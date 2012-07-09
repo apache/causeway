@@ -353,7 +353,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         final Oid oid = idMapping.recreateOid(rs, specification);
         final ObjectAdapter adapter = getAdapter(cls, oid);
 
-        if (adapter.getResolveState().isValidToChangeTo(ResolveState.RESOLVING)) {
+        if (adapter.canTransitionToResolving()) {
             loadFields(adapter, rs);
             loadCollections(connector, adapter); // KAM
         }

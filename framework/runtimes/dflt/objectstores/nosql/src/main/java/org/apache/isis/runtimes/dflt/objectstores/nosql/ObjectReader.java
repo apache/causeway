@@ -55,8 +55,8 @@ public class ObjectReader {
         final String oidStr = reader.readOid();
         final RootOid rootOid = getOidMarshaller().unmarshal(oidStr, RootOid.class);
         
-        final ObjectAdapter object = getAdapter(rootOid);
-        if (object.getResolveState().isResolved()) {
+        final ObjectAdapter adapter = getAdapter(rootOid);
+        if (adapter.isResolved()) {
             Version version = null;
             final String versionString = reader.readVersion();
             if (!versionString.equals("")) {
@@ -64,7 +64,7 @@ public class ObjectReader {
                 final String time = reader.readTime();
                 version = versionCreator.version(versionString, user, time);
             }
-            if (version.different(object.getVersion())) {
+            if (version.different(adapter.getVersion())) {
                 // TODO - do we need to CHECK version and update
                 throw new UnexpectedCallException();
             }
@@ -73,10 +73,10 @@ public class ObjectReader {
             
             // TODO move lock to common method
             // object.setOptimisticLock(version);
-            loadState(reader, versionCreator, dataEncrypters, object);
+            loadState(reader, versionCreator, dataEncrypters, adapter);
         }
 
-        return object;
+        return adapter;
     }
 
     public void update(final StateReader reader, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters, final ObjectAdapter object) {

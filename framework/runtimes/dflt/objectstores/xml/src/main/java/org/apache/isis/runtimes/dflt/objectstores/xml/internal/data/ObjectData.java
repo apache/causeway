@@ -112,7 +112,7 @@ public class ObjectData extends Data {
     }
 
     public void addAssociation(final ObjectAdapter fieldContent, final String fieldId, final boolean ensurePersistent) {
-        final boolean notAlreadyPersistent = fieldContent != null && fieldContent.representsTransient();
+        final boolean notAlreadyPersistent = fieldContent != null && fieldContent.isTransient();
         if (ensurePersistent && notAlreadyPersistent) {
             throw new IllegalStateException("Cannot save an object that is not persistent: " + fieldContent);
         }

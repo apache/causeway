@@ -62,8 +62,8 @@ public class ObjectData extends Data {
         }
     }
 
-    public ObjectData(final Oid oid, final String resolveState, final String className) {
-        super(oid, resolveState, className);
+    public ObjectData(final Oid oid, final String className) {
+        super(oid, className);
         initialized();
     }
 

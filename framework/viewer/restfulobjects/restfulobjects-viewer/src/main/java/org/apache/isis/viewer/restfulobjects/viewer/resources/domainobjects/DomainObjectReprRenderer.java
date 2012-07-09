@@ -116,7 +116,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // self, oid
         if (!mode.isCutDown()) {
-            if (objectAdapter.isPersistent()) {
+            if (objectAdapter.representsPersistent()) {
                 if (includesSelf) {
                     final JsonRepresentation self = linkToBuilder.with(objectAdapter).builder(Rel.SELF).build();
                     getLinks().arrayAdd(self);
@@ -156,7 +156,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             // extensions
             final boolean isService = objectAdapter.getSpecification().isService();
             getExtensions().mapPut("isService", isService);
-            getExtensions().mapPut("isPersistent", objectAdapter.isPersistent());
+            getExtensions().mapPut("isPersistent", objectAdapter.representsPersistent());
         }
 
         return representation;
@@ -246,7 +246,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addPersistLinkIfTransient() {
-        if (objectAdapter.isPersistent()) {
+        if (objectAdapter.representsPersistent()) {
             return;
         }
         final RendererFactory rendererFactory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
@@ -268,7 +268,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addUpdatePropertiesLinkIfPersistent() {
-        if (!objectAdapter.isPersistent()) {
+        if (!objectAdapter.representsPersistent()) {
             return;
         }
 

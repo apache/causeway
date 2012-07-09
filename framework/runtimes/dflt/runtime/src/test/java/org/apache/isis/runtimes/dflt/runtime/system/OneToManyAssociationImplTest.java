@@ -135,10 +135,10 @@ public class OneToManyAssociationImplTest {
                 one(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
 
-                one(mockOwnerAdapter).isPersistent();
+                one(mockOwnerAdapter).representsPersistent();
                 will(returnValue(true));
 
-                one(mockAssociatedAdapter).representsTransient();
+                one(mockAssociatedAdapter).isTransient();
                 will(returnValue(false));
 
                 one(mockPeer).getFacet(CollectionAddToFacet.class);

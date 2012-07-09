@@ -47,7 +47,7 @@ class TransientRootAdapterMapping implements Mapping {
     public TransientRootAdapterMapping(final ObjectAdapter adapter) {
         oid = (RootOid) adapter.getOid();
         Assert.assertTrue("OID is for persistent", oid.isTransient());
-        Assert.assertTrue("adapter is for persistent", adapter.representsTransient());
+        Assert.assertTrue("adapter is for persistent", adapter.isTransient());
         memento = new Memento(adapter);
     }
 

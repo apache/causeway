@@ -276,7 +276,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         if (LOG.isDebugEnabled()) {
             LOG.debug("create object - creating command for: " + adapter);
         }
-        if (adapter.isPersistent()) {
+        if (adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
         return new DataNucleusCreateObjectCommand(adapter, getPersistenceManager());
@@ -286,7 +286,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         ensureOpened();
         ensureInSession();
 
-        if (!adapter.isPersistent()) {
+        if (!adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         if (LOG.isDebugEnabled()) {
@@ -302,7 +302,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroy object - creating command for: " + adapter);
         }
-        if (!adapter.isPersistent()) {
+        if (!adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         return new DataNucleusDeleteObjectCommand(adapter, getPersistenceManager());
@@ -403,7 +403,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
             }
             return;
         }
-        if (!adapter.isPersistent()) {
+        if (!adapter.representsPersistent()) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("; not persistent - ignoring");
             }

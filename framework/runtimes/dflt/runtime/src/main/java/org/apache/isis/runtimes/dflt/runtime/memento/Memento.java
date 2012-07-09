@@ -100,14 +100,14 @@ public class Memento implements Serializable {
             collData[i++] = createReferenceData(ref);
         }
         final String elementTypeSpecName = adapter.getSpecification().getFullIdentifier();
-        return new CollectionData(adapter.getOid(), adapter.getResolveState(), elementTypeSpecName, collData);
+        return new CollectionData(adapter.getOid(), elementTypeSpecName, collData);
     }
 
     private ObjectData createObjectData(final ObjectAdapter adapter) {
         transientObjects.add(adapter.getOid());
         final ObjectSpecification cls = adapter.getSpecification();
         final List<ObjectAssociation> associations = cls.getAssociations();
-        final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullIdentifier());
+        final ObjectData data = new ObjectData(adapter.getOid(), cls.getFullIdentifier());
         for (int i = 0; i < associations.size(); i++) {
             if (associations.get(i).isNotPersisted()) {
                 if (associations.get(i).isOneToManyAssociation()) {
@@ -156,10 +156,8 @@ public class Memento implements Serializable {
             return createObjectData(referencedAdapter);
         }
 
-        final String resolvedState = referencedAdapter.getResolveState().name();
         final String specification = referencedAdapter.getSpecification().getFullIdentifier();
-        return new Data(refOid, resolvedState, specification);
-
+        return new Data(refOid, specification);
     }
 
     private Data createStandaloneData(final ObjectAdapter adapter) {
@@ -287,7 +285,7 @@ public class Memento implements Serializable {
             PersistorUtil.startStateTransition(objectAdapter, targetState);
             updateFields(objectAdapter, data);
             PersistorUtil.endStateTransition(objectAdapter);
-        } else if (objectAdapter.representsTransient() && targetState == ResolveState.TRANSIENT) {
+        } else if (objectAdapter.isTransient() && targetState == ResolveState.TRANSIENT) {
             updateFields(objectAdapter, data);
         } else if (objectAdapter.isParented()) {
             updateFields(objectAdapter, data);

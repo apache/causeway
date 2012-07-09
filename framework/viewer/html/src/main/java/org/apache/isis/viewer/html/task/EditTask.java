@@ -93,7 +93,7 @@ public class EditTask extends Task {
             i++;
         }
 
-        final boolean isTransient = adapter.representsTransient();
+        final boolean isTransient = adapter.isTransient();
         newType = isTransient ? getTarget(context).getSpecification().getSingularName() : null;
     }
 
@@ -132,7 +132,7 @@ public class EditTask extends Task {
             }
         }
 
-        if (target.representsTransient()) {
+        if (target.isTransient()) {
             saveState(target, entries);
             final Consent isValid = target.getSpecification().isValid(target);
             error = isValid.isVetoed() ? isValid.getReason() : null;
@@ -144,7 +144,7 @@ public class EditTask extends Task {
         final ObjectAdapter targetAdapter = getTarget(context);
         final ObjectAdapter[] entryAdapters = getEntries(context);
 
-        if (targetAdapter.representsTransient()) {
+        if (targetAdapter.isTransient()) {
             final ObjectAction action = targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
             if (action == null) {
                 getPersistenceSession().makePersistent(targetAdapter);

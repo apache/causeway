@@ -112,7 +112,7 @@ public final class InvokeMethod implements Action {
 
     static void forwardObjectResult(final Request request, final Context context, final ObjectAdapter resultAdapter) {
         final String objectId = context.mapObject(resultAdapter);
-        if (resultAdapter.representsTransient() && resultAdapter.getSpecification().persistability() == Persistability.USER_PERSISTABLE) {
+        if (resultAdapter.isTransient() && resultAdapter.getSpecification().persistability() == Persistability.USER_PERSISTABLE) {
             request.forward(ForwardRequest.editObject(objectId));
         } else if (resultAdapter.getSpecification().isService()) {
             request.forward(ForwardRequest.viewService(objectId));

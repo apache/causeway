@@ -44,7 +44,7 @@ public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFr
 
     @Override
     public void remove(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
             underlyingFacet.remove(adapter, referencedAdapter);

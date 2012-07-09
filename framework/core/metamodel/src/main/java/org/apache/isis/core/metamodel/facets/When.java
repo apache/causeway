@@ -41,7 +41,7 @@ public final class When extends EnumerationAbstract {
      * this 'when'.
      */
     public boolean isNowFor(final ObjectAdapter targetAdapter) {
-        final boolean isTransient = targetAdapter.representsTransient();
+        final boolean isTransient = targetAdapter.isTransient();
         return this == When.ALWAYS || this == When.ONCE_PERSISTED && !isTransient || this == When.UNTIL_PERSISTED && isTransient;
     }
 

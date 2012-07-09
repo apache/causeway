@@ -134,7 +134,7 @@ public class EditObject extends AbstractElementProcessor {
         hiddenFields.add(resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, resultOverride));
         hiddenFields.add(scope == null ? null : new HiddenInputField("_" + SCOPE, scope));
 
-        if (!object.representsTransient()) {
+        if (!object.isTransient()) {
             // ensure all booleans are included so the pass back TRUE if set.
             final List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
             for (int i = 0; i < fields2.size(); i++) {
@@ -292,7 +292,7 @@ public class EditObject extends AbstractElementProcessor {
     }
 
     private String getValue(final RequestContext context, final ObjectAdapter field) {
-        if (field == null || field.representsTransient()) {
+        if (field == null || field.isTransient()) {
             return "";
         }
         final ObjectSpecification specification = field.getSpecification();

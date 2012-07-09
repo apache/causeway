@@ -43,9 +43,9 @@ public class HiddenFacetImpl extends HiddenFacetAbstract {
         }
 
         if (value() == When.UNTIL_PERSISTED) {
-            return targetAdapter.representsTransient() ? "Hidden until persisted" : null;
+            return targetAdapter.isTransient() ? "Hidden until persisted" : null;
         } else if (value() == When.ONCE_PERSISTED) {
-            return targetAdapter.isPersistent() ? "Hidden once persisted" : null;
+            return targetAdapter.representsPersistent() ? "Hidden once persisted" : null;
         }
         return null;
     }

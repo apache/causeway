@@ -66,7 +66,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
                 // TODO: move logic into Facet
                 return new Veto(String.format("Only objects of type %s are allowed in this collection", elementSpecification.getSingularName()));
             }
-            if (parentAdapter.isPersistent() && sourceAdapter.representsTransient()) {
+            if (parentAdapter.representsPersistent() && sourceAdapter.isTransient()) {
                 // TODO: move logic into Facet
                 return new Veto("Can't set field in persistent object with reference to non-persistent object");
             }

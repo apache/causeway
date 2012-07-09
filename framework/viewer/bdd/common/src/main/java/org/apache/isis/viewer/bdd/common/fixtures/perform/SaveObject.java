@@ -45,7 +45,7 @@ public class SaveObject extends PerformAbstractTypeParams {
             throw ScenarioBoundValueException.current(performBinding, valid.getReason());
         }
 
-        if (onAdapter.isPersistent()) {
+        if (onAdapter.representsPersistent()) {
             throw ScenarioBoundValueException.current(performBinding, "(already persistent)");
         }
 

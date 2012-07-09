@@ -275,7 +275,7 @@ public class Context implements Serializable {
 
         // ensure resolved if currently a ghost;
         // start/end xactn if required
-        if (adapter.isPersistent() && adapter.isGhost()) {
+        if (adapter.representsPersistent() && adapter.isGhost()) {
             getPersistenceSession().resolveImmediately(adapter);
         }
 
@@ -345,7 +345,7 @@ public class Context implements Serializable {
     }
 
     private static RootAdapterMapping persistentOrTransientObjectMappingFor(final ObjectAdapter adapter) {
-        return adapter.representsTransient() ? new TransientRootAdapterMapping(adapter) : new PersistentRootAdapterMapping(adapter);
+        return adapter.isTransient() ? new TransientRootAdapterMapping(adapter) : new PersistentRootAdapterMapping(adapter);
     }
 
     
@@ -538,7 +538,7 @@ public class Context implements Serializable {
 
 
     public void updateVersion(final ObjectAdapter adapter) {
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             return;
         }
 

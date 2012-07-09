@@ -44,7 +44,7 @@ public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbs
 
     @Override
     public void add(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
             underlyingFacet.add(adapter, referencedAdapter);

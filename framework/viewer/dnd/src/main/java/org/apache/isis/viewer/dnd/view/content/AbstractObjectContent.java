@@ -118,7 +118,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         @Override
         public Consent disabled(final View view) {
             final ObjectAdapter object = view.getContent().getAdapter();
-            return ConsentAbstract.allowIf(object == null || !object.representsTransient() || object.isGhost());
+            return ConsentAbstract.allowIf(object == null || !object.isTransient() || object.isGhost());
         }
 
         @Override
@@ -155,7 +155,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     }
 
     private Consent setFieldOfMatchingType(final ObjectAdapter targetAdapter, final ObjectAdapter sourceAdapter) {
-        if (targetAdapter.representsTransient() && sourceAdapter.isPersistent()) {
+        if (targetAdapter.isTransient() && sourceAdapter.representsPersistent()) {
             // TODO: use Facet for this test instead.
             return new Veto("Can't set field in persistent object with reference to non-persistent object");
         }

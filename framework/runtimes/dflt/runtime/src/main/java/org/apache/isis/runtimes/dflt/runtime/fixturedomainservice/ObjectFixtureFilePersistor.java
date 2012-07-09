@@ -65,14 +65,14 @@ public class ObjectFixtureFilePersistor {
                 } else if (line.startsWith("  ")) {
                     loadFieldData(object, loaded, line);
                 } else {
-                    if (object != null && !object.isPersistent()) {
+                    if (object != null && !object.representsPersistent()) {
                         getPersistenceSession().makePersistent(object);
                     }
                     object = loaded.get(line);
                 }
             }
 
-            if (object != null && !object.isPersistent()) {
+            if (object != null && !object.representsPersistent()) {
                 getPersistenceSession().makePersistent(object);
             }
         } catch (final Exception e) {

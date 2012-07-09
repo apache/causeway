@@ -71,7 +71,7 @@ public class OpenJpaPersistenceMechanismInstallerTest_persist {
         PrimitiveValuedEntity entity = repo.newEntity();
         ObjectAdapter adapter = iswf.adapterFor(entity);
         
-        assertThat(adapter.representsTransient(), is(true));
+        assertThat(adapter.isTransient(), is(true));
         assertThat(adapter.getResolveState(), is(ResolveState.TRANSIENT));
         assertThat(adapter.getOid().isTransient(), is(true));
         
@@ -86,7 +86,7 @@ public class OpenJpaPersistenceMechanismInstallerTest_persist {
         
         adapter = iswf.adapterFor(list.get(0));
         assertThat(adapter.getResolveState(), is(ResolveState.GHOST));
-        assertThat(adapter.representsTransient(), is(false));
+        assertThat(adapter.isTransient(), is(false));
         assertThat(adapter.getOid().enString(), is("PRMV:1"));
 
         iswf.commitTran();

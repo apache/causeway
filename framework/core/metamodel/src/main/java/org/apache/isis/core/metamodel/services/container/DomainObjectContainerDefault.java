@@ -226,7 +226,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     public boolean isPersistent(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterMap().adapterFor(domainObject);
-        return adapter.isPersistent();
+        return adapter.representsPersistent();
     }
 
     @Override

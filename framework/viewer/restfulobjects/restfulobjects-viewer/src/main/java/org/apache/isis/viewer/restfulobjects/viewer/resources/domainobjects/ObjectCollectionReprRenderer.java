@@ -60,7 +60,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         // id and memberType are rendered eagerly
 
         renderMemberContent();
-        if (mode.isStandalone() || mode.isMutated() || !objectAdapter.isPersistent()) {
+        if (mode.isStandalone() || mode.isMutated() || !objectAdapter.representsPersistent()) {
             addValue();
         }
         putDisabledReasonIfDisabled();

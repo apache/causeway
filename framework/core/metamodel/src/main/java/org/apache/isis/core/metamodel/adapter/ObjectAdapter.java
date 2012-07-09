@@ -166,40 +166,27 @@ public interface ObjectAdapter extends Instance {
      * Whether the object is persisted.
      * 
      * <p>
-     * Note: not necessarily the reciprocal of {@link #representsTransient()};
+     * Note: not necessarily the reciprocal of {@link #isTransient()};
      * standalone adapters (with {@link ResolveState#VALUE}) report as neither
      * persistent or transient.
      */
-    boolean isPersistent();
+    boolean representsPersistent();
 
-    /**
-     * Whether the object is transient.
-     * 
-     * <p>
-     * Note: not necessarily the reciprocal of {@link #isPersistent()};
-     * standalone adapters (with {@link ResolveState#VALUE}) report as neither
-     * persistent or transient.
-     */
-    boolean representsTransient();
-
-
-    boolean isResolved();
+    boolean isNew();
+    boolean isTransient();
 
     boolean isGhost();
+    boolean isResolved();
 
-    boolean isTitleAvailable();
-
-    void markAsResolvedIfPossible();
+    boolean isResolving();
+    boolean isUpdating();
 
     boolean isDestroyed();
 
-    boolean isResolving();
-
-    boolean isUpdating();
-
-    boolean isNew();
 
     boolean canTransitionToResolving();
+    boolean isTitleAvailable();
+    void markAsResolvedIfPossible();
 
     
     
@@ -233,6 +220,8 @@ public interface ObjectAdapter extends Instance {
      * TODO: should this be recursive, to support root->aggregate->aggregate etc.
      */
     ObjectAdapter getAggregateRoot();
+
+    boolean respondToChangesInPersistentObjects();
 
 
 

@@ -36,7 +36,7 @@ public class NotSaved extends ThatSubcommandAbstract {
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
 
-        if (onAdapter.isPersistent()) {
+        if (onAdapter.representsPersistent()) {
             throw ScenarioBoundValueException.current(thatItBinding, "(saved)");
         }
 

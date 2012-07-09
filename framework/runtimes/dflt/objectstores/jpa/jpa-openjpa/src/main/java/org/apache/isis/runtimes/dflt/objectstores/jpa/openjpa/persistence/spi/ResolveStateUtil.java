@@ -36,7 +36,7 @@ public final class ResolveStateUtil {
 
     private static void moveUpToResolving(final ObjectAdapter adapter) {
         // move these on so we can get to part_resolved or resolved.
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
             adapter.changeState(ResolveState.GHOST);
             adapter.changeState(ResolveState.RESOLVING);
@@ -59,7 +59,7 @@ public final class ResolveStateUtil {
             // TODO: what should we do here? throw exception?
         }
 
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
             adapter.changeState(ResolveState.GHOST);
 
@@ -90,7 +90,7 @@ public final class ResolveStateUtil {
 
     public static void markAsUpdating(final ObjectAdapter adapter) {
 
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
         }
         if (adapter.isResolved()) {

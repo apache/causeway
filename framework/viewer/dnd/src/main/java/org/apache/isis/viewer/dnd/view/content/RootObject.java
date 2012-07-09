@@ -106,7 +106,7 @@ public class RootObject extends AbstractObjectContent {
 
     @Override
     public boolean isTransient() {
-        return adapter != null && adapter.representsTransient();
+        return adapter != null && adapter.isTransient();
     }
 
     @Override

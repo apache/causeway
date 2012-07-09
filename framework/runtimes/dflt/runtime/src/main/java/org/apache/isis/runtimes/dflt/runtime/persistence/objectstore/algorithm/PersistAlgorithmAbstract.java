@@ -72,7 +72,7 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
      * @see #alreadyPersistedOrNotPersistableOrServiceOrStandalone(ObjectAdapter)
      */
     protected static boolean alreadyPersistedOrNotPersistable(final ObjectAdapter adapter) {
-        return adapter.isPersistent() || objectSpecNotPersistable(adapter);
+        return adapter.representsPersistent() || objectSpecNotPersistable(adapter);
     }
 
     /**

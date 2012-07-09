@@ -279,7 +279,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
         if (LOG.isDebugEnabled()) {
             LOG.debug("create object - creating command for: " + adapter);
         }
-        if (adapter.isPersistent()) {
+        if (adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
         return new JpaCreateObjectCommand(adapter, getEntityManager());
@@ -289,7 +289,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
         ensureOpened();
         ensureInSession();
 
-        if (!adapter.isPersistent()) {
+        if (!adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         if (LOG.isDebugEnabled()) {
@@ -305,7 +305,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroy object - creating command for: " + adapter);
         }
-        if (!adapter.isPersistent()) {
+        if (!adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         return new JpaDeleteObjectCommand(adapter, getEntityManager());
@@ -406,7 +406,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
             }
             return;
         }
-        if (!adapter.isPersistent()) {
+        if (!adapter.representsPersistent()) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("; not persistent - ignoring");
             }

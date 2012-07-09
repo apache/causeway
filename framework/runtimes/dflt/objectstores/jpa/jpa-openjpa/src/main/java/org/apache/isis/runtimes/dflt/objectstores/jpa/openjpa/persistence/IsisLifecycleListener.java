@@ -44,7 +44,7 @@ public class IsisLifecycleListener extends AbstractLifecycleListener implements 
         final Oid oid = adapter.getOid();
         
         // make sure the adapter is transient
-        if (!adapter.representsTransient()) {
+        if (!adapter.isTransient()) {
             throw new IsisException(MessageFormat.format("adapter is in invalid state; should be {0} but is {1}", ResolveState.TRANSIENT, adapter.getResolveState()));
         }
 

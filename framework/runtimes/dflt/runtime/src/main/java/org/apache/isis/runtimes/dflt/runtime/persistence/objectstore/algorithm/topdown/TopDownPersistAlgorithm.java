@@ -87,7 +87,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
 
     private void makeCollectionPersistent(final ObjectAdapter collectionAdapter, final ToPersistObjectSet toPersistObjectSet) {
         LOG.info("persist " + collectionAdapter);
-        if (collectionAdapter.representsTransient()) {
+        if (collectionAdapter.isTransient()) {
             collectionAdapter.changeState(ResolveState.RESOLVED);
         }
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);

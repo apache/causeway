@@ -292,7 +292,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         notifyListenersAndVetoIfRequired(interactionResult);
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
-            if (targetAdapter.representsTransient()) {
+            if (targetAdapter.isTransient()) {
                 getObjectPersistor().makePersistent(targetAdapter);
             }
         }

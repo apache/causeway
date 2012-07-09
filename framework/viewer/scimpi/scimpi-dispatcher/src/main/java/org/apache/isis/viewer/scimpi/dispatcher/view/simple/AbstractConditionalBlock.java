@@ -263,7 +263,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         if (persistent != null) {
             final ObjectAdapter object = request.getContext().getMappedObjectOrResult(persistent);
             checkMade = true;
-            allConditionsMet &= object.isPersistent();
+            allConditionsMet &= object.representsPersistent();
         }
         /*
          * String type = request.getOptionalProperty(TYPE); if (type != null) {
@@ -344,7 +344,7 @@ class TestObjectPersistent extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = request.getContext().getMappedObjectOrResult(attributeName);
-        return object.isPersistent();
+        return object.representsPersistent();
     }
 }
 

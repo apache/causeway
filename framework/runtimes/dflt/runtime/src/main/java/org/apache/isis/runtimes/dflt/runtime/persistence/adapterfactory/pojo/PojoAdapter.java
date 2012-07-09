@@ -128,8 +128,13 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public ResolveState getResolveState() {
+        return aggregateResolveState();
+    }
+
+
+    private ResolveState aggregateResolveState() {
         return isAggregated() ? 
-                getAggregateRoot().getResolveState() : 
+                ((PojoAdapter)getAggregateRoot()).aggregateResolveState() : 
                 resolveState;
     }
 
@@ -137,7 +142,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public void changeState(final ResolveState newState) {
-        
         if(isAggregated()) {
             return; // no-op for aggregated objects.
         }
@@ -162,7 +166,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     private boolean elementsLoaded() {
-        return representsTransient() || this.isResolved();
+        return isTransient() || this.isResolved();
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -170,68 +174,68 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Just delegates to {@link #getResolveState() resolve state}.
+     * Just delegates to {@link #aggregateResolveState() resolve state}.
      * 
      * @see ResolveState#representsPersistent()
-     * @see #representsTransient()
+     * @see #isTransient()
      */
     @Override
-    public boolean isPersistent() {
-        return getResolveState().representsPersistent();
+    public boolean representsPersistent() {
+        return aggregateResolveState().representsPersistent();
     }
 
 
     /**
-     * Just delegates to {@link #getResolveState() resolve state}.
+     * Just delegates to {@link #aggregateResolveState() resolve state}.
      * 
      * @see ResolveState#isTransient()
-     * @see #isPersistent()
+     * @see #representsPersistent()
      */
     @Override
-    public boolean representsTransient() {
-        return getResolveState().isTransient();
+    public boolean isTransient() {
+        return aggregateResolveState().isTransient();
     }
 
     @Override
     public boolean isNew() {
-        return getResolveState().isNew();
+        return aggregateResolveState().isNew();
     }
 
     @Override
     public boolean isResolving() {
-        return getResolveState().isResolving();
+        return aggregateResolveState().isResolving();
     }
 
     @Override
     public boolean isResolved() {
-        return getResolveState().isResolved();
+        return aggregateResolveState().isResolved();
     }
 
     @Override
     public boolean isGhost() {
-        return getResolveState().isGhost();
+        return aggregateResolveState().isGhost();
     }
 
     @Override
     public boolean isUpdating() {
-        return getResolveState().isUpdating();
+        return aggregateResolveState().isUpdating();
     }
 
     @Override
     public boolean isDestroyed() {
-        return getResolveState().isDestroyed();
+        return aggregateResolveState().isDestroyed();
     }
 
 
     @Override
     public boolean canTransitionToResolving() {
-        return getResolveState().canTransitionToResolving();
+        return aggregateResolveState().canTransitionToResolving();
     }
 
 
     @Override
     public boolean isTitleAvailable() {
-        final ResolveState resolveState = getResolveState();
+        final ResolveState resolveState = aggregateResolveState();
         return resolveState.isValue() || resolveState.isResolved();
     }
 
@@ -276,7 +280,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean isValue() {
-        // equivalently: getResolveState().isValue();
+        // equivalently: aggregateResolveState().isValue();
         return oid == null;
     }
 
@@ -365,7 +369,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     private String objectTitleString() {
-        if (getResolveState().isNew()) {
+        if (isNew()) {
             return "";
         } 
         if (getObject() instanceof String) {
@@ -439,7 +443,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     protected void toString(final ToString str) {
-        str.append(getResolveState().code());
+        str.append(aggregateResolveState().code());
         final Oid oid = getOid();
         if (oid != null) {
             str.append(":");
@@ -511,6 +515,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      */
     @Override
     public void fireChangedEvent() {
+    }
+
+
+    @Override
+    public boolean respondToChangesInPersistentObjects() {
+        return aggregateResolveState().respondToChangesInPersistentObjects();
     }
 
 

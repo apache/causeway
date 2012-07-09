@@ -391,11 +391,10 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         }
         final Object pojo = objectSpec.createObject();
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo, parentAdapter);
+        // returned adapter's ResolveState will either be TRANSIENT or GHOST
         objectSpec.initialize(adapter); 
         if (adapter.isGhost()) {
             adapter.changeState(ResolveState.RESOLVING);
-        }
-        if (adapter.getResolveState().isValidToChangeTo(ResolveState.RESOLVED)) {
             adapter.changeState(ResolveState.RESOLVED);
         }
         return adapter;
@@ -660,7 +659,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
 
     protected boolean isImmutable(final ObjectAdapter adapter) {
         final ObjectSpecification noSpec = adapter.getSpecification();
-        return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.isPersistent());
+        return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.representsPersistent());
     }
 
     // ////////////////////////////////////////////////////////////////////
@@ -915,7 +914,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
                 return;
             }
             Assert.assertFalse("only resolve object that is not yet resolved", adapter, adapter.isResolved());
-            Assert.assertTrue("only resolve object that is persistent", adapter, adapter.isPersistent());
+            Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
             resolveImmediatelyFromPersistenceLayer(adapter);
             if (LOG.isDebugEnabled()) {
                 // don't log object - its toString() may use the unresolved
@@ -967,7 +966,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         if (referenceAdapter == null || referenceAdapter.isResolved()) {
             return;
         }
-        if (!referenceAdapter.isPersistent()) {
+        if (!referenceAdapter.representsPersistent()) {
             return;
         }
         if (LOG.isInfoEnabled()) {
@@ -1011,7 +1010,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      */
     @Override
     public void makePersistent(final ObjectAdapter adapter) {
-        if (adapter.isPersistent()) {
+        if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
         if (!adapter.getSpecification().persistability().isPersistable()) {
@@ -1059,12 +1058,12 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     @Override
     public void objectChanged(final ObjectAdapter adapter) {
 
-        if (adapter.representsTransient() || (adapter.isParented() && adapter.getAggregateRoot().representsTransient())) {
+        if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
             addObjectChangedForPresentationLayer(adapter);
             return;
         }
 
-        if (adapter.getResolveState().respondToChangesInPersistentObjects()) {
+        if (adapter.respondToChangesInPersistentObjects()) {
             if (isImmutable(adapter)) {
                 // previously used to throw
                 // new
@@ -1079,7 +1078,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
             addObjectChangedForPersistenceLayer(adapter);
             addObjectChangedForPresentationLayer(adapter);
         }
-        if (adapter.getResolveState().respondToChangesInPersistentObjects() || adapter.representsTransient()) {
+        if (adapter.respondToChangesInPersistentObjects() || adapter.isTransient()) {
             addObjectChangedForPresentationLayer(adapter);
         }
     }

@@ -52,7 +52,7 @@ public class UpdateNotifierDefault extends UpdateNotifierAbstract implements Deb
 
     @Override
     public synchronized void addChangedObject(final ObjectAdapter adapter) {
-        if (!adapter.isResolved() && !adapter.representsTransient()) {
+        if (!adapter.isResolved() && !adapter.isTransient()) {
             return;
         }
 

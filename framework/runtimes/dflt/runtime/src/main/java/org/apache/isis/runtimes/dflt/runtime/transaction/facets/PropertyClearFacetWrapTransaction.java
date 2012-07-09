@@ -44,7 +44,7 @@ public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstrac
 
     @Override
     public void clearProperty(final ObjectAdapter adapter) {
-        if (adapter.representsTransient()) {
+        if (adapter.isTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
             underlyingFacet.clearProperty(adapter);

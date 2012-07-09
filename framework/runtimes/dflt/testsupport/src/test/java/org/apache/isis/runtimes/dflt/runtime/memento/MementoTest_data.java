@@ -78,17 +78,6 @@ public class MementoTest_data {
 
 
     @Test
-    public void data_getResolveState_whenTransient() throws Exception {
-        assertEquals("Transient", data1.getResolveState());
-    }
-
-
-    @Test
-    public void data_getResolveState_whenResolved() throws Exception {
-        assertEquals("Resolved", data2.getResolveState());
-    }
-
-    @Test
     public void data_getClassName() throws Exception {
         assertEquals(WrapperValuedEntity.class.getName(), data1.getClassName());
     }

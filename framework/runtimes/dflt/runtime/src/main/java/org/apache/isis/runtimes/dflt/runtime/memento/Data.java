@@ -34,20 +34,16 @@ public class Data implements Encodable, Serializable {
     private final static long serialVersionUID = 1L;
 
     private final String className;
-    private final String resolveState;
     private final Oid oid;
 
-    public Data(final Oid oid, final String resolveState, final String className) {
+    public Data(final Oid oid, final String className) {
         this.className = className;
-        this.resolveState = resolveState;
         this.oid = oid;
         initialized();
     }
 
     public Data(final DataInputExtended input) throws IOException {
         this.className = input.readUTF();
-        this.resolveState = input.readUTF(); // TODO: make ResolveState
-                                             // encodable?
         this.oid = input.readEncodable(Oid.class);
         initialized();
     }
@@ -55,7 +51,6 @@ public class Data implements Encodable, Serializable {
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(className);
-        output.writeUTF(resolveState);
         output.writeEncodable(oid);
     }
 
@@ -79,14 +74,9 @@ public class Data implements Encodable, Serializable {
         return className;
     }
 
-    public String getResolveState() {
-        return resolveState;
-    }
-
     public void debug(final DebugBuilder debug) {
         debug.appendln(className);
         debug.appendln(oid != null ? oid.toString() : "null");
-        debug.appendln(resolveState);
     }
 
     @Override

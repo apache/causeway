@@ -40,7 +40,7 @@ public class EditLink extends AbstractLink {
         final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
         final ImmutableFacet facet = specification.getFacet(ImmutableFacet.class);
         final boolean isImmutable = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ALWAYS;
-        final boolean isImmutableOncePersisted = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED && adapter.isPersistent();
+        final boolean isImmutableOncePersisted = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED && adapter.representsPersistent();
         return visibleFields.size() > 0 && !isImmutable && !isImmutableOncePersisted;
     }
 

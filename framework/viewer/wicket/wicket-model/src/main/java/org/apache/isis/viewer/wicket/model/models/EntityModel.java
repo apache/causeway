@@ -60,7 +60,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
 
         final PageParameters pageParameters = new PageParameters();
 
-        final Boolean persistent = adapter.isPersistent();
+        final Boolean persistent = adapter.representsPersistent();
         PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent.toString());
 
         if (persistent) {

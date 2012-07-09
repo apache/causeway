@@ -43,9 +43,9 @@ public class DisabledFacetImpl extends DisabledFacetAbstract {
         }
 
         if (value() == When.UNTIL_PERSISTED) {
-            return targetAdapter.representsTransient() ? "Disabled until persisted" : null;
+            return targetAdapter.isTransient() ? "Disabled until persisted" : null;
         } else if (value() == When.ONCE_PERSISTED) {
-            return targetAdapter.isPersistent() ? "Disabled once persisted" : null;
+            return targetAdapter.representsPersistent() ? "Disabled once persisted" : null;
         }
         return null;
     }

@@ -53,7 +53,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             if (adapter.isGhost()) {
                 adapter.changeState(ResolveState.RESOLVING);
                 adapter.changeState(ResolveState.RESOLVED);
-            } else if (adapter.representsTransient()) {
+            } else if (adapter.isTransient()) {
                 adapter.changeState(ResolveState.RESOLVED);
             }
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(adapter);
@@ -66,46 +66,47 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
         }
     }
 
-    protected void persist(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
-        if (alreadyPersistedOrNotPersistableOrServiceOrStandalone(object)) {
+    protected void persist(final ObjectAdapter adapter, final ToPersistObjectSet toPersistObjectSet) {
+        if (alreadyPersistedOrNotPersistableOrServiceOrStandalone(adapter)) {
             return;
         }
 
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
-        if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
+        final List<ObjectAssociation> associations = adapter.getSpecification().getAssociations();
+        if (!adapter.getSpecification().isEncodeable() && associations.size() > 0) {
             if(LOG.isDebugEnabled()) {
-                LOG.debug("make persistent " + object);
+                LOG.debug("make persistent " + adapter);
             }
-            CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
-            toPersistObjectSet.remapAsPersistent(object);
+            CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
+            toPersistObjectSet.remapAsPersistent(adapter);
             
-            // was previously to SERIALIZING_RESOLVED, but after refactoring simplifications this is now equivalent to UPDATING
+            // was previously to SERIALIZING_RESOLVED, but 
+            // after refactoring simplifications this is now equivalent to UPDATING
             final ResolveState stateWhilePersisting = ResolveState.UPDATING;
             
-            object.changeState(stateWhilePersisting);  
+            adapter.changeState(stateWhilePersisting);  
 
-            for (int i = 0; i < fields.size(); i++) {
-                final ObjectAssociation field = fields.get(i);
-                if (field.isNotPersisted()) {
+            for (int i = 0; i < associations.size(); i++) {
+                final ObjectAssociation objectAssoc = associations.get(i);
+                if (objectAssoc.isNotPersisted()) {
                     continue;
                 }
-                if (field.isOneToManyAssociation()) {
-                    final ObjectAdapter collection = field.get(object);
+                if (objectAssoc.isOneToManyAssociation()) {
+                    final ObjectAdapter collection = objectAssoc.get(adapter);
                     if (collection == null) {
-                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in " + object.getSpecification().getFullIdentifier());
+                        throw new ObjectPersistenceException("Collection " + objectAssoc.getName() + " does not exist in " + adapter.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {
-                    final ObjectAdapter fieldValue = field.get(object);
+                    final ObjectAdapter fieldValue = objectAssoc.get(adapter);
                     if (fieldValue == null) {
                         continue;
                     }
                     persist(fieldValue, toPersistObjectSet);
                 }
             }
-            toPersistObjectSet.addCreateObjectCommand(object);
-            CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
-            object.changeState(stateWhilePersisting.getEndState());
+            toPersistObjectSet.addCreateObjectCommand(adapter);
+            CallbackUtils.callCallback(adapter, PersistedCallbackFacet.class);
+            adapter.changeState(stateWhilePersisting.getEndState());
         }
 
     }

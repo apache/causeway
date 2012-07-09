@@ -376,7 +376,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
 
-        Ensure.ensureThatArg(rootAdapter.representsTransient(), is(true), "root adapter should be transient; oid:" + transientRootOid);
+        Ensure.ensureThatArg(rootAdapter.isTransient(), is(true), "root adapter should be transient; oid:" + transientRootOid);
         Ensure.ensureThatArg(transientRootOid.isTransient(), is(true), "root adapter's OID should be transient; oid:" + transientRootOid);
         
         final RootAndCollectionAdapters rootAndCollectionAdapters = new RootAndCollectionAdapters(adapter, this);

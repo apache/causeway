@@ -66,7 +66,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     }
 
     private Link<?> createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
-        final Boolean persistent = adapter.isPersistent();
+        final Boolean persistent = adapter.representsPersistent();
         if (persistent) {
             return createLinkForPersistent(linkId, adapterMemento, action);
         } else {

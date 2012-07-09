@@ -739,7 +739,7 @@ public abstract class RequestContext {
     public String mapObject(final ObjectAdapter object, final Scope scope) {
         if (object.isValue()) {
             return object.titleString();
-        } else if (scope == Scope.INTERACTION && object.representsTransient()) {
+        } else if (scope == Scope.INTERACTION && object.isTransient()) {
             return objectMapping.mapTransientObject(object);
         } else if (object.getOid() != null) {
             return objectMapping.mapObject(object, scope);
