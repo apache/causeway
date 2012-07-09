@@ -197,7 +197,9 @@ public class Memento implements Serializable {
             targetState = ResolveState.TRANSIENT;
         } else {
             adapter = getHydrator().recreateAdapter(spec, getOid());
-            targetState = ResolveState.UPDATING;
+            // was previously UPDATING; however all tests when set to RESOLVING,
+            // and working towards combining these two states.
+            targetState = ResolveState.RESOLVING;
         }
         
         if (adapter.getSpecification().isParentedOrFreeCollection()) {

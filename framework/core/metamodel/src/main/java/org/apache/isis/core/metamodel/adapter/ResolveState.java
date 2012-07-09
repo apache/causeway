@@ -202,11 +202,11 @@ public final class ResolveState {
      * As per {@link #isValidToChangeTo(ResolveState)}, but will additionally
      * return <tt>false</tt> if the current state can never be transitioned from.
      */
-    public boolean canTransitionTo(final ResolveState newState) {
+    public boolean canTransitionToResolving() {
         if (this.transitionFrom != CAN_TRANSITION_FROM) {
             return false;
         } 
-        return isValidToChangeTo(newState);
+        return isValidToChangeTo(ResolveState.RESOLVING);
     }
 
     /**

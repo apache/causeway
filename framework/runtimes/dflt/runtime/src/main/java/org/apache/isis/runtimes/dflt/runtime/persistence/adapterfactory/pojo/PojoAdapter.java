@@ -225,7 +225,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean canTransitionToResolving() {
-        return getResolveState().canTransitionTo(ResolveState.RESOLVING);
+        return getResolveState().canTransitionToResolving();
     }
 
 
