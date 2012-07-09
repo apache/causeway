@@ -257,7 +257,7 @@ public class InMemoryObjectStore implements ObjectStore {
         // as belt-n-braces, have also made PSOS#resolveImmediately synchronize
         // on
         // the object being resolved.
-        if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        if (adapter.canTransitionToResolving()) {
             LOG.debug("resolve " + adapter);
 
             PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
@@ -324,7 +324,7 @@ public class InMemoryObjectStore implements ObjectStore {
 
     private static List<ObjectAdapter> resolved(final List<ObjectAdapter> instances) {
         for (ObjectAdapter adapter: instances) {
-            if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            if (adapter.canTransitionToResolving()) {
                 PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
                 PersistorUtil.endStateTransition(adapter);
             }

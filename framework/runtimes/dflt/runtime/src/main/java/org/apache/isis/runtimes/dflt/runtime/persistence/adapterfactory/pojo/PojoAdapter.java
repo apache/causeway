@@ -229,6 +229,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
 
     @Override
+    public boolean canTransitionToResolving() {
+        return getResolveState().canTransitionTo(ResolveState.RESOLVING);
+    }
+
+
+    @Override
     public boolean isTitleAvailable() {
         final ResolveState resolveState = getResolveState();
         return resolveState.isValue() || resolveState.isResolved();
@@ -239,10 +245,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      */
     @Override
     public void markAsResolvedIfPossible() {
-        if (getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-            changeState(ResolveState.RESOLVING);
-            changeState(ResolveState.RESOLVED);
-        }
+        if (!canTransitionToResolving()) {
+            return;
+        } 
+        changeState(ResolveState.RESOLVING);
+        changeState(ResolveState.RESOLVED);
     }
 
 
@@ -510,6 +517,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public void fireChangedEvent() {
     }
+
+
 
 
 

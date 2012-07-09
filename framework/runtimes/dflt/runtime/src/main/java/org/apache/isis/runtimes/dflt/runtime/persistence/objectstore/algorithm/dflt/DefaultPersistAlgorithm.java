@@ -78,7 +78,11 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             }
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
-            object.changeState(ResolveState.SERIALIZING_RESOLVED);
+            
+            // was previously to SERIALIZING_RESOLVED, but after refactoring simplifications this is now equivalent to UPDATING
+            final ResolveState stateWhilePersisting = ResolveState.UPDATING;
+            
+            object.changeState(stateWhilePersisting);  
 
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAssociation field = fields.get(i);
@@ -101,7 +105,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             }
             toPersistObjectSet.addCreateObjectCommand(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
-            object.changeState(ResolveState.SERIALIZING_RESOLVED.getEndState());
+            object.changeState(stateWhilePersisting.getEndState());
         }
 
     }

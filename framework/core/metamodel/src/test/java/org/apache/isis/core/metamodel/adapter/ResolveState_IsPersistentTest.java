@@ -24,7 +24,6 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.UPDATING;
@@ -45,14 +44,22 @@ public class ResolveState_IsPersistentTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { true, GHOST }, { false, NEW },
+        return Arrays.asList(new Object[][] { 
+                { true, GHOST }, //
+                { false, NEW }, //
                 // { true, PART_RESOLVED },
-                { true, RESOLVED }, { true, RESOLVING },
+                { true, RESOLVED }, //
+                { true, RESOLVING }, //
                 // { true, RESOLVING_PART },
-                { false, TRANSIENT }, { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT },
+                { false, TRANSIENT }, //
+                { false, DESTROYED }, //
+                { true, UPDATING }, //
+                { false, SERIALIZING_TRANSIENT }, //
                 // { true, SERIALIZING_GHOST },
                 // { true, SERIALIZING_PART_RESOLVED },
-                { true, SERIALIZING_RESOLVED }, { false, VALUE }, });
+                // { true, SERIALIZING_RESOLVED }, 
+                { false, VALUE }, //
+                });
     }
 
     private final boolean whetherIs;

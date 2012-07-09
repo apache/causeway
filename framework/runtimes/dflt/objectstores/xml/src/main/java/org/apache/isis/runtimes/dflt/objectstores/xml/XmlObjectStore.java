@@ -144,7 +144,7 @@ public class XmlObjectStore implements ObjectStore {
     }
 
     private void initObject(final ObjectAdapter adapter, final ObjectData data) {
-        if (!adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        if (!adapter.canTransitionToResolving()) {
             return;
         } 
         PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
@@ -233,7 +233,7 @@ public class XmlObjectStore implements ObjectStore {
         final ListOfRootOid refs = (ListOfRootOid) data.get(field.getId());
         
         final ObjectAdapter collectionAdapter = field.get(objectAdapter);
-        if (!collectionAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        if (!collectionAdapter.canTransitionToResolving()) {
             return;
         } 
         

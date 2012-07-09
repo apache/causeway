@@ -47,8 +47,7 @@ public class DomainObjectContainerResolve {
 
     public void resolve(final Object parent) {
         final ObjectAdapter adapter = adapterFor(parent);
-        final ResolveState resolveState = adapter.getResolveState();
-        if (resolveState.canChangeTo(ResolveState.RESOLVING)) {
+        if (adapter.canTransitionToResolving()) {
             getPersistenceSession().resolveImmediately(adapter);
         }
     }

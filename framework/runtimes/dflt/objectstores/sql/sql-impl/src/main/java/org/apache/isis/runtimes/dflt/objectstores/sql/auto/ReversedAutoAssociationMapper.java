@@ -91,7 +91,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
         final ObjectAdapter collectionAdapter = field.get(parentAdapter);
         
-        if (!collectionAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        if (!collectionAdapter.canTransitionToResolving()) {
             return;
         } 
         if(LOG.isDebugEnabled()) {

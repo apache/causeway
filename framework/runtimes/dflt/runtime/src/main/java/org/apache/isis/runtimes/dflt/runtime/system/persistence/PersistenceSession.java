@@ -911,17 +911,16 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         // with DnD viewer + in-memory object store +
         // cglib bytecode enhancement
         synchronized (getAuthenticationSession()) {
-            final ResolveState resolveState = adapter.getResolveState();
-            if (!resolveState.canChangeTo(ResolveState.RESOLVING)) {
+            if (!adapter.canTransitionToResolving()) {
                 return;
             }
-            Assert.assertFalse("only resolve object that is not yet resolved", adapter, resolveState.isResolved());
+            Assert.assertFalse("only resolve object that is not yet resolved", adapter, adapter.isResolved());
             Assert.assertTrue("only resolve object that is persistent", adapter, adapter.isPersistent());
             resolveImmediatelyFromPersistenceLayer(adapter);
             if (LOG.isDebugEnabled()) {
                 // don't log object - its toString() may use the unresolved
                 // field, or unresolved collection
-                LOG.debug("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code() + " " + adapter.getOid());
+                LOG.debug("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + adapter.getResolveState().code() + " " + adapter.getOid());
             }
         }
     }

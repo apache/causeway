@@ -137,6 +137,8 @@ public interface ObjectAdapter extends ObjectMetaModel {
 
     boolean isNew();
 
+    boolean canTransitionToResolving();
+
 
 
 }

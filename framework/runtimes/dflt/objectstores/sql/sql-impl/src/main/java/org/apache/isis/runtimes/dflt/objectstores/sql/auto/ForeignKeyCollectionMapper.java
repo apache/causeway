@@ -192,7 +192,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
 
         final ObjectAdapter collectionAdapter = field.get(parentAdapter);
-        if (!collectionAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        if (!collectionAdapter.canTransitionToResolving()) {
             return;
         } 
         
@@ -255,7 +255,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     protected void loadFields(final ObjectAdapter adapter, final Results rs, final boolean makeResolved, final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
-        if (!adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        if (!adapter.canTransitionToResolving()) {
             return;
         }
         

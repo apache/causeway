@@ -23,12 +23,8 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPers
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.REPRESENTS_PERSISTENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsTransient.DOES_NOT_REPRESENT_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsTransient.REPRESENTS_TRANSIENT;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.ResolvableFrom.NOT_RESOLVABLE_FROM;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.ResolvableFrom.RESOLVABLE_FROM;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.ResolvableInto.NOT_RESOLVABLE_INTO;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.ResolvableInto.RESOLVABLE_INTO;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.ResolvePotential.COULD_RESOLVE;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.ResolvePotential.WILL_NEVER_RESOLVE;
+import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CANNOT_TRANSITION_FROM;
+import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CAN_TRANSITION_FROM;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.DOES_NOT_RESPOND_TO_CHANGES;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.RESPONDS_TO_CHANGES;
 
@@ -43,12 +39,8 @@ import com.google.common.collect.Maps;
 public final class ResolveState {
     private static final Map<String, ResolveState> statesByName = Maps.newHashMap();
 
-    static enum ResolvableFrom {
-        RESOLVABLE_FROM, NOT_RESOLVABLE_FROM
-    }
-
-    static enum ResolvableInto {
-        RESOLVABLE_INTO, NOT_RESOLVABLE_INTO
+    static enum TransitionFrom {
+        CAN_TRANSITION_FROM, CANNOT_TRANSITION_FROM
     }
 
     static enum RespondsToChanges {
@@ -64,33 +56,21 @@ public final class ResolveState {
     }
 
     /**
-     * Whether or not an object in this state could cause a resolve (database
-     * load) to occur if interacted with.
-     */
-    static enum ResolvePotential {
-        COULD_RESOLVE, WILL_NEVER_RESOLVE
-    }
-
-    /**
      * When first instantiated by <tt>PojoAdapterFactory</tt>.
      */
-    public static final ResolveState NEW = new ResolveState("New", "N~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, WILL_NEVER_RESOLVE);
-    public static final ResolveState TRANSIENT = new ResolveState("Transient", "T~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, WILL_NEVER_RESOLVE);
-    public static final ResolveState GHOST = new ResolveState("Ghost", "PG~~", null, RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, COULD_RESOLVE);
-    public static final ResolveState RESOLVED = new ResolveState("Resolved", "PR~~", null, RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, WILL_NEVER_RESOLVE);
-    public static final ResolveState RESOLVING = new ResolveState("Resolving", "P~R~", RESOLVED, NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, COULD_RESOLVE);
+    public static final ResolveState NEW                   = new ResolveState("New",                   "N~~", null,      CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState TRANSIENT             = new ResolveState("Transient",             "T~~", null,      CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT,         DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState GHOST                 = new ResolveState("Ghost",                 "PG~", null,      CAN_TRANSITION_FROM,    RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
+    public static final ResolveState RESOLVED              = new ResolveState("Resolved",              "PR~", null,      CAN_TRANSITION_FROM,    RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
+    public static final ResolveState RESOLVING             = new ResolveState("Resolving",             "Pr~", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
+    public static final ResolveState UPDATING              = new ResolveState("Updating",              "PU~", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
+    public static final ResolveState DESTROYED             = new ResolveState("Destroyed",             "D~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState VALUE                 = new ResolveState("Value",                 "V~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
+
     /**
-     * 20120709: used only in <tt>Memento</tt>, when recreating a transient
-     * object.
+     * 20120709: used only in <tt>Memento</tt>, when recreating a transient object.
      */
-    public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~~S", TRANSIENT, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, WILL_NEVER_RESOLVE);
-    /**
-     * 20120709: used only in <tt>DefaultPersistAlgorithm</tt>
-     */
-    public static final ResolveState SERIALIZING_RESOLVED = new ResolveState("Serializing Resolved", "PR~S", RESOLVED, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, WILL_NEVER_RESOLVE);
-    public static final ResolveState UPDATING = new ResolveState("Updating", "PU~~", RESOLVED, NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, COULD_RESOLVE);
-    public static final ResolveState DESTROYED = new ResolveState("Destroyed", "D~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, WILL_NEVER_RESOLVE);
-    public static final ResolveState VALUE = new ResolveState("Value", "V~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, WILL_NEVER_RESOLVE);
+    public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~S", TRANSIENT, CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT,         DOES_NOT_REPRESENT_PERSISTENT);
 
     // no longer seem to be used
 
@@ -118,6 +98,11 @@ public final class ResolveState {
     // DOES_NOT_REPRESENT_RESOLVING,
     // COULD_RESOLVE);
 
+    // 20120709: only used in <tt>DefaultPersistAlgorithm</tt>
+    // able to remove because, after refactoring simplifications, ended up as equivalent to UPDATING.
+    // public static final ResolveState SERIALIZING_RESOLVED  = new ResolveState("Serializing Resolved",   "PRS", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
+
+
     /**
      * These cannot be passed into the constructor because cannot reference an
      * instance until it has been declared.
@@ -130,8 +115,9 @@ public final class ResolveState {
             put(NEW, new ResolveState[] { TRANSIENT, GHOST, VALUE });
             put(TRANSIENT, new ResolveState[] { RESOLVED, SERIALIZING_TRANSIENT });
             put(RESOLVING, new ResolveState[] { RESOLVED });
-            put(RESOLVED, new ResolveState[] { GHOST, SERIALIZING_RESOLVED, UPDATING, DESTROYED });
-            put(SERIALIZING_RESOLVED, new ResolveState[] { RESOLVED });
+            // previously also SERIALIZING_RESOLVED
+            put(RESOLVED, new ResolveState[] { GHOST, UPDATING, DESTROYED });
+            //put(SERIALIZING_RESOLVED, new ResolveState[] { RESOLVED });
             put(SERIALIZING_TRANSIENT, new ResolveState[] { TRANSIENT });
             put(UPDATING, new ResolveState[] { RESOLVED });
             put(DESTROYED, new ResolveState[] {});
@@ -151,25 +137,20 @@ public final class ResolveState {
     private final String code;
     private final ResolveState endState;
     private final String name;
-    private final ResolvableFrom resolvableFrom;
-    private final ResolvableInto resolvableInto;
+    private final TransitionFrom transitionFrom;
     private final RespondsToChanges respondsToChanges;
     private final RepresentsTransient representsTransient;
     private final RepresentsPersistent representsPersistent;
-    private final ResolvePotential resolvePotential;
     private HashSet<ResolveState> changeToStates;
 
-    private ResolveState(final String name, final String code, final ResolveState endState, final ResolvableFrom resolvableFrom, final ResolvableInto resolvableInto, final RespondsToChanges respondsToChanges, final RepresentsTransient representsTransient,
-            final RepresentsPersistent representsPersistent, final ResolvePotential resolvePotential) {
+    private ResolveState(final String name, final String code, final ResolveState endState, final TransitionFrom transitionFrom, final RespondsToChanges respondsToChanges, final RepresentsTransient representsTransient, final RepresentsPersistent representsPersistent) {
         this.name = name;
         this.code = code;
         this.endState = endState;
-        this.resolvableFrom = resolvableFrom;
-        this.resolvableInto = resolvableInto;
+        this.transitionFrom = transitionFrom;
         this.respondsToChanges = respondsToChanges;
         this.representsTransient = representsTransient;
         this.representsPersistent = representsPersistent;
-        this.resolvePotential = resolvePotential;
         statesByName.put(name, this);
     }
 
@@ -177,7 +158,7 @@ public final class ResolveState {
      * Four character representation of the state.
      * 
      * <p>
-     * The format is <tt>XYZW</tt> where:
+     * The format is <tt>XYZ</tt> where:
      * <ul>
      * <li><tt>X</tt> is transient state:
      * <ul>
@@ -185,25 +166,18 @@ public final class ResolveState {
      * <li>T</li> for <b>T</b>ransient
      * <li>P</li> for <b>P</b>ersistent
      * <li>D</li> for <b>D</b>estroyed
-     * <li>A</li> for st<b>A</b>ndalone
+     * <li>V</li> for <b>V</b>alue
      * </ul>
      * </li>
      * <li><tt>Y</tt> (for persistent only) is the resolve state:
      * <ul>
      * <li>G</li> for <b>G</b>host
      * <li>R</li> for <b>R</b>esolved
-     * <li>r</li> for Part <b>r</b>esolved
+     * <li>r</li> for <b>r</b>esolving
      * <li>~</li> if not persistent
      * </ul>
      * </li>
-     * <li><tt>Z</tt> (for persistent only) is the resolving state:
-     * <ul>
-     * <li>R</li> for <b>R</b>esolving
-     * <li>r</li> for Part <b>r</b>esolving
-     * <li>~</li> if not persistent
-     * </ul>
-     * </li>
-     * <li><tt>W</tt> (for non-standalone, not resolving, not updating, not
+     * <li><tt>Z</tt> (for non-standalone, not resolving, not updating, not
      * destroyed) is the serialization state:
      * <ul>
      * <li>~</li> not serializing
@@ -244,18 +218,13 @@ public final class ResolveState {
 
     /**
      * As per {@link #isValidToChangeTo(ResolveState)}, but will additionally
-     * throw a {@link ResolveException} if the requested state can never be
-     * transitioned into, and will return <tt>false</tt> if the current state
-     * can never be transitioned from.
+     * return <tt>false</tt> if the current state can never be transitioned from.
      */
-    public boolean canChangeTo(final ResolveState newState) {
-        if (newState.resolvableInto == NOT_RESOLVABLE_INTO) {
-            throw new ResolveException("new state must be resolvable into");
-        }
-        if (this.resolvableFrom == RESOLVABLE_FROM) {
-            return isValidToChangeTo(newState);
-        }
-        return false;
+    public boolean canTransitionTo(final ResolveState newState) {
+        if (this.transitionFrom != CAN_TRANSITION_FROM) {
+            return false;
+        } 
+        return isValidToChangeTo(newState);
     }
 
     /**
@@ -298,20 +267,6 @@ public final class ResolveState {
      */
     public boolean isResolving() {
         return this == RESOLVING;
-    }
-
-    /**
-     * Returns <tt>true</tt> if an object in this state could trigger some sort
-     * of database loading.
-     * 
-     * <p>
-     * Used to prevent calls to <tt>title()</tt> etc on objects that are not
-     * resolved.
-     * 
-     * @see ResolvePotential
-     */
-    public boolean couldResolve() {
-        return this.resolvePotential == COULD_RESOLVE;
     }
 
     /**

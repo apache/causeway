@@ -24,7 +24,6 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.UPDATING;
@@ -51,7 +50,8 @@ public class ResolveState_GetEndStateTest {
                 { RESOLVING, RESOLVED }, { RESOLVED, null }, { UPDATING, RESOLVED }, { SERIALIZING_TRANSIENT, TRANSIENT },
                 // { SERIALIZING_PART_RESOLVED, PART_RESOLVED },
                 // { SERIALIZING_GHOST, GHOST },
-                { SERIALIZING_RESOLVED, RESOLVED }, { VALUE, null }, { DESTROYED, null }, });
+                // { SERIALIZING_RESOLVED, RESOLVED }, 
+                { VALUE, null }, { DESTROYED, null }, });
     }
 
     private final ResolveState from;
