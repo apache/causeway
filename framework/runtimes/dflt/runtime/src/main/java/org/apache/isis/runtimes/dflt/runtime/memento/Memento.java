@@ -228,23 +228,26 @@ public class Memento implements Serializable {
         if (data instanceof StandaloneData) {
             final StandaloneData standaloneData = (StandaloneData) data;
             return standaloneData.getAdapter();
-        } else {
-            final Oid oid = data.getOid();
-            if (oid == null) {
-                return null;
-            }
-            ObjectAdapter referencedAdapter = getHydrator().recreateAdapter(spec, oid);
-            if (data instanceof ObjectData) {
-                if (oid.isTransient() || spec.isParented()) {
-                    final ResolveState resolveState = spec.isParented() ? ResolveState.GHOST : ResolveState.TRANSIENT;
-                    if (referencedAdapter.getResolveState().isValidToChangeTo(resolveState)) {
-                        referencedAdapter.changeState(resolveState);
-                    }
-                    updateObject(referencedAdapter, data, resolveState);
-                }
-            }
-            return referencedAdapter;
+        } 
+        final Oid oid = data.getOid();
+        if (oid == null) {
+            return null;
         }
+        
+        ObjectAdapter referencedAdapter = getHydrator().recreateAdapter(spec, oid);
+        if (data instanceof ObjectData) {
+            if (spec.isParented()) {
+                // rather than the following, is it equivalent to pass in RESOLVING (like everywhere else?)
+//                final ResolveState targetState = ResolveState.GHOST;
+//                if (referencedAdapter.getResolveState().isValidToChangeTo(targetState)) {
+//                    referencedAdapter.changeState(targetState);
+//                }
+                updateObject(referencedAdapter, data, ResolveState.RESOLVING);
+            } else if (oid.isTransient()) {
+                updateObject(referencedAdapter, data, ResolveState.TRANSIENT);
+            }
+        }
+        return referencedAdapter;
     }
 
     
