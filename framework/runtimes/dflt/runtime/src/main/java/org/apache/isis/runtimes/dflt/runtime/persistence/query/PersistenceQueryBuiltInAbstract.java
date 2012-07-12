@@ -21,12 +21,18 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.query;
 
 import java.io.IOException;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryBuiltInAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 /**
  * Corresponds to {@link QueryBuiltInAbstract}.
+ *
+ * <p>
+ * REVIEW: now that we've dropped remoting, could we get rid of the {@link PersistenceQuery} hierarchy
+ * classes and just use the applib {@link Query} throughout?
  */
 public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements PersistenceQueryBuiltIn {
 

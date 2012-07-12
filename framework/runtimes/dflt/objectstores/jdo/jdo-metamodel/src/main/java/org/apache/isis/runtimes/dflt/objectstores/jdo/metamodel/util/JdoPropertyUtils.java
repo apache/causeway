@@ -48,8 +48,8 @@ public final class JdoPropertyUtils {
      * 
      * @see JdoPrimaryKeyPropertyFilter
      */
-    public static OneToOneAssociation getIdPropertyFor(final ObjectSpecification objectSpec) {
-        return getPropertyFor(objectSpec, "@Id", new JdoPrimaryKeyPropertyFilter());
+    public static OneToOneAssociation getPrimaryKeyPropertyFor(final ObjectSpecification objectSpec) {
+        return getPropertyFor(objectSpec, "@PrimaryKey", new JdoPrimaryKeyPropertyFilter());
     }
 
     /**
@@ -89,7 +89,7 @@ public final class JdoPropertyUtils {
     }
     
     public static Object idValueOf(final RootOid oid, ObjectSpecification objectSpec) {
-        final OneToOneAssociation idProperty = getIdPropertyFor(objectSpec);
+        final OneToOneAssociation idProperty = getPrimaryKeyPropertyFor(objectSpec);
         final EncodableFacet idPropEncodableFacet = idProperty.getFacet(EncodableFacet.class);
         final ObjectAdapter idPropValueAdapter = idPropEncodableFacet.fromEncodedString(oid.getIdentifier());
         return idPropValueAdapter.getObject();
@@ -98,7 +98,7 @@ public final class JdoPropertyUtils {
 
     private static void setId(final ObjectAdapter adapter, final ObjectAdapter idValueAdapter) {
         final ObjectSpecification objectSpec = adapter.getSpecification();
-        final OneToOneAssociation idProperty = getIdPropertyFor(objectSpec);
+        final OneToOneAssociation idProperty = getPrimaryKeyPropertyFor(objectSpec);
         if (idProperty == null) {
             throw new IsisException("Specification {0} does not have a single property with IdFacet", objectSpec.getFullIdentifier());
         }
@@ -106,7 +106,7 @@ public final class JdoPropertyUtils {
     }
 
     public static Object getIdFor(final ObjectAdapter adapter) {
-        final OneToOneAssociation idPropertyFor = getIdPropertyFor(adapter.getSpecification());
+        final OneToOneAssociation idPropertyFor = getPrimaryKeyPropertyFor(adapter.getSpecification());
         if (idPropertyFor == null) {
             return null;
         }

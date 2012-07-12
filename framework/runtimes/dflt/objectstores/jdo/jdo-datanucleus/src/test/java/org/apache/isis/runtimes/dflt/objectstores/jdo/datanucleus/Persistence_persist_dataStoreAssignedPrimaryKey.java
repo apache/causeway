@@ -11,8 +11,6 @@ import org.junit.Test;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.AutoAssignedEntity;
 import org.apache.isis.tck.dom.scalars.AutoAssignedEntityRepository;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
 public class Persistence_persist_dataStoreAssignedPrimaryKey {
 

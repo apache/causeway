@@ -19,29 +19,25 @@
 
 package org.apache.isis.tck.dom.scalars;
 
-import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.PrimaryKey;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 
-@PersistenceCapable         // for jdo object store
-@Discriminator("PRMV")      // for jdo object store
-@Entity                     // for jpa object store
-@DiscriminatorValue("PRMV") // for jpa object store
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Discriminator("PRMV")
+@javax.jdo.annotations.Query(
+        name="pve_findByIntProperty", language="JDOQL",  
+        value="SELECT FROM org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity WHERE intProperty == :i")
+@javax.persistence.Entity                    
+@javax.persistence.DiscriminatorValue("PRMV")
 @ObjectType("PRMV")
 public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     // {{ Id (Integer)
     private Integer id;
 
-    @Id         // for jpa object store
-    @PrimaryKey // for jdo object store
+    @javax.persistence.Id
+    @javax.jdo.annotations.PrimaryKey
     public Integer getId() {
         return id;
     }
@@ -159,6 +155,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     // {{ CharProperty
     private char charProperty;
 
+    @javax.jdo.annotations.Column(sqlType="char")
     @MemberOrder(sequence = "1")
     public char getCharProperty() {
         return charProperty;

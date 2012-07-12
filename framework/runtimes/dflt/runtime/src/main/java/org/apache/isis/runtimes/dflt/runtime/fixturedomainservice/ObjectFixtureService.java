@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -181,7 +182,7 @@ public class ObjectFixtureService {
     // //////////////////////////////////////////////////////////////////
 
     // {{ loadFile (ignored)
-    @Ignore
+    @Programmatic
     public void loadFile() {
         FileReader reader = null;
         try {

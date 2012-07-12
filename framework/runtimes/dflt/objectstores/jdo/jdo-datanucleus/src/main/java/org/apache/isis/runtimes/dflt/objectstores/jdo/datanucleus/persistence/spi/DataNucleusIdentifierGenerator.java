@@ -3,8 +3,11 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.s
 import java.util.UUID;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.log4j.Logger;
+import org.datanucleus.identity.OID;
+
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -12,6 +15,7 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
@@ -49,17 +53,22 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator, Adap
     @Override
     public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid) {
         
-        final Object identifier = getPersistenceManager().getObjectId(pojo);
-        
-        if(identifier == null) {
-            // is a service
+        // hack to deal with services
+        if(!(pojo instanceof PersistenceCapable)) {
             return "1";
         }
+        
+        Object identifierObj = getPersistenceManager().getObjectId(pojo);
+        if(identifierObj instanceof org.datanucleus.identity.OID) {
+            // for autoassigned (datastore identity)
+            org.datanucleus.identity.OID dnOid = (org.datanucleus.identity.OID) identifierObj;
+            return dnOid.getKeyValue().toString();
+        } else {
+            // for application-assigned identities
+            // for now, just using toString().  Suspect will need to review this
+            return identifierObj.toString();
+        }
 
-        
-        
-        // for now, just using toString().  Suspect will need to review this
-        return identifier.toString();
     }
 
 

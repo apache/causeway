@@ -1,9 +1,11 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.common.collect.Maps;
 
@@ -11,8 +13,11 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoNamedQuery;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoPropertyUtils;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -28,37 +33,38 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final String queryName = persistenceQuery.getQueryName();
         final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
         final QueryCardinality cardinality = persistenceQuery.getCardinality();
-        final List<?> results = getResults(queryName, map, cardinality);
-        return loadAdapters(persistenceQuery.getSpecification(), results);
-    }
-
-    public List<?> getResults(final String queryName, final Map<String, Object> argumentsByParameterName, final QueryCardinality cardinality) {
-        final JdoNamedQuery namedQuery = getNamedQuery(queryName);
-
-        throw new NotYetImplementedException();
+        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
         
-//        final PersistenceManager persistenceManager = getJdoObjectStore().getPersistenceManager();
-//        final Query emQuery = persistenceManager.createNamedQuery(namedQuery.getName());
-//        
-//        for (final Map.Entry<String, Object> argumentByParameterName : argumentsByParameterName.entrySet()) {
-//            final String parameterName = argumentByParameterName.getKey();
-//            final Object argument = argumentByParameterName.getValue();
-//            emQuery.setParameter(parameterName, argument);
-//        }
-//
-//        if (cardinality == QueryCardinality.MULTIPLE) {
-//            return emQuery.getResultList();
-//        }
-//        if (cardinality == QueryCardinality.SINGLE) {
-//            final Object result = emQuery.getSingleResult();
-//            return result == null ? Collections.EMPTY_LIST : Arrays.asList(result);
-//        }
-//        // should never get here
-//        return Collections.EMPTY_LIST;
+        final List<?> results;
+        if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
+            // special case handling
+            final Class<?> cls = objectSpec.getCorrespondingClass();
+            final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
+            if (pkOtoa == null) {
+                throw new UnsupportedOperationException("cannot search by primary key for DataStore-assigned entities");
+            } 
+            String pkOtoaId = pkOtoa.getId();
+            final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
+            final Query jdoQuery = getPersistenceManager().newQuery(cls, filter);
+            results = (List<?>) jdoQuery.execute();
+        } else {
+            results = getResults(objectSpec, queryName, map, cardinality);
+        }
+        
+        return loadAdapters(objectSpec, results);
     }
 
-    private JdoNamedQuery getNamedQuery(final String queryName) {
-        return getJdoObjectStore().getNamedQuery(queryName);
+    private List<?> getResults(ObjectSpecification objectSpec, final String queryName, final Map<String, Object> argumentsByParameterName, final QueryCardinality cardinality) {
+        
+        final PersistenceManager persistenceManager = getJdoObjectStore().getPersistenceManager();
+        final Class<?> cls = objectSpec.getCorrespondingClass();
+        final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
+        
+        final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
+        if (cardinality == QueryCardinality.MULTIPLE) {
+            return results;
+        }
+        return results.isEmpty()?Collections.emptyList():results.subList(0, 1);
     }
 
     private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {

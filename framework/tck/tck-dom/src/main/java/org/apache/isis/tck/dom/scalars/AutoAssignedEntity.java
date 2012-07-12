@@ -19,12 +19,7 @@
 
 package org.apache.isis.tck.dom.scalars;
 
-import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.PrimaryKey;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -32,28 +27,28 @@ import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
-@PersistenceCapable         // for jdo object store
-@Discriminator("AUAS")      // for jdo object store
-@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY) // for jdo objectstore
-@Entity                     // for jpa object store
-@DiscriminatorValue("AUAS") // for jpa object store
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("AUAS")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("AUAS")
 @ObjectType("AUAS")
 public class AutoAssignedEntity extends AbstractDomainObject {
 
-    // {{ Id (Integer, also used in title)
-    private Integer id;
-
-    @Title(sequence="1", append=": ")
-    @Id         // for jpa object store
-    @PrimaryKey // for jdo object store
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(final Integer id) {
-        this.id = id;
-    }
-    // }}
+//    // {{ Id (Integer, also used in title)
+//    private Integer id;
+//
+//    @Title(sequence="1", append=": ")
+//    @javax.jdo.annotations.PrimaryKey
+//    @javax.persistence.Id
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    public void setId(final Integer id) {
+//        this.id = id;
+//    }
+//    // }}
 
     
     // {{ StringProperty (also used in title)

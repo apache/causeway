@@ -26,21 +26,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an property, collection or action should be ignored from the
- * metamodel.
+ * Indicates that an property, collection or action is to be called
+ * programmatically and should be ignored from the metamodel.
  * 
  * <p>
- * Use of this annotation is discouraged because of the nameclash with
- * <tt>org.junit.Ignore</tt>.
+ * For example, it may be a helper method that needs to be <tt>public</tt> but
+ * that doesn't conform to the requirements of an action (for example, invalid
+ * parameter types).
  * 
- * Instead, use {@link Programmatic}, which is functionally identical.
- * 
- * @see Programmatic
+ * <p>
+ * This is intended as a replacement for {@link Ignore} (the use of which is
+ * being discouraged because of the name clash with <tt>org.junit.Ignore</tt>).
  */
-@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Ignore {
+public @interface Programmatic {
 
 }

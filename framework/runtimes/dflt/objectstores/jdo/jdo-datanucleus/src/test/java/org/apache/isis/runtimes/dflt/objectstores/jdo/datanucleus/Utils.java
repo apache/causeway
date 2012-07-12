@@ -45,11 +45,6 @@ public class Utils {
                 }
             }
 
-            private Statement createStatement() throws SQLException {
-                Connection connection = getConnection();
-                return connection.createStatement();
-            }
-
             private Connection getConnection() {
                 final DataNucleusObjectStore objectStore = (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
                 return objectStore.getJavaSqlConnection();
@@ -74,9 +69,9 @@ public class Utils {
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName", "jdo");
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword", "jdopass");
 
-        //props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");
-        //props.put("isis.persistor.datanucleus.impl.datanucleus.validateTables", "false");
-        //props.put("isis.persistor.datanucleus.impl.datanucleus.validateConstraints", "false");
+        props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");
+        props.put("isis.persistor.datanucleus.impl.datanucleus.validateTables", "true");
+        props.put("isis.persistor.datanucleus.impl.datanucleus.validateConstraints", "true");
         configuration.add(props);
         return configuration;
     }

@@ -31,14 +31,17 @@ import org.apache.isis.applib.DomainObjectContainer;
  * 
  * <p>
  * The principle reason for this is to reduce the size of the API from the
- * {@link DomainObjectContainer} to <tt>RuntimeContext</tt>, as well as possibly
- * to the embedded viewer's <tt>EmbeddedContext</tt>. It also means that the
+ * {@link DomainObjectContainer} to <tt>RuntimeContext</tt>. It also means that the
  * requirements for writing an object store are more easily expressed: support
  * the three built-in queries, plus any others.
  * 
  * <p>
  * Note also that the {@link QueryFindByPattern} isn't actually serializable
  * (because it references an arbitrary pojo).
+ * 
+ * <p>
+ * REVIEW: now that we've dropped remoting, could we get rid of the <tt>PersistenceQuery</tt>
+ * classes and just use these classes throughout?
  */
 public abstract class QueryBuiltInAbstract<T> extends QueryAbstract<T> {
 

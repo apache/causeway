@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.Ignore;
+import org.junit.Ignore;
 
 public class DefaultPersistAlgorithmTest {
 

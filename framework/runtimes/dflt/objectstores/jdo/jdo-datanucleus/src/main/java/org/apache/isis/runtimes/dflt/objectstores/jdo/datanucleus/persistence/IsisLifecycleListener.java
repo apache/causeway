@@ -3,6 +3,7 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence;
 import java.text.MessageFormat;
 import java.util.Map;
 
+import javax.jdo.JDOHelper;
 import javax.jdo.listener.AttachLifecycleListener;
 import javax.jdo.listener.ClearLifecycleListener;
 import javax.jdo.listener.CreateLifecycleListener;
@@ -23,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
@@ -48,22 +50,6 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(" [currently suspended - ignoring]");
             return;
         }
-
-        ensureRootObject(event);
-
-        final PersistenceCapable pojo = persistenceCapableFor(event);
-        
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-        final RootOid transientOid = (RootOid) adapter.getOid();
-        final RootOid persistentOid = getOidGenerator().createPersistent(pojo, transientOid);
-
-        // most of the magic is here...
-        getAdapterManager().remapAsPersistent(adapter, persistentOid);
-
-        clearDirtyFor(adapter);
-        CallbackUtils.callCallback(adapter, PersistedCallbackFacet.class);
-
-        ensureFrameworksInAgreement(event);
     }
 
     @Override
@@ -133,8 +119,6 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             return;
         }
 
-        ensureRootObject(event);
-        ensureFrameworksInAgreement(event);
     }
 
     @Override
@@ -149,13 +133,36 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         }
 
         ensureRootObject(event);
-
+        
+        
         final PersistenceCapable pojo = persistenceCapableFor(event);
         
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        
+        if(!pojo.jdoIsPersistent()) {
+            throw new IllegalStateException("Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
+        }
 
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        final RootOid isisOid = (RootOid) adapter.getOid();
+        
+        Class<? extends CallbackFacet> callbackFacetClass;
+        if (isisOid.isTransient()) {
+            final RootOid persistentOid = getOidGenerator().createPersistent(pojo, isisOid);
+            
+//            if(persistentOid == null) {
+//                return;
+//            }
+
+            // most of the magic is here...
+            getAdapterManager().remapAsPersistent(adapter, persistentOid);
+
+            callbackFacetClass = PersistedCallbackFacet.class;
+        } else {
+            callbackFacetClass = UpdatedCallbackFacet.class;
+        }
+        
         clearDirtyFor(adapter);
-        CallbackUtils.callCallback(adapter, UpdatedCallbackFacet.class);
+        CallbackUtils.callCallback(adapter, callbackFacetClass);
 
         ensureFrameworksInAgreement(event);
     }

@@ -37,7 +37,7 @@ public final class JdoNamedQuery {
 
     private final String name;
     private final String query;
-    private final ObjectSpecification noSpec;
+    private final ObjectSpecification objSpec;
 
     public JdoNamedQuery(final String name, final String query,
             final ObjectSpecification noSpec) {
@@ -47,7 +47,7 @@ public final class JdoNamedQuery {
 
         this.name = name;
         this.query = query;
-        this.noSpec = noSpec;
+        this.objSpec = noSpec;
     }
 
     public JdoNamedQuery(final Query jdoNamedQuery,
@@ -64,7 +64,7 @@ public final class JdoNamedQuery {
     }
 
     public ObjectSpecification getObjectSpecification() {
-        return noSpec;
+        return objSpec;
     }
 
     @Override

@@ -19,16 +19,18 @@
 
 package org.apache.isis.core.progmodel.facets.object.ignore.annotation;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
-public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
-    public RemoveIgnoreAnnotationMethodsFacetFactory() {
+    public RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
@@ -37,6 +39,7 @@ public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFa
         removeIgnoredMethods(processClassContext.getCls(), processClassContext);
     }
 
+    @SuppressWarnings("deprecation")
     private void removeIgnoredMethods(final Class<?> cls, final MethodRemover methodRemover) {
         if (cls == null) {
             return;
@@ -44,11 +47,16 @@ public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFa
 
         final Method[] methods = cls.getMethods();
         for (final Method method : methods) {
-            final Ignore annotation = getAnnotation(method, Ignore.class);
-            if (annotation != null) {
-                methodRemover.removeMethod(method);
-            }
+            removeAnnotatedMethods(methodRemover, method, Ignore.class);
+            removeAnnotatedMethods(methodRemover, method, Programmatic.class);
         }
+    }
+
+    private static <T extends Annotation> void removeAnnotatedMethods(final MethodRemover methodRemover, final Method method, Class<T> annotationClass) {
+        if (!isAnnotationPresent(method, annotationClass)) {
+            return;
+        } 
+        methodRemover.removeMethod(method);
     }
 
 }

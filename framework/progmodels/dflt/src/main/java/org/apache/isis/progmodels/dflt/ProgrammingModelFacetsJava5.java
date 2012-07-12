@@ -75,7 +75,7 @@ import org.apache.isis.core.progmodel.facets.object.facets.annotation.FacetsAnno
 import org.apache.isis.core.progmodel.facets.object.hidden.HiddenAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.hidden.method.HiddenObjectViaHiddenMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.icon.method.IconMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.annotation.RemoveIgnoreAnnotationMethodsFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.annotation.RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
@@ -200,7 +200,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(RemoveInitMethodFacetFactory.class);
         addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
         addFactory(RemoveGetClassMethodFacetFactory.class);
-        addFactory(RemoveIgnoreAnnotationMethodsFacetFactory.class);
+        addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);
         addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
 
         // must be before any other FacetFactories that install

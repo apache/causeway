@@ -20,12 +20,16 @@
 package org.apache.isis.tck.dom.scalars;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.query.QueryDefault;
 
 @Named("PrimitiveValuedEntities")
 @ObjectType("PrimitiveValuedEntities")
@@ -42,10 +46,30 @@ public class PrimitiveValuedEntityRepository extends AbstractFactoryAndRepositor
         return allInstances(PrimitiveValuedEntity.class);
     }
 
+    @QueryOnly
+    @MemberOrder(sequence = "1")
+    public PrimitiveValuedEntity findById(int id) {
+        final Query<PrimitiveValuedEntity> query = new QueryDefault<PrimitiveValuedEntity>(PrimitiveValuedEntity.class, PrimitiveValuedEntity.class.getName() + "#pk", "id", id);
+        return this.firstMatch(query);
+    }
+
     @MemberOrder(sequence = "2")
     public PrimitiveValuedEntity newEntity() {
         final PrimitiveValuedEntity entity = newTransientInstance(PrimitiveValuedEntity.class);
         persist(entity);
         return entity;
     }
+    
+    @Programmatic
+    public PrimitiveValuedEntity findByNamedQueryFirstOnly(String queryName, Map<String, Object> argumentByParameterName) {
+        final Query<PrimitiveValuedEntity> query = new QueryDefault<PrimitiveValuedEntity>(PrimitiveValuedEntity.class, queryName, argumentByParameterName); 
+        return this.firstMatch(query);
+    }
+
+    @Programmatic
+    public List<PrimitiveValuedEntity> findByNamedQueryAll(String queryName, Map<String, Object> argumentByParameterName) {
+        final Query<PrimitiveValuedEntity> query = new QueryDefault<PrimitiveValuedEntity>(PrimitiveValuedEntity.class, queryName, argumentByParameterName); 
+        return this.allMatches(query);
+    }
+    
 }
