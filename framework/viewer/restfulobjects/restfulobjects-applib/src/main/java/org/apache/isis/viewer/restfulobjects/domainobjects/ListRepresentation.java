@@ -29,7 +29,7 @@ public class ListRepresentation extends DomainRepresentation {
     }
 
     public JsonRepresentation getValues() {
-        return getArray("values").ensureArray();
+        return getArray("value").ensureArray();
     }
 
 }

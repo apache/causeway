@@ -109,6 +109,8 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
 
         // then
         for (final LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
+            assertThat("HiddenRepository should not show up in services list", false, is(link.getHref().endsWith("HiddenRepository")));
+
             final RestfulResponse<JsonRepresentation> followJsonResp = client.follow(link);
             assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 

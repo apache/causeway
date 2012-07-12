@@ -96,6 +96,9 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         final LinkFollower linkFollower = getLinkFollower().follow("value");
 
         for (final ObjectAdapter adapter : objectAdapters) {
+            if (adapter.getSpecification().isHidden()) {
+                continue;
+            }
             final JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
             values.arrayAdd(linkToObject);
 
