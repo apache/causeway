@@ -40,8 +40,8 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     // {{ Id (Integer)
     private Integer id;
 
-    @PrimaryKey // for jdo object store
     @Id         // for jpa object store
+    @PrimaryKey // for jdo object store
     public Integer getId() {
         return id;
     }
@@ -154,5 +154,20 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
         this.doubleProperty = doubleProperty;
     }
     // }}
+
+    
+    // {{ CharProperty
+    private char charProperty;
+
+    @MemberOrder(sequence = "1")
+    public char getCharProperty() {
+        return charProperty;
+    }
+
+    public void setCharProperty(final char charProperty) {
+        this.charProperty = charProperty;
+    }
+    // }}
+
 
 }

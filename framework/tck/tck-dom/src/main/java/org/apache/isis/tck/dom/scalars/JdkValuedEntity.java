@@ -28,20 +28,15 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Title;
 
 @ObjectType("JDKV")
 public class JdkValuedEntity extends AbstractDomainObject {
 
-    // {{ Title
-    public String title() {
-        return getStringProperty();
-    }
-
-    // }}
-
-    // {{ StringProperty
+    // {{ StringProperty (also title)
     private String stringProperty;
 
+    @Title
     @Optional
     @MemberOrder(sequence = "1")
     public String getStringProperty() {
