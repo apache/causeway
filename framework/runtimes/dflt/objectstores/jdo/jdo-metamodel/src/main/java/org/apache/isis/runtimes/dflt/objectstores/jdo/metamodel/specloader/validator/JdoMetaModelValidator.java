@@ -72,27 +72,6 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
         throw new MetaModelInvalidException(MessageFormat.format("Class {0} is mapped as both @PersistenceCapable and @EmbeddedOnly; " + "not supported", classFullName));
     }
 
-//    private void ensureEntityIfAnnotatedAsSuchHasOrInheritsAnPrimaryKyProperty(final ObjectSpecification objSpec) throws ClassNotFoundException {
-//        if (!objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
-//            return;
-//        }
-//
-//        final String classFullName = objSpec.getFullIdentifier();
-//        final Class<?> cls = Class.forName(classFullName);
-//
-//        if (cls.isInterface()) {
-//            // TODO: could possibly have a FacetFactory to check that the
-//            // @javax.persistence.Transient
-//            // annotation has been set on all properties?
-//            return;
-//        }
-//
-//        final OneToOneAssociation idProperty = JdoPropertyUtils.getPrimaryKeyPropertyFor(objSpec);
-//        if (idProperty == null) {
-//            throw new MetaModelInvalidException(MessageFormat.format("Class {0} does not have a single property with IdFacet", classFullName));
-//        }
-//    }
-
     private void ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(final ObjectSpecification objSpec) {
         if (!objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return;

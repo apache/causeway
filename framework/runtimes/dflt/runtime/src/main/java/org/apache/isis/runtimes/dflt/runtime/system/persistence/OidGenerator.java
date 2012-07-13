@@ -127,10 +127,6 @@ public class OidGenerator implements DebuggableWithTitle, SessionScopedComponent
         final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
         final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo, transientRootOid);
         
-//        if(persistentIdentifier == null) {
-//            return null;
-//        }
-//        
         return RootOidDefault.create(objectSpecId, persistentIdentifier);
     }
 
