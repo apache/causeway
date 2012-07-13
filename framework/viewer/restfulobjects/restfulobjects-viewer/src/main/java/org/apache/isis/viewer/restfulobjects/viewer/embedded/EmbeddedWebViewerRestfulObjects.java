@@ -31,7 +31,7 @@ import org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted;
 
-final class EmbeddedWebViewerJson extends EmbeddedWebViewer {
+final class EmbeddedWebViewerRestfulObjects extends EmbeddedWebViewer {
     @Override
     public WebAppSpecification getWebAppSpecification() {
         final WebAppSpecification webAppSpec = new WebAppSpecification();
@@ -40,20 +40,20 @@ final class EmbeddedWebViewerJson extends EmbeddedWebViewer {
         
         webAppSpec.addContextParams("isis.viewers", "restfulobjects");
 
-        webAppSpec.addContextParams(JsonViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulObjectsApplication.class.getName());
+        webAppSpec.addContextParams(RestfulObjectsViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulObjectsApplication.class.getName());
 
         webAppSpec.addFilterSpecification(IsisSessionFilter.class, 
                 MapUtils.asMap(
                         IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY, AuthenticationSessionStrategyTrusted.class.getName(),
                         IsisSessionFilter.WHEN_NO_SESSION_KEY, IsisSessionFilter.WhenNoSession.CONTINUE.name().toLowerCase()), 
-                JsonViewerInstaller.EVERYTHING);
+                RestfulObjectsViewerInstaller.EVERYTHING);
 
-        webAppSpec.addFilterSpecification(ResourceCachingFilter.class, JsonViewerInstaller.STATIC_CONTENT);
-        webAppSpec.addServletSpecification(ResourceServlet.class, JsonViewerInstaller.STATIC_CONTENT);
+        webAppSpec.addFilterSpecification(ResourceCachingFilter.class, RestfulObjectsViewerInstaller.STATIC_CONTENT);
+        webAppSpec.addServletSpecification(ResourceServlet.class, RestfulObjectsViewerInstaller.STATIC_CONTENT);
 
         
         webAppSpec.addServletContextListener(ResteasyBootstrap.class);
-        webAppSpec.addServletSpecification(HttpServletDispatcher.class, JsonViewerInstaller.ROOT);
+        webAppSpec.addServletSpecification(HttpServletDispatcher.class, RestfulObjectsViewerInstaller.ROOT);
 
 
         return webAppSpec;
