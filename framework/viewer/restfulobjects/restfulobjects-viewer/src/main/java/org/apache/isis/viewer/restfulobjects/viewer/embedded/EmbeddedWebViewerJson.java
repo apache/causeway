@@ -27,6 +27,7 @@ import org.apache.isis.core.webapp.content.ResourceServlet;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
+import org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted;
 
@@ -35,17 +36,25 @@ final class EmbeddedWebViewerJson extends EmbeddedWebViewer {
     public WebAppSpecification getWebAppSpecification() {
         final WebAppSpecification webAppSpec = new WebAppSpecification();
 
-        webAppSpec.addContextParams("isis.viewers", "json");
+        webAppSpec.addServletContextListener(IsisWebAppBootstrapper.class);
+        
+        webAppSpec.addContextParams("isis.viewers", "restfulobjects");
 
         webAppSpec.addContextParams(JsonViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulObjectsApplication.class.getName());
 
-        webAppSpec.addServletContextListener(ResteasyBootstrap.class);
-
-        webAppSpec.addFilterSpecification(IsisSessionFilter.class, MapUtils.asMap(IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY, AuthenticationSessionStrategyTrusted.class.getName()), JsonViewerInstaller.EVERYTHING);
-        webAppSpec.addServletSpecification(HttpServletDispatcher.class, JsonViewerInstaller.ROOT);
+        webAppSpec.addFilterSpecification(IsisSessionFilter.class, 
+                MapUtils.asMap(
+                        IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY, AuthenticationSessionStrategyTrusted.class.getName(),
+                        IsisSessionFilter.WHEN_NO_SESSION_KEY, IsisSessionFilter.WhenNoSession.CONTINUE.name().toLowerCase()), 
+                JsonViewerInstaller.EVERYTHING);
 
         webAppSpec.addFilterSpecification(ResourceCachingFilter.class, JsonViewerInstaller.STATIC_CONTENT);
         webAppSpec.addServletSpecification(ResourceServlet.class, JsonViewerInstaller.STATIC_CONTENT);
+
+        
+        webAppSpec.addServletContextListener(ResteasyBootstrap.class);
+        webAppSpec.addServletSpecification(HttpServletDispatcher.class, JsonViewerInstaller.ROOT);
+
 
         return webAppSpec;
     }

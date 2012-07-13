@@ -23,34 +23,6 @@
 
 	<display-name>RestfulObjects TCK</display-name>
 
-	<listener>
-		<listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
-	</listener>
-
-	<context-param>
-		<param-name>isis.viewers</param-name>
-		<param-value>restfulobjects</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>javax.ws.rs.Application</param-name>
-		<param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
-	</context-param>
-
-	<filter>
-		<filter-name>IsisSessionFilter</filter-name>
-		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
-		<init-param>
-			<!-- trusted client, so no authentication required -->
-			<param-name>authenticationSessionStrategy</param-name>
-			<param-value>org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted</param-value>
-		</init-param>
-		<init-param>
-            <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->
-            <param-name>whenNoSession</param-name>
-            <param-value>continue</param-value>
-        </init-param>
-	</filter>
 
 	<filter>
 		<filter-name>ResourceCachingFilter</filter-name>
@@ -60,11 +32,6 @@
 			<param-value>86400</param-value>
 		</init-param>
 	</filter>
-
-	<filter-mapping>
-		<filter-name>IsisSessionFilter</filter-name>
-		<url-pattern>*</url-pattern>
-	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>ResourceCachingFilter</filter-name>
@@ -87,24 +54,10 @@
 		<url-pattern>*.gif</url-pattern>
 	</filter-mapping>
 
-	<listener>
-		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-	</listener>
-
-	<servlet>
-		<servlet-name>RestEasy</servlet-name>
-		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
-	</servlet>
-
 	<servlet>
 		<servlet-name>Resource</servlet-name>
 		<servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
 	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>RestEasy</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Resource</servlet-name>
@@ -122,5 +75,59 @@
         <servlet-name>Resource</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
+
+
+
+
+	<listener>
+		<listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>isis.viewers</param-name>
+		<param-value>restfulobjects</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>IsisSessionFilter</filter-name>
+		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
+		<init-param>
+			<!-- trusted client, so no authentication required -->
+			<param-name>authenticationSessionStrategy</param-name>
+			<param-value>org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted</param-value>
+		</init-param>
+		<init-param>
+            <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->
+            <param-name>whenNoSession</param-name>
+            <param-value>continue</param-value>
+        </init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>IsisSessionFilter</filter-name>
+		<url-pattern>*</url-pattern>
+	</filter-mapping>
+
+
+
+
+	<listener>
+		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>javax.ws.rs.Application</param-name>
+		<param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>RestEasy</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RestEasy</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 
 </web-app>
