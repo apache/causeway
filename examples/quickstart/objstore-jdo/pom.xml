@@ -26,14 +26,22 @@
         <version>0.3.1-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-fixture</artifactId>
-	<name>Quickstart Fixtures</name>
+	<artifactId>quickstart-objstore-jdo</artifactId>
+	<name>Quickstart Repositories (for JDO)</name>
 
 	<dependencies>
+	
+		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>quickstart-dom</artifactId>
 		</dependency>
+		
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>jdo-datanucleus</artifactId>
+        </dependency>
+		
 	</dependencies>
 
 </project>

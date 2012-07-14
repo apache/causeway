@@ -23,14 +23,14 @@
 
     <groupId>org.apache.isis.examples</groupId>
     <artifactId>quickstart</artifactId>
-    <version>0.3.0-incubating-SNAPSHOT</version>
+    <version>0.3.1-incubating-SNAPSHOT</version>
 
     <name>Quickstart App</name>
 
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.3.0-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.3.1-incubating-SNAPSHOT</isis.version>
     </properties>
 
     <repositories>
@@ -147,11 +147,14 @@
 
     <modules>
         <module>dom</module>
+        <module>exploration</module>
         <module>fixture</module>
         <module>objstore-dflt</module>
-        <module>objstore-mongodb</module>
+        <module>objstore-jdo</module>
+        <module>objstore-nosql</module>
         <module>objstore-sql</module>
         <module>webapp</module>
+        <module>wicket</module>
         <module>tests-junit</module>
         <module>tests-bdd</module>
     </modules>
@@ -348,6 +351,7 @@
                 <version>${isis.version}</version>
             </dependency>
 
+
             <!-- isis: runtimes-dflt: objectstores: dflt -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
@@ -355,10 +359,27 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: objectstores: xml -->
+            <!-- isis: runtimes-dflt: objectstores: jdo -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>xml</artifactId>
+                <artifactId>jdo</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jdo-applib</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jdo-datanucleus</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
+            <!-- isis: runtimes-dflt: objectstores: mongodb and fileserver -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>nosql</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -369,10 +390,10 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: objectstores: nosql -->
+            <!-- isis: runtimes-dflt: objectstores: xml -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>nosql</artifactId>
+                <artifactId>xml</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -391,58 +412,13 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: remoting -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>common</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-sockets</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>marshalling-encode</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>marshalling-serialize</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
 
+            <!-- isis: viewer: dnd -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-http</artifactId>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>dnd</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-http-client</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-http-server</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>marshalling-xstream</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
-
-            <!-- isis: runtimes: embedded -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>embedded</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
 
             <!-- isis: viewer: html -->
             <dependency>
@@ -451,20 +427,20 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: viewer: json -->
+            <!-- isis: viewer: restfulobjects -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json</artifactId>
+                <artifactId>restfulobjects</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json-applib</artifactId>
+                <artifactId>restfulobjects-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json-viewer</artifactId>
+                <artifactId>restfulobjects-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -517,17 +493,7 @@
             </dependency>
 
 
-            <!-- isis: viewer: dnd -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>dnd</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
-
             <!-- isis: viewer: wicket -->
-            <!-- 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>wicket</artifactId>
@@ -558,7 +524,6 @@
                 <artifactId>wicket-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            -->
 
         </dependencies>
     </dependencyManagement>

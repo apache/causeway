@@ -23,11 +23,11 @@
     <parent>
     	<groupId>org.apache.isis.examples</groupId>
         <artifactId>quickstart</artifactId>
-        <version>0.3.0-incubating-SNAPSHOT</version>
+        <version>0.3.1-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-objstore-mongodb</artifactId>
-	<name>Quickstart Repositories (for MongoDB)</name>
+	<artifactId>quickstart-objstore-nosql</artifactId>
+	<name>Quickstart Repos (for MongoDB / FileServer)</name>
 
 	<dependencies>
 	
@@ -38,7 +38,7 @@
 		</dependency>
 
 
-        <!-- isis nosql-mongodb objectstore -->
+        <!-- isis nosql objectstore -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>nosql</artifactId>

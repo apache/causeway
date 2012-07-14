@@ -23,7 +23,7 @@
     <parent>
     	<groupId>org.apache.isis.examples</groupId>
         <artifactId>quickstart</artifactId>
-        <version>0.3.0-incubating-SNAPSHOT</version>
+        <version>0.3.1-incubating-SNAPSHOT</version>
     </parent>
 
 	<artifactId>quickstart-objstore-sql</artifactId>

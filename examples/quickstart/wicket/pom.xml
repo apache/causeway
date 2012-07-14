@@ -16,8 +16,7 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,11 +25,15 @@
         <version>0.3.1-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-webapp</artifactId>
-	<name>Quickstart Webapp</name>
+	<artifactId>quickstart-wicket</artifactId>
+	<name>QuickStart Wicket App</name>
 	
 	<packaging>war</packaging>
 
+	<properties>
+        <siteBaseDir>..</siteBaseDir>
+	</properties>
+    
 	<build>
 		<plugins>
             <plugin>
@@ -63,8 +66,8 @@
                 <configuration>
                     <tasks>
                         <exec executable="java" failonerror="true">
-                            <arg value="-jar"/>
-                            <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war"/>
+                            <arg value="-jar" />
+                            <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war" />
                         </exec>
                     </tasks>
                 </configuration>
@@ -87,66 +90,20 @@
         </dependency>
 
 
-
-        <!-- domain service/repository implementations -->
+        <!-- domain service implementations -->
         
-        <!--
-          - uncomment in order to use in-memory or xml object stores
-          - (also edit isis.properties)
-          -
-          -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart-objstore-dflt</artifactId>
         </dependency>
         
-        <!--
-         - uncomment in order to use jdo object store
-         - (also edit isis.properties)
-         - 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-jdo</artifactId>
-        </dependency>
-        -->
         
-        <!--
-         - uncomment in order to use sql object store
-         - (also edit isis.properties)
-         -
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-sql</artifactId>
-        </dependency>
-        -->
-
-        <!--
-         - uncomment in order to use either mongodb or fileserver object store
-         - (also edit isis.properties)
-         - 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-nosql</artifactId>
-        </dependency>
-        -->
-        
-
 
         <!-- isis viewer -->
 		<dependency>
-	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>html</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>wicket-viewer</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>restfulobjects-viewer</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>scimpi-servlet</artifactId>
-        </dependency>
 
 
         <!-- isis runtime -->
@@ -158,6 +115,21 @@
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>nosql</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>jdo-datanucleus</artifactId>
         </dependency>
         
         <!-- isis progmodel -->

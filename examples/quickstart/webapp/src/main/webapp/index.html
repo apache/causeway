@@ -44,28 +44,45 @@ th {
     <body>
         <h2>Congratulations!</h2>
         <p>Congratulations, you've successfully run the <a href="http://incubator.apache.org/isis">Apache Isis</a> quickstart archetype
-           and are now running the generated application.</p>
+           and are now running the generated 'webapp' application.</p>
 
-        <p>The app has the following viewers are configured:</p>
+        <p>This webapp has the following viewers are configured:</p>
         <table>
-            <tr><th>Viewer</th><th>Description</th><th>Further Documentation</th></tr>
-            <tr><td><a href="logon.htmlviewer">HTML viewer</a></td><td>for building simple, non-customizable webapps</td><td>(none currently)</td></tr>
-            <tr><td><a href="login.shtml">Scimpi viewer</a></td><td>which supports optional customization</td><td><a href="http://incubator.apache.org/isis/viewer/scimpi/docbkx/html/guide/isis-scimpi-viewer.html">Developers' guide</a></td></tr>
-            <tr><td><a href="services">JSON viewer</a></td><td>which exposes a REST API to supporting custom UIs (eg Javascript) and integration scenarios</td><td><a href="http://restfulobjects.org">Restful Objects spec</a></td></tr>
-            <tr><td><a href="mobile/index.html">JQueryMobile demo</a></td><td>which is a demo mobile webapp that can be used browse the REST API</td><td>(none)</td></tr>
+            <tr><th>Viewer</th><th>Description</th><th>Prod use?</th><th>Further Documentation</th></tr>
+            <tr><td><a href="logon.htmlviewer">HTML viewer</a></td><td>for building simple, non-customizable webapps</td><td>Yes</td><td>(none currently)</td></tr>
+            <tr><td><a href="login.shtml">Scimpi viewer</a></td><td>which supports optional customization</td><td>Yes</td><td><a href="http://incubator.apache.org/isis/viewer/scimpi/docbkx/html/guide/isis-scimpi-viewer.html">Developers' guide</a></td></tr>
+            <tr><td><a href="services">Restful Objects viewer</a></td><td>which exposes a REST API to supporting custom UIs (eg Javascript) and integration scenarios</td><td>(not currently)</td><td><a href="http://restfulobjects.org">Restful Objects spec</a></td></tr>
+            <tr><td><a href="mobile/index.html">JQueryMobile demo</a></td><td>which is a demo mobile webapp that can be used browse the REST API</td><td>(not currently)</td><td>(none)</td></tr>
         </table>
 
         <p>Follow the links above to explore these viewers, using username: <tt>sven</tt>, password: <tt>pass</tt>.</p>
         
         <p>It also has the following objectstores (databases) configured:</p>
         <table>
-            <tr><th>Object Store</th><th>Description</th><th>Further Documentation</th></tr>
-            <tr><td>In-memory objectstore</td><td>for rapid prototyping</td><td>(none)</td></tr>
-            <tr><td>NoSQL MongoDB objectstore</td><td>for persisting to a MongoDB instance</td><td>(none currently)</td></tr>
-            <tr><td>SQL objectstore</td><td>for persisting to a relational database</td><td><a href="http://incubator.apache.org/isis/runtimes/dflt/objectstores/sql/docbkx/html/guide/isis-sql-objectstore.html">Config and Deployment guide</a></td></tr>
+            <tr><th>Object Store</th><th>Description</th><th>Prod use?</th><th>Further Documentation</th></tr>
+            <tr><td>In-memory objectstore</td><td>for rapid prototyping</td><td>No</td><td>(none currently)</td></tr>
+            <tr><td>XML objectstore</td><td>also for rapid prototyping but which persists data in local XML files</td><td>No</td><td>(none currently)</td></tr>
+            <tr><td>JDO objectstore</td><td>for persisting using JDO DataNucleus to a relational database</td><td>Yes</td><td>(none currently)</td></tr>
+            <tr><td>SQL objectstore</td><td>for persisting simple domain models to a relational database</td><td>Yes</td><td><a href="http://incubator.apache.org/isis/runtimes/dflt/objectstores/sql/docbkx/html/guide/isis-sql-objectstore.html">Config and Deployment guide</a></td></tr>
+            <tr><td>MongoDB objectstore</td><td>for persisting as JSON docs to MongoDB</td><td>(not currently)</td><td>(none currently)</td></tr>
+            <tr><td>FileServer objectstore</td><td>for persisting as JSON docs to Isis' own FileServer instance</td><td>Yes</td><td>(none currently)</td></tr>
         </table>
         
         <p>The in-memory objectstore is the default, as it takes no additional setup.</p>
+
+        <h2>Other viewers</h2>
+        
+        <p>In addition to the viewers, Isis also provides two further viewers configured in other modules. 
+
+        <table>
+            <tr><th>Viewer</th><th>Module</th><th>Description</th><th>Prod use?</th><th>Further Documentation</th></tr>
+            <tr><td>Wicket viewer</td><td><tt>quickstart-wicket</tt></td><td>which exposes a customizable webapp using Apache Wicket (its session management is such that it cannot be run in this webapp)</td><td>(not currently)</td><td><a href="http://incubator.apache.org/isis/viewer/wicket/docbkx/html/guide/isis-wicket-viewer.html">Developers' guide</a></td></tr>
+            <tr><td>Drag-n-Drop viewer</td><td><tt>quickstart-exploration</tt></td><td>which is intended for the development environment only (not production); it makes it easy for developers and analysts to explore the domain</td><td>No</td><td>(none currently)</td></tr>
+        </table>
+        
+        <p>
+        The <tt>quickstart-wicket</tt> webapp supports the full set of object stores as this webapp.  The <tt>quickstart-exploration</tt> app in contrast is configured only to
+        run with the in-memory and XML object stores.</p>
 
         <h2>What next?</h2>
 
@@ -75,7 +92,7 @@ th {
         <tt>&lt;filter&gt;RedirectToDocsFilter&lt;/filter&gt;</tt> entry in <tt>web.xml</tt>.
         
         <p>Also, decide which objectstore you want to use to persist your domain objects.  As noted above, the in-memory object store is the default.  
-        If you decide to use the NoSQL (MongoDB) or SQL object stores, you'll need to make a number of configuration changes:
+        If you decide to use any of the other object stores, you'll need to make a number of configuration changes:
         <ul>
             <li>in the <tt>WEB-INF/isis.properties</tt> config file:
                 <ul>
@@ -84,13 +101,20 @@ th {
                 </ul>
             </li>
             <li>in the <tt>WEB-INF/persistor_xxx.properties</tt> file, verify the configuration of the server (hostname, port, etc)</li>
-            <li>modify the pom.xml, to depend on the corresponding <tt>objectstore-xxx</tt> module</li>
-            <li>if using SQL object store, modify the pom.xml of the corresponding <tt>objectstore-xxx</tt> to bring in JDBC drivers</li>
+            <li>modify the pom.xml, to depend on the corresponding <tt>objstore-xxx</tt> module
+                <ul>
+                    <li>the in-memory and XML object stores use the to <tt>objstore-dflt</tt> module</li>
+                    <li>the JDO object store corresponds to <tt>objstore-jdo</tt> module</li>
+                    <li>the SQL object store corresponds to <tt>objstore-sql</tt> module</li>
+                    <li>the MongoDB and FileServer object stores corresponds to <tt>objstore-nosql</tt> module</li>
+                </ul>
+            </li>
+            <li>If using the JDO or SQL object stores, you'll also need to modify the pom.xml of the corresponding <tt>objectstore-xxx</tt> to bring in JDBC drivers</li>
         </ul>
 
         <p>While doing initial prototyping you may find that the default in-memory objectstore suffices; the <tt>isis.fixtures</tt> / <tt>isis.fixtures.prefix</tt> 
         properties in the <tt>WEB-INF/isis.properties</tt> configuration file define an the initial data set with which to seed the database.  
-        <p>For both the NoSQL and SQL object stores, these fixtures are loaded the very first time that the system is bootstrapped, but are then
+        <p>For the other SQL object stores, these fixtures are loaded the very first time that the system is bootstrapped, but are then
         not loaded thereafter.
 
         <h2>Running Tests</h2>
@@ -139,7 +163,7 @@ th {
             <tr><td>WEB-INF/persistor_sql.properties</td><td>SQL objectstore configuration file</td></tr>
             <tr><td>WEB-INF/user-profile-store_in-memory.properties</td><td>In-memory user profile store configuration file</td></tr>
             <tr><td>WEB-INF/viewer_html.properties</td><td>HTML viewer configuration file</td></tr>
-            <tr><td>WEB-INF/viewer_json.properties</td><td>JSON viewer configuration file</td></tr>
+            <tr><td>WEB-INF/viewer_restfulobjects.properties</td><td>Restful Objects viewer configuration file</td></tr>
             <tr><td>WEB-INF/viewer_scimpi.properties</td><td>Scimpi viewer configuration file</td></tr>
         </table>        .
         
