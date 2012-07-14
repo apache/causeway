@@ -50,5 +50,3 @@ public class JdoProgrammingModelFacets extends ProgrammingModelFacetsJava5 {
 
 }
 
-
-// Copyright (c) Naked Objects Group Ltd.

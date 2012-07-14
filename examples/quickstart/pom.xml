@@ -183,7 +183,13 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-objstore-mongodb</artifactId>
+                <artifactId>quickstart-objstore-jdo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>quickstart-objstore-nosql</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

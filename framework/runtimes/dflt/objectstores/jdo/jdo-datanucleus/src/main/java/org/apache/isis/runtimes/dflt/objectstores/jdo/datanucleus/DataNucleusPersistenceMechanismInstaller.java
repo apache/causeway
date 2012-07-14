@@ -1,5 +1,6 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus;
 
+
 import java.util.Map;
 
 import org.apache.isis.core.commons.components.Installer;
