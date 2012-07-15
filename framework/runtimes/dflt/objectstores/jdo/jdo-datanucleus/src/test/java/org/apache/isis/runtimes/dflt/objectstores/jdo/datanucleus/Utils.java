@@ -22,6 +22,9 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.specloader.progmodelfacets.DataNucleusProgrammingModelFacets;
@@ -72,10 +75,11 @@ public class Utils {
         Properties props = new Properties();
         
         props.put("isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
-        
+
+        // last one wins!
+        configureHsqlDbFileBased(props);
+        configureForMsSqlServer(props);
         configureHsqlDbInMemory(props);
-//        configureHsqlDbFileBased(props);
-//        configureForMsSqlServer(props);
 
         props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");
         props.put("isis.persistor.datanucleus.impl.datanucleus.validateTables", "true");
@@ -104,6 +108,18 @@ public class Utils {
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:sqlserver://127.0.0.1:1433;instance=SQLEXPRESS;databaseName=jdo;");
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName", "jdo");
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword", "jdopass");
+    }
+
+    
+
+    static long toMillis(int year, int monthOfYear, int dayOfMonth) {
+        LocalDate d = new LocalDate(year, monthOfYear, dayOfMonth);
+        return d.toDateMidnight().getMillis();
+    }
+
+    static long toMillis(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute) {
+        LocalDateTime d = new LocalDateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute);
+        return d.toDateTime().getMillis();
     }
 
 }

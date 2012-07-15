@@ -155,7 +155,8 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     // {{ CharProperty
     private char charProperty;
 
-    @javax.jdo.annotations.Column(jdbcType="char", length=1)
+    @javax.jdo.annotations.Column(jdbcType="char", length=1) // for hsqldb
+    //@javax.jdo.annotations.Column(jdbcType="char", length=1, sqlType="char") // for mssqlserver
     @MemberOrder(sequence = "1")
     public char getCharProperty() {
         return charProperty;

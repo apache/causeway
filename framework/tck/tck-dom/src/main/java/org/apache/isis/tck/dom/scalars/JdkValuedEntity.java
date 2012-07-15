@@ -30,12 +30,20 @@ import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Discriminator("JDKV")
+@javax.jdo.annotations.Query(
+        name="jdkv_findByStringProperty", language="JDOQL",  
+        value="SELECT FROM org.apache.isis.tck.dom.scalars.JdkValuedEntity WHERE stringProperty == :i")
+@javax.persistence.Entity                    
+@javax.persistence.DiscriminatorValue("JDKV")
 @ObjectType("JDKV")
 public class JdkValuedEntity extends AbstractDomainObject {
 
     // {{ StringProperty (also title)
     private String stringProperty;
 
+    @javax.jdo.annotations.PrimaryKey
     @Title
     @Optional
     @MemberOrder(sequence = "1")
@@ -67,6 +75,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
     // {{ JavaSqlDateProperty
     private java.sql.Date javaSqlDateProperty;
 
+    @javax.jdo.annotations.Persistent() // since not persistent by default
     @Optional
     @MemberOrder(sequence = "1")
     public java.sql.Date getJavaSqlDateProperty() {
@@ -79,9 +88,27 @@ public class JdkValuedEntity extends AbstractDomainObject {
 
     // }}
 
+    // {{ JavaSqlTimeProperty (property)
+    private java.sql.Time javaSqlTimeProperty;
+
+    @javax.jdo.annotations.Persistent() // since not persistent by default
+    @Optional
+    @MemberOrder(sequence = "1")
+    public java.sql.Time getJavaSqlTimeProperty() {
+        return javaSqlTimeProperty;
+    }
+
+    public void setJavaSqlTimeProperty(final java.sql.Time javaSqlTimeProperty) {
+        this.javaSqlTimeProperty = javaSqlTimeProperty;
+    }
+    // }}
+
+
+    
     // {{ JavaSqlTimestampProperty
     private java.sql.Timestamp javaSqlTimestampProperty;
 
+    @javax.jdo.annotations.Persistent() // since not persistent by default
     @Optional
     @MemberOrder(sequence = "1")
     public java.sql.Timestamp getJavaSqlTimestampProperty() {

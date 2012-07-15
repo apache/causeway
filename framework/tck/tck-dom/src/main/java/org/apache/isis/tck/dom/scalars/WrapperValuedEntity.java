@@ -44,6 +44,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     // {{ StringProperty
     private String stringProperty;
 
+    @javax.jdo.annotations.PrimaryKey
     @Optional
     @MemberOrder(sequence = "1")
     public String getStringProperty() {
@@ -163,6 +164,8 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     // {{ CharacterProperty (property)
     private Character characterProperty;
 
+    @javax.jdo.annotations.Column(jdbcType="char", length=1) // works for hsqldb
+    //@javax.jdo.annotations.Column(jdbcType="char", length=1, sqlType="char") // works for mssqlserver
     @Optional
     @MemberOrder(sequence = "1")
     public Character getCharacterProperty() {
