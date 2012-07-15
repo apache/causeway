@@ -24,6 +24,13 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Discriminator("WRPV")
+@javax.jdo.annotations.Query(
+        name="wrpv_findByStringProperty", language="JDOQL",  
+        value="SELECT FROM org.apache.isis.tck.dom.scalars.WrapperValuedEntity WHERE stringProperty == :i")
+@javax.persistence.Entity                    
+@javax.persistence.DiscriminatorValue("WRPV")
 @ObjectType("WRPV")
 public class WrapperValuedEntity extends AbstractDomainObject {
 
@@ -49,17 +56,17 @@ public class WrapperValuedEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ BooleanWProperty
-    private Boolean booleanWProperty;
+    // {{ BooleanProperty
+    private Boolean booleanProperty;
 
     @Optional
     @MemberOrder(sequence = "1")
-    public Boolean getBooleanWProperty() {
-        return booleanWProperty;
+    public Boolean getBooleanProperty() {
+        return booleanProperty;
     }
 
-    public void setBooleanWProperty(final Boolean booleanWProperty) {
-        this.booleanWProperty = booleanWProperty;
+    public void setBooleanProperty(final Boolean booleanProperty) {
+        this.booleanProperty = booleanProperty;
     }
 
     // }}
@@ -152,5 +159,20 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         this.doubleProperty = doubleWProperty;
     }
     // }}
+
+    // {{ CharacterProperty (property)
+    private Character characterProperty;
+
+    @Optional
+    @MemberOrder(sequence = "1")
+    public Character getCharacterProperty() {
+        return characterProperty;
+    }
+
+    public void setCharacterProperty(final Character charProperty) {
+        this.characterProperty = charProperty;
+    }
+    // }}
+
 
 }

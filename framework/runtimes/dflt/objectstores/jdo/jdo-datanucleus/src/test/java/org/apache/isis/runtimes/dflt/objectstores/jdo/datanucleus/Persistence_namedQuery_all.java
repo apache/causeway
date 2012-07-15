@@ -74,7 +74,7 @@ public class Persistence_namedQuery_all {
         
         iswf.beginTran();
 
-        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("pve_findByIntProperty", ImmutableMap.of("i", (Object)222));
+        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("prmv_findByIntProperty", ImmutableMap.of("i", (Object)222));
         assertThat(entities, is(not(nullValue())));
         assertThat(entities.size(), is(1));
 
@@ -86,7 +86,7 @@ public class Persistence_namedQuery_all {
         
         iswf.beginTran();
 
-        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("pve_findByIntProperty", ImmutableMap.of("i", (Object)111));
+        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("prmv_findByIntProperty", ImmutableMap.of("i", (Object)111));
         assertThat(entities, is(not(nullValue())));
         assertThat(entities.size(), is(2));
 
@@ -98,7 +98,7 @@ public class Persistence_namedQuery_all {
         
         iswf.beginTran();
 
-        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("pve_findByIntProperty", ImmutableMap.of("i", (Object)999));
+        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("prmv_findByIntProperty", ImmutableMap.of("i", (Object)999));
         assertThat(entities, is(not(nullValue())));
         assertThat(entities.size(), is(0));
 

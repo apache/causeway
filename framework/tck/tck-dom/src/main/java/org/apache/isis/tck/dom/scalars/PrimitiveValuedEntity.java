@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.ObjectType;
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.Discriminator("PRMV")
 @javax.jdo.annotations.Query(
-        name="pve_findByIntProperty", language="JDOQL",  
+        name="prmv_findByIntProperty", language="JDOQL",  
         value="SELECT FROM org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity WHERE intProperty == :i")
 @javax.persistence.Entity                    
 @javax.persistence.DiscriminatorValue("PRMV")

@@ -32,7 +32,7 @@ import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-public class Persistence_persist {
+public class Persistence_persist_primitiveValuedEntity {
 
     private PrimitiveValuedEntityRepository repo = new PrimitiveValuedEntityRepository();
     
@@ -88,35 +88,5 @@ public class Persistence_persist {
         
         iswf.commitTran();
     }
-
-    @Test
-    public void adapterResolveState_isResolved() throws Exception {
-        
-        iswf.beginTran();
-        PrimitiveValuedEntity entity = repo.newEntity();
-        ObjectAdapter adapter = iswf.adapterFor(entity);
-        
-        assertThat(adapter.isTransient(), is(true));
-        assertThat(adapter.getResolveState(), is(ResolveState.TRANSIENT));
-        assertThat(adapter.getOid().isTransient(), is(true));
-        
-        entity.setId(1);
-        iswf.commitTran();
-        
-        iswf.bounceSystem();
-        
-        iswf.beginTran();
-        final List<PrimitiveValuedEntity> list = repo.list();
-        assertThat(list.size(), is(1));
-        
-        adapter = iswf.adapterFor(list.get(0));
-        assertThat(adapter.getResolveState(), is(ResolveState.RESOLVED));
-        assertThat(adapter.isTransient(), is(false));
-        assertThat(adapter.getOid().enString(), is("PRMV:1"));
-
-        iswf.commitTran();
-    }
-
-    
 
 }

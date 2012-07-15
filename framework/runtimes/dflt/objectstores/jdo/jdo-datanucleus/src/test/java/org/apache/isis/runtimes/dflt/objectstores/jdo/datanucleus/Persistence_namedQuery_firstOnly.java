@@ -75,7 +75,7 @@ public class Persistence_namedQuery_firstOnly {
         
         iswf.beginTran();
 
-        entity = repo.findByNamedQueryFirstOnly("pve_findByIntProperty", ImmutableMap.of("i", (Object)222));
+        entity = repo.findByNamedQueryFirstOnly("prmv_findByIntProperty", ImmutableMap.of("i", (Object)222));
         assertThat(entity, is(not(nullValue())));
         assertThat(entity.getId(), is(2));
 
@@ -89,7 +89,7 @@ public class Persistence_namedQuery_firstOnly {
         
         iswf.beginTran();
 
-        entity = repo.findByNamedQueryFirstOnly("pve_findByIntProperty", ImmutableMap.of("i", (Object)111));
+        entity = repo.findByNamedQueryFirstOnly("prmv_findByIntProperty", ImmutableMap.of("i", (Object)111));
         assertThat(entity, is(not(nullValue())));
         assertThat(entity.getId(), is(1));
 
@@ -103,7 +103,7 @@ public class Persistence_namedQuery_firstOnly {
         
         iswf.beginTran();
 
-        entity = repo.findByNamedQueryFirstOnly("pve_findByIntProperty", ImmutableMap.of("i", (Object)999));
+        entity = repo.findByNamedQueryFirstOnly("prmv_findByIntProperty", ImmutableMap.of("i", (Object)999));
         assertThat(entity, is(nullValue()));
 
         iswf.commitTran();
