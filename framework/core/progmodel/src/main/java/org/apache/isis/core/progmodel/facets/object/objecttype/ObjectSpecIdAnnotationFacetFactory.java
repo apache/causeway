@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 
-public class ObjectTypeAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ObjectSpecIdAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
-    public ObjectTypeAnnotationFacetFactory() {
+    public ObjectSpecIdAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 

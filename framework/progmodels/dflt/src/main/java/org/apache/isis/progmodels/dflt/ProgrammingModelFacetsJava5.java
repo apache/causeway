@@ -95,7 +95,7 @@ import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnota
 import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableMarkerInterfacesFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectTypeAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectSpecIdAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectTypeDerivedFromClassNameFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.orderactions.ActionOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.orderfields.FieldOrderAnnotationFacetFactory;
@@ -252,7 +252,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(HiddenFacetViaHideMethodFacetFactory.class);
 
         // objects
-        addFactory(ObjectTypeAnnotationFacetFactory.class);
+        addFactory(ObjectSpecIdAnnotationFacetFactory.class);
         addFactory(IconMethodFacetFactory.class);
 
         addFactory(CreatedCallbackFacetFactory.class);

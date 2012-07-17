@@ -78,8 +78,8 @@ public class Utils {
 
         // last one wins!
         configureHsqlDbFileBased(props);
-        configureForMsSqlServer(props);
         configureHsqlDbInMemory(props);
+        configureForMsSqlServer(props);
 
         props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");
         props.put("isis.persistor.datanucleus.impl.datanucleus.validateTables", "true");
@@ -112,12 +112,12 @@ public class Utils {
 
     
 
-    static long toMillis(int year, int monthOfYear, int dayOfMonth) {
+    public static long toMillis(int year, int monthOfYear, int dayOfMonth) {
         LocalDate d = new LocalDate(year, monthOfYear, dayOfMonth);
         return d.toDateMidnight().getMillis();
     }
 
-    static long toMillis(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute) {
+    public static long toMillis(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute) {
         LocalDateTime d = new LocalDateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute);
         return d.toDateTime().getMillis();
     }

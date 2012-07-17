@@ -113,6 +113,7 @@
         </dependency>
 
 		<!-- 
+		-->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>jdbc</artifactId>
@@ -121,7 +122,6 @@
 			<optional>true</optional>
 			<systemPath>${basedir}/lib/sqljdbc4.jar</systemPath>
 		</dependency>
-		-->
 
 	</dependencies>
 </project>

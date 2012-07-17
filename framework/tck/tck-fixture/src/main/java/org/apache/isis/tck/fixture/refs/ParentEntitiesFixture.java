@@ -20,10 +20,10 @@
 package org.apache.isis.tck.fixture.refs;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
+import org.apache.isis.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.tck.dom.refs.ParentEntity;
 
-public class AssociatedEntitiesFixture extends AbstractFixture {
+public class ParentEntitiesFixture extends AbstractFixture {
 
     @Override
     public void install() {
@@ -41,9 +41,9 @@ public class AssociatedEntitiesFixture extends AbstractFixture {
         return parent;
     }
 
-    private AssociatedEntitiesRepository parentEntityRepository;
+    private ParentEntityRepository parentEntityRepository;
 
-    public void setParentEntityRepository(final AssociatedEntitiesRepository parentEntityRepository) {
+    public void setParentEntityRepository(final ParentEntityRepository parentEntityRepository) {
         this.parentEntityRepository = parentEntityRepository;
     }
 

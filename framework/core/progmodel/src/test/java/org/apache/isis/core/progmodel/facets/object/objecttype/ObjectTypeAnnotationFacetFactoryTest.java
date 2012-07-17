@@ -35,11 +35,11 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private ObjectTypeAnnotationFacetFactory facetFactory;
+    private ObjectSpecIdAnnotationFacetFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new ObjectTypeAnnotationFacetFactory();
+        facetFactory = new ObjectSpecIdAnnotationFacetFactory();
     }
 
     @Test

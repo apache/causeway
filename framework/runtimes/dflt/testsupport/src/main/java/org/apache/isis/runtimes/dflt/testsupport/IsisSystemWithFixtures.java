@@ -55,7 +55,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.security.dflt.authentication.AuthenticationRequestDefault;
 import org.apache.isis.tck.dom.refs.AggregatedEntity;
-import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
+import org.apache.isis.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.tck.dom.refs.ParentEntity;
 import org.apache.isis.tck.dom.refs.ReferencingEntity;
 import org.apache.isis.tck.dom.refs.SimpleEntity;
@@ -134,7 +134,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
             NO_INIT
         }
 
-        public AssociatedEntitiesRepository associatedEntitiesRepository = new AssociatedEntitiesRepository();
+        public ParentEntityRepository associatedEntitiesRepository = new ParentEntityRepository();
 
         public ApplibValuedEntity ave1, ave2; 
         public JdkValuedEntity jve1, jve2;

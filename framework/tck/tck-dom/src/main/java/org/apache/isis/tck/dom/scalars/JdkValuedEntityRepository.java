@@ -19,33 +19,16 @@
 
 package org.apache.isis.tck.dom.scalars;
 
-import java.util.List;
-
-import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.tck.dom.AbstractEntityRepository;
 
 @Named("JdkValuedEntities")
 @ObjectType("JdkValuedEntities")
-public class JdkValuedEntityRepository extends AbstractFactoryAndRepository {
+public class JdkValuedEntityRepository extends AbstractEntityRepository<JdkValuedEntity> {
 
-    public String getId() {
-        return "JdkValuedEntities";
-    }
-
-    @MemberOrder(sequence = "1")
-    @QueryOnly
-    public List<JdkValuedEntity> list() {
-        return allInstances(JdkValuedEntity.class);
-    }
-
-    @MemberOrder(sequence = "2")
-    public JdkValuedEntity newEntity() {
-        final JdkValuedEntity entity = newTransientInstance(JdkValuedEntity.class);
-        persist(entity);
-        return entity;
+    public JdkValuedEntityRepository() {
+        super(JdkValuedEntity.class, "JdkValuedEntities");
     }
 
 }

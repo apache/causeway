@@ -54,9 +54,13 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
     private void ensureAllSpecificationsValid() throws ClassNotFoundException {
         final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
         for (final ObjectSpecification objSpec : objectSpecs) {
-            ensureNotAnnotatedAsBothEntityAndEmbeddedOnly(objSpec);
+            
+            // TODO: seems that DataNucleus does require to be annotated as both.
+            // ensureNotAnnotatedAsBothEntityAndEmbeddedOnly(objSpec);
+            
             // there is no requirement to ensure that there is a primary key property;
             // can get the value directly from JDO
+            
             ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(objSpec);
         }
     }

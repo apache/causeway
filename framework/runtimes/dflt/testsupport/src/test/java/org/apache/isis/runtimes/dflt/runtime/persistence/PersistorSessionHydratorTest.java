@@ -39,7 +39,7 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechan
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
-import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
+import org.apache.isis.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class PersistorSessionHydratorTest {
@@ -53,9 +53,9 @@ public class PersistorSessionHydratorTest {
     {
         context.checking(new Expectations() {
             {
-                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("AssociatedEntities"))), with(an(AssociatedEntitiesRepository.class)));
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("ParentEntities"))), with(an(ParentEntityRepository.class)));
                 will(returnValue("1"));
-                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("AssociatedEntities"))), with(an(AssociatedEntitiesRepository.class)), with(any(RootOid.class)));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("ParentEntities"))), with(an(ParentEntityRepository.class)), with(any(RootOid.class)));
                 will(returnValue("1"));
                 
                 allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("SMPL"))), with(an(SimpleEntity.class)));

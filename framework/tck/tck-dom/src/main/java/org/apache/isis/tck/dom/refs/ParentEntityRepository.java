@@ -19,25 +19,24 @@
 
 package org.apache.isis.tck.dom.refs;
 
-import java.util.List;
-
-import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.tck.dom.AbstractEntityRepository;
 
-@ObjectType("AssociatedEntities")
-public class AssociatedEntitiesRepository extends AbstractFactoryAndRepository {
+@Named("ParentEntities")
+@ObjectType("ParentEntities")
+public class ParentEntityRepository extends AbstractEntityRepository<ParentEntity> {
+
+    public ParentEntityRepository() {
+        super(ParentEntity.class, "ParentEntities");
+    }
     
     public BaseEntity someAction() { return null; }
     public SimpleEntity someAction2() { return null; }
     public ReferencingEntity someAction3() { return null; }
     public ParentEntity someAction4() { return null; }
  
-    @MemberOrder(sequence = "1")
-    public List<ParentEntity> list() {
-        return allInstances(ParentEntity.class);
-    }
-
     @MemberOrder(sequence = "2")
     public ParentEntity newEntity(final String name) {
         final ParentEntity entity = newTransientInstance(ParentEntity.class);

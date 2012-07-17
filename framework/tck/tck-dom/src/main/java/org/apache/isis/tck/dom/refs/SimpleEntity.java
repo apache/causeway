@@ -21,11 +21,18 @@ package org.apache.isis.tck.dom.refs;
 
 import java.util.Date;
 
+import javax.jdo.annotations.IdentityType;
+
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("SMPL")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("SMPL")
 @ObjectType("SMPL")
 public class SimpleEntity extends BaseEntity {
     

@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
+import org.apache.isis.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class InMemoryObjectStoreTest_serviceRegistry {
@@ -55,8 +55,8 @@ public class InMemoryObjectStoreTest_serviceRegistry {
 
     @Test
     public void getOidForServices() throws Exception {
-        final Oid oidForService = getStore().getOidForService(iswf.loadSpecification(AssociatedEntitiesRepository.class));
-        assertEquals(RootOidDefault.create(ObjectSpecId.of("AssociatedEntities"), "1"), oidForService);
+        final Oid oidForService = getStore().getOidForService(iswf.loadSpecification(ParentEntityRepository.class));
+        assertEquals(RootOidDefault.create(ObjectSpecId.of("ParentEntities"), "1"), oidForService);
     }
 
 

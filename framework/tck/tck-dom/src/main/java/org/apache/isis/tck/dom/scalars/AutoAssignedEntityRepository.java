@@ -19,33 +19,15 @@
 
 package org.apache.isis.tck.dom.scalars;
 
-import java.util.List;
-
-import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.tck.dom.AbstractEntityRepository;
 
 @Named("AutoAssignedEntities")
 @ObjectType("AutoAssignedEntities")
-public class AutoAssignedEntityRepository extends AbstractFactoryAndRepository {
+public class AutoAssignedEntityRepository extends AbstractEntityRepository<AutoAssignedEntity> {
 
-    @Override
-    public String getId() {
-        return "AutoAssignedEntities";
-    }
-
-    @QueryOnly
-    @MemberOrder(sequence = "1")
-    public List<AutoAssignedEntity> list() {
-        return allInstances(AutoAssignedEntity.class);
-    }
-
-    @MemberOrder(sequence = "2")
-    public AutoAssignedEntity newEntity() {
-        final AutoAssignedEntity entity = newTransientInstance(AutoAssignedEntity.class);
-        persist(entity);
-        return entity;
+    public AutoAssignedEntityRepository() {
+        super(AutoAssignedEntity.class, "AutoAssignedEntities");
     }
 }

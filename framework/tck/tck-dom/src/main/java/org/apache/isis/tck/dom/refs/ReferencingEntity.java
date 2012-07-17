@@ -21,13 +21,21 @@ package org.apache.isis.tck.dom.refs;
 
 import java.util.List;
 
+import javax.jdo.annotations.IdentityType;
+
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("RFCG")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("RFCG")
 @ObjectType("RFCG")
 public class ReferencingEntity extends BaseEntity {
+    
     
     // {{ Reference
     private SimpleEntity reference;
@@ -42,7 +50,7 @@ public class ReferencingEntity extends BaseEntity {
 
     // }}
 
-    // {{ AggregatedReference
+    // {{ AggregatedEntity
     private AggregatedEntity aggregatedReference;
 
     public AggregatedEntity getAggregatedReference() {
