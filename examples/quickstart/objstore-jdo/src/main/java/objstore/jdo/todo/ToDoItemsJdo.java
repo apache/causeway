@@ -22,12 +22,14 @@ package objstore.jdo.todo;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableMap;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.query.QueryDefault;
 
 public class ToDoItemsJdo extends AbstractFactoryAndRepository implements ToDoItems {
 
@@ -46,12 +48,8 @@ public class ToDoItemsJdo extends AbstractFactoryAndRepository implements ToDoIt
     @Override
     public List<ToDoItem> notYetDone() {
         final String userName = getContainer().getUser().getName();
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return Objects.equal(t.getOwnedBy(), userName) && !t.isDone();
-            }
-        });
+        return allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, "todo_notYetDone", "ownedBy", userName));
     }
 
     // {{ NewToDo  (action)
@@ -80,12 +78,15 @@ public class ToDoItemsJdo extends AbstractFactoryAndRepository implements ToDoIt
     // {{ SimilarTo (action)
     @Override
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(ToDoItem t) {
-                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
-            }
-        });
+        // TODO: should also filter out the supplied toDoItem
+        return allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, "todo_similarTo", "ownedBy", toDoItem.getOwnedBy(), "category", toDoItem.getCategory()));
+//        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+//            @Override
+//            public boolean accept(ToDoItem t) {
+//                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
+//            }
+//        });
     }
     // }}
 

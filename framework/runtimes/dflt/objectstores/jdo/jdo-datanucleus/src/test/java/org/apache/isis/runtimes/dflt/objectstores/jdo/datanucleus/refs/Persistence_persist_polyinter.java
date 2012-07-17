@@ -47,7 +47,7 @@ public class Persistence_persist_polyinter {
         .with(Utils.listenerToDeleteFrom("POLYINTERFACESUBTYPE1ENTITY"))
         .with(Utils.listenerToDeleteFrom("POLYINTERFACESUBTYPE2ENTITY"))
         .with(Utils.listenerToDeleteFrom("POLYINTERFACESUBTYPE3ENTITY"))
-        .with(Utils.listenerToDeleteFrom("POLYINTERFACECHILDENTITY"))
+        .with(Utils.listenerToDeleteFrom("POLYINTERFACEPARENTENTITY"))
         .withServices(repo)
         .build();
 

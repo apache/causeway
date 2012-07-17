@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util;
 import java.text.MessageFormat;
 import java.util.List;
 
+import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Version;
 
 import org.apache.isis.applib.filter.Filter;
@@ -41,7 +42,7 @@ public final class JdoPropertyUtils {
     }
 
     /**
-     * Searches for the property annotated with {@link Id}.
+     * Searches for the property annotated with {@link PrimaryKey}.
      * <p>
      * Returns the {@link OneToOneAssociation} if there is precisely one; else
      * <tt>null</tt>.
@@ -52,6 +53,14 @@ public final class JdoPropertyUtils {
         return getPropertyFor(objectSpec, "@PrimaryKey", new JdoPrimaryKeyPropertyFilter());
     }
 
+    public static boolean hasPrimaryKeyProperty(final ObjectAdapter adapter) {
+        return hasPrimaryKeyProperty(adapter.getSpecification());
+    }
+
+    public static boolean hasPrimaryKeyProperty(final ObjectSpecification objectSpec) {
+        return getPrimaryKeyPropertyFor(objectSpec) != null;
+    }
+    
     /**
      * Searches for the property annotated with {@link Version}.
      * <p>

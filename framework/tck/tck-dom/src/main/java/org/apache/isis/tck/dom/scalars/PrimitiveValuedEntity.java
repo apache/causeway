@@ -34,9 +34,9 @@ import org.apache.isis.applib.annotation.ObjectType;
 public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     // {{ Id (Integer)
-    @javax.jdo.annotations.PrimaryKey
     private Integer id;
 
+    @javax.jdo.annotations.PrimaryKey // must be on the getter.
     @javax.persistence.Id
     public Integer getId() {
         return id;

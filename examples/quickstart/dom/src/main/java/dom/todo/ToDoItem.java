@@ -33,6 +33,14 @@ import org.apache.isis.applib.annotation.MemberOrder;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("TODO")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+        name="todo_notYetDone", language="JDOQL",  
+        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == false"),
+    @javax.jdo.annotations.Query(
+        name="todo_similarTo", language="JDOQL",  
+        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
+})
 public class ToDoItem extends AbstractDomainObject {
 
     public static final List<String> CATEGORIES = Collections.unmodifiableList(Arrays.asList("Professional", "Domestic", "Other"));
@@ -127,6 +135,7 @@ public class ToDoItem extends AbstractDomainObject {
     // }}
 
     // {{ injected: ToDoItems
+    @SuppressWarnings("unused")
     private ToDoItems toDoItems;
 
     public void setToDoItems(final ToDoItems toDoItems) {

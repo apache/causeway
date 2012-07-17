@@ -36,10 +36,10 @@ import org.apache.isis.applib.annotation.Title;
 public class WrapperValuedEntity extends AbstractDomainObject {
 
     // {{ StringProperty (also pk, title)
-    @javax.jdo.annotations.PrimaryKey
-    @javax.persistence.Id
     private String stringProperty;
 
+    @javax.jdo.annotations.PrimaryKey
+    @javax.persistence.Id
     @Title
     @Optional
     @MemberOrder(sequence = "1")
@@ -158,8 +158,8 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ CharacterProperty (property)
-    @javax.jdo.annotations.Column(jdbcType="char") // works for hsqldb
-    //@javax.jdo.annotations.Column(jdbcType="char", sqlType="char") // works for mssqlserver
+    //@javax.jdo.annotations.Column(jdbcType="char") // works for hsqldb
+    @javax.jdo.annotations.Column(jdbcType="char", sqlType="char") // works for mssqlserver
     private Character characterProperty;
 
     @Optional

@@ -40,9 +40,10 @@ import org.apache.isis.applib.annotation.Title;
 public class JdkValuedEntity extends AbstractDomainObject {
 
     // {{ StringProperty (also title, pk)
-    @javax.jdo.annotations.PrimaryKey
     private String stringProperty;
 
+    @javax.jdo.annotations.PrimaryKey
+    @javax.persistence.Id
     @Title
     @Optional
     @MemberOrder(sequence = "1")

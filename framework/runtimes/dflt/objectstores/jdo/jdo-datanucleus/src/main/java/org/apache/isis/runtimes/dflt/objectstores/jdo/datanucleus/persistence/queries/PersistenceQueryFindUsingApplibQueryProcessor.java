@@ -9,14 +9,12 @@ import javax.jdo.Query;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoPropertyUtils;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -39,10 +37,10 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
             // special case handling
             final Class<?> cls = objectSpec.getCorrespondingClass();
-            final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
-            if (pkOtoa == null) {
+            if(!JdoPropertyUtils.hasPrimaryKeyProperty(objectSpec)) {
                 throw new UnsupportedOperationException("cannot search by primary key for DataStore-assigned entities");
-            } 
+            }
+            final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
             String pkOtoaId = pkOtoa.getId();
             final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
             final Query jdoQuery = getPersistenceManager().newQuery(cls, filter);

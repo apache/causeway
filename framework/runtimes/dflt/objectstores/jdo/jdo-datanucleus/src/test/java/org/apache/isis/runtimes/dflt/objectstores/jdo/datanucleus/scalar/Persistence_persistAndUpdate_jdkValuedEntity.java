@@ -19,17 +19,13 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scalar;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -69,10 +65,10 @@ public class Persistence_persistAndUpdate_jdkValuedEntity {
         iswf.beginTran();
         JdkValuedEntity entity = repo.newEntity();
         entity.setStringProperty("1");
-        entity.setBigDecimalProperty(BigDecimal.valueOf(543210987654321L, 2));
+        entity.setBigDecimalProperty(BigDecimal.valueOf(543210987654321L, 0)); // mssqlserver can cope with scale>0, but hsqldb cannot
         entity.setBigIntegerProperty(BigInteger.valueOf(123456789012345L));
         entity.setJavaSqlDateProperty(new java.sql.Date(Utils.toMillis(2009, 6, 11)));
-        entity.setJavaSqlTimeProperty(new java.sql.Time(Utils.toMillis(1970, 1, 2, 0, 5, 10))); // date portion is unimportant, but is preserved
+        entity.setJavaSqlTimeProperty(new java.sql.Time(Utils.toMillis(1970, 1, 1, 0, 5, 10))); // date portion is unimportant, is preserved on mssqlserver but not on hsqldb
         entity.setJavaSqlTimestampProperty(new Timestamp(Utils.toMillis(2010, 5, 13, 20, 25, 30)));
         entity.setJavaUtilDateProperty(new java.util.Date(Utils.toMillis(2010, 5, 13, 22, 17, 12)));
         entity.setMyEnum(MyEnum.GREEN);
@@ -85,19 +81,19 @@ public class Persistence_persistAndUpdate_jdkValuedEntity {
         entity = repo.list().get(0);
 
         assertThat(entity.getStringProperty(), is("1"));
-        assertThat(entity.getBigDecimalProperty(), is(BigDecimal.valueOf(543210987654321L, 2)));
+        assertThat(entity.getBigDecimalProperty(), is(BigDecimal.valueOf(543210987654321L, 0)));
         assertThat(entity.getBigIntegerProperty(), is(BigInteger.valueOf(123456789012345L)));
         assertThat(entity.getJavaSqlDateProperty(), is(new java.sql.Date(Utils.toMillis(2009, 6, 11))));
-        assertThat(entity.getJavaSqlTimeProperty(), is(new java.sql.Time(Utils.toMillis(1970, 1, 2, 0, 5, 10))));
+        assertThat(entity.getJavaSqlTimeProperty(), is(new java.sql.Time(Utils.toMillis(1970, 1, 1, 0, 5, 10))));
         assertThat(entity.getJavaSqlTimestampProperty(), is(new Timestamp(Utils.toMillis(2010, 5, 13, 20, 25, 30))));
         assertThat(entity.getJavaUtilDateProperty(), is(new java.util.Date(Utils.toMillis(2010, 5, 13, 22, 17, 12))));
         assertThat(entity.getMyEnum(), is(MyEnum.GREEN));
         
 
-        entity.setBigDecimalProperty(BigDecimal.valueOf(123456789012345L, 2));
+        entity.setBigDecimalProperty(BigDecimal.valueOf(123456789012345L, 0));
         entity.setBigIntegerProperty(BigInteger.valueOf(543210987654321L));
         entity.setJavaSqlDateProperty(new java.sql.Date(Utils.toMillis(2010, 5, 13)));
-        entity.setJavaSqlTimeProperty(new java.sql.Time(Utils.toMillis(1970, 1, 2, 5, 10, 15))); // date portion is unimportant, but is preserved
+        entity.setJavaSqlTimeProperty(new java.sql.Time(Utils.toMillis(1970, 1, 1, 5, 10, 15))); 
         entity.setJavaSqlTimestampProperty(new Timestamp(Utils.toMillis(2010, 5, 13, 10, 15, 20)));
         entity.setJavaUtilDateProperty(new java.util.Date(Utils.toMillis(2010, 5, 13, 20, 15, 10)));
         entity.setMyEnum(MyEnum.BLUE);
@@ -108,10 +104,10 @@ public class Persistence_persistAndUpdate_jdkValuedEntity {
         
         iswf.beginTran();
         entity = repo.list().get(0);
-        assertThat(entity.getBigDecimalProperty(), is(BigDecimal.valueOf(123456789012345L, 2)));
+        assertThat(entity.getBigDecimalProperty(), is(BigDecimal.valueOf(123456789012345L, 0)));  
         assertThat(entity.getBigIntegerProperty(), is(BigInteger.valueOf(543210987654321L)));
         assertThat(entity.getJavaSqlDateProperty(), is(new java.sql.Date(Utils.toMillis(2010, 5, 13))));
-        assertThat(entity.getJavaSqlTimeProperty(), is(new java.sql.Time(Utils.toMillis(1970, 1, 2, 5, 10, 15))));
+        assertThat(entity.getJavaSqlTimeProperty(), is(new java.sql.Time(Utils.toMillis(1970, 1, 1, 5, 10, 15))));
         assertThat(entity.getJavaSqlTimestampProperty(), is(new Timestamp(Utils.toMillis(2010, 5, 13, 10, 15, 20))));
         assertThat(entity.getJavaUtilDateProperty(), is(new java.util.Date(Utils.toMillis(2010, 5, 13, 20, 15, 10))));
         assertThat(entity.getMyEnum(), is(MyEnum.BLUE));

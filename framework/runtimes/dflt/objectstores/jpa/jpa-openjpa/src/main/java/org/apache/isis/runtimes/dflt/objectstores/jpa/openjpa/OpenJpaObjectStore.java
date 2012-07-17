@@ -80,8 +80,8 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     /**
      * @see #isFixturesInstalled()
      */
-    public static final String IS_FIXTURES_INSTALLED_KEY = ConfigurationConstants.ROOT + "persistor.openjpa.install-fixtures";
-    public static final boolean IS_FIXTURES_INSTALLED_DEFAULT = true;
+    public static final String INSTALL_FIXTURES_KEY = ConfigurationConstants.ROOT + "persistor.openjpa.install-fixtures";
+    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
     static enum TransactionMode {
         /**
@@ -190,14 +190,14 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     // ///////////////////////////////////////////////////////////////////////
 
     /**
-     * Implementation looks for the {@link #IS_FIXTURES_INSTALLED_KEY} in the
+     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the
      * {@link #getConfiguration() configuration}.
      * <p>
      * By default this is not expected to be there, but utilities can add in on
      * the fly during bootstrapping if required.
      */
     public boolean isFixturesInstalled() {
-        return getConfiguration().getBoolean(IS_FIXTURES_INSTALLED_KEY, IS_FIXTURES_INSTALLED_DEFAULT);
+        return ! getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
     }
 
 

@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
+import org.datanucleus.identity.OIDImpl;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -77,8 +78,8 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     /**
      * @see #isFixturesInstalled()
      */
-    public static final String IS_FIXTURES_INSTALLED_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.install-fixtures";
-    public static final boolean IS_FIXTURES_INSTALLED_DEFAULT = true;
+    public static final String INSTALL_FIXTURES_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.install-fixtures";
+    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
     static enum TransactionMode {
         /**
@@ -151,7 +152,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
      * <p>
      * Automatically {@link IsisTransactionManager#endTransaction() ends
      * (commits)} the current (Isis) {@link Transaction}. This in turn
-     * {@link DataNucleusObjectStore#commitJpaTransaction() commits the underlying
+     * {@link DataNucleusObjectStore#commitJdoTransaction() commits the underlying
      * JPA transaction}.
      * <p>
      * The corresponding DataNucleus {@link Entity} is then
@@ -188,14 +189,14 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     // ///////////////////////////////////////////////////////////////////////
 
     /**
-     * Implementation looks for the {@link #IS_FIXTURES_INSTALLED_KEY} in the
+     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the
      * {@link #getConfiguration() configuration}.
      * <p>
      * By default this is not expected to be there, but utilities can add in on
      * the fly during bootstrapping if required.
      */
     public boolean isFixturesInstalled() {
-        return getConfiguration().getBoolean(IS_FIXTURES_INSTALLED_KEY, IS_FIXTURES_INSTALLED_DEFAULT);
+        return ! getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
     }
 
 
@@ -232,18 +233,18 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     // ///////////////////////////////////////////////////////////////////////
 
     public void startTransaction() {
-        beginJpaTransaction();
+        beginJdoTransaction();
     }
 
     public void endTransaction() {
-        commitJpaTransaction();
+        commitJdoTransaction();
     }
 
     public void abortTransaction() {
         rollbackJpaTransaction();
     }
 
-    private void beginJpaTransaction() {
+    private void beginJdoTransaction() {
         final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
         if (transaction.isActive()) {
             throw new IllegalStateException("Transaction already active");
@@ -251,7 +252,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         transaction.begin();
     }
 
-    private void commitJpaTransaction() {
+    private void commitJdoTransaction() {
         final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
         if (transaction.isActive()) {
             transaction.commit();
@@ -422,11 +423,18 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
             return;
         }
 
-        JdoPropertyUtils.setPropertyIdFromOid(adapter, getAdapterFactory());
         try {
-            final Object domainObject = adapter.getObject();
-
-            getPersistenceManager().refresh(domainObject);
+            if(JdoPropertyUtils.hasPrimaryKeyProperty(adapter)) {
+                JdoPropertyUtils.setPropertyIdFromOid(adapter, getAdapterFactory());
+                final Object domainObject = adapter.getObject();
+                getPersistenceManager().refresh(domainObject);
+            } else {
+                RootOid rootOid = (RootOid) adapter.getOid();
+                Object dnOid = new OIDImpl(adapter.getSpecification().getFullIdentifier(), Long.parseLong(rootOid.getIdentifier()));
+                // will cause postLoad() lifecycle callback to fire,
+                // which sets up the adapters as required
+                getPersistenceManager().getObjectById(dnOid);
+            }
         } catch (final RuntimeException e) {
             throw new ObjectNotFoundException(adapter.getOid(), e);
         }

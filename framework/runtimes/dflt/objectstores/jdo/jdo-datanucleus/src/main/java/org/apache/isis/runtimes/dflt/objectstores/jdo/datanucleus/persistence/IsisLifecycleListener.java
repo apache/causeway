@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -86,23 +87,29 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             return;
         }
         
-        final PersistenceCapable pojo1 = persistenceCapableFor(event);
+        final PersistenceCapable pojo = persistenceCapableFor(event);
         
         final RootOid oid ;
-        final ObjectAdapter existingAdapterIfAny = getAdapterManager().getAdapterFor(pojo1);
+        ObjectAdapter existingAdapterIfAny = getAdapterManager().getAdapterFor(pojo);
         if(existingAdapterIfAny != null) {
             ensureRootObject(event);
             oid = (RootOid) existingAdapterIfAny.getOid();
         } else {
-            final Object pojo = persistenceCapableFor(event);
-            
             final OidGenerator oidGenerator = getOidGenerator();
             oid = oidGenerator.createPersistent(pojo, null);
             
-            PersistenceSessionHydrator hydrator = getPersistenceSession();
-            ObjectAdapter adapter = hydrator.recreateAdapter(oid, pojo);
-            PersistorUtil.startResolving(adapter);
-            PersistorUtil.endResolving(adapter);
+            // it's possible that there is already an adapter for this Oid, ie from ObjectStore#resolveImmediately()
+            existingAdapterIfAny = getAdapterManager().getAdapterFor(oid);
+            if(existingAdapterIfAny != null) {
+                getAdapterManager().removeAdapter(existingAdapterIfAny);
+                existingAdapterIfAny.replacePojo(pojo);
+                getAdapterManager().addExistingAdapter(existingAdapterIfAny);
+            } else {
+                PersistenceSessionHydrator hydrator = getPersistenceSession();
+                ObjectAdapter adapter = hydrator.recreateAdapter(oid, pojo);
+                PersistorUtil.startResolving(adapter);
+                PersistorUtil.endResolving(adapter);
+            }
         }
 
         ensureFrameworksInAgreement(event);
@@ -149,10 +156,6 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         if (isisOid.isTransient()) {
             final RootOid persistentOid = getOidGenerator().createPersistent(pojo, isisOid);
             
-//            if(persistentOid == null) {
-//                return;
-//            }
-
             // most of the magic is here...
             getAdapterManager().remapAsPersistent(adapter, persistentOid);
 
@@ -229,8 +232,8 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(" [currently suspended - ignoring]");
             return;
         }
-        ensureRootObject(event);
-        ensureFrameworksInAgreement(event);
+        //ensureRootObject(event);
+        //ensureFrameworksInAgreement(event);
     }
 
     @Override
@@ -242,8 +245,8 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(" [currently suspended - ignoring]");
             return;
         }
-        ensureRootObject(event);
-        ensureFrameworksInAgreement(event);
+        //ensureRootObject(event);
+        //ensureFrameworksInAgreement(event);
     }
 
     @Override
