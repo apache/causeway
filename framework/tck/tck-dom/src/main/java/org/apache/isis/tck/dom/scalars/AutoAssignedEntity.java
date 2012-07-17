@@ -35,23 +35,8 @@ import org.apache.isis.applib.annotation.Title;
 @ObjectType("AUAS")
 public class AutoAssignedEntity extends AbstractDomainObject {
 
-//    // {{ Id (Integer, also used in title)
-//    @javax.jdo.annotations.PrimaryKey
-//    private Integer id;
-//
-//    @Title(sequence="1", append=": ")
-//    @javax.persistence.Id
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(final Integer id) {
-//        this.id = id;
-//    }
-//    // }}
-
     
-    // {{ StringProperty (also used in title)
+    // {{ StringProperty (used in title)
     private String stringProperty;
 
     @Title(sequence="2")

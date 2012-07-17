@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: objectstores-jdo-datanucleus
+Bundle-SymbolicName: org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus
+Bundle-Version: 1.0.0
+Bundle-Vendor: Apache Software Foundation

@@ -23,6 +23,7 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
@@ -33,25 +34,38 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Discriminator("APLV")
+@javax.jdo.annotations.Query(
+        name="jdkv_findByStringProperty", language="JDOQL",  
+        value="SELECT FROM org.apache.isis.tck.dom.scalars.ApplibValuedEntity WHERE stringProperty == :i")
+@javax.persistence.Entity                    
+@javax.persistence.DiscriminatorValue("APLV")
 @ObjectType("APLV")
 public class ApplibValuedEntity extends AbstractDomainObject {
 
-    // {{ ColorProperty
-    private Color colorProperty;
+    
+    // {{ StringProperty (also title, pk)
+    @javax.jdo.annotations.PrimaryKey
+    private String stringProperty;
 
+    @Title
     @Optional
     @MemberOrder(sequence = "1")
-    public Color getColorProperty() {
-        return colorProperty;
+    public String getStringProperty() {
+        return stringProperty;
     }
 
-    public void setColorProperty(final Color colorProperty) {
-        this.colorProperty = colorProperty;
+    public void setStringProperty(final String description) {
+        this.stringProperty = description;
     }
 
     // }}
 
+    
+    
     // {{ DateProperty
+    @javax.jdo.annotations.Persistent
     private Date dateProperty;
 
     @Optional
@@ -66,7 +80,24 @@ public class ApplibValuedEntity extends AbstractDomainObject {
 
     // }}
 
+    // {{ ColorProperty
+    @javax.jdo.annotations.NotPersistent
+    private Color colorProperty;
+
+    @Optional
+    @MemberOrder(sequence = "1")
+    public Color getColorProperty() {
+        return colorProperty;
+    }
+
+    public void setColorProperty(final Color colorProperty) {
+        this.colorProperty = colorProperty;
+    }
+
+    // }}
+
     // {{ DateTimeProperty
+    @javax.jdo.annotations.NotPersistent
     private DateTime dateTimeProperty;
 
     @Optional
@@ -82,6 +113,7 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ ImageProperty
+    @javax.jdo.annotations.NotPersistent
     private Image imageProperty;
 
     @Optional
@@ -97,6 +129,7 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ MoneyProperty
+    @javax.jdo.annotations.NotPersistent
     private Money moneyProperty;
 
     @Optional
@@ -112,6 +145,7 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ PasswordProperty
+    @javax.jdo.annotations.NotPersistent
     private Password passwordProperty;
 
     @Optional
@@ -127,6 +161,7 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ PercentageProperty
+    @javax.jdo.annotations.NotPersistent
     private Percentage percentageProperty;
 
     @Optional
@@ -142,6 +177,7 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ TimeProperty
+    @javax.jdo.annotations.NotPersistent
     private Time timeProperty;
 
     @Optional
@@ -157,6 +193,7 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ TimeStampProperty
+    @javax.jdo.annotations.NotPersistent
     private TimeStamp timeStampProperty;
 
     @Optional
