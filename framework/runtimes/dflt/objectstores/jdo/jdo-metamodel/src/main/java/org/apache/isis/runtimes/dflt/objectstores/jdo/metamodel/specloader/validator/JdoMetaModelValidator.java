@@ -22,13 +22,11 @@ import java.text.MessageFormat;
 import java.util.Collection;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoPropertyUtils;
 
 public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
 
@@ -48,7 +46,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
                 return;
             }
         }
-        throw new MetaModelInvalidException("No annotated entities found; " + "are they annotated with @PersistenceCapable? " + "are the entities referenced by the registered services? " + "are all services registered? " + "are you using the JPA reflector");
+        throw new MetaModelInvalidException("No annotated entities found; " + "are they annotated with @PersistenceCapable? " + "are the entities referenced by the registered services? " + "are all services registered? " + "are you using the JDO reflector");
     }
 
     private void ensureAllSpecificationsValid() throws ClassNotFoundException {

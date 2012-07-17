@@ -37,6 +37,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.Utils;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
+import org.apache.isis.tck.dom.scalars.MyEnum;
 
 public class Persistence_persist_jdkValuedEntity {
 
@@ -70,12 +71,11 @@ public class Persistence_persist_jdkValuedEntity {
         entity.setStringProperty("1");
         entity.setBigDecimalProperty(BigDecimal.valueOf(123456789012345L, 2));
         entity.setBigIntegerProperty(BigInteger.valueOf(543210987654321L));
-        Image image = null; // TODO
-        entity.setImageProperty(image);
         entity.setJavaSqlDateProperty(new java.sql.Date(Utils.toMillis(2010, 5, 13)));
         entity.setJavaSqlTimeProperty(new java.sql.Time(Utils.toMillis(1970, 1, 2, 5, 10, 15))); // date portion is unimportant, but is preserved
         entity.setJavaSqlTimestampProperty(new Timestamp(Utils.toMillis(2010, 5, 13, 10, 15, 20)));
         entity.setJavaUtilDateProperty(new java.util.Date(Utils.toMillis(2010, 5, 13, 20, 15, 10)));
+        entity.setMyEnum(MyEnum.BLUE);
         
         iswf.commitTran();
 
@@ -86,11 +86,11 @@ public class Persistence_persist_jdkValuedEntity {
         assertThat(entityRetrieved.getStringProperty(), is("1"));
         assertThat(entityRetrieved.getBigDecimalProperty(), is(BigDecimal.valueOf(123456789012345L, 2)));
         assertThat(entityRetrieved.getBigIntegerProperty(), is(BigInteger.valueOf(543210987654321L)));
-        assertThat(entityRetrieved.getImageProperty(), is(nullValue())); // TODO
         assertThat(entityRetrieved.getJavaSqlDateProperty(), is(new java.sql.Date(Utils.toMillis(2010, 5, 13))));
         assertThat(entityRetrieved.getJavaSqlTimeProperty(), is(new java.sql.Time(Utils.toMillis(1970, 1, 2, 5, 10, 15))));
         assertThat(entityRetrieved.getJavaSqlTimestampProperty(), is(new Timestamp(Utils.toMillis(2010, 5, 13, 10, 15, 20))));
         assertThat(entityRetrieved.getJavaUtilDateProperty(), is(new java.util.Date(Utils.toMillis(2010, 5, 13, 20, 15, 10))));
+        assertThat(entityRetrieved.getMyEnum(), is(MyEnum.BLUE));
         
         iswf.commitTran();
     }

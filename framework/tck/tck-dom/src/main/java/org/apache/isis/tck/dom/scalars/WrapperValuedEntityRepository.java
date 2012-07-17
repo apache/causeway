@@ -19,6 +19,7 @@
 
 package org.apache.isis.tck.dom.scalars;
 
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.tck.dom.AbstractEntityRepository;
@@ -29,6 +30,15 @@ public class WrapperValuedEntityRepository extends AbstractEntityRepository<Wrap
 
     public WrapperValuedEntityRepository() {
         super(WrapperValuedEntity.class, "WrapperValuedEntities");
+    }
+
+    /**
+     * Required to discover the WrapperValuedEntity type.
+     */
+    @Override
+    @MemberOrder(sequence = "2")
+    public WrapperValuedEntity newEntity() {
+        return super.newEntity();
     }
 
 }

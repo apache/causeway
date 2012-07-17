@@ -19,6 +19,7 @@
 
 package org.apache.isis.tck.dom.scalars;
 
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.tck.dom.AbstractEntityRepository;
@@ -29,5 +30,14 @@ public class ApplibValuedEntityRepository extends AbstractEntityRepository<Appli
 
     public ApplibValuedEntityRepository() {
         super(ApplibValuedEntity.class, "ApplibValuedEntities");
+    }
+    
+    /**
+     * Required to discover the ApplibValuedEntity type.
+     */
+    @Override
+    @MemberOrder(sequence = "2")
+    public ApplibValuedEntity newEntity() {
+        return super.newEntity();
     }
 }

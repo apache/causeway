@@ -19,7 +19,6 @@
 
 package org.apache.isis.tck.dom.scalars;
 
-import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -40,10 +39,10 @@ import org.apache.isis.applib.annotation.Title;
 @ObjectType("JDKV")
 public class JdkValuedEntity extends AbstractDomainObject {
 
-    // {{ StringProperty (also title)
+    // {{ StringProperty (also title, pk)
+    @javax.jdo.annotations.PrimaryKey
     private String stringProperty;
 
-    @javax.jdo.annotations.PrimaryKey
     @Title
     @Optional
     @MemberOrder(sequence = "1")
@@ -89,9 +88,9 @@ public class JdkValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ JavaSqlTimeProperty (property)
+    @javax.jdo.annotations.Persistent() // since not persistent by default
     private java.sql.Time javaSqlTimeProperty;
 
-    @javax.jdo.annotations.Persistent() // since not persistent by default
     @Optional
     @MemberOrder(sequence = "1")
     public java.sql.Time getJavaSqlTimeProperty() {
@@ -106,9 +105,9 @@ public class JdkValuedEntity extends AbstractDomainObject {
 
     
     // {{ JavaSqlTimestampProperty
+    @javax.jdo.annotations.Persistent() // since not persistent by default
     private java.sql.Timestamp javaSqlTimestampProperty;
 
-    @javax.jdo.annotations.Persistent() // since not persistent by default
     @Optional
     @MemberOrder(sequence = "1")
     public java.sql.Timestamp getJavaSqlTimestampProperty() {
@@ -151,18 +150,22 @@ public class JdkValuedEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ ImageProperty
-    private Image imageProperty;
 
+    // {{ MyEnum (property)
+    private MyEnum myEnum;
+
+    @javax.jdo.annotations.Persistent
     @Optional
     @MemberOrder(sequence = "1")
-    public Image getImageProperty() {
-        return imageProperty;
+    public MyEnum getMyEnum() {
+        return myEnum;
     }
 
-    public void setImageProperty(final Image imageProperty) {
-        this.imageProperty = imageProperty;
+    public void setMyEnum(final MyEnum myEnum) {
+        this.myEnum = myEnum;
     }
     // }}
+
+
 
 }

@@ -23,6 +23,7 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Title;
 
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.Discriminator("WRPV")
@@ -34,17 +35,12 @@ import org.apache.isis.applib.annotation.Optional;
 @ObjectType("WRPV")
 public class WrapperValuedEntity extends AbstractDomainObject {
 
-    // {{ Title
-    public String title() {
-        return getStringProperty();
-    }
-
-    // }}
-
-    // {{ StringProperty
+    // {{ StringProperty (also pk, title)
+    @javax.jdo.annotations.PrimaryKey
+    @javax.persistence.Id
     private String stringProperty;
 
-    @javax.jdo.annotations.PrimaryKey
+    @Title
     @Optional
     @MemberOrder(sequence = "1")
     public String getStringProperty() {
@@ -162,10 +158,10 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ CharacterProperty (property)
-    private Character characterProperty;
-
     @javax.jdo.annotations.Column(jdbcType="char", length=1) // works for hsqldb
     //@javax.jdo.annotations.Column(jdbcType="char", length=1, sqlType="char") // works for mssqlserver
+    private Character characterProperty;
+
     @Optional
     @MemberOrder(sequence = "1")
     public Character getCharacterProperty() {

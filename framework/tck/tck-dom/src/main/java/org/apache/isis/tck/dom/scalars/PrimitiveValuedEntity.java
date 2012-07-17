@@ -34,10 +34,10 @@ import org.apache.isis.applib.annotation.ObjectType;
 public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     // {{ Id (Integer)
+    @javax.jdo.annotations.PrimaryKey
     private Integer id;
 
     @javax.persistence.Id
-    @javax.jdo.annotations.PrimaryKey
     public Integer getId() {
         return id;
     }
@@ -153,10 +153,10 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     
     // {{ CharProperty
-    private char charProperty;
-
     @javax.jdo.annotations.Column(jdbcType="char", length=1) // for hsqldb
     //@javax.jdo.annotations.Column(jdbcType="char", length=1, sqlType="char") // for mssqlserver
+    private char charProperty;
+
     @MemberOrder(sequence = "1")
     public char getCharProperty() {
         return charProperty;

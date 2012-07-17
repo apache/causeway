@@ -36,10 +36,10 @@ import org.apache.isis.applib.annotation.Title;
 public class AutoAssignedEntity extends AbstractDomainObject {
 
 //    // {{ Id (Integer, also used in title)
+//    @javax.jdo.annotations.PrimaryKey
 //    private Integer id;
 //
 //    @Title(sequence="1", append=": ")
-//    @javax.jdo.annotations.PrimaryKey
 //    @javax.persistence.Id
 //    public Integer getId() {
 //        return id;

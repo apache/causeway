@@ -19,6 +19,7 @@
 
 package org.apache.isis.tck.dom.scalars;
 
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.tck.dom.AbstractEntityRepository;
@@ -29,5 +30,14 @@ public class AutoAssignedEntityRepository extends AbstractEntityRepository<AutoA
 
     public AutoAssignedEntityRepository() {
         super(AutoAssignedEntity.class, "AutoAssignedEntities");
+    }
+    
+    /**
+     * Required to discover the AutoAssignedEntity type.
+     */
+    @Override
+    @MemberOrder(sequence = "2")
+    public AutoAssignedEntity newEntity() {
+        return super.newEntity();
     }
 }
