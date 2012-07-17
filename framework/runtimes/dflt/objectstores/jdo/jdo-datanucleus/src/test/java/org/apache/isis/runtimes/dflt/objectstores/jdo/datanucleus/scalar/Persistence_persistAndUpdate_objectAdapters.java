@@ -18,6 +18,7 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scalar;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -33,7 +34,7 @@ import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-public class Persistence_persist_objectAdapters {
+public class Persistence_persistAndUpdate_objectAdapters {
 
     private PrimitiveValuedEntityRepository repo = new PrimitiveValuedEntityRepository();
     
@@ -44,7 +45,7 @@ public class Persistence_persist_objectAdapters {
         .build();
 
     @Test
-    public void adapterResolveState_isResolved() throws Exception {
+    public void transient_then_persistent() throws Exception {
         
         iswf.beginTran();
         PrimitiveValuedEntity entity = repo.newEntity();
@@ -71,6 +72,40 @@ public class Persistence_persist_objectAdapters {
         iswf.commitTran();
     }
 
+    @Test
+    public void updated_and_retrieved() throws Exception {
+
+        // given persisted
+        iswf.beginTran();
+        PrimitiveValuedEntity entity = repo.newEntity();
+        ObjectAdapter adapter = iswf.adapterFor(entity);
+        
+        entity.setId(1);
+        entity.setCharProperty('X');
+        
+        iswf.commitTran();
+        
+        // when update
+        iswf.bounceSystem();
+
+        iswf.beginTran();
+        entity = repo.list().get(0);
+        entity.setCharProperty('Y');
+        iswf.commitTran();
+
+        // then adapter's state is resolved
+        iswf.bounceSystem();
+        
+        iswf.beginTran();
+        entity = repo.list().get(0);
+        assertThat(entity.getCharProperty(), is('Y'));
+        
+        adapter = iswf.adapterFor(entity);
+        assertThat(adapter.getResolveState(), is(ResolveState.RESOLVED));
+        
+        iswf.commitTran();
+
+    }
     
 
 }

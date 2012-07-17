@@ -19,17 +19,10 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scalar;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.awt.Image;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.List;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -38,11 +31,8 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.Utils;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
-import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
-import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
-import org.apache.isis.tck.dom.scalars.MyEnum;
 
-public class Persistence_persist_applibValuedEntity {
+public class Persistence_persistAndUpdate_applibValuedEntity {
 
     private ApplibValuedEntityRepository repo = new ApplibValuedEntityRepository();
     
@@ -68,7 +58,7 @@ public class Persistence_persist_applibValuedEntity {
     }
 
     @Test
-    public void persistAllValues() throws Exception {
+    public void persist_then_update() throws Exception {
         iswf.beginTran();
         
         ApplibValuedEntity entity = repo.newEntity();
@@ -82,9 +72,21 @@ public class Persistence_persist_applibValuedEntity {
         iswf.bounceSystem();
         
         iswf.beginTran();
-        ApplibValuedEntity entityRetrieved = repo.list().get(0);
-        assertThat(entityRetrieved.getDateProperty().dateValue(), is(date.dateValue()));
+        entity = repo.list().get(0);
+        assertThat(entity.getDateProperty().dateValue(), is(date.dateValue()));
+        
+        date = date.add(-1, -1, -1);
+        entity.setDateProperty(date);
+        
+        iswf.commitTran();
+
+        iswf.bounceSystem();
+        
+        iswf.beginTran();
+        entity = repo.list().get(0);
+        assertThat(entity.getDateProperty().dateValue(), is(date.dateValue()));
         
         iswf.commitTran();
     }
+    
 }

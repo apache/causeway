@@ -35,7 +35,7 @@ import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntityRepository;
 
-public class Persistence_persist_wrapperValuedEntity {
+public class Persistence_persistAndUpdate_wrapperValuedEntity {
 
     private WrapperValuedEntityRepository repo = new WrapperValuedEntityRepository();
     
@@ -60,11 +60,38 @@ public class Persistence_persist_wrapperValuedEntity {
         iswf.commitTran();
     }
 
+    
     @Test
-    public void persistAllValues() throws Exception {
+    public void persist_then_update() throws Exception {
         iswf.beginTran();
         WrapperValuedEntity entity = repo.newEntity();
         entity.setStringProperty("1");
+        entity.setBooleanProperty(false);
+        entity.setByteProperty((byte)321);
+        entity.setDoubleProperty(123456768723429.0);
+        entity.setFloatProperty(654321.0f);
+        entity.setIntegerProperty(543);
+        entity.setLongProperty(90876512345L);
+        entity.setShortProperty((short)7654);
+        entity.setCharacterProperty('A');
+        
+        iswf.commitTran();
+
+        iswf.bounceSystem();
+
+        iswf.beginTran();
+        entity = repo.list().get(0);
+        assertThat(entity.getStringProperty(), is("1"));
+        assertThat(entity.getBooleanProperty(), is(false));
+        assertThat(entity.getByteProperty(), is((byte)321));
+        assertThat(entity.getDoubleProperty(), is(123456768723429.0));
+        assertThat(entity.getFloatProperty(), is(654321.0f));
+        assertThat(entity.getIntegerProperty(), is(543));
+        assertThat(entity.getLongProperty(), is(90876512345L));
+        assertThat(entity.getShortProperty(), is((short)7654));
+        assertThat(entity.getCharacterProperty(), is('A'));
+        
+        
         entity.setBooleanProperty(true);
         entity.setByteProperty((byte)123);
         entity.setDoubleProperty(9876543210987.0);
@@ -77,18 +104,17 @@ public class Persistence_persist_wrapperValuedEntity {
         iswf.commitTran();
 
         iswf.bounceSystem();
-        
+
         iswf.beginTran();
-        WrapperValuedEntity entityRetrieved = repo.list().get(0);
-        assertThat(entityRetrieved.getStringProperty(), is("1"));
-        assertThat(entityRetrieved.getBooleanProperty(), is(true));
-        assertThat(entityRetrieved.getByteProperty(), is((byte)123));
-        assertThat(entityRetrieved.getDoubleProperty(), is(9876543210987.0));
-        assertThat(entityRetrieved.getFloatProperty(), is(123456.0f));
-        assertThat(entityRetrieved.getIntegerProperty(), is(456));
-        assertThat(entityRetrieved.getLongProperty(), is(12345678901L));
-        assertThat(entityRetrieved.getShortProperty(), is((short)4567));
-        assertThat(entityRetrieved.getCharacterProperty(), is('X'));
+        entity = repo.list().get(0);
+        assertThat(entity.getBooleanProperty(), is(true));
+        assertThat(entity.getByteProperty(), is((byte)123));
+        assertThat(entity.getDoubleProperty(), is(9876543210987.0));
+        assertThat(entity.getFloatProperty(), is(123456.0f));
+        assertThat(entity.getIntegerProperty(), is(456));
+        assertThat(entity.getLongProperty(), is(12345678901L));
+        assertThat(entity.getShortProperty(), is((short)4567));
+        assertThat(entity.getCharacterProperty(), is('X'));
         
         iswf.commitTran();
     }

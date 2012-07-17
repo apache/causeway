@@ -26,14 +26,12 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.Utils;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-public class Persistence_persist_primitiveValuedEntity {
+public class Persistence_persistAndUpdate_primitiveValuedEntity {
 
     private PrimitiveValuedEntityRepository repo = new PrimitiveValuedEntityRepository();
     
@@ -59,10 +57,38 @@ public class Persistence_persist_primitiveValuedEntity {
     }
 
     @Test
-    public void persistAllValues() throws Exception {
+    public void persist_then_update() throws Exception {
+        
         iswf.beginTran();
         PrimitiveValuedEntity entity = repo.newEntity();
         entity.setId(1);
+        
+        entity.setBooleanProperty(false);
+        entity.setByteProperty((byte)456);
+        entity.setDoubleProperty(123456789876.0);
+        entity.setFloatProperty(654321.0f);
+        entity.setIntProperty(765);
+        entity.setLongProperty(7654321012345L);
+        entity.setShortProperty((short)543);
+        entity.setCharProperty('A');
+        
+        iswf.commitTran();
+
+        iswf.bounceSystem();
+        
+        iswf.beginTran();
+        entity = repo.list().get(0);
+
+        assertThat(entity.getBooleanProperty(), is(false));
+        assertThat(entity.getByteProperty(), is((byte)456));
+        assertThat(entity.getDoubleProperty(), is(123456789876.0));
+        assertThat(entity.getFloatProperty(), is(654321.0f));
+        assertThat(entity.getIntProperty(), is(765));
+        assertThat(entity.getLongProperty(), is(7654321012345L));
+        assertThat(entity.getShortProperty(), is((short)543));
+        assertThat(entity.getCharProperty(), is('A'));
+
+        
         entity.setBooleanProperty(true);
         entity.setByteProperty((byte)123);
         entity.setDoubleProperty(9876543210987.0);
@@ -71,23 +97,23 @@ public class Persistence_persist_primitiveValuedEntity {
         entity.setLongProperty(12345678901L);
         entity.setShortProperty((short)4567);
         entity.setCharProperty('X');
-        
+
         iswf.commitTran();
 
         iswf.bounceSystem();
         
         iswf.beginTran();
-        PrimitiveValuedEntity entityRetrieved = repo.list().get(0);
-        assertThat(entityRetrieved.getBooleanProperty(), is(true));
-        assertThat(entityRetrieved.getByteProperty(), is((byte)123));
-        assertThat(entityRetrieved.getDoubleProperty(), is(9876543210987.0));
-        assertThat(entityRetrieved.getFloatProperty(), is(123456.0f));
-        assertThat(entityRetrieved.getIntProperty(), is(456));
-        assertThat(entityRetrieved.getLongProperty(), is(12345678901L));
-        assertThat(entityRetrieved.getShortProperty(), is((short)4567));
-        assertThat(entityRetrieved.getCharProperty(), is('X'));
+        entity = repo.list().get(0);
+
+        assertThat(entity.getBooleanProperty(), is(true));
+        assertThat(entity.getByteProperty(), is((byte)123));
+        assertThat(entity.getDoubleProperty(), is(9876543210987.0));
+        assertThat(entity.getFloatProperty(), is(123456.0f));
+        assertThat(entity.getIntProperty(), is(456));
+        assertThat(entity.getLongProperty(), is(12345678901L));
+        assertThat(entity.getShortProperty(), is((short)4567));
+        assertThat(entity.getCharProperty(), is('X'));
         
         iswf.commitTran();
     }
-
 }

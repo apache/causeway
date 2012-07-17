@@ -158,8 +158,8 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     // }}
 
     // {{ CharacterProperty (property)
-    @javax.jdo.annotations.Column(jdbcType="char", length=1) // works for hsqldb
-    //@javax.jdo.annotations.Column(jdbcType="char", length=1, sqlType="char") // works for mssqlserver
+    @javax.jdo.annotations.Column(jdbcType="char") // works for hsqldb
+    //@javax.jdo.annotations.Column(jdbcType="char", sqlType="char") // works for mssqlserver
     private Character characterProperty;
 
     @Optional

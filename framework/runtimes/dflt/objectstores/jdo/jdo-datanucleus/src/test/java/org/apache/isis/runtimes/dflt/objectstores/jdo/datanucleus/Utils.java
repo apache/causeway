@@ -78,12 +78,15 @@ public class Utils {
 
         // last one wins!
         configureHsqlDbFileBased(props);
-        configureHsqlDbInMemory(props);
         configureForMsSqlServer(props);
+        configureHsqlDbInMemory(props);
 
         props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");
         props.put("isis.persistor.datanucleus.impl.datanucleus.validateTables", "true");
         props.put("isis.persistor.datanucleus.impl.datanucleus.validateConstraints", "true");
+        
+        props.put("isis.persistor.datanucleus.impl.datanucleus.cache.level2.type", "none");
+
         configuration.add(props);
         return configuration;
     }
