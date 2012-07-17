@@ -41,7 +41,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.tck.dom.refs.ChildEntity;
+import org.apache.isis.tck.dom.refs.BidirWithSetChildEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
 import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
@@ -98,7 +98,7 @@ public class DomainObjectResourceTest {
         // then
         final LinkRepresentation self = domainObjectRepr.getSelf();
         assertThat(self, isLink().rel(Rel.SELF).href(matches(".+objects/OID:32")).httpMethod(HttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
-        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + ChildEntity.class.getName())).httpMethod(HttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + BidirWithSetChildEntity.class.getName())).httpMethod(HttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
 
         assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
         assertThat(domainObjectRepr.getOid(), is("OID:32"));
@@ -144,7 +144,7 @@ public class DomainObjectResourceTest {
         final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
 
         // then
-        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + ChildEntity.class.getName())).httpMethod(HttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + BidirWithSetChildEntity.class.getName())).httpMethod(HttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
     }
 
     @Test

@@ -19,39 +19,26 @@
 
 package org.apache.isis.tck.dom.refs;
 
-import java.util.List;
-
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
-@ObjectType("CHLD")
-public class ChildEntity extends AbstractDomainObject {
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("UDJC")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("UDJC")
+@ObjectType("UDJC")
+public class UnidirJoinChildEntity extends AbstractDomainObject {
+    
 
-    // {{ Parent (title #1)
-    private ParentEntity parent;
-
-    @Title(sequence="1", append="-")
-    @MemberOrder(sequence = "1")
-    @Optional
-    public ParentEntity getParent() {
-        return parent;
-    }
-
-    public void setParent(final ParentEntity parent) {
-        this.parent = parent;
-    }
-
-    // }}
-
-    // {{ Name  (title #2)
+    // {{ Name  (title)
     private String name;
 
-    @Title(sequence="2")
+    @Title(sequence="1")
     @MemberOrder(sequence = "1")
     public String getName() {
         return name;
@@ -63,28 +50,5 @@ public class ChildEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ moveTo
-    @MemberOrder(sequence = "1")
-    public ChildEntity moveTo(final ParentEntity newParent) {
-        if (newParent == getParent()) {
-            // nothing to do
-            return this;
-        }
-        if (getParent() != null) {
-            getParent().removeChild(this);
-        }
-        newParent.getChildren().add(this);
-        this.setParent(newParent);
-        return this;
-    }
-
-    public ParentEntity default0MoveTo() {
-        return getParent();
-    }
-
-    public List<ParentEntity> choices0MoveTo() {
-        return getContainer().allInstances(ParentEntity.class);
-    }
-    // }}
 
 }

@@ -19,30 +19,37 @@
 
 package org.apache.isis.tck.dom.refs;
 
-import java.util.List;
-
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
 
-import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
-@ObjectType("CHLD")
-public class ChildEntity extends AbstractDomainObject {
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("PIS3")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("PIS3")
+@ObjectType("PIS3")
+public class PolyInterfaceIdentityStrategySubtype3Entity extends BaseEntity implements PolyInterfaceIdentityStrategy {
+
+    
 
     // {{ Parent (title #1)
-    private ParentEntity parent;
+    private PolyInterfaceIdentityStrategyParentEntity parent;
 
     @Title(sequence="1", append="-")
     @MemberOrder(sequence = "1")
     @Optional
-    public ParentEntity getParent() {
+    public PolyInterfaceIdentityStrategyParentEntity getParent() {
         return parent;
     }
 
-    public void setParent(final ParentEntity parent) {
+    public void setParent(final PolyInterfaceIdentityStrategyParentEntity parent) {
         this.parent = parent;
     }
 
@@ -63,28 +70,20 @@ public class ChildEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ moveTo
+    
+    // {{ Baz (property)
+    private java.math.BigDecimal boz;
+
     @MemberOrder(sequence = "1")
-    public ChildEntity moveTo(final ParentEntity newParent) {
-        if (newParent == getParent()) {
-            // nothing to do
-            return this;
-        }
-        if (getParent() != null) {
-            getParent().removeChild(this);
-        }
-        newParent.getChildren().add(this);
-        this.setParent(newParent);
-        return this;
+    public java.math.BigDecimal getBoz() {
+        return boz;
     }
 
-    public ParentEntity default0MoveTo() {
-        return getParent();
-    }
-
-    public List<ParentEntity> choices0MoveTo() {
-        return getContainer().allInstances(ParentEntity.class);
+    public void setBoz(final java.math.BigDecimal baz) {
+        this.boz = baz;
     }
     // }}
+
+
 
 }

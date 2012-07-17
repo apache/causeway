@@ -20,36 +20,24 @@
 package org.apache.isis.tck.dom.refs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.jdo.annotations.IdentityType;
+import java.util.Set;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.applib.annotation.Title;
 
-@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.Discriminator("PRNT")
-@javax.jdo.annotations.Inheritance()
-@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("PRNT")
 @ObjectType("PRNT")
 public class ParentEntity extends BaseEntity {
 
-    // {{ Identification
-    public String title() {
-        final TitleBuffer buf = new TitleBuffer();
-        buf.append(getName());
-        return buf.toString();
-    }
-    // }}
-    
-    
-    // {{ Name
+    // {{ Name (also title)
     private String name;
+    
+    @Title
     @MemberOrder(sequence = "1")
     @Optional
     public String getName() {
@@ -89,18 +77,19 @@ public class ParentEntity extends BaseEntity {
     // }}
 
     // {{ Children
-    private List<ChildEntity> children = new ArrayList<ChildEntity>();
+    private Set<ChildEntity> children = new HashSet<ChildEntity>();
 
     @MemberOrder(sequence = "1")
-    public List<ChildEntity> getChildren() {
+    public Set<ChildEntity> getChildren() {
         return children;
     }
 
-    public void setChildren(final List<ChildEntity> children) {
+    public void setChildren(final Set<ChildEntity> children) {
         this.children = children;
     }
     // }}
 
+    
     // {{ NotPersisted
     @NotPersisted
     public List<SimpleEntity> getNotPersisted() {
@@ -119,22 +108,20 @@ public class ParentEntity extends BaseEntity {
         persistIfNotAlready(childEntity);
         return childEntity;
     }
-
     // }}
 
     
-
     // {{ removeChild (action)
     public ParentEntity removeChild(final ChildEntity childEntity) {
-        if (homogeneousCollection.contains(childEntity)) {
-            homogeneousCollection.remove(childEntity);
+        if (getChildren().contains(childEntity)) {
+            getChildren().remove(childEntity);
             childEntity.setParent(null);
         }
         return this;
     }
 
-    public List<ChildEntity> choices0RemoveChild() {
-        return getChildren();
+    public List<BidirWithSetChildEntity> choices0RemoveChild() {
+        return Arrays.asList(getChildren().toArray(new BidirWithSetChildEntity[0]));
     }
     // }}
 

@@ -19,28 +19,44 @@
 
 package org.apache.isis.tck.dom.refs;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.Discriminator("SMPL")
+@javax.jdo.annotations.Discriminator("BDSC")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("SMPL")
-@ObjectType("SMPL")
-public class SimpleEntity extends BaseEntity {
-    
-    // {{ name: String (title)
+@javax.persistence.DiscriminatorValue("BDSC")
+@ObjectType("BDSC")
+public class BidirWithSetChildEntity extends AbstractDomainObject {
+
+    // {{ Parent (title #1)
+    private BidirWithSetParentEntity parent;
+
+    @Title(sequence="1", append="-")
+    @MemberOrder(sequence = "1")
+    @Optional
+    public BidirWithSetParentEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(final BidirWithSetParentEntity parent) {
+        this.parent = parent;
+    }
+
+    // }}
+
+    // {{ Name  (title #2)
     private String name;
 
-    @Title
+    @Title(sequence="2")
     @MemberOrder(sequence = "1")
     public String getName() {
         return name;
@@ -52,55 +68,28 @@ public class SimpleEntity extends BaseEntity {
 
     // }}
 
-    // {{ Date: java.util.Date
-    private Date date;
-
-    @Optional
+    // {{ moveTo
     @MemberOrder(sequence = "1")
-    public Date getDate() {
-        return date;
+    public BidirWithSetChildEntity moveTo(final BidirWithSetParentEntity newParent) {
+        if (newParent == getParent()) {
+            // nothing to do
+            return this;
+        }
+        if (getParent() != null) {
+            getParent().removeChild(this);
+        }
+        newParent.getChildren().add(this);
+        this.setParent(newParent);
+        return this;
     }
 
-    public void setDate(final Date date) {
-        this.date = date;
-    }
-    // }}
-
-    // {{ Size: int
-    private int size;
-
-    @MemberOrder(sequence = "1")
-    public int getSize() {
-        return size;
+    public BidirWithSetParentEntity default0MoveTo() {
+        return getParent();
     }
 
-    public void setSize(final int size) {
-        this.size = size;
-    }
-
-    // }}
-
-    // {{ Nullable: long
-    private Long number;
-
-    @Optional
-    @MemberOrder(sequence = "1")
-    public Long getNullable() {
-        return number;
-    }
-
-    public void setNullable(final Long number) {
-        this.number = number;
-    }
-
-    // }}
-
-    // {{ NotPersisted: int  (nb: throws exception if called)
-    @NotPersisted
-    public int getNotPersisted() {
-        throw new org.apache.isis.applib.ApplicationException("unexpected call");
+    public List<BidirWithSetParentEntity> choices0MoveTo() {
+        return getContainer().allInstances(BidirWithSetParentEntity.class);
     }
     // }}
-
 
 }

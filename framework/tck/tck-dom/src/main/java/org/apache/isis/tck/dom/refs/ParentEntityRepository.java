@@ -31,11 +31,12 @@ public class ParentEntityRepository extends AbstractEntityRepository<ParentEntit
     public ParentEntityRepository() {
         super(ParentEntity.class, "ParentEntities");
     }
-    
+
     public BaseEntity someAction() { return null; }
+    
     public SimpleEntity someAction2() { return null; }
+    
     public ReferencingEntity someAction3() { return null; }
-    public ParentEntity someAction4() { return null; }
  
     @MemberOrder(sequence = "2")
     public ParentEntity newEntity(final String name) {

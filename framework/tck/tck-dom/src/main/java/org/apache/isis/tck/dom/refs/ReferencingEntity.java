@@ -22,6 +22,7 @@ package org.apache.isis.tck.dom.refs;
 import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.InheritanceStrategy;
 
 import com.google.common.collect.Lists;
 

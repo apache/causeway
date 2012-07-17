@@ -28,21 +28,27 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.util.TitleBuffer;
 
-@ObjectType("CHLD")
-public class ChildEntity extends AbstractDomainObject {
-
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("BDLC")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("BDLC")
+@ObjectType("BDLC")
+public class BidirWithListChildEntity extends AbstractDomainObject {
+    
     // {{ Parent (title #1)
-    private ParentEntity parent;
+    private BidirWithListParentEntity parent;
 
     @Title(sequence="1", append="-")
     @MemberOrder(sequence = "1")
     @Optional
-    public ParentEntity getParent() {
+    public BidirWithListParentEntity getParent() {
         return parent;
     }
 
-    public void setParent(final ParentEntity parent) {
+    public void setParent(final BidirWithListParentEntity parent) {
         this.parent = parent;
     }
 
@@ -65,7 +71,7 @@ public class ChildEntity extends AbstractDomainObject {
 
     // {{ moveTo
     @MemberOrder(sequence = "1")
-    public ChildEntity moveTo(final ParentEntity newParent) {
+    public BidirWithListChildEntity moveTo(final BidirWithListParentEntity newParent) {
         if (newParent == getParent()) {
             // nothing to do
             return this;
@@ -78,13 +84,14 @@ public class ChildEntity extends AbstractDomainObject {
         return this;
     }
 
-    public ParentEntity default0MoveTo() {
+    public BidirWithListParentEntity default0MoveTo() {
         return getParent();
     }
 
-    public List<ParentEntity> choices0MoveTo() {
-        return getContainer().allInstances(ParentEntity.class);
+    public List<BidirWithListParentEntity> choices0MoveTo() {
+        return getContainer().allInstances(BidirWithListParentEntity.class);
     }
+
     // }}
 
 }

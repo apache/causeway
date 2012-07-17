@@ -19,30 +19,37 @@
 
 package org.apache.isis.tck.dom.refs;
 
-import java.util.List;
-
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
 
-import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
-@ObjectType("CHLD")
-public class ChildEntity extends AbstractDomainObject {
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.Discriminator("PIS1")
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
+@javax.persistence.Entity
+@javax.persistence.DiscriminatorValue("PIS1")
+@ObjectType("PIS1")
+public class PolyInterfaceSubtype1Entity extends BaseEntity implements PolyInterface {
 
+
+    
     // {{ Parent (title #1)
-    private ParentEntity parent;
+    private PolyInterfaceParentEntity parent;
 
     @Title(sequence="1", append="-")
     @MemberOrder(sequence = "1")
     @Optional
-    public ParentEntity getParent() {
+    public PolyInterfaceParentEntity getParent() {
         return parent;
     }
 
-    public void setParent(final ParentEntity parent) {
+    public void setParent(final PolyInterfaceParentEntity parent) {
         this.parent = parent;
     }
 
@@ -63,28 +70,19 @@ public class ChildEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ moveTo
+    
+    // {{ Foo (property)
+    private int foo;
+
     @MemberOrder(sequence = "1")
-    public ChildEntity moveTo(final ParentEntity newParent) {
-        if (newParent == getParent()) {
-            // nothing to do
-            return this;
-        }
-        if (getParent() != null) {
-            getParent().removeChild(this);
-        }
-        newParent.getChildren().add(this);
-        this.setParent(newParent);
-        return this;
+    public int getFoo() {
+        return foo;
     }
 
-    public ParentEntity default0MoveTo() {
-        return getParent();
-    }
-
-    public List<ParentEntity> choices0MoveTo() {
-        return getContainer().allInstances(ParentEntity.class);
+    public void setFoo(final int foo) {
+        this.foo = foo;
     }
     // }}
+
 
 }

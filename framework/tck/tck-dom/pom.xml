@@ -36,9 +36,9 @@
                 <artifactId>maven-datanucleus-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
+                	<fork>false</fork>
                     <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
                     <verbose>true</verbose>
-                    <props>${basedir}/datanucleus.properties</props>
                 </configuration>
                 <executions>
                     <execution>
