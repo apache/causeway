@@ -114,9 +114,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                 if (Strings.isNullOrEmpty(title)) {
                     continue;
                 }
-                if (stringBuilder.length() > 0) {
-                    stringBuilder.append(component.getPrepend());
-                }
+                stringBuilder.append(component.getPrepend());
                 stringBuilder.append(abbreviated(title, component.abbreviateTo));
                 stringBuilder.append(component.getAppend());
             }
