@@ -35,8 +35,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.Discriminator("PCCH")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("PCCH")
 @ObjectType("PCCH")
 public abstract class PolyClassChildEntity extends AbstractDomainObject {
 

@@ -30,8 +30,6 @@ import org.apache.isis.applib.annotation.ObjectType;
 @javax.jdo.annotations.Discriminator("PCS3")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("PCS3")
 @ObjectType("PCS3")
 public class PolyClassSubtype3Entity extends PolyClassChildEntity {
 

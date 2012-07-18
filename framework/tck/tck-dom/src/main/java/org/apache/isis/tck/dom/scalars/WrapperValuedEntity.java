@@ -30,8 +30,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.Query(
         name="wrpv_findByStringProperty", language="JDOQL",  
         value="SELECT FROM org.apache.isis.tck.dom.scalars.WrapperValuedEntity WHERE stringProperty == :i")
-@javax.persistence.Entity                    
-@javax.persistence.DiscriminatorValue("WRPV")
 @ObjectType("WRPV")
 public class WrapperValuedEntity extends AbstractDomainObject {
 
@@ -39,7 +37,6 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     private String stringProperty;
 
     @javax.jdo.annotations.PrimaryKey
-    @javax.persistence.Id
     @Title
     @Optional
     @MemberOrder(sequence = "1")

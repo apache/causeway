@@ -32,8 +32,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.Discriminator("PII1")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("PII1")
 @ObjectType("PII1")
 public class PolyInterfaceIdentityStrategySubtype1Entity extends BaseEntity implements PolyInterfaceIdentityStrategy {
 

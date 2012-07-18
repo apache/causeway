@@ -38,8 +38,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("PIIP")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("PIIP")
 @ObjectType("PIIP")
 public class PolyInterfaceIdentityStrategyParentEntity extends BaseEntity {
 

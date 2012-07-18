@@ -34,8 +34,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.Query(
         name="jdkv_findByStringProperty", language="JDOQL",  
         value="SELECT FROM org.apache.isis.tck.dom.scalars.JdkValuedEntity WHERE stringProperty == :i")
-@javax.persistence.Entity                    
-@javax.persistence.DiscriminatorValue("JDKV")
 @ObjectType("JDKV")
 public class JdkValuedEntity extends AbstractDomainObject {
 
@@ -43,7 +41,6 @@ public class JdkValuedEntity extends AbstractDomainObject {
     private String stringProperty;
 
     @javax.jdo.annotations.PrimaryKey
-    @javax.persistence.Id
     @Title
     @Optional
     @MemberOrder(sequence = "1")

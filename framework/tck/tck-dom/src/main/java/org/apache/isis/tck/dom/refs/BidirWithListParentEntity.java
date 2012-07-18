@@ -33,8 +33,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("BDLP")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("BDLP")
 @ObjectType("BDLP")
 public class BidirWithListParentEntity extends BaseEntity {
 

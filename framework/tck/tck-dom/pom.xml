@@ -112,6 +112,11 @@
 			<artifactId>jdo-applib</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>wicket-applib</artifactId>
+		</dependency>
+
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
        <dependency>
             <groupId>javax.jdo</groupId>
@@ -130,16 +135,5 @@
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
 		
-
-		<dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-			<artifactId>jpa-applib</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-applib</artifactId>
-		</dependency>
-				
 	</dependencies>
 </project>

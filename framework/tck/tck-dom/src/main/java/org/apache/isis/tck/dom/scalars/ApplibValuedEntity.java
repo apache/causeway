@@ -39,8 +39,6 @@ import org.apache.isis.applib.value.TimeStamp;
 @javax.jdo.annotations.Query(
         name="jdkv_findByStringProperty", language="JDOQL",  
         value="SELECT FROM org.apache.isis.tck.dom.scalars.ApplibValuedEntity WHERE stringProperty == :i")
-@javax.persistence.Entity                    
-@javax.persistence.DiscriminatorValue("APLV")
 @ObjectType("APLV")
 public class ApplibValuedEntity extends AbstractDomainObject {
 
@@ -49,7 +47,6 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     private String stringProperty;
 
     @javax.jdo.annotations.PrimaryKey
-    @javax.persistence.Id
     @Title
     @Optional
     @MemberOrder(sequence = "1")

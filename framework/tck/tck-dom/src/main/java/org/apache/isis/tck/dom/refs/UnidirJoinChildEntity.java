@@ -29,8 +29,6 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("UDJC")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
-@javax.persistence.Entity
-@javax.persistence.DiscriminatorValue("UDJC")
 @ObjectType("UDJC")
 public class UnidirJoinChildEntity extends AbstractDomainObject {
     

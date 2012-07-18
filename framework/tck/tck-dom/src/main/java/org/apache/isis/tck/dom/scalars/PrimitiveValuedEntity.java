@@ -28,8 +28,6 @@ import org.apache.isis.applib.annotation.ObjectType;
 @javax.jdo.annotations.Query(
         name="prmv_findByIntProperty", language="JDOQL",  
         value="SELECT FROM org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity WHERE intProperty == :i")
-@javax.persistence.Entity                    
-@javax.persistence.DiscriminatorValue("PRMV")
 @ObjectType("PRMV")
 public class PrimitiveValuedEntity extends AbstractDomainObject {
 
@@ -37,7 +35,6 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     private Integer id;
 
     @javax.jdo.annotations.PrimaryKey // must be on the getter.
-    @javax.persistence.Id
     public Integer getId() {
         return id;
     }
