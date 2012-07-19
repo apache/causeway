@@ -24,6 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -346,7 +347,8 @@ public class FacetProcessor implements RuntimeContextAware {
 
     private List<FacetFactory> getFactoryListByFeatureType(final FeatureType featureType) {
         cacheByFeatureTypeIfRequired();
-        return factoryListByFeatureType.get(featureType);
+        List<FacetFactory> list = factoryListByFeatureType.get(featureType);
+        return list != null? list: Collections.<FacetFactory>emptyList();
     }
 
     private void clearCaches() {

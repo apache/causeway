@@ -71,7 +71,7 @@ public class GivenJdoVersionAnnotationFacetFactoryTest extends AbstractFacetFact
 
     public void testFeatureTypes() {
         final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertTrue(contains(featureTypes, FeatureType.OBJECT_POST_PROCESSING));
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
         assertFalse(contains(featureTypes, FeatureType.ACTION));
