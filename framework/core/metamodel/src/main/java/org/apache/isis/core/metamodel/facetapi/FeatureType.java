@@ -32,7 +32,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Enumerates the features that a particular Facet can be applied to.
- * 
+ *
+ * <p>
+ * The class-level feature processing is typically performed by {@link FacetFactory}s 
+ * pertaining to {@link #OBJECT}, performed before the processing of class members.  
+ * However, {@link FacetFactory}s can also be associated with {@link #OBJECT_POST_PROCESSING},
+ * which is run after all members have been introspected. This is useful for facets
+ * (eg the JDO <tt>Version</tt> annotation) that references class members.
+ *  
  * <p>
  * TODO: should rationalize this and {@link ObjectSpecification#getResultType()}
  * . Note though that we don't distinguish value properties and reference
@@ -78,6 +85,15 @@ public enum FeatureType {
         public Identifier identifierFor(final Class<?> type, final Method method) {
             return null;
         }
+    },
+    OBJECT_POST_PROCESSING("Object post processing") {
+        /**
+         * The supplied method can be null; at any rate it will be ignored.
+         */
+        @Override
+        public Identifier identifierFor(final Class<?> type, final Method method) {
+            return Identifier.classIdentifier(type);
+        }
     };
 
     public final static List<FeatureType> COLLECTIONS_ONLY = ImmutableList.of(COLLECTION);
@@ -87,6 +103,7 @@ public enum FeatureType {
     public final static List<FeatureType> OBJECTS_ONLY = ImmutableList.of(OBJECT);
     public final static List<FeatureType> MEMBERS = ImmutableList.of(PROPERTY, COLLECTION, ACTION);
     public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableList.of(OBJECT, PROPERTY, COLLECTION);
+    public final static List<FeatureType> OBJECTS_POST_PROCESSING_ONLY = ImmutableList.of(OBJECT_POST_PROCESSING);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s

@@ -429,7 +429,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public String getSingularName() {
         final NamedFacet namedFacet = getFacet(NamedFacet.class);
-        return namedFacet.value();
+        return namedFacet != null? namedFacet.value() : this.getFullIdentifier();
     }
 
     /**

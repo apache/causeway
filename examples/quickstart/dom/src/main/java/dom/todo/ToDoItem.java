@@ -23,12 +23,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Version;
+import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Title;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("TODO")
@@ -41,20 +45,16 @@ import org.apache.isis.applib.annotation.MemberOrder;
         name="todo_similarTo", language="JDOQL",  
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
 })
+@Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION",
+extensions={@Extension(vendorName="datanucleus", key="field-name", value="version")})
 public class ToDoItem extends AbstractDomainObject {
 
     public static final List<String> CATEGORIES = Collections.unmodifiableList(Arrays.asList("Professional", "Domestic", "Other"));
 
-    // {{ Title
-    public String title() {
-        return getDescription();
-    }
-
-    // }}
-
     // {{ Description
     private String description;
 
+    @Title
     @MemberOrder(sequence = "1")
     public String getDescription() {
         return description;
@@ -133,6 +133,39 @@ public class ToDoItem extends AbstractDomainObject {
         return !done ? "Not yet done" : null;
     }
     // }}
+
+
+    // {{ Version (property)
+    private long version;
+
+    @Disabled
+    @MemberOrder(sequence = "3")
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
+    // }}
+
+
+//    // {{ LastUpdatedAt (property)
+//    private java.util.Date lastUpdatedAt;
+//
+//    @Disabled
+//    @MemberOrder(sequence = "3")
+//    public java.util.Date getLastUpdatedAt() {
+//        return lastUpdatedAt;
+//    }
+//
+//    public void setLastUpdatedAt(final java.util.Date lastUpdatedAt) {
+//        this.lastUpdatedAt = lastUpdatedAt;
+//    }
+//    // }}
+
+
+
 
     // {{ injected: ToDoItems
     @SuppressWarnings("unused")

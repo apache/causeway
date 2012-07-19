@@ -283,6 +283,13 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
+    public void processPost(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+        final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT_POST_PROCESSING);
+        for (final FacetFactory facetFactory : factoryList) {
+            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
+        }
+    }
+
     /**
      * Attaches all facets applicable to the provided {@link FeatureType type of
      * feature} to the supplied {@link FacetHolder}.

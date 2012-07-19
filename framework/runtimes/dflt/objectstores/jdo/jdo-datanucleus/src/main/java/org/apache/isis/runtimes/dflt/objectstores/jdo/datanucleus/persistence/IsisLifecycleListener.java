@@ -1,6 +1,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence;
 
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.Map;
 
 import javax.jdo.JDOHelper;
@@ -19,17 +20,19 @@ import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -90,27 +93,28 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         final PersistenceCapable pojo = persistenceCapableFor(event);
         
         final RootOid oid ;
-        ObjectAdapter existingAdapterIfAny = getAdapterManager().getAdapterFor(pojo);
-        if(existingAdapterIfAny != null) {
+        ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        if(adapter != null) {
             ensureRootObject(event);
-            oid = (RootOid) existingAdapterIfAny.getOid();
+            oid = (RootOid) adapter.getOid();
         } else {
             final OidGenerator oidGenerator = getOidGenerator();
             oid = oidGenerator.createPersistent(pojo, null);
             
             // it's possible that there is already an adapter for this Oid, ie from ObjectStore#resolveImmediately()
-            existingAdapterIfAny = getAdapterManager().getAdapterFor(oid);
-            if(existingAdapterIfAny != null) {
-                getAdapterManager().removeAdapter(existingAdapterIfAny);
-                existingAdapterIfAny.replacePojo(pojo);
-                getAdapterManager().addExistingAdapter(existingAdapterIfAny);
+            adapter = getAdapterManager().getAdapterFor(oid);
+            if(adapter != null) {
+                getAdapterManager().removeAdapter(adapter);
+                adapter.replacePojo(pojo);
+                getAdapterManager().addExistingAdapter(adapter);
             } else {
                 PersistenceSessionHydrator hydrator = getPersistenceSession();
-                ObjectAdapter adapter = hydrator.recreateAdapter(oid, pojo);
+                adapter = hydrator.recreateAdapter(oid, pojo);
                 PersistorUtil.startResolving(adapter);
                 PersistorUtil.endResolving(adapter);
             }
         }
+        adapter.setVersion(getVersionIfAny(pojo));
 
         ensureFrameworksInAgreement(event);
     }
@@ -165,6 +169,8 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         }
         
         clearDirtyFor(adapter);
+        
+        adapter.setVersion(getVersionIfAny(pojo));
         CallbackUtils.callCallback(adapter, callbackFacetClass);
 
         ensureFrameworksInAgreement(event);
@@ -386,6 +392,15 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         return jdoObjectId;
     }
 
+    private Version getVersionIfAny(final PersistenceCapable pojo) {
+        Object jdoVersion = pojo.jdoGetVersion();
+        if(jdoVersion instanceof Long) {
+            return new SerialNumberVersion((Long) jdoVersion, getAuthenticationSession().getUserName(), new Date()); 
+        } 
+        return null;
+    }
+
+
     // /////////////////////////////////////////////////////////
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
@@ -401,5 +416,10 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
 
 }

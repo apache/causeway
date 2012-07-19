@@ -18,6 +18,7 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.version;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.Version;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -29,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 public class JdoVersionAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public JdoVersionAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_POST_PROCESSING_ONLY);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JdoVersionAnnotationFacetFactory extends AnnotationBasedFacetFactor
             return;
         }
         final ObjectSpecification objSpec = (ObjectSpecification) processClassContext.getFacetHolder();
-        String propertyId = annotation.column();
+        String propertyId = getPropertyId(annotation);
         ObjectAssociation otoa = objSpec.getAssociation(propertyId);
         if (otoa == null) {
             throw new RuntimeException("No such property '" + propertyId + "'");
@@ -48,6 +49,16 @@ public class JdoVersionAnnotationFacetFactory extends AnnotationBasedFacetFactor
         FacetUtil.addFacet(new JdoVersionFacetAnnotation(otoa));
         FacetUtil.addFacet(new DisabledFacetDerivedFromJdoVersionAnnotation(otoa));
         FacetUtil.addFacet(new OptionalFacetDerivedFromJdoVersionAnnotation(otoa));
+    }
+
+    private static String getPropertyId(final Version annotation) {
+        final Extension[] extensions = annotation.extensions();
+        for(Extension extension: extensions) {
+            if("datanucleus".equals(extension.vendorName()) && "field-name".equals(extension.key())) {
+                return  extension.value();
+            }
+        }
+        return annotation.column();
     }
 
 }

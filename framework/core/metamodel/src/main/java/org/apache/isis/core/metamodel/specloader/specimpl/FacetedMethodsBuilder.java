@@ -452,6 +452,21 @@ public class FacetedMethodsBuilder {
         return true;
     }
 
+
+    // ////////////////////////////////////////////////////////////////////////////
+    // introspect class post processing
+    // ////////////////////////////////////////////////////////////////////////////
+
+    public void introspectClassPostProcessing() {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("introspecting " + getClassName() + ": class-level post-processing");
+        }
+
+        // process facets at object level
+        // this will also remove some methods, such as the superclass methods.
+        getFacetProcessor().processPost(introspectedClass, methodRemover, spec);
+    }
+
     // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.
     // ////////////////////////////////////////////////////////////////////////////

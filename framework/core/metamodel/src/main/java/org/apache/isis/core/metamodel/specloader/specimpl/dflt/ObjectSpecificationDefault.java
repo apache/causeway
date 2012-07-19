@@ -180,6 +180,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
         addObjectActions(asObjectActions(actionOrderSet));
 
+        facetedMethodsBuilder.introspectClassPostProcessing();
+
         updateFromFacetValues();
 
         facetedMethodsBuilder = null;
