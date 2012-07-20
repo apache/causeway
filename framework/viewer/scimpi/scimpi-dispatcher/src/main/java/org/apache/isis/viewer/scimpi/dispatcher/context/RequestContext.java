@@ -397,9 +397,6 @@ public abstract class RequestContext {
         if (scope == Scope.SESSION && value != null && !(value instanceof Serializable)) {
             throw new ScimpiException("SESSION scoped variable (" + name + ") must be serializable: " + value);
         }
-        if (scope == Scope.SESSION) {
-            startHttpSession();
-        }
         removeExistingVariable(name);
         variables.get(scope).put(name, value);
     }
