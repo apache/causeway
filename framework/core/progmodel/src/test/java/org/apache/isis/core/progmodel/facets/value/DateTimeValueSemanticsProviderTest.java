@@ -77,7 +77,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
     }
 
     private void assertEntry(final String entry, final int year, final int month, final int day, final int hour, final int minute, final int second) {
-        final Object object = adapter.parseTextEntry(null, entry);
+        final Object object = adapter.parseTextEntry(null, entry, null);
         assertEquals(new DateTime(year, month, day, hour, minute, second), object);
     }
 
@@ -103,7 +103,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Test
     public void testEmptyClears() {
-        assertNull(adapter.parseTextEntry(null, ""));
+        assertNull(adapter.parseTextEntry(null, "", null));
     }
 
     @Test

@@ -57,7 +57,7 @@ public class TimeStampValueSemanticsProviderTest extends ValueSemanticsProviderA
 
     @Override
     public void testParseEmptyString() {
-        final Object parsed = adapter.parseTextEntry(null, "");
+        final Object parsed = adapter.parseTextEntry(null, "", null);
         assertNull(parsed);
     }
 

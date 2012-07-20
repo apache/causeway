@@ -33,6 +33,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.LocaleUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -140,7 +141,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public T parseTextEntry(final Object context, final String entry) {
+    public T parseTextEntry(final Object context, final String entry, final Localization localization) {
         if (entry == null) {
             throw new IllegalArgumentException();
         }
@@ -151,7 +152,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
                 return null;
             }
         }
-        return doParse(context, entry);
+        return doParse(context, entry, localization);
     }
 
     /**
@@ -161,7 +162,13 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      *            - the proposed new object, as a string representation to be
      *            parsed
      */
-    protected abstract T doParse(Object context, String entry);
+    protected T doParse(Object context, String entry) { 
+        throw new UnexpectedCallException(); 
+    } 
+
+    protected T doParse(Object context, String entry, Localization localization) { 
+        return doParse(context, entry); 
+    } 
 
     /**
      * Whether a non-null entry is required, used by parsing.

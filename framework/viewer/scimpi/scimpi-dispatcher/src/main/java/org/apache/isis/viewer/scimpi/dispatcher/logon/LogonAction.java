@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.logon;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -72,10 +74,11 @@ public class LogonAction implements Action {
                     throw new ScimpiException("Expected two parameters for the log-on method: " + methodName);
                 }
 
+                Localization localization = IsisContext.getLocalization(); 
                 ParseableFacet facet = parameters2.get(0).getSpecification().getFacet(ParseableFacet.class);
-                parameters[0] = facet.parseTextEntry(null, username);
+                parameters[0] = facet.parseTextEntry(null, username, localization);
                 facet = parameters2.get(1).getSpecification().getFacet(ParseableFacet.class);
-                parameters[1] = facet.parseTextEntry(null, password);
+                parameters[1] = facet.parseTextEntry(null, password, localization);
                 final ObjectAdapter result = action.execute(object, parameters);
                 isValid = result != null;
                 if (isValid) {

@@ -51,32 +51,32 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
 
     @Test
     public void testParseFalseString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "faLSe");
+        final Object parsed = value.parseTextEntry(null, "faLSe", null);
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseStringWithPrecedingSpace() throws Exception {
-        final Object parsed = value.parseTextEntry(null, " false");
+        final Object parsed = value.parseTextEntry(null, " false", null);
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseStringWithTrailingSpace() throws Exception {
-        final Object parsed = value.parseTextEntry(null, " false");
+        final Object parsed = value.parseTextEntry(null, " false", null);
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseTrueString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "TRue");
+        final Object parsed = value.parseTextEntry(null, "TRue", null);
         assertEquals(Boolean.valueOf(true), parsed);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "yes");
+            value.parseTextEntry(null, "yes", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }

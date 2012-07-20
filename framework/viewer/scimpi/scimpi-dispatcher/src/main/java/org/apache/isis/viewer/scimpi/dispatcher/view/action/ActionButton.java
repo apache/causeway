@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -69,7 +70,8 @@ public class ActionButton extends AbstractElementProcessor {
                 objectParameters[i] = null;
             } else if (typ.getFacet(ParseableFacet.class) != null) {
                 final ParseableFacet facet = typ.getFacet(ParseableFacet.class);
-                objectParameters[i] = facet.parseTextEntry(null, parameters[i]);
+                Localization localization = IsisContext.getLocalization(); 
+                objectParameters[i] = facet.parseTextEntry(null, parameters[i], localization); 
             } else {
                 objectParameters[i] = MethodsUtils.findObject(request.getContext(), parameters[i]);
             }

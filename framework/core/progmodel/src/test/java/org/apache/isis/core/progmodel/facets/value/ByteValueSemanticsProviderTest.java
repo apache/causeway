@@ -61,14 +61,14 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "21");
+        final Object parsed = value.parseTextEntry(null, "21", null);
         assertEquals(Byte.valueOf((byte) 21), parsed);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "xs21z4xxx23");
+            value.parseTextEntry(null, "xs21z4xxx23", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }

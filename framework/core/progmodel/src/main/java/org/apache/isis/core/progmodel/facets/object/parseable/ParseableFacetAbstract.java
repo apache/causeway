@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -70,8 +71,8 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     }
 
     @Override
-    public ObjectAdapter parseTextEntry(final ObjectAdapter original, final String entryText) {
-        return parseableFacetUsingParser.parseTextEntry(original, entryText);
+    public ObjectAdapter parseTextEntry(final ObjectAdapter original, final String entryText, final Localization localization) {
+        return parseableFacetUsingParser.parseTextEntry(original, entryText, localization);
     }
 
     @Override

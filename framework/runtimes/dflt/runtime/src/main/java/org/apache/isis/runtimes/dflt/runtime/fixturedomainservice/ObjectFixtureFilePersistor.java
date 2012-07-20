@@ -93,7 +93,7 @@ public class ObjectFixtureFilePersistor {
             final ObjectAssociation association = object.getSpecification().getAssociation(name);
             if (data.trim().length() == 0) {
                 if (!association.isEmpty(object) && association instanceof OneToOneAssociation) {
-                    ((OneToOneAssociation) association).clearAssociation(object);
+                    ((OneToOneAssociation) association).set(object, null);
                 }
             } else {
                 if (association.isOneToManyAssociation()) {
@@ -108,7 +108,7 @@ public class ObjectFixtureFilePersistor {
                 } else if (association.getSpecification().isParseable()) {
                     data = data.replaceAll("\\n", "\n");
                     final ParseableFacet facet = association.getSpecification().getFacet(ParseableFacet.class);
-                    final ObjectAdapter value = facet.parseTextEntry(null, data);
+                    final ObjectAdapter value = facet.parseTextEntry(null, data, null);
                     ((OneToOneAssociation) association).initAssociation(object, value);
                 } else if (association.isOneToOneAssociation()) {
                     final ObjectAdapter value = loaded.get(data);

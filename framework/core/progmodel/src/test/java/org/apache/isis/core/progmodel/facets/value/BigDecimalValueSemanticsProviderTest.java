@@ -61,14 +61,14 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "2142342334");
+        final Object newValue = value.parseTextEntry(null, "2142342334", null);
         assertEquals(new BigDecimal(2142342334L), newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "214xxx2342334");
+            value.parseTextEntry(null, "214xxx2342334", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }

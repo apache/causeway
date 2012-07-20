@@ -326,7 +326,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         final ParseableFacet parseableFacet = noSpec.getFacet(ParseableFacet.class);
         if (parseableFacet != null) {
             try {
-                return parseableFacet.parseTextEntry(contextAdapter, cellText);
+                return parseableFacet.parseTextEntry(contextAdapter, cellText, null);
             } catch (final TextEntryParseException ex) {
                 throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '" + cellText + "')");
             } catch (final IllegalArgumentException ex) {

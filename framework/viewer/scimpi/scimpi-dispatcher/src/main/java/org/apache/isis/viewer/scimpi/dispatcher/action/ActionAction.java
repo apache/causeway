@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.action;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -231,12 +232,13 @@ public class ActionAction implements Action {
             } else if (parameters2.get(i).getSpecification().getFacet(ParseableFacet.class) != null) {
                 try {
                     final ParseableFacet facet = parameters2.get(i).getSpecification().getFacet(ParseableFacet.class);
-                    final String message = parameters2.get(i).isValid(object, newEntry);
+                    Localization localization = IsisContext.getLocalization(); 
+                    final String message = parameters2.get(i).isValid(object, newEntry, localization); 
                     if (message != null) {
                         consent = new Veto(message);
                         formState.setError("Not all fields are valid");
                     }
-                    final ObjectAdapter entry = facet.parseTextEntry(null, newEntry);
+                    final ObjectAdapter entry = facet.parseTextEntry(null, newEntry, localization);
                     fieldState.setValue(entry);
                 } catch (final TextEntryParseException e) {
                     consent = new Veto(e.getMessage());

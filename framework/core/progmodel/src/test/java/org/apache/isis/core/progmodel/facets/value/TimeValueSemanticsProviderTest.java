@@ -65,55 +65,46 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testParseEntryOfHoursMinutesText() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "8:30");
+        final Object parsed = adapter.parseTextEntry(null, "8:30", null);
         assertEquals(new Time(8, 30), parsed);
     }
 
     @Test
     @Ignore
     public void testParseEntryOfHoursMinutesSecondsText() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "8:30:45"); // I
-                                                                       // can't
-                                                                       // get
-                                                                       // the
-                                                                       // text
-                                                                       // parser
-                                                                       // to
-                                                                       // parse
-                                                                       // HH:mm:ss
-                                                                       // before
-                                                                       // HH:mm!!
+        final Object parsed = adapter.parseTextEntry(null, "8:30:45", null); 
+        // I can't get the text parser to parse HH:mm:ss before HH:mm!!
         final Time expected = new Time(8, 30, 45);
         assertEquals(expected, parsed);
     }
 
     @Test
     public void testParseEntryOfHoursAfterTime() throws Exception {
-        final Object parsed = adapter.parseTextEntry(time, "+5H");
+        final Object parsed = adapter.parseTextEntry(time, "+5H", null);
         assertEquals(new Time(13, 13), parsed);
     }
 
     @Test
     public void testParseEntryOfHoursAfterNow() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "+5H");
+        final Object parsed = adapter.parseTextEntry(null, "+5H", null);
         assertEquals(new Time(2, 30, 25), parsed);
     }
 
     @Test
     public void testParseEntryOfHoursBeforeTime() throws Exception {
-        final Object parsed = adapter.parseTextEntry(time, "-7H");
+        final Object parsed = adapter.parseTextEntry(time, "-7H", null);
         assertEquals(new Time(1, 13), parsed);
     }
 
     @Test
     public void testParseEntryOfHoursBeforeToNow() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "-5H");
+        final Object parsed = adapter.parseTextEntry(null, "-5H", null);
         assertEquals(new Time(16, 30, 25), parsed);
     }
 
     @Test
     public void testParseEntryOfKeywordNow() throws Exception {
-        final Object parsed = adapter.parseTextEntry(time, "now");
+        final Object parsed = adapter.parseTextEntry(time, "now", null);
         assertEquals(new Time(), parsed);
     }
 

@@ -61,7 +61,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one");
+            value.parseTextEntry(null, "one", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -74,13 +74,13 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "120");
+        final Object newValue = value.parseTextEntry(null, "120", null);
         assertEquals(Integer.valueOf(120), newValue);
     }
 
     @Test
     public void testParseOddlyFormedEntry() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "1,20.0");
+        final Object newValue = value.parseTextEntry(null, "1,20.0", null);
         assertEquals(Integer.valueOf(120), newValue);
     }
 }

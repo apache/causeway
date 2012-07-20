@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
@@ -92,7 +93,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @param proposedValue
      * @return
      */
-    String isValid(ObjectAdapter adapter, Object proposedValue);
+    String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
 
     ObjectAdapter[] getChoices(ObjectAdapter adapter);
 

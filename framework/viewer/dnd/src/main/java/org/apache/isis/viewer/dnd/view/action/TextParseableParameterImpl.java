@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryExcept
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -170,7 +172,8 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
     @Override
     public void parseTextEntry(final String entryText) {
         object = parse(entryText);
-        final String reason = parameter.isValid(object, AdapterUtils.unwrap(object));
+        Localization localization = IsisContext.getLocalization(); 
+        final String reason = parameter.isValid(object, AdapterUtils.unwrap(object), localization);
         if (reason != null) {
             throw new InvalidEntryException(reason);
         } else if (!parameter.isOptional() && object == null) {
@@ -183,7 +186,8 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
         final ObjectSpecification parameterSpecification = parameter.getSpecification();
         final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
         try {
-            return p.parseTextEntry(object, entryText);
+            Localization localization = IsisContext.getLocalization(); 
+            return p.parseTextEntry(object, entryText, localization);
         } catch (final IllegalArgumentException ex) {
             throw new InvalidEntryException(ex.getMessage(), ex);
         }

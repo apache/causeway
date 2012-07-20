@@ -157,7 +157,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testParseNull() throws Exception {
         try {
-            valueSemanticsProvider.parseTextEntry(null, null);
+            valueSemanticsProvider.parseTextEntry(null, null, null);
             fail();
         } catch (final IllegalArgumentException expected) {
         }
@@ -165,7 +165,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testParseEmptyString() throws Exception {
-        final Object newValue = valueSemanticsProvider.parseTextEntry(null, "");
+        final Object newValue = valueSemanticsProvider.parseTextEntry(null, "", null);
         assertNull(newValue);
     }
 

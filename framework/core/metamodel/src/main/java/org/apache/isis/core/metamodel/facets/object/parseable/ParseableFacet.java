@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -34,11 +35,12 @@ public interface ParseableFacet extends MultipleValueFacet {
      * <p>
      * Equivalent to <tt>Parser#parseTextEntry(Object, String)</tt>, though may
      * be implemented through some other mechanism.
+     * @param localization TODO
      * 
      * @throws InvalidEntryException
      * @throws TextEntryParseException
      */
-    ObjectAdapter parseTextEntry(ObjectAdapter original, String text);
+    ObjectAdapter parseTextEntry(ObjectAdapter original, String text, Localization localization);
 
     /**
      * A title for the object that is valid but which may be easier to edit than

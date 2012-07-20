@@ -241,7 +241,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         if (parseableFacet != null) {
             // handle as parseable value
             try {
-                referencedAdapter = parseableFacet.parseTextEntry(adapter, cellText);
+                referencedAdapter = parseableFacet.parseTextEntry(adapter, cellText, null);
             } catch (final IllegalArgumentException ex) {
                 return SetUpObjectResult.CANNOT_PARSE;
             }

@@ -62,7 +62,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one");
+            value.parseTextEntry(null, "one", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -75,13 +75,13 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "120");
+        final Object parsed = value.parseTextEntry(null, "120", null);
         assertEquals("120", parsed.toString());
     }
 
     @Test
     public void testParseWithBadlyFormattedEntry() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "1,20.0");
+        final Object parsed = value.parseTextEntry(null, "1,20.0", null);
         assertEquals("120", parsed.toString());
     }
 

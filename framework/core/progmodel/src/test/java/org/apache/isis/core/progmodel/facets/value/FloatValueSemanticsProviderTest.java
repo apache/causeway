@@ -61,7 +61,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one");
+            value.parseTextEntry(null, "one", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -74,13 +74,13 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "120.50");
+        final Object parsed = value.parseTextEntry(null, "120.50", null);
         assertEquals(120.5f, ((Float) parsed).floatValue(), 0.0);
     }
 
     @Test
     public void testParseBadlyFormatedEntry() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "1,20.0");
+        final Object parsed = value.parseTextEntry(null, "1,20.0", null);
         assertEquals(120.0f, ((Float) parsed).floatValue(), 0.0);
     }
 

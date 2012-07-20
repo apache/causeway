@@ -20,27 +20,30 @@
 package org.apache.isis.core.progmodel.facets.value.date;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
+import com.google.common.collect.Maps;
+
 public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd"));
         formats.put("iso", createDateFormat("yyyy-MM-dd"));
-        formats.put(ISO_ENCODING_FORMAT, createDateFormat("yyyyMMdd"));
-        formats.put("long", DateFormat.getDateInstance(DateFormat.LONG));
         formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
-        formats.put("short", DateFormat.getDateInstance(DateFormat.SHORT));
     }
 
     public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
@@ -95,6 +98,30 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
     @Override
     public String toString() {
         return "DateValueSemanticsProvider: " + format;
+    }
+
+    @Override
+    protected DateFormat format(final Localization localization) {
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, localization.getLocale());
+        dateFormat.setTimeZone(UTC_TIME_ZONE);
+        return dateFormat;
+    }
+
+    protected List<DateFormat> formatsToTry(Localization localization) {
+        List<DateFormat> formats = new ArrayList<DateFormat>();
+
+        Locale locale = localization == null ? Locale.getDefault() : localization.getLocale();
+        formats.add(DateFormat.getDateInstance(DateFormat.LONG, locale));
+        formats.add(DateFormat.getDateInstance(DateFormat.MEDIUM, locale));
+        formats.add(DateFormat.getDateInstance(DateFormat.SHORT, locale));
+        formats.add(createDateFormat("yyyy-MM-dd"));
+        formats.add(createDateFormat("yyyyMMdd"));
+
+        for (DateFormat format : formats) {
+            format.setTimeZone(localization == null ? TimeZone.getDefault() : UTC_TIME_ZONE);
+        }
+
+        return formats;
     }
 
 }

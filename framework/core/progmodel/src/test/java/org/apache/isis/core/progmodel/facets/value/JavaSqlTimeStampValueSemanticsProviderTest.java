@@ -58,7 +58,7 @@ public class JavaSqlTimeStampValueSemanticsProviderTest extends ValueSemanticsPr
 
     @Override
     public void testParseEmptyString() {
-        final Object parsed = adapter.parseTextEntry(null, "");
+        final Object parsed = adapter.parseTextEntry(null, "", null);
         assertNull(parsed);
     }
 

@@ -20,9 +20,12 @@
 package org.apache.isis.core.progmodel.facets.value.timestamp;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -39,9 +42,7 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
     private static final boolean EQUAL_BY_CONTENT = false;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
-        formats.put("iso", createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
-        formats.put(ISO_ENCODING_FORMAT, createDateFormat("yyyyMMdd'T'HHmmssSSS"));
-        formats.put("medium", DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG));
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS")); 
         formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG));
     }
 
@@ -81,4 +82,24 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
         return "TimeStampValueSemanticsProvider: " + format;
     }
 
+    @Override
+    protected DateFormat format(final Localization localization) {
+        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, localization.getLocale());
+        dateFormat.setTimeZone(localization.getTimeZone());
+        return dateFormat;
+    }
+
+    protected List<DateFormat> formatsToTry(Localization localization) {
+        List<DateFormat> formats = new ArrayList<DateFormat>();
+
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, localization.getLocale()));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, localization.getLocale()));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
+
+        for (DateFormat format : formats) {
+            format.setTimeZone(localization.getTimeZone());
+        }
+
+        return formats;
+    }
 }

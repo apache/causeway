@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
@@ -74,7 +75,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
      * Assumed to be invoked {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
-    public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
+    public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
 
         if (!(proposedValue instanceof String)) {
             return null;
@@ -89,7 +90,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
 
         final ObjectSpecification parameterSpecification = parameter.getSpecification();
         final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
-        final ObjectAdapter newValue = p.parseTextEntry(null, proposedString);
+        final ObjectAdapter newValue = p.parseTextEntry(null, proposedString, localization);
 
         final ValidityContext<?> ic = parameter.createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(newValue), getNumber());
 

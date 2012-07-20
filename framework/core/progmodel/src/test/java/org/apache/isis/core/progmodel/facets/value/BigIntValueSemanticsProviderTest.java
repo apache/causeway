@@ -60,14 +60,14 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "2142342334");
+        final Object newValue = getValue().parseTextEntry(null, "2142342334", null);
         assertEquals(new BigInteger("2142342334"), newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            getValue().parseTextEntry(null, "214xxx2342334");
+            getValue().parseTextEntry(null, "214xxx2342334", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }

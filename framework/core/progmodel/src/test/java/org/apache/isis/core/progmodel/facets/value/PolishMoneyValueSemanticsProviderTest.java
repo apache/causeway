@@ -100,25 +100,25 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
     @Test
     public void testUserEntryWithCurrency() {
         final Money money = createMoney(10.5, "gbp");
-        final Money parsed = adapter.parseTextEntry(money, "22,45 USD");
+        final Money parsed = adapter.parseTextEntry(money, "22,45 USD", null);
         assertEquals(new Money(22.45, "usd"), parsed);
     }
 
     @Test
     public void testUserEntryUsesPreviousCurrency() {
-        final Object parsed = adapter.parseTextEntry(originalMoney, "22,45");
+        final Object parsed = adapter.parseTextEntry(originalMoney, "22,45", null);
         assertEquals(new Money(22.45, "pln"), parsed);
     }
 
     @Test
     public void testReplacementEntryForDefaultCurrency() {
-        final Object parsed = adapter.parseTextEntry(originalMoney, "80,90 " + ZLOTYCH_SYMBOL);
+        final Object parsed = adapter.parseTextEntry(originalMoney, "80,90 " + ZLOTYCH_SYMBOL, null);
         assertEquals(new Money(80.90, "pln"), parsed);
     }
 
     @Test
     public void testSpecifyingCurrencyInEntry() {
-        final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 cad");
+        final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 cad", null);
         assertEquals("3" + CURRENCY_SPACE + "021,5 CAD", adapter.displayTitleOf(parsed, (Localization) null));
     }
 
@@ -126,20 +126,20 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
     public void testUsingLocalCurrencySymbol() {
         // MoneyValueSemanticsProvider adapter = new
         // MoneyValueSemanticsProvider(new Money(0L, "gbp"));
-        final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 " + ZLOTYCH_SYMBOL);
+        final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 " + ZLOTYCH_SYMBOL, null);
         assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed, (Localization) null));
     }
 
     @Test
     public void testInvalidCurrencySuffixRejected() throws Exception {
-        final Object parsed = adapter.parseTextEntry(originalMoney, "3" + CURRENCY_SPACE + "021,50  Dm");
+        final Object parsed = adapter.parseTextEntry(originalMoney, "3" + CURRENCY_SPACE + "021,50  Dm", null);
         assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed, null));
     }
 
     @Test
     public void testInvalidCurrencySymbolIsRejected() throws Exception {
         try {
-            adapter.parseTextEntry(originalMoney, EURO_SYMBOL + "3021.50");
+            adapter.parseTextEntry(originalMoney, EURO_SYMBOL + "3021.50", null);
             fail("invalid code accepted " + adapter);
         } catch (final TextEntryParseException expected) {
         }
@@ -147,7 +147,7 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testNewValueDefaultsToLocalCurrency() throws Exception {
-        final Money parsed = adapter.parseTextEntry(originalMoney, "3021,50");
+        final Money parsed = adapter.parseTextEntry(originalMoney, "3021,50", null);
         assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.displayTitleOf(parsed, (Localization) null));
     }
 
@@ -155,7 +155,7 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
     public void testUnrelatedCurrencySymbolIsRejected() throws Exception {
         final Money money = createMoney(1, "eur");
         try {
-            adapter.parseTextEntry(money, "$3021.50");
+            adapter.parseTextEntry(money, "$3021.50", null);
             fail("invalid code accepted " + adapter);
         } catch (final TextEntryParseException expected) {
         }

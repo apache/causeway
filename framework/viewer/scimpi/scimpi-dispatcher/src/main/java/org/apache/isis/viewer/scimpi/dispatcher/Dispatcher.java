@@ -29,9 +29,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TimeZone;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -44,6 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.userprofile.UserLocalization;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -94,7 +97,14 @@ public class Dispatcher {
         LOG.debug("processing request " + servletPath);
         final AuthenticationSession session = UserManager.startRequest(context);
         LOG.debug("exsiting session: " + session);
-
+        
+        String language = (String) context.getVariable("user-language");
+        if (language != null) {
+            Locale locale = Util.locale(language);
+            TimeZone timeZone = Util.timeZone((String) context.getVariable("user-time-zone"));
+            IsisContext.getUserProfile().setLocalization(new UserLocalization(locale, timeZone));
+         } 
+        
         IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
         context.setRequestPath(servletPath);
         context.startRequest();

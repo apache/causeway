@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -48,7 +49,7 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
      * instead.
      */
     @Override
-    public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
+    public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
         return null;
     }
 

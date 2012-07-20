@@ -190,7 +190,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public MyValueSemanticsProviderThatIsAParser parseTextEntry(final Object context, final String entry) {
+        public MyValueSemanticsProviderThatIsAParser parseTextEntry(final Object context, final String entry, Localization localization) {
             return null;
         }
 
@@ -399,7 +399,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(final Object context, final String entry) {
+        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(final Object context, final String entry, Localization localization) {
             return null;
         }
 
@@ -443,7 +443,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(final Object context, final String entry) {
+        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(final Object context, final String entry, Localization localization) {
             return null;
         }
 

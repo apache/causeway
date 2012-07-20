@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -61,7 +62,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     };
 
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
-    private static final TimeZone UTC_TIME_ZONE;
+    protected static final TimeZone UTC_TIME_ZONE;
 
     public final static String FORMAT_KEY_PREFIX = ConfigurationConstants.ROOT + "value.format.";
 
@@ -83,7 +84,16 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     protected static DateFormat createDateFormat(final String mask) {
         return new SimpleDateFormat(mask);
     }
-
+    
+    /**
+     * for encoding always use UTC.
+     */
+    protected static DateFormat createDateEncodingFormat(final String mask) {
+        DateFormat encodingFormat = createDateFormat(mask);
+        encodingFormat.setTimeZone(UTC_TIME_ZONE);
+        return encodingFormat;
+    }
+ 
     private final DateFormat encodingFormat;
     protected DateFormat format;
     private String configuredFormat;
@@ -149,7 +159,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected T doParse(final Object context, final String entry) {
+    protected T doParse(final Object context, final String entry, final Localization localization) {
         buildDefaultFormatIfRequired();
         final String dateString = entry.trim();
         final String str = dateString.toLowerCase();
@@ -160,19 +170,16 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         } else if (dateString.startsWith("-")) {
             return relativeDate(context == null ? now() : context, dateString, false);
         } else {
-            return parseDate(dateString, context == null ? now() : context);
+            return parseDate(dateString, context == null ? now() : context, localization);
         }
     }
 
-    private T parseDate(final String dateString, final Object original) {
-        try {
-            return setDate(format.parse(dateString));
-        } catch (final ParseException e) {
-            final Map<String, DateFormat> formats = formats();
-            final Iterator<DateFormat> elements = formats.values().iterator();
-            return setDate(parseDate(dateString, elements));
-        }
+    private T parseDate(final String dateString, final Object original, final Localization localization) {
+        List<DateFormat> elements = formatsToTry(localization);
+        return setDate(parseDate(dateString, elements.iterator()));
     }
+
+    protected abstract List<DateFormat> formatsToTry(Localization localization);
 
     private Date parseDate(final String dateString, final Iterator<DateFormat> elements) {
         final DateFormat format = elements.next();

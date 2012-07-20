@@ -53,7 +53,7 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
     @Test
     public void testParseLongString() throws Exception {
         try {
-            value.parseTextEntry(null, "one");
+            value.parseTextEntry(null, "one", null);
             fail();
         } catch (final InvalidEntryException expected) {
         }
@@ -66,7 +66,7 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
 
     @Test
     public void testValidParse() throws Exception {
-        final Object parse = value.parseTextEntry(null, "t");
+        final Object parse = value.parseTextEntry(null, "t", null);
         assertEquals(Character.valueOf('t'), parse);
     }
 

@@ -68,7 +68,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "invalid entry");
+            getValue().parseTextEntry(null, "invalid entry", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -87,7 +87,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40");
+        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40", null);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

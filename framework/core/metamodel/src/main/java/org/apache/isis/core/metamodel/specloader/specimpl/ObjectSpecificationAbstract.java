@@ -174,6 +174,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public ObjectSpecId getSpecId() {
         if(specId == null) {
             final ObjectSpecIdFacet facet = getFacet(ObjectSpecIdFacet.class);
+            if(facet == null) {
+                throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
+            }
             if(facet != null) {
                 specId = facet.value();
             }

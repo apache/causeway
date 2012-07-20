@@ -52,14 +52,14 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "#3366fF");
+        final Object newValue = value.parseTextEntry(null, "#3366fF", null);
         assertEquals(color, newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "red");
+            value.parseTextEntry(null, "red", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }

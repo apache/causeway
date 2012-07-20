@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.wicket.Session;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -99,7 +101,8 @@ public class ScalarModel extends EntityModel {
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter();
                     final ObjectAdapter currentValue = property.get(parentAdapter);
-                    final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr);
+                    Localization localization = IsisContext.getLocalization(); 
+                    final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, localization);
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter);
                     return valid.isAllowed() ? null : valid.getReason();
                 } catch (final Exception ex) {
@@ -182,7 +185,8 @@ public class ScalarModel extends EntityModel {
                 }
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter();
-                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr);
+                    Localization localization = IsisContext.getLocalization(); 
+                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr, localization);
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -368,7 +372,8 @@ public class ScalarModel extends EntityModel {
         if (parseableFacet == null) {
             throw new RuntimeException("unable to parse string for " + getTypeOfSpecification().getFullIdentifier());
         }
-        final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText);
+        Localization localization = IsisContext.getLocalization(); 
+        final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText, localization);
 
         setObject(adapter);
     }

@@ -21,11 +21,13 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -60,7 +62,8 @@ public class ActionContent implements BlockContent {
             final ObjectSpecification typ = pars.get(i).getSpecification();
             if (typ.getFacet(ParseableFacet.class) != null) {
                 final ParseableFacet facet = typ.getFacet(ParseableFacet.class);
-                params[i] = facet.parseTextEntry(null, parameters[i]);
+                Localization localization = IsisContext.getLocalization(); 
+                params[i] = facet.parseTextEntry(null, parameters[i], localization);            
             } else {
                 params[i] = request.getContext().getMappedObject(parameters[i]);
             }

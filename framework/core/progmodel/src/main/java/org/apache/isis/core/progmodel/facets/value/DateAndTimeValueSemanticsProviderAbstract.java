@@ -20,9 +20,11 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
+import java.util.TimeZone;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -30,22 +32,16 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
+import com.google.common.collect.Maps;
+
 public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
         formats.put("iso", createDateFormat("yyyy-MM-dd HH:mm"));
-        formats.put("iso_short", createDateFormat("yyyyMMdd'T'HHmm"));
-        formats.put("iso_sec", createDateFormat("yyyy-MM-dd HH:mm:ss"));
-        formats.put("iso_sec_short", createDateFormat("yyyyMMdd'T'HHmmss"));
-        formats.put("iso_milli", createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
-        formats.put("iso_milli_short", createDateFormat("yyyyMMdd'T'HHmmssSSS"));
-        formats.put(ISO_ENCODING_FORMAT, createDateFormat("yyyyMMdd'T'HHmmssSSS"));
-        formats.put("long", DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG));
         formats.put("medium", DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT));
-        formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT));
-        formats.put("custom1", createDateFormat("dd-MMM-yyyy HH:mm"));
     }
 
     private static final Object DEFAULT_VALUE = null; // no default
@@ -96,6 +92,28 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     @Override
     public String toString() {
         return "JavaDateTimeValueSemanticsProvider: " + format;
+    }
+
+    protected List<DateFormat> formatsToTry(Localization localization) {
+        List<DateFormat> formats = new ArrayList<DateFormat>();
+
+        Locale locale = localization == null ? Locale.getDefault() : localization.getLocale();
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
+        formats.add(createDateFormat("yyyyMMdd'T'HHmmssSSS"));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss"));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale));
+        formats.add(createDateFormat("yyyyMMdd'T'HHmmss"));
+        formats.add(createDateFormat("yyyy-MM-dd HH:mm"));
+        formats.add(createDateFormat("yyyyMMdd'T'HHmm"));
+        formats.add(createDateFormat("dd-MMM-yyyy HH:mm"));
+
+        for (DateFormat format : formats) {
+            format.setTimeZone(localization == null ? TimeZone.getDefault() : localization.getTimeZone());
+        }
+
+        return formats;
     }
 
 }

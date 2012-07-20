@@ -66,19 +66,19 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testParseTextEntryWithNumber() {
-        final Percentage parsed = adapter.parseTextEntry(percentage, "21%");
+        final Percentage parsed = adapter.parseTextEntry(percentage, "21%", null);
         assertEquals(new Percentage(0.21f), parsed);
     }
 
     @Test
     public void testParseTextEntryWithNumberAndDecimalPoint() {
-        final Percentage parsed = adapter.parseTextEntry(percentage, "21.4%");
+        final Percentage parsed = adapter.parseTextEntry(percentage, "21.4%", null);
         assertEquals(new Percentage(0.214f), parsed);
     }
 
     @Test
     public void testParseTextEntryWithBlank() {
-        final Percentage parsed = adapter.parseTextEntry(percentage, "");
+        final Percentage parsed = adapter.parseTextEntry(percentage, "", null);
         assertEquals(null, parsed);
     }
 

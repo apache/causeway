@@ -20,9 +20,13 @@
 package org.apache.isis.core.progmodel.facets.value.time;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,19 +36,14 @@ import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstrac
 public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Object DEFAULT_VALUE = null; // no default
-    private static final int TYPICAL_LENGTH = 6;
+    private static final int TYPICAL_LENGTH = 8;
 
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
-        formats.put("iso", createDateFormat("HH:mm"));
-        formats.put("iso_sec", createDateFormat("HH:mm:ss"));
-        formats.put("iso_milli", createDateFormat("HH:mm:ss.SSS"));
-        formats.put(ISO_ENCODING_FORMAT, createDateFormat("HHmmssSSS"));
-        formats.put("long", DateFormat.getTimeInstance(DateFormat.LONG));
-        formats.put("medium", DateFormat.getTimeInstance(DateFormat.MEDIUM));
-        formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT));
+        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS")); 
+        formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT)); 
     }
 
     @SuppressWarnings("unchecked")
@@ -88,5 +87,30 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     public String toString() {
         return "TimeValueSemanticsProvider: " + format;
     }
-
+    
+@Override 
+     protected DateFormat format(final Localization localization) { 
+         final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, localization.getLocale()); 
+         dateFormat.setTimeZone(UTC_TIME_ZONE); 
+         return dateFormat; 
+     } 
+  
+     protected List<DateFormat> formatsToTry(Localization localization) { 
+         List<DateFormat> formats = new ArrayList<DateFormat>(); 
+          
+         Locale locale = localization == null ? Locale.getDefault() : localization.getLocale(); 
+         formats.add(DateFormat.getTimeInstance(DateFormat.LONG, locale)); 
+         formats.add(DateFormat.getTimeInstance(DateFormat.MEDIUM, locale)); 
+         formats.add(DateFormat.getTimeInstance(DateFormat.SHORT, locale)); 
+         formats.add(createDateFormat("HH:mm:ss.SSS")); 
+         formats.add(createDateFormat("HHmmssSSS")); 
+         formats.add(createDateFormat("HH:mm:ss")); 
+         formats.add(createDateFormat("HHmmss")); 
+  
+         for (DateFormat format : formats) { 
+             format.setTimeZone(UTC_TIME_ZONE); 
+         } 
+          
+         return formats; 
+     } 
 }

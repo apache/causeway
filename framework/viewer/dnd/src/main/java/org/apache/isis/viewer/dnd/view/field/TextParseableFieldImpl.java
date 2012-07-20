@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -198,7 +199,8 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         final ObjectSpecification fieldSpecification = field.getSpecification();
         final ParseableFacet p = fieldSpecification.getFacet(ParseableFacet.class);
         try {
-            return p.parseTextEntry(object, entryText);
+            Localization localization = IsisContext.getLocalization(); 
+            return p.parseTextEntry(object, entryText, localization);
         } catch (final IllegalArgumentException ex) {
             throw new InvalidEntryException(ex.getMessage(), ex);
         }

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -191,7 +192,8 @@ public class EditAction implements Action {
                 try {
                     final ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
                     final ObjectAdapter originalValue = field.get(object);
-                    final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry);
+                    Localization localization = IsisContext.getLocalization(); 
+                    final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry, localization); 
                     consent = ((OneToOneAssociation) field).isAssociationValid(object, newValue);
                     fieldState.setValue(newValue);
                 } catch (final TextEntryParseException e) {
@@ -240,7 +242,8 @@ public class EditAction implements Action {
 
             if (fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                 final ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
-                final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry);
+                Localization localization = IsisContext.getLocalization(); 
+                final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry, localization);
                 ((OneToOneAssociation) fields.get(i)).set(object, newValue);
             } else {
                 ((OneToOneAssociation) fields.get(i)).set(object, field.getValue());

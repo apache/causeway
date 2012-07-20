@@ -91,7 +91,7 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public static class ParserNoop<T> implements Parser<T> {
         @Override
-        public T parseTextEntry(final Object context, final String entry) {
+        public T parseTextEntry(final Object context, final String entry, Localization localization) {
             return null;
         }
 

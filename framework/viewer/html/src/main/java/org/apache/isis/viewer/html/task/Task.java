@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.html.task;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
@@ -241,7 +242,8 @@ public abstract class Task {
             if (fieldSpecification.isParseable()) {
                 final ParseableFacet parser = fieldSpecification.getFacet(ParseableFacet.class);
                 try {
-                    entries[i] = parser.parseTextEntry(initialState[i], entryText[i]);
+                    Localization localization = IsisContext.getLocalization(); 
+                    entries[i] = parser.parseTextEntry(initialState[i], entryText[i], localization);
                 } catch (final InvalidEntryException e) {
                     errors[i] = e.getMessage();
                 } catch (final TextEntryParseException e) {
@@ -381,7 +383,8 @@ public abstract class Task {
             // be reviewed in line with Dan's proposed changes to the reflector.
             final ObjectAdapter valueAdapter = initialState[i];
             final ParseableFacet parser = spec.getFacet(ParseableFacet.class);
-            parser.parseTextEntry(valueAdapter, textEntry);
+            Localization localization = IsisContext.getLocalization(); 
+            parser.parseTextEntry(valueAdapter, textEntry, localization);
             // REVIEW what do we do when an exception is thrown - a parse fails?
         }
     }

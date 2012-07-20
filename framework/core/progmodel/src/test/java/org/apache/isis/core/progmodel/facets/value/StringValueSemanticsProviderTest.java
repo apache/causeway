@@ -54,7 +54,7 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "tRUe");
+        final Object parsed = value.parseTextEntry(null, "tRUe", null);
         assertEquals("tRUe", parsed.toString());
     }
 

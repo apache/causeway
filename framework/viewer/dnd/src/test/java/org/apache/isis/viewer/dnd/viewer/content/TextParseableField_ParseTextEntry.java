@@ -83,7 +83,7 @@ public class TextParseableField_ParseTextEntry {
 
         context.checking(new Expectations() {
             {
-                one(mockParseableFacet).parseTextEntry(mockChild, "foo");
+                one(mockParseableFacet).parseTextEntry(mockChild, "foo", null);
                 will(returnValue(mockParsedText));
 
                 atLeast(1).of(mockOtoa).isAssociationValid(mockParent, mockParsedText);
@@ -101,7 +101,7 @@ public class TextParseableField_ParseTextEntry {
 
         context.checking(new Expectations() {
             {
-                one(mockParseableFacet).parseTextEntry(mockChild, "foo");
+                one(mockParseableFacet).parseTextEntry(mockChild, "foo", null);
                 will(returnValue(null));
 
                 atLeast(1).of(mockOtoa).isAssociationValid(mockParent, null);
@@ -120,7 +120,7 @@ public class TextParseableField_ParseTextEntry {
 
         context.checking(new Expectations() {
             {
-                one(mockParseableFacet).parseTextEntry(mockChild, "foo");
+                one(mockParseableFacet).parseTextEntry(mockChild, "foo", null);
                 will(returnValue(mockParsedText));
 
                 atLeast(1).of(mockOtoa).isAssociationValid(mockParent, mockParsedText);
@@ -139,7 +139,7 @@ public class TextParseableField_ParseTextEntry {
 
         context.checking(new Expectations() {
             {
-                allowing(mockParseableFacet).parseTextEntry(mockChild, "foo");
+                allowing(mockParseableFacet).parseTextEntry(mockChild, "foo", null);
                 will(returnValue(mockParsedText));
 
                 atLeast(1).of(mockOtoa).isAssociationValid(mockParent, mockParsedText);
@@ -158,7 +158,7 @@ public class TextParseableField_ParseTextEntry {
 
         context.checking(new Expectations() {
             {
-                allowing(mockParseableFacet).parseTextEntry(mockChild, "foo");
+                allowing(mockParseableFacet).parseTextEntry(mockChild, "foo", null);
                 will(returnValue(mockParsedText));
 
                 one(mockOtoa).isAssociationValid(mockParent, mockParsedText);

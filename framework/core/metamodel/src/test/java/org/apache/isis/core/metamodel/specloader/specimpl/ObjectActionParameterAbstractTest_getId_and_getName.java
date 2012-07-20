@@ -31,6 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -84,7 +85,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
+        public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
             return null;
         }
 

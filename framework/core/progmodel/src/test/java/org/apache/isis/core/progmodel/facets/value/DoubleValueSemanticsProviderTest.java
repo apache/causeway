@@ -66,7 +66,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "one");
+            getValue().parseTextEntry(null, "one", null);
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -79,13 +79,13 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "120.56");
+        final Object newValue = getValue().parseTextEntry(null, "120.56", null);
         assertEquals(120.56, ((Double) newValue).doubleValue(), 0.0);
     }
 
     @Test
     public void testParse2() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1,20.0");
+        final Object newValue = getValue().parseTextEntry(null, "1,20.0", null);
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
     }
 }

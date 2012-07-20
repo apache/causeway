@@ -267,7 +267,7 @@ public final class DomainResourceHelper {
             }
             if (argAdapter.getSpecification().containsFacet(ValueFacet.class)) {
                 final Object arg = argAdapter.getObject();
-                final String reasonNotValid = parameter.isValid(objectAdapter, arg);
+                final String reasonNotValid = parameter.isValid(objectAdapter, arg, null);
                 if (reasonNotValid != null) {
                     throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
                 }

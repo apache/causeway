@@ -72,7 +72,7 @@ public class ParseableFacetUsingParserTest {
 
         final Parser<String> parser = new Parser<String>() {
             @Override
-            public String parseTextEntry(final Object contextPojo, final String entry) {
+            public String parseTextEntry(final Object contextPojo, final String entry, Localization localization) {
                 if (entry.equals("invalid")) {
                     throw new ParsingException();
                 }
@@ -136,16 +136,16 @@ public class ParseableFacetUsingParserTest {
 
     @Test(expected = TextEntryParseException.class)
     public void parsingExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "invalid");
+        parseableFacetUsingParser.parseTextEntry(null, "invalid", null);
     }
 
     @Test(expected = TextEntryParseException.class)
     public void numberFormatExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "number");
+        parseableFacetUsingParser.parseTextEntry(null, "number", null);
     }
 
     @Test(expected = TextEntryParseException.class)
     public void illegalFormatExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "format");
+        parseableFacetUsingParser.parseTextEntry(null, "format", null);
     }
 }
