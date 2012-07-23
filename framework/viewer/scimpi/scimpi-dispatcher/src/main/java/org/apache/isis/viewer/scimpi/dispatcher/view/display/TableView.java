@@ -200,7 +200,7 @@ public class TableView extends AbstractTableView {
             if (showDeleteOption && parent != null) {
                 String view = request.getViewPath();
                 view = context.fullFilePath(view == null ? context.getResourceFile() : view);
-                RemoveElement.write(request, context.getMappedObject(parent), fieldName, element, null, view, view, "delete", "element-delete");
+                RemoveElement.write(request, context.getMappedObject(parent), fieldName, element, null, view, view, "delete", "action in-line element-delete confirm");
             }
 
             request.appendHtml("</td>");
@@ -312,7 +312,7 @@ public class TableView extends AbstractTableView {
         }
         
         final RequestContext context = request.getContext();
-        final TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields, 
+        final TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getIdentifier().getMemberName(), fields, 
                 showIconByDefault);
         write(request, collection, summary, rowBuilder, null, null, null);
     }
