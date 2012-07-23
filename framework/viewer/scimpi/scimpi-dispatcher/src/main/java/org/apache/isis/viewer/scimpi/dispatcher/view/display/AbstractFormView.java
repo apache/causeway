@@ -51,7 +51,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             String title = request.getOptionalProperty(FORM_TITLE);
             final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
             final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
-            final boolean showIcons = request.isRequested(SHOW_ICON, true); 
+            final boolean showIcons = request.isRequested(SHOW_ICON, showIconByDefault()); 
 
             request.setBlockContent(tag);
             request.processUtilCloseTag();
