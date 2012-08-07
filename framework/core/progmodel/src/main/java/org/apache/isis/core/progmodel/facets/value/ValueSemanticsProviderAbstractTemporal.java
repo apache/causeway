@@ -298,6 +298,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         final Calendar cal = Calendar.getInstance();
         cal.setTimeZone(UTC_TIME_ZONE);
 
+        // TODO allow restoring of dates where datetime expected, and datetimes where date expected - to allow for changing of field types. 
         try {
             cal.setTime(parse(data));
             clearFields(cal);

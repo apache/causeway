@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -118,7 +117,7 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         formats.add(createDateFormat("yyyyMMdd"));
 
         for (DateFormat format : formats) {
-            format.setTimeZone(localization == null ? TimeZone.getDefault() : UTC_TIME_ZONE);
+            format.setTimeZone(UTC_TIME_ZONE);
         }
 
         return formats;
