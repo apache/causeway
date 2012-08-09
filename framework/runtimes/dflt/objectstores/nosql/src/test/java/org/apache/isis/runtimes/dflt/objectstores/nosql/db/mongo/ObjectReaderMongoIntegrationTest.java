@@ -41,15 +41,15 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.ObjectReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.refs.ParentEntity;
@@ -272,7 +272,7 @@ public class ObjectReaderMongoIntegrationTest {
         });
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
@@ -280,7 +280,7 @@ public class ObjectReaderMongoIntegrationTest {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

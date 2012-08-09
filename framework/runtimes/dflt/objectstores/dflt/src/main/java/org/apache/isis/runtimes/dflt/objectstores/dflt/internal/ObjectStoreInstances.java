@@ -36,10 +36,9 @@ import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /*
@@ -124,7 +123,7 @@ public class ObjectStoreInstances {
 
     /**
      * If the pojo exists in the object store, then looks up the
-     * {@link ObjectAdapter adapter} from the {@link AdapterManager}, and only
+     * {@link ObjectAdapter adapter} from the {@link AdapterManagerSpi}, and only
      * if none found does it
      * {@link PersistenceSessionHydrator#mapRecreatedPojo(Object, Object) recreate}
      * a new {@link ObjectAdapter adapter}.
@@ -226,7 +225,7 @@ public class ObjectStoreInstances {
      * The alternative design would be to laboriously inject this object via the
      * {@link InMemoryObjectStore}.
      */
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

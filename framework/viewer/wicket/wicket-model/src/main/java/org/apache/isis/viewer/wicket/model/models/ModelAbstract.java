@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -48,7 +48,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -34,9 +34,9 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
  * not a {@link #getRegisteredServices() registered service}.
  * 
  * <p>
- * Can be considered a mutable SPI to the {@link DependencyInjector} immutable API.
+ * Can be considered a mutable SPI to the {@link ServicesInjector} immutable API.
  */
-public interface ServicesInjector extends SessionScopedComponent, Injectable, DependencyInjector {
+public interface ServicesInjectorSpi extends SessionScopedComponent, Injectable, ServicesInjector {
 
     // ///////////////////////////////////////////////////////////////////////////
     // Container

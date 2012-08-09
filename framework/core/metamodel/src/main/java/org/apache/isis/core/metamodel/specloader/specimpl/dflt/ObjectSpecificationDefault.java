@@ -42,7 +42,7 @@ import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -59,7 +59,7 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -448,7 +448,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (int i = 0; i < fields.size(); i++) {
             fields.get(i).toDefault(adapter);
         }
-        getDependencyInjector().injectDependenciesInto(adapter.getObject());
+        getDependencyInjector().injectServicesInto(adapter.getObject());
         
         CallbackUtils.callCallback(adapter, CreatedCallbackFacet.class);
         
@@ -533,11 +533,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
 
-    protected AdapterMap getAdapterMap() {
+    protected AdapterManager getAdapterMap() {
         return createObjectContext.getAdapterMap();
     }
 
-    protected DependencyInjector getDependencyInjector() {
+    protected ServicesInjector getDependencyInjector() {
         return createObjectContext.getDependencyInjector();
     }
 

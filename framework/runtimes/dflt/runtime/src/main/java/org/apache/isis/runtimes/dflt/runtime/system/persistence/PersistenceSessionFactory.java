@@ -22,15 +22,15 @@ package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
  * @see PersistenceSessionFactoryDelegate
  */
-public interface PersistenceSessionFactory extends ApplicationScopedComponent, SpecificationLoaderAware {
+public interface PersistenceSessionFactory extends ApplicationScopedComponent {
 
     DeploymentType getDeploymentType();
 
@@ -40,14 +40,6 @@ public interface PersistenceSessionFactory extends ApplicationScopedComponent, S
      * {@link PersistenceSession#getPersistenceSessionFactory() owning factory}.
      */
     PersistenceSession createPersistenceSession();
-
-    /**
-     * Make available when creating {@link PersistenceSession}s.
-     * 
-     * <p>
-     * Needed for the <tt>RuntimeContextFromSession</tt>.
-     */
-    SpecificationLoader getSpecificationLoader();
 
     // //////////////////////////////////////////////////////
     // Services

@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
@@ -124,7 +124,7 @@ public class FacetedMethodsBuilder {
 
     private final ClassSubstitutor classSubstitutor;
 
-    private final SpecificationLoader specificationLoader;
+    private final SpecificationLoaderSpi specificationLoader;
 
     // ////////////////////////////////////////////////////////////////////////////
     // Constructor & finalize
@@ -509,7 +509,7 @@ public class FacetedMethodsBuilder {
     // Dependencies
     // ////////////////////////////////////////////////////////////////////////////
 
-    private SpecificationLoader getSpecificationLoader() {
+    private SpecificationLoaderSpi getSpecificationLoader() {
         return specificationLoader;
     }
 

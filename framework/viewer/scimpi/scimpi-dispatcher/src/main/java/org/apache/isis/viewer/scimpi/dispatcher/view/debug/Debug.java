@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -236,7 +236,7 @@ public class Debug extends AbstractElementProcessor {
         }
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

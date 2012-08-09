@@ -23,21 +23,21 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private AdapterMap adapterManager;
-    private DependencyInjector dependencyInjector;
+    private AdapterManager adapterManager;
+    private ServicesInjector servicesInjector;
     /**
      * Lazily created.
      */
@@ -62,7 +62,7 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
 
     public ValueSemanticsProviderContext getContext() {
         if (context == null) {
-            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(), adapterManager, dependencyInjector);
+            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(), adapterManager, servicesInjector);
         }
         return context;
     }
@@ -78,13 +78,13 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
+    public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
     @Override
-    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
-        this.dependencyInjector = dependencyInjector;
+    public void setServicesInjector(final ServicesInjector dependencyInjector) {
+        this.servicesInjector = dependencyInjector;
     }
 
 }

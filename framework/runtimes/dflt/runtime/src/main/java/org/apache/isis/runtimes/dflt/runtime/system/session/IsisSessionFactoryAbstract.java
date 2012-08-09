@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -59,14 +59,14 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
     private final TemplateImageLoader templateImageLoader;
-    private final SpecificationLoader specificationLoader;
+    private final SpecificationLoaderSpi specificationLoaderSpi;
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final UserProfileLoader userProfileLoader;
     private final List<Object> serviceList;
 
-    public IsisSessionFactoryAbstract(final DeploymentType deploymentType, final IsisConfiguration configuration, final SpecificationLoader specificationLoader, final TemplateImageLoader templateImageLoader, final AuthenticationManager authenticationManager,
+    public IsisSessionFactoryAbstract(final DeploymentType deploymentType, final IsisConfiguration configuration, final SpecificationLoaderSpi specificationLoader, final TemplateImageLoader templateImageLoader, final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory, final List<Object> serviceList) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
@@ -82,7 +82,7 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         this.deploymentType = deploymentType;
         this.configuration = configuration;
         this.templateImageLoader = templateImageLoader;
-        this.specificationLoader = specificationLoader;
+        this.specificationLoaderSpi = specificationLoader;
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
         this.userProfileLoader = userProfileLoader;
@@ -102,12 +102,12 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     public void init() {
         templateImageLoader.init();
 
-        specificationLoader.setServiceClasses(JavaClassUtils.toClasses(serviceList));
+        specificationLoaderSpi.setServiceClasses(JavaClassUtils.toClasses(serviceList));
 
-        specificationLoader.init();
+        specificationLoaderSpi.init();
 
         // must come after init of spec loader.
-        specificationLoader.injectInto(persistenceSessionFactory);
+        specificationLoaderSpi.injectInto(persistenceSessionFactory);
         persistenceSessionFactory.setServices(serviceList);
         userProfileLoader.setServices(serviceList);
 
@@ -120,7 +120,7 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     public void shutdown() {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
-        specificationLoader.shutdown();
+        specificationLoaderSpi.shutdown();
         templateImageLoader.shutdown();
         userProfileLoader.shutdown();
     }
@@ -153,8 +153,8 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     }
 
     @Override
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    public SpecificationLoaderSpi getSpecificationLoader() {
+        return specificationLoaderSpi;
     }
 
     @Override

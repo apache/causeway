@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class TypeOfFacetDefaultToObject extends TypeOfFacetAbstract {
 
-    public TypeOfFacetDefaultToObject(final FacetHolder holder, final SpecificationLookup specificationLookup) {
+    public TypeOfFacetDefaultToObject(final FacetHolder holder, final SpecificationLoader specificationLookup) {
         super(Object.class, holder, specificationLookup);
     }
 

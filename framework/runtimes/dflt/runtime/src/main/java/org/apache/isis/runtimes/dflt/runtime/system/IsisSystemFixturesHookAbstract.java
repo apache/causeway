@@ -28,7 +28,7 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -196,7 +196,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // Reflector
     // ///////////////////////////////////////////
 
-    protected abstract ObjectReflector obtainReflector(DeploymentType deploymentType) throws IsisSystemException;
+    protected abstract SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType) throws IsisSystemException;
 
     // ///////////////////////////////////////////
     // PersistenceSessionFactory

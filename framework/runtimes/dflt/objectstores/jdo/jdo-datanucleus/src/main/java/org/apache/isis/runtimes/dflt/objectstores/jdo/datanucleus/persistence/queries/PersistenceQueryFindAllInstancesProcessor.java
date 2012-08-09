@@ -10,14 +10,13 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     private static final Logger LOG = Logger.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
-    public PersistenceQueryFindAllInstancesProcessor(final AdapterManager adapterManager, final PersistenceManager persistenceManager) {
-        super(adapterManager, persistenceManager);
+    public PersistenceQueryFindAllInstancesProcessor(final PersistenceManager persistenceManager) {
+        super(persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {

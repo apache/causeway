@@ -43,13 +43,12 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -521,7 +520,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
     // from context
     ///////////////////////////////////////
     
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
@@ -529,7 +528,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -24,9 +24,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
@@ -113,7 +112,7 @@ public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
     

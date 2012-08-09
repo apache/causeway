@@ -37,15 +37,15 @@ import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.LocaleUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
@@ -301,21 +301,21 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     /**
      * From {@link #getContext() context.}
      */
-    protected AdapterMap getAdapterMap() {
+    protected AdapterManager getAdapterMap() {
         return context.getAdapterMap();
     }
 
     /**
      * From {@link #getContext() context.}
      */
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return context.getSpecificationLookup();
     }
 
     /**
      * From {@link #getContext() context.}
      */
-    protected DependencyInjector getDependencyInjector() {
+    protected ServicesInjector getDependencyInjector() {
         return context.getDependencyInjector();
     }
 

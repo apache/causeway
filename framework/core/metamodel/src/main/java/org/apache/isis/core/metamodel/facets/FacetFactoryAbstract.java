@@ -24,14 +24,14 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLookupAware {
+public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware {
 
     private final List<FeatureType> featureTypes;
 
-    private SpecificationLookup specificationLookup;
+    private SpecificationLoader specificationLookup;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
         this.featureTypes = ImmutableList.copyOf(featureTypes);
@@ -58,7 +58,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     // Dependencies (injected)
     // ////////////////////////////////////////////////////////////////
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
@@ -66,7 +66,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
      * Injected
      */
     @Override
-    public void setSpecificationLookup(final SpecificationLookup specificationLookup) {
+    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
 

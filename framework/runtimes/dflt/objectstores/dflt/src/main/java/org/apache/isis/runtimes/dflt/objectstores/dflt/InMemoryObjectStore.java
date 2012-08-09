@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
@@ -45,15 +45,14 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemor
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemorySaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
@@ -62,7 +61,7 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-public class InMemoryObjectStore implements ObjectStore {
+public class InMemoryObjectStore implements ObjectStoreSpi {
 
     private final static Logger LOG = Logger.getLogger(InMemoryObjectStore.class);
 
@@ -486,11 +485,11 @@ public class InMemoryObjectStore implements ObjectStore {
      * not only this object but also the {@link ObjectStoreInstances} that do
      * the work.
      */
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return IsisContext.getSpecificationLoader();
     }
 

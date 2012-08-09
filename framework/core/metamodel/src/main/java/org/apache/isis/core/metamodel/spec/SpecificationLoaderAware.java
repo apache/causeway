@@ -21,5 +21,6 @@ package org.apache.isis.core.metamodel.spec;
 
 public interface SpecificationLoaderAware {
 
-    public void setSpecificationLoader(SpecificationLoader specificationLoader);
+    public void setSpecificationLookup(final SpecificationLoader specificationLookup);
+
 }

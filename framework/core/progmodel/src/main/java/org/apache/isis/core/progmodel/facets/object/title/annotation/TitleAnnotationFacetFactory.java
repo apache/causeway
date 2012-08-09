@@ -30,8 +30,8 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,9 +41,9 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterMapAware, LocalizationProviderAware {
+public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, LocalizationProviderAware {
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
     private LocalizationProvider localizationProvider;
 
     public TitleAnnotationFacetFactory() {
@@ -75,7 +75,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
             return;
         }
         final List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterMap, localizationProvider));
+        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterManager, localizationProvider));
     }
 
     static class SequenceComparator implements Comparator<String> {
@@ -139,7 +139,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterMap) {
+        this.adapterManager = adapterMap;
     }
 }

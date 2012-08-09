@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -43,9 +43,8 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class ObjectReader {
@@ -252,7 +251,7 @@ public class ObjectReader {
     }
 
     
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
@@ -260,7 +259,7 @@ public class ObjectReader {
         return IsisContext.getPersistenceSession();
     }
     
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

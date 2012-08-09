@@ -46,26 +46,26 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware, AdapterMapAware, LocalizationProviderAware {
+public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware {
 
     private ObjectDirtier objectDirtier;
     private ObjectPersistor objectPersistor;
     private QuerySubmitter querySubmitter;
-    private SpecificationLookup specificationLookup;
+    private SpecificationLoader specificationLookup;
     private DomainObjectServices domainObjectServices;
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
     private LocalizationProvider localizationProvider;
 
     public DomainObjectContainerDefault() {
@@ -78,7 +78,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public String titleOf(final Object domainObject) {
-        final ObjectAdapter objectAdapter = adapterMap.adapterFor(domainObject);
+        final ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
         return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
     }
 
@@ -145,7 +145,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {
-        final ObjectAdapter parentAdapter = getAdapterMap().getAdapterFor(parent);
+        final ObjectAdapter parentAdapter = getAdapterManager().getAdapterFor(parent);
         return getDomainObjectServices().createAggregatedInstance(spec, parentAdapter);
     }
 
@@ -154,7 +154,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = getAdapterMap().getAdapterFor(persistentObject);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(persistentObject);
         if (!isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
@@ -214,7 +214,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public String validate(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterMap().adapterFor(domainObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         final InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
         return validityResult.getReason();
     }
@@ -225,13 +225,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterMap().adapterFor(domainObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         return adapter.representsPersistent();
     }
 
     @Override
     public void persist(final Object transientObject) {
-        final ObjectAdapter adapter = getAdapterMap().getAdapterFor(transientObject);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(transientObject);
         // TODO check aggregation is supported
         if (adapter.isParented()) {
             return;
@@ -452,12 +452,12 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         this.domainObjectServices = domainObjectServices;
     }
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
     @Override
-    public void setSpecificationLookup(final SpecificationLookup specificationLookup) {
+    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
 
@@ -470,13 +470,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
-    protected AdapterMap getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
-        this.adapterMap = adapterManager;
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 
     protected ObjectDirtier getObjectDirtier() {

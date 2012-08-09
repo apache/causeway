@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -35,11 +35,11 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware, ObjectDirtierAware {
+public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware, ObjectDirtierAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CLEAR_PREFIX };
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
     private ObjectDirtier objectDirtier;
 
     public CollectionClearFacetFactory() {
@@ -69,7 +69,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaMethod(clearMethodIfAny, collection);
         } else {
-            return new CollectionClearFacetViaAccessor(accessorMethod, collection, getAdapterMap(), getObjectDirtier());
+            return new CollectionClearFacetViaAccessor(accessorMethod, collection, getAdapterManager(), getObjectDirtier());
         }
     }
 
@@ -77,13 +77,13 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
 
-    protected AdapterMap getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterMap) {
+        this.adapterManager = adapterMap;
     }
 
     protected ObjectDirtier getObjectDirtier() {

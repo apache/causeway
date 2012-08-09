@@ -36,7 +36,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
 
@@ -48,7 +48,7 @@ public class ClassEnhancerTest {
     private ObjectResolveAndObjectChangedEnhancer classEnhancer;
     private ObjectResolver mockObjectResolver;
     private ObjectChanger mockObjectChanger;
-    private SpecificationLoader mockSpecificationLoader;
+    private SpecificationLoaderSpi mockSpecificationLoader;
 
     private SomeDomainObject sdo;
 
@@ -56,7 +56,7 @@ public class ClassEnhancerTest {
     public void setUp() {
         mockObjectResolver = mockery.mock(ObjectResolver.class);
         mockObjectChanger = mockery.mock(ObjectChanger.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
+        mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
 
         classEnhancer = new ObjectResolveAndObjectChangedEnhancer(mockObjectResolver, mockObjectChanger, mockSpecificationLoader);
 

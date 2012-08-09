@@ -39,7 +39,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -61,7 +61,7 @@ public class ResourceContext {
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
-    private final SpecificationLookup specificationLookup;
+    private final SpecificationLoader specificationLookup;
 
     private List<List<String>> followLinks;
 
@@ -80,7 +80,7 @@ public class ResourceContext {
     private JsonRepresentation readQueryStringAsMap;
 
     public ResourceContext(final RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request, final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final SecurityContext securityContext,
-            final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup, final SpecificationLookup specificationLookup, IsisConfiguration configuration) {
+            final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup, final SpecificationLoader specificationLookup, IsisConfiguration configuration) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -210,7 +210,7 @@ public class ResourceContext {
         return persistenceSession;
     }
 
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 

@@ -25,21 +25,21 @@ import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 
 public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterMap;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterMap;
 
-    public PropertyDefaultFacetViaMethod(final Method method, final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public PropertyDefaultFacetViaMethod(final Method method, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.specificationLookup = specificationLookup;
@@ -92,11 +92,11 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
 
-    private SpecificationLookup getSpecificationLookup() {
+    private SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
-    protected AdapterMap getAdapterMap() {
+    protected AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

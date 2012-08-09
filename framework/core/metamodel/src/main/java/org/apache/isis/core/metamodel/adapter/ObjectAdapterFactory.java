@@ -19,18 +19,16 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
  * Polymorphic instantiation of {@link ObjectAdapter}.
  * 
  * <p>
- * Introduced to allow subclasses of ObjectAdapter with support for
- * {@link OneToOneAssociationInstance} and so on.
+ * Originally introduced for a feature that has subsequently been removed, 
+ * but seems like a good idea nevertheless.
  */
-public interface ObjectAdapterFactory extends SessionScopedComponent, Injectable {
+public interface ObjectAdapterFactory {
 
-    public ObjectAdapter createAdapter(final Object pojo, final Oid oid);
+    public ObjectAdapter createAdapter(final Object pojo, final Oid oid, final ObjectAdapterLookup objectAdapterLookup);
 }

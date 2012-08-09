@@ -22,14 +22,13 @@ package org.apache.isis.viewer.wicket.ui;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderProvider;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.
  */
-public abstract class ComponentFactoryAbstract implements ComponentFactory, SpecificationLoaderProvider {
+public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     private static final long serialVersionUID = 1L;
 
@@ -95,15 +94,6 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory, Spec
     @Override
     public String getName() {
         return name;
-    }
-
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
     }
 
 }

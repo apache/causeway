@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.properties.defaults.fromtype;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 
-public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract implements AdapterMapAware {
+public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract implements AdapterManagerAware {
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
 
     public PropertyDefaultDerivedFromTypeFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -53,7 +53,7 @@ public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedF
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), getAdapterMap());
+            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), getAdapterManager());
             FacetUtil.addFacet(propertyFacet);
         }
     }
@@ -67,13 +67,13 @@ public class PropertyDefaultDerivedFromTypeFacetFactory extends AnnotationBasedF
     // Injected
     // ////////////////////////////////////////////////////////////////////
 
-    public AdapterMap getAdapterMap() {
-        return adapterMap;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterMap) {
+        this.adapterManager = adapterMap;
     }
 
 }

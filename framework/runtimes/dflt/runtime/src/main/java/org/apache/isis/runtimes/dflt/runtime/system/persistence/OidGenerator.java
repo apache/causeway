@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,10 +32,10 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-public class OidGenerator implements DebuggableWithTitle, SessionScopedComponent, Injectable {
+public class OidGenerator implements DebuggableWithTitle, Injectable {
 
     private final OidStringifier oidStringifier;
     private final IdentifierGenerator identifierGenerator;
@@ -63,25 +62,7 @@ public class OidGenerator implements DebuggableWithTitle, SessionScopedComponent
         return oidStringifier;
     }
 
-    // //////////////////////////////////////////////////////////////
-    // open, close (session scoped)
-    // //////////////////////////////////////////////////////////////
 
-    /**
-     * Default implementation does nothing.
-     */
-    @Override
-    public void open() {
-    }
-
-    /**
-     * Default implementation does nothing.
-     */
-    @Override
-    public void close() {
-    }
-
-    
     // //////////////////////////////////////////////////////////////
     // API and mandatory hooks
     // //////////////////////////////////////////////////////////////
@@ -181,7 +162,7 @@ public class OidGenerator implements DebuggableWithTitle, SessionScopedComponent
     // context
     //////////////////////////////////////////////////////////////////
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return IsisContext.getSpecificationLoader();
     }
 

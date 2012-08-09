@@ -14,20 +14,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.isis.core.commons.components.Injectable;
 
-public interface SpecificationLookup extends Injectable {
-
-    Collection<ObjectSpecification> allSpecifications();
+public interface ServicesInjector extends Injectable {
 
     /**
-     * @see #loadSpecification(String)
+     * Provided by the <tt>ServicesInjectorDefault</tt> when used by framework.
+     * 
+     * <p>
+     * Called in multiple places from metamodel and facets.
      */
-    ObjectSpecification loadSpecification(Class<?> cls);
+    void injectServicesInto(final Object domainObject);
 
-    ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
+    /**
+     * As per {@link #injectServicesInto(Object)}, but for all objects in the
+     * list.
+     */
+    void injectServicesInto(List<Object> objects);
+
 }

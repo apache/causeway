@@ -38,11 +38,11 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
@@ -56,8 +56,8 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private TitleAnnotationFacetFactory facetFactory;
 
-    private SpecificationLookup mockSpecificationLookup;
-    private AdapterMap mockAdapterMap;
+    private SpecificationLoader mockSpecificationLookup;
+    private AdapterManager mockAdapterMap;
     private LocalizationProvider mockLocalizationProvider;
 
     @Before
@@ -65,14 +65,14 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        mockSpecificationLookup = context.mock(SpecificationLookup.class);
-        mockAdapterMap = context.mock(AdapterMap.class);
+        mockSpecificationLookup = context.mock(SpecificationLoader.class);
+        mockAdapterMap = context.mock(AdapterManager.class);
         mockLocalizationProvider = context.mock(LocalizationProvider.class);
 
         objectAdapter = context.mock(ObjectAdapter.class);
 
         facetFactory = new TitleAnnotationFacetFactory();
-        facetFactory.setAdapterMap(mockAdapterMap);
+        facetFactory.setAdapterManager(mockAdapterMap);
         facetFactory.setSpecificationLookup(mockSpecificationLookup);
         facetFactory.setLocalizationProvider(mockLocalizationProvider);
 

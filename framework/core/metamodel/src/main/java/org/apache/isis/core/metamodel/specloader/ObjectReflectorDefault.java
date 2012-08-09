@@ -37,6 +37,7 @@ import com.google.common.collect.Maps;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -45,7 +46,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
@@ -53,7 +54,7 @@ import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
@@ -62,10 +63,10 @@ import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
@@ -115,7 +116,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
  * to its <tt>IsisContext</tt>.
  */
 
-public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTitle {
+public class ObjectReflectorDefault implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware, DebuggableWithTitle {
 
     private final static Logger LOG = Logger.getLogger(ObjectReflectorDefault.class);
 
@@ -392,7 +393,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
         final AuthenticationSessionProvider authenticationSessionProvider = getRuntimeContext().getAuthenticationSessionProvider();
-        final SpecificationLookup specificationLookup = getRuntimeContext().getSpecificationLookup();
+        final SpecificationLoader specificationLookup = getRuntimeContext().getSpecificationLoader();
         final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
@@ -401,11 +402,11 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         if (FreeStandingList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationForFreeStandingList(specContext);
         } else {
-            final SpecificationLoader specificationLoader = this;
-            final AdapterMap adapterMap = getRuntimeContext().getAdapterMap();
+            final SpecificationLoaderSpi specificationLoader = this;
+            final AdapterManager adapterMap = getRuntimeContext().getAdapterMap();
             final ObjectMemberContext objectMemberContext = new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
             final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
-            final DependencyInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
+            final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser, facetProcessor);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, introspectionContext, specContext, objectMemberContext, createObjectContext);
@@ -464,12 +465,12 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     @Override
     public void injectInto(final Object candidate) {
         final Class<?> candidateClass = candidate.getClass();
+        if (SpecificationLoaderSpiAware.class.isAssignableFrom(candidateClass)) {
+            final SpecificationLoaderSpiAware cast = SpecificationLoaderSpiAware.class.cast(candidate);
+            cast.setSpecificationLoaderSpi(this);
+        }
         if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
             final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
-            cast.setSpecificationLoader(this);
-        }
-        if (SpecificationLookupAware.class.isAssignableFrom(candidateClass)) {
-            final SpecificationLookupAware cast = SpecificationLookupAware.class.cast(candidate);
             cast.setSpecificationLookup(this);
         }
 

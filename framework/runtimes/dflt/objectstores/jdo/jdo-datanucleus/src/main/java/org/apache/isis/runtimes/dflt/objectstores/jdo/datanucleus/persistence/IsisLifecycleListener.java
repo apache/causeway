@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackF
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
@@ -477,7 +477,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
 
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

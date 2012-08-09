@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil;
 import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.action.Action;
@@ -335,7 +335,7 @@ public class WebController {
     private void listServices(final Context context, final Block navigationBar) {
         final Block taskBar = context.getComponentFactory().createBlock("services", null);
         taskBar.add(context.getComponentFactory().createHeading("Services"));
-        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+        final AdapterManagerSpi adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
         final List<Object> services = getUserProfile().getPerspective().getServices();
         for (final Object service : services) {
             final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);

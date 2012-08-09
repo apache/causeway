@@ -34,11 +34,11 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.MultiUserExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -363,7 +363,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
                 final List<Object> servicePojos = IsisContext.getServices();
                 final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
                 for (final Object servicePojo : servicePojos) {
-                    final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+                    final AdapterManagerSpi adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
                     serviceAdapters.add(adapterManager.adapterFor(servicePojo));
                 }
                 final ObjectSpecification spec = getSpecificationLoader().loadSpecification(Object.class);
@@ -499,7 +499,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     // Dependencies (from singleton)
     // //////////////////////////////////////////////////////////////////
 
-    private SpecificationLoader getSpecificationLoader() {
+    private SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
@@ -507,7 +507,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManager getAdapterManager() {
+    private AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

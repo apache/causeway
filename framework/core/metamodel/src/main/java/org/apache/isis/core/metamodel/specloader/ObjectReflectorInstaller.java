@@ -20,15 +20,16 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 /**
- * Installs a {@link ObjectReflector}during system start up.
+ * Installs a {@link SpecificationLoaderSpi} during system start up.
  */
 public interface ObjectReflectorInstaller extends Installer {
 
     static String TYPE = "reflector";
 
-    ObjectReflector createReflector();
+    SpecificationLoaderSpi createReflector();
 
     void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller);
 

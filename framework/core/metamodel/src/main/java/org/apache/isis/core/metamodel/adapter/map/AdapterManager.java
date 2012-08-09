@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.adapter.map;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
@@ -26,20 +27,8 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-public interface AdapterMap extends Injectable {
+public interface AdapterManager extends Injectable, ObjectAdapterLookup {
 
-    /**
-     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
-     * it exists in the identity map.
-     * 
-     * <p>
-     * Provided by the <tt>AdapterManager</tt> when used by framework.
-     * 
-     * @param pojo
-     *            - must not be <tt>null</tt>
-     * @return adapter, or <tt>null</tt> if doesn't exist.
-     */
-    ObjectAdapter getAdapterFor(Object pojo);
 
     /**
      * Looks up or creates a standalone (value) or root adapter.

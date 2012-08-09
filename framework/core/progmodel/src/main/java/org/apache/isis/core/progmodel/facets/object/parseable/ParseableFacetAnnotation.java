@@ -23,9 +23,9 @@ import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class ParseableFacetAnnotation extends ParseableFacetAbstract {
 
@@ -43,11 +43,11 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
         return annotation.parserClass();
     }
 
-    public ParseableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public ParseableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder, authenticationSessionProvider, adapterManager, dependencyInjector);
     }
 
-    private ParseableFacetAnnotation(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    private ParseableFacetAnnotation(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         super(candidateParserName, candidateParserClass, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 

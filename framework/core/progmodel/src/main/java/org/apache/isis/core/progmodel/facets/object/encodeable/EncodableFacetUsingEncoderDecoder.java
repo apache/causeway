@@ -22,19 +22,19 @@ package org.apache.isis.core.progmodel.facets.object.encodeable;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements EncodableFacet {
 
     private final EncoderDecoder<?> encoderDecoder;
-    private final DependencyInjector dependencyInjector;
-    private final AdapterMap adapterManager;
+    private final ServicesInjector dependencyInjector;
+    private final AdapterManager adapterManager;
 
-    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
         this.encoderDecoder = encoderDecoder;
         this.dependencyInjector = dependencyInjector;
@@ -46,7 +46,7 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectDependenciesInto(encoderDecoder);
+        getDependencyInjector().injectServicesInto(encoderDecoder);
         return encoderDecoder.toString();
     }
 
@@ -56,7 +56,7 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
-            getDependencyInjector().injectDependenciesInto(encoderDecoder);
+            getDependencyInjector().injectServicesInto(encoderDecoder);
             final Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
             return getAdapterManager().adapterFor(decodedObject);
         }
@@ -65,7 +65,7 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
 
     @Override
     public String toEncodedString(final ObjectAdapter adapter) {
-        getDependencyInjector().injectDependenciesInto(encoderDecoder);
+        getDependencyInjector().injectServicesInto(encoderDecoder);
         return adapter == null ? ENCODED_NULL: encode(encoderDecoder, adapter.getObject());
     }
 
@@ -79,11 +79,11 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////
 
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 
-    public AdapterMap getAdapterManager() {
+    public AdapterManager getAdapterManager() {
         return adapterManager;
     }
 

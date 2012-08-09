@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
@@ -58,7 +58,7 @@ public class TitleFacetViaTitleAnnotationTest {
     private ObjectAdapter mockObjectAdapter;
 
     @Mock
-    private AdapterMap mockAdapterMap;
+    private AdapterManager mockAdapterMap;
     
     @Mock
     private LocalizationProvider mockLocalizationProvider;

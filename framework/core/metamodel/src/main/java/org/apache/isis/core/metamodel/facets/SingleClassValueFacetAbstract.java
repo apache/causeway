@@ -23,14 +23,14 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {
 
     private final Class<?> value;
-    private final SpecificationLookup specificationLookup;
+    private final SpecificationLoader specificationLookup;
 
-    public SingleClassValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final Class<?> value, final SpecificationLookup specificationLookup) {
+    public SingleClassValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final Class<?> value, final SpecificationLoader specificationLookup) {
         super(facetType, holder, false);
         this.value = value;
         this.specificationLookup = specificationLookup;
@@ -50,7 +50,7 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
         return valueType != null ? getSpecificationLookup().loadSpecification(valueType) : null;
     }
 
-    private SpecificationLookup getSpecificationLookup() {
+    private SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 

@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -53,7 +53,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private static final int INCOMPLETE_COLLECTION = -1;
 
-    private final SpecificationLoader specificationLoader;
+    private final SpecificationLoaderSpi specificationLoader;
     private final ObjectAdapterLookup objectAdapterLookup;
     private final Localization localization;
     
@@ -71,7 +71,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     // Constructor, finalizer
     // ///////////////////////////////////////////////////////////////////
 
-    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoader specificationLoader, ObjectAdapterLookup objectAdapterLookup, Localization localization) {
+    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoaderSpi specificationLoader, ObjectAdapterLookup objectAdapterLookup, Localization localization) {
         this.specificationLoader = specificationLoader;
         this.objectAdapterLookup = objectAdapterLookup;
         this.localization = localization;

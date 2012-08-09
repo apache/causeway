@@ -20,16 +20,16 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
- * Just delegates to an underlying {@link AdapterMap}.
+ * Just delegates to an underlying {@link AdapterManager}.
  * 
  * <p>
  * Provided to allow subclasses to override specific methods if required.
  */
-public abstract class AdapterMapDelegator extends AdapterMapAbstract {
+public abstract class AdapterMapDelegator extends AdapterManagerAbstract {
 
-    private final AdapterMap underlying;
+    private final AdapterManager underlying;
 
-    public AdapterMapDelegator(final AdapterMap underlying) {
+    public AdapterMapDelegator(final AdapterManager underlying) {
         this.underlying = underlying;
     }
 

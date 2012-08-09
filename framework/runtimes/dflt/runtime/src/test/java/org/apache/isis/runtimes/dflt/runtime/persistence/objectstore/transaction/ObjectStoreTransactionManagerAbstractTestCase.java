@@ -25,7 +25,6 @@ import org.junit.Rule;
 
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -41,7 +40,7 @@ public abstract class ObjectStoreTransactionManagerAbstractTestCase {
     @Mock
     protected PersistenceSession mockPersistenceSession;
     @Mock
-    protected ObjectStoreTransactionManagement mockObjectStore;
+    protected TransactionalResource mockObjectStore;
 
 
     // //////////////////////////////////////////////////

@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.viewer.html.action.ActionException;
@@ -258,7 +258,7 @@ public class ContextTest_mapObject {
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManager getAdapterManager() {
+    private AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

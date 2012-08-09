@@ -27,15 +27,15 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultsProviderUtil;
 
-public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, DependencyInjectorAware {
+public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
-    private DependencyInjector dependencyInjector;
+    private ServicesInjector servicesInjector;
 
     public DefaultedAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -51,7 +51,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
 
         // create from annotation, if present
         if (annotation != null) {
-            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, getDependencyInjector());
+            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, getServicesInjector());
             if (facet.isValid()) {
                 return facet;
             }
@@ -60,7 +60,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // otherwise, try to create from configuration, if present
         final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(providerName)) {
-            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, getDependencyInjector());
+            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, getServicesInjector());
             if (facet.isValid()) {
                 return facet;
             }
@@ -82,13 +82,13 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
         this.configuration = configuration;
     }
 
-    private DependencyInjector getDependencyInjector() {
-        return dependencyInjector;
+    private ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 
     @Override
-    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
-        this.dependencyInjector = dependencyInjector;
+    public void setServicesInjector(final ServicesInjector dependencyInjector) {
+        this.servicesInjector = dependencyInjector;
     }
 
 }

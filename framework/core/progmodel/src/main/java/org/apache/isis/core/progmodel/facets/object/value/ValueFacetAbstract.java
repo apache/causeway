@@ -26,13 +26,13 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
@@ -161,11 +161,11 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // Dependencies (from constructor)
     // /////////////////////////////////////////
 
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return context.getAdapterMap();
     }
 
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return context.getDependencyInjector();
     }
 

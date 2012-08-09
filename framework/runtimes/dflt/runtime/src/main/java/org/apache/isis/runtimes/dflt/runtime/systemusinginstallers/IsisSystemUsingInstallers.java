@@ -30,7 +30,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -205,7 +205,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     @Override
-    protected ObjectReflector obtainReflector(final DeploymentType deploymentType) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType) throws IsisSystemException {
         if (reflectorInstaller == null) {
             final String fromCmdLine = getConfiguration().getString(SystemConstants.REFLECTOR_KEY);
             reflectorInstaller = installerLookup.reflectorInstaller(fromCmdLine);

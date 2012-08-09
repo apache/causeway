@@ -45,22 +45,22 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
 
-public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware, SpecificationLookupAware, AdapterMapAware, ObjectPersistorAware {
+public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware, SpecificationLoaderAware, AdapterManagerAware, ObjectPersistorAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
 
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private SpecificationLookup specificationLookup;
-    private AdapterMap adapterManager;
+    private SpecificationLoader specificationLookup;
+    private AdapterManager adapterManager;
     private ObjectPersistor objectPersistor;
 
     public WrapperFactoryDefault() {
@@ -254,12 +254,12 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
+    public void setAdapterManager(final AdapterManager adapterMap) {
         this.adapterManager = adapterMap;
     }
 
     @Override
-    public void setSpecificationLookup(final SpecificationLookup specificationLookup) {
+    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
 

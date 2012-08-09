@@ -29,19 +29,17 @@ import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAw
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.SpecificationLookupDelegator;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderDelegator;
 
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware, DomainObjectContainerAware {
+public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware, DomainObjectContainerAware {
 
-    private final SpecificationLookupDelegator specificationLookupDelegator;
+    private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
+    
     private DomainObjectContainer container;
     private Properties properties;
 
-    public RuntimeContextAbstract() {
-        this.specificationLookupDelegator = new SpecificationLookupDelegator();
-    }
 
     @Override
     public void init() {
@@ -72,12 +70,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getObjectPersistor().injectInto(candidate);
         getQuerySubmitter().injectInto(candidate);
         getServicesProvider().injectInto(candidate);
-        getSpecificationLookup().injectInto(candidate);
-        
+        getSpecificationLoader().injectInto(candidate);
     }
 
     @Override
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLoader() {
         return specificationLookupDelegator;
     }
 
@@ -86,8 +83,8 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
      * {@link ObjectReflectorAbstract#init() initialized}.
      */
     @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLookupDelegator.setDelegate(new SpecificationLookup() {
+    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
+        this.specificationLookupDelegator.setDelegate(new SpecificationLoader() {
 
             @Override
             public void injectInto(final Object candidate) {
@@ -108,6 +105,31 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
                 return specificationLoader.lookupBySpecId(objectSpecId);
             }
+
+            @Override
+            public ObjectSpecification loadSpecification(String fullyQualifiedClassName) {
+                return specificationLoader.loadSpecification(fullyQualifiedClassName);
+            }
+
+            @Override
+            public boolean loadSpecifications(List<Class<?>> typesToLoad) {
+                return specificationLoader.loadSpecifications(typesToLoad);
+            }
+
+            @Override
+            public boolean loadSpecifications(List<Class<?>> typesToLoad, Class<?> typeToIgnore) {
+                return specificationLoader.loadSpecifications(typesToLoad, typeToIgnore);
+            }
+
+            @Override
+            public boolean loaded(Class<?> cls) {
+                return specificationLoader.loaded(cls);
+            }
+
+            @Override
+            public boolean loaded(String fullyQualifiedClassName) {
+                return specificationLoader.loaded(fullyQualifiedClassName);
+            }
         });
     }
 
@@ -116,7 +138,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     /**
-     * So that {@link #injectDependenciesInto(Object)} can also inject the
+     * So that {@link #injectServicesInto(Object)} can also inject the
      * {@link DomainObjectContainer}.
      */
     @Override

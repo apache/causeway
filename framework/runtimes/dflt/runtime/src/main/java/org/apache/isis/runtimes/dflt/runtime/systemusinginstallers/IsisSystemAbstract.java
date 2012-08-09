@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -174,17 +174,15 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
         final TemplateImageLoader templateImageLoader = obtainTemplateImageLoader();
-        final ObjectReflector reflector = obtainReflector(deploymentType);
+        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType);
 
         final List<Object> servicesList = obtainServices();
 
         // bind metamodel to the (runtime) framework
-        // REVIEW: misplaced? seems like a side-effect...
-        reflector.setRuntimeContext(new RuntimeContextFromSession());
+        RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        runtimeContext.injectInto(reflector);
 
         return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
     }
-
-
     
 }

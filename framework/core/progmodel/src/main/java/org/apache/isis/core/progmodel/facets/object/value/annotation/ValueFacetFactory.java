@@ -26,8 +26,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -40,8 +40,8 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.progmodel.facets.object.value.ValueFacetFromConfiguration;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderUtil;
@@ -72,12 +72,12 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
  * <p>
  * Note that {@link ParentedFacet} is <i>not</i> installed.
  */
-public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private AdapterMap adapterManager;
-    private DependencyInjector dependencyInjector;
+    private AdapterManager adapterManager;
+    private ServicesInjector servicesInjector;
 
     public ValueFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -116,7 +116,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
     }
 
     protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
-        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getDependencyInjector());
+        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getServicesInjector());
     }
 
     // ////////////////////////////////////////////////////////////////////
@@ -141,22 +141,22 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
-    public AdapterMap getAdapterManager() {
+    public AdapterManager getAdapterManager() {
         return adapterManager;
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
+    public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
-    public DependencyInjector getDependencyInjector() {
-        return dependencyInjector;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 
     @Override
-    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
-        this.dependencyInjector = dependencyInjector;
+    public void setServicesInjector(final ServicesInjector dependencyInjector) {
+        this.servicesInjector = dependencyInjector;
     }
 
 }

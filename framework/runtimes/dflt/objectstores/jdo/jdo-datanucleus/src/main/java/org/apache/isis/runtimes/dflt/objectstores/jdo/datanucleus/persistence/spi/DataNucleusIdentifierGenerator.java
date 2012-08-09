@@ -6,33 +6,20 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.log4j.Logger;
-import org.datanucleus.identity.OID;
 
-
-import org.apache.isis.core.commons.base64.Base64Serializer;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 
-public class DataNucleusIdentifierGenerator implements IdentifierGenerator, AdapterMapAware, SpecificationLookupAware {
+public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(DataNucleusIdentifierGenerator.class);
     
-    @SuppressWarnings("unused")
-    private AdapterMap adapterMap;
-    
-    @SuppressWarnings("unused")
-    private SpecificationLookup specificationLookup;
 
 
     // //////////////////////////////////////////////////////////////
@@ -59,7 +46,7 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator, Adap
             return "1";
         }
         
-        final Object jdoOid = getPersistenceManager().getObjectId(pojo);
+        final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
         
         return JdoOidSerializer.toString(jdoOid);
     }
@@ -81,33 +68,19 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator, Adap
         
     }
 
-
-    // //////////////////////////////////////////////////////////////
-    // Dependencies (injected by setter)
-    // //////////////////////////////////////////////////////////////
-
-    @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
-    }
-
-    @Override
-    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
-        this.specificationLookup = specificationLookup;
-    }
     
     // //////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////////
 
 
-    protected PersistenceManager getPersistenceManager() {
-        final DataNucleusObjectStore objectStore = getObjectStore();
+    protected PersistenceManager getJdoPersistenceManager() {
+        final DataNucleusObjectStore objectStore = getDataNucleusObjectStore();
         return objectStore.getPersistenceManager();
     }
 
 
-    protected DataNucleusObjectStore getObjectStore() {
+    protected DataNucleusObjectStore getDataNucleusObjectStore() {
         return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 

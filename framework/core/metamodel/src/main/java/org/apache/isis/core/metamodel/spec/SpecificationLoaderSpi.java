@@ -19,8 +19,23 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-public interface SpecificationLookupAware {
+import java.util.List;
 
-    public void setSpecificationLookup(final SpecificationLookup specificationLookup);
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+
+public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
+
+
+    /**
+     * Specify the classes of the services to pro-actively prime the cache.
+     */
+    void setServiceClasses(List<Class<?>> serviceClasses);
+
+    /**
+     * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
+     */
+    void validateSpecifications();
 
 }

@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -265,7 +265,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    protected static void checkChoicesType(final SpecificationLookup specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
+    protected static void checkChoicesType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
             final ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
             if (!componentSpec.isOfType(paramSpec)) {
@@ -303,7 +303,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // Dependencies (from parent)
     // /////////////////////////////////////////////////////////////
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return parentAction.getSpecificationLookup();
     }
 
@@ -311,7 +311,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction.getAuthenticationSessionProvider();
     }
 
-    protected AdapterMap getAdapterMap() {
+    protected AdapterManager getAdapterMap() {
         return parentAction.getAdapterMap();
     }
 

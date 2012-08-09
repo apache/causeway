@@ -20,30 +20,24 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactoryAbstract;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-public class PojoAdapterFactory extends ObjectAdapterFactoryAbstract {
+public class PojoAdapterFactory implements ObjectAdapterFactory {
 
     @Override
-    public PojoAdapter createAdapter(final Object pojo, final Oid oid) {
-        return new PojoAdapter(pojo, oid, getSpecificationLoader(), getObjectAdapterLookup(), getLocalization());
+    public PojoAdapter createAdapter(final Object pojo, final Oid oid, ObjectAdapterLookup objectAdapterLookup) {
+        return new PojoAdapter(pojo, oid, getSpecificationLoader(), objectAdapterLookup, getLocalization());
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
-    }
-
-    protected ObjectAdapterLookup getObjectAdapterLookup() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
     protected Localization getLocalization() {
         return IsisContext.getLocalization();
     }
-
-    
 }

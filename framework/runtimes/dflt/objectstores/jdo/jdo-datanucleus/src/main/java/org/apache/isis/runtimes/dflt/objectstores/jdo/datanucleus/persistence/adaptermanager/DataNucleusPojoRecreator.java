@@ -1,16 +1,12 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-public class DataNucleusPojoRecreator implements PojoRecreator, SpecificationLoaderAware {
-
-    private SpecificationLoader specificationLoader;
-    
+public class DataNucleusPojoRecreator implements PojoRecreator {
 
     @Override
     public Object recreatePojo(TypedOid oid) {
@@ -20,19 +16,14 @@ public class DataNucleusPojoRecreator implements PojoRecreator, SpecificationLoa
     ///////////////////////////////
     
 
-    protected DataNucleusObjectStore getObjectStore() {
-        // REVIEW: inject somehow?
-        return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    protected DataNucleusObjectStore getObjectStore() {
+        return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
     }
     
-    @Override
-    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    };
     
 }
 

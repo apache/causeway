@@ -25,22 +25,22 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
 
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private AdapterMap adapterManager;
-    private DependencyInjector dependencyInjector;
+    private AdapterManager adapterManager;
+    private ServicesInjector servicesInjector;
 
     public ParseableFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -56,7 +56,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
 
         // create from annotation, if present
         if (annotation != null) {
-            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider, adapterManager, dependencyInjector);
+            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider, adapterManager, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -65,7 +65,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
         // otherwise, try to create from configuration, if present
         final String parserName = ParserUtil.parserNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(parserName)) {
-            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
+            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider, servicesInjector, adapterManager);
             if (facet.isValid()) {
                 return facet;
             }
@@ -96,13 +96,13 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
+    public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
     @Override
-    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
-        this.dependencyInjector = dependencyInjector;
+    public void setServicesInjector(final ServicesInjector dependencyInjector) {
+        this.servicesInjector = dependencyInjector;
     }
 
 }

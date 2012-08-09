@@ -24,17 +24,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLookup specificationLookup) {
+    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLoader specificationLookup) {
         super(holder, specificationLookup);
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter, final SpecificationLookup specificationLookup) {
+    public Object[] getChoices(final ObjectAdapter adapter, final SpecificationLoader specificationLookup) {
         final FacetHolder facetHolder = getFacetHolder();
         final FacetedMethod noap = (FacetedMethod) facetHolder;
         final ObjectSpecification noSpec = getSpecification(noap.getType());

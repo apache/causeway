@@ -38,7 +38,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -63,7 +63,7 @@ public class UserProfileDataHandlerTest {
         final ArrayList<Object> servicesList = new ArrayList<Object>();
         service = new TestServiceObject1();
         servicesList.add(service);
-        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockery.mock(TemplateImageLoader.class), mockery.mock(SpecificationLoader.class), mockery.mock(AuthenticationManager.class),
+        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockery.mock(TemplateImageLoader.class), mockery.mock(SpecificationLoaderSpi.class), mockery.mock(AuthenticationManager.class),
                 mockery.mock(AuthorizationManager.class), mockery.mock(UserProfileLoader.class), mockery.mock(PersistenceSessionFactory.class), servicesList);
 
         IsisContextStatic.createRelaxedInstance(executionContextFactory);

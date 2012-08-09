@@ -17,23 +17,43 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
+package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.applib.annotation.Aggregated;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.Resettable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * API used solely by the {@link PersistenceSession}.
+ * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid
+ * identities} for each and every POJO that is being used by the framework.
+ * 
+ * <p>
+ * It provides a consistent set of adapters in memory, providing an
+ * {@link ObjectAdapter adapter} for the POJOs that are in use ensuring that the
+ * same object is not loaded twice into memory.
+ * 
+ * <p>
+ * Each POJO is given an {@link ObjectAdapter adapter} so that the framework can
+ * work with the POJOs even though it does not understand their types. Each POJO
+ * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
-public interface AdapterManagerPersist {
+public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapter>
+    , SessionScopedComponent, 
+    DebuggableWithTitle,  
+    Resettable {
+
 
     /**
      * Remaps the {@link ObjectAdapter adapter} and any associated 
@@ -101,5 +121,33 @@ public interface AdapterManagerPersist {
      * @param oid
      */
     ObjectAdapter recreatePersistentAdapter(TypedOid oid);
+
+    
+    
+    
+    /**
+     * Add a pre-existing {@link ObjectAdapter adapter} straight into the maps.
+     */
+    ObjectAdapter addExistingAdapter(ObjectAdapter object);
+
+    // /////////////////////////////////////////////////////////
+    // removal
+    // /////////////////////////////////////////////////////////
+
+    /**
+     * Removes the specified {@link ObjectAdapter adapter} from the identity
+     * maps.
+     */
+    void removeAdapter(ObjectAdapter adapter);
+
+    /**
+     * Removes the {@link ObjectAdapter adapter} identified by the specified
+     * {@link Oid}.
+     * 
+     * <p>
+     * Should be same as {@link #getAdapterFor(Oid)} followed by
+     * {@link #removeAdapter(ObjectAdapter)}.
+     */
+    void removeAdapter(Oid oid);
 
 }

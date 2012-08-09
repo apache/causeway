@@ -40,7 +40,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
     }
 
     private void ensureFoundAnnotatedEntities() {
-        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
+        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoaderSpi().allSpecifications();
         for (final ObjectSpecification objectSpec : objectSpecs) {
             if (objectSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
                 return;
@@ -50,7 +50,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
     }
 
     private void ensureAllSpecificationsValid() throws ClassNotFoundException {
-        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
+        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoaderSpi().allSpecifications();
         for (final ObjectSpecification objSpec : objectSpecs) {
             
             // TODO: ensure that PersistenceCapable has supported strategy (APPLICATION or DATASTORE)

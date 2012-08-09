@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.progmodel.app.IsisMetaModel;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
@@ -44,7 +45,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -53,6 +54,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -66,7 +68,7 @@ public class PersistenceSessionObjectStoreTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private ServicesInjectorDefault servicesInjector;
-    private AdapterManagerExtended adapterManager;
+    private AdapterManagerSpi adapterManager;
     private ObjectAdapterFactory adapterFactory;
     
     
@@ -80,7 +82,7 @@ public class PersistenceSessionObjectStoreTest {
     private PersistenceSessionFactory mockPersistenceSessionFactory;
     
     @Mock
-    private ObjectStore mockObjectStore;
+    private ObjectStoreSpi mockObjectStore;
     @Mock
     private ObjectFactory objectFactory;
     @Mock
@@ -143,15 +145,19 @@ public class PersistenceSessionObjectStoreTest {
         servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
 
-        adapterManager = new AdapterManagerDefault();
+        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore);
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore) {
+            @Override
+            protected SpecificationLoaderSpi getSpecificationLoader() {
+                return isisMetaModel.getSpecificationLoader();
+            }
+        };
         
         transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore);
         transactionManager.injectInto(persistenceSession);
 
         servicesInjector.setServices(Collections.emptyList());
-        persistenceSession.setSpecificationLoader(isisMetaModel.getSpecificationLoader());
 
         persistentAdapter = PojoAdapterBuilder.create().withOid("CUS|1").withPojo(new Customer()).with(Persistence.PERSISTENT).with(mockVersion).with(isisMetaModel.getSpecificationLoader()).build();
         transientAdapter = PojoAdapterBuilder.create().withOid("CUS|2").withPojo(new Customer()).with(Persistence.TRANSIENT).with(isisMetaModel.getSpecificationLoader()).build();

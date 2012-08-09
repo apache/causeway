@@ -23,7 +23,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
@@ -55,7 +55,7 @@ public final class PersistenceConstants {
     public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory";
 
     /**
-     * Key used to lookup implementation of {@link ServicesInjector} in
+     * Key used to lookup implementation of {@link ServicesInjectorSpi} in
      * {@link IsisConfiguration}.
      */
     public static final String SERVICES_INJECTOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.services-injector";

@@ -38,7 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializ
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -85,8 +85,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterManager;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterManager;
     private final ObjectPersistor objectPersistor;
 
     /**
@@ -104,7 +104,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      */
     protected Method wrappedMethod;
 
-    public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
+    public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager,
             final ObjectPersistor objectPersistor) {
         super(delegate, embeddedViewer, mode);
 
@@ -615,7 +615,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // Dependencies
     // /////////////////////////////////////////////////////////////////
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
@@ -627,7 +627,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
-    protected AdapterMap getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return adapterManager;
     }
 

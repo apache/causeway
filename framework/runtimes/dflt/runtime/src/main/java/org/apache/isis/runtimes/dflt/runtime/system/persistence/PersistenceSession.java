@@ -34,6 +34,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -60,7 +61,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
@@ -68,16 +69,15 @@ import org.apache.isis.core.metamodel.spec.Dirtiable;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAware;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
+import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -89,6 +89,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
@@ -96,22 +97,26 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceExcept
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
 
-public class PersistenceSession implements PersistenceSessionContainer, PersistenceSessionAdaptedServiceManager, PersistenceSessionTransactionManagement, PersistenceSessionTestSupport, SpecificationLoaderAware,
-        IsisTransactionManagerAware, SessionScopedComponent, Injectable, DebuggableWithTitle, ToPersistObjectSet {
+public class PersistenceSession implements  
+        EnlistedObjectDirtying, ToPersistObjectSet, 
+        IsisTransactionManagerAware, 
+        SessionScopedComponent, Injectable, DebuggableWithTitle {
+
+    private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
 
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final ObjectAdapterFactory adapterFactory;
+    private final ObjectAdapterFactory objectAdapterFactory;
     private final ObjectFactory objectFactory;
-    private final ServicesInjector servicesInjector;
+    private final ServicesInjectorSpi servicesInjector;
     private final OidGenerator oidGenerator;
-    private final AdapterManagerExtended adapterManager;
+    private final AdapterManagerSpi adapterManager;
+
+    private final PersistAlgorithm persistAlgorithm;
+    private final ObjectStore objectStore;
+    private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
     private boolean dirtiableSupport;
 
-    /**
-     * Injected using setter-based injection.
-     */
-    private SpecificationLoader specificationLoader;
     /**
      * Injected using setter-based injection.
      */
@@ -122,21 +127,38 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
     private State state;
-
     
-    private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
-    
-    private final PersistAlgorithm persistAlgorithm;
-    private final ObjectStorePersistence objectStore;
-    private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
-
     
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator, final AdapterManagerExtended adapterManager,
-            final PersistAlgorithm persistAlgorithm, final ObjectStorePersistence objectStore) {
+    public PersistenceSession(
+                final PersistenceSessionFactory persistenceSessionFactory, 
+                final ObjectAdapterFactory adapterFactory, 
+                final ObjectFactory objectFactory, 
+                final ServicesInjectorSpi servicesInjector, 
+                final IdentifierGenerator identifierGenerator, 
+                final AdapterManagerSpi adapterManager,
+                final PersistAlgorithm persistAlgorithm, 
+                final ObjectStore objectStore) {
+
+        this(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager,
+            persistAlgorithm, objectStore);
+    }
+
+    /**
+     * Initialize the object store so that calls to this object store access
+     * persisted objects and persist changes to the object that are saved.
+     */
+    public PersistenceSession(
+                final PersistenceSessionFactory persistenceSessionFactory, 
+                final ObjectAdapterFactory adapterFactory, 
+                final ObjectFactory objectFactory, 
+                final ServicesInjectorSpi servicesInjector, 
+                final OidGenerator oidGenerator, 
+                final AdapterManagerSpi adapterManager,
+            final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
         
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
@@ -150,7 +172,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         this.persistenceSessionFactory = persistenceSessionFactory;
 
         // session scope
-        this.adapterFactory = adapterFactory;
+        this.objectAdapterFactory = adapterFactory;
         this.objectFactory = objectFactory;
         this.servicesInjector = servicesInjector;
         this.oidGenerator = oidGenerator;
@@ -168,17 +190,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
 
         this.persistAlgorithm = persistAlgorithm;
         this.objectStore = objectStore;
-    }
-
-    /**
-     * Initialize the object store so that calls to this object store access
-     * persisted objects and persist changes to the object that are saved.
-     */
-    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final IdentifierGenerator identifierGenerator, final AdapterManagerExtended identityMap,
-            final PersistAlgorithm persistAlgorithm, final ObjectStorePersistence objectStore) {
-
-        this(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(identifierGenerator), identityMap,
-            persistAlgorithm, objectStore);
     }
 
 
@@ -213,28 +224,19 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         }
 
         // injected via setters
-        ensureThatState(specificationLoader, is(not(nullValue())), "SpecificationLoader missing");
         ensureThatState(transactionManager, is(not(nullValue())), "TransactionManager missing");
 
         // inject any required dependencies into object factory
         this.injectInto(objectFactory);
-        specificationLoader.injectInto(objectFactory);
         servicesInjector.injectInto(objectFactory);
 
-        // wire dependencies into identityMap
-        adapterFactory.injectInto(adapterManager);
-        specificationLoader.injectInto(adapterManager);
+        // wire dependencies into adapterManager
         oidGenerator.injectInto(adapterManager);
         servicesInjector.injectInto(adapterManager);
 
-        // wire dependencies into oid generator
-        specificationLoader.injectInto(oidGenerator);
-
         servicesInjector.open();
-        adapterFactory.open();
         objectFactory.open();
         adapterManager.open();
-        oidGenerator.open();
 
         // doOpen..
         ensureThatState(objectStore, is(notNullValue()), "object store required");
@@ -279,8 +281,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         adapterManager.close();
         servicesInjector.close();
         objectFactory.close();
-        adapterFactory.close();
-        oidGenerator.close();
 
         setState(State.CLOSED);
     }
@@ -293,7 +293,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     private void createServiceAdapters() {
         getTransactionManager().startTransaction();
         for (final Object service : servicesInjector.getRegisteredServices()) {
-            final ObjectSpecification serviceSpecification = specificationLoader.loadSpecification(service.getClass());
+            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
             serviceSpecification.markAsService();
             final RootOid existingOid = getOidForService(serviceSpecification);
             ObjectAdapter serviceAdapter;
@@ -342,18 +342,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
     // ///////////////////////////////////////////////////////////////////////////
-    // shutdown, reset
-    // ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * For testing purposes only.
-     */
-    public void testReset() {
-        objectStore.reset();
-        getAdapterManager().reset();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
     // Factory (for transient instance)
     // ///////////////////////////////////////////////////////////////////////////
 
@@ -361,15 +349,34 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * Create a root or standalone {@link ObjectAdapter adapter}.
      * 
      * <p>
+     * Creates a new instance of the specified type and returns it in an adapter
+     * whose resolved state set to {@link ResolveState#TRANSIENT} (except if the
+     * type is marked as {@link ObjectSpecification#isValueOrIsParented()
+     * aggregated} in which case it will be set to {@link ResolveState#VALUE}).
+     * 
+     * <p>
      * The returned object will be initialised (had the relevant callback
      * lifecycle methods invoked).
      * 
      * <p>
+     * <b><i> REVIEW: not sure about {@link ResolveState#VALUE} - see comments
+     * in {@link #adapterFor(Object, Oid, OneToManyAssociation)}.</i></b>
+     * <p>
      * TODO: this is the same as
-     * {@link RuntimeContextFromSession#createTransientInstance(ObjectSpecification)}
-     * ; could it be unified?
+     * {@link RuntimeContextFromSession#createTransientInstance(ObjectSpecification)};
+     * could it be unified?
+     * 
+     * <p>
+     * While creating the object it will be initialised with default values and
+     * its created lifecycle method (its logical constructor) will be invoked.
+     * Contrast this with
+     * {@link #recreateTransientInstance(Oid, ObjectSpecification)}.
+     * 
+     * <p>
+     * This method is ultimately delegated to by the
+     * {@link DomainObjectContainer}.
      */
-    @Override
+    //@Override
     public ObjectAdapter createInstance(final ObjectSpecification objectSpec) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
@@ -379,7 +386,23 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return objectSpec.initialize(adapter);
     }
 
-    @Override
+    /**
+     * Creates a new instance of the specified type and returns an adapter with
+     * an aggregated OID that show that this new object belongs to the specified
+     * parent. The new object's resolved state is set to
+     * {@link ResolveState#RESOLVED} as it state is part of it parent.
+     * 
+     * <p>
+     * While creating the object it will be initialised with default values and
+     * its created lifecycle method (its logical constructor) will be invoked.
+     * Contrast this with
+     * {@link #recreateTransientInstance(Oid, ObjectSpecification)}.
+     * 
+     * <p>
+     * This method is ultimately delegated to by the
+     * {@link DomainObjectContainer}.
+     */
+    //@Override
     public ObjectAdapter createInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating aggregated instance of " + objectSpec);
@@ -400,7 +423,17 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // findInstances, getInstances
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Finds and returns instances that match the specified query.
+     * 
+     * <p>
+     * The {@link QueryCardinality} determines whether all instances or just the
+     * first matching instance is returned.
+     * 
+     * @throws UnsupportedFindException
+     *             if the criteria is not support by this persistor
+     */
+    //@Override
     public <T> ObjectAdapter findInstances(final Query<T> query, final QueryCardinality cardinality) {
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (persistenceQuery == null) {
@@ -409,7 +442,20 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return findInstances(persistenceQuery);
     }
 
-    @Override
+    /**
+     * Finds and returns instances that match the specified
+     * {@link PersistenceQuery}.
+     * 
+     * <p>
+     * Compared to {@link #findInstances(Query, QueryCardinality)}, not that
+     * there is no {@link QueryCardinality} parameter. That's because
+     * {@link PersistenceQuery} intrinsically carry the knowledge as to how many
+     * rows they return.
+     * 
+     * @throws UnsupportedFindException
+     *             if the criteria is not support by this persistor
+     */
+    //@Override
     public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
         final List<ObjectAdapter> instances = getInstances(persistenceQuery);
         final ObjectSpecification specification = persistenceQuery.getSpecification();
@@ -509,10 +555,18 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
     /**
+     * Mark as {@link #objectChanged(ObjectAdapter) changed } all
+     * {@link Dirtiable} objects that have been
+     * {@link Dirtiable#markDirty(ObjectAdapter) manually marked} as dirty.
+     * 
+     * <p>
      * If {@link #isCheckObjectsForDirtyFlag() enabled}, will mark as
      * {@link #objectChanged(ObjectAdapter) changed} any {@link Dirtiable}
      * objects that have manually been
      * {@link Dirtiable#markDirty(ObjectAdapter) marked as dirty}.
+     * 
+     * <p>
+     * Called by the {@link IsisTransactionManager}.
      */
     @Override
     public void objectChangedAllDirty() {
@@ -534,10 +588,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         }
     }
 
-    /**
-     * Set as {@link Dirtiable#clearDirty(ObjectAdapter) clean} any
-     * {@link Dirtiable} objects.
-     */
     @Override
     public synchronized void clearAllDirty() {
         if (!isCheckObjectsForDirtyFlag()) {
@@ -578,7 +628,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         objectStore.registerService(rootOid);
     }
 
-    @Override
     public ObjectAdapter getService(final String id) {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             // TODO this (ServiceUtil) uses reflection to access the service
@@ -592,7 +641,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
     // REVIEW why does this get called multiple times when starting up
-    @Override
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
@@ -635,10 +683,10 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * initialise the persistor.
      * 
      * <p>
-     * Returns the cached value of {@link ObjectStore#isFixturesInstalled()
+     * Returns the cached value of {@link ObjectStoreSpi#isFixturesInstalled()
      * whether fixtures are installed} from the
      * {@link PersistenceSessionFactory} (provided it implements
-     * {@link FixturesInstalledFlag}), otherwise queries {@link ObjectStore}
+     * {@link FixturesInstalledFlag}), otherwise queries {@link ObjectStoreSpi}
      * directly.
      * <p>
      * This caching is important because if we've determined, for a given run,
@@ -671,7 +719,11 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // loadObject, reload
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Loads the object identified by the specified {@link TypedOid} from the
+     * persisted set of objects.
+     */
+    //@Override
     public ObjectAdapter loadObject(final TypedOid oid) {
         ensureThatArg(oid, is(notNullValue()));
 
@@ -698,7 +750,12 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Re-initialises the fields of an object. If the object is unresolved then
+     * the object's missing data should be retrieved from the persistence
+     * mechanism and be used to set up the value objects and associations.
+     */
+    //@Override
     public void resolveImmediately(final ObjectAdapter adapter) {
         // synchronize on the current session because getting race
         // conditions, I think between different UI threads when running
@@ -743,7 +800,19 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         });
     }
 
-    @Override
+    /**
+     * Hint that specified field within the specified object is likely to be
+     * needed soon. This allows the object's data to be loaded, ready for use.
+     * 
+     * <p>
+     * This method need not do anything, but offers the object store the
+     * opportunity to load in objects before their use. Contrast this with
+     * resolveImmediately, which requires an object to be loaded before
+     * continuing.
+     * 
+     * @see #resolveImmediately(ObjectAdapter)
+     */
+    //@Override
     public void resolveField(final ObjectAdapter objectAdapter, final ObjectAssociation field) {
         if (field.isNotPersisted()) {
             return;
@@ -789,7 +858,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have an
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link AdapterManager} as the object is implicitly 'in use'.
+     * the {@link AdapterManagerSpi} as the object is implicitly 'in use'.
      * 
      * <p>
      * If the object has any associations then each of these, where they aren't
@@ -803,7 +872,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * 
      * @see #remapAsPersistent(ObjectAdapter)
      */
-    @Override
+    //@Override
     public void makePersistent(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
@@ -850,7 +919,11 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // objectChanged
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Mark the {@link ObjectAdapter} as changed, and therefore requiring
+     * flushing to the persistence mechanism.
+     */
+    //@Override
     public void objectChanged(final ObjectAdapter adapter) {
 
         if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
@@ -920,7 +993,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * Removes the specified object from the system. The specified object's data
      * should be removed from the persistence mechanism.
      */
-    @Override
+    //@Override
     public void destroyObject(final ObjectAdapter adapter) {
         if (adapter.getSpecification().isParented()) {
             return;
@@ -1004,12 +1077,19 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
+     * Whether there are any instances of the specified
+     * {@link ObjectSpecification type}.
+     *
+     * <p>
      * Checks whether there are any instances of the specified type. The object
      * store should look for instances of the type represented by <variable>type
      * </variable> and return <code>true</code> if there are, or
      * <code>false</code> if there are not.
+     * 
+     * <p>
+     * Used (ostensibly) by client-side code.
      */
-    @Override
+    //@Override
     public boolean hasInstances(final ObjectSpecification specification) {
         if (LOG.isInfoEnabled()) {
             LOG.info("hasInstances of " + specification.getShortIdentifier());
@@ -1048,8 +1128,8 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
 
 
     /**
-     * Uses the {@link ObjectStore} to
-     * {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
+     * Uses the {@link ObjectStoreSpi} to
+     * {@link ObjectStoreSpi#createCreateObjectCommand(ObjectAdapter) create} a
      * {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
@@ -1142,13 +1222,26 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
 
     
     // ///////////////////////////////////////////////////////////////////////////
+    // test support
+    // ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * For testing purposes only.
+     */
+    public void testReset() {
+        objectStore.reset();
+        getAdapterManager().reset();
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (injected in constructor, possibly implicitly)
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Injected by constructor.
      */
-    public ObjectStorePersistence getObjectStore() {
+    public ObjectStore getObjectStore() {
         return objectStore;
     }
 
@@ -1169,8 +1262,8 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * <p>
      * Injected in constructor.
      */
-    public final ObjectAdapterFactory getAdapterFactory() {
-        return adapterFactory;
+    public final ObjectAdapterFactory getObjectAdapterFactory() {
+        return objectAdapterFactory;
     }
 
     /**
@@ -1184,19 +1277,19 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
     /**
-     * The configured {@link AdapterManager}.
+     * The configured {@link AdapterManagerSpi}.
      * 
      * <p>
      * Injected in constructor.
      */
-    public final AdapterManagerExtended getAdapterManager() {
+    public final AdapterManagerSpi getAdapterManager() {
         return adapterManager;
     }
 
     /**
-     * The configured {@link ServicesInjector}.
+     * The configured {@link ServicesInjectorSpi}.
      */
-    public ServicesInjector getServicesInjector() {
+    public ServicesInjectorSpi getServicesInjector() {
         return servicesInjector;
     }
 
@@ -1210,27 +1303,11 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return objectFactory;
     }
 
-    
+
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    /**
-     * Inject the {@link SpecificationLoader}.
-     * 
-     * <p>
-     * The need to inject the reflector was introduced to support the
-     * HibernateObjectStore, which installs its own
-     * <tt>HibernateClassStrategy</tt> to cope with the proxy classes that
-     * Hibernate wraps around lists, sets and maps.
-     */
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    }
 
     /**
      * Inject the {@link IsisTransactionManager}.
@@ -1238,7 +1315,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * <p>
      * This must be injected using setter-based injection rather than through
      * the constructor because there is a bidirectional relationship between the
-     * {@link PersistenceSessionHydrator} and the {@link IsisTransactionManager}.
+     * this class and the {@link IsisTransactionManager}.
      * 
      * @see #getTransactionManager()
      */
@@ -1261,7 +1338,11 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////////////////////////
 
-    private static AuthenticationSession getAuthenticationSession() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
     

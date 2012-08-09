@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.html.component.Block;
@@ -89,7 +89,7 @@ public class Context implements Serializable {
     }
 
     public void init() {
-        final AdapterManager adapterManager = getAdapterManager();
+        final AdapterManagerSpi adapterManager = getAdapterManager();
         final List<Object> services = getUserProfile().getPerspective().getServices();
         for (final Object service : services) {
             final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);
@@ -636,7 +636,7 @@ public class Context implements Serializable {
         return IsisContext.getUserProfile();
     }
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.core.metamodel.adapter.map;
 
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+public interface AdapterManagerAware {
 
-public interface ObjectReflector extends SpecificationLoader, ApplicationScopedComponent, RuntimeContextAware {
+    public void setAdapterManager(final AdapterManager adapterManager);
 
 }

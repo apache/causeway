@@ -21,11 +21,11 @@ package org.apache.isis.core.progmodel.facets.collections.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class TypeOfFacetAnnotationForCollection extends TypeOfFacetAbstract {
 
-    public TypeOfFacetAnnotationForCollection(final Class<?> type, final FacetHolder holder, final SpecificationLookup specificationLookup) {
+    public TypeOfFacetAnnotationForCollection(final Class<?> type, final FacetHolder holder, final SpecificationLoader specificationLookup) {
         super(type, holder, specificationLookup);
     }
 

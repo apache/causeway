@@ -37,7 +37,7 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
@@ -118,7 +118,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
             getTransactionManager().startTransaction();
 
             final Object test = createTest();
-            getServicesInjector().injectDependenciesInto(test);
+            getServicesInjector().injectServicesInto(test);
 
             final TestMethod testMethod = wrapMethod(method);
             new MethodRoadie(test, testMethod, notifier, description).run();
@@ -210,7 +210,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         return IsisContext.getPersistenceSession();
     }
 
-    private static ServicesInjector getServicesInjector() {
+    private static ServicesInjectorSpi getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

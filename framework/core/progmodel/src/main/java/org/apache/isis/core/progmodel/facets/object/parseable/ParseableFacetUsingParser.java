@@ -26,7 +26,7 @@ import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -39,17 +39,17 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ParseValueContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
     private final Parser<?> parser;
-    private final DependencyInjector dependencyInjector;
-    private final AdapterMap adapterMap;
+    private final ServicesInjector dependencyInjector;
+    private final AdapterManager adapterMap;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
-    public ParseableFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
+    public ParseableFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
         super(ParseableFacet.class, holder, false);
         this.parser = parser;
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -59,7 +59,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
     @Override
     protected String toStringValues() {
-        dependencyInjector.injectDependenciesInto(parser);
+        dependencyInjector.injectServicesInto(parser);
         return parser.toString();
     }
 
@@ -79,7 +79,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
         final Object context = AdapterUtils.unwrap(contextAdapter);
 
-        getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectServicesInto(parser);
 
         try {
             final Object parsed = parser.parseTextEntry(context, entry, localization);
@@ -121,7 +121,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     public String parseableTitle(final ObjectAdapter contextAdapter) {
         final Object pojo = AdapterUtils.unwrap(contextAdapter);
 
-        getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);
     }
 
@@ -132,7 +132,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     /**
      * @return the dependencyInjector
      */
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 
@@ -146,7 +146,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     /**
      * @return the adapterManager
      */
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return adapterMap;
     }
 }

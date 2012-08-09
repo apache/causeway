@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
 
 public class PojoAdapterBuilder {
@@ -48,7 +48,7 @@ public class PojoAdapterBuilder {
     private ObjectSpecification objectSpec;
     
     // substitute the SpecLoader
-    private SpecificationLoader specificationLoader;
+    private SpecificationLoaderSpi specificationLoader;
     
     private ObjectAdapterLookup objectAdapterLookup;
     
@@ -200,7 +200,7 @@ public class PojoAdapterBuilder {
         return this;
     }
     
-    public PojoAdapterBuilder with(SpecificationLoader specificationLoader) {
+    public PojoAdapterBuilder with(SpecificationLoaderSpi specificationLoader) {
         this.specificationLoader = specificationLoader;
         return this;
     }

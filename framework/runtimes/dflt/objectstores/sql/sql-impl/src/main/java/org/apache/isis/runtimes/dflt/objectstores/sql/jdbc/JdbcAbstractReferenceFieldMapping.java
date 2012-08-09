@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
@@ -144,7 +144,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         debug.appendln(field.getId(), getColumn());
     }
 
-    private SpecificationLoader getReflector() {
+    private SpecificationLoaderSpi getReflector() {
         return IsisContext.getSpecificationLoader();
     }
 }

@@ -25,15 +25,15 @@ import java.util.Iterator;
 import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
-    private final AdapterMap adapterMap;
+    private final AdapterManager adapterMap;
 
-    public JavaCollectionFacet(final FacetHolder holder, final AdapterMap adapterManager) {
+    public JavaCollectionFacet(final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
         this.adapterMap = adapterManager;
     }
@@ -78,7 +78,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////////
 
-    private AdapterMap getAdapterMap() {
+    private AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

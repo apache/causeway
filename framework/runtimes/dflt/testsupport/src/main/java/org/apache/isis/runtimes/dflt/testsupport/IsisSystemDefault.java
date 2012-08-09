@@ -14,7 +14,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
@@ -119,7 +119,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * @see #obtainReflectorSpecificationTraverser()
      */
     @Override
-    protected ObjectReflector obtainReflector(DeploymentType deploymentType) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType) throws IsisSystemException {
         ClassSubstitutor classSubstitutor = obtainReflectorClassSubstitutor();
         CollectionTypeRegistry collectionTypeRegistry = obtainReflectorCollectionTypeRegistry();
         SpecificationTraverser specificationTraverser = obtainReflectorSpecificationTraverser();
@@ -131,7 +131,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
      * @return
      */
     protected ClassSubstitutor obtainReflectorClassSubstitutor() {
@@ -139,7 +139,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
      * @return
      */
     protected CollectionTypeRegistry obtainReflectorCollectionTypeRegistry() {
@@ -147,7 +147,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
      * @return
      */
     protected SpecificationTraverser obtainReflectorSpecificationTraverser() {
@@ -155,7 +155,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
      * @return
      */
     protected ProgrammingModel obtainReflectorProgrammingModel() {
@@ -163,7 +163,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
      * @return
      */
     protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
@@ -171,7 +171,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
      * @return
      */
     protected MetaModelValidator obtainReflectorMetaModelValidator() {

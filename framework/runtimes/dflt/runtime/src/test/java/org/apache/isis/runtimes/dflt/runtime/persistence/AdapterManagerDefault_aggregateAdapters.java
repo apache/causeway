@@ -42,8 +42,9 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.progmodel.app.IsisMetaModel;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
@@ -51,6 +52,7 @@ import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -116,29 +118,35 @@ public class AdapterManagerDefault_aggregateAdapters {
         isisMetaModel = IsisMetaModel.builder(mockRuntimeContext, new ProgrammingModelFacetsJava5()).withServices(new CustomerRepository()).build();
         isisMetaModel.init();
 
-        adapterManager = new AdapterManagerDefault();
-
         adapterFactory = new PojoAdapterFactory() {
             @Override
             protected Localization getLocalization() {
                 return mockLocalization;
             }
             @Override
-            protected SpecificationLoader getSpecificationLoader() {
+            protected SpecificationLoaderSpi getSpecificationLoader() {
+                return isisMetaModel.getSpecificationLoader();
+            }
+        };
+
+        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault()) {
+            @Override
+            protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();
             }
             @Override
-            protected ObjectAdapterLookup getObjectAdapterLookup() {
-                return adapterManager;
+            protected ObjectAdapterFactory getObjectAdapterFactory() {
+                return adapterFactory;
+            }
+            @Override
+            public OidGenerator getOidGenerator() {
+                return mockOidGenerator;
+            }
+            @Override
+            protected ServicesInjector getServicesInjector() {
+                return isisMetaModel.getDependencyInjector();
             }
         };
-        
-        adapterManager.setPojoAdapterMap(new PojoAdapterHashMap());
-        adapterManager.setOidAdapterMap(new OidAdapterHashMap());
-        adapterManager.setAdapterFactory(adapterFactory);
-        adapterManager.setDependencyInjector(isisMetaModel.getDependencyInjector());
-        adapterManager.setSpecificationLoader(isisMetaModel.getSpecificationLoader());
-        adapterManager.setOidGenerator(mockOidGenerator);
 
         rootObject = new Customer();
         aggregatedObject = new Name();

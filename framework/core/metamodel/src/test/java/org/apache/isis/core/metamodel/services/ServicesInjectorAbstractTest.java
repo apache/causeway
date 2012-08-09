@@ -22,27 +22,31 @@ package org.apache.isis.core.metamodel.services;
 import java.util.Arrays;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class ServicesInjectorAbstractTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private ServicesInjectorAbstract injector;
+    @Mock
     private DomainObjectContainerExtended mockContainer;
+    @Mock
     private Service1 mockService1;
+    @Mock
     private Service2 mockService2;
-
+    @Mock
     private SomeDomainObject mockDomainObject;
+    
+    private ServicesInjectorSpi injector;
 
     static interface Service1 {
     }
@@ -58,22 +62,14 @@ public class ServicesInjectorAbstractTest {
 
     static interface SomeDomainObject {
         public void setContainer(DomainObjectContainer container);
-
         public void setMixin(Mixin mixin);
-
         public void setService1(Service1 service);
-
         public void setService2(Service2 service);
     }
 
     @Before
     public void setUp() throws Exception {
-        mockDomainObject = mockery.mock(SomeDomainObject.class);
-        mockContainer = mockery.mock(DomainObjectContainerExtended.class);
-        mockService1 = mockery.mock(Service1.class);
-        mockService2 = mockery.mock(Service2.class);
-        injector = new ServicesInjectorAbstract() {
-        };
+        injector = new ServicesInjectorDefault();
     }
 
     @After
@@ -86,7 +82,7 @@ public class ServicesInjectorAbstractTest {
         final Object[] services = { mockService1, mockService2 };
         injector.setServices(Arrays.asList(services));
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockDomainObject).setContainer(mockContainer);
                 one(mockDomainObject).setMixin(mockContainer);
@@ -95,7 +91,7 @@ public class ServicesInjectorAbstractTest {
             }
         });
 
-        injector.injectDependenciesInto(mockDomainObject);
+        injector.injectServicesInto(mockDomainObject);
     }
 
 }

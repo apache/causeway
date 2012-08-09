@@ -32,7 +32,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 
 /**
  * Handles reading and writing java.sql.Date and
@@ -43,7 +43,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
  */
 public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
-    private final AdapterManager adapterManager;
+    private final AdapterManagerSpi adapterManager;
     private final String dataType;
 
     public static class Factory extends AbstractFieldMappingFactory {

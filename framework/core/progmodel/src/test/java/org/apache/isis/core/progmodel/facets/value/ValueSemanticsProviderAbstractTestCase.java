@@ -40,12 +40,12 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
@@ -69,9 +69,9 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected IsisConfiguration mockConfiguration;
     protected ValueSemanticsProviderContext mockContext;
 
-    protected SpecificationLoader mockSpecificationLoader;
-    protected DependencyInjector mockDependencyInjector;
-    protected AdapterMap mockAdapterManager;
+    protected SpecificationLoaderSpi mockSpecificationLoader;
+    protected ServicesInjector mockDependencyInjector;
+    protected AdapterManager mockAdapterManager;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected ObjectAdapter mockAdapter;
 
@@ -84,10 +84,10 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
         mockContext = mockery.mock(ValueSemanticsProviderContext.class);
 
-        mockDependencyInjector = mockery.mock(DependencyInjector.class);
-        mockAdapterManager = mockery.mock(AdapterMap.class);
+        mockDependencyInjector = mockery.mock(ServicesInjector.class);
+        mockAdapterManager = mockery.mock(AdapterManager.class);
         mockAuthenticationSessionProvider = mockery.mock(AuthenticationSessionProvider.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
+        mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
 
         mockery.checking(new Expectations() {
             {
@@ -100,7 +100,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                 allowing(mockConfiguration).getString("isis.locale");
                 will(returnValue(null));
 
-                allowing(mockDependencyInjector).injectDependenciesInto(with(any(Object.class)));
+                allowing(mockDependencyInjector).injectServicesInto(with(any(Object.class)));
 
                 never(mockAuthenticationSessionProvider);
 

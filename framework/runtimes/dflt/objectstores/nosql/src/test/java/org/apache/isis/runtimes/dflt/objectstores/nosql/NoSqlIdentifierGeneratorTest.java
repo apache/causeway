@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
@@ -50,7 +50,7 @@ public class NoSqlIdentifierGeneratorTest {
     @Mock
     private NoSqlDataDatabase db;
     @Mock
-    private SpecificationLoader mockSpecificationLoader;
+    private SpecificationLoaderSpi mockSpecificationLoader;
     @Mock
     private ObjectSpecification mockSpecification;
 

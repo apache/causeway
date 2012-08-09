@@ -42,7 +42,7 @@ public interface AdapterManagerProxy extends ObjectAdapterLookup {
      * Part of public API so that the proxy persistor can maintain its maps when
      * it processes a newly persisted object.
      * 
-     * @see AdapterManagerPersist#remapAsPersistent(ObjectAdapter, RootOid)
+     * @see AdapterManagerSpi#remapAsPersistent(ObjectAdapter, RootOid)
      */
     public void remapUpdated(Oid rootOid);
 

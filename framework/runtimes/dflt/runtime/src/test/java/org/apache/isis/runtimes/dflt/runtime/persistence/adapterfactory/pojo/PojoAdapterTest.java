@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
@@ -56,7 +56,7 @@ public class PojoAdapterTest {
     @Mock
     private Version mockVersion2;
     @Mock
-    private SpecificationLoader mockSpecificationLoader;
+    private SpecificationLoaderSpi mockSpecificationLoader;
     @Mock
     private ObjectAdapterLookup mockObjectAdapterLookup;
     @Mock

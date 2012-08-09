@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -48,14 +48,14 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
  * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
  */
-public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
 
     private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX, ExecutedFacet.Where.REMOTE_PREFIX, ExecutedFacet.Where.LOCAL_PREFIX };
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -105,7 +105,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
             final ObjectSpecification typeSpec = getSpecificationLookup().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
-            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterMap()));
+            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterManager()));
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
@@ -177,12 +177,12 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterMap) {
+        this.adapterManager = adapterMap;
     }
 
-    private AdapterMap getAdapterMap() {
-        return adapterMap;
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

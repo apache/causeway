@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.collections.collection;
 import org.apache.commons.collections.Transformer;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 
 /**
  * Uses the Commons Collection API to transform {@link Object}s into
@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
  */
 public final class ObjectToAdapterTransformer implements Transformer {
 
-    private final AdapterMap adapterMap;
+    private final AdapterManager adapterMap;
 
-    public ObjectToAdapterTransformer(final AdapterMap adapterManager) {
+    public ObjectToAdapterTransformer(final AdapterManager adapterManager) {
         this.adapterMap = adapterManager;
     }
 
@@ -46,7 +46,7 @@ public final class ObjectToAdapterTransformer implements Transformer {
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
 
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

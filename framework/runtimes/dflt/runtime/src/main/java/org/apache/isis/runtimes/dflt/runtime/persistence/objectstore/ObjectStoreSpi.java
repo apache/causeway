@@ -17,39 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectStore;
 
-public abstract class ObjectAdapterFactoryAbstract implements ObjectAdapterFactory {
-
-    @Override
-    public abstract ObjectAdapter createAdapter(Object pojo, Oid oid);
-
-    /**
-     * Default implementation does nothing.
-     */
-    @Override
-    public void open() {
-    }
-
-    /**
-     * Default implementation does nothing.
-     */
-    @Override
-    public void close() {
-    }
-
-    /**
-     * Injects.
-     */
-    @Override
-    public void injectInto(final Object candidate) {
-        if (ObjectAdapterFactoryAware.class.isAssignableFrom(candidate.getClass())) {
-            final ObjectAdapterFactoryAware cast = ObjectAdapterFactoryAware.class.cast(candidate);
-            cast.setAdapterFactory(this);
-        }
-    }
-
+public interface ObjectStoreSpi extends ObjectStore, TransactionalResource {
 
 }

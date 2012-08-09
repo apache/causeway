@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
-    private final AdapterMap adapterMap;
+    private final AdapterManager adapterMap;
 
-    public JavaArrayFacet(final FacetHolder holder, final AdapterMap adapterManager) {
+    public JavaArrayFacet(final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
         this.adapterMap = adapterManager;
     }
@@ -88,7 +88,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////
 
-    private AdapterMap getAdapterMap() {
+    private AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

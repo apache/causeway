@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 
 /**
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
  * <p>
  * The root adapter/pojo can be recreated with no further information; the
  * {@link #getObjectSpecId()} can be used to fetch the corresponding
- * {@link ObjectSpecification} using {@link SpecificationLoader#lookupBySpecId(String)}.
+ * {@link ObjectSpecification} using {@link SpecificationLoaderSpi#lookupBySpecId(String)}.
  * 
  * <p>
  * <p>

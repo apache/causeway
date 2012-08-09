@@ -17,14 +17,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.JdoPropertyUtils;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
     
-    public PersistenceQueryFindUsingApplibQueryProcessor(final AdapterManager objectManager, final PersistenceManager persistenceManager) {
-        super(objectManager, persistenceManager);
+    public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceManager persistenceManager) {
+        super(persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
@@ -75,17 +72,6 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         return argumentsByParameterName;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////////
-
-    private DataNucleusObjectStore getJdoObjectStore() {
-        return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
-    }
-
-    private PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
 
 }
 

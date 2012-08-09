@@ -19,15 +19,15 @@
 
 package org.apache.isis.core.progmodel.facets.properties.choices.enums;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements AdapterMapAware {
+public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
 
     public PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -49,12 +49,12 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fac
     // Injected
     // /////////////////////////////////////////////
 
-    protected AdapterMap getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterMap) {
+        this.adapterManager = adapterMap;
     }
 }

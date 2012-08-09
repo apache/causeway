@@ -26,13 +26,13 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 
 public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMapping {
     private final int columnCount;
     private final String[] types;
     private final String[] columnNames;
-    private final AdapterManager adapterManager;
+    private final AdapterManagerSpi adapterManager;
 
     /**
      * 

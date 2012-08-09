@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
+package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+public interface SpecificationLoaderSpiAware {
 
-public interface AdapterManagerAware {
-    void setAdapterManager(AdapterManager adapterManager);
+    public void setSpecificationLoaderSpi(SpecificationLoaderSpi specificationLoader);
 }

@@ -37,11 +37,11 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 /**
@@ -160,7 +160,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private static final Logger LOG = Logger.getLogger(IsisTransaction.class);
 
 
-    private final ObjectStoreTransactionManagement objectStore;
+    private final TransactionalResource objectStore;
     private final List<PersistenceCommand> commands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
@@ -171,7 +171,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private RuntimeException cause;
 
-    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final ObjectStoreTransactionManagement objectStore) {
+    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");

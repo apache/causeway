@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.progmodel.facets.param.choices;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract implements ActionParameterChoicesFacet {
 
@@ -33,10 +33,10 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return ActionParameterChoicesFacet.class;
     }
 
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterMap;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterMap;
 
-    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(type(), holder, false);
         this.specificationLookup = specificationLookup;
         this.adapterMap = adapterManager;
@@ -50,11 +50,11 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     // Dependencies
     // /////////////////////////////////////////////////////////
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
-    protected AdapterMap getAdapterMap() {
+    protected AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

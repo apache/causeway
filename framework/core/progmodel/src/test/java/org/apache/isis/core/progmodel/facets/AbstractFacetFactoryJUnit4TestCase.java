@@ -19,13 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
@@ -38,10 +34,10 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest.Customer;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
@@ -52,7 +48,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
     @Mock
-    protected ObjectReflector reflector;
+    protected SpecificationLoaderSpi reflector;
     @Mock
     protected MethodRemover methodRemover;
     @Mock

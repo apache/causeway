@@ -89,10 +89,14 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
             @Override
             public ObjectAdapterMemento getObject() {
                 if (pending != null) {
-                    LOG.info("TextField: pending not null: " + pending.toString());
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("TextField: pending not null: " + pending.toString());
+                    }
                     return pending;
                 }
-                LOG.info("TextField: pending is null");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("TextField: pending is null");
+                }
                 final ObjectAdapter adapter = ValueChoicesPanel.this.getModelValue();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
@@ -100,7 +104,9 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
             @Override
             public void setObject(final ObjectAdapterMemento adapterMemento) {
                 if (adapterMemento != null) {
-                    LOG.info("TextField: setting to: " + adapterMemento.toString());
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("TextField: setting to: " + adapterMemento.toString());
+                    }
                     pending = adapterMemento;
                 }
                 if (scalarModel != null && pending != null) {

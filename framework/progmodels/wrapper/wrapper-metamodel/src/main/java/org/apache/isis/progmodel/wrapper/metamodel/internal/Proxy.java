@@ -29,15 +29,15 @@ import java.util.Map;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 
 public class Proxy {
 
-    public static <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLookup specificationLookup, final AdapterMap adapterManager, final ObjectPersistor objectPersistor) {
+    public static <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ObjectPersistor objectPersistor) {
 
         Ensure.ensureThatArg(wrapperFactory, is(not(nullValue())));
         Ensure.ensureThatArg(authenticationSessionProvider, is(not(nullValue())));

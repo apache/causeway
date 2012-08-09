@@ -36,8 +36,8 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.none.DataEncr
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
@@ -54,7 +54,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends PersistenceMechan
     }
 
     @Override
-    protected ObjectStore createObjectStore(final IsisConfiguration configuration, final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
+    protected ObjectStoreSpi createObjectStore(final IsisConfiguration configuration, final ObjectAdapterFactory objectFactory, final AdapterManagerSpi adapterManager) {
         return getObjectStore(configuration);
     }
 

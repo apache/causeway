@@ -36,13 +36,13 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
@@ -74,8 +74,8 @@ public class OneToManyAssociationImplTest {
     private FacetedMethod mockPeer;
 
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    private SpecificationLookup mockSpecificationLookup;
-    private AdapterMap mockAdapterManager;
+    private SpecificationLoader mockSpecificationLookup;
+    private AdapterManager mockAdapterManager;
     private QuerySubmitter mockQuerySubmitter;
 
     private NamedFacet mockNamedFacet;
@@ -89,8 +89,8 @@ public class OneToManyAssociationImplTest {
         mockAssociatedAdapter = context.mock(ObjectAdapter.class, "associated");
 
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        mockSpecificationLookup = context.mock(SpecificationLookup.class);
-        mockAdapterManager = context.mock(AdapterMap.class);
+        mockSpecificationLookup = context.mock(SpecificationLoader.class);
+        mockAdapterManager = context.mock(AdapterManager.class);
         mockQuerySubmitter = context.mock(QuerySubmitter.class);
         mockCollectionTypeRegistry = context.mock(CollectionTypeRegistry.class);
         mockPeer = context.mock(FacetedMethod.class);

@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
@@ -545,7 +545,7 @@ public class XmlDataManager implements DataManager {
         return IsisContext.getAuthenticationSession();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

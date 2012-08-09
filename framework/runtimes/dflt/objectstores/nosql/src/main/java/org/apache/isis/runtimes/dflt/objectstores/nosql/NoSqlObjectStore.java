@@ -31,21 +31,21 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
@@ -54,7 +54,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class NoSqlObjectStore implements ObjectStore {
+public class NoSqlObjectStore implements ObjectStoreSpi {
     
     private final KeyCreatorDefault keyCreator = new KeyCreatorDefault();
     private final Map<ObjectSpecId, RootOid> servicesByObjectSpecId = Maps.newHashMap();
@@ -283,7 +283,7 @@ public class NoSqlObjectStore implements ObjectStore {
     // Dependencies (from context)
     // ////////////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
@@ -291,7 +291,7 @@ public class NoSqlObjectStore implements ObjectStore {
         return IsisContext.getPersistenceSession();
     }
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return IsisContext.getSpecificationLoader();
     }
 

@@ -25,24 +25,24 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.CollectionUtils;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterMap;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterMap;
 
-    public ActionChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
@@ -99,11 +99,11 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     // Dependencies
     // ///////////////////////////////////////////////////////
 
-    private SpecificationLookup getSpecificationLookup() {
+    private SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
-    private AdapterMap getAdapterMap() {
+    private AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

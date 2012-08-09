@@ -17,29 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
+package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 /**
- * Interface for the {@link IsisTransactionManager} to interact with the
- * {@link ObjectStore}.
+ * Interface for the {@link IsisTransactionManager} to interact with some
+ * transactional resource (ie a {@link ObjectStoreSpi}).
  */
-public interface ObjectStoreTransactionManagement {
+public interface TransactionalResource {
 
     /**
      * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
-     * {@link ObjectStore} to start a transaction.
+     * {@link ObjectStoreSpi} to start a transaction.
      */
     void startTransaction();
 
     /**
      * Used by the current {@link IsisTransaction} to flush changes to
-     * the {@link ObjectStore} (either via a
+     * the {@link ObjectStoreSpi} (either via a
      * {@link IsisTransactionManager#flushTransaction()} or a
      * {@link IsisTransactionManager#endTransaction()}).
      */
@@ -47,13 +47,13 @@ public interface ObjectStoreTransactionManagement {
 
     /**
      * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
-     * {@link ObjectStore} to commit a transaction.
+     * {@link ObjectStoreSpi} to commit a transaction.
      */
     void endTransaction();
 
     /**
      * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
-     * {@link ObjectStore} to abort a transaction.
+     * {@link ObjectStoreSpi} to abort a transaction.
      */
     void abortTransaction();
 

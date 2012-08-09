@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
@@ -84,7 +84,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * calling this.
      */
     @Override
-    public ObjectReflectorDefault createReflector() {
+    public SpecificationLoaderSpi createReflector() {
         final ClassSubstitutor classSubstitutor = createClassSubstitutor(getConfiguration());
         final CollectionTypeRegistry collectionTypeRegistry = createCollectionTypeRegistry(getConfiguration());
         final SpecificationTraverser specificationTraverser = createSpecificationTraverser(getConfiguration());
@@ -293,6 +293,6 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
 
     @Override
     public List<Class<?>> getTypes() {
-        return listOf(ObjectReflector.class);
+        return listOf(SpecificationLoaderSpi.class);
     }
 }

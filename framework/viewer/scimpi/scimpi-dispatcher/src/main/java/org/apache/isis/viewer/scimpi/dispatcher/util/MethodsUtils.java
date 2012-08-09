@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.scimpi.dispatcher.DispatchException;
@@ -148,7 +148,7 @@ public class MethodsUtils {
         return IsisContext.getSession();
     }
 
-    private static AdapterManager getAdapterManager() {
+    private static AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

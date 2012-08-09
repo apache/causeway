@@ -50,7 +50,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.bdd.common.components.BddAuthenticationManagerInstaller;
@@ -298,7 +298,7 @@ public class Scenario implements AliasRegistryHolder {
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManager getAdapterManager() {
+    private AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

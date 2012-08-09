@@ -14,26 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.spec;
 
-import java.util.List;
+public abstract class SpecificationLoaderAbstract implements SpecificationLoader {
 
-import org.apache.isis.core.commons.components.Injectable;
-
-public interface DependencyInjector extends Injectable {
-
-    /**
-     * Provided by the <tt>ServicesInjectorDefault</tt> when used by framework.
-     * 
-     * <p>
-     * Called in multiple places from metamodel and facets.
-     */
-    void injectDependenciesInto(final Object domainObject);
-
-    /**
-     * As per {@link #injectDependenciesInto(Object)}, but for all objects in the
-     * list.
-     */
-    void injectDependenciesInto(List<Object> objects);
+    @Override
+    public void injectInto(final Object candidate) {
+        if (SpecificationLoaderAware.class.isAssignableFrom(candidate.getClass())) {
+            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
+            cast.setSpecificationLookup(this);
+        }
+    }
 
 }

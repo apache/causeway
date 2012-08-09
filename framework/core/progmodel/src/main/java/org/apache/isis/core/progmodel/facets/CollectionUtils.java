@@ -20,7 +20,7 @@
 package org.apache.isis.core.progmodel.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -29,7 +29,7 @@ public final class CollectionUtils {
     private CollectionUtils() {
     }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterMap adapterMap) {
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
         final ObjectAdapter collection = adapterMap.adapterFor(option);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final Object[] optionArray = new Object[facet.size(collection)];

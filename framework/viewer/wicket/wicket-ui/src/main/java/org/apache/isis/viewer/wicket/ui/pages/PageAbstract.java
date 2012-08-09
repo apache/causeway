@@ -32,8 +32,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
@@ -149,7 +149,7 @@ public abstract class PageAbstract extends WebPage {
     // System components
     // ///////////////////////////////////////////////////
 
-    protected ServicesInjector getServicesInjector() {
+    protected ServicesInjectorSpi getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 
@@ -161,7 +161,7 @@ public abstract class PageAbstract extends WebPage {
         return getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 }

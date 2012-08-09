@@ -32,7 +32,7 @@ public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
     }
 
     private void validateSpecifications() {
-        getSpecificationLoader().validateSpecifications();
+        getSpecificationLoaderSpi().validateSpecifications();
     }
 
 }

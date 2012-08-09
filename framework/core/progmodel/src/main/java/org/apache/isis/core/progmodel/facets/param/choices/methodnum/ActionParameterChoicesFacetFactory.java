@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -41,11 +41,11 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
 
     private static final String[] PREFIXES = {};
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -99,7 +99,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder, getSpecificationLookup(), getAdapterMap()));
+            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder, getSpecificationLookup(), getAdapterManager()));
         }
     }
 
@@ -117,12 +117,12 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterMap) {
+        this.adapterManager = adapterMap;
     }
 
-    private AdapterMap getAdapterMap() {
-        return adapterMap;
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

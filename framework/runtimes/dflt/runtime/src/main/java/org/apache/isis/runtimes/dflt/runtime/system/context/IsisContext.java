@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugList;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -340,7 +340,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * 
      * @see IsisSessionFactory#getSpecificationLoader()
      */
-    public static SpecificationLoader getSpecificationLoader() {
+    public static SpecificationLoaderSpi getSpecificationLoader() {
         return getSessionFactory().getSpecificationLoader();
     }
 
@@ -525,7 +525,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debugList.add("Transaction Manager", getTransactionManager());
 
         debugList.add("Service injector", getPersistenceSession().getServicesInjector());
-        debugList.add("Adapter factory", getPersistenceSession().getAdapterFactory());
+        debugList.add("Adapter factory", getPersistenceSession().getObjectAdapterFactory());
         debugList.add("Object factory", getPersistenceSession().getObjectFactory());
         debugList.add("OID generator", getPersistenceSession().getOidGenerator());
         debugList.add("Adapter manager", getPersistenceSession().getAdapterManager());

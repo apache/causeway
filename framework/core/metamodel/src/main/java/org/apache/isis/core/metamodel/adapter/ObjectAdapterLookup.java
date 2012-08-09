@@ -47,4 +47,17 @@ public interface ObjectAdapterLookup {
      */
     ObjectAdapter getAdapterFor(Oid oid);
 
+    /**
+     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
+     * it exists in the identity map.
+     * 
+     * <p>
+     * Provided by the <tt>AdapterManager</tt> when used by framework.
+     * 
+     * @param pojo
+     *            - must not be <tt>null</tt>
+     * @return adapter, or <tt>null</tt> if doesn't exist.
+     */
+    ObjectAdapter getAdapterFor(Object pojo);
+
 }

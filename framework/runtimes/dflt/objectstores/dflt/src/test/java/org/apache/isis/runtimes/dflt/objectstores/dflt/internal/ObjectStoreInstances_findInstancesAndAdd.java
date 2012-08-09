@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.IsisActions;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 
 public class ObjectStoreInstances_findInstancesAndAdd {
 
@@ -56,7 +56,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
     @Mock
     private AuthenticationSession mockAuthSession;
     @Mock
-    private AdapterManagerExtended mockAdapterManager;
+    private AdapterManagerSpi mockAdapterManager;
 
     @Mock
     private ObjectAdapter mockAdapter1;
@@ -71,7 +71,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
                 return mockAuthSession;
             }
             @Override
-            protected AdapterManagerExtended getAdapterManager() {
+            protected AdapterManagerSpi getAdapterManager() {
                 return mockAdapterManager;
             }
         };

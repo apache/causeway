@@ -17,17 +17,17 @@
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class ValueSemanticsProviderContext {
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterManager;
-    private final DependencyInjector dependencyInjector;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterManager;
+    private final ServicesInjector dependencyInjector;
 
-    public ValueSemanticsProviderContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLookup specificationLookup, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public ValueSemanticsProviderContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
@@ -38,15 +38,15 @@ public class ValueSemanticsProviderContext {
         return authenticationSessionProvider;
     }
 
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return adapterManager;
     }
 
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 }

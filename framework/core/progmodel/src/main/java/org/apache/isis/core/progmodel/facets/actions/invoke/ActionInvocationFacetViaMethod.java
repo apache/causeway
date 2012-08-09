@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -46,9 +46,9 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
-    private final AdapterMap adapterMap;
+    private final AdapterManager adapterMap;
 
-    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType, final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterMap) {
+    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType, final ObjectSpecification returnType, final FacetHolder holder, final AdapterManager adapterMap) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
@@ -139,7 +139,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
 
-    private AdapterMap getAdapterMap() {
+    private AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

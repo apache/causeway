@@ -24,7 +24,7 @@ import com.google.common.base.Objects;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 
 public abstract class Data {
@@ -45,7 +45,7 @@ public abstract class Data {
         return version;
     }
 
-    public ObjectSpecification getSpecification(SpecificationLookup specificationLookup) {
+    public ObjectSpecification getSpecification(SpecificationLoader specificationLookup) {
         final ObjectSpecId objectSpecId = oid.getObjectSpecId();
         return specificationLookup.lookupBySpecId(objectSpecId);
     }

@@ -22,14 +22,14 @@ package org.apache.isis.core.progmodel.facets.object.defaults;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implements DefaultedFacet {
 
     private final DefaultsProvider<?> defaultsProvider;
-    private final DependencyInjector dependencyInjector;
+    private final ServicesInjector dependencyInjector;
 
-    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
         this.defaultsProvider = parser;
         this.dependencyInjector = dependencyInjector;
@@ -37,13 +37,13 @@ public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implement
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectDependenciesInto(defaultsProvider);
+        getDependencyInjector().injectServicesInto(defaultsProvider);
         return defaultsProvider.toString();
     }
 
     @Override
     public Object getDefault() {
-        getDependencyInjector().injectDependenciesInto(defaultsProvider);
+        getDependencyInjector().injectServicesInto(defaultsProvider);
         return defaultsProvider.getDefaultValue();
     }
 
@@ -51,7 +51,7 @@ public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implement
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////
 
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 

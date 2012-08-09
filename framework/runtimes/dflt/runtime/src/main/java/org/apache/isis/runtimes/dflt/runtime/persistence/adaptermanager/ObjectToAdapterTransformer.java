@@ -23,7 +23,7 @@ import org.apache.commons.collections.Transformer;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -45,7 +45,7 @@ public final class ObjectToAdapterTransformer implements Transformer {
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////////////
 
-    private static AdapterManager getAdapterManager() {
+    private static AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -53,7 +53,7 @@ public class TransactionTest {
     private ObjectAdapter persistentAdapter2;
 
     @Mock
-    private ObjectStore mockObjectStore;
+    private ObjectStoreSpi mockObjectStore;
 
     @Mock
     private IsisTransactionManager mockTransactionManager;

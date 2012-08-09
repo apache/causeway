@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -59,9 +59,9 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}
-     * {@link SpecificationLoader}.
+     * {@link SpecificationLoaderSpi}.
      */
-    public SpecificationLoader getSpecificationLoader();
+    public SpecificationLoaderSpi getSpecificationLoader();
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}

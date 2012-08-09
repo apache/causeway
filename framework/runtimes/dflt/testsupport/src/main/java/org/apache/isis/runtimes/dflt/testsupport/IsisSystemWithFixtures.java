@@ -44,11 +44,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerPersist;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.State;
@@ -524,7 +523,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ObjectStore> T getObjectStore(Class<T> cls) {
+    public <T extends ObjectStoreSpi> T getObjectStore(Class<T> cls) {
         final PersistenceSession persistenceSession = getPersistenceSession();
         return (T) persistenceSession.getObjectStore();
     }
@@ -574,8 +573,8 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
 
     
-    private AdapterManagerPersist getAdapterManagerPersist() {
-        return (AdapterManagerPersist)getAdapterManager();
+    private AdapterManagerSpi getAdapterManagerPersist() {
+        return getAdapterManager();
     }
 
     public void beginTran() {
@@ -654,7 +653,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         return getPersistenceSession().getTransactionManager();
     }
     
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

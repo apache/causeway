@@ -21,7 +21,7 @@ package org.apache.isis.runtimes.dflt.runtime.userprofile;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
@@ -74,7 +74,7 @@ public final class UserProfilesDebugUtil {
                 debug.blankLine();
                 debug.appendTitle("Objects");
                 debug.indent();
-                final AdapterMap adapterMap = getAdapterMap();
+                final AdapterManager adapterMap = getAdapterMap();
                 for (final Object obj : perspectiveEntry.getObjects()) {
                     debug.appendln(adapterMap.adapterFor(obj).toString());
                 }
@@ -92,7 +92,7 @@ public final class UserProfilesDebugUtil {
     // Dependencies (from Context)
     // ///////////////////////////////////////////////////////
 
-    private static AdapterMap getAdapterMap() {
+    private static AdapterManager getAdapterMap() {
         return getPersistenceSession().getAdapterManager();
     }
 

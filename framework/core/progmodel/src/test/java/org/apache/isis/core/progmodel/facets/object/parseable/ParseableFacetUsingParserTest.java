@@ -31,11 +31,11 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
@@ -49,9 +49,9 @@ public class ParseableFacetUsingParserTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private DependencyInjector mockDependencyInjector;
+    private ServicesInjector mockDependencyInjector;
     @Mock
-    private AdapterMap mockAdapterManager;
+    private AdapterManager mockAdapterManager;
 
     private ParseableFacetUsingParser parseableFacetUsingParser;
 
@@ -66,7 +66,7 @@ public class ParseableFacetUsingParserTest {
                 allowing(mockFacetHolder).containsFacet(ValueFacet.class);
                 will(returnValue(Boolean.FALSE));
 
-                allowing(mockDependencyInjector).injectDependenciesInto(with(any(Object.class)));
+                allowing(mockDependencyInjector).injectServicesInto(with(any(Object.class)));
             }
         });
 

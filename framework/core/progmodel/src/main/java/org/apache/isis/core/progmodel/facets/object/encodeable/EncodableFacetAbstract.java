@@ -22,11 +22,11 @@ package org.apache.isis.core.progmodel.facets.object.encodeable;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public abstract class EncodableFacetAbstract extends FacetAbstract implements EncodableFacet {
 
@@ -35,10 +35,10 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     // to delegate to
     private final EncodableFacetUsingEncoderDecoder encodeableFacetUsingEncoderDecoder;
 
-    private final AdapterMap adapterMap;
-    private final DependencyInjector dependencyInjector;
+    private final AdapterManager adapterMap;
+    private final ServicesInjector dependencyInjector;
 
-    public EncodableFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
         this.adapterMap = adapterManager;
         this.dependencyInjector = dependencyInjector;
@@ -83,11 +83,11 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
         return encodeableFacetUsingEncoderDecoder.toEncodedString(object);
     }
 
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return adapterMap;
     }
 
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 

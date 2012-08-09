@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
@@ -61,20 +61,19 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml.XmlS
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-public class XmlObjectStore implements ObjectStore {
+public class XmlObjectStore implements ObjectStoreSpi {
 
     private static final Logger LOG = Logger.getLogger(XmlObjectStore.class);
     private static final String XMLOS_DIR = ConfigurationConstants.ROOT + "xmlos.dir";
@@ -460,11 +459,11 @@ public class XmlObjectStore implements ObjectStore {
     // Dependencies (from singleton)
     // /////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLookup() {
+    protected SpecificationLoaderSpi getSpecificationLookup() {
         return IsisContext.getSpecificationLoader();
     }
 
-    private AdapterManagerExtended getAdapterManager() {
+    private AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -143,7 +143,7 @@ public class CollectionMapping implements Iterable<String> {
     // Dependencies (from context)
     // //////////////////////////////////////////////////////
 
-    private static AdapterManager getAdapterManager() {
+    private static AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

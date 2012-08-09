@@ -8,12 +8,11 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class PersistenceQueryFindByTitleProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindByTitle> {
 
-    public PersistenceQueryFindByTitleProcessor(final AdapterManager adapterManager, final PersistenceManager persistenceManager) {
-        super(adapterManager, persistenceManager);
+    public PersistenceQueryFindByTitleProcessor(final PersistenceManager persistenceManager) {
+        super(persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindByTitle persistenceQuery) {

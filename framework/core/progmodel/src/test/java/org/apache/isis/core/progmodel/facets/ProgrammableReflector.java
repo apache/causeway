@@ -22,15 +22,17 @@ package org.apache.isis.core.progmodel.facets;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
-public class ProgrammableReflector implements ObjectReflector {
+public class ProgrammableReflector implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
 
     @Override
     public void init() {

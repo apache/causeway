@@ -41,13 +41,13 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
@@ -68,13 +68,13 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private AdapterMap mockAdapterMap;
+    private AdapterManager mockAdapterMap;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     private ObjectPersistor mockObjectPersistor;
     @Mock
-    private SpecificationLookup mockSpecificationLookup;
+    private SpecificationLoader mockSpecificationLookup;
 
     private Employee employeeDO;
     @Mock
@@ -114,7 +114,7 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
         wrapperFactory = new WrapperFactoryDefault();
-        wrapperFactory.setAdapterMap(mockAdapterMap);
+        wrapperFactory.setAdapterManager(mockAdapterMap);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         wrapperFactory.setObjectPersistor(mockObjectPersistor);
         wrapperFactory.setSpecificationLookup(mockSpecificationLookup);

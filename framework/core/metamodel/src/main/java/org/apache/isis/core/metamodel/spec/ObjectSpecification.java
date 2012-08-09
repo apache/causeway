@@ -104,7 +104,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
      * 
      * <p>
-     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLookup#lookupBySpecId(String)}.
+     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecId(String)}.
      */
     ObjectSpecId getSpecId();
     

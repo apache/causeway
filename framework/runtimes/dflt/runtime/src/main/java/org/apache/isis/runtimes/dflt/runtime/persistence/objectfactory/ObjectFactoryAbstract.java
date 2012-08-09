@@ -21,10 +21,10 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory;
 
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -40,11 +40,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * {@link PersistenceSession} could change over the lifetime of the instance (eg
  * when using the {@link InMemoryObjectStore}), we must always look the
  * {@link PersistenceSession} from the {@link IsisContext}. The same applies to
- * the {@link ServicesInjector}.
+ * the {@link ServicesInjectorSpi}.
  * 
  * <p>
- * In theory it would be possible to cache the {@link SpecificationLoader} and
- * inject using {@link SpecificationLoaderAware}, but since we are already using
+ * In theory it would be possible to cache the {@link SpecificationLoaderSpi} and
+ * inject using {@link SpecificationLoaderSpiAware}, but since we are already using
  * the {@link IsisContext}, decided instead to use the same approach throughout.
  */
 public abstract class ObjectFactoryAbstract implements ObjectFactory {
@@ -83,7 +83,7 @@ public abstract class ObjectFactoryAbstract implements ObjectFactory {
         final T newInstance = doInstantiate(cls);
 
         if (getServicesInjector() != null) {
-            getServicesInjector().injectDependenciesInto(newInstance);
+            getServicesInjector().injectServicesInto(newInstance);
         }
         return newInstance;
     }
@@ -119,7 +119,7 @@ public abstract class ObjectFactoryAbstract implements ObjectFactory {
     // Dependencies (looked up from context)
     // /////////////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
@@ -127,7 +127,7 @@ public abstract class ObjectFactoryAbstract implements ObjectFactory {
         return IsisContext.getPersistenceSession();
     }
 
-    protected ServicesInjector getServicesInjector() {
+    protected ServicesInjectorSpi getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

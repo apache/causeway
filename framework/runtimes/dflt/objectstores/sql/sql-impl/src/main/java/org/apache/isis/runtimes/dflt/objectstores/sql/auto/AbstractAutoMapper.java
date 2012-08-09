@@ -24,12 +24,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractMapper;
@@ -41,14 +45,9 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Maps;
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
 	
@@ -342,7 +341,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappingByField.size() + ",specification=" + specification.getFullIdentifier() + "]";
     }
 
-	protected SpecificationLoader getSpecificationLoader() {
+	protected SpecificationLoaderSpi getSpecificationLoader() {
 		return IsisContext.getSpecificationLoader();
 	}
 
@@ -354,7 +353,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerExtended getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

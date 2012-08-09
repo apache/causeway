@@ -32,11 +32,11 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
@@ -57,9 +57,9 @@ public class ObjectActionImplTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private SpecificationLookup mockSpecificationLookup;
+    private SpecificationLoader mockSpecificationLookup;
     @Mock
-    private AdapterMap mockAdapterManager;
+    private AdapterManager mockAdapterManager;
     @Mock
     private ServicesProvider mockServicesProvider;
     @Mock

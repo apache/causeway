@@ -24,9 +24,9 @@ public class SpecificationContext {
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
-    private final SpecificationLookup specificationLookup;
+    private final SpecificationLoader specificationLookup;
 
-    public SpecificationContext(final AuthenticationSessionProvider authenticationSessionProvider, final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator, final SpecificationLookup specificationLookup) {
+    public SpecificationContext(final AuthenticationSessionProvider authenticationSessionProvider, final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator, final SpecificationLoader specificationLookup) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;
@@ -45,7 +45,7 @@ public class SpecificationContext {
         return objectInstantiator;
     }
 
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 }

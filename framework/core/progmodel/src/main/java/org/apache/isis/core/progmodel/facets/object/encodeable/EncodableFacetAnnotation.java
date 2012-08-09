@@ -22,9 +22,9 @@ package org.apache.isis.core.progmodel.facets.object.encodeable;
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class EncodableFacetAnnotation extends EncodableFacetAbstract {
 
@@ -42,11 +42,11 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
         return annotation.encoderDecoderClass();
     }
 
-    public EncodableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         this(encoderDecoderName(annotatedClass, configuration), encoderDecoderClass(annotatedClass), holder, adapterManager, dependencyInjector);
     }
 
-    private EncodableFacetAnnotation(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    private EncodableFacetAnnotation(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         super(candidateEncoderDecoderName, candidateEncoderDecoderClass, holder, adapterManager, dependencyInjector);
     }
 

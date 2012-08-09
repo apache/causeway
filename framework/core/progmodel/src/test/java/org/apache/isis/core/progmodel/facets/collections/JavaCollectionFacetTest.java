@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.collections.collection.JavaCollectionFacet;
 
@@ -53,7 +53,7 @@ public class JavaCollectionFacetTest {
     private Collection<ObjectAdapter> mockWrappedCollection;
     private Iterator<ObjectAdapter> mockIterator;
 
-    private AdapterMap mockAdapterManager;
+    private AdapterManager mockAdapterManager;
 
     @Before
     public void setUp() throws Exception {
@@ -61,7 +61,7 @@ public class JavaCollectionFacetTest {
         mockCollection = mockery.mock(ObjectAdapter.class);
         mockWrappedCollection = mockery.mock(Collection.class);
         mockIterator = mockery.mock(Iterator.class);
-        mockAdapterManager = mockery.mock(AdapterMap.class);
+        mockAdapterManager = mockery.mock(AdapterManager.class);
 
         facet = new JavaCollectionFacet(mockFacetHolder, mockAdapterManager);
     }

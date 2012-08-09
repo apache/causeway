@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets.properties.choices.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,11 +32,11 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CHOICES_PREFIX };
 
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
 
     public PropertyChoicesFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, PREFIXES);
@@ -62,7 +62,7 @@ public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAb
         processMethodContext.removeMethod(choicesMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLookup(), getAdapterMap()));
+        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLookup(), getAdapterManager()));
     }
 
     // ///////////////////////////////////////////////////////
@@ -70,12 +70,12 @@ public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAb
     // ///////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
-        this.adapterMap = adapterManager;
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 
-    protected AdapterMap getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

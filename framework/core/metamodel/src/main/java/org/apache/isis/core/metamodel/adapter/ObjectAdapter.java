@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -140,7 +140,7 @@ public interface ObjectAdapter extends Instance {
      * <p>
      * This id allows the object to added to, stored by,
      * and retrieved from the object store.  Objects can be looked up by their
-     * {@link Oid} from the {@link AdapterMap}.
+     * {@link Oid} from the {@link AdapterManager}.
      * 
      * <p>
      * Note that standalone value objects ("foobar", or 5, or a date),

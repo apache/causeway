@@ -24,7 +24,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public abstract class DefaultedFacetAbstract extends FacetAbstract implements DefaultedFacet {
 
@@ -33,9 +33,9 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
     // to delegate to
     private final DefaultedFacetUsingDefaultsProvider defaultedFacetUsingDefaultsProvider;
 
-    private final DependencyInjector dependencyInjector;
+    private final ServicesInjector dependencyInjector;
 
-    public DefaultedFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    public DefaultedFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final ServicesInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
 
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
@@ -78,7 +78,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////
 
-    private DependencyInjector getDependencyInjector() {
+    private ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 

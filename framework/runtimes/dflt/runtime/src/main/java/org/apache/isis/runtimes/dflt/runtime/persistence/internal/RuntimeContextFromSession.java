@@ -39,11 +39,13 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAbstract;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -54,7 +56,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -68,12 +70,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final AdapterMap adapterManager;
+    private final AdapterManager adapterManager;
     private final ObjectDirtier objectDirtier;
     private final ObjectInstantiator objectInstantiator;
     private final ObjectPersistor objectPersistor;
     private final ServicesProvider servicesProvider;
-    private final DependencyInjector dependencyInjector;
+    private final ServicesInjector dependencyInjector;
     private final QuerySubmitter querySubmitter;
     private final DomainObjectServices domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
@@ -90,7 +92,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return IsisContext.getAuthenticationSession();
             }
         };
-        this.adapterManager = new AdapterMapAbstract() {
+        this.adapterManager = new AdapterManager() {
+
+            @Override
+            public ObjectAdapter getAdapterFor(Oid oid) {
+                return null;
+            }
 
             @Override
             public ObjectAdapter getAdapterFor(final Object pojo) {
@@ -110,6 +117,14 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             @Override
             public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final OneToManyAssociation collection) {
                 return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, collection);
+            }
+
+            @Override
+            public void injectInto(Object candidate) {
+                if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
+                    final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+                    cast.setAdapterManager(this);
+                }
             }
         };
         this.objectInstantiator = new ObjectInstantiatorAbstract() {
@@ -223,23 +238,23 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return list.size() > 0 ? list.get(0) : null;
             }
         };
-        this.dependencyInjector = new DependencyInjector() {
+        this.dependencyInjector = new ServicesInjector() {
 
             @Override
-            public void injectDependenciesInto(final Object object) {
-                getPersistenceSession().getServicesInjector().injectDependenciesInto(object);
+            public void injectServicesInto(final Object object) {
+                getPersistenceSession().getServicesInjector().injectServicesInto(object);
             }
 
             @Override
-            public void injectDependenciesInto(List<Object> objects) {
-                getPersistenceSession().getServicesInjector().injectDependenciesInto(objects);
+            public void injectServicesInto(List<Object> objects) {
+                getPersistenceSession().getServicesInjector().injectServicesInto(objects);
             }
             
             @Override
             public void injectInto(Object candidate) {
-                if (DependencyInjectorAware.class.isAssignableFrom(candidate.getClass())) {
-                    final DependencyInjectorAware cast = DependencyInjectorAware.class.cast(candidate);
-                    cast.setDependencyInjector(this);
+                if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {
+                    final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
+                    cast.setServicesInjector(this);
                 }
             }
         };
@@ -262,7 +277,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return adapterManager;
     }
 
@@ -297,7 +312,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 
@@ -314,7 +329,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         return IsisContext.getPersistenceSession();
     }
 
-    private static AdapterManager getRuntimeAdapterManager() {
+    private static AdapterManagerSpi getRuntimeAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

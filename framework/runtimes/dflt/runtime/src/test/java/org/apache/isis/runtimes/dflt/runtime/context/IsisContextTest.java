@@ -33,8 +33,8 @@ import org.junit.Test;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -63,7 +63,7 @@ public class IsisContextTest {
     private PersistenceSession mockPersistenceSession;
     
     @Mock
-    private SpecificationLoader mockSpecificationLoader;
+    private SpecificationLoaderSpi mockSpecificationLoader;
 
     @Mock
     protected TemplateImageLoader mockTemplateImageLoader;

@@ -24,11 +24,11 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {
 
@@ -37,7 +37,7 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     // to delegate to
     private final ParseableFacetUsingParser parseableFacetUsingParser;
 
-    public ParseableFacetAbstract(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
+    public ParseableFacetAbstract(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
         super(ParseableFacet.class, holder, false);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
@@ -45,7 +45,7 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
                 createParser(holder, authenticationSessionProvider, dependencyInjector, adapterManager):null;
     }
 
-    private ParseableFacetUsingParser createParser(final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
+    private ParseableFacetUsingParser createParser(final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
         final Parser<?> parser = (Parser<?>) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
         return new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }

@@ -27,12 +27,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
-public class SpecificationTraverserDefault implements SpecificationTraverser, SpecificationLoaderAware {
+public class SpecificationTraverserDefault implements SpecificationTraverser, SpecificationLoaderSpiAware {
 
-    private SpecificationLoader specificationLoader;
+    private SpecificationLoaderSpi specificationLoaderSpi;
 
     // ////////////////////////////////////////////////////////////////////
     // init, shutdown
@@ -40,7 +40,7 @@ public class SpecificationTraverserDefault implements SpecificationTraverser, Sp
 
     @Override
     public void init() {
-        ensureThatState(specificationLoader, is(notNullValue()));
+        ensureThatState(specificationLoaderSpi, is(notNullValue()));
     }
 
     @Override
@@ -77,13 +77,13 @@ public class SpecificationTraverserDefault implements SpecificationTraverser, Sp
     // Dependencies (due to *Aware)
     // ////////////////////////////////////////////////////////////////////
 
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    public SpecificationLoaderSpi getSpecificationLoaderSpi() {
+        return specificationLoaderSpi;
     }
 
     @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
+    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
+        this.specificationLoaderSpi = specificationLoader;
     }
 
 }

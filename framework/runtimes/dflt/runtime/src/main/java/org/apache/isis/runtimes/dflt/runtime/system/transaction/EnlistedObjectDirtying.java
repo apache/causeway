@@ -17,16 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.system.persistence;
+package org.apache.isis.runtimes.dflt.runtime.system.transaction;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.Dirtiable;
 
 /**
- * Support for tests.
+ * As called by the {@link IsisTransactionManager}.
+ * 
+ * <p>
+ * Dirtiable support.
  */
-public interface PersistenceSessionTestSupport {
+public interface EnlistedObjectDirtying {
 
     /**
-     * Only for testing purposes.
+     * Mark as {@link #objectChanged(ObjectAdapter) changed } all
+     * {@link Dirtiable} objects that have been
+     * {@link Dirtiable#markDirty(ObjectAdapter) manually marked} as dirty.
+     * 
+     * <p>
+     * Called by the {@link IsisTransactionManager}.
      */
-    public void testReset();
+    void objectChangedAllDirty();
+
+    /**
+     * Set as {@link Dirtiable#clearDirty(ObjectAdapter) clean} any
+     * {@link Dirtiable} objects.
+     */
+    void clearAllDirty();
 
 }

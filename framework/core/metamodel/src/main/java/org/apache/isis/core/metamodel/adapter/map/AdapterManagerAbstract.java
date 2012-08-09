@@ -16,13 +16,13 @@
  */
 package org.apache.isis.core.metamodel.adapter.map;
 
-public abstract class AdapterMapAbstract implements AdapterMap {
+public abstract class AdapterManagerAbstract implements AdapterManager {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (AdapterMapAware.class.isAssignableFrom(candidate.getClass())) {
-            final AdapterMapAware cast = AdapterMapAware.class.cast(candidate);
-            cast.setAdapterMap(this);
+        if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
+            final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+            cast.setAdapterManager(this);
         }
     }
 

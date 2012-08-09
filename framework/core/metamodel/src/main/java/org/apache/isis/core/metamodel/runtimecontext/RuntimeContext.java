@@ -30,10 +30,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 /**
  * Decouples the metamodel from a runtime.
@@ -53,18 +53,18 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
     public QuerySubmitter getQuerySubmitter();
 
-    public AdapterMap getAdapterMap();
+    public AdapterManager getAdapterMap();
 
     public ObjectInstantiator getObjectInstantiator();
 
-    public SpecificationLookup getSpecificationLookup();
+    public SpecificationLoader getSpecificationLoader();
 
     public ServicesProvider getServicesProvider();
 
     /**
      * aka the ServicesInjector...
      */
-    public DependencyInjector getDependencyInjector();
+    public ServicesInjector getDependencyInjector();
 
     public ObjectDirtier getObjectDirtier();
 

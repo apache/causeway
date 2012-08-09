@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.runtimes.dflt.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
@@ -41,7 +41,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
 
     private MethodHandler methodHandler;
 
-    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoaderSpi specificationLoader) {
         super(objectResolver, objectChanger, specificationLoader);
 
         createCallback();

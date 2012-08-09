@@ -35,29 +35,31 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceConstants;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisObjectStoreLogger;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt.DefaultPersistAlgorithm;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTransactionManagement;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 
@@ -100,11 +102,18 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * Will return a {@link PersistenceSessionObjectStore}; subclasses are free
      * to downcast if required.
      */
-    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final IdentifierGenerator identifierGenerator,
-            final ServicesInjector servicesInjector) {
+    protected PersistenceSession createPersistenceSession(
+            final PersistenceSessionFactory persistenceSessionFactory, 
+            final ObjectAdapterFactory objectAdapterFactory, 
+            final ObjectFactory objectFactory, 
+            final PojoRecreator pojoRecreator, 
+            final IdentifierGenerator identifierGenerator,
+            final ServicesInjectorSpi servicesInjector) {
 
         final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
-        ObjectStore objectStore = createObjectStore(getConfiguration(), adapterFactory, adapterManager);
+        final AdapterManagerDefault adapterManager = new AdapterManagerDefault(pojoRecreator);
+        
+        ObjectStoreSpi objectStore = createObjectStore(getConfiguration(), objectAdapterFactory, adapterManager);
 
         ensureThatArg(persistAlgorithm, is(not(nullValue())));
         ensureThatArg(objectStore, is(not(nullValue())));
@@ -114,7 +123,8 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
             objectStore = new IsisObjectStoreLogger(objectStore, level);
         }
 
-        final PersistenceSession persistenceSession = createObjectStorePersistor(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
+        final PersistenceSession persistenceSession = 
+                new PersistenceSession(persistenceSessionFactory, objectAdapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
 
         final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore);
 
@@ -134,15 +144,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     // ///////////////////////////////////////////
 
     /**
-     * Can optionally be overridden, but by default creates an
-     * {@link PersistenceSessionObjectStore}.
-     */
-    protected PersistenceSession createObjectStorePersistor(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final IdentifierGenerator identifierGenerator,
-            final AdapterManagerExtended adapterManager, final PersistAlgorithm persistAlgorithm, final ObjectStorePersistence objectStore) {
-        return new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
-    }
-
-    /**
      * Hook method to create {@link PersistAlgorithm}.
      * 
      * <p>
@@ -158,7 +159,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * <p>
      * By default returns a {@link ObjectStoreTransactionManager}.
      */
-    protected IsisTransactionManager createTransactionManager(final PersistenceSessionTransactionManagement persistor, final ObjectStoreTransactionManagement objectStore) {
+    protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
         return new IsisTransactionManager(persistor, objectStore);
     }
 
@@ -167,9 +168,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     // ///////////////////////////////////////////
 
     /**
-     * Hook method to return {@link ObjectStore}.
+     * Hook method to return {@link ObjectStoreSpi}.
      */
-    protected abstract ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager);
+    protected abstract ObjectStoreSpi createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerSpi adapterManager);
 
     
     /**
@@ -177,8 +178,8 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * hook methods.
      * 
      * @see #createPersistenceSession(PersistenceSessionFactory,
-     *      AdapterManagerExtended, ObjectAdapterFactory, ObjectFactory,
-     *      IdentifierGenerator, ServicesInjector)
+     *      ObjectAdapterFactory, ObjectFactory, AdapterManagerSpi,
+     *      IdentifierGenerator, ServicesInjectorSpi)
      * @see #createAdapterFactory(IsisConfiguration)
      * @see #createAdapterManager(IsisConfiguration)
      * @see #createContainer(IsisConfiguration)
@@ -192,7 +193,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
             LOG.debug("installing " + this.getClass().getName());
         }
 
-        final AdapterManagerExtended adapterManager = createAdapterManager(getConfiguration());
+        final PojoRecreator pojoRecreator = createPojoRecreator(getConfiguration());
         final ObjectAdapterFactory adapterFactory = createAdapterFactory(getConfiguration());
         final ObjectFactory objectFactory = createObjectFactory(getConfiguration());
         final IdentifierGenerator identifierGenerator = createIdentifierGenerator(getConfiguration());
@@ -200,10 +201,10 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final RuntimeContext runtimeContext = createRuntimeContext(getConfiguration());
         final DomainObjectContainer container = createContainer(getConfiguration());
 
-        final ServicesInjector servicesInjector = createServicesInjector(getConfiguration());
+        final ServicesInjectorSpi servicesInjector = createServicesInjector(getConfiguration());
         final List<Object> serviceList = persistenceSessionFactory.getServices();
 
-        ensureThatArg(adapterManager, is(not(nullValue())));
+        ensureThatArg(pojoRecreator, is(not(nullValue())));
         ensureThatArg(adapterFactory, is(not(nullValue())));
         ensureThatArg(objectFactory, is(not(nullValue())));
         ensureThatArg(identifierGenerator, is(not(nullValue())));
@@ -219,9 +220,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
 
         servicesInjector.setContainer(container);
         servicesInjector.setServices(serviceList);
-        persistenceSessionFactory.getSpecificationLoader().injectInto(runtimeContext);
+        getSpecificationLoader().injectInto(runtimeContext);
 
-        return createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory, identifierGenerator, servicesInjector);
+        return createPersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, pojoRecreator, identifierGenerator, servicesInjector);
     }
 
     
@@ -229,6 +230,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     // ///////////////////////////////////////////
     // Optional hook methods
     // ///////////////////////////////////////////
+
 
     /**
      * Hook method to allow subclasses to specify a different implementation of
@@ -264,7 +266,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
 
     /**
      * Hook method to allow subclasses to specify a different implementation of
-     * {@link ServicesInjector}
+     * {@link ServicesInjectorSpi}
      * 
      * <p>
      * By default, looks up implementation from provided
@@ -273,9 +275,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * implementation is specified, then defaults to
      * {@value PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME_DEFAULT}.
      */
-    protected ServicesInjector createServicesInjector(final IsisConfiguration configuration) {
+    protected ServicesInjectorSpi createServicesInjector(final IsisConfiguration configuration) {
         final String configuredClassName = configuration.getString(PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME, PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, ServicesInjector.class);
+        return InstanceUtil.createInstance(configuredClassName, ServicesInjectorSpi.class);
     }
 
     /**
@@ -295,13 +297,23 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     }
 
     /**
-     * Hook method to return {@link AdapterManagerExtended}.
+     * Hook method to return {@link AdapterManagerSpi}.
      * 
      * <p>
      * By default returns an {@link AdapterManagerDefault}.
      */
-    protected AdapterManagerExtended createAdapterManager(final IsisConfiguration configuration) {
-        return new AdapterManagerDefault();
+    private AdapterManagerSpi createAdapterManager(final IsisConfiguration configuration) {
+        return new AdapterManagerDefault(createPojoRecreator(configuration));
+    }
+
+    /**
+     * Hook method to return {@link PojoRecreator}.
+     * 
+     * <p>
+     * By default returns an {@link PojoRecreatorDefault}.
+     */
+    protected PojoRecreator createPojoRecreator(final IsisConfiguration configuration) {
+        return new PojoRecreatorDefault();
     }
 
     /**
@@ -357,6 +369,16 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return installerLookup;
     }
 
+    
+    // /////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // /////////////////////////////////////////////////////
+
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+    
+    
     // /////////////////////////////////////////////////////
     // Guice
     // /////////////////////////////////////////////////////
@@ -365,9 +387,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     public List<Class<?>> getTypes() {
         return listOf(PersistenceSessionFactory.class);
     }
-
-    
-    
 
 
     

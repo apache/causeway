@@ -24,14 +24,14 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 
 public final class AdapterUtils {
     private AdapterUtils() {
     }
 
-    public static ObjectAdapter createAdapter(final Class<?> type, final Object object, final AdapterManager adapterManager, final SpecificationLoader specificationLoader) {
+    public static ObjectAdapter createAdapter(final Class<?> type, final Object object, final AdapterManagerSpi adapterManager, final SpecificationLoaderSpi specificationLoader) {
         final ObjectSpecification specification = specificationLoader.loadSpecification(type);
         if (specification.isNotCollection()) {
             return adapterManager.adapterFor(object);
@@ -40,7 +40,7 @@ public final class AdapterUtils {
         }
     }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterManager) {
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManagerSpi adapterManager) {
         final ObjectAdapter collection = adapterManager.adapterFor(option);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final Object[] optionArray = new Object[facet.size(collection)];

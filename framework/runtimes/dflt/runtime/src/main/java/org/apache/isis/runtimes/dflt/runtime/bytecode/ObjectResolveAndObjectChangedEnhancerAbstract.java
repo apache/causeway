@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
@@ -36,9 +36,9 @@ public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
 
     protected final ObjectResolver objectResolver;
     protected final ObjectChanger objectChanger;
-    protected final SpecificationLoader specificationLoader;
+    protected final SpecificationLoaderSpi specificationLoader;
 
-    public ObjectResolveAndObjectChangedEnhancerAbstract(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+    public ObjectResolveAndObjectChangedEnhancerAbstract(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoaderSpi specificationLoader) {
         ensureThatArg(objectResolver, is(notNullValue()));
         ensureThatArg(objectChanger, is(notNullValue()));
         ensureThatArg(specificationLoader, is(notNullValue()));
@@ -100,7 +100,7 @@ public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
         return objectChanger;
     }
 
-    public final SpecificationLoader getSpecificationLoader() {
+    public final SpecificationLoaderSpi getSpecificationLoader() {
         return specificationLoader;
     }
 

@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -158,7 +158,7 @@ public class IsisSessionDefault implements IsisSession {
     /**
      * Convenience method.
      */
-    public SpecificationLoader getSpecificationLoader() {
+    public SpecificationLoaderSpi getSpecificationLoader() {
         return executionContextFactory.getSpecificationLoader();
     }
 

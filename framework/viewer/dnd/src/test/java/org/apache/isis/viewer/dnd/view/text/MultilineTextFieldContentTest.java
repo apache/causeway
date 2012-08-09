@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -50,7 +50,7 @@ public class MultilineTextFieldContentTest {
     private TextContent content;
     private final Mockery mockery = new JUnit4Mockery();
     protected TemplateImageLoader mockTemplateImageLoader;
-    protected SpecificationLoader mockSpecificationLoader;
+    protected SpecificationLoaderSpi mockSpecificationLoader;
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
     private UserProfileLoader mockUserProfileLoader;
     protected AuthenticationManager mockAuthenticationManager;
@@ -65,7 +65,7 @@ public class MultilineTextFieldContentTest {
         servicesList = Collections.emptyList();
 
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
+        mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
         mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
         mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
         mockAuthenticationManager = mockery.mock(AuthenticationManager.class);

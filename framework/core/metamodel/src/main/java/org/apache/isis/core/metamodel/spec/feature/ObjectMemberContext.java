@@ -18,19 +18,19 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public class ObjectMemberContext {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterManager;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
 
-    public ObjectMemberContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLookup specificationLookup, final AdapterMap adapterManager, final QuerySubmitter querySubmitter, final CollectionTypeRegistry collectionTypeRegistry) {
+    public ObjectMemberContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final QuerySubmitter querySubmitter, final CollectionTypeRegistry collectionTypeRegistry) {
 
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
@@ -43,11 +43,11 @@ public class ObjectMemberContext {
         return authenticationSessionProvider;
     }
 
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
-    public AdapterMap getAdapterManager() {
+    public AdapterManager getAdapterManager() {
         return adapterManager;
     }
 

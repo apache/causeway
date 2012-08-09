@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {
 
-    public EncodableFacetFromConfiguration(final String candidateEncoderDecoderName, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetFromConfiguration(final String candidateEncoderDecoderName, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
         super(candidateEncoderDecoderName, null, holder, adapterManager, dependencyInjector);
 
     }

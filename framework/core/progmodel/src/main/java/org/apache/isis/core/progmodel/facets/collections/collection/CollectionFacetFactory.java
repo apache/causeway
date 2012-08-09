@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.collections.collection;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -31,10 +31,10 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGener
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterMapAware {
+public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterManagerAware {
 
     private CollectionTypeRegistry collectionTypeRegistry;
-    private AdapterMap adapterMap;
+    private AdapterManager adapterManager;
 
     public CollectionFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -60,13 +60,13 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
         } else {
             // nothing
         }
-        facetHolder.addFacet(new JavaCollectionFacet(facetHolder, getAdapterMap()));
+        facetHolder.addFacet(new JavaCollectionFacet(facetHolder, getAdapterManager()));
         return;
     }
 
     private void processAsArrayType(final ProcessClassContext processClassContaxt) {
         final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
-        facetHolder.addFacet(new JavaArrayFacet(facetHolder, getAdapterMap()));
+        facetHolder.addFacet(new JavaArrayFacet(facetHolder, getAdapterManager()));
         facetHolder.addFacet(new TypeOfFacetInferredFromArray(processClassContaxt.getCls().getComponentType(), facetHolder, getSpecificationLookup()));
     }
 
@@ -86,13 +86,13 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
         this.collectionTypeRegistry = collectionTypeRegistry;
     }
 
-    public AdapterMap getAdapterMap() {
-        return adapterMap;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
-        this.adapterMap = adapterManager;
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 
 }

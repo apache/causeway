@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -46,14 +46,14 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    public static ObjectSpecification getSpecification(final SpecificationLookup specificationLookup, final Class<?> type) {
+    public static ObjectSpecification getSpecification(final SpecificationLoader specificationLookup, final Class<?> type) {
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
@@ -62,8 +62,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final SpecificationLookup specificationLookup;
-    private final AdapterMap adapterMap;
+    private final SpecificationLoader specificationLookup;
+    private final AdapterManager adapterMap;
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
 
@@ -290,11 +290,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return authenticationSessionProvider;
     }
 
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 
-    public AdapterMap getAdapterMap() {
+    public AdapterManager getAdapterMap() {
         return adapterMap;
     }
 

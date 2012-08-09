@@ -27,8 +27,9 @@ import java.util.List;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -40,7 +41,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
     private final DeploymentType deploymentType;
     private final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate;
-    private SpecificationLoader specificationLoader;
     private List<Object> serviceList;
 
     private Boolean fixturesInstalled;
@@ -66,8 +66,8 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
     @Override
     public final void init() {
+
         // check prereq dependencies injected
-        ensureThatState(specificationLoader, is(notNullValue()));
         ensureThatState(serviceList, is(notNullValue()));
 
         // a bit of a workaround, but required if anything in the metamodel (for
@@ -130,20 +130,13 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         this.serviceList = serviceList;
     }
 
-    /**
-     * @see #setSpecificationLoader(SpecificationLoader)
-     */
-    @Override
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
 
-    /**
-     * Injected prior to {@link #init()}.
-     */
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    }
+    
+    // //////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////
 
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 }

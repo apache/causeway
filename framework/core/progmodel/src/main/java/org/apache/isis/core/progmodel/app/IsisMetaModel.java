@@ -39,12 +39,12 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
@@ -152,7 +152,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
      * 
      * <p>
      * To obtain the instantiated services, use the
-     * {@link ServicesInjector#getRegisteredServices()} (available from
+     * {@link ServicesInjectorSpi#getRegisteredServices()} (available from
      * {@link #getServicesInjector()}).
      */
     public List<Object> getServices() {
@@ -196,7 +196,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     /**
      * Available once {@link #init() initialized}.
      */
-    public SpecificationLoader getSpecificationLoader() {
+    public SpecificationLoaderSpi getSpecificationLoader() {
         return reflector;
     }
 
@@ -219,7 +219,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     /**
      * Available once {@link #init() initialized}.
      */
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         ensureInitialized();
         return runtimeContext.getDependencyInjector();
     }

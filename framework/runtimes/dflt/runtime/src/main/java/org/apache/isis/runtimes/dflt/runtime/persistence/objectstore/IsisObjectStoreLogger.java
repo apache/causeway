@@ -39,15 +39,15 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-public class IsisObjectStoreLogger extends Logger implements ObjectStore {
-    private final ObjectStore underlying;
+public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
+    private final ObjectStoreSpi underlying;
 
-    public IsisObjectStoreLogger(final ObjectStore decorated, final String level) {
+    public IsisObjectStoreLogger(final ObjectStoreSpi decorated, final String level) {
         super(level);
         this.underlying = decorated;
     }
 
-    public IsisObjectStoreLogger(final ObjectStore decorated) {
+    public IsisObjectStoreLogger(final ObjectStoreSpi decorated) {
         this.underlying = decorated;
     }
 

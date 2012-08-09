@@ -34,10 +34,9 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.JdoPropertyUtils;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
@@ -52,8 +51,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.sp
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -63,13 +61,14 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
 
-public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderAware, IsisTransactionManagerAware {
+public class DataNucleusObjectStore implements ObjectStoreSpi {
 
     private static final Logger LOG = Logger.getLogger(DataNucleusObjectStore.class);
 
@@ -94,14 +93,11 @@ public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderA
         CHAINED;
     }
 
-    private final IsisConfiguration configuration;
     private final ObjectAdapterFactory adapterFactory;
-    private final AdapterManagerExtended adapterManager;
     private final DataNucleusApplicationComponents applicationComponents;
     
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
 
-    private SpecificationLoader specificationLoader;
     private PersistenceManager persistenceManager;
 
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
@@ -110,25 +106,19 @@ public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderA
     private State state;
     private TransactionMode transactionMode;
 
-    private IsisTransactionManager transactionManager;
     
     // TODO: review this, want to reuse
     private final IsisLifecycleListener lifecycleListener = new IsisLifecycleListener();
 
-    public DataNucleusObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerExtended adapterManager, DataNucleusApplicationComponents applicationComponents) {
-        ensureThatArg(configuration, is(notNullValue()));
+    public DataNucleusObjectStore(ObjectAdapterFactory adapterFactory, DataNucleusApplicationComponents applicationComponents) {
         ensureThatArg(adapterFactory, is(notNullValue()));
-        ensureThatArg(adapterManager, is(notNullValue()));
         ensureThatArg(applicationComponents, is(notNullValue()));
 
         this.state = State.NOT_YET_OPEN;
         this.transactionMode = TransactionMode.UNCHAINED;
 
-        this.configuration = configuration;
         this.adapterFactory = adapterFactory;
-        this.adapterManager = adapterManager;
         this.applicationComponents = applicationComponents;
-
     }
 
     @Override
@@ -142,7 +132,6 @@ public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderA
 
     public void open() {
         ensureNotYetOpen();
-        ensureDependenciesInjected();
 
         openSession();
         ensureThatState(persistenceManager, is(notNullValue()));
@@ -183,10 +172,10 @@ public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderA
     }
 
     private void addPersistenceQueryProcessors(final PersistenceManager persistenceManager) {
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class, new PersistenceQueryFindAllInstancesProcessor(adapterManager, persistenceManager));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class, new PersistenceQueryFindByTitleProcessor(adapterManager, persistenceManager));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class, new PersistenceQueryFindByPatternProcessor(adapterManager, persistenceManager));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindUsingApplibQueryDefault.class, new PersistenceQueryFindUsingApplibQueryProcessor(adapterManager, persistenceManager));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class, new PersistenceQueryFindAllInstancesProcessor(persistenceManager));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class, new PersistenceQueryFindByTitleProcessor(persistenceManager));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class, new PersistenceQueryFindByPatternProcessor(persistenceManager));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindUsingApplibQueryDefault.class, new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager));
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -556,7 +545,7 @@ public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderA
     // ///////////////////////////////////////////////////////////////////////
 
     @SuppressWarnings("unused")
-    private List<ObjectAdapter> loadObjects(final ObjectSpecification specification, final List<?> listOfPojs, final AdapterManager adapterManager) {
+    private List<ObjectAdapter> loadObjects(final ObjectSpecification specification, final List<?> listOfPojs, final AdapterManagerSpi adapterManager) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         int i = 0;
         for (final Object pojo : listOfPojs) {
@@ -697,89 +686,33 @@ public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderA
     // Dependencies (from constructor)
     // ///////////////////////////////////////////////////////////////////////
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
     public ObjectAdapterFactory getAdapterFactory() {
         return adapterFactory;
     }
 
-    /**
-     * @see #setAdapterManager(AdapterManager)
-     */
-    public AdapterManagerExtended getAdapterManager() {
-        return adapterManager;
-    }
 
     // ///////////////////////////////////////////////////////////////////////
-    // Dependencies (injected)
+    // Dependencies (from context)
     // ///////////////////////////////////////////////////////////////////////
 
-    private void ensureDependenciesInjected() {
-        ensureThatState(specificationLoader, is(notNullValue()));
-        ensureThatState(adapterManager, is(notNullValue()));
-        //TODO: ensureThatState(hibernateApplicationComponents, is(notNullValue()));
-        ensureThatState(transactionManager, is(notNullValue()));
+    public IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
-    /**
-     * @see #setSpecificationLoader(SpecificationLoader)
-     */
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
     }
 
-    /**
-     * Injected prior to {@link #open()}ing.
-     * <p>
-     * Injected by owning {@link PersistenceSessionObjectStore} (see
-     * {@link PersistenceSessionObjectStore#open()}) by virtue of fact that this
-     * implementation is {@link SpecificationLoaderAware aware} of the
-     * {@link SpecificationLoader}.
-     */
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 
-
-    /**
-     * @see #getTransactionManager()
-     */
-    public IsisTransactionManager getTransactionManager() {
-        return transactionManager;
+    protected AdapterManagerSpi getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
     }
-
-    /**
-     * Injected prior to {@link #open()}ing.
-     * <p>
-     * Injected by owning {@link PersistenceSessionObjectStore} (see
-     * {@link PersistenceSessionObjectStore#open()}) by virtue of fact that this
-     * implementation is {@link NakedObjectTransactionManagerAware aware} of the
-     * {@link NakedObjectTransactionManager}.
-     */
-    public void setTransactionManager(final IsisTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
+    
+    protected IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
     }
-
-
-
-
-//    /**
-//     * @see #setHibernateApplicationComponents(HibernateMetaDataComponents)
-//     */
-//    public HibernateApplicationComponents getHibernateApplicationComponents() {
-//        return hibernateApplicationComponents;
-//    }
-//
-//    /**
-//     * Injected prior to {@link #open()}ing.
-//     * <p>
-//     * Injected by owning {@link JpaPersistenceSession} (see
-//     * {@link JpaPersistenceSession#doOpen()); hard-coded into implementation.
-//     */
-//    public void setHibernateApplicationComponents(final HibernateApplicationComponents hibernateApplicationComponents) {
-//        this.hibernateApplicationComponents = hibernateApplicationComponents;
-//    }
 
 }

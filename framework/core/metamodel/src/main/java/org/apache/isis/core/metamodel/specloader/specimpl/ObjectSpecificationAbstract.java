@@ -77,7 +77,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -109,7 +109,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
-    private final SpecificationLookup specificationLookup;
+    private final SpecificationLoader specificationLookup;
 
     private final List<ObjectAction> objectActions = Lists.newArrayList();
     private final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -977,7 +977,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return objectInstantiator;
     }
 
-    public SpecificationLookup getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
 }

@@ -20,17 +20,17 @@
 package org.apache.isis.core.progmodel.facets.param.choices.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(holder, specificationLookup, adapterManager);
     }
 

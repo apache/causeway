@@ -34,17 +34,17 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 /**
- * Implementation that simply delegates to underlying {@link ObjectStore}.
+ * Implementation that simply delegates to underlying {@link ObjectStoreSpi}.
  * 
  * <p>
  * Useful for quickly writing decorating implementations.
  */
-public class IsisObjectStoreDelegating implements ObjectStore {
+public class IsisObjectStoreDelegating implements ObjectStoreSpi {
 
-    private final ObjectStore underlying;
+    private final ObjectStoreSpi underlying;
     private final String name;
 
-    public IsisObjectStoreDelegating(final ObjectStore underlying, final String name) {
+    public IsisObjectStoreDelegating(final ObjectStoreSpi underlying, final String name) {
         this.underlying = underlying;
         this.name = name;
     }

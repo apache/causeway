@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
+package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import java.util.List;
 
@@ -35,11 +35,8 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScopedComponent {
+public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent {
 
     /**
      * The name of this component.

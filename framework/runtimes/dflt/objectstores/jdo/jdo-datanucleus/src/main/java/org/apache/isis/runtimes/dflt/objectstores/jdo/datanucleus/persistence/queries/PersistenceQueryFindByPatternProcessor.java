@@ -7,14 +7,13 @@ import javax.jdo.PersistenceManager;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class PersistenceQueryFindByPatternProcessor extends
         PersistenceQueryProcessorAbstract<PersistenceQueryFindByPattern> {
 
     public PersistenceQueryFindByPatternProcessor(
-            final AdapterManager objectManager, final PersistenceManager persistenceManager) {
-        super(objectManager, persistenceManager);
+            final PersistenceManager persistenceManager) {
+        super(persistenceManager);
     }
 
     public List<ObjectAdapter> process(

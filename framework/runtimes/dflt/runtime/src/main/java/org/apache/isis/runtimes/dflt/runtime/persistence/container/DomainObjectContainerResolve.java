@@ -21,9 +21,9 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.container;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -38,7 +38,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * {@link PersistenceSession} could change over the lifetime of the instance (eg
  * when using the {@link InMemoryObjectStore}), we must always look the
  * {@link PersistenceSession} from the {@link IsisContext}. The same applies to
- * the {@link ServicesInjector}.
+ * the {@link ServicesInjectorSpi}.
  */
 public class DomainObjectContainerResolve {
 
@@ -70,7 +70,7 @@ public class DomainObjectContainerResolve {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

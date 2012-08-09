@@ -32,7 +32,7 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
 import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
 import org.apache.isis.core.commons.lang.CastUtils;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -163,7 +163,7 @@ public class FixturesInstallerDelegate {
     }
 
     private void installFixtureInTransaction(final Object fixture) {
-        getServicesInjector().injectDependenciesInto(fixture);
+        getServicesInjector().injectServicesInto(fixture);
 
         installFixtures(getFixtures(fixture));
 
@@ -285,7 +285,7 @@ public class FixturesInstallerDelegate {
         return persistenceSession != null ? persistenceSession : IsisContext.getPersistenceSession();
     }
 
-    private ServicesInjector getServicesInjector() {
+    private ServicesInjectorSpi getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

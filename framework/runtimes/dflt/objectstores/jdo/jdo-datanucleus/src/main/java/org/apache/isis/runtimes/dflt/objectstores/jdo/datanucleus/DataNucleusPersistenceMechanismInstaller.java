@@ -6,18 +6,16 @@ import java.util.Map;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 
@@ -50,9 +48,9 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     @Override
-    protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager) {
+    protected ObjectStoreSpi createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerSpi adapterManager) {
         createDataNucleusApplicationComponentsIfRequired(configuration);
-        return new DataNucleusObjectStore(configuration, adapterFactory, (AdapterManagerExtended) adapterManager, applicationComponents);
+        return new DataNucleusObjectStore(adapterFactory, applicationComponents);
     }
 
     private void createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
@@ -71,7 +69,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         return new DataNucleusIdentifierGenerator();
     }
 
-
     @Override
     protected PersistAlgorithm createPersistAlgorithm(IsisConfiguration configuration) {
         return new DataNucleusSimplePersistAlgorithm();
@@ -83,11 +80,11 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     @Override
-    protected AdapterManagerExtended createAdapterManager(IsisConfiguration configuration) {
-        return new AdapterManagerDefault(new DataNucleusPojoRecreator());
+    protected DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {
+        return new DataNucleusPojoRecreator();
     }
     
-    protected SpecificationLookup getSpecificationLoader() {
+    protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

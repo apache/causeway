@@ -23,14 +23,14 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {
 
     private final Parser<?> parser;
-    private final DependencyInjector dependencyInjector;
+    private final ServicesInjector dependencyInjector;
 
-    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
         super(TypicalLengthFacet.class, holder, false);
         this.parser = parser;
         this.dependencyInjector = dependencyInjector;
@@ -38,13 +38,13 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
     @Override
     public int value() {
-        getDependencyInjector().injectDependenciesInto(parser);
+        getDependencyInjector().injectServicesInto(parser);
         return parser.typicalLength();
     }
 
@@ -60,7 +60,7 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
     /**
      * @return the dependencyInjector
      */
-    public DependencyInjector getDependencyInjector() {
+    public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
 

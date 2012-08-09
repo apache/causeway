@@ -22,10 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
@@ -57,7 +57,7 @@ public abstract class AbstractFixturePeer {
         return IsisContext.getServices();
     }
 
-    public SpecificationLoader getSpecificationLoader() {
+    public SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
@@ -69,11 +69,11 @@ public abstract class AbstractFixturePeer {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerSpi getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
-    protected ObjectStorePersistence getObjectStore() {
+    protected ObjectStore getObjectStore() {
         return getPersistenceSession().getObjectStore();
     }
 

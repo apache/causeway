@@ -39,9 +39,9 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -56,7 +56,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
-public final class SqlObjectStore implements ObjectStore {
+public final class SqlObjectStore implements ObjectStoreSpi {
 
     private static final String TABLE_NAME = "isis_admin_services";
     // private static final String ID_COLUMN = "id";
@@ -500,7 +500,7 @@ public final class SqlObjectStore implements ObjectStore {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
-    protected SpecificationLookup getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLookup() {
         return IsisContext.getSpecificationLoader();
     }
 

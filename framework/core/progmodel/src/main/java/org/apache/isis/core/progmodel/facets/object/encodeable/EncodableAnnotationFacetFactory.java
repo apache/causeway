@@ -23,22 +23,22 @@ import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, DependencyInjectorAware, AdapterMapAware {
+public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, ServicesInjectorAware, AdapterManagerAware {
 
     private IsisConfiguration configuration;
 
-    private AdapterMap adapterManager;
-    private DependencyInjector dependencyInjector;
+    private AdapterManager adapterManager;
+    private ServicesInjector servicesInjector;
 
     public EncodableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -57,7 +57,7 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // create from annotation, if present
         final Encodable annotation = getAnnotation(cls, Encodable.class);
         if (annotation != null) {
-            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, getIsisConfiguration(), holder, adapterManager, dependencyInjector);
+            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, getIsisConfiguration(), holder, adapterManager, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -66,7 +66,7 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // otherwise, try to create from configuration, if present
         final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
-            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, dependencyInjector);
+            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -90,13 +90,13 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
+    public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
     @Override
-    public void setDependencyInjector(final DependencyInjector dependencyInjector) {
-        this.dependencyInjector = dependencyInjector;
+    public void setServicesInjector(final ServicesInjector dependencyInjector) {
+        this.servicesInjector = dependencyInjector;
     }
 
 }
