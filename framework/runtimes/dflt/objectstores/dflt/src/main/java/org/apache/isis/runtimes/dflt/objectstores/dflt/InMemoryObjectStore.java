@@ -24,10 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.common.collect.Lists;
-
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -48,7 +44,6 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemor
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemoryDestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemorySaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -63,6 +58,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 public class InMemoryObjectStore implements ObjectStore {
 
@@ -199,11 +197,17 @@ public class InMemoryObjectStore implements ObjectStore {
 
     @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
+        if (object.getSpecification().isParented()) {
+            return null;
+        }
         return new InMemoryCreateObjectCommand(object, persistedObjects);
     }
 
     @Override
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
+        if (object.getSpecification().isParented()) {
+            return null;
+        }
         return new InMemorySaveObjectCommand(object, persistedObjects);
     }
 

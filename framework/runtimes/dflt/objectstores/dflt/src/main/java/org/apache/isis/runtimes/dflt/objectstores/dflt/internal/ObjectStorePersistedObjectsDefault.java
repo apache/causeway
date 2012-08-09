@@ -19,16 +19,15 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
+
+import com.google.common.collect.Maps;
 
 /**
  * Represents the persisted objects.
