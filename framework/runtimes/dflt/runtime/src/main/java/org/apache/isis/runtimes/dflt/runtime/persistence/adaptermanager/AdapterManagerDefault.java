@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterMap;
@@ -464,6 +465,19 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
                 getPojoAdapterMap().remove(collectionAdapter);
                 collectionAdapter.replacePojo(collectionPojoActuallyOnPojo);
                 getPojoAdapterMap().add(collectionPojoActuallyOnPojo, collectionAdapter);
+            }
+        }
+
+        for (final ObjectAssociation association: adapter.getSpecification().getAssociations()) {
+            if (association.getSpecification().isParented()) {
+                ObjectAdapter adapter2 = association.get(adapter);
+    
+                Oid oid = adapter2.getOid();
+                if (oid instanceof AggregatedOid) {
+                    AggregatedOid aoid = (AggregatedOid) oid;
+                    AggregatedOid childOid = new AggregatedOid(aoid.getObjectSpecId(), persistedRootOid, aoid.getLocalId());
+                    adapter2.replaceOid(childOid);
+                }
             }
         }
         

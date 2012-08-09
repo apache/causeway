@@ -49,7 +49,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
@@ -129,7 +128,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
 
     
     private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
-    private static OidMarshaller oidMarshaller = new OidMarshaller();
     
     private final PersistAlgorithm persistAlgorithm;
     private final ObjectStorePersistence objectStore;
