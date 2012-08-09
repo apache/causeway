@@ -502,13 +502,16 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
 
         for (final ObjectAssociation association: adapter.getSpecification().getAssociations()) {
             if (association.getSpecification().isParented()) {
-                ObjectAdapter adapter2 = association.get(adapter);
+                final ObjectAdapter referencedAdapter = association.get(adapter);
     
-                Oid oid = adapter2.getOid();
+                if(referencedAdapter == null) {
+                    continue;
+                }
+                final Oid oid = referencedAdapter.getOid();
                 if (oid instanceof AggregatedOid) {
                     AggregatedOid aoid = (AggregatedOid) oid;
                     AggregatedOid childOid = new AggregatedOid(aoid.getObjectSpecId(), persistedRootOid, aoid.getLocalId());
-                    adapter2.replaceOid(childOid);
+                    referencedAdapter.replaceOid(childOid);
                 }
             }
         }
