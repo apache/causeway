@@ -135,16 +135,12 @@ public class ObjectReader {
     }
 
     private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final AggregatedOid aggregatedOid, final DataEncryption dataEncrypter) {
-        
         final ObjectSpecification specification = getSpecificationLoader().lookupBySpecId(aggregatedOid.getObjectSpecId());
-
         final ObjectAdapter fieldObject = getAdapter(specification, aggregatedOid);
-        if (fieldObject.isGhost()) {
-            final ResolveState resolveState = ResolveState.RESOLVING;
-            fieldObject.changeState(resolveState);
-            readFields(aggregateReader, fieldObject, dataEncrypter);
-            fieldObject.changeState(resolveState.getEndState());
-        }
+        final ResolveState resolveState = ResolveState.RESOLVING;
+        fieldObject.changeState(resolveState);
+        readFields(aggregateReader, fieldObject, dataEncrypter);
+        fieldObject.changeState(resolveState.getEndState());
         return fieldObject;
     }
 

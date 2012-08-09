@@ -50,24 +50,11 @@ public class JsonStateWriter implements StateWriter {
         return jsonStateWriter;
     }
 
-//    @Override
-//    public void writeObjectType(final String type) {
-//        this.type = type;
-//        writeField("_type", type);
-//    }
-//
-//    @Override
-//    public void writeId(final String oid) {
-//        this.oid = oid;
-//        writeField("_id", oid);
-//    }
-
-      @Override
-      public void writeOid(final TypedOid typedOid) {
-          this.oid = typedOid;
-          writeField(PropertyNames.OID, typedOid.enString());
-      }
-
+    @Override
+    public void writeOid(final TypedOid typedOid) {
+        this.oid = typedOid;
+        writeField(PropertyNames.OID, typedOid.enString());
+    }
     
     @Override
     public void writeEncryptionType(final String type) {

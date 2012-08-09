@@ -19,18 +19,18 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-
-import org.apache.log4j.Logger;
-
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
+import org.apache.log4j.Logger;
+
+import com.mongodb.BasicDBList;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 public class MongoStateReader implements StateReader {
     
@@ -79,12 +79,6 @@ public class MongoStateReader implements StateReader {
         return (String) instance.get(PropertyNames.ENCRYPT);
     }
 
-//    @Override
-//    public String readObjectType() {
-//        return (String) instance.get(TYPE);
-//    }
-//
-
     @Override
     public String readOid() {
         return readField(PropertyNames.OID);
@@ -107,12 +101,21 @@ public class MongoStateReader implements StateReader {
 
     @Override
     public StateReader readAggregate(final String id) {
-        throw new UnexpectedCallException();
+        DBObject object = (DBObject) instance.get(id);
+        return object == null ? null : new MongoStateReader(object);
     }
 
     @Override
     public List<StateReader> readCollection(final String id) {
-        throw new UnexpectedCallException();
+        BasicDBList array = (BasicDBList) instance.get(id);
+        final List<StateReader> readers = new ArrayList<StateReader>();
+        if (array != null) {
+            final int size = array.size();
+            for (int i = 0; i < size; i++) {
+                readers.add(new MongoStateReader((DBObject) array.get(i)));
+            }
+        }
+        return readers;
     }
 
 }

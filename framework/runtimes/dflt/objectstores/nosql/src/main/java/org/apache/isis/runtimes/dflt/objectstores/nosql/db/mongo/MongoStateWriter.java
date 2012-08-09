@@ -21,27 +21,32 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
 import java.util.List;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-
-import org.apache.log4j.Logger;
-
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
 
 public class MongoStateWriter implements StateWriter {
     
     private static final Logger LOG = Logger.getLogger(MongoStateWriter.class);
+    private final DB db;
     private final BasicDBObject dbObject;
-    private final DBCollection instances;
+    private DBCollection instances;
 
     public MongoStateWriter(final DB db, final ObjectSpecId objectSpecId) {
-        dbObject = new BasicDBObject();
+        this(db);
         instances = db.getCollection(objectSpecId.asString());
+    }
+
+    private MongoStateWriter(final DB db) {
+        this.db = db;
+        dbObject = new BasicDBObject();
     }
 
     public void flush() {
@@ -50,15 +55,6 @@ public class MongoStateWriter implements StateWriter {
             LOG.debug("saved " + dbObject);
         }
     }
-
-//    public void writeId(final String oid) {
-//        writeField(ID, oid);
-//    }
-//
-//    @Override
-//    public void writeObjectType(final String type) {
-//        writeField(TYPE, type);
-//    }
 
     @Override
     public void writeOid(final TypedOid typedOid) {
@@ -101,15 +97,22 @@ public class MongoStateWriter implements StateWriter {
 
     @Override
     public StateWriter addAggregate(final String id) {
-        throw new UnexpectedCallException();
+        final MongoStateWriter stateWriter = new MongoStateWriter(db);
+        dbObject.put(id, stateWriter.dbObject);
+        return stateWriter;
     }
 
     @Override
     public StateWriter createElementWriter() {
-        return null;
+        return new MongoStateWriter(db);
     }
 
     @Override
     public void writeCollection(final String id, final List<StateWriter> elements) {
+        final List<BasicDBObject> collection = Lists.newArrayList();
+        for (final StateWriter writer : elements) {
+            collection.add(((MongoStateWriter) writer).dbObject);
+        }
+        dbObject.put(id, collection);
     }
 }

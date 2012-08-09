@@ -19,13 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -54,6 +50,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenera
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class NoSqlObjectStore implements ObjectStore {
     
