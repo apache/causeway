@@ -74,7 +74,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAware;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionHydratorAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
@@ -97,11 +96,9 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceExcept
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
 
-public class PersistenceSession implements PersistenceSessionContainer, PersistenceSessionAdaptedServiceManager, PersistenceSessionTransactionManagement, PersistenceSessionHydrator, PersistenceSessionTestSupport, SpecificationLoaderAware,
+public class PersistenceSession implements PersistenceSessionContainer, PersistenceSessionAdaptedServiceManager, PersistenceSessionTransactionManagement, PersistenceSessionTestSupport, SpecificationLoaderAware,
         IsisTransactionManagerAware, SessionScopedComponent, Injectable, DebuggableWithTitle, ToPersistObjectSet {
 
-
-    
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final ObjectAdapterFactory adapterFactory;
     private final ObjectFactory objectFactory;
@@ -303,7 +300,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
             if (existingOid == null) {
                 serviceAdapter = getAdapterManager().adapterFor(service);
             } else {
-                serviceAdapter = getAdapterManager().recreateAdapter(existingOid, service);
+                serviceAdapter = getAdapterManager().mapRecreatedPojo(existingOid, service);
             }
 
             if (serviceAdapter.getOid().isTransient()) {
@@ -398,49 +395,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return adapter;
     }
 
-    @Override
-    public final ObjectAdapter recreateAdapter(final TypedOid oid) {
-        final ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(objectSpecId);
-        return recreateAdapter(objectSpec, oid);
-    }
-
-    @Override
-    public ObjectAdapter recreateAdapter(final ObjectSpecification specification, final Oid oid) {
-        final ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
-        if (adapterLookedUpByOid != null) {
-            return adapterLookedUpByOid;
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("recreating adapter for Oid: " + oid + " of type " + specification);
-        }
-        
-        final Object pojo = specification.createObject();
-
-        return getAdapterManager().recreateAdapter(oid, pojo);
-    }
-
-    @Override
-    public ObjectAdapter recreateAdapter(final Oid oid, final Object pojo) {
-        final ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
-        if (adapterLookedUpByOid != null) {
-            return adapterLookedUpByOid;
-        }
-
-        final ObjectAdapter adapterLookedUpByPojo = getAdapterManager().getAdapterFor(pojo);
-        if (adapterLookedUpByPojo != null) {
-            return adapterLookedUpByPojo;
-        }
-
-        if (LOG.isDebugEnabled()) {
-            // don't touch pojo in case cause it to resolve.
-            LOG.debug("recreating adapter for Oid: " + oid + " for provided pojo ");
-        }
-        return getAdapterManager().recreateAdapter(oid, pojo);
-    }
-    
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // findInstances, getInstances
@@ -522,6 +476,20 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return getInstancesFromPersistenceLayer(persistenceQuery);
     }
 
+    private List<ObjectAdapter> getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
+            @Override
+            public List<ObjectAdapter> execute() {
+                return objectStore.getInstances(persistenceQuery);
+            }
+
+            @Override
+            public void onSuccess() {
+                clearAllDirty();
+            }
+        });
+    }
+
     // ///////////////////////////////////////////////////////////////////////////
     // Manual dirtying support
     // ///////////////////////////////////////////////////////////////////////////
@@ -587,9 +555,9 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
                 object.getSpecification().clearDirty(object);
             }
         }
-
     }
 
+    
     // ///////////////////////////////////////////////////////////////////////////
     // Services
     // ///////////////////////////////////////////////////////////////////////////
@@ -637,7 +605,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     private ObjectAdapter getService(final Object servicePojo) {
         final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
-        final ObjectAdapter serviceAdapter = getAdapterManager().recreateAdapter(oid, servicePojo);
+        final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
         
         serviceAdapter.markAsResolvedIfPossible();
         return serviceAdapter;
@@ -651,178 +619,8 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
 
-    // ////////////////////////////////////////////////////////////////////
-    // Helpers
-    // ////////////////////////////////////////////////////////////////////
-
-    protected boolean isImmutable(final ObjectAdapter adapter) {
-        final ObjectSpecification noSpec = adapter.getSpecification();
-        return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.representsPersistent());
-    }
-
-    // ////////////////////////////////////////////////////////////////////
-    // injectInto
-    // ////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void injectInto(final Object candidate) {
-        if (PersistenceSessionAware.class.isAssignableFrom(candidate.getClass())) {
-            final PersistenceSessionAware cast = PersistenceSessionAware.class.cast(candidate);
-            cast.setPersistenceSession(this);
-        }
-        if (PersistenceSessionHydratorAware.class.isAssignableFrom(candidate.getClass())) {
-            final PersistenceSessionHydratorAware cast = PersistenceSessionHydratorAware.class.cast(candidate);
-            cast.setHydrator(this);
-        }
-    }
-
     // ///////////////////////////////////////////////////////////////////////////
-    // Debugging
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendTitle(getClass().getName());
-        debug.appendln("container", servicesInjector);
-        debug.appendln();
-
-        adapterManager.debugData(debug);
-        debug.appendln();
-
-        debug.appendln("manually dirtiable support (isDirty flag)?", dirtiableSupport);
-
-        debug.appendTitle("OID Generator");
-        oidGenerator.debugData(debug);
-        debug.appendln();
-
-        debug.appendTitle("Services");
-        for (final Object servicePojo : servicesInjector.getRegisteredServices()) {
-            final String id = ServiceUtil.id(servicePojo);
-            final Class<? extends Object> serviceClass = servicePojo.getClass();
-            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
-            final String serviceClassName = serviceClass.getName();
-            final Oid oidForService = getOidForService(serviceSpecification);
-            final String serviceId = id + (id.equals(serviceClassName) ? "" : " (" + serviceClassName + ")");
-            debug.appendln(oidForService != null ? oidForService.toString() : "[NULL]", serviceId);
-        }
-        debug.appendln();
-
-        
-        debug.appendTitle("Persistor");
-        getTransactionManager().debugData(debug);
-        debug.appendln("Persist Algorithm", persistAlgorithm);
-        debug.appendln("Object Store", objectStore);
-        debug.appendln();
-
-        objectStore.debugData(debug);
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Dependencies (injected in constructor, possibly implicitly)
-    // ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * The configured {@link ObjectAdapterFactory}.
-     * 
-     * <p>
-     * Injected in constructor.
-     */
-    public final ObjectAdapterFactory getAdapterFactory() {
-        return adapterFactory;
-    }
-
-    /**
-     * The configured {@link OidGenerator}.
-     * 
-     * <p>
-     * Injected in constructor.
-     */
-    public final OidGenerator getOidGenerator() {
-        return oidGenerator;
-    }
-
-    /**
-     * The configured {@link AdapterManager}.
-     * 
-     * <p>
-     * Injected in constructor.
-     */
-    public final AdapterManagerExtended getAdapterManager() {
-        return adapterManager;
-    }
-
-    /**
-     * The configured {@link ServicesInjector}.
-     */
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    /**
-     * The configured {@link ObjectFactory}.
-     * 
-     * <p>
-     * Obtained indirectly from the injected reflector.
-     */
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ///////////////////////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    /**
-     * Inject the {@link SpecificationLoader}.
-     * 
-     * <p>
-     * The need to inject the reflector was introduced to support the
-     * HibernateObjectStore, which installs its own
-     * <tt>HibernateClassStrategy</tt> to cope with the proxy classes that
-     * Hibernate wraps around lists, sets and maps.
-     */
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    }
-
-    /**
-     * Inject the {@link IsisTransactionManager}.
-     * 
-     * <p>
-     * This must be injected using setter-based injection rather than through
-     * the constructor because there is a bidirectional relationship between the
-     * {@link PersistenceSessionHydrator} and the {@link IsisTransactionManager}.
-     * 
-     * @see #getTransactionManager()
-     */
-    public void setTransactionManager(final IsisTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
-
-    
-    /**
-     * The configured {@link IsisTransactionManager}.
-     * 
-     * @see #setTransactionManager(IsisTransactionManager)
-     */
-    public IsisTransactionManager getTransactionManager() {
-        return transactionManager;
-    }
-
-    
-    
-    
-
-    
-    
-    
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // init, shutdown
+    // fixture installation
     // ///////////////////////////////////////////////////////////////////////////
 
 
@@ -862,14 +660,13 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         }
     }
 
-
-
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.debug("finalizing object manager");
+        LOG.debug("finalizing persistence session");
     }
-
+    
+    
     // ///////////////////////////////////////////////////////////////////////////
     // loadObject, reload
     // ///////////////////////////////////////////////////////////////////////////
@@ -1114,6 +911,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         getUpdateNotifier().addChangedObject(adapter);
     }
 
+    
     // ///////////////////////////////////////////////////////////////////////////
     // destroyObject
     // ///////////////////////////////////////////////////////////////////////////
@@ -1165,6 +963,8 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // remapAsPersistent
     // ///////////////////////////////////////////////////////////////////////////
 
+    private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
+
     /**
      * Callback from the {@link PersistAlgorithm} (or equivalent; some object
      * stores such as Hibernate will use listeners instead) to indicate that the
@@ -1181,11 +981,6 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * The {@link PersistAlgorithm} is called from
      * {@link #makePersistent(ObjectAdapter)}.
      * 
-     * <p>
-     * TODO: the <tt>PersistenceSessionProxy</tt> doesn't have this method;
-     * should document better why this is the case, and where the equivalent
-     * functionality is (somewhere in the marshalling stuff, I think).
-     * 
      * @see #remapAsPersistent(ObjectAdapter)
      */
     @Override
@@ -1197,31 +992,12 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     }
 
 
-    private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
     
     @Override
     public Oid remappedFrom(Oid transientOid) {
         return persistentByTransient.get(transientOid);
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // getInstances
-    // ///////////////////////////////////////////////////////////////////////////
-
-
-    private List<ObjectAdapter> getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
-        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
-            @Override
-            public List<ObjectAdapter> execute() {
-                return objectStore.getInstances(persistenceQuery);
-            }
-
-            @Override
-            public void onSuccess() {
-                clearAllDirty();
-            }
-        });
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // hasInstances
@@ -1282,6 +1058,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         getTransactionManager().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
+    
     // ///////////////////////////////////////////////////////////////////////////
     // Debugging
     // ///////////////////////////////////////////////////////////////////////////
@@ -1292,6 +1069,43 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return "Object Store Persistor";
     }
 
+    @Override
+    public void debugData(final DebugBuilder debug) {
+        debug.appendTitle(getClass().getName());
+        debug.appendln("container", servicesInjector);
+        debug.appendln();
+
+        adapterManager.debugData(debug);
+        debug.appendln();
+
+        debug.appendln("manually dirtiable support (isDirty flag)?", dirtiableSupport);
+
+        debug.appendTitle("OID Generator");
+        oidGenerator.debugData(debug);
+        debug.appendln();
+
+        debug.appendTitle("Services");
+        for (final Object servicePojo : servicesInjector.getRegisteredServices()) {
+            final String id = ServiceUtil.id(servicePojo);
+            final Class<? extends Object> serviceClass = servicePojo.getClass();
+            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
+            final String serviceClassName = serviceClass.getName();
+            final Oid oidForService = getOidForService(serviceSpecification);
+            final String serviceId = id + (id.equals(serviceClassName) ? "" : " (" + serviceClassName + ")");
+            debug.appendln(oidForService != null ? oidForService.toString() : "[NULL]", serviceId);
+        }
+        debug.appendln();
+
+        
+        debug.appendTitle("Persistor");
+        getTransactionManager().debugData(debug);
+        debug.appendln("Persist Algorithm", persistAlgorithm);
+        debug.appendln("Object Store", objectStore);
+        debug.appendln();
+
+        objectStore.debugData(debug);
+    }
+    
     @Override
     public String toString() {
         final ToString toString = new ToString(this);
@@ -1304,8 +1118,31 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return toString.toString();
     }
 
+    
+    // ////////////////////////////////////////////////////////////////////
+    // Helpers
+    // ////////////////////////////////////////////////////////////////////
+
+    protected boolean isImmutable(final ObjectAdapter adapter) {
+        final ObjectSpecification noSpec = adapter.getSpecification();
+        return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.representsPersistent());
+    }
+
+    // ////////////////////////////////////////////////////////////////////
+    // injectInto
+    // ////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void injectInto(final Object candidate) {
+        if (PersistenceSessionAware.class.isAssignableFrom(candidate.getClass())) {
+            final PersistenceSessionAware cast = PersistenceSessionAware.class.cast(candidate);
+            cast.setPersistenceSession(this);
+        }
+    }
+
+    
     // ///////////////////////////////////////////////////////////////////////////
-    // Dependencies
+    // Dependencies (injected in constructor, possibly implicitly)
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -1326,6 +1163,100 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return getTransactionManager().getTransaction().getUpdateNotifier();
     }
 
+    /**
+     * The configured {@link ObjectAdapterFactory}.
+     * 
+     * <p>
+     * Injected in constructor.
+     */
+    public final ObjectAdapterFactory getAdapterFactory() {
+        return adapterFactory;
+    }
+
+    /**
+     * The configured {@link OidGenerator}.
+     * 
+     * <p>
+     * Injected in constructor.
+     */
+    public final OidGenerator getOidGenerator() {
+        return oidGenerator;
+    }
+
+    /**
+     * The configured {@link AdapterManager}.
+     * 
+     * <p>
+     * Injected in constructor.
+     */
+    public final AdapterManagerExtended getAdapterManager() {
+        return adapterManager;
+    }
+
+    /**
+     * The configured {@link ServicesInjector}.
+     */
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
+
+    /**
+     * The configured {@link ObjectFactory}.
+     * 
+     * <p>
+     * Obtained indirectly from the injected reflector.
+     */
+    public ObjectFactory getObjectFactory() {
+        return objectFactory;
+    }
+
+    
+    // ///////////////////////////////////////////////////////////////////////////
+    // Dependencies (injected)
+    // ///////////////////////////////////////////////////////////////////////////
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
+    }
+
+    /**
+     * Inject the {@link SpecificationLoader}.
+     * 
+     * <p>
+     * The need to inject the reflector was introduced to support the
+     * HibernateObjectStore, which installs its own
+     * <tt>HibernateClassStrategy</tt> to cope with the proxy classes that
+     * Hibernate wraps around lists, sets and maps.
+     */
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
+    }
+
+    /**
+     * Inject the {@link IsisTransactionManager}.
+     * 
+     * <p>
+     * This must be injected using setter-based injection rather than through
+     * the constructor because there is a bidirectional relationship between the
+     * {@link PersistenceSessionHydrator} and the {@link IsisTransactionManager}.
+     * 
+     * @see #getTransactionManager()
+     */
+    public void setTransactionManager(final IsisTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
+    
+    /**
+     * The configured {@link IsisTransactionManager}.
+     * 
+     * @see #setTransactionManager(IsisTransactionManager)
+     */
+    public IsisTransactionManager getTransactionManager() {
+        return transactionManager;
+    }
+
+
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////////////////////////
@@ -1333,7 +1264,5 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     private static AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-
-
     
 }

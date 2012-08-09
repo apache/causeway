@@ -19,26 +19,18 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
@@ -47,8 +39,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.IsisActions;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class ObjectStoreInstances_findInstancesAndAdd {
 
@@ -64,7 +56,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
     @Mock
     private AuthenticationSession mockAuthSession;
     @Mock
-    private AdapterManager mockAdapterManager;
+    private AdapterManagerExtended mockAdapterManager;
 
     @Mock
     private ObjectAdapter mockAdapter1;
@@ -79,7 +71,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
                 return mockAuthSession;
             }
             @Override
-            protected AdapterManager getAdapterManager() {
+            protected AdapterManagerExtended getAdapterManager() {
                 return mockAdapterManager;
             }
         };

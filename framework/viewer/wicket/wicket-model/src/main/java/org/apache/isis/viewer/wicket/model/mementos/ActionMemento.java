@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 import java.io.Serializable;
 
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -31,24 +32,24 @@ public class ActionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final SpecMemento owningType;
+    private final ObjectSpecId owningType;
     private final ActionType actionType;
     private final String nameParmsId;
 
     private transient ObjectAction action;
 
-    public ActionMemento(final SpecMemento owningType, final ActionType actionType, final String nameParmsId) {
+    public ActionMemento(final ObjectSpecId owningType, final ActionType actionType, final String nameParmsId) {
         this.owningType = owningType;
         this.actionType = actionType;
         this.nameParmsId = nameParmsId;
     }
 
     public ActionMemento(final ObjectAction action) {
-        this(new SpecMemento(action.getOnType()), action.getType(), action.getIdentifier().toNameParmsIdentityString());
+        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString());
         this.action = action;
     }
 
-    public SpecMemento getOwningType() {
+    public ObjectSpecId getOwningType() {
         return owningType;
     }
 
@@ -62,7 +63,7 @@ public class ActionMemento implements Serializable {
 
     public ObjectAction getAction() {
         if (action == null) {
-            action = owningType.getSpecification().getObjectAction(actionType, nameParmsId);
+            action = SpecUtils.getSpecificationFor(owningType).getObjectAction(actionType, nameParmsId);
         }
         return action;
     }

@@ -44,6 +44,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerPersist;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -338,7 +339,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
     
     private DomainObjectContainer getContainer() {
-        return IsisContext.getPersistenceSession().getServicesInjector().getContainer();
+        return getPersistenceSession().getServicesInjector().getContainer();
     }
 
     /**
@@ -500,18 +501,18 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     public ObjectAdapter adapterFor(Object domainObject) {
         ensureSessionInProgress();
-        return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(domainObject);
+        return getAdapterManager().adapterFor(domainObject);
     }
 
     public ObjectAdapter reload(RootOid oid) {
         ensureSessionInProgress();
-        final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
+        final PersistenceSession persistenceSession = getPersistenceSession();
         return persistenceSession.loadObject(oid);
     }
 
     public ObjectAdapter recreateAdapter(RootOid oid) {
         ensureSessionInProgress();
-        return IsisContext.getPersistenceSession().recreateAdapter(oid);
+        return getAdapterManager().recreatePersistentAdapter(oid);
     }
 
     public ObjectAdapter remapAsPersistent(Object pojo, RootOid persistentOid) {
@@ -524,7 +525,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     @SuppressWarnings("unchecked")
     public <T extends ObjectStore> T getObjectStore(Class<T> cls) {
-        final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
+        final PersistenceSession persistenceSession = getPersistenceSession();
         return (T) persistenceSession.getObjectStore();
     }
 
@@ -574,11 +575,11 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     
     private AdapterManagerPersist getAdapterManagerPersist() {
-        return (AdapterManagerPersist)IsisContext.getPersistenceSession().getAdapterManager();
+        return (AdapterManagerPersist)getAdapterManager();
     }
 
     public void beginTran() {
-        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
 
         if(transaction == null) {
@@ -605,7 +606,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
     public void commitTran() {
-        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
         if(transaction == null) {
             Assert.fail("No transaction exists");
@@ -627,7 +628,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
     public void abortTran() {
-        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
         if(transaction == null) {
             Assert.fail("No transaction exists");
@@ -648,6 +649,19 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
                 Assert.fail("Unknown transaction state '" + state + "'");
         }
     }
+
+    protected IsisTransactionManager getTransactionManager() {
+        return getPersistenceSession().getTransactionManager();
+    }
+    
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
 
     
 }

@@ -41,6 +41,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -297,15 +298,15 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return sql.toString();
     }
 
-    protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
-        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
+    protected ObjectAdapter getAdapter(final ObjectSpecification spec, final Oid oid) {
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         }
-        return getPersistenceSession().recreateAdapter(specification, oid);
+        final Object recreatedPojo = spec.createObject();
+        return getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
     }
-    
+
     protected FieldMapping fieldMappingFor(final ObjectAssociation field) {
         return fieldMappingByField.get(field);
     }
@@ -353,6 +354,9 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return IsisContext.getPersistenceSession();
     }
 
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
 
 
 }

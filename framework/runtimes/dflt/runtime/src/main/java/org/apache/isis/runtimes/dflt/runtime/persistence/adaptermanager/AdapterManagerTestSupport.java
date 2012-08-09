@@ -39,10 +39,10 @@ public interface AdapterManagerTestSupport {
      * Note that the {@link RootOid} must represent a {@link Oid#isTransient()
      * transient} object. If an {@link ObjectAdapter adapter} is required for a
      * persistent {@link RootOid}, just use
-     * {@link #recreateAdapter(RootOid, Object)}.
+     * {@link #mapRecreatedPojo(RootOid, Object)}.
      * 
      * @see #adapterFor(Object)
-     * @see #recreateAdapter(RootOid, Object)
+     * @see #mapRecreatedPojo(RootOid, Object)
      */
     ObjectAdapter testCreateTransient(Object pojo, RootOid oid);
 

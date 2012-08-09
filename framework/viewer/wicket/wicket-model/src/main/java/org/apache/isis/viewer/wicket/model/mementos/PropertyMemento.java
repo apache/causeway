@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -34,39 +35,39 @@ public class PropertyMemento implements Serializable {
         return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
-    private final SpecMemento owningType;
+    private final ObjectSpecId owningType;
     private final String identifier;
 
     /**
      * Lazily loaded as required.
      */
-    private SpecMemento type;
+    private ObjectSpecId type;
 
     private transient OneToOneAssociation property;
 
-    public PropertyMemento(final SpecMemento owningType, final String name) {
+    public PropertyMemento(final ObjectSpecId owningType, final String name) {
         this(owningType, name, null);
     }
 
-    public PropertyMemento(final SpecMemento owningType, final String name, final SpecMemento type) {
+    public PropertyMemento(final ObjectSpecId owningType, final String name, final ObjectSpecId type) {
         this.owningType = owningType;
         this.identifier = name;
         this.type = type;
     }
 
     public PropertyMemento(final OneToOneAssociation property) {
-        this(new SpecMemento(owningSpecFor(property)), property.getIdentifier().toNameIdentityString(), new SpecMemento(property.getSpecification()));
+        this(owningSpecFor(property).getSpecId(), property.getIdentifier().toNameIdentityString(), property.getSpecification().getSpecId());
         this.property = property;
     }
 
-    public SpecMemento getOwningType() {
+    public ObjectSpecId getOwningType() {
         return owningType;
     }
 
-    public SpecMemento getType() {
+    public ObjectSpecId getType() {
         if (type == null) {
             // lazy load if need be
-            type = new SpecMemento(getProperty().getSpecification());
+            type = getProperty().getSpecification().getSpecId();
         }
         return type;
     }
@@ -77,7 +78,7 @@ public class PropertyMemento implements Serializable {
 
     public OneToOneAssociation getProperty() {
         if (property == null) {
-            property = (OneToOneAssociation) owningType.getSpecification().getAssociation(identifier);
+            property = (OneToOneAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(identifier);
         }
         return property;
     }

@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -325,7 +326,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         final TypedOid typedOid = new OidMarshaller().unmarshal(oidStr, TypedOid.class);
 
         if(!typedOid.isTransient()) {
-            return getPersistenceSession().recreateAdapter(typedOid);
+            return getAdapterManager().recreatePersistentAdapter(typedOid);
         } else {
             return mappedObject(oidStr);
         }
@@ -374,7 +375,6 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 //        final String aggregatedId = split.length > 2?split[2]:null;
 //            
 //        final ObjectSpecification spec = getSpecificationLoader().lookupByObjectType(objectType);
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(typedOid.getObjectSpecId());
 
         //if ((type == 'T')) {
         if (typedOid.isTransient()) {
@@ -384,13 +384,12 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 mapping = requestTransients.get(oidStr);
             }
             if (mapping == null) {
-                final Object pojo = spec.createObject();
 
                 // create as a (transient) root adapter
                 // Oid oid = deString(objectType, oidData, State.TRANSIENT);
                 //return getPersistenceSession().recreateAdapter(oid, pojo);
                 
-                return getPersistenceSession().recreateAdapter(typedOid, pojo);
+                return getAdapterManager().recreatePersistentAdapter(typedOid);
             }
             
             final ObjectAdapter mappedTransientObject = mapping.getObject();
@@ -522,10 +521,6 @@ public class DefaultOidObjectMapping implements ObjectMapping {
     // from context
     ///////////////////////////////////////
     
-//    protected OidStringifier getOidStringifier() {
-//        return getPersistenceSession().getOidGenerator().getOidStringifier();
-//    }
-    
     protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
@@ -534,7 +529,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerExtended getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

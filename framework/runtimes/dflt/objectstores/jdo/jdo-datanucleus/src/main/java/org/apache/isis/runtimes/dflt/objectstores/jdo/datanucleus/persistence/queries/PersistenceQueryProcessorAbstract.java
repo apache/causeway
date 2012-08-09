@@ -7,6 +7,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.metadata.TypeMetadata;
+import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.collect.Lists;
 
@@ -41,17 +42,21 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         return getPersistenceManagerFactory().getMetadata(classFullName);
     }
 
+    // TODO: review this, want to reuse
+    private final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener();
+    
     /**
-     * Traversing the provided list causes the
+     * Traversing the provided list causes (or should cause) the
      * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {
      * to be called.
-     * @param specification
-     * @param pojos returned from DataNucleus.
      */
     protected List<ObjectAdapter> loadAdapters(
             final ObjectSpecification specification, final List<?> pojos) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         for (final Object pojo : pojos) {
+        	// ought not to be necessary, however for some queries it seems that the 
+        	// lifecycle listener is not called
+        	isisLifecycleListener.postLoadProcessingFor((PersistenceCapable) pojo);
             ObjectAdapter adapter = adapterManager.getAdapterFor(pojo);
             Assert.assertNotNull(adapter);
             adapters.add(adapter);

@@ -26,6 +26,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.components.Injectable;
@@ -37,6 +39,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManagerException;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerDefault;
 import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifierDefault;
 
@@ -56,8 +59,6 @@ public class IsisTransactionManager implements SessionScopedComponent, Injectabl
      * Holds the current or most recently completed transaction.
      */
     private IsisTransaction transaction;
-
-    
 
 
 
@@ -242,7 +243,7 @@ public class IsisTransactionManager implements SessionScopedComponent, Injectabl
     // start, flush, abort, end
     // //////////////////////////////////////////////////////
 
-    public void startTransaction() {
+    public synchronized void startTransaction() {
 
         boolean noneInProgress = false;
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
@@ -260,7 +261,7 @@ public class IsisTransactionManager implements SessionScopedComponent, Injectabl
         }
     }
 
-    public boolean flushTransaction() {
+    public synchronized boolean flushTransaction() {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("flushTransaction");
@@ -276,17 +277,60 @@ public class IsisTransactionManager implements SessionScopedComponent, Injectabl
     /**
      * Ends the transaction if nesting level is 0.
      */
-    public void endTransaction() {
+    public synchronized void endTransaction() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("endTransaction: level " + (transactionLevel) + "->" + (transactionLevel - 1));
         }
 
         transactionLevel--;
         if (transactionLevel == 0) {
-            LOG.debug("endTransaction: committing");
-            objectPersistor.objectChangedAllDirty();
-            getTransaction().commit();
-            objectStore.endTransaction();
+
+            //
+            // TODO: granted, this is some fairly byzantine coding.  but I'm trying to account for different types
+            // of object store implementations that could start throwing exceptions at any stage.
+            // once the contract/API for the objectstore is better tied down, hopefully can simplify this...
+            //
+            
+            List<ObjectPersistenceException> exceptions = this.getTransaction().getExceptionsIfAny();
+            if(exceptions.isEmpty()) {
+            
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("endTransaction: committing");
+                }
+                
+                objectPersistor.objectChangedAllDirty();
+                
+                // just in case any additional exceptions were raised...
+                exceptions = this.getTransaction().getExceptionsIfAny();
+            }
+            
+            if(exceptions.isEmpty()) {
+                getTransaction().commit();
+                
+                // in case any additional exceptions were raised...
+                exceptions = this.getTransaction().getExceptionsIfAny();
+            }
+            
+            if(exceptions.isEmpty()) {
+                objectStore.endTransaction();
+                
+                // just in case any additional exceptions were raised...
+                exceptions = this.getTransaction().getExceptionsIfAny();
+            }
+            
+            if(!exceptions.isEmpty()) {
+                
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("endTransaction: aborting instead, " + exceptions.size() + " exception(s) have been raised");
+                }
+                abortTransaction();
+                
+                // just in case any additional exceptions were raised...
+                exceptions = this.getTransaction().getExceptionsIfAny();
+                
+                throw exceptionToThrowFrom(exceptions);
+            }
+            
         } else if (transactionLevel < 0) {
             LOG.error("endTransaction: transactionLevel=" + transactionLevel);
             transactionLevel = 0;
@@ -294,7 +338,20 @@ public class IsisTransactionManager implements SessionScopedComponent, Injectabl
         }
     }
 
-    public void abortTransaction() {
+
+    private ObjectPersistenceException exceptionToThrowFrom(List<ObjectPersistenceException> exceptions) {
+        if(exceptions.size() == 1) {
+            return exceptions.get(0);
+        } 
+        final StringBuilder buf = new StringBuilder();
+        for (ObjectPersistenceException ope : exceptions) {
+            buf.append(ope.getMessage()).append("\n");
+        }
+        return new ObjectPersistenceException(buf.toString());
+    }
+    
+
+    public synchronized void abortTransaction() {
         if (getTransaction() != null) {
             getTransaction().abort();
             transactionLevel = 0;

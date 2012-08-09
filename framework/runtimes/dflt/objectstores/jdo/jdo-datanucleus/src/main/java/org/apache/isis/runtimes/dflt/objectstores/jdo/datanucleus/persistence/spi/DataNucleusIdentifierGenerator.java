@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.datanucleus.identity.OID;
 
 
+import org.apache.isis.core.commons.base64.Base64Serializer;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
@@ -58,17 +59,9 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator, Adap
             return "1";
         }
         
-        Object identifierObj = getPersistenceManager().getObjectId(pojo);
-        if(identifierObj instanceof org.datanucleus.identity.OID) {
-            // for autoassigned (datastore identity)
-            org.datanucleus.identity.OID dnOid = (org.datanucleus.identity.OID) identifierObj;
-            return dnOid.getKeyValue().toString();
-        } else {
-            // for application-assigned identities
-            // for now, just using toString().  Suspect will need to review this
-            return identifierObj.toString();
-        }
-
+        final Object jdoOid = getPersistenceManager().getObjectId(pojo);
+        
+        return JdoOidSerializer.toString(jdoOid);
     }
 
 

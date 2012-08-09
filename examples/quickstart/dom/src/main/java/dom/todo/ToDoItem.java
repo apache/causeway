@@ -46,9 +46,9 @@ import org.apache.isis.applib.annotation.Title;
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
 })
 @Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION",
-extensions={@Extension(vendorName="datanucleus", key="field-name", value="version")})
+         extensions={@Extension(vendorName="datanucleus", key="field-name", value="version")})
 public class ToDoItem extends AbstractDomainObject {
-
+    
     public static final List<String> CATEGORIES = Collections.unmodifiableList(Arrays.asList("Professional", "Domestic", "Other"));
 
     // {{ Description

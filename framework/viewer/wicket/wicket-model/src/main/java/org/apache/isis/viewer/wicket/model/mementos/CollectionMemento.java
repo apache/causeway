@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -37,22 +38,22 @@ public class CollectionMemento implements Serializable {
         return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
-    private final SpecMemento owningType;
+    private final ObjectSpecId owningType;
     private final String id;
 
     private transient OneToManyAssociation collection;
 
-    public CollectionMemento(final SpecMemento owningType, final String id) {
+    public CollectionMemento(final ObjectSpecId owningType, final String id) {
         this.owningType = owningType;
         this.id = id;
     }
 
     public CollectionMemento(final OneToManyAssociation collection) {
-        this(new SpecMemento(owningSpecFor(collection)), collection.getIdentifier().toNameIdentityString());
+        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString());
         this.collection = collection;
     }
 
-    public SpecMemento getOwningType() {
+    public ObjectSpecId getOwningType() {
         return owningType;
     }
 
@@ -73,7 +74,7 @@ public class CollectionMemento implements Serializable {
 
     public OneToManyAssociation getCollection() {
         if (collection == null) {
-            collection = (OneToManyAssociation) owningType.getSpecification().getAssociation(id);
+            collection = (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(id);
         }
         return collection;
     }

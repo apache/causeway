@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.entity;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.datastoreidentity;
 
 import java.util.List;
 
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
 import junit.framework.Assert;
@@ -33,16 +35,16 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.pe
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetAnnotation;
 
 
-public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
+public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
         AbstractFacetFactoryTest {
 
-    private JdoPersistenceCapableAnnotationFacetFactory facetFactory;
+    private JdoDatastoreIdentityAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoPersistenceCapableAnnotationFacetFactory();
+        facetFactory = new JdoDatastoreIdentityAnnotationFacetFactory();
     }
 
     @Override
@@ -54,64 +56,58 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
     public void testFeatureTypes() {
         final List<FeatureType> featureTypes = facetFactory
                 .getFeatureTypes();
-        Assert
-                .assertTrue(contains(featureTypes,
-                FeatureType.OBJECT));
-        assertFalse(contains(featureTypes,
-                FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes,
-                FeatureType.COLLECTION));
-        Assert
-                .assertFalse(contains(featureTypes,
-                FeatureType.ACTION));
+        Assert.assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        Assert.assertFalse(contains(featureTypes, FeatureType.ACTION));
         assertFalse(contains(featureTypes,
                 FeatureType.ACTION_PARAMETER));
     }
 
-    public void testPersistenceCapableAnnotationPickedUpOnClass() {
-        @PersistenceCapable
+    public void testDatastoreIdentityAnnotationPickedUpOnClass() {
+        @DatastoreIdentity()
         class Customer {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
+        final Facet facet = facetHolder.getFacet(JdoDatastoreIdentityFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof JdoPersistenceCapableFacetAnnotation);
+        assertTrue(facet instanceof JdoDatastoreIdentityFacetAnnotation);
     }
 
-    public void testIfNoEntityAnnotationThenNoFacet() {
+    public void testIfNoDatastoreIdentityAnnotationThenNoFacet() {
 
         class Customer {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
+        final Facet facet = facetHolder.getFacet(JdoDatastoreIdentityFacet.class);
         assertNull(facet);
     }
 
-    public void testEntityAnnotationWithNoExplicitNameDefaultsToClassName() {
-        @PersistenceCapable()
+    public void testDatastoreIdentityAnnotationWithNoExplicitStrategyDefaultsToUnspecified() {
+        @DatastoreIdentity()
         class Customer {
         }
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final JdoPersistenceCapableFacet entityFacet = facetHolder
-                .getFacet(JdoPersistenceCapableFacet.class);
-        assertEquals("Customer", entityFacet.getTable());
+        final JdoDatastoreIdentityFacet entityFacet = facetHolder
+                .getFacet(JdoDatastoreIdentityFacet.class);
+        assertEquals(IdGeneratorStrategy.UNSPECIFIED, entityFacet.getStrategy());
     }
 
-    public void testEntityAnnotationWithExplicitNameAttributeProvided() {
-        @PersistenceCapable(table = "CUS_CUSTOMER")
+    public void testEntityAnnotationWithExplicitStrategyAttributeProvided() {
+        @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY)
         class Customer {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final JdoPersistenceCapableFacet entityFacet = facetHolder
-                .getFacet(JdoPersistenceCapableFacet.class);
-        assertEquals("CUS_CUSTOMER", entityFacet.getTable());
+        final JdoDatastoreIdentityFacet entityFacet = facetHolder
+                .getFacet(JdoDatastoreIdentityFacet.class);
+        assertEquals(IdGeneratorStrategy.IDENTITY, entityFacet.getStrategy());
     }
 
     public void testNoMethodsRemoved() {

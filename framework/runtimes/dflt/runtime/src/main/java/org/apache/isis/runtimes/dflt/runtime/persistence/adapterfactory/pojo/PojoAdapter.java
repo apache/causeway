@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
@@ -293,11 +294,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         final Oid parentOid = parentedOid.getParentOid();
         ObjectAdapter parentAdapter = objectAdapterLookup.getAdapterFor(parentOid);
         if(parentAdapter == null) {
-            final Oid parentOidNowPersisted = IsisContext.getPersistenceSession().remappedFrom(parentOid);
+            final Oid parentOidNowPersisted = getPersistenceSession().remappedFrom(parentOid);
             parentAdapter = objectAdapterLookup.getAdapterFor(parentOidNowPersisted);
         }
         return parentAdapter;
     }
+
     
 
     
@@ -525,6 +527,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
 
 
+    
+    ////////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ////////////////////////////////////////////////////////////////////
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
 
 }

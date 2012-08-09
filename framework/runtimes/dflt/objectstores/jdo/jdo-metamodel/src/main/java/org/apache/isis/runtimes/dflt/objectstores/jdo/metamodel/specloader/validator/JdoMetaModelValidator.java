@@ -53,25 +53,9 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
         final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
         for (final ObjectSpecification objSpec : objectSpecs) {
             
-            // TODO: seems that DataNucleus does require to be annotated as both.
-            // ensureNotAnnotatedAsBothEntityAndEmbeddedOnly(objSpec);
-            
-            // there is no requirement to ensure that there is a primary key property;
-            // can get the value directly from JDO
-            
-            ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(objSpec);
+            // TODO: ensure that PersistenceCapable has supported strategy (APPLICATION or DATASTORE)
+            // ensure that DATASTORE has recognised @DatastoreIdentity attribute
         }
-    }
-
-    private void ensureNotAnnotatedAsBothEntityAndEmbeddedOnly(final ObjectSpecification objSpec) {
-        final JdoPersistenceCapableFacet entityFacet = objSpec.getFacet(JdoPersistenceCapableFacet.class);
-        final JdoEmbeddedOnlyFacet embeddableFacet = objSpec.getFacet(JdoEmbeddedOnlyFacet.class);
-        if (entityFacet == null || embeddableFacet == null) {
-            return;
-        }
-
-        final String classFullName = objSpec.getFullIdentifier();
-        throw new MetaModelInvalidException(MessageFormat.format("Class {0} is mapped as both @PersistenceCapable and @EmbeddedOnly; " + "not supported", classFullName));
     }
 
     private void ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(final ObjectSpecification objSpec) {

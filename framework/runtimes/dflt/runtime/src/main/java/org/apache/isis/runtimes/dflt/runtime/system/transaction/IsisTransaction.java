@@ -21,9 +21,9 @@ package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -41,6 +42,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -157,11 +159,13 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private static final Logger LOG = Logger.getLogger(IsisTransaction.class);
 
+
     private final ObjectStoreTransactionManagement objectStore;
     private final List<PersistenceCommand> commands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
     private final UpdateNotifier updateNotifier;
+    private final List<ObjectPersistenceException> exceptions = Lists.newArrayList();
 
     private State state;
 
@@ -196,7 +200,6 @@ public class IsisTransaction implements TransactionScopedComponent {
     private void setState(final State state) {
         this.state = state;
     }
-
 
     
     // //////////////////////////////////////////////////////////
@@ -264,6 +267,24 @@ public class IsisTransaction implements TransactionScopedComponent {
 
 
 
+    /////////////////////////////////////////////////////////////////////////
+    // for worm-hole handling of exceptions
+    /////////////////////////////////////////////////////////////////////////
+
+    public void ensureExceptionsListIsEmpty() {
+        Ensure.ensureThatArg(exceptions.isEmpty(), is(true), "exceptions list is not empty");
+    }
+
+    public void addException(ObjectPersistenceException exception) {
+        exceptions.add(exception);
+    }
+    
+    public List<ObjectPersistenceException> getExceptionsIfAny() {
+        return Collections.unmodifiableList(exceptions);
+    }
+
+    
+
     // ////////////////////////////////////////////////////////////////
     // flush
     // ////////////////////////////////////////////////////////////////
@@ -330,6 +351,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     public final void commit() {
         ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
+        ensureThatState(exceptions.isEmpty(), is(true), "cannot commit: " + exceptions.size() + " exceptions have been raised");
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("commit transaction " + this);

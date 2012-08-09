@@ -37,7 +37,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.prop.prim
  * Note that it is NOT necessary for there to be a facet to
  * {@link PropertySetterFacet set} the property.
  */
-final class JdoPrimaryKeyPropertyFilter implements Filter<ObjectAssociation> {
+public final class JdoPrimaryKeyPropertyFilter implements Filter<ObjectAssociation> {
     @Override
     public boolean accept(final ObjectAssociation noa) {
         return noa.isOneToOneAssociation() &&

@@ -32,17 +32,23 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 
 public class IsisLifecycleListener implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener, DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener, SuspendableListener {
 
     private static final Logger LOG = Logger.getLogger(IsisLifecycleListener.class);
 
+
+    /////////////////////////////////////////////////////////////////////////
+    // callbacks
+    /////////////////////////////////////////////////////////////////////////
+    
     private boolean suspended;
 
     @Override
@@ -51,7 +57,9 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.POST, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
     }
@@ -62,7 +70,9 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.PRE, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
 
@@ -75,6 +85,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         if (LOG.isDebugEnabled()) {
             LOG.debug(logString(Phase.POST, event));
         }
+        if (isSuspended()) {
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
+            return;
+        }
 
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
@@ -86,50 +102,75 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.POST, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
         
         final PersistenceCapable pojo = persistenceCapableFor(event);
+        postLoadProcessingFor(pojo);
+    }
+
+	public void postLoadProcessingFor(final PersistenceCapable pojo) {
+
+		final Version pojoVersion = getVersionIfAny(pojo);
         
         final RootOid oid ;
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
         if(adapter != null) {
-            ensureRootObject(event);
+            ensureRootObject(pojo);
             oid = (RootOid) adapter.getOid();
+
+            final Version previousVersion = adapter.getVersion();
+
+            // sync the pojo held by the adapter with that just loaded
+            getAdapterManager().removeAdapter(adapter);
+            adapter.replacePojo(pojo);
+            getAdapterManager().addExistingAdapter(adapter);
+
+            // since there was already an adapter, do concurrency check
+            if(previousVersion != null && pojoVersion != null) {
+            	if(previousVersion.different(pojoVersion)) {
+            	    getCurrentTransaction().addException(new ConcurrencyException(adapter, pojoVersion));
+            	}
+            }
         } else {
             final OidGenerator oidGenerator = getOidGenerator();
             oid = oidGenerator.createPersistent(pojo, null);
             
-            // it's possible that there is already an adapter for this Oid, ie from ObjectStore#resolveImmediately()
+            // it's appears to be possible that there is already an adapter for this Oid, 
+            // ie from ObjectStore#resolveImmediately()
             adapter = getAdapterManager().getAdapterFor(oid);
             if(adapter != null) {
                 getAdapterManager().removeAdapter(adapter);
                 adapter.replacePojo(pojo);
                 getAdapterManager().addExistingAdapter(adapter);
             } else {
-                PersistenceSessionHydrator hydrator = getPersistenceSession();
-                adapter = hydrator.recreateAdapter(oid, pojo);
-                PersistorUtil.startResolving(adapter);
-                PersistorUtil.endResolving(adapter);
+                adapter = getAdapterManager().mapRecreatedPojo(oid, pojo);
             }
         }
-        adapter.setVersion(getVersionIfAny(pojo));
+        if(!adapter.isResolved()) {
+            PersistorUtil.startResolving(adapter);
+            PersistorUtil.endResolving(adapter);
+        }
+        adapter.setVersion(pojoVersion);
 
-        ensureFrameworksInAgreement(event);
-    }
+        ensureFrameworksInAgreement(pojo);
+	}
 
-    @Override
+	@Override
     public void preStore(InstanceLifecycleEvent event) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(logString(Phase.PRE, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
-
     }
 
     @Override
@@ -147,8 +188,8 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         
         
         final PersistenceCapable pojo = persistenceCapableFor(event);
-        
-        
+
+        // assert is persistent
         if(!pojo.jdoIsPersistent()) {
             throw new IllegalStateException("Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
         }
@@ -182,7 +223,9 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.PRE, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
 
@@ -196,9 +239,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.POST, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
+        
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
@@ -209,9 +255,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.PRE, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
+        
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
@@ -222,9 +271,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.POST, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
+        
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
@@ -235,9 +287,13 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.PRE, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
+        
+        //TODO: not sure about the lifecycle of clear
         //ensureRootObject(event);
         //ensureFrameworksInAgreement(event);
     }
@@ -248,9 +304,13 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.POST, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
+        
+        //TODO: not sure about the lifecycle of clear
         //ensureRootObject(event);
         //ensureFrameworksInAgreement(event);
     }
@@ -261,9 +321,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(logString(Phase.PRE, event));
         }
         if (isSuspended()) {
-            LOG.debug(" [currently suspended - ignoring]");
+            if (LOG.isDebugEnabled()) {
+            	LOG.debug(" [currently suspended - ignoring]");
+            }
             return;
         }
+
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
@@ -277,6 +340,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             LOG.debug(" [currently suspended - ignoring]");
             return;
         }
+        
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
@@ -301,7 +365,11 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     private void ensureFrameworksInAgreement(InstanceLifecycleEvent event) {
         final PersistenceCapable pojo = persistenceCapableFor(event);
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        ensureFrameworksInAgreement(pojo);
+    }
+
+	private void ensureFrameworksInAgreement(final PersistenceCapable pojo) {
+		final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
         final Oid oid = adapter.getOid();
 
         if(!pojo.jdoIsPersistent()) {
@@ -327,13 +395,17 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             }
 
         }
-    }
+	}
 
     // make sure the entity is known to Isis and is a root
     // TODO: will probably need to handle aggregated entities at some point...
     private void ensureRootObject(InstanceLifecycleEvent event) {
         final PersistenceCapable pojo = persistenceCapableFor(event);
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        ensureRootObject(pojo);
+    }
+
+	private void ensureRootObject(final PersistenceCapable pojo) {
+		final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
         if(adapter == null) {
             throw new IsisException(MessageFormat.format("Object not yet known to Isis: {0}", pojo));
         }
@@ -341,7 +413,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         if (!(oid instanceof RootOid)) {
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
-    }
+	}
 
 
 
@@ -421,5 +493,8 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         return IsisContext.getAuthenticationSession();
     }
 
-
+    protected IsisTransaction getCurrentTransaction() {
+        return IsisContext.getCurrentTransaction();
+    }
+    
 }

@@ -20,6 +20,7 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.prog
 
 
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
@@ -39,6 +40,7 @@ public class JdoProgrammingModelFacets extends ProgrammingModelFacetsJava5 {
 
     public JdoProgrammingModelFacets() {
         addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
+        addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
         addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
 
         addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);

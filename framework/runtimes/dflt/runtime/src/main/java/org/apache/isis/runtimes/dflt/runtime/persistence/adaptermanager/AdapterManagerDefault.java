@@ -101,12 +101,25 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
      */
     private DependencyInjector dependencyInjector;
 
+    private final PojoRecreator pojoRecreator;
+
     // //////////////////////////////////////////////////////////////////
     // constructor
     // //////////////////////////////////////////////////////////////////
 
     public AdapterManagerDefault() {
-        // does nothing
+        this(new PojoRecreatorDefault());
+    }
+
+    /**
+     * For object store implementations (eg JDO) that do not provide any mechanism
+     * to allow transient objects to be reattached; can instead provide a
+     * {@link PojoRecreator} implementation that is injected into the Adapter Manager.
+     * 
+     * @see http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976
+     */
+    public AdapterManagerDefault(PojoRecreator pojoRecreator) {
+        this.pojoRecreator = pojoRecreator;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -119,6 +132,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         ensureThatState(specificationLoader, is(notNullValue()));
         ensureThatState(oidGenerator, is(notNullValue()));
         ensureThatState(dependencyInjector, is(notNullValue()));
+        
+        specificationLoader.injectInto(pojoRecreator);
 
         if (oidAdapterMap == null) {
             oidAdapterMap = new OidAdapterHashMap();
@@ -185,6 +200,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         return getOidAdapterMap().getAdapter(oid);
     }
 
+    
     // //////////////////////////////////////////////////////////////////
     // Adapter lookup/creation
     // //////////////////////////////////////////////////////////////////
@@ -292,10 +308,26 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter recreateAdapter(final Oid oid, final Object pojo) {
+    public ObjectAdapter recreatePersistentAdapter(final TypedOid typedOid) {
+
+        // attempt to locate adapter for the Oid
+        final ObjectAdapter adapterLookedUpByOid = getAdapterFor(typedOid);
+        if (adapterLookedUpByOid != null) {
+            return adapterLookedUpByOid;
+        }
+        
+        final Object pojo = pojoRecreator.recreatePojo(typedOid);
+        return mapRecreatedPojo(typedOid, pojo);
+    }
+
+
+    @Override
+    public ObjectAdapter mapRecreatedPojo(final Oid oid, final Object recreatedPojo) {
 
         // attempt to locate adapter for the pojo
-        final ObjectAdapter adapterLookedUpByPojo = getAdapterFor(pojo);
+        // REVIEW: this check is possibly redundant because the pojo will most likely 
+        // have just been instantiated, so won't yet be in any maps
+        final ObjectAdapter adapterLookedUpByPojo = getAdapterFor(recreatedPojo);
         if (adapterLookedUpByPojo != null) {
             return adapterLookedUpByPojo;
         }
@@ -306,7 +338,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
             return adapterLookedUpByOid;
         }
 
-        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, pojo);
+        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return mapAndInjectServices(createdAdapter);
     }
 
@@ -547,13 +579,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
 
     /**
      * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new 
-     * root {@link ObjectAdapter adapter} for the supplied domain object.
-     *
-     * <p>
-     * Helper method that creates but does not
-     *  the root
-     * {@link ObjectAdapter adapter} and sets its {@link ResolveState} based on
-     * the {@link Oid}.
+     * root {@link ObjectAdapter adapter} for the supplied domain object, and 
+     * sets its {@link ResolveState} based on the {@link Oid}.
      * 
      * <p>
      * The {@link ResolveState} state will be:
@@ -571,7 +598,20 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
         final ObjectAdapter rootAdapter = getAdapterFactory().createAdapter(pojo, rootOid);
         rootAdapter.changeState(rootOid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST);
+        doPostCreateRootAdapter(rootAdapter);
         return rootAdapter;
+    }
+
+    /**
+     * Hook method for objectstores to register the newly created root-adapter.
+     * 
+     * <p>
+     * For example, the JDO DataNucleus object store uses this to attach the pojo
+     * into its persistence context.  This enables dirty tracking and lazy loading of the
+     * pojo.
+     */
+    protected void doPostCreateRootAdapter(ObjectAdapter rootAdapter) {
+        
     }
 
     private ObjectAdapter createCollectionAdapterAndInferResolveState(final Object pojo, CollectionOid collectionOid) {

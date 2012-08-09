@@ -33,10 +33,12 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -46,7 +48,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.mementos.SpecMemento;
 import org.apache.isis.viewer.wicket.model.util.ActionParams;
 
 /**
@@ -87,6 +88,8 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
          */
         SELECT
     }
+
+    private final static OidMarshaller oidMarshaller = new OidMarshaller();
 
     /**
      * Factory; for use directly.
@@ -223,20 +226,28 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return ActionType.valueOf(PageParameterNames.ACTION_TYPE.getFrom(pageParameters));
     }
 
-    private static SpecMemento actionOwningSpecFor(final PageParameters pageParameters) {
-        return SpecMemento.representing(PageParameterNames.ACTION_OWNING_SPEC.getFrom(pageParameters));
+    private static ObjectSpecId actionOwningSpecFor(final PageParameters pageParameters) {
+        return ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getFrom(pageParameters));
     }
 
     private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        return ObjectAdapterMemento.createPersistent(oidFor(pageParameters, oidStringifier), objectSpecFor(pageParameters));
+        RootOid oid = oidFor(pageParameters);
+        if(oid.isTransient()) {
+            //return ObjectAdapterMemento.
+            return null;
+        } else {
+            return ObjectAdapterMemento.createPersistent(oid);
+        }
     }
 
-    private static SpecMemento objectSpecFor(final PageParameters pageParameters) {
-        return SpecMemento.representing(PageParameterNames.OBJECT_SPEC.getFrom(pageParameters));
-    }
+//    private static SpecMemento objectSpecFor(final PageParameters pageParameters) {
+//        return SpecMemento.representing(PageParameterNames.OBJECT_SPEC.getFrom(pageParameters));
+//    }
 
-    private static Oid oidFor(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        return oidStringifier.deString(PageParameterNames.OBJECT_OID.getFrom(pageParameters));
+    
+    private static RootOid oidFor(final PageParameters pageParameters) {
+        String oidStr = PageParameterNames.OBJECT_OID.getFrom(pageParameters);
+        return oidMarshaller.unmarshal(oidStr, RootOid.class);
     }
 
     private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode, final SingleResultsMode singleResultsMode) {

@@ -8,9 +8,12 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -27,8 +30,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
  * </ul>
  * 
  * <p>
- * With respect to configuration, all properties under <tt>isis.persistor.datanucleus.impl</tt> prefix are passed thru verbatim to the OpenDataNucleus runtime.
- * For example:
+ * With respect to configuration, all properties under {@value #ISIS_CONFIG_PREFIX} prefix are passed 
+ * through verbatim to the DataNucleus runtime. For example:
  * <table>
  * <tr><th>Isis Property</th><th>DataNucleus Property</th></tr>
  * <tr><td><tt>isis.persistor.datanucleus.impl.datanucleus.foo.Bar</tt></td><td><tt>datanucleus.foo.Bar</tt></td></tr>
@@ -38,6 +41,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
     public static final String NAME = "datanucleus";
+    private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
 
     private DataNucleusApplicationComponents applicationComponents = null;
     
@@ -48,7 +52,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     @Override
     protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager) {
         createDataNucleusApplicationComponentsIfRequired(configuration);
-        return new DataNucleusObjectStore(configuration, adapterFactory, adapterManager, applicationComponents);
+        return new DataNucleusObjectStore(configuration, adapterFactory, (AdapterManagerExtended) adapterManager, applicationComponents);
     }
 
     private void createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
@@ -56,7 +60,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
             return;
         }
         
-        final IsisConfiguration dataNucleusConfig = configuration.createSubset("isis.persistor.datanucleus.impl");
+        final IsisConfiguration dataNucleusConfig = configuration.createSubset(ISIS_CONFIG_PREFIX);
         final Map<String, String> props = dataNucleusConfig.asMap();
         
         applicationComponents = new DataNucleusApplicationComponents(props, getSpecificationLoader().allSpecifications());
@@ -76,6 +80,11 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     @Override
     protected ObjectFactory createObjectFactory(IsisConfiguration configuration) {
         return new ObjectFactoryBasic();
+    }
+
+    @Override
+    protected AdapterManagerExtended createAdapterManager(IsisConfiguration configuration) {
+        return new AdapterManagerDefault(new DataNucleusPojoRecreator());
     }
     
     protected SpecificationLookup getSpecificationLoader() {

@@ -19,6 +19,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable;
 
 
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.core.commons.lang.StringUtils;
@@ -46,8 +47,10 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends
             annotationTableAttribute = cls.getSimpleName();
         }
 
+        IdentityType annotationIdentityType = annotation.identityType();
+        
         FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
-                annotationTableAttribute, processClassContext.getFacetHolder()));
+                annotationTableAttribute, annotationIdentityType, processClassContext.getFacetHolder()));
         return;
     }
 

@@ -15,7 +15,7 @@ import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoPropertyUtils;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.JdoPropertyUtils;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;

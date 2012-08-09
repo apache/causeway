@@ -26,7 +26,9 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 interface Mapping {
     ObjectAdapter getObject();
@@ -112,7 +114,7 @@ class PersistentRootAdapterMapping implements Mapping {
 
     @Override
     public String debug() {
-        return oid + "  " + spec.getShortIdentifier() + "  " + IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
+        return oid + "  " + spec.getShortIdentifier() + "  " + getAdapterManager().getAdapterFor(oid);
     }
 
     @Override
@@ -120,13 +122,14 @@ class PersistentRootAdapterMapping implements Mapping {
         if (!IsisContext.inTransaction()) {
             throw new IllegalStateException(getClass().getSimpleName() + " requires transaction in order to load");
         }
-        return IsisContext.getPersistenceSession().loadObject(oid);
+        return getPersistenceSession().loadObject(oid);
     }
 
     @Override
     public void reload() {
-        if (IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid) == null) {
-            IsisContext.getPersistenceSession().recreateAdapter(spec, oid);
+        if (getAdapterManager().getAdapterFor(oid) == null) {
+            final Object recreatedPojo = spec.createObject();
+            getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
         }
     }
 
@@ -155,5 +158,19 @@ class PersistentRootAdapterMapping implements Mapping {
     @Override
     public void update() {
     }
+
+    
+    ////////////////////////////////////
+    
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
 
 }

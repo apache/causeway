@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -25,16 +25,12 @@ import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Version;
 
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoPrimaryKeyPropertyFilter;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoVersionPropertyFilter;
 
 public final class JdoPropertyUtils {
 
@@ -53,9 +49,9 @@ public final class JdoPropertyUtils {
         return getPropertyFor(objectSpec, "@PrimaryKey", new JdoPrimaryKeyPropertyFilter());
     }
 
-    public static boolean hasPrimaryKeyProperty(final ObjectAdapter adapter) {
-        return hasPrimaryKeyProperty(adapter.getSpecification());
-    }
+//    public static boolean hasPrimaryKeyProperty(final ObjectAdapter adapter) {
+//        return hasPrimaryKeyProperty(adapter.getSpecification());
+//    }
 
     public static boolean hasPrimaryKeyProperty(final ObjectSpecification objectSpec) {
         return getPrimaryKeyPropertyFor(objectSpec) != null;
@@ -73,6 +69,39 @@ public final class JdoPropertyUtils {
         return getPropertyFor(objectSpec, "@Version", new JdoVersionPropertyFilter());
     }
 
+//    public static Object getIdFor(final ObjectAdapter adapter) {
+//        PersistenceCapable pcPojo = (PersistenceCapable) adapter.getObject();
+//        DataNucleusObjectStore objectStore = getObjectStore();
+//        return objectStore.getPersistenceManager().getObjectId(pcPojo);
+//    }
+
+//    public static void setPropertyIdFromOid(final ObjectAdapter adapter, final ObjectAdapterFactory adapterFactory) {
+//
+//        final RootOid oid = (RootOid) adapter.getOid();
+//        ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
+//        if(!hasPrimaryKeyProperty(objectSpec)) {
+//            throw new IllegalStateException("Oid '" + oid.enString() + "' is for a type that has datastore-managed identity");
+//        } 
+//
+//        final Object idValue = idValueOf(oid);
+//        final ObjectAdapter jpaIdAdapter = adapterFactory.createAdapter(idValue, null);
+//
+//        setId(adapter, jpaIdAdapter);
+//    }
+
+    
+    
+//    private static void setId(final ObjectAdapter adapter, final ObjectAdapter idValueAdapter) {
+//        final ObjectSpecification objectSpec = adapter.getSpecification();
+//        final OneToOneAssociation idProperty = getPrimaryKeyPropertyFor(objectSpec);
+//        if (idProperty == null) {
+//            throw new IsisException("Specification {0} does not have a single property with IdFacet", objectSpec.getFullIdentifier());
+//        }
+//        idProperty.set(adapter, idValueAdapter);
+//    }
+
+
+    
     private static OneToOneAssociation getPropertyFor(final ObjectSpecification objSpec, final String annotationName, final Filter<ObjectAssociation> filter) {
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return null;
@@ -87,41 +116,15 @@ public final class JdoPropertyUtils {
         return (OneToOneAssociation) propertyList.get(0);
     }
 
-    public static void setPropertyIdFromOid(final ObjectAdapter adapter, final ObjectAdapterFactory adapterFactory) {
-
-        final RootOid oid = (RootOid) adapter.getOid();
-        final ObjectSpecification objectSpec = adapter.getSpecification();
-        final Object idValue = idValueOf(oid, objectSpec);
-        final ObjectAdapter jpaIdAdapter = adapterFactory.createAdapter(idValue, null);
-
-        setId(adapter, jpaIdAdapter);
-    }
     
-    public static Object idValueOf(final RootOid oid, ObjectSpecification objectSpec) {
-        final OneToOneAssociation idProperty = getPrimaryKeyPropertyFor(objectSpec);
-        final EncodableFacet idPropEncodableFacet = idProperty.getFacet(EncodableFacet.class);
-        final ObjectAdapter idPropValueAdapter = idPropEncodableFacet.fromEncodedString(oid.getIdentifier());
-        return idPropValueAdapter.getObject();
-    }
+//    private static DataNucleusObjectStore getObjectStore() {
+//        return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+//    }
 
+//    private static SpecificationLoader getSpecificationLoader() {
+//        return IsisContext.getSpecificationLoader();
+//    }
 
-    private static void setId(final ObjectAdapter adapter, final ObjectAdapter idValueAdapter) {
-        final ObjectSpecification objectSpec = adapter.getSpecification();
-        final OneToOneAssociation idProperty = getPrimaryKeyPropertyFor(objectSpec);
-        if (idProperty == null) {
-            throw new IsisException("Specification {0} does not have a single property with IdFacet", objectSpec.getFullIdentifier());
-        }
-        idProperty.set(adapter, idValueAdapter);
-    }
-
-    public static Object getIdFor(final ObjectAdapter adapter) {
-        final OneToOneAssociation idPropertyFor = getPrimaryKeyPropertyFor(adapter.getSpecification());
-        if (idPropertyFor == null) {
-            return null;
-        }
-        final PropertyOrCollectionAccessorFacet facet = idPropertyFor.getFacet(PropertyOrCollectionAccessorFacet.class);
-        return facet.getProperty(adapter);
-    }
 
 
 }

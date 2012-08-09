@@ -27,15 +27,17 @@ import com.google.common.collect.Maps;
 import org.apache.wicket.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.mementos.SpecMemento;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -47,6 +49,8 @@ import org.apache.isis.viewer.wicket.model.mementos.SpecMemento;
 public class EntityModel extends ModelAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final OidMarshaller oidMarshaller  = new OidMarshaller();
 
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
@@ -61,14 +65,16 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         final PageParameters pageParameters = new PageParameters();
 
         final Boolean persistent = adapter.representsPersistent();
-        PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent.toString());
+        //PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent.toString());
 
         if (persistent) {
-            final String oidStr = oidStringifier.enString((RootOid) adapter.getOid());
-            final ObjectSpecification noSpec = adapter.getSpecification();
+            //final String oidStr = oidStringifier.enString((RootOid) adapter.getOid());
+            final String oidStr = oidMarshaller.marshal((RootOid) adapter.getOid());
 
             PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);
-            PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec.getFullIdentifier());
+            
+            //final ObjectSpecification noSpec = adapter.getSpecification();
+            //PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec.getFullIdentifier());
         } else {
             // don't do anything; instead the page should be redirected back to
             // an EntityPage so that the underlying EntityModel that contains
@@ -99,8 +105,8 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     public EntityModel() {
     }
 
-    public EntityModel(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        this(ObjectAdapterMemento.createPersistent(oidStringifier.deString(PageParameterNames.OBJECT_OID.getFrom(pageParameters)), SpecMemento.representing(PageParameterNames.OBJECT_SPEC.getFrom(pageParameters))));
+    public EntityModel(final PageParameters pageParameters) {
+        this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
     }
 
     public EntityModel(final ObjectAdapter adapter) {
@@ -111,6 +117,15 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     public EntityModel(final ObjectAdapterMemento adapterMemento) {
         this.adapterMemento = adapterMemento;
     }
+
+    private static String oidStr(final PageParameters pageParameters) {
+        return PageParameterNames.OBJECT_OID.getFrom(pageParameters);
+    }
+
+    private static RootOid rootOidFrom(final PageParameters pageParameters) {
+        return oidMarshaller.unmarshal(oidStr(pageParameters), RootOid.class);
+    }
+    
 
     // //////////////////////////////////////////////////////////
     // ObjectAdapterMemento, typeOfSpecification
@@ -128,9 +143,13 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         if (adapterMemento == null) {
             return null;
         }
-        return adapterMemento.getSpecMemento().getSpecification();
+        return getSpecificationFor(adapterMemento.getObjectSpecId());
     }
 
+    private ObjectSpecification getSpecificationFor(ObjectSpecId objectSpecId) {
+        return IsisContext.getSpecificationLoader().lookupBySpecId(objectSpecId);
+    }
+    
     // //////////////////////////////////////////////////////////
     // load, setObject
     // //////////////////////////////////////////////////////////
@@ -153,7 +172,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     public void detach() {
         if (isAttached()) {
             if (adapterMemento != null) {
-                adapterMemento.captureTitleHintIfPossible(adapterMemento.getObjectAdapter());
+                adapterMemento.captureTitleHintIfPossible();
             }
         }
         super.detach();

@@ -18,13 +18,15 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable;
 
+import javax.jdo.annotations.IdentityType;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAbstract {
 
-    public JdoPersistenceCapableFacetImpl(final String name, final FacetHolder holder) {
-        super(name, holder);
+    public JdoPersistenceCapableFacetImpl(final String table, IdentityType identityType, final FacetHolder holder) {
+        super(table, identityType, holder);
     }
 
 }

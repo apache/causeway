@@ -36,11 +36,11 @@ import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 
 /*
  * The objects need to store in a repeatable sequence so the elements and instances method return the same data for any repeated
@@ -126,7 +126,7 @@ public class ObjectStoreInstances {
      * If the pojo exists in the object store, then looks up the
      * {@link ObjectAdapter adapter} from the {@link AdapterManager}, and only
      * if none found does it
-     * {@link PersistenceSessionHydrator#recreateAdapter(Oid, Object) recreate}
+     * {@link PersistenceSessionHydrator#mapRecreatedPojo(Object, Object) recreate}
      * a new {@link ObjectAdapter adapter}.
      */
     public ObjectAdapter retrieveObject(final Oid oid) {
@@ -142,7 +142,7 @@ public class ObjectStoreInstances {
         if (adapterLookedUpByOid != null) {
             return adapterLookedUpByOid;
         }
-        return getHydrator().recreateAdapter(oid, pojo);
+        return getAdapterManager().mapRecreatedPojo(oid, pojo);
     }
 
     // ///////////////////////////////////////////////////////
@@ -226,23 +226,8 @@ public class ObjectStoreInstances {
      * The alternative design would be to laboriously inject this object via the
      * {@link InMemoryObjectStore}.
      */
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerExtended getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
-    }
-
-    /**
-     * Must use {@link IsisContext context}, because although this object is
-     * recreated with each {@link PersistenceSession session}, the persisted
-     * objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects)
-     * attached} to it span multiple sessions.
-     * 
-     * <p>
-     * The alternative design would be to laboriously inject this object via the
-     * {@link InMemoryObjectStore}.
-     */
-    protected PersistenceSessionHydrator getHydrator() {
-        return getPersistenceSession();
     }
 
     /**

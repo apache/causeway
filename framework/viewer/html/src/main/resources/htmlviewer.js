@@ -18,5 +18,5 @@
  */
 $(document).ready(function()
 {
-    $(".message-header").fadeOut(2000)
+    $(".message-header").fadeOut(5000)
 });

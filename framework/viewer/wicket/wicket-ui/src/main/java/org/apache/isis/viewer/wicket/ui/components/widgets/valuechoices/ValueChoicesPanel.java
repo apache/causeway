@@ -176,7 +176,8 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
 
     private DropDownChoicesForValueMementos createDropDownChoices(final IModel<List<? extends ObjectAdapterMemento>> choicesMementos, final IModel<ObjectAdapterMemento> modelObject) {
         final String id = ID_VALUE_ID;
-        return new DropDownChoicesForValueMementos(id, modelObject, choicesMementos);
+        DropDownChoicesForValueMementos dropDownChoices = new DropDownChoicesForValueMementos(id, modelObject, choicesMementos);
+        return dropDownChoices;
     }
 
     @Override

@@ -45,6 +45,7 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemor
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemorySaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -56,7 +57,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
@@ -137,7 +137,7 @@ public class InMemoryObjectStore implements ObjectStore {
                 throw new IsisException("A mapping already exists for " + oid + ": " + existingAdapterLookedUpByOid);
             }
 
-            final ObjectAdapter recreatedAdapter = getHydrator().recreateAdapter(oid, pojo);
+            final ObjectAdapter recreatedAdapter = getAdapterManager().mapRecreatedPojo(oid, pojo);
 
             final Version version = objectStoreInstances.getVersion(oid);
             recreatedAdapter.setVersion(version);
@@ -486,24 +486,8 @@ public class InMemoryObjectStore implements ObjectStore {
      * not only this object but also the {@link ObjectStoreInstances} that do
      * the work.
      */
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerExtended getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
-    }
-
-    /**
-     * Must use {@link IsisContext context}, because although this object is
-     * recreated with each {@link PersistenceSession session}, the persisted
-     * objects that get
-     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to
-     * it span multiple sessions.
-     * 
-     * <p>
-     * The alternative design would be to laboriously inject the session into
-     * not only this object but also the {@link ObjectStoreInstances} that do
-     * the work.
-     */
-    protected PersistenceSessionHydrator getHydrator() {
-        return getPersistenceSession();
     }
 
     protected SpecificationLookup getSpecificationLookup() {

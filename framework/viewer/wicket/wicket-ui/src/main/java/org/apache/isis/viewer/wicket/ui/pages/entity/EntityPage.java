@@ -36,7 +36,7 @@ public class EntityPage extends PageAbstract {
 
     public EntityPage(final PageParameters pageParameters) {
         super(pageParameters, ComponentType.ENTITY);
-        final IModel<?> model = new EntityModel(getPageParameters(), getOidStringifier());
+        final IModel<?> model = new EntityModel(getPageParameters());
         addChildComponents(model);
     }
 

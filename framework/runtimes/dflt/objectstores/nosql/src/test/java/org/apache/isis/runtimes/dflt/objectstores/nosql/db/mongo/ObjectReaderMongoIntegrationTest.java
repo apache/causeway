@@ -41,13 +41,16 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.ObjectReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.refs.ParentEntity;
 import org.apache.isis.tck.dom.refs.ReferencingEntity;
@@ -238,8 +241,9 @@ public class ObjectReaderMongoIntegrationTest {
             }
         });
 
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(SimpleEntity.class);
-        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(specification, RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4));
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(SimpleEntity.class);
+        final Object recreatedPojo = spec.createObject();
+        final ObjectAdapter readObject = getAdapterManager().mapRecreatedPojo(RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4), recreatedPojo);
 
         objectReader.update(reader1, versionCreator, dataEncrypter, readObject);
 
@@ -267,5 +271,18 @@ public class ObjectReaderMongoIntegrationTest {
             }
         });
     }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
 
 }

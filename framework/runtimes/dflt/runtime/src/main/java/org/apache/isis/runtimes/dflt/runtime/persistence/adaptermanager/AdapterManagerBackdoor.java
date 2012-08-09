@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 
 /**
  * Not part of the standard API, but used by the <tt>MemoryObjectStore</tt> to

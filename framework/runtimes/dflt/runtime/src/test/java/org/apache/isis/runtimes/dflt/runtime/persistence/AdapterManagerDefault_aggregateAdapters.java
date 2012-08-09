@@ -143,7 +143,7 @@ public class AdapterManagerDefault_aggregateAdapters {
         rootObject = new Customer();
         aggregatedObject = new Name();
         
-        persistentParentAdapter = adapterManager.recreateAdapter(
+        persistentParentAdapter = adapterManager.mapRecreatedPojo(
                 RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), rootObject);
     }
 

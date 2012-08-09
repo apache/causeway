@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable;
 
+import javax.jdo.annotations.IdentityType;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -30,14 +32,20 @@ public abstract class JdoPersistenceCapableFacetAbstract extends FacetAbstract i
         return JdoPersistenceCapableFacet.class;
     }
 
-    private final String name;
+    private final String table;
+    private final IdentityType identityType;
 
-    public JdoPersistenceCapableFacetAbstract(final String name, final FacetHolder holder) {
+    public JdoPersistenceCapableFacetAbstract(final String table, IdentityType identityType, final FacetHolder holder) {
         super(JdoPersistenceCapableFacetAbstract.type(), holder, false);
-        this.name = name;
+        this.table = table;
+        this.identityType = identityType;
     }
 
+    public IdentityType getIdentityType() {
+        return identityType;
+    }
+    
     public String getTable() {
-        return name;
+        return table;
     }
 }

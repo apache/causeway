@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.model.util;
 import com.google.common.base.Function;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -34,19 +35,18 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.mementos.SpecMemento;
 
 public final class Mementos {
 
     private Mementos() {
     }
 
-    public static Function<ObjectSpecification, SpecMemento> fromSpec() {
-        return new Function<ObjectSpecification, SpecMemento>() {
+    public static Function<ObjectSpecification, ObjectSpecId> fromSpec() {
+        return new Function<ObjectSpecification, ObjectSpecId>() {
 
             @Override
-            public SpecMemento apply(final ObjectSpecification from) {
-                return new SpecMemento(from);
+            public ObjectSpecId apply(final ObjectSpecification from) {
+                return from.getSpecId();
             }
         };
     }

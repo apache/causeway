@@ -37,7 +37,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.ve
  * {@link PropertySetterFacet set} the property, since JPA/Hibernate does this
  * for us.
  */
-final class JdoVersionPropertyFilter implements Filter<ObjectAssociation> {
+public final class JdoVersionPropertyFilter implements Filter<ObjectAssociation> {
     @Override
     public boolean accept(final ObjectAssociation noa) {
         return noa.isOneToOneAssociation() && 

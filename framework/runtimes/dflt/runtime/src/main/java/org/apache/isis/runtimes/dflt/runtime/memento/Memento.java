@@ -45,9 +45,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -186,7 +186,8 @@ public class Memento implements Serializable {
         final ObjectSpecification spec = 
                 getSpecificationLoader().loadSpecification(data.getClassName());
 
-        ObjectAdapter adapter = getHydrator().recreateAdapter(spec, getOid());
+        final Object recreatedPojo = spec.createObject();
+        ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(getOid(), recreatedPojo);
         
         if (adapter.getSpecification().isParentedOrFreeCollection()) {
             populateCollection(adapter, (CollectionData) data);
@@ -199,6 +200,8 @@ public class Memento implements Serializable {
         }
         return adapter;
     }
+
+
 
     private void populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
         final ObjectAdapter[] initData = new ObjectAdapter[state.elements.length];
@@ -222,7 +225,8 @@ public class Memento implements Serializable {
             return null;
         }
         
-        ObjectAdapter referencedAdapter = getHydrator().recreateAdapter(spec, oid);
+        final Object recreatedPojo = spec.createObject();
+        ObjectAdapter referencedAdapter = getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
         if (data instanceof ObjectData) {
             if (spec.isParented()) {
                 // rather than the following, is it equivalent to pass in RESOLVING (like everywhere else?)
@@ -409,9 +413,8 @@ public class Memento implements Serializable {
         return IsisContext.getPersistenceSession();
     }
 
-    protected PersistenceSessionHydrator getHydrator() {
-        return getPersistenceSession();
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
     }
-
 
 }

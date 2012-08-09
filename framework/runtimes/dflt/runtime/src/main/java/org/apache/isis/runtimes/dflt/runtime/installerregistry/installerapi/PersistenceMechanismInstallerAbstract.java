@@ -221,8 +221,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         servicesInjector.setServices(serviceList);
         persistenceSessionFactory.getSpecificationLoader().injectInto(runtimeContext);
 
-        final PersistenceSession persistenceSession = createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory, identifierGenerator, servicesInjector);
-        return persistenceSession;
+        return createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory, identifierGenerator, servicesInjector);
     }
 
     

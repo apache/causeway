@@ -23,11 +23,15 @@ import java.io.Serializable;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.util.Oids;
@@ -49,12 +53,10 @@ public class ObjectAdapterMemento implements Serializable {
     /**
      * Factory method
      */
-    public static ObjectAdapterMemento createPersistent(final Oid oid, final SpecMemento specMemento) {
-        return new ObjectAdapterMemento(oid, specMemento);
+    public static ObjectAdapterMemento createPersistent(final RootOid rootOid) {
+        return new ObjectAdapterMemento(rootOid);
     }
 
-    private final SpecMemento specMemento;
-    private String titleHint;
 
     enum Type {
         /**
@@ -64,14 +66,26 @@ public class ObjectAdapterMemento implements Serializable {
          */
         ENCODEABLE {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
-                final EncodableFacet encodableFacet = nom.specMemento.getSpecification().getFacet(EncodableFacet.class);
-                return encodableFacet.fromEncodedString(nom.encodableValue);
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
+                ObjectSpecId objectSpecId = oam.objectSpecId;
+                ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(objectSpecId);
+                final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
+                return encodableFacet.fromEncodedString(oam.encodableValue);
             }
 
             @Override
-            public String toString(final ObjectAdapterMemento nom) {
-                return nom.encodableValue;
+            public boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other) {
+                return other.type == ENCODEABLE && oam.encodableValue.equals(other.encodableValue);
+            }
+
+            @Override
+            public int hashCode(ObjectAdapterMemento oam) {
+                return oam.encodableValue.hashCode();
+            }
+
+            @Override
+            public String toString(final ObjectAdapterMemento oam) {
+                return oam.encodableValue;
             }
         },
         /**
@@ -80,17 +94,28 @@ public class ObjectAdapterMemento implements Serializable {
          */
         PERSISTENT {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
-                return getPersistenceSession().recreateAdapter(nom.getSpecMemento().getSpecification(), nom.persistentOid);
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
+                TypedOid oid = oidMarshaller.unmarshal(oam.persistentOidStr, TypedOid.class);
+                return getAdapterManager().recreatePersistentAdapter(oid);
             }
 
-            private PersistenceSession getPersistenceSession() {
-                return IsisContext.getPersistenceSession();
+            private AdapterManagerExtended getAdapterManager() {
+                return IsisContext.getPersistenceSession().getAdapterManager();
+            }
+            
+            @Override
+            public boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other) {
+                return other.type == PERSISTENT && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
             @Override
-            public String toString(final ObjectAdapterMemento nom) {
-                return nom.persistentOid.toString();
+            public int hashCode(ObjectAdapterMemento oam) {
+                return oam.persistentOidStr.hashCode();
+            }
+
+            @Override
+            public String toString(final ObjectAdapterMemento oam) {
+                return oam.persistentOidStr;
             }
         },
         /**
@@ -99,14 +124,24 @@ public class ObjectAdapterMemento implements Serializable {
          */
         TRANSIENT {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
-                final ObjectAdapter adapter = nom.transientMemento.recreateObject();
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
+                final ObjectAdapter adapter = oam.transientMemento.recreateObject();
                 return adapter;
             }
 
             @Override
-            public String toString(final ObjectAdapterMemento nom) {
-                return nom.transientMemento.toString();
+            public boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other) {
+                return other.type == TRANSIENT && oam.transientMemento.equals(other.transientMemento);
+            }
+
+            @Override
+            public int hashCode(ObjectAdapterMemento oam) {
+                return oam.transientMemento.hashCode();
+            }
+            
+            @Override
+            public String toString(final ObjectAdapterMemento oam) {
+                return oam.transientMemento.toString();
             }
         };
 
@@ -116,10 +151,16 @@ public class ObjectAdapterMemento implements Serializable {
 
         abstract ObjectAdapter recreateAdapter(ObjectAdapterMemento nom);
 
+        public abstract boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other);
+        public abstract int hashCode(ObjectAdapterMemento objectAdapterMemento);
+        
         public abstract String toString(ObjectAdapterMemento adapterMemento);
     }
 
     private Type type;
+
+    private final ObjectSpecId objectSpecId;
+    private String titleHint;
 
     /**
      * The current value, if {@link Type#ENCODEABLE}.
@@ -128,13 +169,14 @@ public class ObjectAdapterMemento implements Serializable {
      * Will be <tt>null</tt> otherwise.
      */
     private String encodableValue;
+    
     /**
      * The current value, if {@link Type#PERSISTENT}.
      * 
      * <p>
      * Will be <tt>null</tt> otherwise.
      */
-    private Oid persistentOid;
+    private String persistentOidStr;
 
     /**
      * The current value, if {@link Type#TRANSIENT}.
@@ -144,10 +186,12 @@ public class ObjectAdapterMemento implements Serializable {
      */
     private Memento transientMemento;
 
-    private ObjectAdapterMemento(final Oid oid, final SpecMemento specMemento) {
-        Ensure.ensureThatArg(oid, Oids.isPersistent());
-        this.persistentOid = oid;
-        this.specMemento = specMemento;
+    private final static OidMarshaller oidMarshaller = new OidMarshaller();
+    
+    private ObjectAdapterMemento(final RootOid rootOid) {
+        Ensure.ensureThatArg(rootOid, Oids.isPersistent());
+        this.persistentOidStr = oidMarshaller.marshal(rootOid);
+        this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
     }
 
@@ -156,36 +200,42 @@ public class ObjectAdapterMemento implements Serializable {
             throw new IllegalArgumentException("adapter cannot be null");
         }
         final ObjectSpecification specification = adapter.getSpecification();
-        specMemento = new SpecMemento(specification);
+        objectSpecId = specification.getSpecId();
         init(adapter);
-        captureTitleHintIfPossible(adapter);
+        captureTitleHintIfPossible();
     }
 
     private void init(final ObjectAdapter adapter) {
-        final ObjectSpecification specification = specMemento.getSpecification();
+        
+        final ObjectSpecification specification = adapter.getSpecification();
+
         final EncodableFacet encodableFacet = specification.getFacet(EncodableFacet.class);
         final boolean isEncodable = encodableFacet != null;
         if (isEncodable) {
             encodableValue = encodableFacet.toEncodedString(adapter);
             type = Type.ENCODEABLE;
-        } else {
-            final Oid oid = adapter.getOid();
-            if (oid.isTransient()) {
-                transientMemento = new Memento(adapter);
-                type = Type.TRANSIENT;
-            } else {
-                persistentOid = oid;
-                type = Type.PERSISTENT;
-            }
-        }
-    }
-
-    public void captureTitleHintIfPossible(final ObjectAdapter adapter) {
-        if (adapter == null) {
             return;
         }
-        if (adapter.isTitleAvailable()) {
-            this.titleHint = adapter.titleString();
+        
+        final RootOid oid = (RootOid) adapter.getOid();
+        if (oid.isTransient()) {
+            transientMemento = new Memento(adapter);
+            type = Type.TRANSIENT;
+            return;
+        } 
+        
+        persistentOidStr = oidMarshaller.marshal(oid);
+        type = Type.PERSISTENT;
+    }
+
+    
+    public void captureTitleHintIfPossible() {
+        if (this.titleHint != null) {
+            return;
+        } 
+        ObjectAdapter objectAdapter = this.getObjectAdapter();
+        if (objectAdapter.isTitleAvailable()) {
+            this.titleHint = objectAdapter.titleString();
         }
     }
 
@@ -219,13 +269,25 @@ public class ObjectAdapterMemento implements Serializable {
         init(adapter);
     }
 
-    public SpecMemento getSpecMemento() {
-        return specMemento;
+    public ObjectSpecId getObjectSpecId() {
+        return objectSpecId;
+    }
+
+    
+    @Override
+    public int hashCode() {
+        return type.hashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof ObjectAdapterMemento) && type.equals(this, (ObjectAdapterMemento)obj);
     }
 
     @Override
     public String toString() {
         return type.toString(this);
     }
+
 
 }

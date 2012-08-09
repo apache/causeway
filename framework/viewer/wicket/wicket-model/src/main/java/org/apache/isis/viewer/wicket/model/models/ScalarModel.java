@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -41,6 +42,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
 import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
 
 /**
@@ -64,7 +66,8 @@ public class ScalarModel extends EntityModel {
 
             @Override
             public ObjectSpecification getScalarTypeSpec(final ScalarModel scalarModel) {
-                return scalarModel.getPropertyMemento().getType().getSpecification();
+                ObjectSpecId type = scalarModel.getPropertyMemento().getType();
+                return SpecUtils.getSpecificationFor(type);
             }
 
             @Override
@@ -74,7 +77,8 @@ public class ScalarModel extends EntityModel {
 
             @Override
             public String getLongName(final ScalarModel scalarModel) {
-                final String specShortName = scalarModel.parentObjectAdapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
+                ObjectSpecId objectSpecId = scalarModel.parentObjectAdapterMemento.getObjectSpecId();
+                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId).getShortIdentifier();
                 return specShortName + "-" + scalarModel.getPropertyMemento().getProperty().getId();
             }
 
@@ -165,7 +169,8 @@ public class ScalarModel extends EntityModel {
                     // shouldn't happen
                     return null;
                 }
-                final String specShortName = adapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
+                ObjectSpecId objectSpecId = adapterMemento.getObjectSpecId();
+                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId).getShortIdentifier();
                 final String parmId = scalarModel.getParameterMemento().getActionParameter().getIdentifier().toNameIdentityString();
                 return specShortName + "-" + parmId + "-" + scalarModel.getParameterMemento().getNumber();
             }

@@ -24,6 +24,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -69,7 +70,7 @@ public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
     @Override
     public void restoreToLoader() {
         final RootOidDefault oid = RootOidDefault.deString(getOidStr());
-        final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid);
+        final ObjectAdapter adapter = getAdapterManager().recreatePersistentAdapter(oid);
         adapter.setVersion(getVersion());
     }
 
@@ -108,12 +109,12 @@ public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
     // Dependencies (from context)
     // /////////////////////////////////////////////////////
 
-    private static AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
-    private static PersistenceSession getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+    
 }

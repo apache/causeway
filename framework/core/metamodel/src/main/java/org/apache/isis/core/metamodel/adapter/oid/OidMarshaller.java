@@ -158,7 +158,7 @@ public class OidMarshaller {
     // marshall
     ////////////////////////////////////////////////////////////////
     
-    public String marshal(RootOidDefault rootOid) {
+    public String marshal(RootOid rootOid) {
         return (rootOid.isTransient()? "!" : "") + rootOid.getObjectSpecId() + ":" + rootOid.getIdentifier();
     }
 

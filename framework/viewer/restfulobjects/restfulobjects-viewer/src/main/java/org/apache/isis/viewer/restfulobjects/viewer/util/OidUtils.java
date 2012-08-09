@@ -35,7 +35,7 @@ public final class OidUtils {
         if(adapterFor != null) {
             return adapterFor;
         }
-        return resourceContext.getPersistenceSession().recreateAdapter(rootOid);
+        return resourceContext.getPersistenceSession().getAdapterManager().recreatePersistentAdapter(rootOid);
     }
 
     public static String getOidStr(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {

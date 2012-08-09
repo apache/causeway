@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -36,6 +37,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.JdoPropertyUtils;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusUpdateObjectCommand;
@@ -45,11 +48,11 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.qu
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries.QueryUtil;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.JdoOidSerializer;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoNamedQuery;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.util.JdoPropertyUtils;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionHydratorAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -62,12 +65,11 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
 
-public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHydratorAware, SpecificationLoaderAware, IsisTransactionManagerAware {
+public class DataNucleusObjectStore implements ObjectStore, SpecificationLoaderAware, IsisTransactionManagerAware {
 
     private static final Logger LOG = Logger.getLogger(DataNucleusObjectStore.class);
 
@@ -94,7 +96,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
 
     private final IsisConfiguration configuration;
     private final ObjectAdapterFactory adapterFactory;
-    private final AdapterManager adapterManager;
+    private final AdapterManagerExtended adapterManager;
     private final DataNucleusApplicationComponents applicationComponents;
     
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
@@ -108,10 +110,12 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     private State state;
     private TransactionMode transactionMode;
 
-    private PersistenceSessionHydrator hydrator;
     private IsisTransactionManager transactionManager;
+    
+    // TODO: review this, want to reuse
+    private final IsisLifecycleListener lifecycleListener = new IsisLifecycleListener();
 
-    public DataNucleusObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager, DataNucleusApplicationComponents applicationComponents) {
+    public DataNucleusObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerExtended adapterManager, DataNucleusApplicationComponents applicationComponents) {
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(adapterFactory, is(notNullValue()));
         ensureThatArg(adapterManager, is(notNullValue()));
@@ -124,6 +128,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         this.adapterFactory = adapterFactory;
         this.adapterManager = adapterManager;
         this.applicationComponents = applicationComponents;
+
     }
 
     @Override
@@ -355,11 +360,25 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
             LOG.debug("getObject; oid=" + oid);
         }
 
+        Object result = getPojo(oid);
+        final ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(oid, result);
+        
+        //TODO: loadPostProcessor.loaded(adapter);
+        return adapter;
+    }
+
+    
+    /**
+     * not API.
+     */
+    public Object getPojo(final TypedOid oid) {
+        // REVIEW: does it make sense to get these directly?  not sure, so for now have decided to fail fast. 
         if(oid instanceof AggregatedOid) {
-            // does it make sense to get these directly?  not sure, so for now have decided to fail fast. 
             throw new UnsupportedOperationException("Cannot retrieve aggregated objects directly, oid: " + oid.enString());
         }
+        
         final RootOid rootOid = (RootOid) oid;
+        
         Object result = null;
         try {
             final Class<?> cls = clsOf(rootOid);
@@ -372,11 +391,18 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         if (result == null) {
             throw new ObjectNotFoundException(oid);
         }
-        final ObjectAdapter adapter = hydrator.recreateAdapter(oid, result);
-        
-        //TODO: loadPostProcessor.loaded(adapter);
-        return adapter;
+        return result;
     }
+    
+    public static Object idValueOf(final RootOid oid) {
+        String idStr = oid.getIdentifier();
+
+        Object dnOid = JdoOidSerializer.toOidStr(idStr);
+
+        return dnOid.toString();
+    }
+
+
 
     /**
      * Will do nothing if object is already resolved or if object is transient.
@@ -423,24 +449,29 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
             return;
         }
 
-        try {
-            if(JdoPropertyUtils.hasPrimaryKeyProperty(adapter)) {
-                JdoPropertyUtils.setPropertyIdFromOid(adapter, getAdapterFactory());
-                final Object domainObject = adapter.getObject();
-                getPersistenceManager().refresh(domainObject);
-            } else {
-                RootOid rootOid = (RootOid) adapter.getOid();
-                Object dnOid = new OIDImpl(adapter.getSpecification().getFullIdentifier(), Long.parseLong(rootOid.getIdentifier()));
-                // will cause postLoad() lifecycle callback to fire,
-                // which sets up the adapters as required
-                getPersistenceManager().getObjectById(dnOid);
-            }
-        } catch (final RuntimeException e) {
-            throw new ObjectNotFoundException(adapter.getOid(), e);
-        }
-
+        // REVIEW: does this make sense?
         if (adapter.getObject() == null) {
             throw new ObjectNotFoundException(adapter.getOid());
+        }
+
+        try {
+            final Object domainObject = adapter.getObject();
+            getPersistenceManager().refresh(domainObject);
+            
+            // REVIEW: I don't think this complexity is required...
+//            if(JdoPropertyUtils.hasPrimaryKeyProperty(adapter)) {
+//                JdoPropertyUtils.setPropertyIdFromOid(adapter, getAdapterFactory());
+//                final Object domainObject = adapter.getObject();
+//                getPersistenceManager().refresh(domainObject);
+//            } else {
+//                RootOid rootOid = (RootOid) adapter.getOid();
+//                Object dnOid = new OIDImpl(adapter.getSpecification().getFullIdentifier(), Long.parseLong(rootOid.getIdentifier()));
+//                // will cause postLoad() lifecycle callback to fire,
+//                // which sets up the adapters as required
+//                getPersistenceManager().getObjectById(dnOid);
+//            }
+        } catch (final RuntimeException e) {
+            throw new ObjectNotFoundException(adapter.getOid(), e);
         }
 
         // possibly redundant because also called in the post-load event
@@ -448,7 +479,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         // but is required if we were ever to get an eager left-outer-join as
         // the result of a refresh (sounds possible).
         
-        //TODO: loadPostProcessor.loaded(adapter);
+        lifecycleListener.postLoadProcessingFor((PersistenceCapable) adapter.getObject());
     }
 
     /**
@@ -655,12 +686,6 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         return objectSpec.getCorrespondingClass();
     }
 
-    private Object idValueOf(final RootOid oid) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
-        return JdoPropertyUtils.idValueOf(oid, objectSpec);
-    }
-
-    
     /**
      * Intended for internal and test use only.
      */
@@ -683,7 +708,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     /**
      * @see #setAdapterManager(AdapterManager)
      */
-    public AdapterManager getAdapterManager() {
+    public AdapterManagerExtended getAdapterManager() {
         return adapterManager;
     }
 
@@ -694,7 +719,6 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     private void ensureDependenciesInjected() {
         ensureThatState(specificationLoader, is(notNullValue()));
         ensureThatState(adapterManager, is(notNullValue()));
-        ensureThatState(hydrator, is(notNullValue()));
         //TODO: ensureThatState(hibernateApplicationComponents, is(notNullValue()));
         ensureThatState(transactionManager, is(notNullValue()));
     }
@@ -718,24 +742,6 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
         this.specificationLoader = specificationLoader;
     }
 
-    /**
-     * @see #setHydrator(PersistenceSessionHydrator)
-     */
-    public PersistenceSessionHydrator getHydrator() {
-        return hydrator;
-    }
-
-    /**
-     * Injected prior to {@link #open()}ing.
-     * <p>
-     * Injected by owning {@link PersistenceSessionObjectStore} (see
-     * {@link PersistenceSessionObjectStore#open()}) by virtue of fact that this
-     * implementation is {@link PersistenceSessionHydratorAware aware} of the
-     * {@link PersistenceSessionHydrator}.
-     */
-    public void setHydrator(final PersistenceSessionHydrator hydrator) {
-        this.hydrator = hydrator;
-    }
 
     /**
      * @see #getTransactionManager()

@@ -19,19 +19,18 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable;
 
 
+import javax.jdo.annotations.IdentityType;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Corresponds to annotating the class with the {@link PersistanceCapable} annotation.
- * <p>
- * Maps onto the information in {@link Entity} as follows:
- * <ul>
- * <li>{@link PersistanceCapable#table()} -> {@link JdoPersistenceCapableFacet#getTable()}</li>
- * </ul>
+ * Corresponds to annotating the class with the {@link PersistenceCapable} annotation.
  */
 public interface JdoPersistenceCapableFacet extends Facet {
 
+    IdentityType getIdentityType();
+    
     String getTable();
 
 }

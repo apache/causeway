@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -42,6 +43,7 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -136,11 +138,13 @@ public class ObjectReader {
 
     private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final AggregatedOid aggregatedOid, final DataEncryption dataEncrypter) {
         final ObjectSpecification specification = getSpecificationLoader().lookupBySpecId(aggregatedOid.getObjectSpecId());
-        final ObjectAdapter fieldObject = getAdapter(specification, aggregatedOid);
+
+        final ObjectAdapter fieldObject = getAdapter(aggregatedOid);
         final ResolveState resolveState = ResolveState.RESOLVING;
         fieldObject.changeState(resolveState);
         readFields(aggregateReader, fieldObject, dataEncrypter);
         fieldObject.changeState(resolveState.getEndState());
+
         return fieldObject;
     }
 
@@ -169,7 +173,7 @@ public class ObjectReader {
             }
             final RootOid oid = keyCreator.unmarshal(ref);
             final ObjectSpecification specification = keyCreator.specificationFromOidStr(ref);
-            fieldObject = getAdapter(specification, oid);
+            fieldObject = getAdapter(oid);
         }
         try {
             association.initAssociation(object, fieldObject);
@@ -211,29 +215,45 @@ public class ObjectReader {
         final String[] references = referencesList.split("\\|");
         final ObjectAdapter[] elements = new ObjectAdapter[references.length];
         for (int i = 0; i < references.length; i++) {
-            final ObjectSpecification specification = keyCreator.specificationFromOidStr(references[i]);
+            
+            // no longer used
+            //final ObjectSpecification specification = keyCreator.specificationFromOidStr(references[i]);
+            
             final RootOid oid = keyCreator.unmarshal(references[i]);
-            elements[i] = getAdapter(specification, oid);
+            elements[i] = getAdapter(oid);
         }
         return elements;
     }
 
-    protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
-        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
-        if (adapter != null) {
-            return adapter;
-        } 
-        return getPersistenceSession().recreateAdapter(specification, oid);
+    protected ObjectAdapter getAdapter(final TypedOid oid) {
+        return getAdapterManager().recreatePersistentAdapter(oid);
     }
 
+    // replaced with getAdapter(TypedOid) above
+//    protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
+//        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
+//        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
+//        if (adapter != null) {
+//            return adapter;
+//        } 
+//        return getPersistenceSession().recreateAdapter(specification, oid);
+//    }
+
     protected ObjectAdapter getAdapter(final RootOid oid) {
-        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
-        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
-        if (adapter != null) {
-            return adapter;
-        } 
-        return getPersistenceSession().recreateAdapter(oid);
+        
+        // removed since also checked in the AdapterManager
+//        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+//        if (adapter != null) {
+//            return adapter;
+//        } 
+        //return getPersistenceSession().recreateAdapter(oid);
+        
+        return getAdapterManager().recreatePersistentAdapter(oid);
+    }
+
+    
+    protected AdapterManagerExtended getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
     }
 
     protected PersistenceSession getPersistenceSession() {

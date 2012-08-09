@@ -61,6 +61,7 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml.XmlS
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -193,7 +194,9 @@ public class XmlObjectStore implements ObjectStore {
         final Data fieldData = dataManager.loadData(referenceOid);
 
         if (fieldData == null) {
-            final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(field.getSpecification(), referenceOid);
+            ObjectSpecification spec = field.getSpecification();
+            final Object recreatedPojo = spec.createObject();
+            final ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(referenceOid, recreatedPojo);
             if (!adapter.isDestroyed()) {
                 adapter.changeState(ResolveState.DESTROYED);
             }
@@ -201,7 +204,9 @@ public class XmlObjectStore implements ObjectStore {
 
             LOG.warn("No data found for " + referenceOid + " so field '" + field.getName() + "' not set in object '" + object.titleString() + "'");
         } else {
-            final ObjectAdapter reference = getPersistenceSession().recreateAdapter(specFor(fieldData), referenceOid);
+            ObjectSpecification spec = specFor(fieldData);
+            final Object recreatedPojo = spec.createObject();
+            final ObjectAdapter reference = getAdapterManager().mapRecreatedPojo(referenceOid, recreatedPojo);
             ((OneToOneAssociation) field).initAssociation(object, reference);
         }
 
@@ -353,7 +358,8 @@ public class XmlObjectStore implements ObjectStore {
     private ObjectAdapter recreateObject(final ObjectData data) {
         final RootOid oid = data.getRootOid();
         final ObjectSpecification spec = specFor(data);
-        final ObjectAdapter object = getPersistenceSession().recreateAdapter(spec, oid);
+        final Object recreatedPojo = spec.createObject();
+        final ObjectAdapter object = getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
         initObject(object, data);
         return object;
     }
@@ -390,7 +396,9 @@ public class XmlObjectStore implements ObjectStore {
             final RootOid oid = instanceData.getRootOid();
 
             final ObjectSpecification spec = specFor(instanceData);
-            final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(spec, oid);
+            final Object recreatedPojo = spec.createObject();
+            
+            final ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
             if(LOG.isDebugEnabled()) {
                 LOG.debug("recreated instance " + adapter);
             }
@@ -456,7 +464,7 @@ public class XmlObjectStore implements ObjectStore {
         return IsisContext.getSpecificationLoader();
     }
 
-    private AdapterManager getAdapterManager() {
+    private AdapterManagerExtended getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
