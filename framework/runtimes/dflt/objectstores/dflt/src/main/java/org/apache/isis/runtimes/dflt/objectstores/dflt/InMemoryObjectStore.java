@@ -44,6 +44,7 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemor
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemoryDestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.commands.InMemorySaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -56,7 +57,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSp
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;

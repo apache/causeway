@@ -33,16 +33,13 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManagerException;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageBrokerDefault;
-import org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier.UpdateNotifierDefault;
 
-public class IsisTransactionManager implements SessionScopedComponent, Injectable {
+public class IsisTransactionManager implements SessionScopedComponent {
 
 
     private static final Logger LOG = Logger.getLogger(IsisTransactionManager.class);
@@ -401,17 +398,6 @@ public class IsisTransactionManager implements SessionScopedComponent, Injectabl
         ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(false), "Transaction in progress");
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // injectInto
-    // ////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void injectInto(final Object candidate) {
-        if (IsisTransactionManagerAware.class.isAssignableFrom(candidate.getClass())) {
-            final IsisTransactionManagerAware cast = IsisTransactionManagerAware.class.cast(candidate);
-            cast.setTransactionManager(this);
-        }
-    }
 
     // //////////////////////////////////////////////////////
     // debugging

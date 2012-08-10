@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
+package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
 import java.util.List;
 
@@ -32,12 +32,10 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 
-public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
-    private static final Logger LOG = Logger.getLogger(DefaultPersistAlgorithm.class);
+public class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
+    private static final Logger LOG = Logger.getLogger(PersistAlgorithmDefault.class);
 
     @Override
     public String name() {

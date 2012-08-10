@@ -66,7 +66,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
 
 public class DataNucleusObjectStore implements ObjectStoreSpi {
 

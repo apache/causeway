@@ -24,9 +24,9 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand implements DestroyObjectCommand {
     private static final Logger LOG = Logger.getLogger(XmlDestroyObjectCommand.class);

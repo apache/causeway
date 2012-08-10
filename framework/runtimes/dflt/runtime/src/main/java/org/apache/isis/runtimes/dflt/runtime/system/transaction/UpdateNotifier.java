@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * UpdateNotifier provides updates to client making available lists of the
  * latest changed and disposed objects.
  */
-public interface UpdateNotifier extends TransactionScopedComponent, Injectable {
+public interface UpdateNotifier extends TransactionScopedComponent {
 
     // //////////////////////////////////////////////////
     // Changed Objects

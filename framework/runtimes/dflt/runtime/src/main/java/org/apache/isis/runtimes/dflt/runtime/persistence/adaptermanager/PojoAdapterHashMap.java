@@ -17,9 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal;
+package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -28,14 +27,17 @@ import com.google.common.collect.Maps;
 import org.apache.commons.collections.map.IdentityMap;
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.components.Resettable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * TODO: an alternative might be to use {@link IdentityMap}.
  */
-public class PojoAdapterHashMap implements PojoAdapterMap {
+public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent, Resettable {
 
     private static class IdentityHashKey {
         private final Object pojo;
@@ -113,7 +115,6 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     // add, remove
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
     public void add(final Object pojo, final ObjectAdapter adapter) {
         adapterByPojoMap.put(key(pojo), adapter);
         if(LOG.isDebugEnabled()) {
@@ -127,7 +128,6 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
         }
     }
 
-    @Override
     public void remove(final ObjectAdapter object) {
         if(LOG.isDebugEnabled()) {
             LOG.debug("remove adapter: " + object);
@@ -136,19 +136,13 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     }
 
     // ///////////////////////////////////////////////////////////////////////////
-    // contains
+    // get, contains
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
     public boolean containsPojo(final Object pojo) {
         return adapterByPojoMap.containsKey(key(pojo));
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // get
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
     public ObjectAdapter getAdapter(final Object pojo) {
         return adapterByPojoMap.get(key(pojo));
     }

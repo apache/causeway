@@ -25,12 +25,13 @@ import org.junit.Test;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmTwoPass;
 
 public class TwoPassPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 
     @Override
     protected PersistAlgorithm createPersistAlgorithm() {
-        return new TwoPassPersistAlgorithm();
+        return new PersistAlgorithmTwoPass();
     }
 
     @Ignore

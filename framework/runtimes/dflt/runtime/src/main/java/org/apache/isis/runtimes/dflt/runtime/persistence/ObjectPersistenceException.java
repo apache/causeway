@@ -17,34 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.transaction;
+package org.apache.isis.runtimes.dflt.runtime.persistence;
 
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
-/**
- * Convenience adapter providing no-op implementations of {@link #onSuccess()}
- * and {@link #onFailure()}.
- */
-public abstract class TransactionalClosureAbstract implements TransactionalClosure {
+public class ObjectPersistenceException extends IsisException {
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * No-op implementation; does nothing.
-     */
-    @Override
-    public void preExecute() {
+    public ObjectPersistenceException() {
+        super();
     }
 
-    /**
-     * No-op implementation; does nothing.
-     */
-    @Override
-    public void onSuccess() {
+    public ObjectPersistenceException(final String message) {
+        super(message);
     }
 
-    /**
-     * No-op implementation; does nothing.
-     */
-    @Override
-    public void onFailure() {
+    public ObjectPersistenceException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    public ObjectPersistenceException(final Throwable cause) {
+        super(cause);
     }
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.transaction;
+package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 

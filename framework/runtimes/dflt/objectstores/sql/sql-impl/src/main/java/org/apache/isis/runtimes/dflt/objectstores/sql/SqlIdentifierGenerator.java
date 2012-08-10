@@ -26,8 +26,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class SqlIdentifierGenerator implements IdentifierGenerator {
     

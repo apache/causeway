@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
+package org.apache.isis.runtimes.dflt.runtime.persistence.adapter;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

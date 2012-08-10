@@ -39,8 +39,8 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultCloc
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ListOfRootOid;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.xmlos.Role;
 import org.apache.isis.tck.dom.xmlos.Team;

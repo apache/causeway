@@ -24,7 +24,6 @@ import java.text.DateFormat;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class ConcurrencyException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;

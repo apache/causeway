@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-public class OidGenerator implements DebuggableWithTitle, Injectable {
+public class OidGenerator implements DebuggableWithTitle {
 
     private final OidStringifier oidStringifier;
     private final IdentifierGenerator identifierGenerator;
@@ -126,19 +126,6 @@ public class OidGenerator implements DebuggableWithTitle, Injectable {
         return objectSpec.getSpecId();
     }
 
-
-
-    // ////////////////////////////////////////////////////////////////////
-    // injectInto
-    // ////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void injectInto(final Object candidate) {
-        if (OidGeneratorAware.class.isAssignableFrom(candidate.getClass())) {
-            final OidGeneratorAware cast = OidGeneratorAware.class.cast(candidate);
-            cast.setOidGenerator(this);
-        }
-    }
 
 
     // //////////////////////////////////////////////////////////////

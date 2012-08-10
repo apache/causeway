@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier;
+package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,11 +30,11 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 
-public class UpdateNotifierDefault extends UpdateNotifierAbstract implements DebuggableWithTitle {
+public class UpdateNotifierDefault implements UpdateNotifier, DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(UpdateNotifierDefault.class);
+    
     private final List<ObjectAdapter> changes = new ArrayList<ObjectAdapter>();
     private final List<ObjectAdapter> disposals = new ArrayList<ObjectAdapter>();
 

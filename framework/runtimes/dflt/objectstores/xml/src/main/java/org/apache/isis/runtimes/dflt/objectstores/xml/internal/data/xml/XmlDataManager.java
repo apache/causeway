@@ -47,8 +47,8 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVe
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.PersistorException;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class XmlDataManager implements DataManager {
     private final XmlFile xmlFile;

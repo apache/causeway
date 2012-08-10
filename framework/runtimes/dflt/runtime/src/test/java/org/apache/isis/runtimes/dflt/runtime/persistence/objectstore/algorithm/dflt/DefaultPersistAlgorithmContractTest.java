@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
 
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
 
@@ -26,7 +27,7 @@ public class DefaultPersistAlgorithmContractTest extends PersistAlgorithmContrac
 
     @Override
     protected PersistAlgorithm createPersistAlgorithm() {
-        return new DefaultPersistAlgorithm();
+        return new PersistAlgorithmDefault();
     }
 
 }

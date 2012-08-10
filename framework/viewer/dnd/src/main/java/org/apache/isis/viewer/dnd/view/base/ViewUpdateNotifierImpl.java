@@ -269,8 +269,4 @@ class NoOpUpdateNotifier implements UpdateNotifier {
         return new ArrayList<ObjectAdapter>();
     }
 
-    @Override
-    public void injectInto(final Object candidate) {
-    }
-
 }

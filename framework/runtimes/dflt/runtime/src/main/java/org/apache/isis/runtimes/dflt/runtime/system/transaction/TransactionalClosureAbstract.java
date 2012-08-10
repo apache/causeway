@@ -19,7 +19,31 @@
 
 package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
-public interface IsisTransactionManagerAware {
 
-    public void setTransactionManager(IsisTransactionManager transactionManager);
+/**
+ * Convenience adapter providing no-op implementations of {@link #onSuccess()}
+ * and {@link #onFailure()}.
+ */
+public abstract class TransactionalClosureAbstract implements TransactionalClosure {
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void preExecute() {
+    }
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void onSuccess() {
+    }
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void onFailure() {
+    }
 }

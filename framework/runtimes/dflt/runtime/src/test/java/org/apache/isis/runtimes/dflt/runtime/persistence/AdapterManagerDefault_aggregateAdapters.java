@@ -50,11 +50,11 @@ import org.apache.isis.core.progmodel.app.IsisMetaModel;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.OidAdapterHashMap;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterHashMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 public class AdapterManagerDefault_aggregateAdapters {

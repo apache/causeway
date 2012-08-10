@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class ObjectNotFoundException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;

@@ -32,8 +32,8 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class ObjectMappingLookup implements DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(ObjectMappingLookup.class);

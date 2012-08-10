@@ -25,9 +25,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Data;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public final class XmlUpdateObjectCommand extends AbstractXmlPersistenceCommand implements SaveObjectCommand {
 

@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -50,16 +49,11 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterHashMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterHashMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterMap;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -69,8 +63,8 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
 
     private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
 
-    protected final PojoAdapterMap pojoAdapterMap = new PojoAdapterHashMap();
-    protected final OidAdapterMap oidAdapterMap = new OidAdapterHashMap();
+    protected final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
+    protected final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
 
     private final PojoRecreator pojoRecreator;
     

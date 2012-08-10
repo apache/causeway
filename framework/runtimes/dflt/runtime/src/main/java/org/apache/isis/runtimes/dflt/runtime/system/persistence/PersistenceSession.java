@@ -40,7 +40,6 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -74,7 +73,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionAware;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
@@ -91,16 +90,13 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
-import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
 
 public class PersistenceSession implements  
         EnlistedObjectDirtying, ToPersistObjectSet, 
-        IsisTransactionManagerAware, 
-        SessionScopedComponent, Injectable, DebuggableWithTitle {
+        SessionScopedComponent, DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
 
@@ -227,11 +223,9 @@ public class PersistenceSession implements
         ensureThatState(transactionManager, is(not(nullValue())), "TransactionManager missing");
 
         // inject any required dependencies into object factory
-        this.injectInto(objectFactory);
         servicesInjector.injectInto(objectFactory);
 
         // wire dependencies into adapterManager
-        oidGenerator.injectInto(adapterManager);
         servicesInjector.injectInto(adapterManager);
 
         servicesInjector.open();
@@ -243,15 +237,10 @@ public class PersistenceSession implements
         ensureThatState(getTransactionManager(), is(notNullValue()), "transaction manager required");
         ensureThatState(persistAlgorithm, is(notNullValue()), "persist algorithm required");
         
-        this.injectInto(objectStore); // as a hydrator
         getAdapterManager().injectInto(objectStore);
         getSpecificationLoader().injectInto(objectStore);
-        getTransactionManager().injectInto(objectStore);
-        
-        getOidGenerator().injectInto(objectStore);
         
         objectStore.open();
-        
         
         createServiceAdapters();
 
@@ -1208,17 +1197,6 @@ public class PersistenceSession implements
         return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.representsPersistent());
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // injectInto
-    // ////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void injectInto(final Object candidate) {
-        if (PersistenceSessionAware.class.isAssignableFrom(candidate.getClass())) {
-            final PersistenceSessionAware cast = PersistenceSessionAware.class.cast(candidate);
-            cast.setPersistenceSession(this);
-        }
-    }
 
     
     // ///////////////////////////////////////////////////////////////////////////

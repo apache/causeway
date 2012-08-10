@@ -17,19 +17,33 @@
  *  under the License.
  */
 
+package org.apache.isis.runtimes.dflt.runtime.system.transaction;
+
+
 /**
- * Update Notifier API.
- * 
- * <p>
- * Used to collate those objects that have been modified as the result of
- * an action; these are then distributed back to the client.
- * 
- * <p>
- * Not generally intended to be implemented; the default implementation in
- * <tt>nof-core</tt> should normally suffice.  However, provides the 
- * opportunity for more exotic remoting mechanisms to send out notifications
- * of changes, for example JMS.
- * 
- * @see org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker
+ * Convenience adapter providing no-op implementations of {@link #onSuccess()}
+ * and {@link #onFailure()}.
  */
-package org.apache.isis.runtimes.dflt.runtime.transaction.updatenotifier;
+public abstract class TransactionalClosureWithReturnAbstract<T> implements TransactionalClosureWithReturn<T> {
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void preExecute() {
+    }
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void onSuccess() {
+    }
+
+    /**
+     * No-op implementation; does nothing.
+     */
+    @Override
+    public void onFailure() {
+    }
+}

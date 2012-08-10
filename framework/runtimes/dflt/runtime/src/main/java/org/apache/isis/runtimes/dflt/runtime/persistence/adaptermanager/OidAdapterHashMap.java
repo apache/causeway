@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal;
+package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -26,12 +26,18 @@ import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.components.Resettable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class OidAdapterHashMap implements OidAdapterMap {
+/**
+ * A map of the objects' identities and the adapters' of the objects.
+ */
+public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, SessionScopedComponent, Resettable {
 
     private static final Logger LOG = Logger.getLogger(OidAdapterHashMap.class);
     public static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 100;
@@ -77,7 +83,9 @@ public class OidAdapterHashMap implements OidAdapterMap {
     // add, remove
     // ///////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Add an adapter for a given oid
+     */
     public void add(final Oid oid, final ObjectAdapter adapter) {
 
         adapterByOidMap.put(oid, adapter);
@@ -91,7 +99,11 @@ public class OidAdapterHashMap implements OidAdapterMap {
         }
     }
 
-    @Override
+    /**
+     * Remove the adapter for the given oid
+     * 
+     * @return <tt>true</tt> if an adapter was removed.
+     */
     public boolean remove(final Oid oid) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("remove oid: " + oid);
@@ -100,11 +112,9 @@ public class OidAdapterHashMap implements OidAdapterMap {
     }
 
 
-    // ///////////////////////////////////////////////////////
-    // getAdapter
-    // ///////////////////////////////////////////////////////
-
-    @Override
+    /**
+     * Get the adapter identified by the specified OID.
+     */
     public ObjectAdapter getAdapter(final Oid oid) {
         return adapterByOidMap.get(oid);
     }

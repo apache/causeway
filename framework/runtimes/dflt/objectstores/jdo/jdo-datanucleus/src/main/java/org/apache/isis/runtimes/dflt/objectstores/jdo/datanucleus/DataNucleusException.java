@@ -1,6 +1,6 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus;
 
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 
 public class DataNucleusException extends ObjectPersistenceException {
 

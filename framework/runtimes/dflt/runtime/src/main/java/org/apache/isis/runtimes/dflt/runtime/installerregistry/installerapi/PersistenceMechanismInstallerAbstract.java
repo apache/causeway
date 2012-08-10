@@ -41,15 +41,15 @@ import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceConstants;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisObjectStoreLogger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt.DefaultPersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -132,7 +132,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         ensureThatArg(transactionManager, is(not(nullValue())));
 
         persistenceSession.setDirtiableSupport(true);
-        transactionManager.injectInto(persistenceSession);
+        persistenceSession.setTransactionManager(transactionManager);
 
         // ... and finally return
         return persistenceSession;
@@ -147,10 +147,10 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * Hook method to create {@link PersistAlgorithm}.
      * 
      * <p>
-     * By default returns a {@link DefaultPersistAlgorithm}.
+     * By default returns a {@link PersistAlgorithmDefault}.
      */
     protected PersistAlgorithm createPersistAlgorithm(final IsisConfiguration configuration) {
-        return new DefaultPersistAlgorithm();
+        return new PersistAlgorithmDefault();
     }
 
     /**

@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 
 public class SqlObjectStoreException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureAbstract;
 
 public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbstract implements DecoratingFacet<CollectionAddToFacet> {
 

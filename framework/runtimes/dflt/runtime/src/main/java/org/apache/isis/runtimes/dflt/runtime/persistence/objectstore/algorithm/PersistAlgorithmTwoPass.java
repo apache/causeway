@@ -17,8 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.topdown;
+package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
+import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -33,13 +34,14 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackF
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
-import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
-    
-    private static final Logger LOG = Logger.getLogger(TopDownPersistAlgorithm.class);
+public class PersistAlgorithmTwoPass extends PersistAlgorithmAbstract {
+    private static final Logger LOG = Logger.getLogger(PersistAlgorithmTwoPass.class);
+
+    @Override
+    public String name() {
+        return "Two pass,  bottom up persistence walker";
+    }
 
     @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
@@ -52,28 +54,21 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
 
     private void makeObjectPersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
         if (alreadyPersistedOrNotPersistableOrServiceOrStandalone(object)) {
-            LOG.warn("can't make object persistent - either already persistent, or transient only: " + object);
             return;
         }
-
         final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
         if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
             LOG.info("persist " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
-            toPersistObjectSet.addCreateObjectCommand(object);
-            CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
 
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAssociation field = fields.get(i);
                 if (field.isNotPersisted()) {
                     continue;
-                } else if (field instanceof OneToManyAssociation) {
-                    final ObjectAdapter collection = field.get(object);
-                    if (collection == null) {
-                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in " + object.getSpecification().getFullIdentifier());
-                    }
-                    makePersistent(collection, toPersistObjectSet);
+                } else if (field.isOneToManyAssociation()) {
+                    // skip in first pass
+                    continue;
                 } else {
                     final ObjectAdapter fieldValue = field.get(object);
                     if (fieldValue == null) {
@@ -82,23 +77,49 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
                     makePersistent(fieldValue, toPersistObjectSet);
                 }
             }
+
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAssociation field = fields.get(i);
+                if (field.isNotPersisted()) {
+                    continue;
+                } else if (field instanceof OneToManyAssociation) {
+                    final ObjectAdapter collection = field.get(object);
+                    makeCollectionPersistent(collection, toPersistObjectSet);
+                    /**
+                     * if (collection == null) { throw new
+                     * ObjectPersistenceException("Collection " +
+                     * field.getName() + " does not exist in " +
+                     * object.getSpecification().getFullName()); }
+                     * makePersistent(collection, toPersistObjectSet); final
+                     * CollectionFacet facet =
+                     * CollectionFacetUtils.getCollectionFacetFromSpec
+                     * (collection); final Enumeration elements =
+                     * facet.elements(collection); while
+                     * (elements.hasMoreElements()) {
+                     * makePersistent((ObjectAdapter) elements.nextElement(),
+                     * toPersistObjectSet); }
+                     */
+                } else {
+                    // skip in second pass
+                    continue;
+                }
+            }
+
+            toPersistObjectSet.addCreateObjectCommand(object);
+            CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
         }
     }
 
-    private void makeCollectionPersistent(final ObjectAdapter collectionAdapter, final ToPersistObjectSet toPersistObjectSet) {
-        LOG.info("persist " + collectionAdapter);
-        if (collectionAdapter.isTransient()) {
-            collectionAdapter.changeState(ResolveState.RESOLVED);
+    private void makeCollectionPersistent(final ObjectAdapter collection, final ToPersistObjectSet toPersistObjectSet) {
+        LOG.info("persist " + collection);
+        if (collection.isTransient()) {
+            collection.changeState(ResolveState.RESOLVED);
         }
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);
-        for(ObjectAdapter element: facet.iterable(collectionAdapter)) {
-            makePersistent(element, toPersistObjectSet);
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final Enumeration elements = facet.elements(collection);
+        while (elements.hasMoreElements()) {
+            makePersistent((ObjectAdapter) elements.nextElement(), toPersistObjectSet);
         }
-    }
-
-    @Override
-    public String name() {
-        return "Simple Top Down Persistence Walker";
     }
 
     @Override

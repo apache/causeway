@@ -42,8 +42,8 @@ import org.apache.isis.core.progmodel.app.IsisMetaModel;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
@@ -152,10 +152,11 @@ public class PersistenceSessionObjectStoreTest {
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();
             }
+            
         };
         
         transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore);
-        transactionManager.injectInto(persistenceSession);
+        persistenceSession.setTransactionManager(transactionManager);
 
         servicesInjector.setServices(Collections.emptyList());
 

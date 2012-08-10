@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker;
+package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 
 public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle {
 

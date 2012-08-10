@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
+package org.apache.isis.runtimes.dflt.runtime.persistence.adapter;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;

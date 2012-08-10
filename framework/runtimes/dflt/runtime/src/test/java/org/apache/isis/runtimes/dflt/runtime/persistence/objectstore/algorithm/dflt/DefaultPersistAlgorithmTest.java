@@ -24,6 +24,8 @@ import org.junit.Test;
 
 import org.junit.Ignore;
 
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
+
 public class DefaultPersistAlgorithmTest {
 
 //    private final static class PersistedObjectAdderSpy implements ToPersistObjectSet {
@@ -46,7 +48,7 @@ public class DefaultPersistAlgorithmTest {
 //
 //    private final String objectType = "CUS";
 //
-    private DefaultPersistAlgorithm algorithm;
+    private PersistAlgorithmDefault algorithm;
     
 //    private PersistedObjectAdderSpy adder;
 //    private ObjectAdapter object;
@@ -152,7 +154,7 @@ public class DefaultPersistAlgorithmTest {
     
     @Before
     public void setUp() throws Exception {
-        algorithm = new DefaultPersistAlgorithm();
+        algorithm = new PersistAlgorithmDefault();
     }
     
 
