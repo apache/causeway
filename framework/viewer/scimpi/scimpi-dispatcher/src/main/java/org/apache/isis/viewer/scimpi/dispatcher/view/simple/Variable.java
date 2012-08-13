@@ -42,7 +42,7 @@ public class Variable extends AbstractElementProcessor {
         request.processUtilCloseTag();
         String source = request.popBuffer();
         if (isClear) {
-            request.appendDebug("variable: " + name + " ( cleared");
+            request.appendDebug("variable: " + name + " (cleared)");
             request.getContext().clearVariable(name, scope);
         } else {
             if (source.length() == 0 && value != null) {

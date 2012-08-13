@@ -26,10 +26,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public interface TableContentWriter {
 
+    void writeCaption(PageWriter writer);
+
     void writeHeaders(PageWriter writer);
 
     void writeFooters(PageWriter writer);
 
     void writeElement(Request request, RequestContext context, ObjectAdapter element);
+
+    void tidyUp();
 
 }

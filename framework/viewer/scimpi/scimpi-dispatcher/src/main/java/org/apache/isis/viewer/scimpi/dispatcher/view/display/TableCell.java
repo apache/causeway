@@ -32,12 +32,14 @@ public class TableCell extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
+        final TableBlock tableBlock = (TableBlock) request.getBlockContent();
         final String id = request.getOptionalProperty(OBJECT);
         final String fieldName = request.getRequiredProperty(FIELD);
-        final String linkView = request.getOptionalProperty(LINK);
+        final String linkView = request.getOptionalProperty(LINK_VIEW);
         String className = request.getOptionalProperty(CLASS);
         className = className == null ? "" : " class=\"" + className + "\"";
-        final ObjectAdapter object = request.getContext().getMappedObjectOrVariable(id, ELEMENT);
+        RequestContext context = request.getContext();
+        final ObjectAdapter object = context.getMappedObjectOrVariable(id, tableBlock.getElementName());
         final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
@@ -45,13 +47,19 @@ public class TableCell extends AbstractElementProcessor {
         request.appendHtml("<td" + className + ">");
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
             final ObjectAdapter fieldReference = field.get(object);
-            final String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
+            final String source = fieldReference == null ? "" : context.mapObject(fieldReference, Scope.REQUEST);
             final String name = request.getOptionalProperty(RESULT_NAME, fieldName);
-            request.getContext().addVariable(name, Request.getEncoder().encoder(source), Scope.REQUEST);
+            context.addVariable(name, Request.getEncoder().encoder(source), Scope.REQUEST);
 
             if (linkView != null) {
-                String linkId = request.getContext().mapObject(object, Scope.REQUEST);
-                request.appendHtml("<a href=\"" + linkView + "?" + RequestContext.RESULT + "=" + linkId + "\">");
+                final String linkId = context.mapObject(object, Scope.REQUEST);
+                final String linkName = request.getOptionalProperty(LINK_NAME, RequestContext.RESULT);
+                final String linkObject = request.getOptionalProperty(LINK_OBJECT, linkId);
+                request.appendHtml("<a href=\"" + linkView + "?" + linkName + "=" + linkObject + context.encodedInteractionParameters() + "\">");
+            } else if(tableBlock.getlinkView() != null) {
+                String linkObjectInVariable = tableBlock.getElementName();
+                final String linkId = (String) context.getVariable(linkObjectInVariable);
+                request.appendHtml("<a href=\"" + tableBlock.getlinkView() + "?" + tableBlock.getlinkName() + "=" + linkId + context.encodedInteractionParameters() + "\">");                
             }
             request.pushNewBuffer();
             request.processUtilCloseTag();

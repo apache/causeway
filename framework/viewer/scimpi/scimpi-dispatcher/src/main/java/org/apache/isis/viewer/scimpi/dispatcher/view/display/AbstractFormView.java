@@ -61,7 +61,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             final List<ObjectAssociation> fields = tag.includedFields(associations);
             final LinkedObject[] linkFields = tag.linkedFields(fields);
 
-            String linkAllView = request.getOptionalProperty(LINK);
+            String linkAllView = request.getOptionalProperty(LINK_VIEW);
             if (linkAllView != null) {
                 linkAllView = request.getContext().fullUriPath(linkAllView);
                 for (int i = 0; i < linkFields.length; i++) {
@@ -78,7 +78,6 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             }
 
             write(request, object, fields, linkFields, classString, title, oddRowClass, evenRowClass, showIcons);
-            request.popBlockContent();
         } else {
             request.skipUntilClose(); 
         }

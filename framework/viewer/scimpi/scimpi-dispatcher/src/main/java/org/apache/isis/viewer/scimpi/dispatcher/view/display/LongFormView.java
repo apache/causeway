@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableView.SimpleTableBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
 public class LongFormView extends AbstractFormView {
@@ -51,9 +52,26 @@ public class LongFormView extends AbstractFormView {
             } else {
                 noColumns = Math.min(fields.size(), Integer.valueOf(noColumnsString));
             }
-            final boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+            // final boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             final String summary = "Table of elements in " + field.getName();
-            TableView.write(request, summary, object, field, collection, noColumns, fields, isFieldEditable, showIconByDefault(), tableClass, rowClasses, linkedObject);
+            // TableView.write(request, summary, object, field, collection, noColumns, fields, isFieldEditable, showIconByDefault(), tableClass, rowClasses, linkedObject);
+            
+            
+            final String headers[] = new String[fields.size()];
+            int h = 0;
+            for (int i = 0; i < noColumns; i++) {
+                if (fields.get(i).isOneToManyAssociation()) {
+                    continue;
+                }
+                headers[h++] = fields.get(i).getName();
+            }
+            
+            final LinkedObject[] linkedFields = new LinkedObject[fields.size()];
+
+
+            final TableContentWriter rowBuilder =new SimpleTableBuilder(object.titleString(), true, false, "", noColumns, headers, fields, false,
+                    showIcons, false, false, false, field.getName(), linkedFields, null);
+            TableView.write(request, collection, summary, rowBuilder, null, tableClass, rowClasses);
         } else {
             super.addField(request, object, field, linkedObject, showIcons);
         }

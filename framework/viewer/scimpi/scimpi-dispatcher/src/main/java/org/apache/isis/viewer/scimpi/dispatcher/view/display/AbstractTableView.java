@@ -65,12 +65,12 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             final TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);
             elementSpec = facet.valueSpec();
             parentObjectId = objectId == null ? context.mapObject(object, Scope.REQUEST) : objectId;
-            tableId = request.getOptionalProperty(CLASS, field);
+            tableId = request.getOptionalProperty(ID, field);
         } else {
             final String id = request.getOptionalProperty(COLLECTION);
             collection = context.getMappedObjectOrResult(id);
             elementSpec = collection.getElementSpecification();
-            tableId = request.getOptionalProperty(CLASS, collection.getElementSpecification().getShortIdentifier());
+            tableId = request.getOptionalProperty(ID, collection.getElementSpecification().getShortIdentifier());
         }
 
         final String summary = request.getOptionalProperty("summary");
@@ -106,6 +106,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         final String idSegment = tableId == null ? "" : (" id=\"" + tableId + "\""); 
         final String classSegment = tableClass == null ? "" : (" class=\"" + tableClass + "\"");
         request.appendHtml("<table" + idSegment + classSegment + summarySegment + ">");
+        rowBuilder.writeCaption(request);
         rowBuilder.writeHeaders(request);
         rowBuilder.writeFooters(request);
 
@@ -128,6 +129,8 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         }
         request.appendHtml("</tbody>");
         request.appendHtml("</table>");
+        
+        rowBuilder.tidyUp();
     }
 
     @Override

@@ -41,8 +41,8 @@ public class DebugObjectView extends AbstractObjectProcessor {
     @Override
     public void process(final Request request, final ObjectAdapter object) {
         final String classString = " class=\"" + request.getOptionalProperty(CLASS, "form debug") + "\"";
-        final String objectLink = request.getOptionalProperty(OBJECT + "-" + LINK, request.getViewPath());
-        final String collectionLink = request.getOptionalProperty(COLLECTION + "-" + LINK, request.getViewPath());
+        final String objectLink = request.getOptionalProperty(OBJECT + "-" + LINK_VIEW, request.getViewPath());
+        // final String collectionLink = request.getOptionalProperty(COLLECTION + "-" + LINK_VIEW, request.getViewPath());
         final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
         final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
         final boolean showIcons = request.isRequested(SHOW_ICON, true);

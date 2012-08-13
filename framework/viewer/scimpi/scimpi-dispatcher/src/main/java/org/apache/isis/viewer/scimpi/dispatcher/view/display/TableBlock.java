@@ -25,6 +25,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
 public class TableBlock implements BlockContent {
 
+    // {{ collection
     private ObjectAdapter collection;
 
     public void setCollection(final ObjectAdapter collection) {
@@ -34,6 +35,43 @@ public class TableBlock implements BlockContent {
     public ObjectAdapter getCollection() {
         return collection;
     }
+    // }}
+    
+    // {{ linkView
+    private String linkView;
+
+    public String getlinkView() {
+        return linkView;
+    }
+
+    public void setlinkView(final String linkView) {
+        this.linkView = linkView;
+    }
+    // }}
+    
+    // {{ linkName
+    private String linkName;
+
+    public String getlinkName() {
+        return linkName;
+    }
+
+    public void setlinkName(final String linkName) {
+        this.linkName = linkName;
+    }
+    // }}
+
+    // {{ elementName
+    private String elementName;
+
+    public String getElementName() {
+        return elementName;
+    }
+
+    public void setElementName(final String linkObject) {
+        this.elementName = linkObject;
+    }
+    // }}
 
     private RepeatMarker marker;
 

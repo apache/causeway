@@ -36,7 +36,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.simple.RemoveElement;
 
 public class TableView extends AbstractTableView {
 
-    private static final class SimpleTableBuilder implements TableContentWriter {
+   static final class SimpleTableBuilder implements TableContentWriter {
         private final String parent;
         private final boolean includeHeader;
         private final boolean includeFooter;
@@ -53,7 +53,7 @@ public class TableView extends AbstractTableView {
         private final LinkedObject linkRow;
         private final int noColumns;
 
-        private SimpleTableBuilder(
+        SimpleTableBuilder(
                 final String parent,
                 final boolean includeHeader,
                 final boolean includeFooter,
@@ -96,22 +96,20 @@ public class TableView extends AbstractTableView {
         }
 
         @Override
+        public void writeCaption(PageWriter writer) {
+            if (title != null) {
+                writer.appendHtml("<caption>");
+                writer.appendHtml(title);
+                writer.appendHtml("</caption>");
+            }
+        }
+        
+        @Override
         public void writeHeaders(final PageWriter writer) {
             if (includeHeader) {
                 writer.appendHtml("<thead>");
-                titleRow(writer);
                 columnHeaders(writer, headers);
                 writer.appendHtml("</thead>");
-            }
-        }
-
-        private void titleRow(final PageWriter writer) {
-            if (title != null) {
-                writer.appendHtml("<tr class=\"title\" colspan=\"" + noColumns + "\">");
-                writer.appendHtml("<th class=\"title\">");
-                writer.appendAsHtmlEncoded(title);
-                writer.appendHtml("</th>");
-                writer.appendHtml("</tr>");
             }
         }
 
@@ -132,6 +130,12 @@ public class TableView extends AbstractTableView {
             writer.appendHtml("</tr>");
         }
 
+        public void tidyUp() {
+       //     request.popBlockContent();
+            
+        //    Is it the block that is left over, or is the collection form not being closed?
+        }
+        
         @Override
         public void writeElement(final Request request, final RequestContext context, final ObjectAdapter element) {
             final String rowId = context.mapObject(element, Scope.INTERACTION);
@@ -228,7 +232,7 @@ public class TableView extends AbstractTableView {
             final String fieldName,
             final List<ObjectAssociation> allFields,
             final boolean showIconByDefault) {
-        final String linkRowView = request.getOptionalProperty(LINK);
+        final String linkRowView = request.getOptionalProperty(LINK_VIEW);
         final String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
         final String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
         final LinkedObject linkRow = linkRowView == null ? null : new LinkedObject(linkObjectName, linkObjectScope, context.fullUriPath(linkRowView));

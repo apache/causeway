@@ -34,15 +34,16 @@ public class TableBuilder extends AbstractTableView {
     @Override
     protected TableContentWriter createRowBuilder(final Request request, final RequestContext context, final String parent, final List<ObjectAssociation> allFields, final ObjectAdapter collection) {
 
+        final String title = request.getOptionalProperty(TABLE_TITLE);
         final String variable = request.getOptionalProperty(ELEMENT_NAME, ELEMENT);
         final String headerClass = request.getOptionalProperty("head-" + CLASS);
 
         final TableBlock block = new TableBlock();
         block.setCollection(collection);
+        block.setElementName(variable);
         request.setBlockContent(block);
         request.pushNewBuffer();
         request.processUtilCloseTag();
-        request.popBlockContent(); 
         final String headers = request.popBuffer();       
         return new TableContentWriter() {
 
@@ -50,6 +51,19 @@ public class TableBuilder extends AbstractTableView {
             public void writeFooters(final PageWriter writer) {
             }
 
+            public void tidyUp() {
+                request.popBlockContent();
+            }
+            
+            @Override
+            public void writeCaption(PageWriter writer) {
+                if (title != null) {
+                    writer.appendHtml("<caption>");
+                    writer.appendHtml(title);
+                    writer.appendHtml("</thead>");
+                }
+            }
+            
             @Override
             public void writeHeaders(final PageWriter writer) {
                 final String headerSegment = headerClass == null ? "" : (" class=\"" + headerClass + "\"");

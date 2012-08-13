@@ -93,13 +93,13 @@ public class History extends AbstractElementProcessor {
             write(crumbs, request);
         } else if (action.equals("link")) {
             final String name = request.getRequiredProperty(NAME);
-            final String link = request.getRequiredProperty(LINK);
+            final String link = request.getRequiredProperty(LINK_VIEW);
             crumbs.add(name, link);
         } else if (action.equals("object")) {
             final String id = request.getOptionalProperty(OBJECT);
             final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             final String name = object.titleString();
-            String link = request.getRequiredProperty(LINK);
+            String link = request.getRequiredProperty(LINK_VIEW);
             link += "?_result=" + id;
             crumbs.add(name, link);
         } else if (action.equals("return")) {

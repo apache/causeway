@@ -39,7 +39,7 @@ public class ListView extends AbstractObjectProcessor {
 
     @Override
     public void process(final Request request, final ObjectAdapter object) {
-        final String linkRowView = request.getOptionalProperty(LINK);
+        final String linkRowView = request.getOptionalProperty(LINK_VIEW);
         final String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
         final String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
         LinkedObject linkedRow = null;

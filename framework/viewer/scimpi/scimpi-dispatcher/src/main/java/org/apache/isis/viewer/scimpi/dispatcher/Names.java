@@ -46,7 +46,11 @@ public interface Names {
     static final String HIDE_UNEDITABLE = "hide-uneditable";
     static final String HEADER_LEVEL = "header";
     static final String ID = "id";
+    @Deprecated
     static final String LINK = "link";
+    static final String LINK_VIEW = "link-view";
+    static final String LINK_NAME = "link-name";
+    static final String LINK_OBJECT = "link-object";
     static final String METHOD = "method";
     static final String MESSAGE = "message";
     static final String NAME = "name";
@@ -67,6 +71,7 @@ public interface Names {
     static final String SHOW_MESSAGE = "show-message";
     static final String SHOW_TITLE = "show-title";
     static final String TRUNCATE = "truncate";
+    static final String TABLE_TITLE = "title";
     static final String TYPE = "type";
     static final String VIEW = "view";
     static final String VALUE = "value";

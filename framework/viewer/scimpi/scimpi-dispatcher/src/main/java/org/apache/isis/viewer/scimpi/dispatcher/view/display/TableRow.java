@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
@@ -33,9 +34,16 @@ public class TableRow extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         final TableBlock block = (TableBlock) request.getBlockContent();
+        
         final RepeatMarker start = request.createMarker();
         block.setMarker(start);
+        
+        final String linkView = request.getOptionalProperty(LINK_VIEW);
+        if (linkView != null) {
+            block.setlinkView(linkView);
+            block.setlinkName(request.getOptionalProperty(LINK_NAME, RequestContext.RESULT));
+        }
+        
         request.skipUntilClose();
     }
-
 }
