@@ -17,9 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.adapter.mgr;
 
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
  * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid
@@ -35,7 +38,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  * work with the POJOs even though it does not understand their types. Each POJO
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
-public interface ObjectAdapterLookup {
+public interface AdapterManager extends Injectable {
 
     /**
      * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists
@@ -59,5 +62,21 @@ public interface ObjectAdapterLookup {
      * @return adapter, or <tt>null</tt> if doesn't exist.
      */
     ObjectAdapter getAdapterFor(Object pojo);
+
+    
+    /**
+     * Looks up or creates a standalone (value) or root adapter.
+     */
+    ObjectAdapter adapterFor(Object domainObject);
+    
+    /**
+     * Looks up or creates a standalone (value), aggregated or root adapter.
+     */
+    ObjectAdapter adapterFor(Object domainObject, ObjectAdapter parentAdapter);
+
+    /**
+     * Looks up or creates a collection adapter.
+     */
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, OneToManyAssociation collection);
 
 }

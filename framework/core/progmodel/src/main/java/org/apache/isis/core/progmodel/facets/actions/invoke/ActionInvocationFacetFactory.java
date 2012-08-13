@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -177,8 +177,8 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterMap) {
-        this.adapterManager = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 
     private AdapterManager getAdapterManager() {

@@ -34,13 +34,13 @@ import org.apache.log4j.Logger;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Exploration;
-import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
@@ -230,7 +230,7 @@ public class ObjectFixtureService {
     // from context
     // //////////////////////////////////////////////////////////////////
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

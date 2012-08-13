@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
@@ -95,11 +96,11 @@ public class IdMappingAbstract {
             return adapter;
         } 
         final Object recreatedPojo = spec.createObject();
-        return getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+        return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
     }
 
     
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

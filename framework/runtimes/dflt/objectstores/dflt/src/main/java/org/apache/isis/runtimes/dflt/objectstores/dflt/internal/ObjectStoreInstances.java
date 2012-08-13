@@ -31,6 +31,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -141,7 +142,7 @@ public class ObjectStoreInstances {
         if (adapterLookedUpByOid != null) {
             return adapterLookedUpByOid;
         }
-        return getAdapterManager().mapRecreatedPojo(oid, pojo);
+        return getPersistenceSession().mapRecreatedPojo(oid, pojo);
     }
 
     // ///////////////////////////////////////////////////////
@@ -225,7 +226,7 @@ public class ObjectStoreInstances {
      * The alternative design would be to laboriously inject this object via the
      * {@link InMemoryObjectStore}.
      */
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

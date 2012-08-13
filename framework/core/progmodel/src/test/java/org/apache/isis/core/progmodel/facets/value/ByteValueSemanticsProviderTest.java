@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.value.bytes.ByteValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.bytes.ByteWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private ByteValueSemanticsProviderAbstract value;
@@ -49,7 +48,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(byteObj);
         holder = new FacetHolderImpl();
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.byte");
                 will(returnValue(null));

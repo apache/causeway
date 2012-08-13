@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private BigDecimalValueSemanticsProvider value;
@@ -45,7 +44,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.decimal");
                 will(returnValue(null));

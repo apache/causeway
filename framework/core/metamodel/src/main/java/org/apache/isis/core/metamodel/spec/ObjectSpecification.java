@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;

@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
@@ -58,7 +58,7 @@ public class TitleFacetViaTitleAnnotationTest {
     private ObjectAdapter mockObjectAdapter;
 
     @Mock
-    private AdapterManager mockAdapterMap;
+    private AdapterManager mockAdapterManager;
     
     @Mock
     private LocalizationProvider mockLocalizationProvider;
@@ -96,7 +96,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final List<Method> methods = Arrays.asList(NormalDomainObject.class.getMethod("titleElement1"), NormalDomainObject.class.getMethod("titleElement2"), NormalDomainObject.class.getMethod("titleElement3"));
 
         final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterMap, mockLocalizationProvider);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager, mockLocalizationProvider);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
         context.checking(new Expectations() {
@@ -104,13 +104,13 @@ public class TitleFacetViaTitleAnnotationTest {
                 allowing(mockObjectAdapter).getObject();
                 will(returnValue(normalPojo));
 
-                allowing(mockAdapterMap).getAdapterFor("Normal");
+                allowing(mockAdapterManager).getAdapterFor("Normal");
                 inSequence(sequence);
 
-                allowing(mockAdapterMap).getAdapterFor("Domain");
+                allowing(mockAdapterManager).getAdapterFor("Domain");
                 inSequence(sequence);
 
-                allowing(mockAdapterMap).getAdapterFor("Object");
+                allowing(mockAdapterManager).getAdapterFor("Object");
                 inSequence(sequence);
             }
         });
@@ -124,7 +124,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, MethodScope.OBJECT, Title.class);
 
         final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterMap, mockLocalizationProvider);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager, mockLocalizationProvider);
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {
             {

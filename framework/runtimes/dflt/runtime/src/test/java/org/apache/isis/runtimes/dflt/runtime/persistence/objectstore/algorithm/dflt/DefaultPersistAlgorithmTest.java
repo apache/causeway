@@ -20,9 +20,8 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
 
 import org.junit.Before;
-import org.junit.Test;
-
 import org.junit.Ignore;
+import org.junit.Test;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 

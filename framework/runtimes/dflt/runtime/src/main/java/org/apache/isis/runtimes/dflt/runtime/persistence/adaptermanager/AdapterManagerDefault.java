@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -119,15 +119,8 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         return pojoAdapterMap.iterator();
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Backdoor
-    // //////////////////////////////////////////////////////////////////
 
-    @Override
-    public ObjectAdapter addExistingAdapter(final ObjectAdapter adapter) {
-        mapAndInjectServices(adapter);
-        return adapter;
-    }
+    
 
     // //////////////////////////////////////////////////////////////////
     // Adapter lookup
@@ -158,7 +151,35 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      */
     @Override
     public ObjectAdapter adapterFor(final Object pojo) {
-        return adapterFor(pojo, null, null);
+
+        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
+        if(existingOrValueAdapter != null) {
+            return existingOrValueAdapter;
+        }
+        
+        final ObjectAdapter newAdapter = createTransientRootAdapter(pojo);
+        
+        return mapAndInjectServices(newAdapter);
+    }
+
+    private ObjectAdapter existingOrValueAdapter(Object pojo) {
+
+        // attempt to locate adapter for the pojo
+        final ObjectAdapter adapter = getAdapterFor(pojo);
+        if (adapter != null) {
+            return adapter;
+        }
+        
+        // need to create (and possibly map) the adapter.
+        final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
+        
+        // we create value facets as standalone (so not added to maps)
+        if (objSpec.containsFacet(ValueFacet.class)) {
+            ObjectAdapter valueAdapter = createStandaloneAdapterAndSetResolveState(pojo);
+            return valueAdapter;
+        }
+        
+        return null;
     }
 
     /**
@@ -166,7 +187,25 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      */
     @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter) {
-        return adapterFor(pojo, parentAdapter, null);
+        
+        Ensure.ensureThatArg(parentAdapter, is(not(nullValue())));
+        
+        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
+        if(existingOrValueAdapter != null) {
+            return existingOrValueAdapter;
+        }
+        
+        final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
+        
+        final ObjectAdapter newAdapter;
+        if(isAggregated(objSpec)) {
+            final AggregatedOid aggregatedOid = getOidGenerator().createAggregateOid(pojo, parentAdapter);
+            newAdapter = createAggregatedAdapter(pojo, aggregatedOid);
+        } else {
+            newAdapter = createTransientRootAdapter(pojo);
+        }
+        
+        return mapAndInjectServices(newAdapter);
     }
 
 
@@ -175,40 +214,18 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      */
     @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {
-
-        // attempt to locate adapter for the pojo
-        final ObjectAdapter adapter = getAdapterFor(pojo);
-        if (adapter != null) {
-            return adapter;
+        
+        Ensure.ensureThatArg(parentAdapter, is(not(nullValue())));
+        Ensure.ensureThatArg(collection, is(not(nullValue())));
+        
+        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
+        if(existingOrValueAdapter != null) {
+            return existingOrValueAdapter;
         }
-
-        // need to create (and possibly map) the adapter.
-        final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
-
-        // we create value facets as standalone (so not added to maps)
-        if (objSpec.containsFacet(ValueFacet.class)) {
-            return createStandaloneAdapterAndSetResolveState(pojo);
-        }
-
-        // as explained in the AdapterMap javadoc
-        final ObjectAdapter newAdapter;
-        if (parentAdapter != null) {
-            if (collection == null) {
-                if(isAggregated(objSpec)) {
-                    final AggregatedOid aggregatedOid = getOidGenerator().createAggregateOid(pojo, parentAdapter);
-                    newAdapter = createAggregatedAdapter(pojo, aggregatedOid);
-                } else {
-                    newAdapter = createTransientRootAdapter(pojo);
-                }
-            } else {
-                // the List, Set etc. instance gets wrapped in its own adapter
-                newAdapter = createCollectionAdapter(pojo, parentAdapter, collection);
-            }
-        } else {
-            // not parented
-            newAdapter = createTransientRootAdapter(pojo);
-        }
-
+        
+        // the List, Set etc. instance gets wrapped in its own adapter
+        final ObjectAdapter newAdapter = createCollectionAdapter(pojo, parentAdapter, collection);
+        
         return mapAndInjectServices(newAdapter);
     }
 
@@ -267,6 +284,14 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         final Object pojo = pojoRecreator.recreatePojo(typedOid);
         return mapRecreatedPojo(typedOid, pojo);
     }
+    
+    
+    @Override
+    public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
+        removeAdapter(adapter);
+        adapter.replacePojo(pojo);
+        mapAndInjectServices(adapter);
+    }
 
 
     @Override
@@ -310,13 +335,6 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     // adapter deletion
     // //////////////////////////////////////////////////////////////////
 
-    @Override
-    public void removeAdapter(final Oid oid) {
-        final ObjectAdapter adapter = getAdapterFor(oid);
-        if (adapter != null) {
-            removeAdapter(adapter);
-        }
-    }
 
     /**
      * Removes the specified object from both the identity-adapter map, and the

@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -128,7 +129,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
                 // this could happen if we rehydrate a persisted object that
                 // depends on another persisted object
                 // not yet rehydrated.
-                getAdapterManager().removeAdapter(existingAdapterLookedUpByPojo);
+                getPersistenceSession().removeAdapter(existingAdapterLookedUpByPojo);
             }
 
             final ObjectAdapter existingAdapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
@@ -136,7 +137,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
                 throw new IsisException("A mapping already exists for " + oid + ": " + existingAdapterLookedUpByOid);
             }
 
-            final ObjectAdapter recreatedAdapter = getAdapterManager().mapRecreatedPojo(oid, pojo);
+            final ObjectAdapter recreatedAdapter = getPersistenceSession().mapRecreatedPojo(oid, pojo);
 
             final Version version = objectStoreInstances.getVersion(oid);
             recreatedAdapter.setVersion(version);
@@ -485,7 +486,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
      * not only this object but also the {@link ObjectStoreInstances} that do
      * the work.
      */
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

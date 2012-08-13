@@ -50,7 +50,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final RepresentationType representationType = RepresentationType.LIST;
         init(representationType);
 
-        final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
+        final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
 
         final RendererFactory factory = RendererFactoryRegistry.instance.find(representationType);
 

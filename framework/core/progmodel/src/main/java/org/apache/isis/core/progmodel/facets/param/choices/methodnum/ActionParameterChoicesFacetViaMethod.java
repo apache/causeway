@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -74,7 +74,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             return ArrayUtil.getObjectAsObjectArray(options);
         } else {
             final ObjectSpecification specification = getSpecification(choicesType);
-            return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
+            return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterManager());
         }
     }
 

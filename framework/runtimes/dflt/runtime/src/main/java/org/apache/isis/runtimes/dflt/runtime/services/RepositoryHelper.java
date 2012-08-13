@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 public final class RepositoryHelper {
 
@@ -95,7 +95,7 @@ public final class RepositoryHelper {
     // Context lookup
     // /////////////////////////////////////////////////////////////////////
 
-    private static PersistenceSession getPersistenceSession() {
+    private static Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

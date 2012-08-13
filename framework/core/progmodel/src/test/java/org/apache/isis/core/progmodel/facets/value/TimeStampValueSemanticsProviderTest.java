@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class TimeStampValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private TimeStampValueSemanticsProvider adapter;
@@ -42,7 +41,7 @@ public class TimeStampValueSemanticsProviderTest extends ValueSemanticsProviderA
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.timestamp");
                 will(returnValue(null));

@@ -134,7 +134,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     @Override
     public ObjectAdapter createValue(final Float value) {
-        return getAdapterMap().adapterFor(value);
+        return getAdapterManager().adapterFor(value);
     }
 
     // //////////////////////////////////////////////////////////////////

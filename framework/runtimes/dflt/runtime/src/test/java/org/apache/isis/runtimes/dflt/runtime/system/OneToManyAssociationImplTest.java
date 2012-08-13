@@ -24,19 +24,16 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
@@ -47,8 +44,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class OneToManyAssociationImplTest {
 
     private static final String COLLECTION_ID = "orders";
@@ -61,43 +59,34 @@ public class OneToManyAssociationImplTest {
 
     private static final Class<?> COLLECTION_TYPE = Order.class;
 
-    private final Mockery context = new JUnit4Mockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
     private ObjectAdapter mockOwnerAdapter;
+    @Mock
     private ObjectAdapter mockAssociatedAdapter;
-    private OneToManyAssociation association;
-
-    private FacetedMethod mockPeer;
-
+    @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
     private SpecificationLoader mockSpecificationLookup;
+    @Mock
     private AdapterManager mockAdapterManager;
+    @Mock
     private QuerySubmitter mockQuerySubmitter;
-
+    @Mock
+    private FacetedMethod mockPeer;
+    @Mock
     private NamedFacet mockNamedFacet;
+    @Mock
     private CollectionAddToFacet mockCollectionAddToFacet;
+    @Mock
     private CollectionTypeRegistry mockCollectionTypeRegistry;
+    
+    private OneToManyAssociation association;
 
     @Before
     public void setUp() {
-
-        mockOwnerAdapter = context.mock(ObjectAdapter.class, "owner");
-        mockAssociatedAdapter = context.mock(ObjectAdapter.class, "associated");
-
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        mockSpecificationLookup = context.mock(SpecificationLoader.class);
-        mockAdapterManager = context.mock(AdapterManager.class);
-        mockQuerySubmitter = context.mock(QuerySubmitter.class);
-        mockCollectionTypeRegistry = context.mock(CollectionTypeRegistry.class);
-        mockPeer = context.mock(FacetedMethod.class);
-
-        mockNamedFacet = context.mock(NamedFacet.class);
-        mockCollectionAddToFacet = context.mock(CollectionAddToFacet.class);
-
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();

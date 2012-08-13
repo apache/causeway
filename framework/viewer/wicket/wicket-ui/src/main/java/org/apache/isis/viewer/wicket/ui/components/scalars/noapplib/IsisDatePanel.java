@@ -104,6 +104,6 @@ public class IsisDatePanel extends ScalarPanelTextFieldAbstract<java.util.Date> 
     }
 
     private ObjectAdapter adapterFor(final Object pojo) {
-        return getPersistenceSession().getAdapterManager().adapterFor(pojo);
+        return getAdapterManager().adapterFor(pojo);
     }
 }

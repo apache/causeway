@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -97,7 +98,7 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     }
 
     @Override
-    public PersistenceSession getPersistenceSession() {
+    public Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
@@ -107,11 +108,11 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     }
 
     protected List<ObjectAdapter> getServiceAdapters() {
-        return getPersistenceSession().getServices();
+        return IsisContext.getPersistenceSession().getServices();
     }
 
     protected OidStringifier getOidStringifier() {
-        return getPersistenceSession().getOidGenerator().getOidStringifier();
+        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     // /////////////////////////////////////////////////

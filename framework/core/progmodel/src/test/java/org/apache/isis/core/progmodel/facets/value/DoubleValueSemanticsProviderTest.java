@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.longs.DoubleWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private Double doubleObj;
@@ -44,7 +43,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.double");
                 will(returnValue(null));

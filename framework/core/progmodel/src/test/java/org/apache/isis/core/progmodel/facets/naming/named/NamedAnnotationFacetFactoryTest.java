@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.progmodel.facets.naming.named;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
@@ -28,7 +31,6 @@ import java.util.Collection;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -36,7 +38,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContex
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnotationOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.named.annotation.NamedAnnotationOnParameterFacetFactory;

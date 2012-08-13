@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 

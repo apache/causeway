@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.DOES_NOT_REPRESENT_PERSISTENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.REPRESENTS_PERSISTENT;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CANNOT_TRANSITION_FROM;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CAN_TRANSITION_FROM;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.DOES_NOT_RESPOND_TO_CHANGES;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.RESPONDS_TO_CHANGES;
+import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CANNOT_TRANSITION_FROM;
+import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CAN_TRANSITION_FROM;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 public abstract class RootAdapterMappingAbstract implements RootAdapterMapping {
     
@@ -102,7 +102,7 @@ public abstract class RootAdapterMappingAbstract implements RootAdapterMapping {
     // Dependencies (from context)
     // /////////////////////////////////////////////////////
 
-    private static PersistenceSession getPersistenceSession() {
+    private static Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

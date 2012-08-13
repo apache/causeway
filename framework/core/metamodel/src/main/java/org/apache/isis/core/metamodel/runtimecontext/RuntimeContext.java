@@ -30,8 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -53,7 +52,7 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
     public QuerySubmitter getQuerySubmitter();
 
-    public AdapterManager getAdapterMap();
+    public AdapterManager getAdapterManager();
 
     public ObjectInstantiator getObjectInstantiator();
 

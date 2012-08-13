@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.html.component.ComponentFactory;
 import org.apache.isis.viewer.html.component.Table;
 import org.apache.isis.viewer.html.context.Context;
@@ -113,7 +113,7 @@ public class TableUtil {
     // Dependencies (from context)
     // ////////////////////////////////////////////////////////////////////////////////
 
-    private static PersistenceSession getPersistenceSession() {
+    private static Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

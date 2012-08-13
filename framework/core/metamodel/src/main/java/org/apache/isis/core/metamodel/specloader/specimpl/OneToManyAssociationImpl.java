@@ -139,7 +139,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         if (collection == null) {
             return null;
         }
-        return getAdapterMap().adapterFor(collection, ownerAdapter, this);
+        return getAdapterManager().adapterFor(collection, ownerAdapter, this);
     }
 
     @Override

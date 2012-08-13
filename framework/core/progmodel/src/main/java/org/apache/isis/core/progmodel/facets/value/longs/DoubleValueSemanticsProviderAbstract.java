@@ -102,7 +102,7 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
 
     @Override
     public ObjectAdapter createValue(final Double value) {
-        return getAdapterMap().adapterFor(value);
+        return getAdapterManager().adapterFor(value);
     }
 
     // /////// toString ///////

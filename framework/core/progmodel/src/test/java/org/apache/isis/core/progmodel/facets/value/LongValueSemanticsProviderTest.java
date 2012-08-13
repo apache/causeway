@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.value.longs.LongValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.longs.LongWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private LongValueSemanticsProviderAbstract value;
@@ -49,7 +48,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(longObj);
         holder = new FacetHolderImpl();
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.long");
                 will(returnValue(null));

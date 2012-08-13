@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.applib.annotation.Aggregated;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

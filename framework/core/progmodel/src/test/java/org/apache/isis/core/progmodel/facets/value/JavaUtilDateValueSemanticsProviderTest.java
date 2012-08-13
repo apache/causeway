@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private java.util.Date date;
@@ -46,7 +45,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.datetime");
                 will(returnValue(null));

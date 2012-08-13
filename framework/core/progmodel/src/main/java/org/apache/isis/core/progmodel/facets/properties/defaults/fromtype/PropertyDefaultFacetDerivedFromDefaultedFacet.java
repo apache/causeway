@@ -20,7 +20,7 @@
 package org.apache.isis.core.progmodel.facets.properties.defaults.fromtype;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
@@ -29,12 +29,12 @@ import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract implements PropertyDefaultFacet {
 
     private final DefaultedFacet typeFacet;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
     public PropertyDefaultFacetDerivedFromDefaultedFacet(final DefaultedFacet typeFacet, final FacetHolder holder, final AdapterManager adapterManager) {
         super(PropertyDefaultFacet.class, holder, false);
         this.typeFacet = typeFacet;
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     @Override
@@ -46,15 +46,15 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
         if (typeFacetDefault == null) {
             return null;
         }
-        return getAdapterMap().adapterFor(typeFacetDefault);
+        return getAdapterManager().adapterFor(typeFacetDefault);
     }
 
     // /////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////
 
-    public AdapterManager getAdapterMap() {
-        return adapterMap;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

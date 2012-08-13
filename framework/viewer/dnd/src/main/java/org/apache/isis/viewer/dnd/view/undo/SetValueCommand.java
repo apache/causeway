@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.dnd.view.undo;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -78,7 +79,7 @@ public class SetValueCommand implements Command {
         return IsisContext.getPersistenceSession();
     }
 
-    private static AdapterManagerSpi getAdapterManager() {
+    private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

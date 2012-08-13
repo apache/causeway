@@ -17,7 +17,7 @@
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -42,7 +42,7 @@ public class ValueSemanticsProviderContext {
         return specificationLookup;
     }
 
-    public AdapterManager getAdapterMap() {
+    public AdapterManager getAdapterManager() {
         return adapterManager;
     }
 

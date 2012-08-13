@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -164,14 +164,14 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected OidStringifier getOidStringifier() {
-        return getOidGenerator().getOidStringifier();
+        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
-    protected OidGenerator getOidGenerator() {
-        return getPersistenceSession().getOidGenerator();
+    protected List<ObjectAdapter> getServiceAdapters() {
+        return IsisContext.getPersistenceSession().getServices();
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

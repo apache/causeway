@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.percentage.PercentageValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
     private PercentageValueSemanticsProvider adapter;
     private Percentage percentage;
@@ -41,7 +40,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.percentage");
                 will(returnValue(null));

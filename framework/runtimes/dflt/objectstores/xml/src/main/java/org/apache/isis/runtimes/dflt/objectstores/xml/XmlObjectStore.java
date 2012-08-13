@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -194,8 +195,10 @@ public class XmlObjectStore implements ObjectStoreSpi {
 
         if (fieldData == null) {
             ObjectSpecification spec = field.getSpecification();
+            
             final Object recreatedPojo = spec.createObject();
-            final ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(referenceOid, recreatedPojo);
+            final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(referenceOid, recreatedPojo);
+            
             if (!adapter.isDestroyed()) {
                 adapter.changeState(ResolveState.DESTROYED);
             }
@@ -205,7 +208,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
         } else {
             ObjectSpecification spec = specFor(fieldData);
             final Object recreatedPojo = spec.createObject();
-            final ObjectAdapter reference = getAdapterManager().mapRecreatedPojo(referenceOid, recreatedPojo);
+            final ObjectAdapter reference = getPersistenceSession().mapRecreatedPojo(referenceOid, recreatedPojo);
             ((OneToOneAssociation) field).initAssociation(object, reference);
         }
 
@@ -358,7 +361,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
         final RootOid oid = data.getRootOid();
         final ObjectSpecification spec = specFor(data);
         final Object recreatedPojo = spec.createObject();
-        final ObjectAdapter object = getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+        final ObjectAdapter object = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
         initObject(object, data);
         return object;
     }
@@ -397,7 +400,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
             final ObjectSpecification spec = specFor(instanceData);
             final Object recreatedPojo = spec.createObject();
             
-            final ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+            final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
             if(LOG.isDebugEnabled()) {
                 LOG.debug("recreated instance " + adapter);
             }
@@ -463,7 +466,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
         return IsisContext.getSpecificationLoader();
     }
 
-    private AdapterManagerSpi getAdapterManager() {
+    private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

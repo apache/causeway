@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.ObjectContent;
@@ -90,7 +90,7 @@ public class DisposeObjectOption extends UserActionAbstract {
     // Dependencies (from context)
     // /////////////////////////////////////////////////////
 
-    private static PersistenceSession getPersistenceSession() {
+    private static Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.actions.executed;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.spec.Target;

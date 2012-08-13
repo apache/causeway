@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -96,13 +97,9 @@ public class ObjectAdapterMemento implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
                 TypedOid oid = oidMarshaller.unmarshal(oam.persistentOidStr, TypedOid.class);
-                return getAdapterManager().recreatePersistentAdapter(oid);
+                return getPersistenceSession().recreatePersistentAdapter(oid);
             }
 
-            private AdapterManagerSpi getAdapterManager() {
-                return IsisContext.getPersistenceSession().getAdapterManager();
-            }
-            
             @Override
             public boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other) {
                 return other.type == PERSISTENT && oam.persistentOidStr.equals(other.persistentOidStr);
@@ -289,5 +286,14 @@ public class ObjectAdapterMemento implements Serializable {
         return type.toString(this);
     }
 
+
+    private static AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    private static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+    
 
 }

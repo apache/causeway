@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -46,15 +46,15 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
-    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType, final ObjectSpecification returnType, final FacetHolder holder, final AdapterManager adapterMap) {
+    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType, final ObjectSpecification returnType, final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
         this.onType = onType;
         this.returnType = returnType;
-        this.adapterMap = adapterMap;
+        this.adapterManager = adapterManager;
     }
 
     /**
@@ -97,7 +97,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 return null;
             }
 
-            final ObjectAdapter resultAdapter = getAdapterMap().adapterFor(result);
+            final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
             final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
             resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
             return resultAdapter;
@@ -139,8 +139,8 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
 
-    private AdapterManager getAdapterMap() {
-        return adapterMap;
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

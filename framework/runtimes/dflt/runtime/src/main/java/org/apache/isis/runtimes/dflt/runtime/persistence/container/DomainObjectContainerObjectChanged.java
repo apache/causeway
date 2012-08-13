@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.container;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
@@ -63,7 +64,7 @@ public class DomainObjectContainerObjectChanged {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

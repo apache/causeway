@@ -33,7 +33,7 @@ public class ApplicationActionsModel extends ModelAbstract<List<ObjectAdapter>> 
 
     @Override
     protected List<ObjectAdapter> load() {
-        return getPersistenceSession().getServices();
+        return getServiceAdapters();
     }
 
 }

@@ -25,6 +25,7 @@ import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
@@ -33,6 +34,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
  * Handles reading and writing java.sql.Date and
@@ -43,7 +45,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSp
  */
 public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
-    private final AdapterManagerSpi adapterManager;
     private final String dataType;
 
     public static class Factory extends AbstractFieldMappingFactory {
@@ -56,7 +57,6 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
     protected JdbcDateMapper(final ObjectAssociation field, final String dataType) {
         super(field);
-        adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
         this.dataType = dataType;
     }
 
@@ -82,12 +82,12 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
         if (correspondingClass == java.util.Date.class || correspondingClass == java.sql.Date.class) {
             // 2011-04-08 = 1270684800000
-            restoredValue = adapterManager.adapterFor(javaDateValue);
+            restoredValue = getAdapterManager().adapterFor(javaDateValue);
         } else if (correspondingClass == Date.class) {
             // 2010-03-05 = 1267747200000
             Date dateValue;
             dateValue = new Date(javaDateValue);
-            restoredValue = adapterManager.adapterFor(dateValue);
+            restoredValue = getAdapterManager().adapterFor(dateValue);
         } else {
             throw new PersistFailedException("Unhandled date type: " + correspondingClass.getCanonicalName());
         }
@@ -99,4 +99,13 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         return dataType;
     }
 
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+    
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
 }
+
+

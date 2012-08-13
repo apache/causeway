@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
@@ -89,7 +90,7 @@ public class Context implements Serializable {
     }
 
     public void init() {
-        final AdapterManagerSpi adapterManager = getAdapterManager();
+        final AdapterManager adapterManager = getAdapterManager();
         final List<Object> services = getUserProfile().getPerspective().getServices();
         for (final Object service : services) {
             final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);
@@ -636,7 +637,7 @@ public class Context implements Serializable {
         return IsisContext.getUserProfile();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

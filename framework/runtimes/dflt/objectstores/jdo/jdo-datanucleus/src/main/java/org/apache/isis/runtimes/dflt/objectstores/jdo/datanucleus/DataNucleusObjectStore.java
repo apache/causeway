@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -349,7 +350,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         }
 
         Object result = getPojo(oid);
-        final ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(oid, result);
+        final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(oid, result);
         
         //TODO: loadPostProcessor.loaded(adapter);
         return adapter;
@@ -706,7 +707,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
     

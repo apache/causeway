@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private DateTimeValueSemanticsProvider adapter;
@@ -41,7 +40,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.datetime");
                 will(returnValue(null));

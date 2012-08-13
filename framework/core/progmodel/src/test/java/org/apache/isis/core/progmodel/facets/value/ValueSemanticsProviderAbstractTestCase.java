@@ -27,20 +27,17 @@ import static org.junit.Assert.fail;
 import java.util.Locale;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -50,46 +47,41 @@ import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsi
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
-    protected Mockery mockery = new JUnit4Mockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
 
     private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
     private ParseableFacetUsingParser parseableFacet;
 
+    @Mock
     protected FacetHolder mockFacetHolder;
-
+    @Mock
     protected IsisConfiguration mockConfiguration;
+    @Mock
     protected ValueSemanticsProviderContext mockContext;
-
-    protected SpecificationLoaderSpi mockSpecificationLoader;
+    @Mock
     protected ServicesInjector mockDependencyInjector;
+    @Mock
     protected AdapterManager mockAdapterManager;
+    @Mock
+    protected SpecificationLoaderSpi mockSpecificationLoader;
+    @Mock
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
     protected ObjectAdapter mockAdapter;
 
     @Before
     public void setUp() throws Exception {
         Locale.setDefault(Locale.UK);
 
-        mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockConfiguration = mockery.mock(IsisConfiguration.class);
-
-        mockContext = mockery.mock(ValueSemanticsProviderContext.class);
-
-        mockDependencyInjector = mockery.mock(ServicesInjector.class);
-        mockAdapterManager = mockery.mock(AdapterManager.class);
-        mockAuthenticationSessionProvider = mockery.mock(AuthenticationSessionProvider.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
-
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(with(any(String.class)), with(any(String.class)));
                 will(returnArgument(1));
@@ -107,17 +99,15 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                 never(mockAdapterManager);
             }
         });
-
-        mockAdapter = mockery.mock(ObjectAdapter.class);
     }
 
     @After
     public void tearDown() throws Exception {
-        mockery.assertIsSatisfied();
+        context.assertIsSatisfied();
     }
 
     protected void allowMockAdapterToReturn(final Object pojo) {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockAdapter).getObject();
                 will(returnValue(pojo));

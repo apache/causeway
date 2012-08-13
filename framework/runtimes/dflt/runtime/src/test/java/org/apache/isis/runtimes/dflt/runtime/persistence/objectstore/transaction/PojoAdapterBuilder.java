@@ -24,8 +24,8 @@ import java.util.Iterator;
 import com.google.common.base.Splitter;
 
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -50,7 +50,7 @@ public class PojoAdapterBuilder {
     // substitute the SpecLoader
     private SpecificationLoaderSpi specificationLoader;
     
-    private ObjectAdapterLookup objectAdapterLookup;
+    private AdapterManager objectAdapterLookup;
     
     private ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
     private String identifier = "1";
@@ -195,7 +195,7 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(ObjectAdapterLookup objectAdapterLookup) {
+    public PojoAdapterBuilder with(AdapterManager objectAdapterLookup) {
         this.objectAdapterLookup = objectAdapterLookup;
         return this;
     }

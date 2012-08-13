@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.value.shortint.ShortValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.shortint.ShortWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private ShortValueSemanticsProviderAbstract value;
@@ -44,7 +43,7 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.short");
                 will(returnValue(null));

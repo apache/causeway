@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.model.util;
 import com.google.common.base.Function;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
@@ -61,7 +62,7 @@ public final class ObjectAdapters {
         };
     }
 
-    private static AdapterManagerSpi getAdapterManager() {
+    private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

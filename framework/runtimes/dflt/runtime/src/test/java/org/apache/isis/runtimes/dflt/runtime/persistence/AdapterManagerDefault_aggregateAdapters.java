@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
@@ -52,8 +51,6 @@ import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.OidAdapterHashMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 

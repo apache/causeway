@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -42,7 +42,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
     private final LocalizationProvider localizationProvider;
 
     public static class TitleComponent {
@@ -88,10 +88,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         }
     }
 
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterMap, final LocalizationProvider localizationProvider) {
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterManager, final LocalizationProvider localizationProvider) {
         super(holder);
         this.components = components;
-        this.adapterMap = adapterMap;
+        this.adapterManager = adapterManager;
         this.localizationProvider = localizationProvider;
     }
 
@@ -127,7 +127,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     private String titleOf(final Object domainObject) {
-        final ObjectAdapter adapter = adapterMap.getAdapterFor(domainObject);
+        final ObjectAdapter adapter = adapterManager.getAdapterFor(domainObject);
         if (adapter == null) {
             return null;
         }

@@ -98,7 +98,7 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     @Override
     public ObjectAdapter createValue(final Float value) {
-        return getAdapterMap().adapterFor(value);
+        return getAdapterManager().adapterFor(value);
     }
 
     // /////// toString ///////

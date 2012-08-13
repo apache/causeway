@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -279,7 +279,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     // Dependencies (from context)
     // ////////////////////////////////////////////////////////////
 
-    private static PersistenceSession getPersistenceSession() {
+    private static Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

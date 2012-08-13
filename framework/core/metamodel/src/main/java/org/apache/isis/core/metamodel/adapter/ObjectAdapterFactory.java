@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
@@ -30,5 +31,5 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  */
 public interface ObjectAdapterFactory {
 
-    public ObjectAdapter createAdapter(final Object pojo, final Oid oid, final ObjectAdapterLookup objectAdapterLookup);
+    public ObjectAdapter createAdapter(final Object pojo, final Oid oid, final AdapterManager objectAdapterLookup);
 }

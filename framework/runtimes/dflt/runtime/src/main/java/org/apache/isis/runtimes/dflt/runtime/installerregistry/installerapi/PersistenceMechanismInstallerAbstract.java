@@ -48,8 +48,8 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecr
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisObjectStoreLogger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;

@@ -38,22 +38,17 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.services.ServicesInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemException;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoaderDefault;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
 public class IsisSystemUsingInstallers extends IsisSystemAbstract {

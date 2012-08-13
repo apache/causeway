@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.color.ColorValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private ColorValueSemanticsProvider value;

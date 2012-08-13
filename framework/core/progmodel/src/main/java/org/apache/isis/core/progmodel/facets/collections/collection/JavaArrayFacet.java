@@ -23,17 +23,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
     public JavaArrayFacet(final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     /**
@@ -57,7 +57,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         final Object[] array = array(collectionAdapter);
         final ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
         for (final Object element2 : array) {
-            final ObjectAdapter element = getAdapterMap().getAdapterFor(element2);
+            final ObjectAdapter element = getAdapterManager().getAdapterFor(element2);
             objectCollection.add(element);
         }
         return objectCollection;
@@ -69,7 +69,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     @Override
     public ObjectAdapter firstElement(final ObjectAdapter collectionAdapter) {
         final Object[] array = array(collectionAdapter);
-        return array.length > 0 ? getAdapterMap().getAdapterFor(array[0]) : null;
+        return array.length > 0 ? getAdapterManager().getAdapterFor(array[0]) : null;
     }
 
     /**
@@ -88,8 +88,8 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////
 
-    private AdapterManager getAdapterMap() {
-        return adapterMap;
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

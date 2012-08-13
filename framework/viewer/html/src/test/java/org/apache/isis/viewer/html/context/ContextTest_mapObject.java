@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -258,7 +259,7 @@ public class ContextTest_mapObject {
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManagerSpi getAdapterManager() {
+    private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

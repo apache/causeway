@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -187,7 +188,7 @@ public class Memento implements Serializable {
                 getSpecificationLoader().loadSpecification(data.getClassName());
 
         final Object recreatedPojo = spec.createObject();
-        ObjectAdapter adapter = getAdapterManager().mapRecreatedPojo(getOid(), recreatedPojo);
+        ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(getOid(), recreatedPojo);
         
         if (adapter.getSpecification().isParentedOrFreeCollection()) {
             populateCollection(adapter, (CollectionData) data);
@@ -226,7 +227,7 @@ public class Memento implements Serializable {
         }
         
         final Object recreatedPojo = spec.createObject();
-        ObjectAdapter referencedAdapter = getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+        ObjectAdapter referencedAdapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
         if (data instanceof ObjectData) {
             if (spec.isParented()) {
                 // rather than the following, is it equivalent to pass in RESOLVING (like everywhere else?)
@@ -413,7 +414,7 @@ public class Memento implements Serializable {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
@@ -143,7 +144,7 @@ public class CollectionMapping implements Iterable<String> {
     // Dependencies (from context)
     // //////////////////////////////////////////////////////
 
-    private static AdapterManagerSpi getAdapterManager() {
+    private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

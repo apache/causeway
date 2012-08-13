@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -225,7 +226,7 @@ public class ObjectReader {
     }
 
     protected ObjectAdapter getAdapter(final TypedOid oid) {
-        return getAdapterManager().recreatePersistentAdapter(oid);
+        return getPersistenceSession().recreatePersistentAdapter(oid);
     }
 
     // replaced with getAdapter(TypedOid) above
@@ -239,19 +240,11 @@ public class ObjectReader {
 //    }
 
     protected ObjectAdapter getAdapter(final RootOid oid) {
-        
-        // removed since also checked in the AdapterManager
-//        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
-//        if (adapter != null) {
-//            return adapter;
-//        } 
-        //return getPersistenceSession().recreateAdapter(oid);
-        
-        return getAdapterManager().recreatePersistentAdapter(oid);
+        return getPersistenceSession().recreatePersistentAdapter(oid);
     }
 
     
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

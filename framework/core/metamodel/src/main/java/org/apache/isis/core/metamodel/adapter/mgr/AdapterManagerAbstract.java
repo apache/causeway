@@ -14,9 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.adapter.map;
+package org.apache.isis.core.metamodel.adapter.mgr;
 
-public abstract class AdapterManagerAbstract implements AdapterManager {
+import org.apache.isis.core.commons.components.Injectable;
+
+public abstract class AdapterManagerAbstract implements AdapterManager, Injectable {
 
     @Override
     public void injectInto(final Object candidate) {

@@ -42,7 +42,7 @@ import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -534,7 +534,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // //////////////////////////////////////////////////////////////////
 
     protected AdapterManager getAdapterMap() {
-        return createObjectContext.getAdapterMap();
+        return createObjectContext.getAdapterManager();
     }
 
     protected ServicesInjector getDependencyInjector() {

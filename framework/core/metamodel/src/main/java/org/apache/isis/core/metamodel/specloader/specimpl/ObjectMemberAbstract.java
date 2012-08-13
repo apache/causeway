@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -63,7 +63,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FeatureType featureType;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLookup;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
 
@@ -79,7 +79,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
         this.authenticationSessionProvider = objectMemberContext.getAuthenticationSessionProvider();
         this.specificationLookup = objectMemberContext.getSpecificationLookup();
-        this.adapterMap = objectMemberContext.getAdapterManager();
+        this.adapterManager = objectMemberContext.getAdapterManager();
         this.querySubmitter = objectMemberContext.getQuerySubmitter();
         this.collectionTypeRegistry = objectMemberContext.getCollectionTypeRegistry();
     }
@@ -294,8 +294,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return specificationLookup;
     }
 
-    public AdapterManager getAdapterMap() {
-        return adapterMap;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     public QuerySubmitter getQuerySubmitter() {

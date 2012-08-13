@@ -26,7 +26,7 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -162,7 +162,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // /////////////////////////////////////////
 
     public AdapterManager getAdapterMap() {
-        return context.getAdapterMap();
+        return context.getAdapterManager();
     }
 
     public ServicesInjector getDependencyInjector() {

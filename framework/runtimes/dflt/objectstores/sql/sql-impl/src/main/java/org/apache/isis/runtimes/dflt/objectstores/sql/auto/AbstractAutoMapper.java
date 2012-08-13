@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -303,7 +304,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             return adapter;
         }
         final Object recreatedPojo = spec.createObject();
-        return getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+        return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
     }
 
     protected FieldMapping fieldMappingFor(final ObjectAssociation field) {
@@ -353,7 +354,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

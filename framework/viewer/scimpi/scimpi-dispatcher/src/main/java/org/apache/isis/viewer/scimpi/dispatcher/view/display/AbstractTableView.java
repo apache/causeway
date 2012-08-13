@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -86,7 +86,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
 
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

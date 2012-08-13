@@ -94,7 +94,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
             @Override
             public void setObject(final Boolean object) {
-                final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().adapterFor(object);
+                final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
                 getModel().setObject(adapter);
             }
         });

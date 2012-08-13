@@ -25,7 +25,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
@@ -103,9 +103,9 @@ public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDe
     }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterMap) {
-        super.setAdapterManager(adapterMap);
-        wrapperFactoryDelegate.setAdapterManager(adapterMap);
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        super.setAdapterManager(adapterManager);
+        wrapperFactoryDelegate.setAdapterManager(adapterManager);
     }
 
     @Override

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.context;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -129,7 +130,7 @@ class PersistentRootAdapterMapping implements Mapping {
     public void reload() {
         if (getAdapterManager().getAdapterFor(oid) == null) {
             final Object recreatedPojo = spec.createObject();
-            getAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+            getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
         }
     }
 
@@ -168,7 +169,7 @@ class PersistentRootAdapterMapping implements Mapping {
     }
 
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

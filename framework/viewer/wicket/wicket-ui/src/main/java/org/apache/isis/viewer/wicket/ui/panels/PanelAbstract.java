@@ -35,9 +35,10 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -157,16 +158,20 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     }
 
     @Override
-    public PersistenceSession getPersistenceSession() {
+    public Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
+    protected AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
     protected List<ObjectAdapter> getServiceAdapters() {
-        return getPersistenceSession().getServices();
+        return IsisContext.getPersistenceSession().getServices();
     }
 
     protected OidStringifier getOidStringifier() {
-        return getPersistenceSession().getOidGenerator().getOidStringifier();
+        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     // /////////////////////////////////////////////////

@@ -41,7 +41,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -63,12 +63,11 @@ import org.apache.isis.tck.dom.claimapp.employees.Employee;
 
 public class WrappedFactoryDefaultTest_wrappedObject_transient {
 
-
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private AdapterManager mockAdapterMap;
+    private AdapterManager mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
@@ -86,9 +85,10 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private Identifier mockPasswordIdentifier;
 
-    private final String passwordValue = "12345678";
     @Mock
     protected ObjectAdapter mockPasswordAdapter;
+    
+    private final String passwordValue = "12345678";
 
     private final SimpleSession session = new SimpleSession("tester", Collections.<String>emptyList());
 
@@ -114,17 +114,17 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
         wrapperFactory = new WrapperFactoryDefault();
-        wrapperFactory.setAdapterManager(mockAdapterMap);
+        wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         wrapperFactory.setObjectPersistor(mockObjectPersistor);
         wrapperFactory.setSpecificationLookup(mockSpecificationLookup);
         
         context.checking(new Expectations() {
             {
-                allowing(mockAdapterMap).getAdapterFor(employeeDO);
+                allowing(mockAdapterManager).getAdapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
-                allowing(mockAdapterMap).adapterFor(passwordValue);
+                allowing(mockAdapterManager).adapterFor(passwordValue);
                 will(returnValue(mockPasswordAdapter));
 
                 allowing(mockEmployeeAdapter).getSpecification();

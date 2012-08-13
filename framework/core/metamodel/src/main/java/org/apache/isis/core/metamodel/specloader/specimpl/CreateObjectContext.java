@@ -16,20 +16,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class CreateObjectContext {
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
     private final ServicesInjector dependencyInjector;
 
-    public CreateObjectContext(final AdapterManager adapterMap, final ServicesInjector dependencyInjector) {
-        this.adapterMap = adapterMap;
+    public CreateObjectContext(final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
+        this.adapterManager = adapterManager;
         this.dependencyInjector = dependencyInjector;
     }
 
-    public AdapterManager getAdapterMap() {
-        return adapterMap;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     public ServicesInjector getDependencyInjector() {

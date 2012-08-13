@@ -26,7 +26,7 @@ import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -46,7 +46,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
     private final Parser<?> parser;
     private final ServicesInjector dependencyInjector;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public ParseableFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
@@ -54,7 +54,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         this.parser = parser;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.dependencyInjector = dependencyInjector;
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         // check string is valid
         // (eg pick up any @RegEx on value type)
         if (getFacetHolder().containsFacet(ValueFacet.class)) {
-            final ObjectAdapter entryAdapter = getAdapterMap().adapterFor(entry);
+            final ObjectAdapter entryAdapter = getAdapterManager().adapterFor(entry);
             final ParseValueContext parseValueContext = new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
             validate(parseValueContext);
         }
@@ -89,7 +89,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
             // check resultant object is also valid
             // (eg pick up any validate() methods on it)
-            final ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
+            final ObjectAdapter adapter = getAdapterManager().adapterFor(parsed);
             final ObjectSpecification specification = adapter.getSpecification();
             final ObjectValidityContext validateContext = specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
             validate(validateContext);
@@ -146,7 +146,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     /**
      * @return the adapterManager
      */
-    public AdapterManager getAdapterMap() {
-        return adapterMap;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 }

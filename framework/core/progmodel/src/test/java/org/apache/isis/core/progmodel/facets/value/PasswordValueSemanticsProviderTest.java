@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.password.PasswordValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private PasswordValueSemanticsProvider adapter;

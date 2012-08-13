@@ -104,7 +104,7 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
 
     @Override
     public ObjectAdapter createValue(final String password) {
-        return getAdapterMap().adapterFor(new Password(password));
+        return getAdapterManager().adapterFor(new Password(password));
     }
 
     private Password password(final Object object) {

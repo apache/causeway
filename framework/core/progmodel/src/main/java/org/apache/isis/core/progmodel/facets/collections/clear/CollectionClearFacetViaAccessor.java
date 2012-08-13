@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -36,13 +36,13 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearF
 public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
     private final ObjectDirtier objectDirtier;
 
     public CollectionClearFacetViaAccessor(final Method method, final FacetHolder holder, final AdapterManager adapterManager, final ObjectDirtier objectDirtier) {
         super(holder);
         this.method = method;
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
         this.objectDirtier = objectDirtier;
     }
 
@@ -75,7 +75,7 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     public void clear(final ObjectAdapter owningAdapter) {
         final Collection<?> collection = (Collection<?>) AdapterInvokeUtils.invoke(method, owningAdapter);
         collection.clear();
-        final ObjectAdapter adapter = getAdapterMap().getAdapterFor(owningAdapter);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(owningAdapter);
         getObjectDirtier().objectChanged(adapter);
     }
 
@@ -88,8 +88,8 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     protected ObjectDirtier getObjectDirtier() {

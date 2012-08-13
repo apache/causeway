@@ -17,7 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter.map;
+package org.apache.isis.core.metamodel.adapter.mgr;
+
 
 public interface AdapterManagerAware {
 

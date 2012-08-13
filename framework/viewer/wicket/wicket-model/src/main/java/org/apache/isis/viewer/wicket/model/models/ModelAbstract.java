@@ -19,11 +19,15 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.List;
+
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -44,12 +48,16 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
     // Dependencies
     // //////////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+    protected List<ObjectAdapter> getServiceAdapters() {
+        return IsisContext.getPersistenceSession().getServices();
+    }
+
+    protected AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
 }

@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryExcept
 import org.apache.isis.core.progmodel.facets.value.chars.CharValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.chars.CharWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private CharValueSemanticsProviderAbstract value;

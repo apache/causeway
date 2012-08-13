@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
@@ -49,7 +49,7 @@ public abstract class PersistAlgorithmContractTest {
     private ObjectSpecification objectSpec;
 
     @Mock
-    private ObjectAdapterLookup mockObjectAdapterLookup;
+    private AdapterManager mockObjectAdapterLookup;
     
     private PersistAlgorithm persistAlgorithm;
 

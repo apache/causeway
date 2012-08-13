@@ -47,8 +47,8 @@ import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -69,7 +69,7 @@ public class TextFieldContentTest {
     @Mock
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
     @Mock
-    protected PersistenceSession mockPersistenceSession;
+    protected Persistor mockPersistenceSession;
     @Mock
     protected AuthenticationManager mockAuthenticationManager;
     @Mock

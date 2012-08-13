@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private BooleanValueSemanticsProviderAbstract value;

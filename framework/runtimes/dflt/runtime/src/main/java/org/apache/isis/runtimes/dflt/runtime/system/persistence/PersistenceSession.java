@@ -48,6 +48,8 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterRecreator;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -95,8 +97,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClo
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
 public class PersistenceSession implements  
-        EnlistedObjectDirtying, ToPersistObjectSet, 
-        SessionScopedComponent, DebuggableWithTitle {
+        EnlistedObjectDirtying, ToPersistObjectSet,
+        AdapterRecreator,
+        RecreatedPojoRemapper,
+        AdapterLifecycleTransitioner,
+        SessionScopedComponent, DebuggableWithTitle, Persistor {
 
     private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
 
@@ -289,7 +294,7 @@ public class PersistenceSession implements
             if (existingOid == null) {
                 serviceAdapter = getAdapterManager().adapterFor(service);
             } else {
-                serviceAdapter = getAdapterManager().mapRecreatedPojo(existingOid, service);
+                serviceAdapter = mapRecreatedPojo(existingOid, service);
             }
 
             if (serviceAdapter.getOid().isTransient()) {
@@ -334,38 +339,11 @@ public class PersistenceSession implements
     // Factory (for transient instance)
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Create a root or standalone {@link ObjectAdapter adapter}.
-     * 
-     * <p>
-     * Creates a new instance of the specified type and returns it in an adapter
-     * whose resolved state set to {@link ResolveState#TRANSIENT} (except if the
-     * type is marked as {@link ObjectSpecification#isValueOrIsParented()
-     * aggregated} in which case it will be set to {@link ResolveState#VALUE}).
-     * 
-     * <p>
-     * The returned object will be initialised (had the relevant callback
-     * lifecycle methods invoked).
-     * 
-     * <p>
-     * <b><i> REVIEW: not sure about {@link ResolveState#VALUE} - see comments
-     * in {@link #adapterFor(Object, Oid, OneToManyAssociation)}.</i></b>
-     * <p>
-     * TODO: this is the same as
-     * {@link RuntimeContextFromSession#createTransientInstance(ObjectSpecification)};
-     * could it be unified?
-     * 
-     * <p>
-     * While creating the object it will be initialised with default values and
-     * its created lifecycle method (its logical constructor) will be invoked.
-     * Contrast this with
-     * {@link #recreateTransientInstance(Oid, ObjectSpecification)}.
-     * 
-     * <p>
-     * This method is ultimately delegated to by the
-     * {@link DomainObjectContainer}.
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#createInstance(org.apache.isis.core.metamodel.spec.ObjectSpecification)
      */
     //@Override
+    @Override
     public ObjectAdapter createInstance(final ObjectSpecification objectSpec) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
@@ -375,23 +353,11 @@ public class PersistenceSession implements
         return objectSpec.initialize(adapter);
     }
 
-    /**
-     * Creates a new instance of the specified type and returns an adapter with
-     * an aggregated OID that show that this new object belongs to the specified
-     * parent. The new object's resolved state is set to
-     * {@link ResolveState#RESOLVED} as it state is part of it parent.
-     * 
-     * <p>
-     * While creating the object it will be initialised with default values and
-     * its created lifecycle method (its logical constructor) will be invoked.
-     * Contrast this with
-     * {@link #recreateTransientInstance(Oid, ObjectSpecification)}.
-     * 
-     * <p>
-     * This method is ultimately delegated to by the
-     * {@link DomainObjectContainer}.
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#createInstance(org.apache.isis.core.metamodel.spec.ObjectSpecification, org.apache.isis.core.metamodel.adapter.ObjectAdapter)
      */
     //@Override
+    @Override
     public ObjectAdapter createInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating aggregated instance of " + objectSpec);
@@ -412,17 +378,11 @@ public class PersistenceSession implements
     // findInstances, getInstances
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Finds and returns instances that match the specified query.
-     * 
-     * <p>
-     * The {@link QueryCardinality} determines whether all instances or just the
-     * first matching instance is returned.
-     * 
-     * @throws UnsupportedFindException
-     *             if the criteria is not support by this persistor
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#findInstances(org.apache.isis.applib.query.Query, org.apache.isis.core.metamodel.services.container.query.QueryCardinality)
      */
     //@Override
+    @Override
     public <T> ObjectAdapter findInstances(final Query<T> query, final QueryCardinality cardinality) {
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (persistenceQuery == null) {
@@ -431,20 +391,11 @@ public class PersistenceSession implements
         return findInstances(persistenceQuery);
     }
 
-    /**
-     * Finds and returns instances that match the specified
-     * {@link PersistenceQuery}.
-     * 
-     * <p>
-     * Compared to {@link #findInstances(Query, QueryCardinality)}, not that
-     * there is no {@link QueryCardinality} parameter. That's because
-     * {@link PersistenceQuery} intrinsically carry the knowledge as to how many
-     * rows they return.
-     * 
-     * @throws UnsupportedFindException
-     *             if the criteria is not support by this persistor
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#findInstances(org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery)
      */
     //@Override
+    @Override
     public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
         final List<ObjectAdapter> instances = getInstances(persistenceQuery);
         final ObjectSpecification specification = persistenceQuery.getSpecification();
@@ -566,7 +517,7 @@ public class PersistenceSession implements
         if (LOG.isDebugEnabled()) {
             LOG.debug("marking as changed any objects that have been manually set as dirty");
         }
-        for (final ObjectAdapter adapter : getAdapterManager()) {
+        for (final ObjectAdapter adapter : adapterManager) {
             if (adapter.getSpecification().isDirty(adapter)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("  found dirty object " + adapter);
@@ -586,7 +537,7 @@ public class PersistenceSession implements
             LOG.debug("cleaning any manually dirtied objects");
         }
 
-        for (final ObjectAdapter object : getAdapterManager()) {
+        for (final ObjectAdapter object : adapterManager) {
             if (object.getSpecification().isDirty(object)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("  found dirty object " + object);
@@ -642,7 +593,7 @@ public class PersistenceSession implements
     private ObjectAdapter getService(final Object servicePojo) {
         final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
-        final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
+        final ObjectAdapter serviceAdapter = mapRecreatedPojo(oid, servicePojo);
         
         serviceAdapter.markAsResolvedIfPossible();
         return serviceAdapter;
@@ -653,6 +604,16 @@ public class PersistenceSession implements
      */
     public boolean hasServices() {
         return servicesInjector.getRegisteredServices().size() > 0;
+    }
+
+    private RootOid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification) {
+        final ObjectSpecId objectSpecId = serviceSpecification.getSpecId();
+        RootOid oid = servicesByObjectType.get(objectSpecId);
+        if (oid == null) {
+            oid = objectStore.getOidForService(serviceSpecification);
+            servicesByObjectType.put(objectSpecId, oid);
+        }
+        return oid;
     }
 
 
@@ -708,11 +669,11 @@ public class PersistenceSession implements
     // loadObject, reload
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Loads the object identified by the specified {@link TypedOid} from the
-     * persisted set of objects.
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#loadObject(org.apache.isis.core.metamodel.adapter.oid.TypedOid)
      */
     //@Override
+    @Override
     public ObjectAdapter loadObject(final TypedOid oid) {
         ensureThatArg(oid, is(notNullValue()));
 
@@ -739,12 +700,11 @@ public class PersistenceSession implements
     // resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Re-initialises the fields of an object. If the object is unresolved then
-     * the object's missing data should be retrieved from the persistence
-     * mechanism and be used to set up the value objects and associations.
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#resolveImmediately(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
      */
     //@Override
+    @Override
     public void resolveImmediately(final ObjectAdapter adapter) {
         // synchronize on the current session because getting race
         // conditions, I think between different UI threads when running
@@ -789,19 +749,10 @@ public class PersistenceSession implements
         });
     }
 
-    /**
-     * Hint that specified field within the specified object is likely to be
-     * needed soon. This allows the object's data to be loaded, ready for use.
-     * 
-     * <p>
-     * This method need not do anything, but offers the object store the
-     * opportunity to load in objects before their use. Contrast this with
-     * resolveImmediately, which requires an object to be loaded before
-     * continuing.
-     * 
-     * @see #resolveImmediately(ObjectAdapter)
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#resolveField(org.apache.isis.core.metamodel.adapter.ObjectAdapter, org.apache.isis.core.metamodel.spec.feature.ObjectAssociation)
      */
-    //@Override
+    @Override
     public void resolveField(final ObjectAdapter objectAdapter, final ObjectAssociation field) {
         if (field.isNotPersisted()) {
             return;
@@ -843,25 +794,10 @@ public class PersistenceSession implements
     // makePersistent
     // ////////////////////////////////////////////////////////////////
 
-    /**
-     * Makes an {@link ObjectAdapter} persistent. The specified object should be
-     * stored away via this object store's persistence mechanism, and have an
-     * new and unique OID assigned to it. The object, should also be added to
-     * the {@link AdapterManagerSpi} as the object is implicitly 'in use'.
-     * 
-     * <p>
-     * If the object has any associations then each of these, where they aren't
-     * already persistent, should also be made persistent by recursively calling
-     * this method.
-     * 
-     * <p>
-     * If the object to be persisted is a collection, then each element of that
-     * collection, that is not already persistent, should be made persistent by
-     * recursively calling this method.
-     * 
-     * @see #remapAsPersistent(ObjectAdapter)
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#makePersistent(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
      */
-    //@Override
+    @Override
     public void makePersistent(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
@@ -908,11 +844,10 @@ public class PersistenceSession implements
     // objectChanged
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Mark the {@link ObjectAdapter} as changed, and therefore requiring
-     * flushing to the persistence mechanism.
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#objectChanged(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
      */
-    //@Override
+    @Override
     public void objectChanged(final ObjectAdapter adapter) {
 
         if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
@@ -978,11 +913,10 @@ public class PersistenceSession implements
     // destroyObject
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Removes the specified object from the system. The specified object's data
-     * should be removed from the persistence mechanism.
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#destroyObject(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
      */
-    //@Override
+    @Override
     public void destroyObject(final ObjectAdapter adapter) {
         if (adapter.getSpecification().isParented()) {
             return;
@@ -1021,8 +955,75 @@ public class PersistenceSession implements
         });
     }
 
+
     // ///////////////////////////////////////////////////////////////////////////
-    // remapAsPersistent
+    // hasInstances
+    // ///////////////////////////////////////////////////////////////////////////
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#hasInstances(org.apache.isis.core.metamodel.spec.ObjectSpecification)
+     */
+    @Override
+    public boolean hasInstances(final ObjectSpecification specification) {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("hasInstances of " + specification.getShortIdentifier());
+        }
+        return hasInstancesFromPersistenceLayer(specification);
+    }
+
+    private boolean hasInstancesFromPersistenceLayer(final ObjectSpecification specification) {
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<Boolean>() {
+            @Override
+            public Boolean execute() {
+                return objectStore.hasInstances(specification);
+            }
+        });
+    }
+
+    
+    // ///////////////////////////////////////////////////////////////////////////
+    // AdapterRecreator
+    // ///////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public ObjectAdapter recreatePersistentAdapter(TypedOid oid) {
+        return adapterManager.recreatePersistentAdapter(oid);
+    }
+
+    
+    // ///////////////////////////////////////////////////////////////////////////
+    // RecreatedPojoRemapper
+    // ///////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
+        return adapterManager.mapRecreatedPojo(oid, recreatedPojo);
+    }
+
+    @Override
+    public void remapRecreatedPojo(ObjectAdapter adapter, Object recreatedPojo) {
+        adapterManager.remapRecreatedPojo(adapter, recreatedPojo);
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // AdapterLifecycleTransitioner
+    // ///////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void remapAsPersistent(ObjectAdapter adapter, RootOid hintRootOid) {
+        adapterManager.remapAsPersistent(adapter, hintRootOid);
+    }
+
+    @Override
+    public void removeAdapter(ObjectAdapter adapter) {
+        adapterManager.removeAdapter(adapter);
+    }
+    
+    
+    
+    // ///////////////////////////////////////////////////////////////////////////
+    // ToPersistObjectSet
     // ///////////////////////////////////////////////////////////////////////////
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
@@ -1048,7 +1049,7 @@ public class PersistenceSession implements
     @Override
     public void remapAsPersistent(final ObjectAdapter adapter) {
         final Oid transientOid = adapter.getOid();
-        getAdapterManager().remapAsPersistent(adapter, null);
+        adapterManager.remapAsPersistent(adapter, null);
         final Oid persistentOid = adapter.getOid();
         persistentByTransient.put(transientOid, persistentOid);
     }
@@ -1060,60 +1061,6 @@ public class PersistenceSession implements
         return persistentByTransient.get(transientOid);
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // hasInstances
-    // ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Whether there are any instances of the specified
-     * {@link ObjectSpecification type}.
-     *
-     * <p>
-     * Checks whether there are any instances of the specified type. The object
-     * store should look for instances of the type represented by <variable>type
-     * </variable> and return <code>true</code> if there are, or
-     * <code>false</code> if there are not.
-     * 
-     * <p>
-     * Used (ostensibly) by client-side code.
-     */
-    //@Override
-    public boolean hasInstances(final ObjectSpecification specification) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("hasInstances of " + specification.getShortIdentifier());
-        }
-        return hasInstancesFromPersistenceLayer(specification);
-    }
-
-    private boolean hasInstancesFromPersistenceLayer(final ObjectSpecification specification) {
-        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<Boolean>() {
-            @Override
-            public Boolean execute() {
-                return objectStore.hasInstances(specification);
-            }
-        });
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Services
-    // ///////////////////////////////////////////////////////////////////////////
-
-
-    private RootOid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification) {
-        final ObjectSpecId objectSpecId = serviceSpecification.getSpecId();
-        RootOid oid = servicesByObjectType.get(objectSpecId);
-        if (oid == null) {
-            oid = objectStore.getOidForService(serviceSpecification);
-            servicesByObjectType.put(objectSpecId, oid);
-        }
-        return oid;
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // TransactionManager
-    // ///////////////////////////////////////////////////////////////////////////
 
 
     /**
@@ -1208,7 +1155,7 @@ public class PersistenceSession implements
      */
     public void testReset() {
         objectStore.reset();
-        getAdapterManager().reset();
+        adapterManager.reset();
     }
 
 
@@ -1260,7 +1207,7 @@ public class PersistenceSession implements
      * <p>
      * Injected in constructor.
      */
-    public final AdapterManagerSpi getAdapterManager() {
+    public final AdapterManager getAdapterManager() {
         return adapterManager;
     }
 
@@ -1323,5 +1270,9 @@ public class PersistenceSession implements
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
+
+    
+    
+    
     
 }

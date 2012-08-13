@@ -41,11 +41,11 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAbstract;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAbstract;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
@@ -234,7 +234,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     }
 
     @Override
-    public AdapterManager getAdapterMap() {
+    public AdapterManager getAdapterManager() {
         return adapterManager;
     }
 

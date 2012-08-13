@@ -30,8 +30,8 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
@@ -54,7 +54,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private static final int INCOMPLETE_COLLECTION = -1;
 
     private final SpecificationLoaderSpi specificationLoader;
-    private final ObjectAdapterLookup objectAdapterLookup;
+    private final AdapterManager objectAdapterLookup;
     private final Localization localization;
     
     private Object pojo;
@@ -71,7 +71,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     // Constructor, finalizer
     // ///////////////////////////////////////////////////////////////////
 
-    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoaderSpi specificationLoader, ObjectAdapterLookup objectAdapterLookup, Localization localization) {
+    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoaderSpi specificationLoader, AdapterManager objectAdapterLookup, Localization localization) {
         this.specificationLoader = specificationLoader;
         this.objectAdapterLookup = objectAdapterLookup;
         this.localization = localization;

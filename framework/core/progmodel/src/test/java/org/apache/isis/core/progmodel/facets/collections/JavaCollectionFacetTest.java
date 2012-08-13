@@ -27,41 +27,40 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.collections.collection.JavaCollectionFacet;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class JavaCollectionFacetTest {
 
     private JavaCollectionFacet facet;
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
     private FacetHolder mockFacetHolder;
-
+    @Mock
     private ObjectAdapter mockCollection;
+    @Mock
     private Collection<ObjectAdapter> mockWrappedCollection;
+    @Mock
     private Iterator<ObjectAdapter> mockIterator;
-
+    @Mock
     private AdapterManager mockAdapterManager;
 
     @Before
     public void setUp() throws Exception {
-        mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockCollection = mockery.mock(ObjectAdapter.class);
-        mockWrappedCollection = mockery.mock(Collection.class);
-        mockIterator = mockery.mock(Iterator.class);
-        mockAdapterManager = mockery.mock(AdapterManager.class);
+        mockAdapterManager = context.mock(AdapterManager.class);
 
         facet = new JavaCollectionFacet(mockFacetHolder, mockAdapterManager);
     }
@@ -73,7 +72,7 @@ public class JavaCollectionFacetTest {
 
     @Test
     public void firstElementForEmptyCollectionIsNull() {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockCollection).getObject();
                 will(returnValue(mockWrappedCollection));

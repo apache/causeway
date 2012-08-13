@@ -24,6 +24,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
@@ -125,9 +126,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             final Version previousVersion = adapter.getVersion();
 
             // sync the pojo held by the adapter with that just loaded
-            getAdapterManager().removeAdapter(adapter);
-            adapter.replacePojo(pojo);
-            getAdapterManager().addExistingAdapter(adapter);
+            getPersistenceSession().remapRecreatedPojo(adapter, pojo);
 
             // since there was already an adapter, do concurrency check
             if(previousVersion != null && pojoVersion != null) {
@@ -139,15 +138,13 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             final OidGenerator oidGenerator = getOidGenerator();
             oid = oidGenerator.createPersistent(pojo, null);
             
-            // it's appears to be possible that there is already an adapter for this Oid, 
+            // it appears to be possible that there is already an adapter for this Oid, 
             // ie from ObjectStore#resolveImmediately()
             adapter = getAdapterManager().getAdapterFor(oid);
             if(adapter != null) {
-                getAdapterManager().removeAdapter(adapter);
-                adapter.replacePojo(pojo);
-                getAdapterManager().addExistingAdapter(adapter);
+                getPersistenceSession().remapRecreatedPojo(adapter, pojo);
             } else {
-                adapter = getAdapterManager().mapRecreatedPojo(oid, pojo);
+                adapter = getPersistenceSession().mapRecreatedPojo(oid, pojo);
             }
         }
         if(!adapter.isResolved()) {
@@ -202,7 +199,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             final RootOid persistentOid = getOidGenerator().createPersistent(pojo, isisOid);
             
             // most of the magic is here...
-            getAdapterManager().remapAsPersistent(adapter, persistentOid);
+            getPersistenceSession().remapAsPersistent(adapter, persistentOid);
 
             callbackFacetClass = PersistedCallbackFacet.class;
         } else {
@@ -477,7 +474,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

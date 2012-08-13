@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
@@ -312,7 +312,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     protected AdapterManager getAdapterMap() {
-        return parentAction.getAdapterMap();
+        return parentAction.getAdapterManager();
     }
 
     protected QuerySubmitter getQuerySubmitter() {

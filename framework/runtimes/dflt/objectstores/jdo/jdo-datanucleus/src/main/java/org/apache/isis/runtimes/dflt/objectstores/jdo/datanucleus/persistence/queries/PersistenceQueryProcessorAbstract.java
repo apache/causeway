@@ -12,13 +12,14 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
         implements PersistenceQueryProcessor<T> {
@@ -72,16 +73,16 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+    protected AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
     protected DataNucleusObjectStore getJdoObjectStore() {
-        return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
+        return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
 }

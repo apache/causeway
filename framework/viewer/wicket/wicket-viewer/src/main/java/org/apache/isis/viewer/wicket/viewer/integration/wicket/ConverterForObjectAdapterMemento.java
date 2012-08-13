@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
@@ -75,7 +76,7 @@ public class ConverterForObjectAdapterMemento implements IConverter {
         return getOidStringifier().enString((RootOid) oid);
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

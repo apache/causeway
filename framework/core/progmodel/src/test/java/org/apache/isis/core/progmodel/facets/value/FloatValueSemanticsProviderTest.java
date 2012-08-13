@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.value.floats.FloatValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private FloatValueSemanticsProviderAbstract value;
@@ -44,7 +43,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.float");
                 will(returnValue(null));

@@ -33,6 +33,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 public class ObjectFixtureFilePersistor {
 
@@ -181,7 +183,7 @@ public class ObjectFixtureFilePersistor {
         return IsisContext.getSpecificationLoader();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 }
@@ -213,7 +215,7 @@ class LoadedObjects {
     }
 
     
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

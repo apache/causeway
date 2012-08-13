@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -172,7 +173,7 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
             if (remainingViews != null && remainingViews.size() > 0) {
                 getMessageBroker().addWarning("There are still views (within other views) for the disposed object " + objectToDispose.titleString() + ".  Only objects that are shown as root views can be properly disposed of");
             } else {
-                getAdapterManager().removeAdapter(objectToDispose);
+                getPersistenceSession().removeAdapter(objectToDispose);
             }
         }
     }
@@ -227,7 +228,7 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
         return IsisContext.getPersistenceSession();
     }
 
-    private static AdapterManagerSpi getAdapterManager() {
+    private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

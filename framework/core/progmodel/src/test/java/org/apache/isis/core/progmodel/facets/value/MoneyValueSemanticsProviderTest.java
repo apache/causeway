@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.money.MoneyValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private static final String POUND_SYMBOL = "\u00A3";

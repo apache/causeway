@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.collections.collection;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;

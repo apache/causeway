@@ -9,7 +9,6 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.context;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -69,7 +70,7 @@ public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
     @Override
     public void restoreToLoader() {
         final RootOidDefault oid = RootOidDefault.deString(getOidStr());
-        final ObjectAdapter adapter = getAdapterManager().recreatePersistentAdapter(oid);
+        final ObjectAdapter adapter = getPersistenceSession().recreatePersistentAdapter(oid);
         adapter.setVersion(getVersion());
     }
 
@@ -112,7 +113,7 @@ public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
     

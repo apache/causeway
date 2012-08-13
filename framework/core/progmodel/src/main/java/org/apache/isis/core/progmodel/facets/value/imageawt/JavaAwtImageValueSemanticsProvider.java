@@ -78,7 +78,7 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
 
     @Override
     public ObjectAdapter createValue(final Image image) {
-        return getAdapterMap().adapterFor(image);
+        return getAdapterManager().adapterFor(image);
     }
 
 }

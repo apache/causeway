@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.snapshot.XmlSchema;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -74,7 +74,7 @@ public class XmlSnapshotBuilder {
     }
 
     public XmlSnapshot build() {
-        final ObjectAdapter adapter = getAdapterMap().adapterFor(snapshottable);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(snapshottable);
         final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema) : new XmlSnapshot(adapter);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {
@@ -90,7 +90,7 @@ public class XmlSnapshotBuilder {
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////
 
-    private static AdapterManager getAdapterMap() {
+    private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

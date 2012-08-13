@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.param.choices;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,12 +34,12 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     }
 
     private final SpecificationLoader specificationLookup;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
     public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(type(), holder, false);
         this.specificationLookup = specificationLookup;
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
@@ -54,8 +54,8 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return specificationLookup;
     }
 
-    protected AdapterManager getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

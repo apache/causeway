@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

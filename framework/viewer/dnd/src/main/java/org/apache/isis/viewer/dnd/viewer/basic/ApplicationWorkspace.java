@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -363,13 +364,14 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
                 final List<Object> servicePojos = IsisContext.getServices();
                 final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
                 for (final Object servicePojo : servicePojos) {
-                    final AdapterManagerSpi adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+                    final AdapterManager adapterManager = getPersistenceSession().getAdapterManager();
                     serviceAdapters.add(adapterManager.adapterFor(servicePojo));
                 }
                 final ObjectSpecification spec = getSpecificationLoader().loadSpecification(Object.class);
                 final FreeStandingList collection = new FreeStandingList(spec, serviceAdapters);
                 addWindowFor(getAdapterManager().adapterFor(collection), new Placement(at));
             }
+
         });
 
         menuForChangingLook(options);
@@ -507,7 +509,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManagerSpi getAdapterManager() {
+    private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

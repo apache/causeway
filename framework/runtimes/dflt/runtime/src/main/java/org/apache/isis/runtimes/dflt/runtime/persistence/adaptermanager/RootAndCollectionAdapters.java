@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 /**
  * A root {@link ObjectAdapter adapter} along with aggregated {@link ObjectAdapter adapters}
  * for any of its {@link OneToManyAssociation collection}s that are currently present in
- * the {@link ObjectAdapterLookup map}s.
+ * the {@link AdapterManager map}s.
  * 
  * <p>
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters
@@ -51,7 +51,7 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
     
     private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = Maps.newLinkedHashMap();
 
-    public RootAndCollectionAdapters(ObjectAdapter parentAdapter, ObjectAdapterLookup objectAdapterLookup) {
+    public RootAndCollectionAdapters(ObjectAdapter parentAdapter, AdapterManager objectAdapterLookup) {
         Assert.assertNotNull(parentAdapter);
         final Oid oid = parentAdapter.getOid();
         this.parentAdapter = parentAdapter;
@@ -96,7 +96,7 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
     // Helpers
     ////////////////////////////////////////////////////////////////////////
 
-    private void addCollectionAdapters(ObjectAdapterLookup objectAdapterLookup) {
+    private void addCollectionAdapters(AdapterManager objectAdapterLookup) {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections()) {
             final CollectionOid collectionOid = new CollectionOid((TypedOid) rootAdapterOid, otma);
             final ObjectAdapter collectionAdapter = objectAdapterLookup.getAdapterFor(collectionOid);

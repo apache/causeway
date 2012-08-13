@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -242,8 +243,9 @@ public class ObjectReaderMongoIntegrationTest {
         });
 
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(SimpleEntity.class);
+        
         final Object recreatedPojo = spec.createObject();
-        final ObjectAdapter readObject = getAdapterManager().mapRecreatedPojo(RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4), recreatedPojo);
+        final ObjectAdapter readObject = getPersistenceSession().mapRecreatedPojo(RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4), recreatedPojo);
 
         objectReader.update(reader1, versionCreator, dataEncrypter, readObject);
 
@@ -280,7 +282,7 @@ public class ObjectReaderMongoIntegrationTest {
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

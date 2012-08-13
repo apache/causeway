@@ -21,7 +21,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adapter;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -29,7 +29,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 public class PojoAdapterFactory implements ObjectAdapterFactory {
 
     @Override
-    public PojoAdapter createAdapter(final Object pojo, final Oid oid, ObjectAdapterLookup objectAdapterLookup) {
+    public PojoAdapter createAdapter(final Object pojo, final Oid oid, AdapterManager objectAdapterLookup) {
         return new PojoAdapter(pojo, oid, getSpecificationLoader(), objectAdapterLookup, getLocalization());
     }
 

@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAw
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderDelegator;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
 public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware, DomainObjectContainerAware {
 
@@ -60,7 +60,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     protected void injectSubcomponentsInto(final Object candidate) {
-        getAdapterMap().injectInto(candidate);
+        getAdapterManager().injectInto(candidate);
         getAuthenticationSessionProvider().injectInto(candidate);
         getDependencyInjector().injectInto(candidate);
         getDomainObjectServices().injectInto(candidate);

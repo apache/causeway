@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
@@ -298,7 +299,7 @@ public class Scenario implements AliasRegistryHolder {
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManagerSpi getAdapterManager() {
+    private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

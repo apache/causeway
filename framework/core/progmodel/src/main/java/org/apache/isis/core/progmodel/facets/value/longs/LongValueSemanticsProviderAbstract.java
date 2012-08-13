@@ -98,7 +98,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
 
     @Override
     public ObjectAdapter createValue(final Long value) {
-        return value == null ? null : getAdapterMap().adapterFor(value);
+        return value == null ? null : getAdapterManager().adapterFor(value);
     }
 
     // // ///// toString ///////

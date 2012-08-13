@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -496,7 +496,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
     // Dependencies (from context)
     ///////////////////////////////////////////////////////////
     
-    protected ObjectAdapterLookup getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
 

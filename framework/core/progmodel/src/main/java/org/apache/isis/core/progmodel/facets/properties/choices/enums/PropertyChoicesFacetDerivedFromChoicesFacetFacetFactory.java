@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.properties.choices.enums;
 
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -54,7 +54,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fac
     }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterMap) {
-        this.adapterManager = adapterMap;
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 }

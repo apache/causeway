@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private BigInteger bigInt;
@@ -47,7 +46,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.int");
                 will(returnValue(null));

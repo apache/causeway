@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -37,13 +37,13 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     private final Method method;
     private final SpecificationLoader specificationLookup;
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
     public PropertyDefaultFacetViaMethod(final Method method, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.specificationLookup = specificationLookup;
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     /**
@@ -77,7 +77,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     private ObjectAdapter createAdapter(final Class<?> type, final Object object) {
         final ObjectSpecification specification = getSpecificationLookup().loadSpecification(type);
         if (specification.isNotCollection()) {
-            return getAdapterMap().adapterFor(object);
+            return getAdapterManager().adapterFor(object);
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }
@@ -96,8 +96,8 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
         return specificationLookup;
     }
 
-    protected AdapterManager getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

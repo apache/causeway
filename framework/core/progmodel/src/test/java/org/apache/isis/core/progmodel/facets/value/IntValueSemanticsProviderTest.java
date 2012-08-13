@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.value.integer.IntValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.integer.IntWrapperValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private IntValueSemanticsProviderAbstract value;
@@ -47,7 +46,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.int");
                 will(returnValue(null));

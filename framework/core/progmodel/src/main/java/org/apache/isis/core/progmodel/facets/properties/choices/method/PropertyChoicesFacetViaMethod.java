@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -39,13 +39,13 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     private final Method method;
     private final Class<?> choicesClass;
 
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
     public PropertyChoicesFacetViaMethod(final Method method, final Class<?> choicesClass, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(holder, specificationLookup);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     /**
@@ -77,7 +77,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             return ArrayUtil.getObjectAsObjectArray(options);
         }
         final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
-        return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
+        return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterManager());
     }
 
     @Override
@@ -89,8 +89,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     // Dependencies
     // ////////////////////////////////////////////
 
-    protected AdapterManager getAdapterMap() {
-        return adapterMap;
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

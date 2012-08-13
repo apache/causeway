@@ -125,7 +125,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             return null;
         }
 
-        return getAdapterMap().adapterFor(referencedPojo, ownerAdapter, null);
+        return getAdapterManager().adapterFor(referencedPojo, ownerAdapter);
     }
 
     /**
@@ -241,7 +241,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {
-                options[i] = getAdapterMap().adapterFor(pojoOptions[i]);
+                options[i] = getAdapterManager().adapterFor(pojoOptions[i]);
             }
             return options;
         } else if (BoundedFacetUtils.isBoundedSet(getSpecification())) {

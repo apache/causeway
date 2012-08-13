@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
@@ -114,7 +115,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     private ObjectAdapter contributingServiceAdapter() {
         final ObjectSpecification serviceType = objectMember.getOnType();
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        final List<ObjectAdapter> serviceAdapters = getServiceAdapters();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             if (serviceAdapter.getSpecification() == serviceType) {
                 return serviceAdapter;

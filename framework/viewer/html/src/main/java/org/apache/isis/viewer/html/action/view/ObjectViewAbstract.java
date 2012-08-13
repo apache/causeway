@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.action.view;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.action.view.util.MenuUtil;
@@ -82,7 +82,7 @@ public abstract class ObjectViewAbstract implements Action {
         return IsisContext.getAuthenticationSession();
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

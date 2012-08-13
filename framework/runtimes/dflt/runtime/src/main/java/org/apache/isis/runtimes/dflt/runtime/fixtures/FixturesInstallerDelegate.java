@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 /**
@@ -149,7 +150,7 @@ public class FixturesInstallerDelegate {
     /**
      * Hook - default does nothing.
      */
-    protected void preInstallFixtures(final PersistenceSession persistenceSession) {
+    protected void preInstallFixtures(final Persistor persistenceSession) {
     }
 
     // ///////////////////////////////////////
@@ -249,7 +250,7 @@ public class FixturesInstallerDelegate {
     /**
      * Hook - default does nothing.
      */
-    protected void postInstallFixtures(final PersistenceSession persistenceSession) {
+    protected void postInstallFixtures(final Persistor persistenceSession) {
     }
 
     // /////////////////////////////////////////////////////////

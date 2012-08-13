@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
-@RunWith(JMock.class)
 public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private Time twoOClock;
@@ -43,7 +42,7 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.time");
                 will(returnValue(null));

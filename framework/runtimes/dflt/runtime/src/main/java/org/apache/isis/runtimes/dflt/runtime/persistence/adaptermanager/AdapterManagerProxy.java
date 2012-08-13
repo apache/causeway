@@ -20,9 +20,10 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -31,7 +32,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * <p>
  * *** THIS INTERFACE IS NO LONGER IMPLEMENTED, SINCE REMOTING SUPPORT HAS BEEN REMOVED. ***
  */
-public interface AdapterManagerProxy extends ObjectAdapterLookup {
+public interface AdapterManagerProxy extends AdapterManager {
 
     /**
      * Remaps an {@link Oid} that has been {@link Oid#getPrevious() updated} so

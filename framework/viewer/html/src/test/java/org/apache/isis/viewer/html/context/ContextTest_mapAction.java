@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
@@ -91,7 +92,7 @@ public class ContextTest_mapAction {
         return IsisContext.getPersistenceSession();
     }
 
-    private AdapterManagerSpi getAdapterManager() {
+    private AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

@@ -20,19 +20,15 @@
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.applib.annotation.Aggregated;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterRecreator;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 
 /**
@@ -49,10 +45,14 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.P
  * work with the POJOs even though it does not understand their types. Each POJO
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
-public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapter>
-    , SessionScopedComponent, 
+public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapter>,
+    AdapterRecreator,
+    RecreatedPojoRemapper,
+    AdapterLifecycleTransitioner,
+    SessionScopedComponent, 
     DebuggableWithTitle,  
     Resettable {
+
 
 
     /**
@@ -75,79 +75,10 @@ public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapte
     void remapAsPersistent(ObjectAdapter adapter, RootOid hintRootOid);
 
     /**
-     * Either returns an existing {@link ObjectAdapter adapter} (as per
-     * {@link #getAdapterFor(Object)} or {@link #getAdapterFor(Oid)}), otherwise
-     * re-creates an adapter with the specified (persistent) {@link Oid}.
-     * 
-     * <p>
-     * Typically called when the {@link Oid} is already known, that is, when
-     * resolving an already-persisted object. Is also available for
-     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
-     * {@link Oid#isTransient() transient} object.
-     * 
-     * <p>
-     * If the {@link ObjectAdapter adapter} is recreated, its
-     * {@link ResolveState} will be set to either
-     * {@link ResolveState#TRANSIENT} or {@link ResolveState#GHOST} based on
-     * whether the {@link Oid} is {@link Oid#isTransient() transient} or not.
-     * 
-     * @param oid
-     * @param recreatedPojo - already known to the object store impl, or a service
-     */
-    ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo);
-
-    
-    /**
-     * Either returns an existing {@link ObjectAdapter adapter} (as per 
-     * {@link #getAdapterFor(Oid)}), otherwise re-creates an adapter with the 
-     * specified (persistent) {@link Oid}.
-     * 
-     * <p>
-     * Typically called when the {@link Oid} is already known, that is, when
-     * resolving an already-persisted object. Is also available for
-     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
-     * {@link Oid#isTransient() transient} object.
-     * 
-     * <p>
-     * The pojo itself is recreated by delegating to a {@link PojoRecreator} implementation.
-     * The default impl just uses the {@link ObjectSpecification#createObject()};
-     * however object stores (eg JDO/DataNucleus) can provide alternative implementations
-     * in order to ensure that the created pojo is attached to a persistence context.
-     * 
-     * <p>
-     * If the {@link ObjectAdapter adapter} is recreated, its
-     * {@link ResolveState} will be set to {@link ResolveState#GHOST}.
-     * 
-     * @param oid
-     */
-    ObjectAdapter recreatePersistentAdapter(TypedOid oid);
-
-    
-    
-    
-    /**
-     * Add a pre-existing {@link ObjectAdapter adapter} straight into the maps.
-     */
-    ObjectAdapter addExistingAdapter(ObjectAdapter object);
-
-    // /////////////////////////////////////////////////////////
-    // removal
-    // /////////////////////////////////////////////////////////
-
-    /**
      * Removes the specified {@link ObjectAdapter adapter} from the identity
      * maps.
      */
     void removeAdapter(ObjectAdapter adapter);
 
-    /**
-     * Removes the {@link ObjectAdapter adapter} identified by the specified
-     * {@link Oid}.
-     * 
-     * <p>
-     * Should be same as {@link #getAdapterFor(Oid)} followed by
-     * {@link #removeAdapter(ObjectAdapter)}.
-     */
-    void removeAdapter(Oid oid);
 
 }

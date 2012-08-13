@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.system.transaction;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 

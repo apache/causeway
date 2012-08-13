@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ErrorCollator;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
@@ -852,7 +852,7 @@ public abstract class RequestContext {
     }
     
     
-    protected PersistenceSession getPersistenceSession() {
+    protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 public final class SimpleRepository {
 
@@ -126,7 +126,7 @@ public final class SimpleRepository {
     // Dependencies (from singleton)
     // //////////////////////////////////////////////////////
 
-    private PersistenceSession getPersistenceSession() {
+    private Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

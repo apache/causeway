@@ -32,8 +32,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -59,7 +59,7 @@ public class PojoAdapterTest {
     @Mock
     private SpecificationLoaderSpi mockSpecificationLoader;
     @Mock
-    private ObjectAdapterLookup mockObjectAdapterLookup;
+    private AdapterManager mockObjectAdapterLookup;
     @Mock
     private Localization mockLocalization;
     

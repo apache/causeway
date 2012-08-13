@@ -19,9 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 
 public class DefaultPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 

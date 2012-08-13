@@ -36,6 +36,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,6 +50,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -505,20 +507,20 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     public ObjectAdapter reload(RootOid oid) {
         ensureSessionInProgress();
-        final PersistenceSession persistenceSession = getPersistenceSession();
+        final Persistor persistenceSession = getPersistenceSession();
         return persistenceSession.loadObject(oid);
     }
 
     public ObjectAdapter recreateAdapter(RootOid oid) {
         ensureSessionInProgress();
-        return getAdapterManager().recreatePersistentAdapter(oid);
+        return getPersistenceSession().recreatePersistentAdapter(oid);
     }
 
     public ObjectAdapter remapAsPersistent(Object pojo, RootOid persistentOid) {
         ensureSessionInProgress();
         ensureObjectIsNotPersistent(pojo);
         final ObjectAdapter adapter = adapterFor(pojo);
-        getAdapterManagerPersist().remapAsPersistent(adapter, persistentOid);
+        getPersistenceSession().remapAsPersistent(adapter, persistentOid);
         return adapter;
     }
 
@@ -573,10 +575,6 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
 
     
-    private AdapterManagerSpi getAdapterManagerPersist() {
-        return getAdapterManager();
-    }
-
     public void beginTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
@@ -653,7 +651,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         return getPersistenceSession().getTransactionManager();
     }
     
-    protected AdapterManagerSpi getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

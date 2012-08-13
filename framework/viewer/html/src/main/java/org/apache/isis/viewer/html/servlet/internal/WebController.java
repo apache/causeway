@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
@@ -335,7 +336,7 @@ public class WebController {
     private void listServices(final Context context, final Block navigationBar) {
         final Block taskBar = context.getComponentFactory().createBlock("services", null);
         taskBar.add(context.getComponentFactory().createHeading("Services"));
-        final AdapterManagerSpi adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
         final List<Object> services = getUserProfile().getPerspective().getServices();
         for (final Object service : services) {
             final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);

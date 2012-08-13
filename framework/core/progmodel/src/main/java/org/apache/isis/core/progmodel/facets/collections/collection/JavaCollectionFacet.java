@@ -25,24 +25,24 @@ import java.util.Iterator;
 import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
-    private final AdapterManager adapterMap;
+    private final AdapterManager adapterManager;
 
     public JavaCollectionFacet(final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
-        this.adapterMap = adapterManager;
+        this.adapterManager = adapterManager;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Collection<ObjectAdapter> collection(final ObjectAdapter wrappedCollection) {
         final Collection<?> collectionOfUnderlying = collectionOfUnderlying(wrappedCollection);
-        return CollectionUtils.collect(collectionOfUnderlying, new ObjectToAdapterTransformer(getAdapterMap()));
+        return CollectionUtils.collect(collectionOfUnderlying, new ObjectToAdapterTransformer(getAdapterManager()));
     }
 
     @Override
@@ -78,8 +78,8 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////////
 
-    private AdapterManager getAdapterMap() {
-        return adapterMap;
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }
