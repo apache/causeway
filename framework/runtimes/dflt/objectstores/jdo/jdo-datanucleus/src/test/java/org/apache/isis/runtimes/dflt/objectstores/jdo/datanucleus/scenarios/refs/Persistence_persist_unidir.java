@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.refs;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scenarios.refs;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -36,15 +36,18 @@ import org.apache.isis.tck.dom.refs.BidirWithSetParentEntity;
 import org.apache.isis.tck.dom.refs.BidirWithSetParentEntityRepository;
 import org.apache.isis.tck.dom.refs.ParentEntity;
 import org.apache.isis.tck.dom.refs.ParentEntityRepository;
+import org.apache.isis.tck.dom.refs.UnidirFkChildEntity;
+import org.apache.isis.tck.dom.refs.UnidirFkParentEntity;
+import org.apache.isis.tck.dom.refs.UnidirFkParentEntityRepository;
 
-public class Persistence_persist_bidirWithSetParent {
+public class Persistence_persist_unidir {
 
-    private BidirWithSetParentEntityRepository repo = new BidirWithSetParentEntityRepository();
+    private UnidirFkParentEntityRepository repo = new UnidirFkParentEntityRepository();
     
     @Rule
     public IsisSystemWithFixtures iswf = Utils.systemBuilder()
-        .with(Utils.listenerToDeleteFrom("BIDIRWITHSETCHILDENTITY"))
-        .with(Utils.listenerToDeleteFrom("BIDIRWITHSETPARENTENTITY"))
+        .with(Utils.listenerToDeleteFrom("UNIDIRFKCHILDENTITY"))
+        .with(Utils.listenerToDeleteFrom("UNIDIRFKPARENTENTITY"))
         .withServices(repo)
         .build();
 
@@ -58,7 +61,7 @@ public class Persistence_persist_bidirWithSetParent {
         iswf.bounceSystem();
         
         iswf.beginTran();
-        List<BidirWithSetParentEntity> list = repo.list();
+        List<UnidirFkParentEntity> list = repo.list();
         assertThat(list.size(), is(2));
         iswf.commitTran();
     }
@@ -73,7 +76,7 @@ public class Persistence_persist_bidirWithSetParent {
         iswf.bounceSystem();
         
         iswf.beginTran();
-        BidirWithSetParentEntity retrievedEntity = repo.list().get(0);
+        UnidirFkParentEntity retrievedEntity = repo.list().get(0);
         retrievedEntity.newChild("Child 1 of Parent 1");
         retrievedEntity.newChild("Child 2 of Parent 1");
         retrievedEntity.newChild("Child 3 of Parent 1");
@@ -83,7 +86,7 @@ public class Persistence_persist_bidirWithSetParent {
         
         iswf.beginTran();
         retrievedEntity = repo.list().get(0);
-        Set<BidirWithSetChildEntity> children = retrievedEntity.getChildren();
+        Set<UnidirFkChildEntity> children = retrievedEntity.getChildren();
         assertThat(children.size(), is(3));
         iswf.commitTran();
     }
@@ -92,9 +95,9 @@ public class Persistence_persist_bidirWithSetParent {
     @Test
     public void updateBidirectional() throws Exception {
         iswf.beginTran();
-        BidirWithSetParentEntity parent1 = repo.newEntity();
+        UnidirFkParentEntity parent1 = repo.newEntity();
         parent1.setName("Parent 1");
-        BidirWithSetParentEntity parent2 = repo.newEntity();
+        UnidirFkParentEntity parent2 = repo.newEntity();
         parent2.setName("Parent 2");
 
         parent1.newChild("Child 1 of Parent 1");
@@ -107,10 +110,11 @@ public class Persistence_persist_bidirWithSetParent {
         iswf.beginTran();
         parent1 = repo.list().get(0);
         parent2 = repo.list().get(0);
-        Set<BidirWithSetChildEntity> children = parent1.getChildren();
+        Set<UnidirFkChildEntity> children = parent1.getChildren();
         assertThat(children.size(), is(3));
-        BidirWithSetChildEntity child1 = parent1.getChildren().iterator().next();
-        child1.moveTo(parent2);
+        UnidirFkChildEntity child1 = parent1.getChildren().iterator().next();
+        parent1.removeChild(child1);
+        parent2.addChild(child1);
         iswf.commitTran();
 
         iswf.bounceSystem();

@@ -17,34 +17,41 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter.oid.stringable;
+package org.apache.isis.core.metamodel.adapter.oid;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-public class GivenOidStringifierDirectWhenInstantiateTest {
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+
+public class RootOidDefaultTest_canRoundtrip {
+
+    private RootOid directlyStringableOid;
+
+    @Before
+    public void setUp() {
+        directlyStringableOid = RootOidDefault.create(ObjectSpecId.of("CUS"), "123");
+    }
+
+    @After
+    public void tearDown() {
+        directlyStringableOid = null;
+    }
 
     @Test
     public void withConformantOidClassThenCorrectlyInitialized() {
-        final OidStringifier oidStringifier = new OidStringifier(OidConformant.class);
-        assertThat(oidStringifier.getDestringMethod(), is(not(nullValue())));
-        assertThat(oidStringifier.getDestringMethod().getName(), is("deString"));
-        assertEquals(OidConformant.class, oidStringifier.getOidClass());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void withOidClassWithNonPublicDestringMethodThenFails() {
-        new OidStringifier(OidWithNonPublicDestringMethod.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void withOidClassWithNonStaticDestringMethodThenFails() {
-        new OidStringifier(OidWithNonStaticDestringMethod.class);
+        final String enString = directlyStringableOid.enString();
+        final Oid deString = RootOidDefault.deStringEncoded(enString);
+        assertThat(deString, is(not(nullValue())));
     }
 
 }

@@ -29,12 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import org.apache.log4j.Logger;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -72,12 +66,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
@@ -95,13 +86,17 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class PersistenceSession implements  
+        Persistor,
         EnlistedObjectDirtying, ToPersistObjectSet,
-        AdapterRecreator,
         RecreatedPojoRemapper,
         AdapterLifecycleTransitioner,
-        SessionScopedComponent, DebuggableWithTitle, Persistor {
+        SessionScopedComponent, DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
 
@@ -339,12 +334,8 @@ public class PersistenceSession implements
     // Factory (for transient instance)
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#createInstance(org.apache.isis.core.metamodel.spec.ObjectSpecification)
-     */
-    //@Override
     @Override
-    public ObjectAdapter createInstance(final ObjectSpecification objectSpec) {
+    public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
         }
@@ -353,12 +344,8 @@ public class PersistenceSession implements
         return objectSpec.initialize(adapter);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#createInstance(org.apache.isis.core.metamodel.spec.ObjectSpecification, org.apache.isis.core.metamodel.adapter.ObjectAdapter)
-     */
-    //@Override
     @Override
-    public ObjectAdapter createInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
+    public ObjectAdapter createAggregatedInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating aggregated instance of " + objectSpec);
         }
@@ -378,10 +365,6 @@ public class PersistenceSession implements
     // findInstances, getInstances
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#findInstances(org.apache.isis.applib.query.Query, org.apache.isis.core.metamodel.services.container.query.QueryCardinality)
-     */
-    //@Override
     @Override
     public <T> ObjectAdapter findInstances(final Query<T> query, final QueryCardinality cardinality) {
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
@@ -391,10 +374,6 @@ public class PersistenceSession implements
         return findInstances(persistenceQuery);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#findInstances(org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery)
-     */
-    //@Override
     @Override
     public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
         final List<ObjectAdapter> instances = getInstances(persistenceQuery);
@@ -669,10 +648,6 @@ public class PersistenceSession implements
     // loadObject, reload
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#loadObject(org.apache.isis.core.metamodel.adapter.oid.TypedOid)
-     */
-    //@Override
     @Override
     public ObjectAdapter loadObject(final TypedOid oid) {
         ensureThatArg(oid, is(notNullValue()));
@@ -700,10 +675,6 @@ public class PersistenceSession implements
     // resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#resolveImmediately(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
-     */
-    //@Override
     @Override
     public void resolveImmediately(final ObjectAdapter adapter) {
         // synchronize on the current session because getting race
@@ -749,9 +720,6 @@ public class PersistenceSession implements
         });
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#resolveField(org.apache.isis.core.metamodel.adapter.ObjectAdapter, org.apache.isis.core.metamodel.spec.feature.ObjectAssociation)
-     */
     @Override
     public void resolveField(final ObjectAdapter objectAdapter, final ObjectAssociation field) {
         if (field.isNotPersisted()) {
@@ -794,9 +762,6 @@ public class PersistenceSession implements
     // makePersistent
     // ////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#makePersistent(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
-     */
     @Override
     public void makePersistent(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
@@ -844,9 +809,6 @@ public class PersistenceSession implements
     // objectChanged
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#objectChanged(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
-     */
     @Override
     public void objectChanged(final ObjectAdapter adapter) {
 
@@ -913,9 +875,6 @@ public class PersistenceSession implements
     // destroyObject
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#destroyObject(org.apache.isis.core.metamodel.adapter.ObjectAdapter)
-     */
     @Override
     public void destroyObject(final ObjectAdapter adapter) {
         if (adapter.getSpecification().isParented()) {
@@ -960,9 +919,6 @@ public class PersistenceSession implements
     // hasInstances
     // ///////////////////////////////////////////////////////////////////////////
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor#hasInstances(org.apache.isis.core.metamodel.spec.ObjectSpecification)
-     */
     @Override
     public boolean hasInstances(final ObjectSpecification specification) {
         if (LOG.isInfoEnabled()) {
@@ -978,16 +934,6 @@ public class PersistenceSession implements
                 return objectStore.hasInstances(specification);
             }
         });
-    }
-
-    
-    // ///////////////////////////////////////////////////////////////////////////
-    // AdapterRecreator
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public ObjectAdapter recreatePersistentAdapter(TypedOid oid) {
-        return adapterManager.recreatePersistentAdapter(oid);
     }
 
     
@@ -1061,8 +1007,7 @@ public class PersistenceSession implements
         return persistentByTransient.get(transientOid);
     }
 
-
-
+    
     /**
      * Uses the {@link ObjectStoreSpi} to
      * {@link ObjectStoreSpi#createCreateObjectCommand(ObjectAdapter) create} a
@@ -1270,9 +1215,4 @@ public class PersistenceSession implements
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-
-    
-    
-    
-    
 }

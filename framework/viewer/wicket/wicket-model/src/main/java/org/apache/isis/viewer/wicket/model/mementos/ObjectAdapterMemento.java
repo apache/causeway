@@ -97,7 +97,7 @@ public class ObjectAdapterMemento implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
                 TypedOid oid = oidMarshaller.unmarshal(oam.persistentOidStr, TypedOid.class);
-                return getPersistenceSession().recreatePersistentAdapter(oid);
+                return getAdapterManager().adapterFor(oid);
             }
 
             @Override

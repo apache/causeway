@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.util;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 
 public final class OidUtils {
@@ -30,12 +31,8 @@ public final class OidUtils {
 
     public static ObjectAdapter getObjectAdapter(final ResourceContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        final RootOid rootOid = resourceContext.getOidStringifier().deString(oidStr);
-        final ObjectAdapter adapterFor = resourceContext.getObjectAdapterLookup().getAdapterFor(rootOid);
-        if(adapterFor != null) {
-            return adapterFor;
-        }
-        return resourceContext.getPersistenceSession().recreatePersistentAdapter(rootOid);
+        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr);
+        return resourceContext.getAdapterManager().adapterFor(rootOid);
     }
 
     public static String getOidStr(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
@@ -44,7 +41,7 @@ public final class OidUtils {
             throw new IllegalArgumentException("objectAdapter must be a root adapter");
         }
         RootOid rootOid = (RootOid) oid;
-        return oid != null ? resourceContext.getOidStringifier().enString(rootOid) : null;
+        return rootOid != null ? rootOid.enString() : null;
     }
 
 }

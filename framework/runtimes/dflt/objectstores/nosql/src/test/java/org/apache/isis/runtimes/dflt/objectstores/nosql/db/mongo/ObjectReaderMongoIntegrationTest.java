@@ -242,10 +242,7 @@ public class ObjectReaderMongoIntegrationTest {
             }
         });
 
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(SimpleEntity.class);
-        
-        final Object recreatedPojo = spec.createObject();
-        final ObjectAdapter readObject = getPersistenceSession().mapRecreatedPojo(RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4), recreatedPojo);
+        final ObjectAdapter readObject = getAdapterManager().adapterFor(RootOidDefault.create(ObjectSpecId.of("SMPL"), ""+4));
 
         objectReader.update(reader1, versionCreator, dataEncrypter, readObject);
 

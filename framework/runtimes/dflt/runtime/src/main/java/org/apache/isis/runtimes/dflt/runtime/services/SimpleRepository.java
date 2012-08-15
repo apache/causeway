@@ -94,7 +94,7 @@ public final class SimpleRepository {
     // //////////////////////////////////////////////////////
 
     public Object newPersistentInstance() {
-        final ObjectAdapter adapter = getPersistenceSession().createInstance(getSpec());
+        final ObjectAdapter adapter = getPersistenceSession().createTransientInstance(getSpec());
         getPersistenceSession().makePersistent(adapter);
         return adapter.getObject();
     }
@@ -104,7 +104,7 @@ public final class SimpleRepository {
     // //////////////////////////////////////////////////////
 
     public Object newTransientInstance() {
-        return getPersistenceSession().createInstance(getSpec()).getObject();
+        return getPersistenceSession().createTransientInstance(getSpec()).getObject();
     }
 
     // //////////////////////////////////////////////////////

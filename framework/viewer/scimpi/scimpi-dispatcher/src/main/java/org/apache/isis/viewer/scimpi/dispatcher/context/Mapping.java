@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 interface Mapping {
@@ -56,7 +55,7 @@ class TransientRootAdapterMapping implements Mapping {
 
     @Override
     public ObjectAdapter getObject() {
-        return IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
+        return getAdapterManager().getAdapterFor(oid);
     }
 
     @Override
@@ -65,16 +64,30 @@ class TransientRootAdapterMapping implements Mapping {
     }
 
     @Override
+    public void reload() {
+        memento.recreateObject();
+    }
+
+    @Override
+    public void update() {
+        memento = new Memento(getObject());
+    }
+
+
+    ////////////////////////////////////
+    // debug
+    ////////////////////////////////////
+
+    @Override
     public String debug() {
         final DebugString debug = new DebugString();
         memento.debug(debug);
         return debug.toString();
     }
 
-    @Override
-    public void reload() {
-        memento.recreateObject();
-    }
+    ////////////////////////////////////
+    // equals, hashCode
+    ////////////////////////////////////
 
     @Override
     public boolean equals(final Object obj) {
@@ -93,10 +106,18 @@ class TransientRootAdapterMapping implements Mapping {
         return oid.hashCode();
     }
 
-    @Override
-    public void update() {
-        memento = new Memento(getObject());
-    }
+    
+    ////////////////////////////////////
+    // from context
+    ////////////////////////////////////
+
+	private AdapterManager getAdapterManager() {
+		return getPersistenceSession().getAdapterManager();
+	}
+
+	private PersistenceSession getPersistenceSession() {
+		return IsisContext.getPersistenceSession();
+	}
 }
 
 class PersistentRootAdapterMapping implements Mapping {
@@ -114,11 +135,6 @@ class PersistentRootAdapterMapping implements Mapping {
     }
 
     @Override
-    public String debug() {
-        return oid + "  " + spec.getShortIdentifier() + "  " + getAdapterManager().getAdapterFor(oid);
-    }
-
-    @Override
     public ObjectAdapter getObject() {
         if (!IsisContext.inTransaction()) {
             throw new IllegalStateException(getClass().getSimpleName() + " requires transaction in order to load");
@@ -128,11 +144,27 @@ class PersistentRootAdapterMapping implements Mapping {
 
     @Override
     public void reload() {
-        if (getAdapterManager().getAdapterFor(oid) == null) {
-            final Object recreatedPojo = spec.createObject();
-            getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
-        }
+    	// will only recreate if not already in the adapter mgr maps.
+    	getAdapterManager().adapterFor(oid);
     }
+
+
+    @Override
+    public void update() {
+    }
+
+    ////////////////////////////////////
+    // debug
+    ////////////////////////////////////
+
+    @Override
+    public String debug() {
+        return oid + "  " + spec.getShortIdentifier() + "  " + getAdapterManager().getAdapterFor(oid);
+    }
+
+    ////////////////////////////////////
+    // equals, hashCode
+    ////////////////////////////////////
 
     @Override
     public boolean equals(final Object obj) {
@@ -148,6 +180,7 @@ class PersistentRootAdapterMapping implements Mapping {
         return false;
     }
 
+
     @Override
     public int hashCode() {
         int hash = 37;
@@ -156,22 +189,17 @@ class PersistentRootAdapterMapping implements Mapping {
         return hash;
     }
 
-    @Override
-    public void update() {
-    }
-
     
     ////////////////////////////////////
-    
+    // from context
+    ////////////////////////////////////
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
-
 
 }

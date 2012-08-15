@@ -21,25 +21,22 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
 
 public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, PersistenceSessionProvider {
 
@@ -109,10 +106,6 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
 
     protected List<ObjectAdapter> getServiceAdapters() {
         return IsisContext.getPersistenceSession().getServices();
-    }
-
-    protected OidStringifier getOidStringifier() {
-        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     // /////////////////////////////////////////////////

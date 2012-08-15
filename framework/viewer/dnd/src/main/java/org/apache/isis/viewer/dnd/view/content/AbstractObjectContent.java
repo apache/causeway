@@ -92,7 +92,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             // ObjectAdapter original = getObject();
             final ObjectSpecification spec = original.getSpecification();
 
-            final ObjectAdapter clone = getPersistenceSession().createInstance(spec);
+            final ObjectAdapter clone = getPersistenceSession().createTransientInstance(spec);
             final List<ObjectAssociation> fields = spec.getAssociations();
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAdapter fld = fields.get(i).get(original);

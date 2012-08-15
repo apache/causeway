@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
+import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public final class RootOidDefault implements Serializable, RootOid {
@@ -96,6 +97,11 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
     // deString'able, enString
     // ////////////////////////////////////////////
+
+    public static RootOid deStringEncoded(final String urlEncodedOidStr) {
+        final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
+        return deString(oidStr);
+    }
 
     public static RootOidDefault deString(final String oidStr) {
         return getOidMarshaller().unmarshal(oidStr, RootOidDefault.class);

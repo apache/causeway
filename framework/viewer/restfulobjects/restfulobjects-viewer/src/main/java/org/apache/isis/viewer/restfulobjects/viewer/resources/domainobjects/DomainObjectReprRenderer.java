@@ -61,7 +61,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectAdapter elementAdapter) {
-        final String oidStr = resourceContext.getOidStringifier().enString((RootOid) elementAdapter.getOid());
+        RootOid rootOid = (RootOid) elementAdapter.getOid();
+		final String oidStr = rootOid.enString();
         final String url = "objects/" + oidStr;
         final LinkBuilder builder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url).withTitle(elementAdapter.titleString());
         return builder;

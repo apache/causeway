@@ -303,6 +303,9 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         if (adapter != null) {
             return adapter;
         }
+        
+        // REVIEW: where the oid is a TypedOid, the following two lines could be replaced by getPersistenceSession().recreatePersistentAdapter(oid)
+        // is preferable, since then reuses the PojoRecreator impl defined within SqlPersistorInstaller
         final Object recreatedPojo = spec.createObject();
         return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
     }

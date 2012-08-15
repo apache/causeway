@@ -21,8 +21,17 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
+import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.wicket.Component;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.Session;
@@ -31,18 +40,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
-import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import com.google.inject.Inject;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
@@ -168,10 +166,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
 
     protected List<ObjectAdapter> getServiceAdapters() {
         return IsisContext.getPersistenceSession().getServices();
-    }
-
-    protected OidStringifier getOidStringifier() {
-        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     // /////////////////////////////////////////////////

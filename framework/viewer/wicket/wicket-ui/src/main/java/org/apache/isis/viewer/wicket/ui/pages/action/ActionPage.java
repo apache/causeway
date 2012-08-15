@@ -52,7 +52,7 @@ public class ActionPage extends PageAbstract {
     }
 
     private IModel<?> buildModel() {
-        return ActionModel.createForPersistent(getPageParameters(), getOidStringifier());
+        return ActionModel.createForPersistent(getPageParameters());
     }
 
 }

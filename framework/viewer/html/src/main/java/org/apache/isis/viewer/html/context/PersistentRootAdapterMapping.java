@@ -70,7 +70,7 @@ public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
     @Override
     public void restoreToLoader() {
         final RootOidDefault oid = RootOidDefault.deString(getOidStr());
-        final ObjectAdapter adapter = getPersistenceSession().recreatePersistentAdapter(oid);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(oid);
         adapter.setVersion(getVersion());
     }
 

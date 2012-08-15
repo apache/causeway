@@ -47,6 +47,7 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 
 public class ObjectReader {
     
@@ -226,32 +227,22 @@ public class ObjectReader {
     }
 
     protected ObjectAdapter getAdapter(final TypedOid oid) {
-        return getPersistenceSession().recreatePersistentAdapter(oid);
+        return getAdapterManager().adapterFor(oid);
     }
 
-    // replaced with getAdapter(TypedOid) above
-//    protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-//        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
-//        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
-//        if (adapter != null) {
-//            return adapter;
-//        } 
-//        return getPersistenceSession().recreateAdapter(specification, oid);
-//    }
-
-    protected ObjectAdapter getAdapter(final RootOid oid) {
-        return getPersistenceSession().recreatePersistentAdapter(oid);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // from context
+    ////////////////////////////////////////////////////////////////////////////
+    
+    protected Persistor getPersistenceSession() {
+    	return IsisContext.getPersistenceSession();
     }
-
     
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-    
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }

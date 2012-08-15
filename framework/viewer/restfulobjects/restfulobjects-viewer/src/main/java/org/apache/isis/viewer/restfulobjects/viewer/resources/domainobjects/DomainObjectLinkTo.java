@@ -64,7 +64,8 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             throw new IllegalStateException("objectAdapter not provided");
         }
         final StringBuilder buf = new StringBuilder("objects/");
-        buf.append(resourceContext.getOidStringifier().enString((RootOid) objectAdapter.getOid()));
+        RootOid rootOid = (RootOid) objectAdapter.getOid();
+		buf.append(rootOid.enString());
         return buf.toString();
     }
 

@@ -21,18 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.FormComponentPanel;
-import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -44,6 +36,12 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.apache.wicket.model.IModel;
 
 /**
  * Convenience adapter for {@link FormComponent}s that are implemented using the
@@ -159,10 +157,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
 
     protected List<ObjectAdapter> getServiceAdapters() {
         return IsisContext.getPersistenceSession().getServices();
-    }
-
-    protected OidStringifier getOidStringifier() {
-        return IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     

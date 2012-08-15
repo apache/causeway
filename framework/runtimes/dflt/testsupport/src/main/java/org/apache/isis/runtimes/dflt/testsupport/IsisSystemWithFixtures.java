@@ -51,6 +51,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
@@ -513,7 +514,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     public ObjectAdapter recreateAdapter(RootOid oid) {
         ensureSessionInProgress();
-        return getPersistenceSession().recreatePersistentAdapter(oid);
+        return getAdapterManager().adapterFor(oid);
     }
 
     public ObjectAdapter remapAsPersistent(Object pojo, RootOid persistentOid) {
@@ -651,8 +652,12 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         return getPersistenceSession().getTransactionManager();
     }
     
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+    public Persistor getPersistor() {
+    	return getPersistenceSession();
+    }
+    
+    public AdapterManager getAdapterManager() {
+        return getPersistor().getAdapterManager();
     }
 
     protected PersistenceSession getPersistenceSession() {

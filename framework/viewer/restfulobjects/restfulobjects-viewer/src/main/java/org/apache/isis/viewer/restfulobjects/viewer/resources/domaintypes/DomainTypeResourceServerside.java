@@ -297,7 +297,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final RendererFactory domainObjectRendererFactory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         final DomainObjectReprRenderer domainObjectRenderer = (DomainObjectReprRenderer) domainObjectRendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        final ObjectAdapter transientInstance = getResourceContext().getPersistenceSession().createInstance(domainTypeSpec);
+        final ObjectAdapter transientInstance = getResourceContext().getPersistenceSession().createTransientInstance(domainTypeSpec);
         domainObjectRenderer.with(transientInstance).includesSelf();
 
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(domainObjectRenderer.render());

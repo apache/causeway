@@ -16,18 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scalar;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scenarios.scalar;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableMap;
-
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -36,7 +31,7 @@ import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-public class Persistence_namedQuery_all {
+public class Persistence_allInstances {
 
     private PrimitiveValuedEntityRepository repo = new PrimitiveValuedEntityRepository();
     
@@ -46,63 +41,46 @@ public class Persistence_namedQuery_all {
         .withServices(repo)
         .build();
 
-    @Before
-    public void setUp() throws Exception {
-
+    @Test
+    public void whenNoInstances() {
         iswf.beginTran();
+        final List<PrimitiveValuedEntity> list = repo.list();
+        assertThat(list.size(), is(0));
+        iswf.commitTran();
+    }
 
+    @Test
+    public void persist_dontBounce_listAll() throws Exception {
+        
+        iswf.beginTran();
         PrimitiveValuedEntity entity = repo.newEntity();
         entity.setId(1);
-        entity.setIntProperty(111);
-
         entity = repo.newEntity();
         entity.setId(2);
-        entity.setIntProperty(222);
-
-        entity = repo.newEntity();
-        entity.setId(3);
-        entity.setIntProperty(333);
-
-        entity = repo.newEntity();
-        entity.setId(4);
-        entity.setIntProperty(111);
-
         iswf.commitTran();
-    }
-    
-    @Test
-    public void whenOne() throws Exception {
-        
+
+        // don't bounce
         iswf.beginTran();
-
-        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("prmv_findByIntProperty", ImmutableMap.of("i", (Object)222));
-        assertThat(entities, is(not(nullValue())));
-        assertThat(entities.size(), is(1));
-
+        List<PrimitiveValuedEntity> list = repo.list();
+        assertThat(list.size(), is(2));
         iswf.commitTran();
     }
 
     @Test
-    public void whenTwo() throws Exception {
+    public void persist_bounce_listAll() throws Exception {
         
         iswf.beginTran();
+        repo.newEntity().setId(1);
+        repo.newEntity().setId(2);
+        iswf.commitTran();
 
-        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("prmv_findByIntProperty", ImmutableMap.of("i", (Object)111));
-        assertThat(entities, is(not(nullValue())));
-        assertThat(entities.size(), is(2));
-
+        iswf.bounceSystem();
+        
+        iswf.beginTran();
+        List<PrimitiveValuedEntity> list = repo.list();
+        assertThat(list.size(), is(2));
         iswf.commitTran();
     }
 
-    @Test
-    public void whenNone() throws Exception {
-        
-        iswf.beginTran();
 
-        List<PrimitiveValuedEntity> entities = repo.findByNamedQueryAll("prmv_findByIntProperty", ImmutableMap.of("i", (Object)999));
-        assertThat(entities, is(not(nullValue())));
-        assertThat(entities.size(), is(0));
-
-        iswf.commitTran();
-    }
 }

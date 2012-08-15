@@ -86,7 +86,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no such class '%s')", domainTypeStr);
         }
 
-        final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().createInstance(domainTypeSpec);
+        final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().createTransientInstance(domainTypeSpec);
 
         final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
         if (propertiesList == null) {

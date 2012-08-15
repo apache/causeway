@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -119,12 +120,18 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
+            public ObjectAdapter adapterFor(TypedOid oid) {
+            	return getRuntimeAdapterManager().adapterFor(oid);
+            }
+            
+            @Override
             public void injectInto(Object candidate) {
                 if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
                     final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
                     cast.setAdapterManager(this);
                 }
             }
+
         };
         this.objectInstantiator = new ObjectInstantiatorAbstract() {
 
@@ -168,12 +175,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
-                return getPersistenceSession().createInstance(spec);
+                return getPersistenceSession().createTransientInstance(spec);
             }
 
             @Override
             public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
-                return getPersistenceSession().createInstance(spec, parent);
+                return getPersistenceSession().createAggregatedInstance(spec, parent);
             };
 
             @Override

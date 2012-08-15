@@ -30,11 +30,14 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -187,12 +190,20 @@ public class Memento implements Serializable {
         final ObjectSpecification spec = 
                 getSpecificationLoader().loadSpecification(data.getClassName());
 
-        final Object recreatedPojo = spec.createObject();
-        ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(getOid(), recreatedPojo);
+        ObjectAdapter adapter;
         
-        if (adapter.getSpecification().isParentedOrFreeCollection()) {
+        final Oid oid = getOid();
+		if (spec.isParentedOrFreeCollection()) {
+        	
+        	final Object recreatedPojo = spec.createObject();
+        	adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
             populateCollection(adapter, (CollectionData) data);
+            
         } else {
+        	Assert.assertTrue("oid must be a TypedOid representing an object because spec is not a collection and cannot be a value", oid instanceof TypedOid);
+        	TypedOid typedOid = (TypedOid) oid;
+        	
+			adapter = getAdapterManager().adapterFor(typedOid);
             updateObject(adapter, data);
         }
 
@@ -215,30 +226,41 @@ public class Memento implements Serializable {
     }
 
     private ObjectAdapter recreateReference(final Data data) {
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
 
+        // handle values
         if (data instanceof StandaloneData) {
             final StandaloneData standaloneData = (StandaloneData) data;
             return standaloneData.getAdapter();
-        } 
-        final Oid oid = data.getOid();
-        if (oid == null) {
+        }
+        
+        // reference to entity
+        
+        Oid oid = data.getOid();
+        Assert.assertTrue("can only create a reference to an entity", oid instanceof TypedOid);
+        
+		final TypedOid typedOid = (TypedOid) oid; 
+        if (typedOid == null) {
             return null;
         }
         
-        final Object recreatedPojo = spec.createObject();
-        ObjectAdapter referencedAdapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
+        final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(typedOid);
+
         if (data instanceof ObjectData) {
-            if (spec.isParented()) {
-                // rather than the following, is it equivalent to pass in RESOLVING (like everywhere else?)
-//                final ResolveState targetState = ResolveState.GHOST;
-//                if (referencedAdapter.getResolveState().isValidToChangeTo(targetState)) {
-//                    referencedAdapter.changeState(targetState);
-//                }
-                updateObject(referencedAdapter, data);
-            } else if (oid.isTransient()) {
-                updateObject(referencedAdapter, data);
-            }
+        	
+        	// no longer needed
+        	//final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
+        	if(typedOid instanceof ParentedOid) { // equiv to spec.isParented()), I think
+        		
+        		// rather than the following, is it equivalent to pass in RESOLVING? (like everywhere else)
+//            final ResolveState targetState = ResolveState.GHOST;
+//            if (referencedAdapter.getResolveState().isValidToChangeTo(targetState)) {
+//                referencedAdapter.changeState(targetState);
+//            }
+        		
+        		updateObject(referencedAdapter, data);
+        	} else if (typedOid.isTransient()) {
+        		updateObject(referencedAdapter, data);
+        	}
         }
         return referencedAdapter;
     }

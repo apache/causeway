@@ -29,25 +29,23 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects.DomainResourceHelper;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class ResourceContext {
 
@@ -57,12 +55,11 @@ public class ResourceContext {
     private final HttpServletRequest httpServletRequest;
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
-    private final OidStringifier oidStringifier;
     private final Localization localization;
     private final IsisConfiguration configuration;
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
-    private final AdapterManager objectAdapterLookup;
+    private final AdapterManager adapterManager;
     private final SpecificationLoader specificationLookup;
 
     private List<List<String>> followLinks;
@@ -82,7 +79,7 @@ public class ResourceContext {
     private JsonRepresentation readQueryStringAsMap;
 
     public ResourceContext(final RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request, final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final SecurityContext securityContext,
-            final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, IsisConfiguration configuration) {
+            final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, IsisConfiguration configuration) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -90,12 +87,11 @@ public class ResourceContext {
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
-        this.oidStringifier = oidStringifier;
         this.localization = localization;
         this.configuration = configuration;
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
-        this.objectAdapterLookup = objectAdapterLookup;
+        this.adapterManager = objectAdapterLookup;
         this.specificationLookup = specificationLookup;
 
         init(representationType);
@@ -192,10 +188,6 @@ public class ResourceContext {
         return getUriInfo().getBaseUri().toString() + url;
     }
 
-    public OidStringifier getOidStringifier() {
-        return oidStringifier;
-    }
-
     public Localization getLocalization() {
         return localization;
     }
@@ -204,8 +196,8 @@ public class ResourceContext {
         return authenticationSession;
     }
 
-    public AdapterManager getObjectAdapterLookup() {
-        return objectAdapterLookup;
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     public PersistenceSession getPersistenceSession() {

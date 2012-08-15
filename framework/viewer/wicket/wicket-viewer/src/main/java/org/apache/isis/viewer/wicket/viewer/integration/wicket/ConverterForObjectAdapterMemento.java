@@ -22,17 +22,15 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.util.convert.IConverter;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Implementation of a Wicket {@link IConverter} for
@@ -44,7 +42,7 @@ public class ConverterForObjectAdapterMemento implements IConverter {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Converts {@link OidStringifier stringified} {@link Oid} to
+     * Converts string representation of {@link Oid} to
      * {@link ObjectAdapterMemento}.
      */
     @Override
@@ -52,14 +50,14 @@ public class ConverterForObjectAdapterMemento implements IConverter {
         if (StringUtils.isEmpty(value)) {
             return null;
         }
-        final Oid oid = getOidStringifier().deString(value);
+        final Oid oid = RootOidDefault.deStringEncoded(value);
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }
 
     /**
-     * Converts {@link ObjectAdapterMemento} to {@link OidStringifier
-     * stringified} {@link RootOid}.
+     * Converts {@link ObjectAdapterMemento} to string representation of
+     * {@link RootOid}.
      */
     @Override
     public String convertToString(final Object object, final Locale locale) {
@@ -73,15 +71,12 @@ public class ConverterForObjectAdapterMemento implements IConverter {
             // REVIEW: is this right?
             return memento.toString();
         }
-        return getOidStringifier().enString((RootOid) oid);
+        RootOid rootOid = (RootOid) oid;
+        return rootOid.enString();
     }
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
-    }
-
-    protected OidStringifier getOidStringifier() {
-        return getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     protected PersistenceSession getPersistenceSession() {

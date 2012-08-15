@@ -273,7 +273,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter recreatePersistentAdapter(final TypedOid typedOid) {
+    public ObjectAdapter adapterFor(final TypedOid typedOid) {
 
         // attempt to locate adapter for the Oid
         final ObjectAdapter adapterLookedUpByOid = getAdapterFor(typedOid);

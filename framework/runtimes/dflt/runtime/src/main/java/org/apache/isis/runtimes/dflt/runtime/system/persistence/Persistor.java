@@ -144,7 +144,7 @@ public interface Persistor {
      * This method is ultimately delegated to by the
      * {@link DomainObjectContainer}.
      */
-    public abstract ObjectAdapter createInstance(ObjectSpecification objectSpec);
+    public abstract ObjectAdapter createTransientInstance(ObjectSpecification objectSpec);
 
     /**
      * Creates a new instance of the specified type and returns an adapter with
@@ -162,7 +162,7 @@ public interface Persistor {
      * This method is ultimately delegated to by the
      * {@link DomainObjectContainer}.
      */
-    public abstract ObjectAdapter createInstance(ObjectSpecification objectSpec, ObjectAdapter parentAdapter);
+    public abstract ObjectAdapter createAggregatedInstance(ObjectSpecification objectSpec, ObjectAdapter parentAdapter);
 
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be

@@ -207,7 +207,7 @@ class LoadedObjects {
         if (object == null) {
             final String className = data.substring(0, pos);
             final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
-            object = getPersistenceSession().createInstance(specification);
+            object = getPersistenceSession().createTransientInstance(specification);
             idMap.put(id, object);
             objects.add(object.getObject());
         }

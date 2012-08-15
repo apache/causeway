@@ -16,28 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scenarios.scalar;
 
-package org.apache.isis.core.metamodel.adapter.oid.stringable;
+import org.junit.Rule;
+import org.junit.Test;
 
-import java.io.IOException;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.Utils;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+public class Persistence_bounceSystem {
 
-class OidWithNonPublicDestringMethod extends RootOidAbstractForTesting {
+    private PrimitiveValuedEntityRepository repo = new PrimitiveValuedEntityRepository();
+    
+    @Rule
+    public IsisSystemWithFixtures iswf = Utils.systemBuilder()
+        .with(Utils.listenerToDeleteFrom("PRIMITIVEVALUEDENTITY"))
+        .withServices(repo)
+        .build();
 
-    protected static Oid deString(final String oidStr) {
-        return new OidWithNonPublicDestringMethod();
-    }
-
-    @Override
-    public String enString() {
-        return getObjectSpecId() + "|1234567A";
-    }
-
-    @Override
-    public void encode(DataOutputExtended outputStream) throws IOException {
-        throw new UnsupportedOperationException();
+    @Test
+    public void bounceSystem() throws Exception {
+        iswf.bounceSystem();
+        iswf.bounceSystem();
     }
 
 }

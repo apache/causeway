@@ -24,18 +24,12 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.Maps;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -49,6 +43,11 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.util.ActionParams;
+import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+
+import com.google.common.collect.Maps;
 
 /**
  * Models an action invocation, either the gathering of arguments for the
@@ -101,8 +100,8 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     /**
      * Factory; for use by {@link BookmarkablePageLink}s.
      */
-    public static ActionModel createForPersistent(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        return new ActionModel(pageParameters, oidStringifier);
+    public static ActionModel createForPersistent(final PageParameters pageParameters) {
+        return new ActionModel(pageParameters);
     }
 
     /**
@@ -110,8 +109,8 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
      * 
      * see {@link #ActionModel(PageParameters)}
      */
-    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction noAction, final OidStringifier oidStringifier, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode) {
-        final PageParameters pageParameters = EntityModel.createPageParameters(adapter, oidStringifier);
+    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction noAction, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode) {
+        final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
 
         final String actionType = noAction.getType().name();
         final String actionNameParmsId = determineActionId(noAction);
@@ -127,7 +126,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         PageParameterNames.ACTION_MODE.addTo(pageParameters, actionMode.name());
         PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addTo(pageParameters, singleResultsMode.name());
 
-        addActionParamContextIfPossible(noAction, oidStringifier, contextAdapter, pageParameters);
+        addActionParamContextIfPossible(noAction, contextAdapter, pageParameters);
         return pageParameters;
     }
 
@@ -145,15 +144,15 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return ActionParams.compatibleWith(contextAdapter, actionParam) ? Mode.RESULTS : Mode.PARAMETERS;
     }
 
-    private static void addActionParamContextIfPossible(final ObjectAction noAction, final OidStringifier oidStringifier, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
+    private static void addActionParamContextIfPossible(final ObjectAction noAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
         if (contextAdapter == null) {
             return;
         }
         int i = 0;
         for (final ObjectActionParameter actionParam : noAction.getParameters()) {
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
-                final String oidStr = oidStringifier.enString((RootOid)contextAdapter.getOid());
-                final String oidKeyValue = "" + i + "=" + oidStr;
+                RootOid rootOid = (RootOid)contextAdapter.getOid();
+				final String oidKeyValue = "" + i + "=" + rootOid.enString();
                 PageParameterNames.ACTION_PARAM_CONTEXT.addTo(pageParameters, oidKeyValue);
                 return;
             }
@@ -188,10 +187,10 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
     private ActionExecutor executor;
 
-    private ActionModel(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        this(newObjectAdapterMementoFrom(pageParameters, oidStringifier), newActionMementoFrom(pageParameters), actionModeFor(pageParameters), singleResultsModeFor(pageParameters));
+    private ActionModel(final PageParameters pageParameters) {
+        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFor(pageParameters), singleResultsModeFor(pageParameters));
 
-        setContextArgumentIfPossible(pageParameters, oidStringifier);
+        setContextArgumentIfPossible(pageParameters);
 
         // TODO: if #args < param count, then change the actionMode
 
@@ -230,7 +229,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getFrom(pageParameters));
     }
 
-    private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters, final OidStringifier oidStringifier) {
+    private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters) {
         RootOid oid = oidFor(pageParameters);
         if(oid.isTransient()) {
             //return ObjectAdapterMemento.
@@ -257,7 +256,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         this.singleResultsMode = singleResultsMode;
     }
 
-    private boolean setContextArgumentIfPossible(final PageParameters pageParameters, final OidStringifier oidStringifier) {
+    private boolean setContextArgumentIfPossible(final PageParameters pageParameters) {
         final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getFrom(pageParameters);
         if (paramContext == null) {
             return false;
@@ -274,7 +273,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         }
 
         try {
-            oid = oidStringifier.deString(mapEntry.getValue());
+            oid = RootOidDefault.deStringEncoded(mapEntry.getValue());
         } catch (final Exception e) {
             return false;
         }

@@ -34,33 +34,30 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.viewer.util.OidUtils;
 import org.apache.isis.viewer.restfulobjects.viewer.util.UrlDecoderUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 public abstract class ResourceAbstract {
 
@@ -123,7 +120,7 @@ public abstract class ResourceAbstract {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
+        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
     }
 
     protected ResourceContext getResourceContext() {
@@ -238,10 +235,6 @@ public abstract class ResourceAbstract {
 
     private OidGenerator getOidGenerator() {
         return getPersistenceSession().getOidGenerator();
-    }
-
-    private OidStringifier getOidStringifier() {
-        return getOidGenerator().getOidStringifier();
     }
 
     protected Localization getLocalization() {

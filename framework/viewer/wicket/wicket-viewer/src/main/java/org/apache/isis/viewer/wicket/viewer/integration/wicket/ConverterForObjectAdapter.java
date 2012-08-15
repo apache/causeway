@@ -21,16 +21,14 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Locale;
 
-import org.apache.wicket.util.convert.IConverter;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,
@@ -41,18 +39,17 @@ public class ConverterForObjectAdapter implements IConverter {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Converts {@link OidStringifier stringified} {@link Oid} to
+     * Converts string representation of {@link Oid} to
      * {@link ObjectAdapter}.
      */
     @Override
     public Object convertToObject(final String value, final Locale locale) {
-        final Oid oid = getOidStringifier().deString(value);
+        final Oid oid = RootOidDefault.deStringEncoded(value);
         return getAdapterManager().getAdapterFor(oid);
     }
 
     /**
-     * Converts {@link ObjectAdapter} to {@link OidStringifier stringified}
-     * {@link Oid}.
+     * Converts {@link ObjectAdapter} to string representation of {@link Oid}.
      */
     @Override
     public String convertToString(final Object object, final Locale locale) {
@@ -62,15 +59,13 @@ public class ConverterForObjectAdapter implements IConverter {
             // values don't have an Oid
             return null;
         }
-        return getOidStringifier().enString((RootOid) oid);
+        
+        RootOid rootOid = (RootOid) oid;
+        return rootOid.enString();
     }
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
-    }
-
-    protected OidStringifier getOidStringifier() {
-        return getPersistenceSession().getOidGenerator().getOidStringifier();
     }
 
     protected PersistenceSession getPersistenceSession() {

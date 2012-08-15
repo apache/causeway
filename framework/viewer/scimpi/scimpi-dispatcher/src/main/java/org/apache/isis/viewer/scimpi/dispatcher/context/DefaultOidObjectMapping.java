@@ -326,7 +326,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         final TypedOid typedOid = new OidMarshaller().unmarshal(oidStr, TypedOid.class);
 
         if(!typedOid.isTransient()) {
-            return getPersistenceSession().recreatePersistentAdapter(typedOid);
+            return getAdapterManager().adapterFor(typedOid);
         } else {
             return mappedObject(oidStr);
         }
@@ -389,7 +389,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 // Oid oid = deString(objectType, oidData, State.TRANSIENT);
                 //return getPersistenceSession().recreateAdapter(oid, pojo);
                 
-                return getPersistenceSession().recreatePersistentAdapter(typedOid);
+                return getAdapterManager().adapterFor(typedOid);
             }
             
             final ObjectAdapter mappedTransientObject = mapping.getObject();

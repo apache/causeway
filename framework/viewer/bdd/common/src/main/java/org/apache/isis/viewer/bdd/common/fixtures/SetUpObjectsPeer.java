@@ -194,7 +194,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         if (spec == null) {
             return null;
         }
-        return getPersistenceSession().createInstance(spec);
+        return getPersistenceSession().createTransientInstance(spec);
     }
 
     public SetUpObjectResult setUpProperty(final ObjectAdapter adapter, final int colNum) {

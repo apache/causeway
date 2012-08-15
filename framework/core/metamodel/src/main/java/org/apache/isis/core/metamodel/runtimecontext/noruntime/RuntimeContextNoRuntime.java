@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAbstract;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -109,9 +110,15 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
+            public ObjectAdapter adapterFor(TypedOid oid) {
+            	throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
             public ObjectAdapter getAdapterFor(Oid oid) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
+
         };
         objectInstantiator = new ObjectInstantiatorAbstract() {
 

@@ -183,35 +183,27 @@ public class XmlObjectStore implements ObjectStoreSpi {
     }
 
     private void initObjectSetupReference(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
-        final RootOidDefault referenceOid = (RootOidDefault) data.get(field.getId());
+    	
+        final RootOid referencedOid = (RootOidDefault) data.get(field.getId());
         if(LOG.isDebugEnabled()) {
-            LOG.debug("setting up field " + field + " with " + referenceOid);
+            LOG.debug("setting up field " + field + " with " + referencedOid);
         }
-        if (referenceOid == null) {
+        if (referencedOid == null) {
             return;
         }
 
-        final Data fieldData = dataManager.loadData(referenceOid);
+        final Data fieldData = dataManager.loadData(referencedOid);
 
+        final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(referencedOid);
         if (fieldData == null) {
-            ObjectSpecification spec = field.getSpecification();
-            
-            final Object recreatedPojo = spec.createObject();
-            final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(referenceOid, recreatedPojo);
-            
-            if (!adapter.isDestroyed()) {
-                adapter.changeState(ResolveState.DESTROYED);
+            if (!referencedAdapter.isDestroyed()) {
+                referencedAdapter.changeState(ResolveState.DESTROYED);
             }
-            ((OneToOneAssociation) field).initAssociation(object, adapter);
-
-            LOG.warn("No data found for " + referenceOid + " so field '" + field.getName() + "' not set in object '" + object.titleString() + "'");
-        } else {
-            ObjectSpecification spec = specFor(fieldData);
-            final Object recreatedPojo = spec.createObject();
-            final ObjectAdapter reference = getPersistenceSession().mapRecreatedPojo(referenceOid, recreatedPojo);
-            ((OneToOneAssociation) field).initAssociation(object, reference);
+            LOG.warn("No data found for " + referencedOid + " so field '" + field.getName() + "' not set in object '" + object.titleString() + "'");
         }
+        ((OneToOneAssociation) field).initAssociation(object, referencedAdapter);
 
+        // REVIEW: what was this commented out code for?
         /*
          * if (loadedObjects().isLoaded(referenceOid)) { ObjectAdapter
          * loadedObject = loadedObjects().getLoadedObject(referenceOid);
@@ -331,7 +323,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
         ObjectAdapter object;
 
         if (data instanceof ObjectData) {
-            object = recreateObject((ObjectData) data);
+            object = recreateAdapter((ObjectData) data);
         } else if (data instanceof CollectionData) {
             throw new IsisException();
         } else {
@@ -357,13 +349,11 @@ public class XmlObjectStore implements ObjectStoreSpi {
      * The ObjectData holds all references for internal collections, so the
      * object should haves its internal collection populated by this method.
      */
-    private ObjectAdapter recreateObject(final ObjectData data) {
+    private ObjectAdapter recreateAdapter(final ObjectData data) {
         final RootOid oid = data.getRootOid();
-        final ObjectSpecification spec = specFor(data);
-        final Object recreatedPojo = spec.createObject();
-        final ObjectAdapter object = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
-        initObject(object, data);
-        return object;
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(oid);
+        initObject(adapter, data);
+        return adapter;
     }
 
     // /////////////////////////////////////////////////////////
@@ -397,10 +387,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
 
             final RootOid oid = instanceData.getRootOid();
 
-            final ObjectSpecification spec = specFor(instanceData);
-            final Object recreatedPojo = spec.createObject();
-            
-            final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
+            final ObjectAdapter adapter = getAdapterManager().adapterFor(oid);
             if(LOG.isDebugEnabled()) {
                 LOG.debug("recreated instance " + adapter);
             }
@@ -411,10 +398,6 @@ public class XmlObjectStore implements ObjectStoreSpi {
             }
         }
         return instances;
-    }
-
-    private ObjectSpecification specFor(final Data data) {
-        return getSpecificationLookup().lookupBySpecId(data.getObjectSpecId());
     }
 
     // /////////////////////////////////////////////////////////

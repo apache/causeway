@@ -384,9 +384,8 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     }
     
     public static Object idValueOf(final RootOid oid) {
-        String idStr = oid.getIdentifier();
 
-        Object dnOid = JdoOidSerializer.toOidStr(idStr);
+        Object dnOid = JdoOidSerializer.toOidStr(oid);
 
         return dnOid.toString();
     }

@@ -361,7 +361,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private void addOrReplaceLink(final ObjectAdapter adapter) {
-        final PageParameters pageParameters = EntityModel.createPageParameters(adapter, getOidStringifier());
+        final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
         final BookmarkablePageLink<EntityPage> link = new BookmarkablePageLink<EntityPage>(ID_ENTITY_LINK, pageClass, pageParameters);
         label = new Label(ID_ENTITY_TITLE, adapter.titleString());

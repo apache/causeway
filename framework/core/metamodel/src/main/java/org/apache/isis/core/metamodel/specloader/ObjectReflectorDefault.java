@@ -254,7 +254,22 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
         // prime cache and validate
         primeCache();
         metaModelValidator.validate();
+        
+        cacheBySpecId();
     }
+
+	private void cacheBySpecId() {
+		final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
+        for (final ObjectSpecification objSpec : allSpecifications()) {
+            final ObjectSpecId objectSpecId = objSpec.getSpecId();
+            if (objectSpecId == null) {
+                continue;
+            }
+            specById.put(objectSpecId, objSpec);
+        }
+
+        getCache().setCacheBySpecId(specById);
+	}
 
     /**
      * load the service specifications and then, using the
@@ -613,10 +628,6 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
             }
             throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId));
         }
-        
-        getCache().setCacheBySpecId(specById);
     }
-
-
 
 }
