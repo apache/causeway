@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -80,21 +81,21 @@ public class WriteObjectCommandTest {
         smpl1 = iswf.fixtures.smpl1;
         smpl1.setName("Fred Smith");
         smpl1.setSize(108);
-        smpl1Adapter = iswf.remapAsPersistent(smpl1, RootOidDefault.deString("SMPL:1"));
+        smpl1Adapter = iswf.remapAsPersistent(smpl1, RootOidDefault.deString("SMPL:1", new OidMarshaller()));
 
         smpl2 = iswf.fixtures.smpl2;
         smpl2.setName("John Brown");
-        iswf.remapAsPersistent(smpl2, RootOidDefault.deString("SMPL:2"));
+        iswf.remapAsPersistent(smpl2, RootOidDefault.deString("SMPL:2", new OidMarshaller()));
 
         rfcg1 = iswf.fixtures.rfcg1;
         rfcg1.setReference(smpl1);
-        rfcg1Adapter = iswf.remapAsPersistent(rfcg1, RootOidDefault.deString("RFCG:1"));
+        rfcg1Adapter = iswf.remapAsPersistent(rfcg1, RootOidDefault.deString("RFCG:1", new OidMarshaller()));
 
         prnt1 = iswf.fixtures.prnt1;
         prnt1.getHomogeneousCollection().add(smpl1);
         prnt1.getHomogeneousCollection().add(smpl2);
         
-        prnt1Adapter = iswf.remapAsPersistent(prnt1, RootOidDefault.deString("PRNT:1"));
+        prnt1Adapter = iswf.remapAsPersistent(prnt1, RootOidDefault.deString("PRNT:1", new OidMarshaller()));
 
         final Version version = new SerialNumberVersion(2, "username", null);
 

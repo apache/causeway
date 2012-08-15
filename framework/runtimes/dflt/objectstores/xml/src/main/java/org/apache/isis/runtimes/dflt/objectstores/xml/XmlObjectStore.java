@@ -247,7 +247,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
                 ObjectAdapter adapter;
                 adapter = getAdapterManager().getAdapterFor(elementOid);
                 if (adapter == null) {
-                    adapter = getObject(elementOid);
+                    adapter = loadInstanceAndAdapt(elementOid);
                 }
                 elements[j] = adapter;
             }
@@ -315,7 +315,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
 
 
     @Override
-    public ObjectAdapter getObject(final TypedOid oid) {
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
         LOG.debug("getObject " + oid);
         final Data data = dataManager.loadData((RootOidDefault) oid);
         LOG.debug("  data read " + data);
@@ -361,7 +361,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
 
         if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
             throw new IllegalArgumentException(MessageFormat.format("Provided PersistenceQuery not supported; was {0}; " + "the XML object store only supports {1}", persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));

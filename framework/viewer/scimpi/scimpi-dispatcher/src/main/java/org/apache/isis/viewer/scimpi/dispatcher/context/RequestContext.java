@@ -40,6 +40,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -94,7 +95,7 @@ public abstract class RequestContext {
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
     private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
     
-    private final OidMarshaller oidMarshaller = new OidMarshaller();
+    private final OidMarshaller oidMarshaller = getOidMarshaller();
 
 
     private final ObjectMapping objectMapping;
@@ -208,7 +209,7 @@ public abstract class RequestContext {
         final TypedOid parentOid = aggregatedOid.getParentOid();
         
         //final ObjectAdapter parentAdapter = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
-        final ObjectAdapter parentAdapter = objectMapping.mappedObject(parentOid.enString());
+        final ObjectAdapter parentAdapter = objectMapping.mappedObject(parentOid.enString(getOidMarshaller()));
         getPersistenceSession().resolveImmediately(parentAdapter);
         
         //ObjectSpecId objectType = null; 
@@ -245,6 +246,7 @@ public abstract class RequestContext {
         }
         return aggregatedAdapter;
     }
+
 
     public boolean isInternalRequest() {
         final String referrer = getHeader("Referer"); // Note spelling mistake

@@ -29,14 +29,6 @@ import org.apache.isis.viewer.wicket.model.util.Strings;
  */
 public enum PageParameterNames {
 
-//    /**
-//     * Whether the object is persistent or not.
-//     */
-//    OBJECT_PERSISTENT,
-//    /**
-//     * The object's spec, as the fully qualified class name.
-//     */
-//    OBJECT_SPEC,
     /**
      * The object's {@link Oid}.
      * 

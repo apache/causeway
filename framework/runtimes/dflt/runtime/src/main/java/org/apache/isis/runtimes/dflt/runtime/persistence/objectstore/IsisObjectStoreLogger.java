@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -37,6 +38,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 
 public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
@@ -59,7 +61,7 @@ public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
 
     @Override
     public void registerService(final RootOid rootOid) {
-        log("registering service: " + rootOid.enString());
+        log("registering service: " + rootOid.enString(getOidMarshaller()));
         underlying.registerService(rootOid);
     }
 
@@ -91,15 +93,15 @@ public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
     }
 
     @Override
-    public List<ObjectAdapter> getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
         log("get instances matching " + criteria);
-        return underlying.getInstances(criteria);
+        return underlying.loadInstancesAndAdapt(criteria);
     }
 
 
     @Override
-    public ObjectAdapter getObject(final TypedOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
-        final ObjectAdapter adapter = underlying.getObject(oid);
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
+        final ObjectAdapter adapter = underlying.loadInstanceAndAdapt(oid);
         log("get object for " + oid + " (of type '" + oid.getObjectSpecId() + "')", adapter.getObject());
         return adapter;
     }
@@ -108,7 +110,7 @@ public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
     public RootOid getOidForService(ObjectSpecification serviceSpec) {
         final RootOid serviceOid = underlying.getOidForService(serviceSpec);
         if(serviceOid != null) {
-            log("get OID for service: " + serviceOid.enString());
+            log("get OID for service: " + serviceOid.enString(getOidMarshaller()));
         } else {
             log("get OID for service: null (presumably in the process of being registered for '" + serviceSpec.getSpecId() + "')");
         }
@@ -188,4 +190,15 @@ public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
     public void abortTransaction() {
         underlying.abortTransaction();
     }
+    
+    
+    /////////////////////////////////////////////
+    // Dependencies (from context)
+    /////////////////////////////////////////////
+    
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+
+
 }

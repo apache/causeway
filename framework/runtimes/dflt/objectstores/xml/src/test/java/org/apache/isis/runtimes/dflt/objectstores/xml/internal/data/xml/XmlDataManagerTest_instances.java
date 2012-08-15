@@ -32,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.xml.XmlFile;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -70,7 +71,7 @@ public class XmlDataManagerTest_instances {
         oids = new RootOid[SIZE];
         data = new ObjectData[SIZE];
 
-        pattern = new ObjectData(RootOidDefault.deString("RLE:1"), new FileVersion("user", 13));
+        pattern = new ObjectData(RootOidDefault.deString("RLE:1", new OidMarshaller()), new FileVersion("user", 13));
         for (int i = 0; i < SIZE; i++) {
             oids[i] = RootOidDefault.create(ObjectSpecId.of("RLE"), ""+i);
             data[i] = new ObjectData(oids[i], new FileVersion("user", 13));

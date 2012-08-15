@@ -48,7 +48,7 @@ public class KeyCreatorDefault {
     }
 
     /**
-     * Equivalent to the {@link Oid#enString()} for the adapter's Oid.
+     * Equivalent to the {@link Oid#enString(OidMarshaller)} for the adapter's Oid.
      */
     public String oidStrFor(final ObjectAdapter adapter) {
         if(adapter == null) {
@@ -56,7 +56,7 @@ public class KeyCreatorDefault {
         }
         try {
             //return adapter.getSpecification().getFullIdentifier() + "@" + key(adapter.getOid());
-            return adapter.getOid().enString();
+            return adapter.getOid().enString(getOidMarshaller());
         } catch (final NoSqlStoreException e) {
             throw new NoSqlStoreException("Failed to create refence for " + adapter, e);
         }
@@ -81,12 +81,18 @@ public class KeyCreatorDefault {
         return getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
     }
 
+    
+    /////////////////////////////////////////////////
+    // dependencies (from context)
+    /////////////////////////////////////////////////
+    
+    
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
     protected OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
+        return IsisContext.getOidMarshaller();
     }
 
 

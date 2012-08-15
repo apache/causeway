@@ -48,7 +48,7 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
         
         final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
         
-        return JdoOidSerializer.toString(jdoOid);
+        return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
     }
 
 

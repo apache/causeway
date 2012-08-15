@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.system.session;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -37,8 +38,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class IsisSessionFactoryDefault extends IsisSessionFactoryAbstract {
 
     public IsisSessionFactoryDefault(final DeploymentType deploymentType, final IsisConfiguration configuration, final TemplateImageLoader templateImageLoader, final SpecificationLoaderSpi specificationLoader, final AuthenticationManager authenticationManager,
-            final AuthorizationManager authorizationManager, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory, final List<Object> servicesList) {
-        super(deploymentType, configuration, specificationLoader, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
+            final AuthorizationManager authorizationManager, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory, final List<Object> servicesList, OidMarshaller oidMarshaller) {
+        super(deploymentType, configuration, specificationLoader, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList, oidMarshaller);
     }
 
 }

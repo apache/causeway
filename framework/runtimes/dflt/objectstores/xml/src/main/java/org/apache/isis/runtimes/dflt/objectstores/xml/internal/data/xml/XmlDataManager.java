@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -133,7 +134,7 @@ public class XmlDataManager implements DataManager {
 
     private static RootOidDefault oidFrom(final Attributes attributes) {
         final String oid = attributes.getValue("oid");
-        return RootOidDefault.deString(oid);
+        return RootOidDefault.deString(oid, getOidMarshaller());
     }
 
     private static FileVersion fileVersionFrom(final Attributes attributes) {
@@ -156,7 +157,7 @@ public class XmlDataManager implements DataManager {
             if (tagName.equals("instance")) {
                 
                 final String oidStr = attrs.getValue("oid");
-                final RootOidDefault oid = RootOidDefault.deString(oidStr);
+                final RootOidDefault oid = RootOidDefault.deString(oidStr, getOidMarshaller());
                 
                 instances.addElement(oid);
             }
@@ -398,7 +399,7 @@ public class XmlDataManager implements DataManager {
 
                 for (final RootOid elementAt : instances) {
                     writer.append("  <instance");
-                    Utils.appendAttribute(writer, "oid", elementAt.enString());
+                    Utils.appendAttribute(writer, "oid", elementAt.enString(getOidMarshaller()));
                     writer.append("/>\n");
                 }
                 writer.append("</instances>");
@@ -428,7 +429,7 @@ public class XmlDataManager implements DataManager {
                 writer.write("<");
                 writer.write(tag);
                 final RootOid oid = data.getRootOid();
-                Utils.appendAttribute(writer, "oid", oid.enString());
+                Utils.appendAttribute(writer, "oid", oid.enString(getOidMarshaller()));
                 Utils.appendAttribute(writer, "user", "" + getAuthenticationSession().getUserName());
 
                 final long sequence = data.getVersion().getSequence();
@@ -474,7 +475,7 @@ public class XmlDataManager implements DataManager {
         Assert.assertFalse(rootOidDefault.isTransient());
         writer.append("  <association");
         Utils.appendAttribute(writer, "field", field);
-        Utils.appendAttribute(writer, "oid", rootOidDefault.enString());
+        Utils.appendAttribute(writer, "oid", rootOidDefault.enString(getOidMarshaller()));
         writer.append("/>\n");
     }
 
@@ -492,7 +493,7 @@ public class XmlDataManager implements DataManager {
                     throw new ObjectPersistenceException("Can't add tranisent OID (" + oid + ") to " + field + " element.");
                 }
                 writer.append("    <element ");
-                Utils.appendAttribute(writer, "oid", rootOidDefault.enString());
+                Utils.appendAttribute(writer, "oid", rootOidDefault.enString(getOidMarshaller()));
                 writer.append("/>\n");
             }
             writer.append("  </multiple-association>\n");
@@ -515,7 +516,7 @@ public class XmlDataManager implements DataManager {
             final Object oid = refs.elementAt(i);
             writer.append("  <element");
             final RootOid rootOid = (RootOid) oid;
-            Utils.appendAttribute(writer, "oid", rootOid.enString());
+            Utils.appendAttribute(writer, "oid", rootOid.enString(getOidMarshaller()));
             writer.append("/>\n");
         }
     }
@@ -538,9 +539,13 @@ public class XmlDataManager implements DataManager {
 
     
     // ////////////////////////////////////////////////////////
-    // From context
+    // dependencies (from context)
     // ////////////////////////////////////////////////////////
-    
+
+    protected static OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
+
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
@@ -549,4 +554,5 @@ public class XmlDataManager implements DataManager {
         return IsisContext.getSpecificationLoader();
     }
 
+    
 }

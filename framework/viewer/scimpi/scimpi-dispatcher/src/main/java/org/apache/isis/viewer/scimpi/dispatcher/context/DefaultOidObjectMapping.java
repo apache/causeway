@@ -152,31 +152,19 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         final JSONObject data = new JSONObject();
 
         final Oid oid = adapter.getOid();
-        data.put("_oid", oid.enString());
-        //data.put("_oidType", oid.getClass().getName());
+        data.put("_oid", oid.enString(getOidMarshaller()));
         
         if(oid instanceof RootOid) {
-            //RootOid ows = (RootOid) oid;
-            //data.put("_objectType", ows.getObjectSpecId());
-            //data.put("_id", enString(ows)); // can be used to recreate
             return data;
         }
         
-        //final ObjectSpecification objectSpec = adapter.getSpecification();
-        //data.put("_objectType", objectSpec.getSpecId());
-
         if (!(oid instanceof AggregatedOid)) {
             throw new ScimpiException("Unsupported OID type " + oid);
         } 
-        
-        //final AggregatedOid aoid = (AggregatedOid) oid;
-        //final Oid parentOid = aoid.getParentOid();
-        //final String aggregatedId = aoid.getLocalId();
-        
-        //String encodedOid = enString(parentOid, aggregatedId);
-        //data.put("_id", encodedOid);
         return data;
     }
+
+
 
     
     ////////////////////////////////////////////////////
@@ -196,25 +184,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 //            oidType = oid.getClass();
 //        }
 
-        String encodedOid;
-//        if(oid instanceof RootOid) {
-//            RootOid ows = (RootOid) oid;
-//            encodedOid = enString(ows);
-//        } else if (oid instanceof AggregatedOid) {
-//            final AggregatedOid aoid = (AggregatedOid) oid;
-//            final String aggregatedId = aoid.getLocalId();
-//            final Oid parentOid = aoid.getParentOid();
-//            adapter = getAdapterManager().getAdapterFor(parentOid);
-//            
-//            encodedOid = enString(parentOid, aggregatedId);
-//        } else if (oid instanceof RootOidDefault) {
-//            final RootOidDefault rootOidDefault = (RootOidDefault) oid;
-//            encodedOid = rootOidDefault.getIdentifier();
-//        } else {
-//            throw new ScimpiException("Unsupported OID type " + oid);
-//        }
-        encodedOid = oid.enString();
-
+        String encodedOid = oid.enString(getOidMarshaller());
         
         //final boolean isTransient = adapter.isTransient();
         //final String transferableId = (isTransient ? "T" : "P") + adapter.getSpecification().getFullIdentifier() + "@" + encodedOid;
@@ -323,7 +293,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         //final ObjectSpecification objectSpec = getSpecificationLoader().lookupByObjectType(objectType);
         
         final String oidStr = jsonObject.getString("_oid");
-        final TypedOid typedOid = new OidMarshaller().unmarshal(oidStr, TypedOid.class);
+        final TypedOid typedOid = getOidMarshaller().unmarshal(oidStr, TypedOid.class);
 
         if(!typedOid.isTransient()) {
             return getAdapterManager().adapterFor(typedOid);
@@ -362,7 +332,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
     @Override
     public ObjectAdapter mappedObject(final String oidStr) {
 
-        final TypedOid typedOid = new OidMarshaller().unmarshal(oidStr, TypedOid.class);
+        final TypedOid typedOid = getOidMarshaller().unmarshal(oidStr, TypedOid.class);
         
         
 //        final char type = oidStr.charAt(0);
@@ -531,6 +501,10 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 
 }

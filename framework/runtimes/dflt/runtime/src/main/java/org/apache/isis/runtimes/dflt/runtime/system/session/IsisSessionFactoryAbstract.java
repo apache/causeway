@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -65,9 +66,10 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final UserProfileLoader userProfileLoader;
     private final List<Object> serviceList;
+    private final OidMarshaller oidMarshaller;
 
     public IsisSessionFactoryAbstract(final DeploymentType deploymentType, final IsisConfiguration configuration, final SpecificationLoaderSpi specificationLoader, final TemplateImageLoader templateImageLoader, final AuthenticationManager authenticationManager,
-            final AuthorizationManager authorizationManager, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory, final List<Object> serviceList) {
+            final AuthorizationManager authorizationManager, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory, final List<Object> serviceList, OidMarshaller oidMarshaller) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(configuration, is(not(nullValue())));
@@ -88,6 +90,7 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         this.userProfileLoader = userProfileLoader;
         this.persistenceSessionFactory = persistenceSessionFactory;
         this.serviceList = serviceList;
+        this.oidMarshaller = oidMarshaller;
     }
 
     // ///////////////////////////////////////////
@@ -185,5 +188,10 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     @Override
     public List<Object> getServices() {
         return serviceList;
+    }
+    
+    @Override
+    public OidMarshaller getOidMarshaller() {
+    	return oidMarshaller;
     }
 }

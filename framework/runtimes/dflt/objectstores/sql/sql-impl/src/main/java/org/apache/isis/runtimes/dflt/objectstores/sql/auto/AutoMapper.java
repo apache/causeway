@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
@@ -53,6 +54,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
@@ -267,7 +269,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         final Results rs = connector.select(completeSelectStatement(sql));
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(typedOid.getObjectSpecId());
         if (rs.next()) {
-            return loadObject(connector, objectSpec, rs);
+            return loadMappedObject(connector, objectSpec, rs);
         } else {
             throw new ObjectNotFoundException("No object with with " + typedOid + " in table " + table);
         }
@@ -340,7 +342,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             final Results rs = connector.select(selectStatment);
             final int maxInstances = Defaults.getMaxInstances();
             for (int count = 0; rs.next() && count < maxInstances; count++) {
-                final ObjectAdapter instance = loadObject(connector, cls, rs);
+                final ObjectAdapter instance = loadMappedObject(connector, cls, rs);
                 LOG.debug("  instance  " + instance);
                 instances.addElement(instance);
             }
@@ -351,7 +353,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         }
     }
 
-    private ObjectAdapter loadObject(final DatabaseConnector connector, final ObjectSpecification cls, final Results rs) {
+    private ObjectAdapter loadMappedObject(final DatabaseConnector connector, final ObjectSpecification cls, final Results rs) {
         final Oid oid = idMapping.recreateOid(rs, specification);
         final ObjectAdapter adapter = getAdapter(cls, oid);
 
@@ -384,7 +386,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             }
         } else {
             rs.close();
-            throw new SqlObjectStoreException("Unable to load data from " + table + " with id " + object.getOid().enString());
+            throw new SqlObjectStoreException("Unable to load data from " + table + " with id " + object.getOid().enString(getOidMarshaller()));
         }
     }
 
@@ -491,5 +493,15 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     public String toString() {
         return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappingByField.size() + ",specification=" + specification.getFullIdentifier() + "]";
     }
+
+    
+
+    ////////////////////////////////////////////////////////////////
+    // dependencies (from context)
+    ////////////////////////////////////////////////////////////////
+
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 
 }

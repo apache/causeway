@@ -129,7 +129,7 @@ public class XmlObjectStoreTest_toRefactor {
     public void validatesGettingObjectStoreInstances() throws Exception {
         final SaveObjectCommand command = objectStore.createSaveObjectCommand(adapter1);
         objectStore.execute(Collections.<PersistenceCommand> singletonList(command));
-        final List<ObjectAdapter> array = objectStore.getInstances(persistenceHelper);
+        final List<ObjectAdapter> array = objectStore.loadInstancesAndAdapt(persistenceHelper);
         assertTrue(array.size() == 1);
     }
 
@@ -155,7 +155,7 @@ public class XmlObjectStoreTest_toRefactor {
     public void validatesObjectStoreGetObject() throws Exception {
         final SaveObjectCommand command = objectStore.createSaveObjectCommand(adapter1);
         objectStore.execute(Collections.<PersistenceCommand> singletonList(command));
-        final ObjectAdapter retrievedAdapter = objectStore.getObject((TypedOid) adapter1.getOid());
+        final ObjectAdapter retrievedAdapter = objectStore.loadInstanceAndAdapt((TypedOid) adapter1.getOid());
         assertTrue(retrievedAdapter.getOid().equals(adapter1.getOid()));
     }
 

@@ -196,7 +196,7 @@ public class NoSqlObjectStoreTest_interactWith_db {
             }
         });
 
-        store.getInstances(persistenceQuery);
+        store.loadInstancesAndAdapt(persistenceQuery);
     }
 
     @Test

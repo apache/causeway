@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -48,7 +49,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.qu
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.queries.QueryUtil;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.JdoOidSerializer;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
@@ -338,10 +339,10 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     }
 
     // ///////////////////////////////////////////////////////////////////////
-    // getObject, resolveImmediately, resolveField
+    // loadMappedObject, resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////
 
-    public ObjectAdapter getObject(final TypedOid oid) {
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
         ensureOpened();
         ensureInTransaction();
 
@@ -349,21 +350,19 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
             LOG.debug("getObject; oid=" + oid);
         }
 
-        Object result = getPojo(oid);
-        final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(oid, result);
-        
-        //TODO: loadPostProcessor.loaded(adapter);
-        return adapter;
+        final Object pojo = loadPojo(oid);
+        return getPersistenceSession().mapRecreatedPojo(oid, pojo);
     }
 
-    
+
     /**
      * not API.
      */
-    public Object getPojo(final TypedOid oid) {
+    public Object loadPojo(final TypedOid oid) {
+    	
         // REVIEW: does it make sense to get these directly?  not sure, so for now have decided to fail fast. 
         if(oid instanceof AggregatedOid) {
-            throw new UnsupportedOperationException("Cannot retrieve aggregated objects directly, oid: " + oid.enString());
+            throw new UnsupportedOperationException("Cannot retrieve aggregated objects directly, oid: " + oid.enString(getOidMarshaller()));
         }
         
         final RootOid rootOid = (RootOid) oid;
@@ -371,8 +370,8 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         Object result = null;
         try {
             final Class<?> cls = clsOf(rootOid);
-            final Object idPropValue = idValueOf(rootOid);
-            result = getPersistenceManager().getObjectById(cls, idPropValue);
+            final Object jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(rootOid);
+            result = getPersistenceManager().getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
             throw e;
         }
@@ -382,14 +381,8 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         }
         return result;
     }
+
     
-    public static Object idValueOf(final RootOid oid) {
-
-        Object dnOid = JdoOidSerializer.toOidStr(oid);
-
-        return dnOid.toString();
-    }
-
 
 
     /**
@@ -409,7 +402,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         ensureInTransaction();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString());
+            LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(getOidMarshaller()));
         }
 
         if (adapter.isResolved()) {
@@ -432,42 +425,28 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
             }
             final AggregatedOid aggregatedOid = (AggregatedOid) oid;
             final TypedOid parentOid = aggregatedOid.getParentOid();
-            final ObjectAdapter parentAdapter = this.getObject(parentOid);
+            final ObjectAdapter parentAdapter = loadInstanceAndAdapt(parentOid);
             resolveImmediately(parentAdapter);
             return;
         }
 
-        // REVIEW: does this make sense?
-        if (adapter.getObject() == null) {
+        // REVIEW: is this possible?
+        final Object domainObject = adapter.getObject();
+		if (domainObject == null) {
             throw new ObjectNotFoundException(adapter.getOid());
         }
 
         try {
-            final Object domainObject = adapter.getObject();
             getPersistenceManager().refresh(domainObject);
-            
-            // REVIEW: I don't think this complexity is required...
-//            if(JdoPropertyUtils.hasPrimaryKeyProperty(adapter)) {
-//                JdoPropertyUtils.setPropertyIdFromOid(adapter, getAdapterFactory());
-//                final Object domainObject = adapter.getObject();
-//                getPersistenceManager().refresh(domainObject);
-//            } else {
-//                RootOid rootOid = (RootOid) adapter.getOid();
-//                Object dnOid = new OIDImpl(adapter.getSpecification().getFullIdentifier(), Long.parseLong(rootOid.getIdentifier()));
-//                // will cause postLoad() lifecycle callback to fire,
-//                // which sets up the adapters as required
-//                getPersistenceManager().getObjectById(dnOid);
-//            }
         } catch (final RuntimeException e) {
             throw new ObjectNotFoundException(adapter.getOid(), e);
         }
 
         // possibly redundant because also called in the post-load event
-        // listener,
-        // but is required if we were ever to get an eager left-outer-join as
-        // the result of a refresh (sounds possible).
+        // listener, but (with JPA impl) found it was required if we were ever to 
+        // get an eager left-outer-join as the result of a refresh (sounds possible).
         
-        lifecycleListener.postLoadProcessingFor((PersistenceCapable) adapter.getObject());
+        lifecycleListener.postLoadProcessingFor((PersistenceCapable) domainObject);
     }
 
     /**
@@ -479,32 +458,28 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
 
         final ObjectAdapter referencedCollectionAdapter = association.get(object);
 
-        // if a proxy collection, then force it to initialize.
+        // this code originally brought in from the JPA impl, but seems reasonable.
         if (association.isOneToManyAssociation()) {
             ensureThatState(referencedCollectionAdapter, is(notNullValue()));
 
             final Object referencedCollection = referencedCollectionAdapter.getObject();
             ensureThatState(referencedCollection, is(notNullValue()));
 
-            // just 'touching' the object is sufficient.
+            // if a proxy collection, then force it to initialize.  just 'touching' the object is sufficient.
+            // REVIEW: I wonder if this is actually needed; does JDO use proxy collections?
             referencedCollection.hashCode();
         }
 
-        if (referencedCollectionAdapter != null) {
-            // this works and seems to be sufficient (is also called from
-            // NakedPostLoadEventListener for direct retrievals rather than
-            // walking the
-            // graph).
-            
-            // TODO: loadPostProcessor.loaded(referencedCollectionAdapter);
-        }
+        // the JPA impl used to also call its lifecycle listener on the referenced collection object, eg List,
+        // itself.  I don't think this makes sense to do for JDO (the collection is not a PersistenceCapable).
     }
 
+    
     // ///////////////////////////////////////////////////////////////////////
     // getInstances, hasInstances
     // ///////////////////////////////////////////////////////////////////////
 
-    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
         ensureOpened();
         ensureInTransaction();
 
@@ -712,6 +687,10 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 
 }

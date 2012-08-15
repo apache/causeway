@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -47,7 +48,7 @@ public class PersistorSessionHydratorTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private RootOid epvTransientOid = RootOidDefault.deString("!SMPL:-999");
+    private RootOid epvTransientOid = RootOidDefault.deString("!SMPL:-999", new OidMarshaller());
 
     private IdentifierGenerator mockIdentifierGenerator = context.mock(IdentifierGenerator.class);
     {
@@ -104,7 +105,7 @@ public class PersistorSessionHydratorTest {
         iswf.setUpSystem();
         
         // when
-        final RootOidDefault oid = RootOidDefault.deString("SMPL:1");
+        final RootOidDefault oid = RootOidDefault.deString("SMPL:1", new OidMarshaller());
         final ObjectAdapter adapter = iswf.recreateAdapter(oid);
         
         // then

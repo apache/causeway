@@ -22,7 +22,9 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -42,10 +44,11 @@ public class DropDownChoicesForObjectAdapterMementos extends DropDownChoice<Obje
         @Override
         public String getIdValue(final ObjectAdapterMemento nom, final int index) {
             final Oid oid = nom.getObjectAdapter().getOid();
-            RootOid rootOid = (RootOid) oid;
-            return rootOid.enString();
+            return oid.enString(getOidMarshaller());
         }
     }
+
+
 
     private static final long serialVersionUID = 1L;
 
@@ -60,5 +63,15 @@ public class DropDownChoicesForObjectAdapterMementos extends DropDownChoice<Obje
     @Override
     protected boolean wantOnSelectionChangedNotifications() {
         return true;
+    }
+    
+
+    
+    // //////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////
+
+    protected static OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 }

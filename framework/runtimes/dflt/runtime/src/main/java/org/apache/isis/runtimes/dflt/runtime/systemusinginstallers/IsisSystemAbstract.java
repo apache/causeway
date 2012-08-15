@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -175,6 +176,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
         final TemplateImageLoader templateImageLoader = obtainTemplateImageLoader();
         final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType);
+        final OidMarshaller oidMarshaller = obtainOidMarshaller();
 
         final List<Object> servicesList = obtainServices();
 
@@ -182,7 +184,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
         runtimeContext.injectInto(reflector);
 
-        return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
+		return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList, oidMarshaller);
     }
     
 }

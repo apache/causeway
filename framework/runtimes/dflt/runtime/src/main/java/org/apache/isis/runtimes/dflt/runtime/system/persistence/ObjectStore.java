@@ -26,6 +26,8 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -114,12 +116,23 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
     void execute(final List<PersistenceCommand> commands);
 
     // ///////////////////////////////////////////////////////
-    // getObject
+    // loadInstancesAndAdapt, hasInstances
+    // ///////////////////////////////////////////////////////
+
+    List<ObjectAdapter> loadInstancesAndAdapt(PersistenceQuery persistenceQuery);
+
+    boolean hasInstances(ObjectSpecification specification);
+
+    // ///////////////////////////////////////////////////////
+    // loadInstanceAndAdapt
     // ///////////////////////////////////////////////////////
 
     /**
      * Retrieves the object identified by the specified {@link TypedOid} from the object
-     * store. The cache should be checked first and, if the object is cached,
+     * store, {@link RecreatedPojoRemapper#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped} into
+     * the {@link AdapterManager}.
+     * 
+     * <p>The cache should be checked first and, if the object is cached,
      * the cached version should be returned. It is important that if this
      * method is called again, while the originally returned object is in
      * working memory, then this method must return that same Java object.
@@ -137,15 +150,15 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
      * specified {@link TypedOid} then a {@link ObjectNotFoundException} should be
      * thrown.
      * 
-     * <para>Note that the OID could be for an internal collection, and is
-     * therefore related to the parent object (using a <class>CompositeOid
-     * </class>). The elements for an internal collection are commonly stored as
+     * <p>
+     * Note that the OID could be for an internal collection, and is
+     * therefore related to the parent object (using a {@link CollectionOid}).
+     * The elements for an internal collection are commonly stored as
      * part of the parent object, so to get element the parent object needs to
      * be retrieved first, and the internal collection can be got from that.
-     * </para>
      * 
      * <p>
-     * Returns the stored ObjectAdapter object .
+     * Returns the stored {@link ObjectAdapter} object.
      * 
      * 
      * @return the requested {@link ObjectAdapter} that has the specified
@@ -154,27 +167,12 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
      * @throws ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
-    ObjectAdapter getObject(TypedOid oid);
+    ObjectAdapter loadInstanceAndAdapt(TypedOid oid);
 
-
-    // ///////////////////////////////////////////////////////
-    // getInstances, hasInstances
-    // ///////////////////////////////////////////////////////
-
-    List<ObjectAdapter> getInstances(PersistenceQuery persistenceQuery);
-
-    boolean hasInstances(ObjectSpecification specification);
 
     // ///////////////////////////////////////////////////////
     // resolveField, resolveImmediately
     // ///////////////////////////////////////////////////////
-
-    /**
-     * Called by the resolveEagerly method in ObjectAdapterManager.
-     * 
-     * @see PersistenceSession#resolveField(ObjectAdapter, ObjectAssociation)
-     */
-    void resolveField(ObjectAdapter object, ObjectAssociation field);
 
     /**
      * Called by the resolveImmediately method in ObjectAdapterManager.
@@ -182,6 +180,13 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
      * @see PersistenceSession#resolveImmediately(ObjectAdapter)
      */
     void resolveImmediately(ObjectAdapter object);
+
+    /**
+     * Called by the resolveEagerly method in ObjectAdapterManager.
+     * 
+     * @see PersistenceSession#resolveField(ObjectAdapter, ObjectAssociation)
+     */
+    void resolveField(ObjectAdapter object, ObjectAssociation field);
 
     // ///////////////////////////////////////////////////////
     // Services

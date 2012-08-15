@@ -17,8 +17,11 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
@@ -64,8 +67,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             throw new IllegalStateException("objectAdapter not provided");
         }
         final StringBuilder buf = new StringBuilder("objects/");
-        RootOid rootOid = (RootOid) objectAdapter.getOid();
-		buf.append(rootOid.enString());
+        buf.append(objectAdapter.getOid().enString(getOidMarshaller()));
         return buf.toString();
     }
 
@@ -98,5 +100,16 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
         final String url = buf.toString();
         return LinkBuilder.newBuilder(resourceContext, rel, representationType, url);
     }
+
+
+    
+    //////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////
+    
+    protected static OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+
 
 }

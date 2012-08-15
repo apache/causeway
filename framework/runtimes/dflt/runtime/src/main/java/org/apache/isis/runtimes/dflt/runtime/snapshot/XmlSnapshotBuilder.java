@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.snapshot.XmlSchema;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -42,6 +43,7 @@ public class XmlSnapshotBuilder {
 
     private final Snapshottable snapshottable;
     private XmlSchema schema;
+    private OidMarshaller oidMarshaller = new OidMarshaller();
 
     static class PathAndAnnotation {
         public PathAndAnnotation(final String path, final String annotation) {
@@ -64,6 +66,11 @@ public class XmlSnapshotBuilder {
         return this;
     }
 
+    public XmlSnapshotBuilder usingOidMarshaller(final OidMarshaller oidMarshaller) {
+        this.oidMarshaller = oidMarshaller;
+        return this;
+    }
+
     public XmlSnapshotBuilder includePath(final String path) {
         return includePathAndAnnotation(path, null);
     }
@@ -75,7 +82,7 @@ public class XmlSnapshotBuilder {
 
     public XmlSnapshot build() {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(snapshottable);
-        final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema) : new XmlSnapshot(adapter);
+        final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema, oidMarshaller) : new XmlSnapshot(adapter, oidMarshaller);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {
                 snapshot.include(paa.path, paa.annotation);

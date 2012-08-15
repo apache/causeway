@@ -232,7 +232,7 @@ public class ObjectReader {
 
     
     ////////////////////////////////////////////////////////////////////////////
-    // from context
+    // dependencies (from context)
     ////////////////////////////////////////////////////////////////////////////
     
     protected Persistor getPersistenceSession() {
@@ -248,7 +248,7 @@ public class ObjectReader {
     }
 
     protected OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
+        return IsisContext.getOidMarshaller();
     }
 
 }

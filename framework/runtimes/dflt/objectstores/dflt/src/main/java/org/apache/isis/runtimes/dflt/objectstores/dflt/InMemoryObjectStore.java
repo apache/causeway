@@ -236,17 +236,17 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getObject(final TypedOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
         if(LOG.isDebugEnabled()) {
             LOG.debug("getObject " + oid);
         }
         final ObjectSpecification objectSpec = getSpecificationLookup().lookupBySpecId(oid.getObjectSpecId());
         final ObjectStoreInstances ins = instancesFor(objectSpec);
-        final ObjectAdapter object = ins.retrieveObject(oid);
-        if (object == null) {
+        final ObjectAdapter adapter = ins.getObjectAndMapIfRequired(oid);
+        if (adapter == null) {
             throw new ObjectNotFoundException(oid);
         } 
-        return object;
+        return adapter;
     }
 
     @Override
@@ -280,7 +280,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) throws ObjectPersistenceException, UnsupportedFindException {
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) throws ObjectPersistenceException, UnsupportedFindException {
 
         if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
             throw new IllegalArgumentException(MessageFormat.format("Provided PersistenceQuery not supported; was {0}; " + "the in-memory object store only supports {1}", persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));

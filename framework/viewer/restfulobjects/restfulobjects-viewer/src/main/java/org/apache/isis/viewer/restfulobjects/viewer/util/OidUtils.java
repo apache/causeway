@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
@@ -31,7 +32,7 @@ public final class OidUtils {
 
     public static ObjectAdapter getObjectAdapter(final ResourceContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr);
+        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
         return resourceContext.getAdapterManager().adapterFor(rootOid);
     }
 
@@ -40,8 +41,12 @@ public final class OidUtils {
         if(!(oid instanceof RootOid)) {
             throw new IllegalArgumentException("objectAdapter must be a root adapter");
         }
-        RootOid rootOid = (RootOid) oid;
-        return rootOid != null ? rootOid.enString() : null;
+        return oid != null ? oid.enString(getOidMarshaller()) : null;
     }
 
+    protected static OidMarshaller getOidMarshaller() {
+		return new OidMarshaller();
+	}
+
+    
 }

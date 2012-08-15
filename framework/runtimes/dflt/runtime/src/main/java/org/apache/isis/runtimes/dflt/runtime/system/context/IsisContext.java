@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugList;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -378,6 +379,16 @@ public abstract class IsisContext implements DebuggableWithTitle {
     public static List<Object> getServices() {
         return getSessionFactory().getServices();
     }
+
+    /**
+     * Convenience method.
+     * 
+     * @see IsisSessionFactory#getOidMarshaller()
+     */
+    public static OidMarshaller getOidMarshaller() {
+        return getSessionFactory().getOidMarshaller();
+    }
+
 
     // ///////////////////////////////////////////////////////////
     // Static Convenience methods (session scoped)

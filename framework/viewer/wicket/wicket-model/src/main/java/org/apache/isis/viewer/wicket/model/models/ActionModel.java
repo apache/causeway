@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.NoResultsHandler;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -87,8 +88,6 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
          */
         SELECT
     }
-
-    private final static OidMarshaller oidMarshaller = new OidMarshaller();
 
     /**
      * Factory; for use directly.
@@ -144,15 +143,15 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return ActionParams.compatibleWith(contextAdapter, actionParam) ? Mode.RESULTS : Mode.PARAMETERS;
     }
 
-    private static void addActionParamContextIfPossible(final ObjectAction noAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
+
+	private static void addActionParamContextIfPossible(final ObjectAction noAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
         if (contextAdapter == null) {
             return;
         }
         int i = 0;
         for (final ObjectActionParameter actionParam : noAction.getParameters()) {
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
-                RootOid rootOid = (RootOid)contextAdapter.getOid();
-				final String oidKeyValue = "" + i + "=" + rootOid.enString();
+                final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
                 PageParameterNames.ACTION_PARAM_CONTEXT.addTo(pageParameters, oidKeyValue);
                 return;
             }
@@ -246,7 +245,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     
     private static RootOid oidFor(final PageParameters pageParameters) {
         String oidStr = PageParameterNames.OBJECT_OID.getFrom(pageParameters);
-        return oidMarshaller.unmarshal(oidStr, RootOid.class);
+        return getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
 
     private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode, final SingleResultsMode singleResultsMode) {
@@ -266,19 +265,19 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
 
         final Map.Entry<Integer, String> mapEntry = parse(paramContext);
 
-        Oid oid;
         final int paramNum = mapEntry.getKey();
         if (paramNum >= parameterCount) {
             return false;
         }
 
+        RootOid oid;
         try {
-            oid = RootOidDefault.deStringEncoded(mapEntry.getValue());
+            oid = RootOidDefault.deStringEncoded(mapEntry.getValue(), getOidMarshaller());
         } catch (final Exception e) {
             return false;
         }
 
-        final ObjectAdapter argumentAdapter = getAdapterManager().getAdapterFor(oid);
+        final ObjectAdapter argumentAdapter = getAdapterManager().adapterFor(oid);
         if (argumentAdapter == null) {
             return false;
         }
@@ -443,5 +442,15 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     public void reset() {
         this.actionMode = determineMode(actionMemento.getAction());
     }
+
+    
+    //////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////
+    
+    protected static OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+
 
 }

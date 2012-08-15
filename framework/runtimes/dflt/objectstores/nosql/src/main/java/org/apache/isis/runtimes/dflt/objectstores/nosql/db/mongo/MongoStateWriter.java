@@ -21,10 +21,12 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
@@ -58,7 +60,7 @@ public class MongoStateWriter implements StateWriter {
 
     @Override
     public void writeOid(final TypedOid typedOid) {
-        writeField(PropertyNames.OID, typedOid.enString());
+        writeField(PropertyNames.OID, typedOid.enString(getOidMarshaller()));
         if(typedOid instanceof RootOid) {
             RootOid rootOid = (RootOid) typedOid;
             writeField(PropertyNames.MONGO_INTERNAL_ID, rootOid.getIdentifier());
@@ -115,4 +117,13 @@ public class MongoStateWriter implements StateWriter {
         }
         dbObject.put(id, collection);
     }
+    
+    // ///////////////////////////////////////////////////////////////////
+    // dependencies
+    // ///////////////////////////////////////////////////////////////////
+
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
+
 }

@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
  * and also identifies the type of the object.
  *
  * <p>
- * In addition, can be directly encoded/decoded into strings.  The {@link #enString()} interface
+ * In addition, can be directly encoded/decoded into strings.  The {@link #enString(OidMarshaller)} interface
  * is defined in the interface; implementations must also provide a static 
  * <tt>deString(String)</tt> factory method.
  */

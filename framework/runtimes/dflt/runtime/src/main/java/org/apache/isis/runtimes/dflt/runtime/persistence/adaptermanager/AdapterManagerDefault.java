@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -440,7 +441,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         
         // associate root adapter with the new Oid, and remap
         if (LOG.isDebugEnabled()) {
-            LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: " + persistedRootOid.enString() + " (was: " + transientRootOid.enString() + ")");
+            LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: " + persistedRootOid.enString(getOidMarshaller()) + " (was: " + transientRootOid.enString(getOidMarshaller()) + ")");
         }
         adapter.replaceOid(persistedRootOid);
         oidAdapterMap.add(persistedRootOid, adapter);
@@ -498,7 +499,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         }
     }
 
-    private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
+	private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter);
     }
@@ -725,6 +726,10 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     // /////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////////////
+
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 
     public OidGenerator getOidGenerator() {
         return IsisContext.getPersistenceSession().getOidGenerator();

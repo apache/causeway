@@ -49,20 +49,52 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <dd>precedes aggregate oid</dd>
  * <dt>$</dt>
  * <dd>precedes collection name</dd>
+ * <dt>^</dt>
+ * <dd>precedes version</dd>
  * </dl>
+ * 
  * <p>
  * Note that # and ; were not chosen as separators to minimize noise when URL encoding OIDs.
  */
 public class OidMarshaller {
 
-    private static Pattern OIDSTR_PATTERN = 
-            Pattern.compile("^((([!])?([^:@#$]+):([^:@#$]+))((~[^:@#$]+:[^:@#$]+)*))([$]([^:@#$]+))?$");
+	private static final String TRANSIENT_INDICATOR = "!";
+    private static final String DIGITS = "\\d+";
+	private static final String SEPARATOR = ":";
+	private static final String SEPARATOR_NESTING = "~";
+	private static final String SEPARATOR_COLLECTION = "$";
+	private static final String SEPARATOR_VERSION = "^";
+
+	private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_COLLECTION + "\\" + SEPARATOR_VERSION + "@#" + "]+";
+	private static final String WORD_GROUP = "(" + WORD + ")";
+    
+	private static Pattern OIDSTR_PATTERN = 
+            Pattern.compile(
+            		"^(" +
+            		   "(" +
+            		     "([" + TRANSIENT_INDICATOR + "])?" +
+            		     WORD_GROUP + SEPARATOR + WORD_GROUP + 
+            		   ")" +
+            		   "(" + 
+            			 "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*" + // nesting of aggregates
+            		   ")" +
+            		 ")" +
+    		 		 "(" + "[" + SEPARATOR_COLLECTION + "]" + WORD + ")?"  + // optional collection name
+    		 		 "(" + "[\\" + SEPARATOR_VERSION + "]" + DIGITS + ")?" + // optional version
+            		 "$");
 
     ////////////////////////////////////////////////////////////////
-    // unmarshall
+    // constructor
     ////////////////////////////////////////////////////////////////
 
-    public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
+	public OidMarshaller() {}
+	
+    ////////////////////////////////////////////////////////////////
+    // unmarshal
+    ////////////////////////////////////////////////////////////////
+
+    @SuppressWarnings("unchecked")
+	public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
         
         final Matcher matcher = OIDSTR_PATTERN.matcher(oidStr);
         if (!matcher.matches()) {
@@ -72,9 +104,8 @@ public class OidMarshaller {
         final int groupCount = matcher.groupCount();
 
         final String isTransientStr = getGroup(matcher, 3);
-        boolean isTransient = "!".equals(isTransientStr);
+        boolean isTransient = TRANSIENT_INDICATOR.equals(isTransientStr);
         
-        final String oidStrWithoutCollectionName = getGroup(matcher, 1);
         final String rootOidStr = getGroup(matcher, 2);
         
         final String rootObjectType = getGroup(matcher, 4);
@@ -82,34 +113,41 @@ public class OidMarshaller {
         
         final String aggregateOidPart = getGroup(matcher, 6);
         final List<AggregateOidPart> aggregateOidParts = Lists.newArrayList();
-        final Splitter tildaSplitter = Splitter.on("~");
-        final Splitter colonSplitter = Splitter.on(":");
+        final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
+        final Splitter partsSplitter = Splitter.on(SEPARATOR);
         if(aggregateOidPart != null) {
-            final Iterable<String> tildaSplitIter = tildaSplitter.split(aggregateOidPart);
+            final Iterable<String> tildaSplitIter = nestingSplitter.split(aggregateOidPart);
             for(String str: tildaSplitIter) {
                 if(Strings.isNullOrEmpty(str)) {
                     continue; // leading "~"
                 }
-                final Iterator<String> colonSplitIter = colonSplitter.split(str).iterator();
+                final Iterator<String> colonSplitIter = partsSplitter.split(str).iterator();
                 final String objectType = colonSplitIter.next();
                 final String localId = colonSplitIter.next();
                 aggregateOidParts.add(new AggregateOidPart(objectType, localId));
             }
         }
-        final String collectionName = getGroup(matcher, groupCount); // last one
+        final String collectionPart = getGroup(matcher, groupCount-1);
+        String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
         
+        final String versionPart = getGroup(matcher, groupCount);
+        Long version = versionPart != null ? Long.parseLong(versionPart.substring(1)) : null;
+
+
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOidDefault.class); 
-                return (T)new RootOidDefault(ObjectSpecId.of(rootObjectType), rootIdentifier, State.valueOf(isTransient));
+                return (T)new RootOidDefault(ObjectSpecId.of(rootObjectType), rootIdentifier, State.valueOf(isTransient), version);
             } else {
                 ensureCorrectType(oidStr, requestedType, AggregatedOid.class);
                 final AggregateOidPart lastPart = aggregateOidParts.remove(aggregateOidParts.size()-1);
-                final TypedOid parentOid = parentOidFor(rootOidStr, aggregateOidParts);
+                final TypedOid parentOid = parentOidFor(rootOidStr, aggregateOidParts, version);
                 return (T)new AggregatedOid(ObjectSpecId.of(lastPart.objectType), parentOid, lastPart.localId);
             }
         } else {
-            TypedOid parentOid = this.unmarshal(oidStrWithoutCollectionName, TypedOid.class);
+            final String oidStrWithoutCollectionName = getGroup(matcher, 1);
+            final String parentOidStr = oidStrWithoutCollectionName + (version != null? SEPARATOR_VERSION + version: "");
+            TypedOid parentOid = this.unmarshal(parentOidStr, TypedOid.class);
             ensureCorrectType(oidStr, requestedType, CollectionOid.class);
             return (T)new CollectionOid(parentOid, collectionName);
         }
@@ -123,15 +161,18 @@ public class OidMarshaller {
         String objectType;
         String localId;
         public String toString() {
-            return "~" + objectType + ":" + localId;
+            return SEPARATOR_NESTING + objectType + SEPARATOR + localId;
         }
     }
     
 
-    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts) {
+    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, Long version) {
         final StringBuilder buf = new StringBuilder(rootOidStr);
         for(AggregateOidPart part: aggregateOidParts) {
             buf.append(part.toString());
+        }
+        if(version != null) {
+            buf.append(SEPARATOR_VERSION).append(version);
         }
         return unmarshal(buf.toString(), TypedOid.class);
     }
@@ -154,19 +195,35 @@ public class OidMarshaller {
 
     
     ////////////////////////////////////////////////////////////////
-    // marshall
+    // marshal
     ////////////////////////////////////////////////////////////////
-    
-    public String marshal(RootOid rootOid) {
-        return (rootOid.isTransient()? "!" : "") + rootOid.getObjectSpecId() + ":" + rootOid.getIdentifier();
+
+    public final String marshal(RootOid rootOid) {
+        return marshalNoVersion(rootOid) + versionIfAny(rootOid);
     }
 
-    public String marshal(CollectionOid collectionOid) {
-        return collectionOid.getParentOid().enString() + "$" + collectionOid.getName();
+    public final String marshalNoVersion(RootOid rootOid) {
+        return (rootOid.isTransient()? TRANSIENT_INDICATOR : "") + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
 
-    public String marshal(AggregatedOid aggregatedOid) {
-        return aggregatedOid.getParentOid().enString() + "~" + aggregatedOid.getObjectSpecId() + ":" + aggregatedOid.getLocalId();
+    public final String marshal(CollectionOid collectionOid) {
+        return marshalNoVersion(collectionOid) + versionIfAny(collectionOid);
+    }
+
+    public String marshalNoVersion(CollectionOid collectionOid) {
+        return collectionOid.getParentOid().enStringNoVersion(this) + SEPARATOR_COLLECTION + collectionOid.getName();
+    }
+
+    public final String marshal(AggregatedOid aggregatedOid) {
+        return marshalNoVersion(aggregatedOid) + versionIfAny(aggregatedOid);
+    }
+
+    public final String marshalNoVersion(AggregatedOid aggregatedOid) {
+        return aggregatedOid.getParentOid().enStringNoVersion(this) + SEPARATOR_NESTING + aggregatedOid.getObjectSpecId() + SEPARATOR + aggregatedOid.getLocalId();
+    }
+
+    private static String versionIfAny(Oid oid) {
+        return oid.getVersion() != null? (SEPARATOR_VERSION + oid.getVersion()): "";
     }
 
 

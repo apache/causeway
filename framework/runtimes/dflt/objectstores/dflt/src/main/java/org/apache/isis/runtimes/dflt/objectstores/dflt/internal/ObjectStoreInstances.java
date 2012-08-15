@@ -129,7 +129,7 @@ public class ObjectStoreInstances {
      * {@link PersistenceSessionHydrator#mapRecreatedPojo(Object, Object) recreate}
      * a new {@link ObjectAdapter adapter}.
      */
-    public ObjectAdapter retrieveObject(final Oid oid) {
+    public ObjectAdapter getObjectAndMapIfRequired(final Oid oid) {
         final Object pojo = getObjectInstances().get(oid);
         if (pojo == null) {
             return null;
@@ -172,7 +172,7 @@ public class ObjectStoreInstances {
     private List<ObjectAdapter> elements() {
         final List<ObjectAdapter> v = new ArrayList<ObjectAdapter>(getObjectInstances().size());
         for (final Oid oid : getObjectInstances().keySet()) {
-            v.add(retrieveObject(oid));
+            v.add(getObjectAndMapIfRequired(oid));
         }
         return v;
     }
@@ -187,7 +187,7 @@ public class ObjectStoreInstances {
             debug.appendln("no instances");
         }
         for (final Oid oid : getObjectInstances().keySet()) {
-            final ObjectAdapter objectAdapter = retrieveObject(oid);
+            final ObjectAdapter objectAdapter = getObjectAndMapIfRequired(oid);
             final String title = objectAdapter.titleString();
             final Object object = getObjectInstances().get(oid);
             debug.appendln(oid.toString(), object + " (" + title + ")");

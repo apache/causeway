@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -74,8 +75,10 @@ public class ActionFieldBuilderTest {
     @Mock
     protected AuthorizationManager mockAuthorizationManager;
 
+
     private IsisConfiguration configuration;
     private List<Object> servicesList;
+    private OidMarshaller oidMarshaller;
 
     private ActionFieldBuilder builder;
 
@@ -85,6 +88,8 @@ public class ActionFieldBuilderTest {
 
         configuration = new IsisConfigurationDefault();
         servicesList = Collections.emptyList();
+        
+        oidMarshaller = new OidMarshaller();
 
         context.checking(new Expectations() {
             {
@@ -107,7 +112,7 @@ public class ActionFieldBuilderTest {
             }
         };
 
-        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList, oidMarshaller);
 
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
         IsisContextStatic.createRelaxedInstance(sessionFactory);

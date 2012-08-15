@@ -125,7 +125,7 @@ public class NoSqlObjectStore implements ObjectStoreSpi {
     }
 
     @Override
-    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         final List<ObjectAdapter> instances = Lists.newArrayList();
         appendInstances(persistenceQuery, specification, instances);
@@ -155,7 +155,7 @@ public class NoSqlObjectStore implements ObjectStoreSpi {
 
 
     @Override
-    public ObjectAdapter getObject(final TypedOid oid) {
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
         final String key = keyCreator.getIdentifierForPersistentRoot(oid);
         final ObjectSpecification objectSpec = getSpecificationLookup().lookupBySpecId(oid.getObjectSpecId());
         final StateReader reader = database.getInstance(key, objectSpec.getSpecId());

@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.util.Oids;
 
@@ -96,7 +95,7 @@ public class ObjectAdapterMemento implements Serializable {
         PERSISTENT {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
-                TypedOid oid = oidMarshaller.unmarshal(oam.persistentOidStr, TypedOid.class);
+                TypedOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, TypedOid.class);
                 return getAdapterManager().adapterFor(oid);
             }
 
@@ -183,11 +182,9 @@ public class ObjectAdapterMemento implements Serializable {
      */
     private Memento transientMemento;
 
-    private final static OidMarshaller oidMarshaller = new OidMarshaller();
-    
     private ObjectAdapterMemento(final RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, Oids.isPersistent());
-        this.persistentOidStr = oidMarshaller.marshal(rootOid);
+        this.persistentOidStr = rootOid.enString(getOidMarshaller());
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
     }
@@ -221,7 +218,7 @@ public class ObjectAdapterMemento implements Serializable {
             return;
         } 
         
-        persistentOidStr = oidMarshaller.marshal(oid);
+        persistentOidStr = oid.enString(getOidMarshaller());
         type = Type.PERSISTENT;
     }
 
@@ -287,6 +284,10 @@ public class ObjectAdapterMemento implements Serializable {
     }
 
 
+    //////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////
+    
     private static AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -294,6 +295,11 @@ public class ObjectAdapterMemento implements Serializable {
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
+	protected static OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
     
+
 
 }

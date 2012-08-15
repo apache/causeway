@@ -30,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
@@ -65,7 +66,7 @@ public class UserProfileContentWriter implements ContentWriter {
             xml.append("      <objects>\n");
             for (final Object object : perspective.getObjects()) {
                 final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().adapterFor(object);
-                xml.append("        <object>" + adapter.getOid().enString() + "</object>\n");
+                xml.append("        <object>" + adapter.getOid().enString(getOidMarshaller()) + "</object>\n");
             }
             xml.append("      </objects>\n");
             xml.append("    </perspective>\n");
@@ -106,6 +107,10 @@ public class UserProfileContentWriter implements ContentWriter {
     // ///////////////////////////////////////////////////
     // Dependencies (from context)
     // ///////////////////////////////////////////////////
+
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 
     protected static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

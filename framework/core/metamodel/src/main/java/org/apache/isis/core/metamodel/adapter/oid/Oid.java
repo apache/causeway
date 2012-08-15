@@ -35,7 +35,11 @@ public interface Oid extends Encodable {
     /**
      * A string representation of this {@link Oid}.
      */
-    String enString();
+    String enString(OidMarshaller oidMarshaller);
+
+    String enStringNoVersion(OidMarshaller oidMarshaller);
+    
+    Long getVersion();
 
     /**
      * Flags whether this OID is for a transient (not-yet-persisted) object.

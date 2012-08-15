@@ -135,6 +135,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 if (singleResultsMode == ActionModel.SingleResultsMode.REDIRECT) {
                     panel.setResponsePage(new EntityPage(actualAdapter));
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
+                    panel.hideAll();
                     actionModel.getSelectionHandler().onSelected(panel, actualAdapter);
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.INLINE) {
                     final ComponentType componentType = ComponentType.ENTITY;
@@ -227,6 +228,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 permanentlyHide(componentType);
             }
         }
+    }
+
+    private void hideAll() {
+        hideAllBut(null);
     }
 
 }

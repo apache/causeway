@@ -134,8 +134,8 @@ public class IsisObjectStoreDelegating implements ObjectStoreSpi {
     // ////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getObject(final TypedOid oid) {
-        return underlying.getObject(oid);
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
+        return underlying.loadInstanceAndAdapt(oid);
     }
 
     @Override
@@ -153,8 +153,8 @@ public class IsisObjectStoreDelegating implements ObjectStoreSpi {
     // ////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
-        return underlying.getInstances(persistenceQuery);
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
+        return underlying.loadInstancesAndAdapt(persistenceQuery);
     }
 
     @Override

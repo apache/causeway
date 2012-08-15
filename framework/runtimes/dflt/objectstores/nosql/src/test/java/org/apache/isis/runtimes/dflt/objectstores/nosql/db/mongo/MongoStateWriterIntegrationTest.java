@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
@@ -79,7 +80,7 @@ public class MongoStateWriterIntegrationTest {
     @Test
     public void serialNumberNotStored() throws Exception {
         //writer.writeId("D01");
-        writer.writeOid(RootOidDefault.deString(SPEC_NAME+":"+"D01"));
+        writer.writeOid(RootOidDefault.deString(SPEC_NAME+":"+"D01", new OidMarshaller()));
         writer.flush();
 
         final DBCollection instances = testDb.getCollection(SPEC_NAME);
@@ -95,7 +96,7 @@ public class MongoStateWriterIntegrationTest {
     @Test
     public void writeFields() throws Exception {
         //writer.writeObjectType(SPEC_NAME);
-        writer.writeOid(RootOidDefault.deString(SPEC_NAME+":"+"D01"));
+        writer.writeOid(RootOidDefault.deString(SPEC_NAME+":"+"D01", new OidMarshaller()));
         writer.writeField("number", 1023);
         writer.writeField("string", "testing");
         writer.flush();
@@ -112,7 +113,7 @@ public class MongoStateWriterIntegrationTest {
     public void writeFields2() throws Exception {
 //        writer.writeId("3");
 //        writer.writeObjectType(SPEC_NAME);
-        writer.writeOid(RootOidDefault.deString(SPEC_NAME + ":" + "3"));
+        writer.writeOid(RootOidDefault.deString(SPEC_NAME + ":" + "3", new OidMarshaller()));
         writer.flush();
 
         writer.writeField("number", 1023);

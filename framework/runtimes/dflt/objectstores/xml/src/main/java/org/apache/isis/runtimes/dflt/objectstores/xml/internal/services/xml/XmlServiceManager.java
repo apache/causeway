@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.Utils;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 
 public class XmlServiceManager implements ServiceManager {
@@ -85,7 +86,7 @@ public class XmlServiceManager implements ServiceManager {
 //                    Utils.appendAttribute(writer, "type", element.oid.getObjectSpecId());
 //                    Utils.appendAttribute(writer, "id", element.oid.getIdentifier());
 
-                  Utils.appendAttribute(writer, "oid", element.oid.enString());
+                  Utils.appendAttribute(writer, "oid", element.oid.enString(getOidMarshaller()));
 
                     writer.append("/>\n");
                 }
@@ -93,15 +94,34 @@ public class XmlServiceManager implements ServiceManager {
             }
         });
     }
+    
+    
+    ////////////////////////////////////////////////////
+    // dependencies (from context)
+    ////////////////////////////////////////////////////
+    
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 }
 
 class ServiceElement {
     final RootOid oid;
 
     public ServiceElement(final RootOid oid) {
-        Assert.assertNotNull("oid", oid.enString());
+        Assert.assertNotNull("oid", oid.enString(getOidMarshaller()));
         this.oid = oid;
     }
+
+    
+    /////////////////////////////////////////////////////
+    // dependencies (from context)
+    /////////////////////////////////////////////////////
+    
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
+
 }
 
 class ServiceHandler extends DefaultHandler {
@@ -121,7 +141,12 @@ class ServiceHandler extends DefaultHandler {
         }
     }
 
+    
+    ///////////////////////////////////////////////////////
+    // dependencies (from context)
+    ///////////////////////////////////////////////////////
+    
     protected OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
+        return IsisContext.getOidMarshaller();
     }
 }

@@ -14,20 +14,22 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 * <dd>persistent root</dd>
 * <dt>!CUS:123</dt>
 * <dd>transient root</dd>
-* <dt>CUS:123#items</dt>
+* <dt>CUS:123$items</dt>
 * <dd>collection of persistent root</dd>
-* <dt>!CUS:123#items</dt>
+* <dt>!CUS:123$items</dt>
 * <dd>collection of transient root</dd>
-* <dt>CUS:123#NME:2</dt>
+* <dt>CUS:123~NME:2</dt>
 * <dd>aggregated object within persistent root</dd>
 * <dt>!CUS:123~NME:2</dt>
 * <dd>aggregated object within transient root</dd>
 * <dt>CUS:123~NME:2~CTY:LON</dt>
 * <dd>aggregated object within aggregated object within root</dd>
-* <dt>CUS:123~NME:2#items</dt>
+* <dt>CUS:123~NME:2$items</dt>
 * <dd>collection of an aggregated object within root</dd>
-* <dt>CUS:123~NME:2~CTY:LON#streets</dt>
+* <dt>CUS:123~NME:2~CTY:LON$streets</dt>
 * <dd>collection of an aggregated object within aggregated object within root</dd>
+* <dt>CUS:123^90809</dt>
+* <dd>persistent root with version information</dd>
 */
 public class OidMarshallerTest_unmarshal {
 
@@ -63,6 +65,29 @@ public class OidMarshallerTest_unmarshal {
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo((Oid)rootOid));
     }
+
+    @Test
+    public void persistentRootWithVersion() {
+        final String oidStr = "CUS:123^90809";
+        
+        final RootOidDefault rootOid = oidMarshaller.unmarshal(oidStr, RootOidDefault.class);
+        assertThat(rootOid.isTransient(), is(false));
+        assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
+        assertThat(rootOid.getIdentifier(), is("123"));
+        assertThat(rootOid.getVersion(), is(90809L));
+        
+        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
+        assertThat(oid, equalTo((Oid)rootOid));
+    }
+
+
+    @Test(expected=IllegalArgumentException.class)
+    public void persistentRootWithNonNumericVersion() {
+        final String oidStr = "CUS:123^d0809";
+        
+        oidMarshaller.unmarshal(oidStr, RootOidDefault.class);
+    }
+
 
     @Test
     public void transientRoot() {

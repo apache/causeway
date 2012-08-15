@@ -28,6 +28,7 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -190,6 +191,18 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
      */
     protected TemplateImageLoader obtainTemplateImageLoader() {
         return new TemplateImageLoaderAwt(getConfiguration());
+    }
+
+    // ///////////////////////////////////////////
+    // OidMarshaller
+    // ///////////////////////////////////////////
+
+    /**
+     * Just returns a {@link OidMarshaller}; subclasses may override if
+     * required.
+     */
+    protected OidMarshaller obtainOidMarshaller() {
+        return new OidMarshaller();
     }
 
     // ///////////////////////////////////////////

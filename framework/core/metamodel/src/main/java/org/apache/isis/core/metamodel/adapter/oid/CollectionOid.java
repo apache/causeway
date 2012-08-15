@@ -46,7 +46,6 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
     public CollectionOid(TypedOid parentOid, OneToManyAssociation otma) {
         this(parentOid, otma.getId());
-        cacheState();
     }
 
     public CollectionOid(TypedOid parentOid, String name) {
@@ -60,13 +59,19 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     // enstring
     // /////////////////////////////////////////////////////////
 
-    public static CollectionOid deString(String oidStr) {
-        return getOidMarshaller().unmarshal(oidStr, CollectionOid.class);
+    public static CollectionOid deString(String oidStr, OidMarshaller oidMarshaller) {
+        return oidMarshaller.unmarshal(oidStr, CollectionOid.class);
+    }
+
+
+    @Override
+    public String enString(OidMarshaller oidMarshaller) {
+        return oidMarshaller.marshal(this);
     }
 
     @Override
-    public String enString() {
-        return getOidMarshaller().marshal(this);
+    public String enStringNoVersion(OidMarshaller oidMarshaller) {
+        return oidMarshaller.marshalNoVersion(this);
     }
 
 
@@ -74,17 +79,24 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     // encodeable
     // /////////////////////////////////////////////////////////
 
+
     public CollectionOid(DataInputExtended inputStream) throws IOException {
-        final CollectionOid oid = CollectionOid.deString(inputStream.readUTF());
+        final CollectionOid oid = CollectionOid.deString(inputStream.readUTF(), getEncodingMarshaller());
         this.parentOid = oid.parentOid;
         this.name = oid.name;
     }
 
     @Override
     public void encode(DataOutputExtended outputStream) throws IOException {
-        outputStream.writeUTF(enString());
+        outputStream.writeUTF(enString(getEncodingMarshaller()));
     }
 
+    /**
+     * Cannot be a reference because Oid gets serialized by wicket viewer
+     */
+    private OidMarshaller getEncodingMarshaller() {
+        return new OidMarshaller();
+    }
 
     // /////////////////////////////////////////////////////////
     // Properties
@@ -99,6 +111,10 @@ public final class CollectionOid extends ParentedOid implements Serializable {
         return name;
     }
 
+    @Override
+    public Long getVersion() {
+        return parentOid.getVersion();
+    }
 
     // /////////////////////////////////////////////////////////
     // Value semantics
@@ -158,12 +174,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
     @Override
     public String toString() {
-        return "COID[" + getParentOid() + "," + name + "]";
-    }
-
-
-    protected static OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
+        return enString(new OidMarshaller());
     }
 
 

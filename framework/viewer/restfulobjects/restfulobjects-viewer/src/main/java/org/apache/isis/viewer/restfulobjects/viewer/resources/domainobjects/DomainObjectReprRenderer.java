@@ -19,6 +19,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -31,6 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contrib
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -61,8 +63,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectAdapter elementAdapter) {
-        RootOid rootOid = (RootOid) elementAdapter.getOid();
-		final String oidStr = rootOid.enString();
+        final String oidStr = ((RootOid) elementAdapter.getOid()).enString(getOidMarshaller());
         final String url = "objects/" + oidStr;
         final LinkBuilder builder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url).withTitle(elementAdapter.titleString());
         return builder;
@@ -298,5 +299,15 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
         return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).withTitle(title).build();
     }
+
+ 
+    
+    // ///////////////////////////////////////////////////////////////////
+    // dependencies (from context)
+    // ///////////////////////////////////////////////////////////////////
+
+    protected static OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 
 }

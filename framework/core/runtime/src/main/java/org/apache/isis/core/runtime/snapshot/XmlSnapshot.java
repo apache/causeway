@@ -38,6 +38,7 @@ import org.w3c.dom.NodeList;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -103,17 +104,21 @@ public class XmlSnapshot {
 
     private final XsMetaModel xsMeta;
 
+    private final OidMarshaller oidMarshaller;
+
     /**
      * Start a snapshot at the root object, using own namespace manager.
+     * @param oidMarshaller TODO
      */
-    public XmlSnapshot(final ObjectAdapter rootAdapter) {
-        this(rootAdapter, new XmlSchema());
+    public XmlSnapshot(final ObjectAdapter rootAdapter, OidMarshaller oidMarshaller) {
+        this(rootAdapter, new XmlSchema(), oidMarshaller);
     }
 
     /**
      * Start a snapshot at the root object, using supplied namespace manager.
+     * @param oidMarshaller TODO
      */
-    public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema) {
+    public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema, final OidMarshaller oidMarshaller) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(".ctor(" + log("rootObj", rootAdapter) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
@@ -123,6 +128,7 @@ public class XmlSnapshot {
         this.xsMeta = new XsMetaModel();
 
         this.schema = schema;
+        this.oidMarshaller = oidMarshaller;
 
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -793,8 +799,8 @@ public class XmlSnapshot {
         return place;
     }
 
-    private static String oidAsString(final ObjectAdapter adapter) {
-        return adapter.getOid().enString();
+    private String oidAsString(final ObjectAdapter adapter) {
+        return adapter.getOid().enString(oidMarshaller);
     }
 
     /**
@@ -812,5 +818,6 @@ public class XmlSnapshot {
     private void setXmlElement(final Element xmlElement) {
         this.xmlElement = xmlElement;
     }
+
 
 }

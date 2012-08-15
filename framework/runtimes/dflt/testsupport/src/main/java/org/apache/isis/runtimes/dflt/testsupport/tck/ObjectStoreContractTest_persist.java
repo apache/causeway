@@ -104,7 +104,7 @@ public abstract class ObjectStoreContractTest_persist {
         iswf.bounceSystem();
         
         // when search for object
-        List<ObjectAdapter> retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
+        List<ObjectAdapter> retrievedInstance = getStore().loadInstancesAndAdapt(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
         
         // then find
         assertEquals(1, retrievedInstance.size());
@@ -115,7 +115,7 @@ public abstract class ObjectStoreContractTest_persist {
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
 
         // and when search for some other title
-        retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, "some other title"));
+        retrievedInstance = getStore().loadInstancesAndAdapt(new PersistenceQueryFindByTitle(epvSpecification, "some other title"));
         
         // then don't find
         assertEquals(0, retrievedInstance.size());
@@ -140,7 +140,7 @@ public abstract class ObjectStoreContractTest_persist {
         iswf.bounceSystem();
 
         // then found
-        List<ObjectAdapter> retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, adapter.titleString()));
+        List<ObjectAdapter> retrievedInstance = getStore().loadInstancesAndAdapt(new PersistenceQueryFindByTitle(epvSpecification, adapter.titleString()));
         assertEquals(1, retrievedInstance.size());
         
         final ObjectAdapter retrievedAdapter = retrievedInstance.get(0);

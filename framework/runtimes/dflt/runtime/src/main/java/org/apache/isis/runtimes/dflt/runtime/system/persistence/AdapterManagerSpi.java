@@ -24,9 +24,7 @@ import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterRecreator;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
@@ -46,7 +44,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.P
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
 public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapter>,
-    AdapterRecreator,
     RecreatedPojoRemapper,
     AdapterLifecycleTransitioner,
     SessionScopedComponent, 

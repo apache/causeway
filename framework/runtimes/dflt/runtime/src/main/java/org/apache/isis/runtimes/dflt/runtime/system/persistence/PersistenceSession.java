@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterRecreator;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -445,7 +444,7 @@ public class PersistenceSession implements
         return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
             @Override
             public List<ObjectAdapter> execute() {
-                return objectStore.getInstances(persistenceQuery);
+                return objectStore.loadInstancesAndAdapt(persistenceQuery);
             }
 
             @Override
@@ -657,18 +656,17 @@ public class PersistenceSession implements
             return adapter;
         }
 
-        return loadObjectFromPersistenceLayer(oid);
+        return loadMappedObjectFromObjectStore(oid);
     }
 
-    private ObjectAdapter loadObjectFromPersistenceLayer(final TypedOid oid) {
-        // the object store will map for us, using its hydrator (calls back
-        // to #recreateAdapter)
-        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+    private ObjectAdapter loadMappedObjectFromObjectStore(final TypedOid oid) {
+        ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
-                return objectStore.getObject(oid);
+                return objectStore.loadInstanceAndAdapt(oid);
             }
         });
+		return adapter;
     }
 
     // ///////////////////////////////////////////////////////////////////////////

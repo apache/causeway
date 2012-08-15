@@ -51,7 +51,7 @@ public class NoSqlKeyCreatorTest {
     private ObjectSpecification mockSpecification;
 
     private final RootOidDefault oid = RootOidDefault.create(ObjectSpecId.of("ERP"), "3");
-    private final String oidStr = oid.enString();
+    private final String oidStr = oid.enString(new OidMarshaller());
 
     private KeyCreatorDefault keyCreatorDefault;
 

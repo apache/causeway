@@ -21,23 +21,24 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.file;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.common.collect.Lists;
 
 public class JsonStateWriter implements StateWriter {
 
     private final JSONObject dbObject = new JSONObject();
     
     private TypedOid oid;
-    
     private String currentVersion;
     private String newVersion;
+
 
     @Override
     public StateWriter addAggregate(final String id) {
@@ -53,7 +54,7 @@ public class JsonStateWriter implements StateWriter {
     @Override
     public void writeOid(final TypedOid typedOid) {
         this.oid = typedOid;
-        writeField(PropertyNames.OID, typedOid.enString());
+        writeField(PropertyNames.OID, typedOid.enString(getOidMarshaller()));
     }
     
     @Override
@@ -97,7 +98,7 @@ public class JsonStateWriter implements StateWriter {
     }
 
     public String getRequest() {
-        return oid.enString() + " " + currentVersion + " " + newVersion;
+        return oid.enString(getOidMarshaller()) + " " + currentVersion + " " + newVersion;
     }
 
     public String getData() {
@@ -125,5 +126,14 @@ public class JsonStateWriter implements StateWriter {
             throw new NoSqlStoreException(e);
         }
     }
+
+    
+    ///////////////////////////////////////////////////////
+    // dependencies (from context)
+    ///////////////////////////////////////////////////////
+    
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 
 }

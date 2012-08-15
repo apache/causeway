@@ -323,7 +323,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
     }
 
     @Override
-    public List<ObjectAdapter> getInstances(final PersistenceQuery query) {
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery query) {
         if (query instanceof PersistenceQueryFindByTitle) {
             return findByTitle((PersistenceQueryFindByTitle) query);
         } else if (query instanceof PersistenceQueryFindAllInstances) {
@@ -413,7 +413,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
 
 
     @Override
-    public ObjectAdapter getObject(final TypedOid oid) {
+    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
         final DatabaseConnector connection = connectionPool.acquire();
         final ObjectSpecification objectSpec = getSpecificationLookup().lookupBySpecId(oid.getObjectSpecId());
         final ObjectMapping mapper = objectMappingLookup.getMapping(objectSpec, connection);

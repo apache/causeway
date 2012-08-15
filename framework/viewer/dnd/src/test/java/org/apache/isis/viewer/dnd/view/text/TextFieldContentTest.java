@@ -38,6 +38,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -75,13 +76,9 @@ public class TextFieldContentTest {
     @Mock
     protected AuthorizationManager mockAuthorizationManager;
 
-    private List<Object> servicesList;
-
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-
-        servicesList = Collections.emptyList();
 
         context.checking(new Expectations() {
             {
@@ -95,7 +92,7 @@ public class TextFieldContentTest {
         });
 
         final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory,
-                servicesList);
+        		Collections.emptyList(), new OidMarshaller());
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
 

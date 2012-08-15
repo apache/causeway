@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -50,7 +51,7 @@ public class ConverterForObjectAdapterMemento implements IConverter {
         if (StringUtils.isEmpty(value)) {
             return null;
         }
-        final Oid oid = RootOidDefault.deStringEncoded(value);
+        final Oid oid = RootOidDefault.deStringEncoded(value, getOidMarshaller());
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }
@@ -71,9 +72,14 @@ public class ConverterForObjectAdapterMemento implements IConverter {
             // REVIEW: is this right?
             return memento.toString();
         }
-        RootOid rootOid = (RootOid) oid;
-        return rootOid.enString();
+        return oid.enString(getOidMarshaller());
     }
+    
+
+
+    // //////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
@@ -81,6 +87,10 @@ public class ConverterForObjectAdapterMemento implements IConverter {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 
 }

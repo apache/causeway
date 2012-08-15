@@ -26,8 +26,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.google.common.base.Objects;
-
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -35,15 +33,21 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import com.google.common.base.Objects;
+
 public final class RootOidDefault implements Serializable, RootOid {
 
     private static final long serialVersionUID = 1L;
 
     private final ObjectSpecId objectSpecId;
-    private String identifier;
-    private State state;
+    private final String identifier;
+    private final State state;
+    
+    // not part of equality check
+    private final Long version;
 
     private int cachedHashCode;
+
     
     
     // ////////////////////////////////////////////
@@ -51,15 +55,27 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
 
     public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier) {
-        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT);
+        return create(objectSpecId, identifier, null);
+    }
+
+    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long version) {
+        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, version);
     }
 
     public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier) {
-        return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT);
+        return createTransient(objectSpecId, identifier, null);
+    }
+
+    public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier, Long version) {
+        return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT, version);
     }
 
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state) {
-        Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
+    	this(objectSpecId, identifier, state, null);
+    }
+
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long version) {
+		Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))));
@@ -68,6 +84,7 @@ public final class RootOidDefault implements Serializable, RootOid {
         this.objectSpecId = objectSpecId;
         this.identifier = identifier;
         this.state = state;
+        this.version = version;
         initialized();
     }
 
@@ -75,22 +92,32 @@ public final class RootOidDefault implements Serializable, RootOid {
         cacheState();
     }
 
+
     // ////////////////////////////////////////////
     // Encodeable
     // ////////////////////////////////////////////
 
     public RootOidDefault(final DataInputExtended input) throws IOException {
         final String oidStr = input.readUTF();
-        final RootOidDefault oid = getOidMarshaller().unmarshal(oidStr, RootOidDefault.class);
+        final RootOidDefault oid = getEncodingMarshaller().unmarshal(oidStr, RootOidDefault.class);
         this.objectSpecId = oid.objectSpecId;
         this.identifier = oid.identifier;
         this.state = oid.state;
+        this.version = oid.version;
         cacheState();
     }
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(enString());
+        output.writeUTF(enString(getEncodingMarshaller()));
+    }
+
+
+    /**
+     * Cannot be a reference because Oid gets serialized by wicket viewer
+     */
+    private OidMarshaller getEncodingMarshaller() {
+        return new OidMarshaller();
     }
 
 
@@ -98,18 +125,23 @@ public final class RootOidDefault implements Serializable, RootOid {
     // deString'able, enString
     // ////////////////////////////////////////////
 
-    public static RootOid deStringEncoded(final String urlEncodedOidStr) {
+    public static RootOid deStringEncoded(final String urlEncodedOidStr, OidMarshaller oidMarshaller) {
         final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
-        return deString(oidStr);
+        return deString(oidStr, oidMarshaller);
     }
 
-    public static RootOidDefault deString(final String oidStr) {
-        return getOidMarshaller().unmarshal(oidStr, RootOidDefault.class);
+    public static RootOidDefault deString(final String oidStr, OidMarshaller oidMarshaller) {
+		return oidMarshaller.unmarshal(oidStr, RootOidDefault.class);
     }
 
     @Override
-    public String enString() {
-        return getOidMarshaller().marshal(this);
+    public String enString(OidMarshaller oidMarshaller) {
+        return oidMarshaller.marshal(this);
+    }
+
+    @Override
+    public String enStringNoVersion(OidMarshaller oidMarshaller) {
+        return oidMarshaller.marshalNoVersion(this);
     }
 
     // ////////////////////////////////////////////
@@ -145,6 +177,11 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
 
+	public Long getVersion() {
+		return version;
+	}
+
+    
     // ////////////////////////////////////////////
     // equals, hashCode
     // ////////////////////////////////////////////
@@ -181,11 +218,7 @@ public final class RootOidDefault implements Serializable, RootOid {
 
     @Override
     public String toString() {
-        return enString();
-    }
-
-    protected static OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
+        return enString(new OidMarshaller());
     }
 
 

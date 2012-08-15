@@ -10,7 +10,7 @@ public class DataNucleusPojoRecreator implements PojoRecreator {
 
     @Override
     public Object recreatePojo(TypedOid oid) {
-        return getObjectStore().getPojo(oid);
+        return getObjectStore().loadPojo(oid);
     }
 
     ///////////////////////////////

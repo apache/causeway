@@ -24,6 +24,8 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -93,5 +95,11 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
     public UserProfileLoader getUserProfileLoader();
 
     public List<Object> getServices();
+
+    /**
+     * The {@link OidMarshaller} to use for marshalling and unmarshalling {@link Oid}s
+     * into strings.
+     */
+	public OidMarshaller getOidMarshaller();
 
 }

@@ -39,6 +39,7 @@ import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -77,9 +78,11 @@ public class ObjectReaderMongoIntegrationTest {
     
     private Map<String, DataEncryption> dataEncrypter;
 
-    private final RootOidDefault oid3 = RootOidDefault.deString("SMPL:3");
-    private final RootOidDefault oid4 = RootOidDefault.deString("RFCG:4"); 
-    private final RootOidDefault oid5 = RootOidDefault.deString("PRNT:5"); 
+	private OidMarshaller oidMarshaller = new OidMarshaller();
+
+    private final RootOidDefault oid3 = RootOidDefault.deString("SMPL:3", oidMarshaller );
+    private final RootOidDefault oid4 = RootOidDefault.deString("RFCG:4", oidMarshaller); 
+    private final RootOidDefault oid5 = RootOidDefault.deString("PRNT:5", oidMarshaller); 
 
 
     @Before

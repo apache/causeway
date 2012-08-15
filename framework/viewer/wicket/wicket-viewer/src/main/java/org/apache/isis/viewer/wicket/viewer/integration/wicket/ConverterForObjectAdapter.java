@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -44,7 +45,7 @@ public class ConverterForObjectAdapter implements IConverter {
      */
     @Override
     public Object convertToObject(final String value, final Locale locale) {
-        final Oid oid = RootOidDefault.deStringEncoded(value);
+        final Oid oid = RootOidDefault.deStringEncoded(value, getOidMarshaller());
         return getAdapterManager().getAdapterFor(oid);
     }
 
@@ -60,16 +61,21 @@ public class ConverterForObjectAdapter implements IConverter {
             return null;
         }
         
-        RootOid rootOid = (RootOid) oid;
-        return rootOid.enString();
+        return oid.enString(getOidMarshaller());
     }
+    
+
+
+    // //////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////
 
     protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+        return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 
 }

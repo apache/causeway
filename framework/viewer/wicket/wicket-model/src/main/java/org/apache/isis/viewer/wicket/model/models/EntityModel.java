@@ -48,8 +48,6 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
     
-    private static final OidMarshaller oidMarshaller  = new OidMarshaller();
-
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
     // //////////////////////////////////////////////////////////
@@ -63,16 +61,11 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         final PageParameters pageParameters = new PageParameters();
 
         final Boolean persistent = adapter.representsPersistent();
-        //PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent.toString());
 
         if (persistent) {
-            //final String oidStr = oidStringifier.enString((RootOid) adapter.getOid());
-            final String oidStr = oidMarshaller.marshal((RootOid) adapter.getOid());
+            final String oidStr = adapter.getOid().enString(getOidMarshaller());
 
             PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);
-            
-            //final ObjectSpecification noSpec = adapter.getSpecification();
-            //PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec.getFullIdentifier());
         } else {
             // don't do anything; instead the page should be redirected back to
             // an EntityPage so that the underlying EntityModel that contains
@@ -83,7 +76,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         return pageParameters;
     }
 
-    public enum Mode {
+	public enum Mode {
         VIEW, EDIT;
     }
 
@@ -121,7 +114,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     }
 
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return oidMarshaller.unmarshal(oidStr(pageParameters), RootOid.class);
+        return getOidMarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
     }
     
 
@@ -316,5 +309,15 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         getObjectAdapterMemento().setAdapter(adapter);
         toViewMode();
     }
+
+    
+    // //////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////
+
+    protected static OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
+
 
 }

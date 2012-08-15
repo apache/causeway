@@ -23,15 +23,19 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.db.file.JsonStateWriter;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class JsonStateWriterTest {
 
+    @Rule
+    public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().build();
+    
     private JsonStateWriter writer;
 
     @Before
@@ -48,7 +52,7 @@ public class JsonStateWriterTest {
     public void basicData() throws Exception {
 //        writer.writeObjectType("com.planchase.ClassName");
 //        writer.writeId("#1");
-        writer.writeOid(RootOidDefault.deString("com.planchase.ClassName:1"));
+        writer.writeOid(RootOidDefault.deString("com.planchase.ClassName:1", new OidMarshaller()));
         writer.writeTime("ddmmyy");
         writer.writeVersion("1", "2");
         writer.writeUser("fred");
@@ -111,7 +115,7 @@ public class JsonStateWriterTest {
     public void requestData() throws Exception {
 //        writer.writeObjectType("com.planchase.ClassName");
 //        writer.writeId("#8");
-        writer.writeOid(RootOidDefault.deString("com.planchase.ClassName:8"));
+        writer.writeOid(RootOidDefault.deString("com.planchase.ClassName:8", new OidMarshaller()));
         writer.writeVersion("1", "2");
         assertEquals("com.planchase.ClassName:8 1 2", writer.getRequest());
     }

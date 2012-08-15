@@ -20,70 +20,56 @@
 package org.apache.isis.viewer.dnd.view.text;
 
 import java.util.Collections;
-import java.util.List;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.auto.Mock;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-@RunWith(JMock.class)
 public class MultilineTextFieldContentTest {
 
-    private TextContent content;
-    private final Mockery mockery = new JUnit4Mockery();
-    protected TemplateImageLoader mockTemplateImageLoader;
-    protected SpecificationLoaderSpi mockSpecificationLoader;
-    protected PersistenceSessionFactory mockPersistenceSessionFactory;
-    private UserProfileLoader mockUserProfileLoader;
-    protected AuthenticationManager mockAuthenticationManager;
-    protected AuthorizationManager mockAuthorizationManager;
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private List<Object> servicesList;
+    private TextContent content;
+    
+    @Mock
+    protected TemplateImageLoader mockTemplateImageLoader;
+    @Mock
+    protected SpecificationLoaderSpi mockSpecificationLoader;
+    @Mock
+    protected PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
+    private UserProfileLoader mockUserProfileLoader;
+    @Mock
+    protected AuthenticationManager mockAuthenticationManager;
+    @Mock
+    protected AuthorizationManager mockAuthorizationManager;
 
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        servicesList = Collections.emptyList();
-
-        mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
-        mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-        mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
-        mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
-        mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-
-        mockery.checking(new Expectations() {
-            {
-                ignoring(mockTemplateImageLoader);
-                ignoring(mockSpecificationLoader);
-                ignoring(mockPersistenceSessionFactory);
-                ignoring(mockUserProfileLoader);
-                ignoring(mockAuthenticationManager);
-                ignoring(mockAuthorizationManager);
-            }
-        });
+        context.ignoring(mockTemplateImageLoader, mockSpecificationLoader, mockPersistenceSessionFactory, mockUserProfileLoader, mockAuthenticationManager, mockAuthorizationManager);
 
         final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
-                mockPersistenceSessionFactory, servicesList);
+                mockPersistenceSessionFactory, Collections.emptyList(), new OidMarshaller());
         IsisContextStatic.createRelaxedInstance(sessionFactory);
         sessionFactory.init();
 

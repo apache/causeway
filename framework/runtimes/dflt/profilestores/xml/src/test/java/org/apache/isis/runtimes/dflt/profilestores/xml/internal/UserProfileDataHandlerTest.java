@@ -24,20 +24,11 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -45,26 +36,51 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public class UserProfileDataHandlerTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    
+    @Mock
+    private TemplateImageLoader mockTemplateImageLoader;
+    @Mock
+    private SpecificationLoaderSpi mockSpecificationLoader;
+    @Mock
+    private AuthenticationManager mockAuthenticationManager;
+    @Mock
+    private AuthorizationManager mockAuthorizationManager;
+    @Mock
+    private UserProfileLoader mockUserProfileLoader;
+    @Mock
+    private PersistenceSessionFactory mockPersistenceSessionFactory;
 
     private TestServiceObject1 service;
     private UserProfile profile;
 
+    
     @Before
     public void setup() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        final Mockery mockery = new JUnit4Mockery();
-        final ArrayList<Object> servicesList = new ArrayList<Object>();
         service = new TestServiceObject1();
-        servicesList.add(service);
-        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockery.mock(TemplateImageLoader.class), mockery.mock(SpecificationLoaderSpi.class), mockery.mock(AuthenticationManager.class),
-                mockery.mock(AuthorizationManager.class), mockery.mock(UserProfileLoader.class), mockery.mock(PersistenceSessionFactory.class), servicesList);
+        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager,
+                mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, Arrays.<Object>asList(service), new OidMarshaller());
 
         IsisContextStatic.createRelaxedInstance(executionContextFactory);
 

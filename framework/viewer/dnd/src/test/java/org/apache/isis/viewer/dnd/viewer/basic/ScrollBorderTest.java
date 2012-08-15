@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -64,13 +65,11 @@ public class ScrollBorderTest {
     protected AuthenticationManager mockAuthenticationManager;
     protected AuthorizationManager mockAuthorizationManager;
 
-    private List<Object> servicesList;
-
     @Before
     public void setUp() throws Exception {
         LogManager.getRootLogger().setLevel(Level.OFF);
 
-        servicesList = Collections.emptyList();
+        
 
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
         mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
@@ -93,7 +92,7 @@ public class ScrollBorderTest {
         TestToolkit.createInstance();
 
         final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, Collections.emptyList(), new OidMarshaller());
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
     }

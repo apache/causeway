@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.context;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -35,7 +36,7 @@ public abstract class RootAdapterMappingAbstract implements RootAdapterMapping {
 
     public RootAdapterMappingAbstract(final ObjectAdapter adapter) {
         final Oid oid = adapter.getOid();
-        oidStr = oid.enString();
+        oidStr = oid.enString(getOidMarshaller());
     }
 
     @Override
@@ -44,7 +45,7 @@ public abstract class RootAdapterMappingAbstract implements RootAdapterMapping {
     }
 
     RootOidDefault getOid() {
-        return RootOidDefault.deString(oidStr);
+        return RootOidDefault.deString(oidStr, getOidMarshaller());
     }
 
     @Override
@@ -105,5 +106,9 @@ public abstract class RootAdapterMappingAbstract implements RootAdapterMapping {
     private static Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
+    protected OidMarshaller getOidMarshaller() {
+		return IsisContext.getOidMarshaller();
+	}
 
 }

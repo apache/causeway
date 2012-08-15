@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.Utils;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
@@ -67,7 +68,7 @@ public class Persistence_persistAndUpdate_objectAdapters {
         adapter = iswf.adapterFor(list.get(0));
         assertThat(adapter.getResolveState(), is(ResolveState.RESOLVED));
         assertThat(adapter.isTransient(), is(false));
-        assertThat(adapter.getOid().enString(), is("PRMV:i~1"));
+        assertThat(adapter.getOid().enString(new OidMarshaller()), is("PRMV:i~1"));
 
         iswf.commitTran();
     }
@@ -106,6 +107,7 @@ public class Persistence_persistAndUpdate_objectAdapters {
         iswf.commitTran();
 
     }
+
     
 
 }
