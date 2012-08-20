@@ -181,6 +181,19 @@ public final class RootOidDefault implements Serializable, RootOid {
 		return version;
 	}
 
+    @Override
+    public Comparison compareAgainst(RootOid other) {
+        if(!equals(other)) {
+            return Comparison.NOT_EQUIVALENT;
+        }
+        if(getVersion() == null || other.getVersion() == null) {
+            return Comparison.EQUIVALENT_BUT_NO_VERSION_INFO;
+        }
+        return getVersion().equals(other.getVersion()) 
+                ? Comparison.EQUIVALENT_AND_UNCHANGED
+                : Comparison.EQUIVALENT_BUT_CHANGED;
+    }
+
     
     // ////////////////////////////////////////////
     // equals, hashCode
@@ -204,11 +217,11 @@ public final class RootOidDefault implements Serializable, RootOid {
         if (getClass() != other.getClass()) {
             return false;
         }
-        return equals((RootOidDefault) other);
+        return equals((RootOid) other);
     }
 
-    public boolean equals(final RootOidDefault other) {
-        return Objects.equal(objectSpecId, other.objectSpecId) && Objects.equal(identifier, other.identifier) && Objects.equal(state, other.state);
+    public boolean equals(final RootOid other) {
+        return Objects.equal(objectSpecId, other.getObjectSpecId()) && Objects.equal(identifier, other.getIdentifier()) && Objects.equal(isTransient(), other.isTransient());
     }
 
     @Override
@@ -221,6 +234,7 @@ public final class RootOidDefault implements Serializable, RootOid {
         return enString(new OidMarshaller());
     }
 
+    
 
 
 }

@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.junit.Test;
 
-public class RootOidTest_create  {
+public class RootOidDefaultTest_create  {
 
 
     @Test

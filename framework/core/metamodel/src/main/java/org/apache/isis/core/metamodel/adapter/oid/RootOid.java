@@ -51,4 +51,40 @@ public interface RootOid extends TypedOid {
      */
     RootOid asPersistent(String identifier);
 
+    /**
+     * The result of performing a {@link #compareTo(Comparison) comparison.}
+     */
+    public static enum Comparison {
+        /**
+         * The two {@link RootOid oid}s identify the same domain object,
+         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>true</tt>)
+         * and the {@link RootOid#getVersion() version information} held within the 
+         * oid is the same.
+         */
+        EQUIVALENT_AND_UNCHANGED,
+        /**
+         * The two {@link RootOid oid}s identify the same domain object,
+         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>true</tt>)
+         * but the {@link RootOid#getVersion() version information} held within the 
+         * oid is the different.
+         */
+        EQUIVALENT_BUT_CHANGED,
+        /**
+         * The two {@link RootOid oid}s identify the same domain object,
+         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>true</tt>)
+         * but there is no {@link RootOid#getVersion() version information} so 
+         * cannot determine whether the domain object has changed.
+         */
+        EQUIVALENT_BUT_NO_VERSION_INFO,
+        /**
+         * The two {@link RootOid oid}s identify the different domain objects,
+         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>false</tt>).
+         * 
+         * <p>
+         */
+        NOT_EQUIVALENT,
+    }
+    
+    Comparison compareAgainst(RootOid oid2);
+
 }

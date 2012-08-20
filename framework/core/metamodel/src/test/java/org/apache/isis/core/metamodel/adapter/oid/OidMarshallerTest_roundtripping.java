@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.junit.Test;
 
-public class OidMarshaller_roundtripping {
+public class OidMarshallerTest_roundtripping {
 
     private OidMarshaller oidMarshaller = new OidMarshaller();
     
