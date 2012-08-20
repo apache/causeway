@@ -11,13 +11,17 @@ import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFacto
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.EnlistedObjectDirtying;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
@@ -67,6 +71,11 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     @Override
     protected IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
         return new DataNucleusIdentifierGenerator();
+    }
+
+    @Override
+    protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
+        return new DataNucleusTransactionManager(persistor, objectStore);
     }
 
     @Override

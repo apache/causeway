@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
@@ -59,14 +61,16 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 public class OidMarshaller {
 
 	private static final String TRANSIENT_INDICATOR = "!";
-    private static final String DIGITS = "\\d+";
 	private static final String SEPARATOR = ":";
 	private static final String SEPARATOR_NESTING = "~";
 	private static final String SEPARATOR_COLLECTION = "$";
 	private static final String SEPARATOR_VERSION = "^";
 
 	private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_COLLECTION + "\\" + SEPARATOR_VERSION + "@#" + "]+";
+	private static final String DIGITS = "\\d+";
+	
 	private static final String WORD_GROUP = "(" + WORD + ")";
+	private static final String DIGITS_GROUP = "(" + DIGITS + ")";
     
 	private static Pattern OIDSTR_PATTERN = 
             Pattern.compile(
@@ -80,7 +84,12 @@ public class OidMarshaller {
             		   ")" +
             		 ")" +
     		 		 "(" + "[" + SEPARATOR_COLLECTION + "]" + WORD + ")?"  + // optional collection name
-    		 		 "(" + "[\\" + SEPARATOR_VERSION + "]" + DIGITS + ")?" + // optional version
+    		 		 "(" + 
+    		 		     "[\\" + SEPARATOR_VERSION + "]" +  
+    		 		     DIGITS_GROUP +                    // optional version digit
+    		 		     SEPARATOR + WORD_GROUP + "?" +    // optional version user name 
+    		 		     SEPARATOR + DIGITS_GROUP + "?" +  // optional version UTC time
+    		 		 ")?" + 
             		 "$");
 
     ////////////////////////////////////////////////////////////////
@@ -100,8 +109,6 @@ public class OidMarshaller {
         if (!matcher.matches()) {
             throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
         }
-
-        final int groupCount = matcher.groupCount();
 
         final String isTransientStr = getGroup(matcher, 3);
         boolean isTransient = TRANSIENT_INDICATOR.equals(isTransientStr);
@@ -127,12 +134,13 @@ public class OidMarshaller {
                 aggregateOidParts.add(new AggregateOidPart(objectType, localId));
             }
         }
-        final String collectionPart = getGroup(matcher, groupCount-1);
-        String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
+        final String collectionPart = getGroup(matcher, 8);
+        final String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
         
-        final String versionPart = getGroup(matcher, groupCount);
-        Long version = versionPart != null ? Long.parseLong(versionPart.substring(1)) : null;
-
+        final String versionSequence = getGroup(matcher, 10);
+        final String versionUser = getGroup(matcher, 11);
+        final String versionUtcTimestamp = getGroup(matcher, 12);
+        final Version version = Version.create(versionSequence, versionUser, versionUtcTimestamp);
 
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
@@ -146,7 +154,9 @@ public class OidMarshaller {
             }
         } else {
             final String oidStrWithoutCollectionName = getGroup(matcher, 1);
-            final String parentOidStr = oidStrWithoutCollectionName + (version != null? SEPARATOR_VERSION + version: "");
+            
+            final String parentOidStr = oidStrWithoutCollectionName + marshal(version);
+
             TypedOid parentOid = this.unmarshal(parentOidStr, TypedOid.class);
             ensureCorrectType(oidStr, requestedType, CollectionOid.class);
             return (T)new CollectionOid(parentOid, collectionName);
@@ -166,14 +176,12 @@ public class OidMarshaller {
     }
     
 
-    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, Long version) {
+    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, Version version) {
         final StringBuilder buf = new StringBuilder(rootOidStr);
         for(AggregateOidPart part: aggregateOidParts) {
             buf.append(part.toString());
         }
-        if(version != null) {
-            buf.append(SEPARATOR_VERSION).append(version);
-        }
+        buf.append(marshal(version));
         return unmarshal(buf.toString(), TypedOid.class);
     }
 
@@ -199,7 +207,7 @@ public class OidMarshaller {
     ////////////////////////////////////////////////////////////////
 
     public final String marshal(RootOid rootOid) {
-        return marshalNoVersion(rootOid) + versionIfAny(rootOid);
+        return marshalNoVersion(rootOid) + marshal(rootOid.getVersion());
     }
 
     public final String marshalNoVersion(RootOid rootOid) {
@@ -207,7 +215,7 @@ public class OidMarshaller {
     }
 
     public final String marshal(CollectionOid collectionOid) {
-        return marshalNoVersion(collectionOid) + versionIfAny(collectionOid);
+        return marshalNoVersion(collectionOid) + marshal(collectionOid.getVersion());
     }
 
     public String marshalNoVersion(CollectionOid collectionOid) {
@@ -215,15 +223,21 @@ public class OidMarshaller {
     }
 
     public final String marshal(AggregatedOid aggregatedOid) {
-        return marshalNoVersion(aggregatedOid) + versionIfAny(aggregatedOid);
+        return marshalNoVersion(aggregatedOid) + marshal(aggregatedOid.getVersion());
     }
 
     public final String marshalNoVersion(AggregatedOid aggregatedOid) {
         return aggregatedOid.getParentOid().enStringNoVersion(this) + SEPARATOR_NESTING + aggregatedOid.getObjectSpecId() + SEPARATOR + aggregatedOid.getLocalId();
     }
 
-    private static String versionIfAny(Oid oid) {
-        return oid.getVersion() != null? (SEPARATOR_VERSION + oid.getVersion()): "";
+    public static String marshal(Version version) {
+        if(version == null) {
+            return "";
+        }
+        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + Strings.nullToEmpty(version.getUser()) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
+    }
+    private static String nullToEmpty(Object obj) {
+        return obj == null? "": "" + obj;
     }
 
 

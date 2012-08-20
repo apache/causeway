@@ -19,12 +19,12 @@ public class IsisDateMapping extends ObjectAsLongMapping {
 
     @Override
     protected Long objectToLong(Object object) {
-        return dateConverter.toLong((Date) object);
+        return dateConverter.toDatastoreType((Date) object);
     }
 
     @Override
     protected Object longToObject(Long datastoreValue) {
-        return dateConverter.toObject(datastoreValue);
+        return dateConverter.toMemberType(datastoreValue);
     }
 
 }

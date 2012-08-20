@@ -20,8 +20,8 @@ public class IsisDateConverterTest {
     @Test
     public void roundTrip() {
         Date date = new Date();
-        final Long value = converter.toLong(date);
-        Date date2 = (Date) converter.toObject(value);
+        final Long value = converter.toDatastoreType(date);
+        Date date2 = (Date) converter.toMemberType(value);
         
         // necessary to use dateValue() because the Isis date (rather poorly) does not
         // override equals() / hashCode()
@@ -30,12 +30,12 @@ public class IsisDateConverterTest {
 
     @Test
     public void toLong_whenNull() {
-        assertNull(converter.toLong(null));
+        assertNull(converter.toDatastoreType(null));
     }
 
     @Test
     public void toObject_whenNull() {
-        assertNull(converter.toObject(null));
+        assertNull(converter.toMemberType(null));
     }
 
 }

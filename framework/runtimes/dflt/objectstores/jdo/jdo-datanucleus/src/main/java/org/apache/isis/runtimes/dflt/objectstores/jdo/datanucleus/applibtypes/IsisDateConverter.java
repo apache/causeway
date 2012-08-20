@@ -1,10 +1,9 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes;
 
-import org.datanucleus.store.types.ObjectLongConverter;
-
 import org.apache.isis.applib.value.Date;
+import org.datanucleus.store.types.converters.TypeConverter;
 
-public class IsisDateConverter implements ObjectLongConverter<Date>{
+public class IsisDateConverter implements TypeConverter<Date, Long>{
 
     private static final long serialVersionUID = 1L;
 
@@ -12,22 +11,40 @@ public class IsisDateConverter implements ObjectLongConverter<Date>{
         
     }
     
+//    @Override
+//    public Long toLong(Date object) {
+//        if(object == null) {
+//            return null;
+//        }
+//
+//        Date d = (Date)object;
+//        return d.getMillisSinceEpoch();
+//    }
+//
+//    @Override
+//    public Date toObject(Long value) {
+//        if(value == null) {
+//            return null;
+//        }
+//        return new Date(value);
+//    }
+
     @Override
-    public Long toLong(Date object) {
-        if(object == null) {
+    public Long toDatastoreType(Date memberValue) {
+        if(memberValue == null) {
             return null;
         }
 
-        Date d = (Date)object;
+        Date d = (Date)memberValue;
         return d.getMillisSinceEpoch();
     }
 
     @Override
-    public Date toObject(Long value) {
-        if(value == null) {
+    public Date toMemberType(Long datastoreValue) {
+        if(datastoreValue == null) {
             return null;
         }
-        return new Date(value);
+        return new Date(datastoreValue);
     }
 
 }

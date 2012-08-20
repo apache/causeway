@@ -39,18 +39,18 @@ public class RootOidDefaultTest_create  {
         RootOidDefault oid = RootOidDefault.create(objectSpecId, "123", 456L);
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-        assertThat(oid.getVersion(), is(456L));
+        assertThat(oid.getVersion().getSequence(), is(456L));
         
         assertThat(oid.isTransient(), is(false));
     }
     
     @Test
-    public void createTransientWithVersion() throws Exception {
+    public void createTransientNoVersion() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOidDefault oid = RootOidDefault.createTransient(objectSpecId, "123", 456L);
+        RootOidDefault oid = RootOidDefault.createTransient(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
-        assertThat(oid.getVersion(), is(456L));
+        assertThat(oid.getVersion(), is(nullValue()));
         
         assertThat(oid.isTransient(), is(true));
     }

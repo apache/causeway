@@ -24,14 +24,6 @@ import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixed
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.progmodelfacets.JdoProgrammingModelFacets;
 
-/**
- * As per the {@link ProgrammingModelFacetsJava5 Java 5 default programming
- * model}, but also
- * includes support for JPA.
- * <p>
- * Intended to be used by the {@link JpaJavaReflectorInstaller}, which
- * additionally sets up other required components needed for JPA support.
- */
 public class DataNucleusProgrammingModelFacets extends JdoProgrammingModelFacets {
 
     public DataNucleusProgrammingModelFacets() {

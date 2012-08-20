@@ -236,8 +236,9 @@ public abstract class AbstractContainedObject {
      * @see #persistIfNotAlready(Object)
      */
     @Hidden
-    protected void persist(final Object transientDomainObject) {
+    protected <T> T persist(final T transientDomainObject) {
         getContainer().persist(transientDomainObject);
+        return transientDomainObject;
     }
 
     /**
@@ -248,15 +249,17 @@ public abstract class AbstractContainedObject {
      * @see #persist(Object)
      */
     @Hidden
-    protected void persistIfNotAlready(final Object domainObject) {
+    protected <T> T persistIfNotAlready(final T domainObject) {
         getContainer().persistIfNotAlready(domainObject);
+        return domainObject;
     }
 
     /**
      * Delete the provided object from the persistent object store.
      */
-    protected void remove(final Object persistentDomainObject) {
+    protected <T> T remove(final T persistentDomainObject) {
         getContainer().remove(persistentDomainObject);
+        return persistentDomainObject;
     }
 
     // }}

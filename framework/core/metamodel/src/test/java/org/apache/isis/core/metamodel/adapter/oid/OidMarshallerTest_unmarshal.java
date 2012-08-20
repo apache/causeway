@@ -28,8 +28,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 * <dd>collection of an aggregated object within root</dd>
 * <dt>CUS:123~NME:2~CTY:LON$streets</dt>
 * <dd>collection of an aggregated object within aggregated object within root</dd>
-* <dt>CUS:123^90809</dt>
-* <dd>persistent root with version information</dd>
+* <dt>CUS:123^90809::</dt>
+* <dd>persistent root with version info (sequence, no user or utc)</dd>
+* <dt>CUS:123^90809:joebloggs:</dt>
+* <dd>persistent root with version info (sequence, user but no utc)</dd>
+* <dt>CUS:123^90809:joebloggs:1231334545123</dt>
+* <dd>persistent root with version info (sequence, user, utc)</dd>
+* <dt>CUS:123^90809::1231334545123</dt>
+* <dd>persistent root with version info (sequence, utc but no user)</dd>
 */
 public class OidMarshallerTest_unmarshal {
 
@@ -68,13 +74,13 @@ public class OidMarshallerTest_unmarshal {
 
     @Test
     public void persistentRootWithVersion() {
-        final String oidStr = "CUS:123^90809";
+        final String oidStr = "CUS:123^90809::";
         
         final RootOidDefault rootOid = oidMarshaller.unmarshal(oidStr, RootOidDefault.class);
         assertThat(rootOid.isTransient(), is(false));
         assertThat(rootOid.getObjectSpecId(), is(ObjectSpecId.of("CUS")));
         assertThat(rootOid.getIdentifier(), is("123"));
-        assertThat(rootOid.getVersion(), is(90809L));
+        assertThat(rootOid.getVersion().getSequence(), is(90809L));
         
         final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
         assertThat(oid, equalTo((Oid)rootOid));

@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.version.VersionUserAndTimeAbstract
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
 
 public class FileVersion extends VersionUserAndTimeAbstract implements Encodable, Serializable {
+    
     private static final long serialVersionUID = 1L;
     private static Clock clock;
 
@@ -39,28 +39,23 @@ public class FileVersion extends VersionUserAndTimeAbstract implements Encodable
         FileVersion.clock = clock;
     }
 
+    
+    // ///////////////////////////////////////////////////////
+    // constructor
+    // ///////////////////////////////////////////////////////
+
     public FileVersion(final String user) {
         this(user, clock.getTime());
     }
 
     public FileVersion(final String user, final long sequence) {
         super(user, new Date(sequence));
-        initialized();
     }
 
     public FileVersion(final DataInputExtended input) throws IOException {
         super(input);
-        initialized();
     }
 
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        super.encode(output);
-    }
-
-    private void initialized() {
-        // nothing to do
-    }
 
     // ///////////////////////////////////////////////////////
     //
@@ -77,24 +72,16 @@ public class FileVersion extends VersionUserAndTimeAbstract implements Encodable
 
     @Override
     public boolean different(final Version version) {
-        if (version instanceof FileVersion) {
-            final FileVersion other = (FileVersion) version;
-            return !sameTime(other);
-        } else {
+        if (!(version instanceof FileVersion)) {
             return false;
-        }
+        } 
+        final FileVersion other = (FileVersion) version;
+        return !sameTime(other);
     }
 
     private boolean sameTime(final FileVersion other) {
         return getTime().getTime() == other.getTime().getTime();
     }
-
-    // don't think is used...
-    // @Override
-    // protected VersionAbstract next() {
-    // // return new FileVersion(user);
-    // throw new NotYetImplementedException();
-    // }
 
     @Override
     public boolean equals(final Object obj) {

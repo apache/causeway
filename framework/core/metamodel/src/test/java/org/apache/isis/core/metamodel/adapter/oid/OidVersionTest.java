@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.junit.Test;
 
-public class RootOidDefaultTest_compareAgainst  {
+public class OidVersionTest  {
 
     private ObjectSpecId cusObjectSpecId = ObjectSpecId.of("CUS");
     private ObjectSpecId ordObjectSpecId = ObjectSpecId.of("ORD");

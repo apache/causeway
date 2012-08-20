@@ -181,7 +181,7 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
 
 
 	@Override
-	public Long getVersion() {
+	public Version getVersion() {
 		return parentOid.getVersion();
 	}
 

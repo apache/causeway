@@ -112,7 +112,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     }
 
     @Override
-    public Long getVersion() {
+    public Version getVersion() {
         return parentOid.getVersion();
     }
 

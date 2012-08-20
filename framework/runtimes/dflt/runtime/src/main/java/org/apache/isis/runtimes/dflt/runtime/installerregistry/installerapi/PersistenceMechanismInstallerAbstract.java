@@ -157,7 +157,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * Hook method to return an {@link IsisTransactionManager}.
      * 
      * <p>
-     * By default returns a {@link ObjectStoreTransactionManager}.
+     * By default returns a {@link IsisTransactionManager}.
      */
     protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
         return new IsisTransactionManager(persistor, objectStore);

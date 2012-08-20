@@ -110,7 +110,9 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
                     pending = adapterMemento;
                 }
                 if (scalarModel != null && pending != null) {
-                    LOG.info("TextField: setting to pending: " + pending.toString());
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("TextField: setting to pending: " + pending.toString());
+                    }
                     scalarModel.setObject(pending.getObjectAdapter());
                 }
 

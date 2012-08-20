@@ -1,7 +1,9 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.jdo.JDOHelper;
@@ -16,10 +18,7 @@ import javax.jdo.listener.LoadLifecycleListener;
 import javax.jdo.listener.StoreLifecycleListener;
 import javax.jdo.spi.PersistenceCapable;
 
-import com.google.common.collect.Maps;
-
-import org.apache.log4j.Logger;
-
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,13 +32,17 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
+import org.apache.log4j.Logger;
+import org.datanucleus.api.jdo.NucleusJDOHelper;
+
+import com.google.common.collect.Maps;
 
 public class IsisLifecycleListener implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener, DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener, SuspendableListener {
 
@@ -226,6 +229,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             return;
         }
 
+        final PersistenceCapable pojo = persistenceCapableFor(event);
+        
+        final IsisTransaction transaction = getCurrentTransaction();
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        transaction.auditDirty(adapter);
+
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
@@ -242,9 +251,14 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             return;
         }
         
+
         ensureRootObject(event);
         ensureFrameworksInAgreement(event);
     }
+    
+    
+
+
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
@@ -414,16 +428,6 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
 
 
-    private void ensureObjectNotLoaded(InstanceLifecycleEvent event) {
-        final PersistenceCapable pojo = persistenceCapableFor(event);
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-        if(adapter != null) {
-            final Oid oid = adapter.getOid();
-            throw new IsisException(MessageFormat.format("Object is already mapped in Isis: oid={0}, for {1}", oid, pojo));
-        }
-    }
-
-    
     private enum Phase {
         PRE, POST
     }
@@ -470,6 +474,32 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     }
 
 
+    
+    @SuppressWarnings("unused")
+    private Filter<ObjectAssociation> dirtyFieldFilterFor(final PersistenceCapable pojo) {
+        String[] dirtyFields = NucleusJDOHelper.getDirtyFields(pojo, JDOHelper.getPersistenceManager(pojo));
+        final List<String> dirtyFieldList = Arrays.asList(dirtyFields);
+        Filter<ObjectAssociation> dirtyFieldsFilter = new Filter<ObjectAssociation>() {
+            @Override
+            public boolean accept(final ObjectAssociation t) {
+                String id = t.getId();
+                return dirtyFieldList.contains(id);
+            }};
+        return dirtyFieldsFilter;
+    }
+
+    @SuppressWarnings("unused")
+    private void ensureObjectNotLoaded(InstanceLifecycleEvent event) {
+        final PersistenceCapable pojo = persistenceCapableFor(event);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        if(adapter != null) {
+            final Oid oid = adapter.getOid();
+            throw new IsisException(MessageFormat.format("Object is already mapped in Isis: oid={0}, for {1}", oid, pojo));
+        }
+    }
+
+
+    
     // /////////////////////////////////////////////////////////
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
@@ -493,5 +523,6 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     protected IsisTransaction getCurrentTransaction() {
         return IsisContext.getCurrentTransaction();
     }
-    
+
+
 }

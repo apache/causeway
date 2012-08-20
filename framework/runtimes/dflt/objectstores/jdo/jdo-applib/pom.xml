@@ -37,17 +37,111 @@
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>maven-datanucleus-plugin</artifactId>
+                <version>3.1.0-release</version>
+                <configuration>
+                	<fork>false</fork>
+                    <verbose>true</verbose>
+                    <!-- 
+                    <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
+                    <props>${basedir}/datanucleus.properties</props>
+                    -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.datanucleus
+										</groupId>
+										<artifactId>
+											maven-datanucleus-plugin
+										</artifactId>
+										<versionRange>
+											[3.0.2,)
+										</versionRange>
+										<goals>
+											<goal>enhance</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- for DataNucleus, see below -->
+			<dependency>
+	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+				<artifactId>jdo</artifactId>
+				<version>0.3.1-incubating-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>						
+			</dependency>
+		</dependencies>
+	</dependencyManagement>	
+
 	<dependencies>
+
+        <dependency>
+            <groupId>org.apache.isis</groupId>
+            <artifactId>applib</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
         </dependency>
 
-		<!-- required for bytecode enhancement -->        
+		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-enhancer</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
+
         
     </dependencies>
 

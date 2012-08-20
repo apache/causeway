@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Version;
+
+import com.google.common.base.Strings;
 
 
 /**
@@ -39,7 +42,7 @@ public interface Oid extends Encodable {
 
     String enStringNoVersion(OidMarshaller oidMarshaller);
     
-    Long getVersion();
+    Version getVersion();
 
     /**
      * Flags whether this OID is for a transient (not-yet-persisted) object.
@@ -71,4 +74,80 @@ public interface Oid extends Encodable {
         }
     }
 
+    
+    public static final class Version {
+        
+        private final Long sequence;
+        private final String user;
+        private final Long utcTimestamp;
+
+        public static Version create(String sequence, String user, String utcTimestamp) {
+            if(sequence == null) { 
+                return null;
+            }
+            return new Version(sequence, user, utcTimestamp);
+        }
+
+        public static Version create(Long sequence, String user, Long utcTimestamp) {
+            if(sequence == null) { 
+                return null;
+            }
+            return new Version(sequence, user, utcTimestamp);
+        }
+
+        private Version(String sequence, String user, String utcTimestamp) {
+            this(Long.parseLong(sequence), user, utcTimestamp != null?Long.parseLong(utcTimestamp):null); 
+        }
+
+        private Version(Long sequence, String user, Long utcTimestamp) {
+            this.sequence = sequence;
+            this.user = user;
+            this.utcTimestamp = utcTimestamp;
+        }
+
+        public Long getSequence() {
+            return sequence;
+        }
+        
+        public String getUser() {
+            return user;
+        }
+        
+        public Long getUtcTimestamp() {
+            return utcTimestamp;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Version other = (Version) obj;
+            if (sequence == null) {
+                if (other.sequence != null)
+                    return false;
+            } else if (!sequence.equals(other.sequence))
+                return false;
+            return true;
+        }
+        
+        public String enString(OidMarshaller oidMarshaller) {
+            return oidMarshaller.marshal(this);
+
+        }
+
+
+    }
+    
 }

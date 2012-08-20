@@ -25,7 +25,6 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.di
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
 
 /**
@@ -46,7 +45,7 @@ public class JdoProgrammingModelFacets extends ProgrammingModelFacetsJava5 {
         addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
         addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
 
-        addFactory(JdoVersionAnnotationFacetFactory.class);
+        //addFactory(JdoVersionAnnotationFacetFactory.class);
         addFactory(JdoQueryAnnotationFacetFactory.class);
     }
 

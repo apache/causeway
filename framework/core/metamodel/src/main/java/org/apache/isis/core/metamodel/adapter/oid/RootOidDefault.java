@@ -44,7 +44,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     private final State state;
     
     // not part of equality check
-    private final Long version;
+    private final Version version;
 
     private int cachedHashCode;
 
@@ -54,28 +54,63 @@ public final class RootOidDefault implements Serializable, RootOid {
     // Constructor, factory methods
     // ////////////////////////////////////////////
 
+    public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier) {
+        return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT);
+    }
+
     public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier) {
         return create(objectSpecId, identifier, null);
     }
 
-    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long version) {
-        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, version);
+    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence) {
+        return create(objectSpecId, identifier, versionSequence, null, null);
     }
 
-    public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier) {
-        return createTransient(objectSpecId, identifier, null);
+    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, String versionUser) {
+        return create(objectSpecId, identifier, versionSequence, versionUser, null);
     }
 
-    public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier, Long version) {
-        return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT, version);
+    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, Long versionUtcTimestamp) {
+        return create(objectSpecId, identifier, versionSequence, null, versionUtcTimestamp);
     }
 
+    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
+        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, Oid.Version.create(versionSequence, versionUser, versionUtcTimestamp));
+    }
+
+
+    
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state) {
-    	this(objectSpecId, identifier, state, null);
+    	this(objectSpecId, identifier, state, (Version)null);
     }
 
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long version) {
-		Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence) {
+        this(objectSpecId, identifier, state, versionSequence, null, null);
+    }
+
+    /**
+     * If specify version sequence, can optionally specify the user that changed the object.  This is used for informational purposes only.
+     */
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, String versionUser) {
+        this(objectSpecId, identifier, state, versionSequence, versionUser, null);
+    }
+
+    /**
+     * If specify version sequence, can optionally specify utc timestamp that the oid was changed.  This is used for informational purposes only.
+     */
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, Long versionUtcTimestamp) {
+        this(objectSpecId, identifier, state, versionSequence, null, versionUtcTimestamp);
+    }
+    
+    /**
+     * If specify version sequence, can optionally specify user and/or utc timestamp that the oid was changed.  This is used for informational purposes only.
+     */
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
+        this(objectSpecId, identifier, state, Version.create(versionSequence, versionUser, versionUtcTimestamp));
+    }
+
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Version version) {
+        Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))));
@@ -177,7 +212,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
 
-	public Long getVersion() {
+	public Version getVersion() {
 		return version;
 	}
 

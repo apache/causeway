@@ -23,16 +23,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.jdo.annotations.Extension;
+import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
+import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.Auditable;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("TODO")
@@ -45,9 +48,8 @@ import org.apache.isis.applib.annotation.Title;
         name="todo_similarTo", language="JDOQL",  
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
 })
-@Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION",
-         extensions={@Extension(vendorName="datanucleus", key="field-name", value="version")})
-public class ToDoItem extends AbstractDomainObject {
+@Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
+public class ToDoItem extends AbstractDomainObject implements Auditable {
     
     public static final List<String> CATEGORIES = Collections.unmodifiableList(Arrays.asList("Professional", "Domestic", "Other"));
 
@@ -135,34 +137,21 @@ public class ToDoItem extends AbstractDomainObject {
     // }}
 
 
-    // {{ Version (property)
-    private long version;
-
+    // {{ Version (derived property)
     @Disabled
     @MemberOrder(sequence = "3")
-    public long getVersion() {
-        return version;
+    @Named("Version")
+    public Long getVersionSequence() {
+        if(!(this instanceof PersistenceCapable)) {
+            return null;
+        } 
+        PersistenceCapable persistenceCapable = (PersistenceCapable) this;
+        return (Long) JDOHelper.getVersion(persistenceCapable);
     }
-
-    public void setVersion(final long version) {
-        this.version = version;
+    public boolean hideVersionSequence() {
+        return !(this instanceof PersistenceCapable);
     }
     // }}
-
-
-//    // {{ LastUpdatedAt (property)
-//    private java.util.Date lastUpdatedAt;
-//
-//    @Disabled
-//    @MemberOrder(sequence = "3")
-//    public java.util.Date getLastUpdatedAt() {
-//        return lastUpdatedAt;
-//    }
-//
-//    public void setLastUpdatedAt(final java.util.Date lastUpdatedAt) {
-//        this.lastUpdatedAt = lastUpdatedAt;
-//    }
-//    // }}
 
 
 

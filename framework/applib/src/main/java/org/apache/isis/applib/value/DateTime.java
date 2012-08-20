@@ -268,6 +268,8 @@ public class DateTime extends Magnitude<DateTime> {
     public long millisSinceEpoch() {
         return dateTime.getMillis();
     }
+    
+    
 
     @Override
     public boolean equals(final Object obj) {

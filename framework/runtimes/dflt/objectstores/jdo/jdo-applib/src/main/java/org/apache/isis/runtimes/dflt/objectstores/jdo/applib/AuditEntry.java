@@ -1,0 +1,111 @@
+package org.apache.isis.runtimes.dflt.objectstores.jdo.applib;
+
+import javax.jdo.annotations.IdentityType;
+
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.value.DateTime;
+
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@Immutable
+public class AuditEntry {
+
+    // {{ TimestampUtc (property)
+    private Long timestampEpoch;
+
+    @Hidden
+    public Long getTimestampEpoch() {
+        return timestampEpoch;
+    }
+
+    public void setTimestampEpoch(final Long timestampEpoch) {
+        this.timestampEpoch = timestampEpoch;
+    }
+    // }}
+
+    
+    // {{ Timestamp (property)
+    @Title(sequence="1")
+    @MemberOrder(sequence = "1")
+    public DateTime getTimestamp() {
+        return timestampEpoch != null? new DateTime(timestampEpoch): null;
+    }
+
+    // }}
+
+    
+    // {{ User (property)
+    private String user;
+
+    @MemberOrder(sequence = "2")
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+    // }}
+
+
+    
+
+    // {{ ObjectType (property)
+    private String objectType;
+
+    @Title(sequence="3", prepend=":")
+    @MemberOrder(sequence = "3")
+    public String getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(final String objectType) {
+        this.objectType = objectType;
+    }
+    // }}
+
+    // {{ Identifier (property)
+    private String identifier;
+
+    @MemberOrder(sequence = "4")
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(final String identifier) {
+        this.identifier = identifier;
+    }
+    // }}
+
+    
+    // {{ PreValue (property)
+    private String preValue;
+
+    @MemberOrder(sequence = "5")
+    public String getPreValue() {
+        return preValue;
+    }
+
+    public void setPreValue(final String preValue) {
+        this.preValue = preValue;
+    }
+    // }}
+
+
+    // {{ PostValue (property)
+    private String postValue;
+
+    @MemberOrder(sequence = "6")
+    public String getPostValue() {
+        return postValue;
+    }
+
+    public void setPostValue(final String postValue) {
+        this.postValue = postValue;
+    }
+    // }}
+
+}

@@ -76,12 +76,14 @@
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jdo-query</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-rdbms</artifactId>
         </dependency>
+		<!-- 
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jdo-query</artifactId>
+        </dependency>
+		-->
 
 		<dependency>
 		    <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
