@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import com.google.common.base.Objects;
@@ -44,7 +45,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     private final State state;
     
     // not part of equality check
-    private final OidVersion version;
+    private final Version version;
 
     private int cachedHashCode;
 
@@ -75,13 +76,13 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
     public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
-        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, OidVersion.create(versionSequence, versionUser, versionUtcTimestamp));
+        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, Version.create(versionSequence, versionUser, versionUtcTimestamp));
     }
 
 
     
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state) {
-    	this(objectSpecId, identifier, state, (OidVersion)null);
+    	this(objectSpecId, identifier, state, (Version)null);
     }
 
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence) {
@@ -106,10 +107,10 @@ public final class RootOidDefault implements Serializable, RootOid {
      * If specify version sequence, can optionally specify user and/or utc timestamp that the oid was changed.  This is used for informational purposes only.
      */
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
-        this(objectSpecId, identifier, state, OidVersion.create(versionSequence, versionUser, versionUtcTimestamp));
+        this(objectSpecId, identifier, state, Version.create(versionSequence, versionUser, versionUtcTimestamp));
     }
 
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, OidVersion version) {
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Version version) {
         Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))));
@@ -212,7 +213,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
 
-	public OidVersion getVersion() {
+	public Version getVersion() {
 		return version;
 	}
 

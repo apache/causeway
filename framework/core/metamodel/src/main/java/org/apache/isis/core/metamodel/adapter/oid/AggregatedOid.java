@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import com.google.common.base.Objects;
@@ -181,7 +182,7 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
 
 
 	@Override
-	public OidVersion getVersion() {
+	public Version getVersion() {
 		return parentOid.getVersion();
 	}
 

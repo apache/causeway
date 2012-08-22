@@ -19,7 +19,6 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.version;
 
-import org.apache.isis.core.metamodel.adapter.oid.OidVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.Clock;
 
@@ -35,7 +34,7 @@ public class FileVersion {
     }
     
     public static Version create(final String user, final long time) {
-        return OidVersion.create(time, user, time);
+        return Version.create(time, user, time);
     }
 
 }

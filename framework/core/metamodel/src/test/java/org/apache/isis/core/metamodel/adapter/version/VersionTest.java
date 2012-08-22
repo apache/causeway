@@ -17,61 +17,55 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objectstores.xml.internal.version;
+package org.apache.isis.core.metamodel.adapter.version;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.jmock.Expectations;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.jmock.auto.Mock;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.adapter.oid.OidVersion;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-
-public class OidVersionTest {
+public class VersionTest {
     
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
     
-    final DataInputExtended extended = context.mock(DataInputExtended.class);;
+    @Mock
+    private DataInputExtended extended;
 
+    @Mock
+    private DataOutputExtended outputExtended;
+
+    @Mock
+    private Version version;;
+
+    @Before
+    public void setUp() throws Exception {
+        context.ignoring(extended);
+    }
+    
     @Test
     public void instantiate_usingDataInputExtended() throws Exception {
-        context.checking(new Expectations() {
-            {
-                ignoring(extended);
-            }
-        });
-        new OidVersion(extended);
+        new Version(extended);
     }
 
     @Test
     public void encode() throws Exception {
-        final DataOutputExtended outputExtended = context.mock(DataOutputExtended.class);
-        context.checking(new Expectations() {
-            {
-                ignoring(extended);
-                ignoring(outputExtended);
-            }
-        });
-        final OidVersion oidVersion = new OidVersion(extended);
+        context.ignoring(outputExtended);
+        
+        final Version oidVersion = new Version(extended);
         oidVersion.encode(outputExtended);
     }
 
     @Test
     public void different_and_sequence_and_equals() throws Exception {
-        final Version version = context.mock(Version.class);
-        context.checking(new Expectations() {
-            {
-                ignoring(extended);
-            }
-        });
-        final OidVersion testVersion = new OidVersion(extended);
+        final Version testVersion = new Version(extended);
         
         assertFalse(testVersion.different(version));
         assertTrue(testVersion.sequence().length() > 0);

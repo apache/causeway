@@ -47,7 +47,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 public class PojoAdapterTest {
 
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
     
     private ObjectAdapter adapter;
     private RuntimeTestPojo domainObject;

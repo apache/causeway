@@ -21,13 +21,11 @@ package org.apache.isis.core.metamodel.adapter.version;
 
 import java.util.Date;
 
-import org.apache.isis.core.metamodel.adapter.oid.OidVersion;
-
 public class SerialNumberVersion {
 
     
     public static Version create(final long number, final String user, final Date time) {
-        return OidVersion.create(number, user, time);
+        return Version.create(number, user, time);
     }
 
 }

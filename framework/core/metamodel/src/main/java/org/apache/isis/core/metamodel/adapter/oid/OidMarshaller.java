@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import com.google.common.base.Splitter;
@@ -138,7 +139,7 @@ public class OidMarshaller {
         final String versionSequence = getGroup(matcher, 10);
         final String versionUser = getGroup(matcher, 11);
         final String versionUtcTimestamp = getGroup(matcher, 12);
-        final OidVersion version = OidVersion.create(versionSequence, versionUser, versionUtcTimestamp);
+        final Version version = Version.create(versionSequence, versionUser, versionUtcTimestamp);
 
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
@@ -174,7 +175,7 @@ public class OidMarshaller {
     }
     
 
-    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, OidVersion version) {
+    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, Version version) {
         final StringBuilder buf = new StringBuilder(rootOidStr);
         for(AggregateOidPart part: aggregateOidParts) {
             buf.append(part.toString());
@@ -228,7 +229,7 @@ public class OidMarshaller {
         return aggregatedOid.getParentOid().enStringNoVersion(this) + SEPARATOR_NESTING + aggregatedOid.getObjectSpecId() + SEPARATOR + aggregatedOid.getLocalId();
     }
 
-    public final String marshal(OidVersion version) {
+    public final String marshal(Version version) {
         if(version == null) {
             return "";
         }

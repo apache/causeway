@@ -26,6 +26,7 @@ import com.google.common.base.Objects;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
@@ -112,7 +113,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     }
 
     @Override
-    public OidVersion getVersion() {
+    public Version getVersion() {
         return parentOid.getVersion();
     }
 

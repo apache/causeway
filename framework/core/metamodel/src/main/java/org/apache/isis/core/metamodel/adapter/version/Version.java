@@ -19,11 +19,16 @@
 
 package org.apache.isis.core.metamodel.adapter.version;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 
 /**
  * An instance of this class is held by each {@link ObjectAdapter} and is used
@@ -40,7 +45,145 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * The user's name and a timestamp should alos be kept so that when an message
  * is passed to the user it can be of the form "user has change object at time"
  */
-public interface Version extends Serializable, Encodable {
+public class Version implements Serializable, Encodable {
+
+    
+    private static final long serialVersionUID = 1L;
+    
+    private final Long sequence;
+    private final String user;
+    private final Long utcTimestamp;
+
+    // ///////////////////////////////////////////////////////
+    // factory methods
+    // ///////////////////////////////////////////////////////
+
+    public static Version create(String sequence, String user, String utcTimestamp) {
+        if(sequence == null) { 
+            return null;
+        }
+        return create(Long.parseLong(sequence), user, utcTimestamp != null?Long.parseLong(utcTimestamp):null);
+    }
+
+    public static Version create(final Long sequence, final String user, final Date time) {
+        return create(sequence, user, time !=null? time.getTime(): null);
+    }
+
+    public static Version create(Long sequence, String user, Long utcTimestamp) {
+        if(sequence == null) { 
+            return null;
+        }
+        return new Version(sequence, user, utcTimestamp);
+    }
+
+    private Version(Long sequence, String user, Long utcTimestamp) {
+        this.sequence = sequence;
+        this.user = user;
+        this.utcTimestamp = utcTimestamp;
+    }
+
+    
+    // ///////////////////////////////////////////////////////
+    // encodable
+    // ///////////////////////////////////////////////////////
+
+    public Version(final DataInputExtended input) throws IOException {
+        this(input.readLong(), input.readUTF(), input.readLong());
+    }
+    
+    @Override
+    public void encode(final DataOutputExtended output) throws IOException {
+        output.writeLong(sequence);
+        output.writeUTF(user);
+        output.writeLong(utcTimestamp);
+    }
+
+
+    // ///////////////////////////////////////////////////////
+    // getters
+    // ///////////////////////////////////////////////////////
+
+    /**
+     * The internal, strictly monotonically increasing, version number.
+     * 
+     * <p>
+     * This might be the timestamp of the change, or it might be simply a number incrementing 1,2,3...
+     */
+    public long getSequence() {
+        return sequence;
+    }
+    
+    /**
+     * Returns the user who made the last change (used for display/reporting only)
+     * 
+     * <p>
+     * May be null.
+     */
+    public String getUser() {
+        return user;
+    }
+    
+    /**
+     * The time of the last change, as UTC milliseconds.
+     * 
+     * <p>
+     * May be null.
+     * 
+     * @see #getTime()
+     */
+    public Long getUtcTimestamp() {
+        return utcTimestamp;
+    }
+
+    /**
+     * Returns the time of the last change (used for display/reporting only, not comparison)
+     * 
+     * <p>
+     * May be null.
+     * 
+     * @see #getUtcTimestamp()
+     */
+    public Date getTime() {
+        return utcTimestamp != null? new Date(this.utcTimestamp): null;
+    }
+
+
+    // ///////////////////////////////////////////////////////
+    // enString
+    // ///////////////////////////////////////////////////////
+
+    public String enString(OidMarshaller oidMarshaller) {
+        return oidMarshaller.marshal(this);
+    }
+
+    // ///////////////////////////////////////////////////////
+    // equals, hashCode
+    // ///////////////////////////////////////////////////////
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Version other = (Version) obj;
+        if (sequence == null) {
+            if (other.sequence != null)
+                return false;
+        } else if (!sequence.equals(other.sequence))
+            return false;
+        return true;
+    }
 
     /**
      * Compares this version against the specified version and returns true if
@@ -50,29 +193,26 @@ public interface Version extends Serializable, Encodable {
      * This is use for optimistic checking, where the existence of a different
      * version will normally cause a concurrency exception.
      */
-    boolean different(Version version);
-
-    /**
-     * The internal, strictly monotonically increasing, version number.
-     * 
-     * <p>
-     * This might be the timestamp of the change, or it might be simply a number incrementing 1,2,3...
-     */
-    long getSequence();
+    public boolean different(Version version) {
+        return !equals(this);
+    }
     
-    /**
-     * Returns the user who made the last change (used for display only)
-     */
-    String getUser();
-
-    /**
-     * Returns the time of the last change (used for display only, not comparison)
-     */
-    Date getTime();
-
+    
+    //////////////////////////////////////////////////////////////
+    // sequence
+    //////////////////////////////////////////////////////////////
+    
+ 
+    @Override
+    public String toString() {
+        return "#" + sequence + " " + getUser() + " " + ToString.timestamp(getTime());
+    }
+    
     /**
      * Returns the sequence for printing/display
      */
-    String sequence();
-
+    public String sequence() {
+        return Long.toString(sequence, 16);
+    }
+    
 }
