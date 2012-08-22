@@ -42,7 +42,7 @@ public final class XmlCreateObjectCommand extends AbstractXmlPersistenceCommand 
             LOG.debug("  create object " + onAdapter());
         }
         final String user = getAuthenticationSession().getUserName();
-        onAdapter().setVersion(new FileVersion(user));
+        onAdapter().setVersion(FileVersion.create(user));
         final ObjectData data = createObjectData(onAdapter(), true);
         getDataManager().insertObject(data);
     }

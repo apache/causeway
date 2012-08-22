@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.adapter.version;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
@@ -39,11 +40,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * The user's name and a timestamp should alos be kept so that when an message
  * is passed to the user it can be of the form "user has change object at time"
  */
-public interface Version extends Serializable {
+public interface Version extends Serializable, Encodable {
 
     /**
      * Compares this version against the specified version and returns true if
-     * they are different versions.
+     * they are different versions (by checking {@link #getSequence()}).
      * 
      * <p>
      * This is use for optimistic checking, where the existence of a different
@@ -52,12 +53,20 @@ public interface Version extends Serializable {
     boolean different(Version version);
 
     /**
-     * Returns the user who made the last change.
+     * The internal, strictly monotonically increasing, version number.
+     * 
+     * <p>
+     * This might be the timestamp of the change, or it might be simply a number incrementing 1,2,3...
+     */
+    long getSequence();
+    
+    /**
+     * Returns the user who made the last change (used for display only)
      */
     String getUser();
 
     /**
-     * Returns the time of the last change.
+     * Returns the time of the last change (used for display only, not comparison)
      */
     Date getTime();
 
@@ -65,4 +74,5 @@ public interface Version extends Serializable {
      * Returns the sequence for printing/display
      */
     String sequence();
+
 }

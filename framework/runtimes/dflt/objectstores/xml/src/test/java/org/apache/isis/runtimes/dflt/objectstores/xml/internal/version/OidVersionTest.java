@@ -28,11 +28,12 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.adapter.oid.OidVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-public class FileVersionTest {
+public class OidVersionTest {
     
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
@@ -46,7 +47,7 @@ public class FileVersionTest {
                 ignoring(extended);
             }
         });
-        new FileVersion(extended);
+        new OidVersion(extended);
     }
 
     @Test
@@ -58,8 +59,8 @@ public class FileVersionTest {
                 ignoring(outputExtended);
             }
         });
-        final FileVersion fileVersion = new FileVersion(extended);
-        fileVersion.encode(outputExtended);
+        final OidVersion oidVersion = new OidVersion(extended);
+        oidVersion.encode(outputExtended);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class FileVersionTest {
                 ignoring(extended);
             }
         });
-        final FileVersion testVersion = new FileVersion(extended);
+        final OidVersion testVersion = new OidVersion(extended);
         
         assertFalse(testVersion.different(version));
         assertTrue(testVersion.sequence().length() > 0);

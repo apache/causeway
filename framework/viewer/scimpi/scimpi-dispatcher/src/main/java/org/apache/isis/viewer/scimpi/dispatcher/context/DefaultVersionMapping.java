@@ -34,7 +34,7 @@ public class DefaultVersionMapping implements VersionMapping {
     @Override
     public Version getVersion(final String id) {
         final Long sequence = Long.valueOf(id, 16);
-        return new SerialNumberVersion(sequence, null, null);
+        return SerialNumberVersion.create(sequence, null, null);
     }
 
 }

@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
@@ -114,7 +115,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     @Override
     public void createObject(final DatabaseConnector connector, final ObjectAdapter object) {
         final int versionSequence = 1;
-        final SerialNumberVersion version = createVersion(versionSequence);
+        final Version version = createVersion(versionSequence);
 
         final StringBuffer sql = new StringBuffer();
         sql.append("insert into " + table + " (");
@@ -146,17 +147,17 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public void destroyObject(final DatabaseConnector connector, final ObjectAdapter object) {
+    public void destroyObject(final DatabaseConnector connector, final ObjectAdapter adapter) {
         final StringBuffer sql = new StringBuffer();
         sql.append("delete from " + table + " WHERE ");
-        final RootOid oid = (RootOid) object.getOid();
+        final RootOid oid = (RootOid) adapter.getOid();
         idMapping.appendWhereClause(connector, sql, oid);
         sql.append(" AND ");
-        sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object.getVersion()));
+        sql.append(versionMapping.whereClause(connector, adapter.getVersion()));
         final int updateCount = connector.update(sql.toString());
         if (updateCount == 0) {
             LOG.info("concurrency conflict object " + this + "; no deletion performed");
-            throw new ConcurrencyException("", object.getOid());
+            throw new ConcurrencyException("", adapter.getOid());
         }
     }
 
@@ -410,7 +411,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
     @Override
     public void save(final DatabaseConnector connector, final ObjectAdapter adapter) {
-        final SerialNumberVersion version = (SerialNumberVersion) adapter.getVersion();
+        final Version version = adapter.getVersion();
         final long nextSequence;
         if (useVersioning) {
             nextSequence = version.getSequence() + 1;
@@ -432,7 +433,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         idMapping.appendWhereClause(connector, sql, oid);
         if (useVersioning) {
             sql.append(" AND ");
-            sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) adapter.getVersion()));
+            sql.append(versionMapping.whereClause(connector, adapter.getVersion()));
         }
 
         final int updateCount = connector.update(sql.toString());

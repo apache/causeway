@@ -71,10 +71,10 @@ public class XmlDataManagerTest_instances {
         oids = new RootOid[SIZE];
         data = new ObjectData[SIZE];
 
-        pattern = new ObjectData(RootOidDefault.deString("RLE:1", new OidMarshaller()), new FileVersion("user", 13));
+        pattern = new ObjectData(RootOidDefault.deString("RLE:1", new OidMarshaller()), FileVersion.create("user", 13));
         for (int i = 0; i < SIZE; i++) {
             oids[i] = RootOidDefault.create(ObjectSpecId.of("RLE"), ""+i);
-            data[i] = new ObjectData(oids[i], new FileVersion("user", 13));
+            data[i] = new ObjectData(oids[i], FileVersion.create("user", 13));
             manager.insertObject(data[i]);
         }
     }

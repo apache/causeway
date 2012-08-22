@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 import com.google.common.base.Objects;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -30,9 +31,9 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersi
 public abstract class Data {
     
     private final RootOid oid;
-    private final FileVersion version;
+    private final Version version;
 
-    Data(final RootOid oid, final FileVersion version) {
+    Data(final RootOid oid, final Version version) {
         this.oid = oid;
         this.version = version;
     }
@@ -41,7 +42,7 @@ public abstract class Data {
         return oid;
     }
 
-    public FileVersion getVersion() {
+    public Version getVersion() {
         return version;
     }
 

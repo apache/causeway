@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.CollectionData;
@@ -116,13 +117,13 @@ public class XmlDataManager implements DataManager {
             } else {
                 if (tagName.equals("isis")) {
                     final RootOidDefault oid = oidFrom(attributes);
-                    final FileVersion fileVersion = fileVersionFrom(attributes);
+                    final Version fileVersion = fileVersionFrom(attributes);
                     
                     object = new ObjectData(oid, fileVersion);
                 } else if (tagName.equals("collection")) {
                     
                     final RootOidDefault oid = oidFrom(attributes);
-                    final FileVersion fileVersion = fileVersionFrom(attributes);
+                    final Version fileVersion = fileVersionFrom(attributes);
                     
                     collection = new CollectionData(oid, fileVersion);
                 } else {
@@ -137,10 +138,10 @@ public class XmlDataManager implements DataManager {
         return RootOidDefault.deString(oid, getOidMarshaller());
     }
 
-    private static FileVersion fileVersionFrom(final Attributes attributes) {
+    private static Version fileVersionFrom(final Attributes attributes) {
         final String user = attributes.getValue("user");
         final long version = Long.valueOf(attributes.getValue("ver"), 16).longValue();
-        final FileVersion fileVersion = new FileVersion(user, version);
+        final Version fileVersion = FileVersion.create(user, version);
         return fileVersion;
     }
 

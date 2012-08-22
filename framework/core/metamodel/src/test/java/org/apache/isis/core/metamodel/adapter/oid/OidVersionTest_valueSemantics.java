@@ -6,22 +6,22 @@ import java.util.List;
 
 import org.apache.isis.core.testsupport.value.ValueTypeContractTestAbstract;
 
-public class OidVersionTest_valueSemantics extends ValueTypeContractTestAbstract<Oid.Version> {
+public class OidVersionTest_valueSemantics extends ValueTypeContractTestAbstract<OidVersion> {
 
     @Override
-    protected List<Oid.Version> getObjectsWithSameValue() {
+    protected List<OidVersion> getObjectsWithSameValue() {
         return Arrays.asList(
-                    Oid.Version.create(123L, null, null), 
-                    Oid.Version.create(123L, "jimmy", null), 
-                    Oid.Version.create(123L, null, new Date().getTime())
+                    OidVersion.create(123L, null, (Long)null), 
+                    OidVersion.create(123L, "jimmy", (Long)null), 
+                    OidVersion.create(123L, null, new Date().getTime())
                 ); 
     }
 
     @Override
-    protected List<Oid.Version> getObjectsWithDifferentValue() {
+    protected List<OidVersion> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                    Oid.Version.create(124L, null, null), 
-                    Oid.Version.create(125L, null, null) 
+                    OidVersion.create(124L, null, (Long)null), 
+                    OidVersion.create(125L, null, (Long)null) 
                 );
     }
 

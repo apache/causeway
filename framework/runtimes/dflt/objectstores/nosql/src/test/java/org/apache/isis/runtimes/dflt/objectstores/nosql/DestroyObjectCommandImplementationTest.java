@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
@@ -50,7 +51,7 @@ public class DestroyObjectCommandImplementationTest {
     @Mock
     private VersionCreatorDefault versionCreator;
     @Mock
-    private SerialNumberVersion version;
+    private Version version;
 
     //private KeyCreatorDefault keyCreator;
 

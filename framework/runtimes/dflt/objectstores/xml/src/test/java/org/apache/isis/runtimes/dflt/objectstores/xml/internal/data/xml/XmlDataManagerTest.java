@@ -32,6 +32,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
@@ -83,7 +84,7 @@ public class XmlDataManagerTest {
 
     @Test
     public void testWriteReadTypeOidAndVersion() {
-        final ObjectData data = createData(Role.class, 99, new FileVersion("user", 19));
+        final ObjectData data = createData(Role.class, 99, FileVersion.create("user", 19));
         manager.insertObject(data);
 
         final ObjectData read = (ObjectData) manager.loadData(data.getRootOid());
@@ -103,7 +104,7 @@ public class XmlDataManagerTest {
 
     @Test
     public void testInsertObjectWithFields() throws ObjectPersistenceException {
-        final ObjectData data = createData(Role.class, 99, new FileVersion("user", 13));
+        final ObjectData data = createData(Role.class, 99, FileVersion.create("user", 13));
         data.set("Person", RootOidDefault.create(ObjectSpecId.of("RLE"), ""+101));
         assertNotNull(data.get("Person"));
         data.set("Name", "Harry");
@@ -121,7 +122,7 @@ public class XmlDataManagerTest {
 
     @Test
     public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectPersistenceException {
-        final ObjectData data = createData(Team.class, 99, new FileVersion("user", 13));
+        final ObjectData data = createData(Team.class, 99, FileVersion.create("user", 13));
 
         data.initCollection("Members");
 
@@ -137,7 +138,7 @@ public class XmlDataManagerTest {
 
     @Test
     public void testInsertObjectWithOneToManyAssociations() throws ObjectPersistenceException {
-        final ObjectData data = createData(Team.class, 99, new FileVersion("user", 13));
+        final ObjectData data = createData(Team.class, 99, FileVersion.create("user", 13));
 
         data.initCollection("Members");
         final RootOidDefault oid[] = new RootOidDefault[3];
@@ -158,7 +159,7 @@ public class XmlDataManagerTest {
     }
 
 
-    private ObjectData createData(final Class<?> type, final long id, final FileVersion version) {
+    private ObjectData createData(final Class<?> type, final long id, final Version version) {
 
         final ObjectSpecification objSpec = IsisContext.getSpecificationLoader().loadSpecification(type);
         final ObjectSpecId objectSpecId = objSpec.getSpecId();

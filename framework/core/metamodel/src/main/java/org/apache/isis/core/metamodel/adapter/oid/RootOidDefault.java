@@ -44,7 +44,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     private final State state;
     
     // not part of equality check
-    private final Version version;
+    private final OidVersion version;
 
     private int cachedHashCode;
 
@@ -75,13 +75,13 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
     public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
-        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, Oid.Version.create(versionSequence, versionUser, versionUtcTimestamp));
+        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, OidVersion.create(versionSequence, versionUser, versionUtcTimestamp));
     }
 
 
     
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state) {
-    	this(objectSpecId, identifier, state, (Version)null);
+    	this(objectSpecId, identifier, state, (OidVersion)null);
     }
 
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence) {
@@ -106,10 +106,10 @@ public final class RootOidDefault implements Serializable, RootOid {
      * If specify version sequence, can optionally specify user and/or utc timestamp that the oid was changed.  This is used for informational purposes only.
      */
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
-        this(objectSpecId, identifier, state, Version.create(versionSequence, versionUser, versionUtcTimestamp));
+        this(objectSpecId, identifier, state, OidVersion.create(versionSequence, versionUser, versionUtcTimestamp));
     }
 
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Version version) {
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, OidVersion version) {
         Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))));
@@ -212,7 +212,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
 
-	public Version getVersion() {
+	public OidVersion getVersion() {
 		return version;
 	}
 

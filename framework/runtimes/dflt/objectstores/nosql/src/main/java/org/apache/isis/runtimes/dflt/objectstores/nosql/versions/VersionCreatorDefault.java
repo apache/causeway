@@ -28,7 +28,7 @@ public class VersionCreatorDefault implements VersionCreator {
 
     @Override
     public String versionString(final Version version) {
-        final long sequence = ((SerialNumberVersion) version).getSequence();
+        final long sequence = version.getSequence();
         return Long.toHexString(sequence);
     }
 
@@ -43,17 +43,17 @@ public class VersionCreatorDefault implements VersionCreator {
         final Long sequence = Long.valueOf(versionString, 16);
         final Long time = Long.valueOf(timeString, 16);
         final Date date = new Date(time);
-        return new SerialNumberVersion(sequence, user, date);
+        return SerialNumberVersion.create(sequence, user, date);
     }
 
     @Override
     public Version newVersion(final String user) {
-        return new SerialNumberVersion(1, user, new Date());
+        return SerialNumberVersion.create(1, user, new Date());
     }
 
     @Override
     public Version nextVersion(final Version version, final String user) {
-        final long sequence = ((SerialNumberVersion) version).getSequence() + 1;
-        return new SerialNumberVersion(sequence, user, new Date());
+        final long sequence = version.getSequence() + 1;
+        return SerialNumberVersion.create(sequence, user, new Date());
     }
 }

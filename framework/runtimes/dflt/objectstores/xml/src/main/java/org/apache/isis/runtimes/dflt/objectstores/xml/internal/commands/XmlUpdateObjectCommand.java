@@ -43,7 +43,7 @@ public final class XmlUpdateObjectCommand extends AbstractXmlPersistenceCommand 
             LOG.debug("  save object " + onAdapter());
         }
         final String user = getAuthenticationSession().getUserName();
-        onAdapter().setVersion(new FileVersion(user));
+        onAdapter().setVersion(FileVersion.create(user));
 
         final Data data = createObjectData(onAdapter(), true);
         getDataManager().save(data);

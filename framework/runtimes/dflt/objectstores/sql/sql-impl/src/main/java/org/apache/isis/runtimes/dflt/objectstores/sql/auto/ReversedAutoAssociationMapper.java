@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
@@ -180,7 +181,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
             final StringBuffer insert = new StringBuffer(sql);
             insert.append(values(connector, element));
-            final SerialNumberVersion version = new SerialNumberVersion(0, "", new Date());
+            final Version version = SerialNumberVersion.create(0, "", new Date());
             insert.append(versionMapping.insertValues(connector, version));
             insert.append(") ");
 

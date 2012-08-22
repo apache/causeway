@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
@@ -36,7 +37,7 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersi
 public class ObjectData extends Data {
     private final Map<String, Object> fieldById;
 
-    public ObjectData(final RootOid oid, final FileVersion version) {
+    public ObjectData(final RootOid oid, final Version version) {
         super(oid, version);
         fieldById = new HashMap<String, Object>();
     }

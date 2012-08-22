@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 
 
 public abstract class AbstractMapper {
@@ -45,8 +46,8 @@ public abstract class AbstractMapper {
         return Sql.sqlName(name);
     }
     
-    protected SerialNumberVersion createVersion(final long versionSequence) {
-        return new SerialNumberVersion(versionSequence, "", new Date());
+    protected Version createVersion(final long versionSequence) {
+        return SerialNumberVersion.create(versionSequence, "", new Date());
     }
 
 }

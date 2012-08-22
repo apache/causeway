@@ -41,7 +41,7 @@ public class VersionMapping {
         return versionColumn + ", " + lastActivityUserColumn + ", " + lastActivityDateColumn;
     }
 
-    public String insertValues(final DatabaseConnector connector, final SerialNumberVersion version) {
+    public String insertValues(final DatabaseConnector connector, final Version version) {
         connector.addToQueryValues(version.getSequence());
         IsisContext.getSession().getAuthenticationSession().getUserName();
         String user = IsisContext.getSession().getAuthenticationSession().getUserName();// version.getUser();
@@ -53,7 +53,7 @@ public class VersionMapping {
         return "?,?,?";
     }
 
-    public String whereClause(final DatabaseConnector connector, final SerialNumberVersion version) {
+    public String whereClause(final DatabaseConnector connector, final Version version) {
         connector.addToQueryValues(version.getSequence());
         return versionColumn + " = ?";
     }
@@ -99,7 +99,7 @@ public class VersionMapping {
         final long number = rs.getLong(versionColumn);
         final String user = rs.getString(lastActivityUserColumn);
         final Date time = rs.getJavaDateTime(lastActivityDateColumn, Defaults.getCalendar());
-        final Version version = new SerialNumberVersion(number, user, time);
+        final Version version = SerialNumberVersion.create(number, user, time);
         return version;
     }
 

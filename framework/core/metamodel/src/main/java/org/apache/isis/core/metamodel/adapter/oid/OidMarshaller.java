@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Objects;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.Version;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Factory for subtypes of {@link Oid}, based on their oid str.
@@ -140,7 +138,7 @@ public class OidMarshaller {
         final String versionSequence = getGroup(matcher, 10);
         final String versionUser = getGroup(matcher, 11);
         final String versionUtcTimestamp = getGroup(matcher, 12);
-        final Version version = Version.create(versionSequence, versionUser, versionUtcTimestamp);
+        final OidVersion version = OidVersion.create(versionSequence, versionUser, versionUtcTimestamp);
 
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
@@ -176,7 +174,7 @@ public class OidMarshaller {
     }
     
 
-    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, Version version) {
+    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, OidVersion version) {
         final StringBuilder buf = new StringBuilder(rootOidStr);
         for(AggregateOidPart part: aggregateOidParts) {
             buf.append(part.toString());
@@ -230,7 +228,7 @@ public class OidMarshaller {
         return aggregatedOid.getParentOid().enStringNoVersion(this) + SEPARATOR_NESTING + aggregatedOid.getObjectSpecId() + SEPARATOR + aggregatedOid.getLocalId();
     }
 
-    public static String marshal(Version version) {
+    public final String marshal(OidVersion version) {
         if(version == null) {
             return "";
         }

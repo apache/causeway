@@ -201,7 +201,6 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         if (isisOid.isTransient()) {
             final RootOid persistentOid = getOidGenerator().createPersistent(pojo, isisOid);
             
-            // most of the magic is here...
             getPersistenceSession().remapAsPersistent(adapter, persistentOid);
 
             callbackFacetClass = PersistedCallbackFacet.class;
@@ -211,7 +210,8 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         
         clearDirtyFor(adapter);
         
-        adapter.setVersion(getVersionIfAny(pojo));
+        Version versionIfAny = getVersionIfAny(pojo);
+        adapter.setVersion(versionIfAny);
         CallbackUtils.callCallback(adapter, callbackFacetClass);
 
         ensureFrameworksInAgreement(event);
@@ -468,7 +468,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     private Version getVersionIfAny(final PersistenceCapable pojo) {
         Object jdoVersion = pojo.jdoGetVersion();
         if(jdoVersion instanceof Long) {
-            return new SerialNumberVersion((Long) jdoVersion, getAuthenticationSession().getUserName(), new Date()); 
+            return SerialNumberVersion.create((Long) jdoVersion, getAuthenticationSession().getUserName(), new Date()); 
         } 
         return null;
     }

@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersi
 public class CollectionData extends Data {
     private final ListOfRootOid elements = new ListOfRootOid();
 
-    public CollectionData(final RootOid oid, final FileVersion version) {
+    public CollectionData(final RootOid oid, final Version version) {
         super(oid, version);
     }
 

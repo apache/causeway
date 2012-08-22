@@ -50,7 +50,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class ObjectStoreInstances {
 
     private final Map<Oid, Object> pojoByOidMap = new HashMap<Oid, Object>();
-    private final Map<Oid, SerialNumberVersion> versionByOidMap = new HashMap<Oid, SerialNumberVersion>();
+    private final Map<Oid, Version> versionByOidMap = new HashMap<Oid, Version>();
 
     @SuppressWarnings("unused")
     private final ObjectSpecification spec;
@@ -102,15 +102,15 @@ public class ObjectStoreInstances {
     public void save(final ObjectAdapter adapter) {
         pojoByOidMap.put(adapter.getOid(), adapter.getObject());
 
-        final SerialNumberVersion version = versionByOidMap.get(adapter.getOid());
-        final SerialNumberVersion nextVersion = nextVersion(version);
+        final Version version = versionByOidMap.get(adapter.getOid());
+        final Version nextVersion = nextVersion(version);
         versionByOidMap.put(adapter.getOid(), nextVersion);
         adapter.setVersion(nextVersion);
     }
 
-    private synchronized SerialNumberVersion nextVersion(final SerialNumberVersion version) {
+    private synchronized Version nextVersion(final Version version) {
         final long sequence = (version != null ? version.getSequence() : 0) + 1;
-        return new SerialNumberVersion(sequence, getAuthenticationSession().getUserName(), new Date(Clock.getTime()));
+        return SerialNumberVersion.create(sequence, getAuthenticationSession().getUserName(), new Date(Clock.getTime()));
     }
 
     public void remove(final Oid oid) {

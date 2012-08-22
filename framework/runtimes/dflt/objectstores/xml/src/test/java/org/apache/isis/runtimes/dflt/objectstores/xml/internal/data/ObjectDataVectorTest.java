@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
@@ -40,7 +41,7 @@ public class ObjectDataVectorTest {
     private ObjectData objectData;
     private ObjectSpecificationStub spec;
     private RootOidDefault oid;
-    private FileVersion version;
+    private Version version;
 
     @Before
     public void setUp() throws Exception {
@@ -50,7 +51,7 @@ public class ObjectDataVectorTest {
         spec = new ObjectSpecificationStub(this.getClass());
         spec.fields = Collections.emptyList();
 
-        version = new FileVersion("", System.currentTimeMillis());
+        version = FileVersion.create("", System.currentTimeMillis());
         objectData = new ObjectData(oid, version);
         objectDataVector = new ObjectDataVector();
     }

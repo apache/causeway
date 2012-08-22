@@ -53,7 +53,7 @@ abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract 
         }
 
         final ObjectSpecification adapterSpec = adapter.getSpecification();
-        final ObjectData data = new ObjectData((RootOidDefault) adapter.getOid(), (FileVersion) adapter.getVersion());
+        final ObjectData data = new ObjectData((RootOidDefault) adapter.getOid(), adapter.getVersion());
 
         final List<ObjectAssociation> associations = adapterSpec.getAssociations();
         for (final ObjectAssociation association : associations) {

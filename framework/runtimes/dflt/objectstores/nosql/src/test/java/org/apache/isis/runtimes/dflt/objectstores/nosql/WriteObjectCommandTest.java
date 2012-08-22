@@ -97,7 +97,7 @@ public class WriteObjectCommandTest {
         
         prnt1Adapter = iswf.remapAsPersistent(prnt1, RootOidDefault.deString("PRNT:1", new OidMarshaller()));
 
-        final Version version = new SerialNumberVersion(2, "username", null);
+        final Version version = SerialNumberVersion.create(2, "username", null);
 
         context.checking(new Expectations() {
             {

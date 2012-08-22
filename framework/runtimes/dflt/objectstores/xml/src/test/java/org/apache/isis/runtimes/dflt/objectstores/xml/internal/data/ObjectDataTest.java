@@ -37,7 +37,7 @@ public class ObjectDataTest extends TestCase {
         FileVersion.setClock(new DefaultClock());
 
         final ObjectSpecificationStub type = new ObjectSpecificationStub("test");
-        final ObjectData objectData = new ObjectData(RootOidDefault.create(ObjectSpecId.of(objectType), ""+13), new FileVersion(""));
+        final ObjectData objectData = new ObjectData(RootOidDefault.create(ObjectSpecId.of(objectType), ""+13), FileVersion.create(""));
 
         assertEquals(null, objectData.get("name"));
         objectData.set("name", "value");
