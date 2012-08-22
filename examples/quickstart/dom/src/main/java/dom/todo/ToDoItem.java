@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
@@ -35,7 +34,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.Auditable;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.Discriminator("TODO")
@@ -48,8 +47,9 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.Auditable;
         name="todo_similarTo", language="JDOQL",  
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
 })
-@Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
-public class ToDoItem extends AbstractDomainObject implements Auditable {
+@javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
+@Auditable
+public class ToDoItem extends AbstractDomainObject  {
     
     public static final List<String> CATEGORIES = Collections.unmodifiableList(Arrays.asList("Professional", "Domestic", "Other"));
 

@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.adapter;
 
 import java.util.List;
 
+import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -53,6 +54,10 @@ public interface DomainObjectServices extends Injectable {
      */
     ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent);
 
+    // ///////////////////////////////////////////
+    // retrieve
+    // ///////////////////////////////////////////
+
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      * 
@@ -68,6 +73,16 @@ public interface DomainObjectServices extends Injectable {
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     void resolve(Object parent, Object field);
+
+    /**
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
+     * 
+     * <p>
+     * Called by <tt>BookmarkServicesDefault</tt>.
+     * @return 
+     */
+    Object lookup(Bookmark bookmark);
+
 
     // ///////////////////////////////////////////
     // flush, commit

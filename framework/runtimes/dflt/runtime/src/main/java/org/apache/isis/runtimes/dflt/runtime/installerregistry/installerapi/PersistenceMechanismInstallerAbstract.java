@@ -217,6 +217,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         // wire up components
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
+        for (Object service : serviceList) {
+            runtimeContext.injectInto(service);
+        }
 
         servicesInjector.setContainer(container);
         servicesInjector.setServices(serviceList);

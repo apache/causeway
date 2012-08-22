@@ -87,7 +87,7 @@ import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSuperc
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.SyntheticMethodFilteringFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfacesFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.maxlen.annotation.MaxLengthAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLineAnnotationOnTypeFacetFactory;
@@ -305,7 +305,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory.class);
         addFactory(DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory.class);
 
-        addFactory(ImmutableMarkerInterfacesFacetFactory.class);
+        addFactory(ImmutableMarkerInterfaceFacetFactory.class);
 
         addFactory(ViewModelAnnotationFacetFactory.class);
 

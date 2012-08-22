@@ -19,9 +19,13 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.container;
 
+import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -45,6 +49,18 @@ public class DomainObjectContainerResolve {
     public DomainObjectContainerResolve() {
     }
 
+    public Object lookup(final Bookmark bookmark) {
+        RootOid oid = RootOidDefault.create(ObjectSpecId.of(bookmark.getObjectType()), bookmark.getIdentifier());
+        final ObjectAdapter adapter = adapterFor(oid);
+        if(adapter == null) {
+            return null;
+        }
+        if (adapter.canTransitionToResolving()) {
+            getPersistenceSession().resolveImmediately(adapter);
+        }
+        return adapter.getObject();
+    }
+
     public void resolve(final Object parent) {
         final ObjectAdapter adapter = adapterFor(parent);
         if (adapter.canTransitionToResolving()) {
@@ -60,6 +76,10 @@ public class DomainObjectContainerResolve {
 
     private ObjectAdapter adapterFor(final Object object) {
         return getAdapterManager().adapterFor(object);
+    }
+
+    private ObjectAdapter adapterFor(final RootOid oid) {
+        return getAdapterManager().adapterFor(oid);
     }
 
     // /////////////////////////////////////////////////////////////////

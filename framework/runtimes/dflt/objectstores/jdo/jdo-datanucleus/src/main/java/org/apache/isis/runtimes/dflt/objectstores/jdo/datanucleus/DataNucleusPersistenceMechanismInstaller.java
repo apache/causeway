@@ -1,13 +1,17 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus;
 
 
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.AuditService;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
@@ -20,8 +24,14 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 /**
  * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
@@ -42,10 +52,23 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
  */
 public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
+    private static final Predicate<Object> LOCATE_AUDIT_SERVICE = new Predicate<Object>() {
+
+        @Override
+        public boolean apply(Object input) {
+            return input instanceof AuditService;
+        }
+    };
+
     public static final String NAME = "datanucleus";
     private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
 
     private DataNucleusApplicationComponents applicationComponents = null;
+
+    // only search once
+    private boolean searchedForAuditService;
+    @Nullable
+    private AuditService auditService;
     
     public DataNucleusPersistenceMechanismInstaller() {
         super(NAME);
@@ -69,13 +92,32 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     @Override
+    public PersistenceSession createPersistenceSession(PersistenceSessionFactory persistenceSessionFactory) {
+        PersistenceSession persistenceSession = super.createPersistenceSession(persistenceSessionFactory);
+        searchAndCacheAuditServiceIfNotAlreadyDoneSo(persistenceSessionFactory);
+        return persistenceSession;
+    }
+
+    private void searchAndCacheAuditServiceIfNotAlreadyDoneSo(PersistenceSessionFactory persistenceSessionFactory) {
+        if(searchedForAuditService) {
+            return;
+        } 
+        List<Object> services = persistenceSessionFactory.getServices();
+        final Optional<Object> optionalService = Iterables.tryFind(services, LOCATE_AUDIT_SERVICE);
+        if(optionalService.isPresent()) {
+            auditService = (AuditService) optionalService.get();
+        }
+        searchedForAuditService = true;
+    }
+    
+    @Override
     protected IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
         return new DataNucleusIdentifierGenerator();
     }
 
     @Override
     protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
-        return new DataNucleusTransactionManager(persistor, objectStore);
+        return new DataNucleusTransactionManager(persistor, objectStore, auditService);
     }
 
     @Override

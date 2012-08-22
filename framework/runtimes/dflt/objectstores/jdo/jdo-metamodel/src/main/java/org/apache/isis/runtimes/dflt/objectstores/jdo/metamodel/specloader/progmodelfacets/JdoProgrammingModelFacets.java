@@ -20,6 +20,8 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.prog
 
 
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable.AuditableAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
@@ -45,8 +47,10 @@ public class JdoProgrammingModelFacets extends ProgrammingModelFacetsJava5 {
         addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
         addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
 
-        //addFactory(JdoVersionAnnotationFacetFactory.class);
         addFactory(JdoQueryAnnotationFacetFactory.class);
+        
+        addFactory(AuditableAnnotationFacetFactory.class);
+        addFactory(AuditableMarkerInterfaceFacetFactory.class);
     }
 
 }

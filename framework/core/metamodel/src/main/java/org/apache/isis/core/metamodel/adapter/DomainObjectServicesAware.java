@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 public interface DomainObjectServicesAware {
 
+    @Programmatic
     public void setDomainObjectServices(DomainObjectServices domainObjectServices);
 
 }

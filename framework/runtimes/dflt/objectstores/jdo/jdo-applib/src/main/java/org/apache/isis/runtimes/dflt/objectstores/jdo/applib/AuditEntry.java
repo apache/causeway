@@ -5,13 +5,16 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.bookmarks.Bookmark;
+import org.apache.isis.applib.bookmarks.BookmarkHolder;
 import org.apache.isis.applib.value.DateTime;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @Immutable
-public class AuditEntry {
+public class AuditEntry implements BookmarkHolder {
 
     // {{ TimestampUtc (property)
     private Long timestampEpoch;
@@ -108,4 +111,12 @@ public class AuditEntry {
     }
     // }}
 
+
+    // {{ bookmark (action)
+    @Override
+    @Programmatic
+    public Bookmark bookmark() {
+        return new Bookmark(getObjectType(), getIdentifier());
+    }
+    // }}
 }

@@ -16,21 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable;
 
-/**
- * Defines interfaces for domain objects that constitute the framework's
- * view of a &quot;user profile&quot;. 
- * 
- * <p>
- * Each user can hold a single {@link org.apache.isis.applib.profiles.Profile},
- * which in turn can hold option settings (eg preferred colour theme) and 
- * {@link org.apache.isis.applib.profiles.Perspective}s (a particular 
- * arrangement of the user interface; the terminology comes from the Eclipse
- * RCP/IDE platform).
- *  
- * <p>
- * The use and surfacing of these capabilities is dependent on the viewer;
- * most notably the drag-n-drop viewer does support the concept of a user
- * profile, but many others do not. 
- */
-package org.apache.isis.applib.maybe;
+
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+
+public abstract class AuditableFacetAbstract extends FacetAbstract implements
+        AuditableFacet {
+
+
+    public static Class<? extends Facet> type() {
+        return AuditableFacet.class;
+    }
+
+    public AuditableFacetAbstract(FacetHolder facetHolder) {
+        super(AuditableFacetAbstract.type(), facetHolder, false);
+    }
+
+}

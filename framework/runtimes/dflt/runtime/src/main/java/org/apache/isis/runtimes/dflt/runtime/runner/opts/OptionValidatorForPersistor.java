@@ -19,9 +19,10 @@
 
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
-import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+
+import com.google.common.base.Optional;
 
 public final class OptionValidatorForPersistor implements OptionValidator {
     private final OptionHandlerPersistor optionHandlerPersistor;
@@ -31,10 +32,14 @@ public final class OptionValidatorForPersistor implements OptionValidator {
     }
 
     @Override
-    public Maybe<String> validate(final DeploymentType deploymentType) {
+    public Optional<String> validate(final DeploymentType deploymentType) {
         final String objectPersistorName = optionHandlerPersistor.getPersistorName();
         final boolean fail = (!StringUtils.isNullOrEmpty(objectPersistorName)) && !deploymentType.canSpecifyObjectStore();
         final String failMsg = String.format("Error: cannot specify an object store (persistor) for deployment type %s\n", deploymentType.name().toLowerCase());
-        return Maybe.setIf(fail, failMsg);
+        return setIf(fail, failMsg);
+    }
+
+    private static Optional<String> setIf(final boolean fail, final String failMsg) {
+        return fail? Optional.of(failMsg): Optional.<String>absent();
     }
 }

@@ -19,8 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
-import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+
+import com.google.common.base.Optional;
 
 public final class OptionValidatorUserAndPasswordCombo implements OptionValidator {
 
@@ -33,10 +34,15 @@ public final class OptionValidatorUserAndPasswordCombo implements OptionValidato
     }
 
     @Override
-    public Maybe<String> validate(final DeploymentType deploymentType) {
+    public Optional<String> validate(final DeploymentType deploymentType) {
         final String user = optionHandlerUser.getUserName();
         final String password = optionHandlerPassword.getPassword();
         final boolean ok = (password == null && user == null) || (password != null && user != null);
-        return Maybe.notSetIf(ok, "A user name must be specified with a password");
+        return setIf(!ok, "A user name must be specified with a password");
     }
+    
+    private static Optional<String> setIf(final boolean fail, final String failMsg) {
+        return fail? Optional.of(failMsg): Optional.<String>absent();
+    }
+
 }

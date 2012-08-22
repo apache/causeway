@@ -23,7 +23,6 @@ import javax.jdo.annotations.PrimaryKey;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.version.OptionalFacetDerivedFromJdoVersionAnnotation;
 
 
 /**
@@ -34,8 +33,6 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.ve
  * {@link PropertyDefaultFacet} facet. We don't want this, so this facet marks
  * the property as optional, meaning that the {@link PrimaryKey} property is left
  * untouched by Isis.
- * 
- * @see OptionalFacetDerivedFromJdoVersionAnnotation
  */
 public class OptionalFacetDerivedFromJdoPrimaryKeyAnnotation extends
         MandatoryFacetDefault {

@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.runtime.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -32,9 +33,12 @@ import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+
+import com.google.common.collect.Lists;
 
 public class ServicesInstallerFromConfiguration extends InstallerAbstract implements ServicesInstaller {
 
@@ -54,45 +58,41 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     public List<Object> getServices(final DeploymentType deploymentType) {
 
         LOG.info("installing " + this.getClass().getName());
-        final Object[] common = createServices(getConfiguration(), null);
-        final Object[] specific = createServices(getConfiguration(), deploymentType.name());
-        final Object[] combined = ArrayUtils.combine(common, specific);
-        if (combined.length == 0) {
+        
+        final List<Object> serviceList = Lists.newArrayList();
+        appendServices(getConfiguration(), null, serviceList);
+        appendServices(getConfiguration(), deploymentType.name(), serviceList);
+        
+        if (serviceList.size() == 0) {
             throw new InitialisationException("No services specified");
         }
-        return ListUtils.asList(combined);
+        appendBookmarkService(serviceList);
+        
+        return Collections.unmodifiableList(serviceList);
     }
 
-    private Object[] createServices(final IsisConfiguration configuration, final String group) {
+    private void appendServices(final IsisConfiguration configuration, final String group, List<Object> listOfServices) {
         final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
+        
         String servicePrefix = configuration.getString(root + SERVICES_PREFIX);
         if (group != null && servicePrefix == null) {
             servicePrefix = configuration.getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
         }
+        
         final String prefix = servicePrefix(servicePrefix);
-        final String serviceList = configuration.getString(root + SERVICES);
-        List<Object> list;
-        if (serviceList != null) {
-            list = createServices(prefix, serviceList);
-        } else {
-            list = new ArrayList<Object>();
-        }
-        if (configuration.getBoolean(root + EXPLORATION_OBJECTS)) {
-            final DeploymentType deploymentType = DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
-            if (deploymentType.isExploring()) {
-                list.add(new ObjectFixtureService());
-            }
-        }
-        final Object[] array = list.toArray(new Object[list.size()]);
-        return array;
+        final String configuredServices = configuration.getString(root + SERVICES);
+        appendConfiguredServices(prefix, configuredServices, listOfServices);
+        appendObjectFixtureService(configuration, root, listOfServices);
     }
 
-    private List<Object> createServices(final String servicePrefix, final String serviceList) {
-        final StringTokenizer services = new StringTokenizer(serviceList, ConfigurationConstants.LIST_SEPARATOR);
+    private void appendConfiguredServices(final String servicePrefix, final String configuredServices, List<Object> serviceList) {
+        if (configuredServices == null) {
+            return;
+        }
+        final StringTokenizer services = new StringTokenizer(configuredServices, ConfigurationConstants.LIST_SEPARATOR);
         if (!services.hasMoreTokens()) {
             throw new InitialisationException("Services specified, but none loaded");
         }
-        final List<Object> list = new ArrayList<Object>();
         while (services.hasMoreTokens()) {
             final String serviceName = services.nextToken().trim();
             if (serviceName.equals("")) {
@@ -105,10 +105,23 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             } else {
                 service = createSimpleRepository(servicePrefix, serviceName);
             }
-            list.add(service);
+            serviceList.add(service);
         }
-        return list;
     }
+
+    private void appendObjectFixtureService(final IsisConfiguration configuration, final String root, List<Object> serviceList) {
+        if (configuration.getBoolean(root + EXPLORATION_OBJECTS)) {
+            final DeploymentType deploymentType = DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
+            if (deploymentType.isExploring()) {
+                serviceList.add(new ObjectFixtureService());
+            }
+        }
+    }
+
+    private void appendBookmarkService(List<Object> serviceList) {
+        serviceList.add(new BookmarkServiceDefault());
+    }
+
 
     /**
      * In the format <tt>xxx#aaa.bbb.ccc.DddEee</tt> where <tt>xxx</tt> is the

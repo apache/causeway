@@ -16,30 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable;
 
-package org.apache.isis.core.progmodel.facets.object.immutable.markerifc;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.When;
-import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
-public class ImmutableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {
 
-    public ImmutableMarkerInterfacesFacetFactory() {
+public class AuditableAnnotationFacetFactory extends
+        AnnotationBasedFacetFactoryAbstract {
+
+    public AuditableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final When when = When.forCorrespondingMarkerSubType(processClassContaxt.getCls());
-        FacetUtil.addFacet(create(when, processClassContaxt.getFacetHolder()));
+    public void process(ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        final Auditable annotation = getAnnotation(cls, Auditable.class);
+        if (annotation == null) {
+            return;
+        }
+        FacetUtil.addFacet(new AuditableFacetAnnotation(
+                processClassContext.getFacetHolder()));
+        return;
     }
 
-    private ImmutableFacet create(final When when, final FacetHolder holder) {
-        return when == null ? null : new ImmutableFacetMarkerInterface(when, holder);
-    }
 
 }

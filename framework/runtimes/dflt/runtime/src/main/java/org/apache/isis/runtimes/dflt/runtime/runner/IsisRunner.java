@@ -23,17 +23,11 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
-import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
@@ -61,6 +55,11 @@ import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidator;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForPersistor;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForViewers;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class IsisRunner {
 
@@ -189,8 +188,8 @@ public class IsisRunner {
         final DeploymentType deploymentType = optionHandlerDeploymentType.getDeploymentType();
 
         for (final OptionValidator validator : validators) {
-            final Maybe<String> errorMessage = validator.validate(deploymentType);
-            if (errorMessage.isSet()) {
+            final Optional<String> errorMessage = validator.validate(deploymentType);
+            if (errorMessage.isPresent()) {
                 printer.printErrorAndHelp(options, errorMessage.get());
                 return false;
             }

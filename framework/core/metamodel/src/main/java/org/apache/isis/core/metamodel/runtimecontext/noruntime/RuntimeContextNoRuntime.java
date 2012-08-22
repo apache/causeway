@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.runtimecontext.noruntime;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -153,8 +154,19 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         };
         domainObjectServices = new DomainObjectServicesAbstract() {
 
+
             @Override
-            public void warnUser(final String message) {
+            public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public Object lookup(Bookmark bookmark) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
@@ -169,12 +181,27 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public void raiseError(final String message) {
+            public boolean flush() {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void commit() {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
             @Override
             public void informUser(final String message) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void warnUser(final String message) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public void raiseError(final String message) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
@@ -185,26 +212,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
             @Override
             public String getProperty(final String name) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public boolean flush() {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public void commit() {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };

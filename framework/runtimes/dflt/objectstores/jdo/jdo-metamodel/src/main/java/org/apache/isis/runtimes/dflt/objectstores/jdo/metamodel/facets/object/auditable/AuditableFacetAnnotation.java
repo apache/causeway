@@ -16,13 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable;
 
-package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-import com.google.common.base.Optional;
 
-public interface OptionValidator {
-    public Optional<String> validate(final DeploymentType deploymentType);
+public class AuditableFacetAnnotation extends AuditableFacetImpl {
+
+    public AuditableFacetAnnotation(FacetHolder facetHolder) {
+        super(facetHolder);
+    }
+
 }

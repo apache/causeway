@@ -21,8 +21,9 @@ package org.apache.isis.runtimes.dflt.runtime.runner.opts;
 
 import java.util.List;
 
-import org.apache.isis.applib.maybe.Maybe;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+
+import com.google.common.base.Optional;
 
 public final class OptionValidatorForViewers implements OptionValidator {
     private final OptionHandlerViewer optionHandlerViewer;
@@ -32,11 +33,16 @@ public final class OptionValidatorForViewers implements OptionValidator {
     }
 
     @Override
-    public Maybe<String> validate(final DeploymentType deploymentType) {
+    public Optional<String> validate(final DeploymentType deploymentType) {
         final List<String> viewerNames = optionHandlerViewer.getViewerNames();
 
         final boolean fail = !deploymentType.canSpecifyViewers(viewerNames);
         final String failMsg = String.format("Error: cannot specify %s viewer%s for deployment type %s\n", Strings.plural(viewerNames, "more than one", "any"), Strings.plural(viewerNames, "", "s"), deploymentType.nameLowerCase());
-        return Maybe.setIf(fail, failMsg);
+        return setIf(fail, failMsg);
     }
+    
+    private static Optional<String> setIf(final boolean fail, final String failMsg) {
+        return fail? Optional.of(failMsg): Optional.<String>absent();
+    }
+
 }

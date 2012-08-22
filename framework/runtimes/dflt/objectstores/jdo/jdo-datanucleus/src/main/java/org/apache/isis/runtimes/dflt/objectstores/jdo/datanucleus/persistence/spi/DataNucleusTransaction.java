@@ -1,15 +1,16 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi;
 
 import java.util.Map.Entry;
-import java.util.Date;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.AuditService;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.Auditable;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable.AuditableFacet;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
@@ -19,15 +20,21 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
 public class DataNucleusTransaction extends IsisTransaction {
 
-    private AuditService auditService;
+    @Nullable
+    private final AuditService auditService;
     
-    public DataNucleusTransaction(IsisTransactionManager transactionManager, MessageBroker messageBroker, UpdateNotifier updateNotifier, TransactionalResource objectStore) {
+    public DataNucleusTransaction(
+                final IsisTransactionManager transactionManager, 
+                final MessageBroker messageBroker, 
+                final UpdateNotifier updateNotifier, 
+                final TransactionalResource objectStore, 
+                @Nullable final AuditService auditService) {
         super(transactionManager, messageBroker, updateNotifier, objectStore);
+        this.auditService = auditService;
     }
 
-    
     @Override
-    protected void doAudit(Set<Entry<AdapterAndProperty, PreAndPostValues>> auditEntries) {
+    protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> auditEntries) {
         if(auditService == null) {
             super.doAudit(auditEntries);
             return;
@@ -46,8 +53,7 @@ public class DataNucleusTransaction extends IsisTransaction {
     private void audit(final String currentUser, final long currentTimestampEpoch, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
-        final Object pojo = adapter.getObject();
-        if(!(pojo instanceof Auditable)) {
+        if(!adapter.getSpecification().containsFacet(AuditableFacet.class)) {
             return;
         }
         final RootOid oid = (RootOid) adapter.getOid();
@@ -66,11 +72,6 @@ public class DataNucleusTransaction extends IsisTransaction {
 
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
-    }
-
-
-    public void usingAuditService(AuditService auditService) {
-        this.auditService = auditService;
     }
 
 }

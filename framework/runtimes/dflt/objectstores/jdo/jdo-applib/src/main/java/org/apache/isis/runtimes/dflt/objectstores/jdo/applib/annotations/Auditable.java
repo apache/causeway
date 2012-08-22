@@ -16,21 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.version;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.When;
-import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetImpl;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Derived from being {@link Transient}.
+ * Indicates that the entity is auditable.
+ * 
+ * <p>
+ * Alternatively, the type can implement the 
+ * {@link org.apache.isis.runtimes.dflt.objectstores.jdo.applib.Auditable Auditable} marker interface.
  */
-public class DisabledFacetDerivedFromJdoVersionAnnotation extends
-        DisabledFacetImpl {
-
-    public DisabledFacetDerivedFromJdoVersionAnnotation(final FacetHolder holder) {
-        super(When.ALWAYS, holder);
-    }
-
+@Inherited
+@Target({ ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Auditable {
 }

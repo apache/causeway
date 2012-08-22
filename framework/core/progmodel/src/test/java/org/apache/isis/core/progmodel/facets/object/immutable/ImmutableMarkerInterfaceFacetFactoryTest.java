@@ -28,17 +28,17 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableFacetMarkerInterface;
-import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfacesFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfaceFacetFactory;
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private ImmutableMarkerInterfacesFacetFactory facetFactory;
+    private ImmutableMarkerInterfaceFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ImmutableMarkerInterfacesFacetFactory();
+        facetFactory = new ImmutableMarkerInterfaceFacetFactory();
     }
 
     @Override

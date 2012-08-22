@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.internal;
 import java.util.List;
 
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -184,6 +185,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             };
 
             @Override
+            public Object lookup(Bookmark bookmark) {
+                return new DomainObjectContainerResolve().lookup(bookmark);
+            }
+
+            @Override
             public void resolve(final Object parent) {
                 new DomainObjectContainerResolve().resolve(parent);
             }
@@ -227,6 +233,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public List<String> getPropertyNames() {
                 return RuntimeContextFromSession.this.getPropertyNames();
             }
+
 
         };
         this.querySubmitter = new QuerySubmitterAbstract() {
