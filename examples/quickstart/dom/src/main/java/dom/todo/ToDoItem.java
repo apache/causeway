@@ -32,6 +32,7 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
@@ -97,7 +98,22 @@ public class ToDoItem extends AbstractDomainObject  {
     }
 
     // }}
-    
+
+    // {{ Notes (property)
+    private String notes;
+
+    @MultiLine(numberOfLines=5)
+    @MemberOrder(sequence = "4")
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(final String notes) {
+        this.notes = notes;
+    }
+    // }}
+
+
     // {{ OwnedBy (property)
     private String ownedBy;
 

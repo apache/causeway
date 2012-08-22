@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 
 /**
  * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
@@ -46,13 +47,13 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-    private TextField<T> textField;
+    private AbstractTextComponent<T> textField;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 
-    protected TextField<T> getTextField() {
+    protected AbstractTextComponent<T> getTextField() {
         return textField;
     }
 
@@ -79,10 +80,10 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
         // parsing, not wicket
     }
 
-    protected abstract TextField<T> createTextField();
+    protected abstract AbstractTextComponent<T> createTextField();
 
     private FormComponentLabel createFormComponentLabel() {
-        final TextField<T> textField = getTextField();
+        final AbstractTextComponent<T> textField = getTextField();
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
 

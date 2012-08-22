@@ -31,6 +31,7 @@ import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 
 /**
  * Panel for rendering scalars of type {@link Date Isis' applib.Date}.
@@ -47,7 +48,7 @@ public class IsisDatePanel extends ScalarPanelTextFieldAbstract<java.util.Date> 
     }
 
     @Override
-    protected TextField<java.util.Date> createTextField() {
+    protected AbstractTextComponent<java.util.Date> createTextField() {
         final TextField<java.util.Date> textField = DateTextField.forDatePattern(ID_SCALAR_VALUE, new Model<java.util.Date>() {
             private static final long serialVersionUID = 1L;
 
@@ -83,7 +84,7 @@ public class IsisDatePanel extends ScalarPanelTextFieldAbstract<java.util.Date> 
 
     private void addObjectAdapterValidator() {
         final ScalarModel scalarModel = getModel();
-        final TextField<java.util.Date> textField = getTextField();
+        final AbstractTextComponent<java.util.Date> textField = getTextField();
 
         textField.add(new IValidator<java.util.Date>() {
             private static final long serialVersionUID = 1L;

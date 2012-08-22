@@ -29,6 +29,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 
 /**
  * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}
@@ -46,8 +47,8 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
     }
 
     @Override
-    protected TextField<String> createTextField() {
-        final TextField<String> textField = new TextField<String>(idTextField, new Model<String>() {
+    protected AbstractTextComponent<String> createTextField() {
+        final AbstractTextComponent<String> textField = new TextField<String>(idTextField, new Model<String>() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -77,7 +78,7 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
 
     private void addMaxLengthValidator() {
         final ScalarModel scalarModel = getModel();
-        final TextField<String> textField = getTextField();
+        final AbstractTextComponent<String> textField = getTextField();
 
         final ObjectSpecification facetHolder = scalarModel.getTypeOfSpecification();
 
@@ -89,7 +90,7 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
 
     private void addObjectAdapterValidator() {
         final ScalarModel scalarModel = getModel();
-        final TextField<String> textField = getTextField();
+        final AbstractTextComponent<String> textField = getTextField();
 
         textField.add(new IValidator<String>() {
             private static final long serialVersionUID = 1L;
