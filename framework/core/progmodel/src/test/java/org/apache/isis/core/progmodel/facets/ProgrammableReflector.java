@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class ProgrammableReflector implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
 
@@ -131,7 +132,7 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     }
 
     @Override
-    public void validateSpecifications() {
+    public void validateSpecifications(ValidationFailures validationFailures) {
         throw new NotYetImplementedException();
     }
 

@@ -18,55 +18,14 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator;
 
-import java.text.MessageFormat;
-import java.util.Collection;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+public class JdoMetaModelValidator extends MetaModelValidatorComposite {
 
-public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
-
-    public void validate() {
-        try {
-            ensureFoundAnnotatedEntities();
-            ensureAllSpecificationsValid();
-        } catch (final ClassNotFoundException e) {
-            throw new MetaModelInvalidException(e);
-        }
-    }
-
-    private void ensureFoundAnnotatedEntities() {
-        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoaderSpi().allSpecifications();
-        for (final ObjectSpecification objectSpec : objectSpecs) {
-            if (objectSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
-                return;
-            }
-        }
-        throw new MetaModelInvalidException("No annotated entities found; " + "are they annotated with @PersistenceCapable? " + "are the entities referenced by the registered services? " + "are all services registered? " + "are you using the JDO reflector");
-    }
-
-    private void ensureAllSpecificationsValid() throws ClassNotFoundException {
-        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoaderSpi().allSpecifications();
-        for (final ObjectSpecification objSpec : objectSpecs) {
-            
-            // TODO: ensure that PersistenceCapable has supported strategy (APPLICATION or DATASTORE)
-            // ensure that DATASTORE has recognised @DatastoreIdentity attribute
-        }
-    }
-
-    private void ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(final ObjectSpecification objSpec) {
-        if (!objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
-            return;
-        }
-        if (objSpec.isAbstract() || objSpec.containsFacet(JdoDiscriminatorFacet.class)) {
-            return;
-        }
-        final String classFullName = objSpec.getFullIdentifier();
-        throw new MetaModelInvalidException(MessageFormat.format("DataNucleus object store requires that concrete class {0} mapped by @PersistenceCapable " + "must also have an @Discriminator annotation", classFullName));
+    public JdoMetaModelValidator() {
+        addValidator(new MetaModelValidatorDefault());
+        addValidator(new JdoMetaModelValidatorLeaf());
     }
 
 }

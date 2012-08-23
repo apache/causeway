@@ -79,6 +79,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpeci
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * Builds the meta-model.
@@ -253,7 +254,11 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
 
         // prime cache and validate
         primeCache();
-        metaModelValidator.validate();
+        
+        ValidationFailures validationFailures = new ValidationFailures();
+        metaModelValidator.validate(validationFailures);
+        
+        validationFailures.assertNone();
         
         cacheBySpecId();
     }
@@ -615,7 +620,7 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
     }
 
     @Override
-    public void validateSpecifications() {
+    public void validateSpecifications(ValidationFailures validationFailures) {
         final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
         for (final ObjectSpecification objSpec : allSpecifications()) {
             final ObjectSpecId objectSpecId = objSpec.getSpecId();
@@ -626,7 +631,7 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
             if (existingSpec == null) {
                 continue;
             }
-            throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId));
+            validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
         }
     }
 

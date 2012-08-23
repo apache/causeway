@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+
 import com.google.common.collect.Lists;
 
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
@@ -29,9 +31,9 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
     private final List<MetaModelValidator> validators = Lists.newArrayList();
 
     @Override
-    public void validate() throws MetaModelInvalidException {
+    public void validate(final ValidationFailures validationFailures)  {
         for (final MetaModelValidator validator : validators) {
-            validator.validate();
+            validator.validate(validationFailures);
         }
     }
 
@@ -43,4 +45,12 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         return Collections.unmodifiableList(validators);
     }
 
+    @Override
+    public void setSpecificationLoaderSpi(SpecificationLoaderSpi specificationLoader) {
+        super.setSpecificationLoaderSpi(specificationLoader);
+        for (final MetaModelValidator validator : validators) {
+            validator.setSpecificationLoaderSpi(specificationLoader);
+        }
+
+    }
 }

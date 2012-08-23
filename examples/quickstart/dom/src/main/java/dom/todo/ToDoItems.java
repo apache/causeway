@@ -26,6 +26,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.QueryOnly;
 
+import dom.todo.ToDoItem.Category;
+
 @Named("ToDos")
 public interface ToDoItems {
 
@@ -36,12 +38,12 @@ public interface ToDoItems {
     @MemberOrder(sequence = "2")
     public ToDoItem newToDo(
             @Named("Description") String description, 
-            @Named("Category") String category);
+            Category category);
 
     @Hidden // for use by fixtures
     public ToDoItem newToDo(
             String description, 
-            String category, 
+            Category category, 
             String ownedBy);
 
     @QueryOnly

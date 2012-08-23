@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
 
@@ -35,7 +36,8 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
 
     /**
      * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
+     * @param validationFailures 
      */
-    void validateSpecifications();
+    void validateSpecifications(ValidationFailures validationFailures);
 
 }

@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.metamodelvalidator.dflt;
 
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
 
@@ -27,12 +28,12 @@ public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
      * Does nothing.
      */
     @Override
-    public void validate() {
-        validateSpecifications();
+    public void validate(ValidationFailures validationFailures) {
+        validateSpecifications(validationFailures);
     }
 
-    private void validateSpecifications() {
-        getSpecificationLoaderSpi().validateSpecifications();
+    private void validateSpecifications(ValidationFailures validationFailures) {
+        getSpecificationLoaderSpi().validateSpecifications(validationFailures);
     }
 
 }

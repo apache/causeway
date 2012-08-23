@@ -19,9 +19,12 @@
 
 package dom.todo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
@@ -34,7 +37,10 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.value.Date;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -52,7 +58,9 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditab
 @Auditable
 public class ToDoItem extends AbstractDomainObject  {
     
-    public static final List<String> CATEGORIES = Collections.unmodifiableList(Arrays.asList("Professional", "Domestic", "Other"));
+    public static enum Category {
+        Professional, Domestic, Other;
+    }
 
     // {{ Description
     private String description;
@@ -69,18 +77,15 @@ public class ToDoItem extends AbstractDomainObject  {
     // }}
 
     // {{ Category
-    private String category;
+    private Category category;
 
     @MemberOrder(sequence = "2")
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(final String category) {
+    public void setCategory(final Category category) {
         this.category = category;
-    }
-    public List<String> choicesCategory() {
-        return CATEGORIES;
     }
     // }}
 
@@ -89,21 +94,35 @@ public class ToDoItem extends AbstractDomainObject  {
 
     @Disabled
     @MemberOrder(sequence = "3")
-    public boolean isDone() {
+    public boolean getDone() {
         return done;
     }
 
     public void setDone(final boolean done) {
         this.done = done;
     }
+    // }}
 
+    // {{ DueBy (property)
+    private Date dueBy;
+
+    @MemberOrder(sequence = "4")
+    @Optional
+    public Date getDueBy() {
+        return dueBy;
+    }
+
+    public void setDueBy(final Date dueBy) {
+        this.dueBy = dueBy;
+    }
     // }}
 
     // {{ Notes (property)
     private String notes;
 
+    @Optional
     @MultiLine(numberOfLines=5)
-    @MemberOrder(sequence = "4")
+    @MemberOrder(sequence = "6")
     public String getNotes() {
         return notes;
     }
@@ -113,8 +132,7 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
-
-    // {{ OwnedBy (property)
+    // {{ OwnedBy (property, hidden)
     private String ownedBy;
 
     @Hidden
@@ -127,35 +145,9 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
-
-    // {{ markAsDone
-    @MemberOrder(sequence = "1")
-    public ToDoItem markAsDone() {
-        setDone(true);
-        return this;
-    }
-
-    public String disableMarkAsDone() {
-        return done ? "Already done" : null;
-    }
-    // }}
-
-    // {{ markAsNotDone
-    @MemberOrder(sequence = "2")
-    public ToDoItem markAsNotDone() {
-        setDone(false);
-        return this;
-    }
-
-    public String disableMarkAsNotDone() {
-        return !done ? "Not yet done" : null;
-    }
-    // }}
-
-
     // {{ Version (derived property)
     @Disabled
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "99")
     @Named("Version")
     public Long getVersionSequence() {
         if(!(this instanceof PersistenceCapable)) {
@@ -169,8 +161,29 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
+    // {{ markAsDone (action)
+    @MemberOrder(sequence = "1")
+    public ToDoItem markAsDone() {
+        setDone(true);
+        return this;
+    }
 
+    public String disableMarkAsDone() {
+        return done ? "Already done" : null;
+    }
+    // }}
 
+    // {{ markAsNotDone (action)
+    @MemberOrder(sequence = "2")
+    public ToDoItem markAsNotDone() {
+        setDone(false);
+        return this;
+    }
+
+    public String disableMarkAsNotDone() {
+        return !done ? "Not yet done" : null;
+    }
+    // }}
 
     // {{ injected: ToDoItems
     @SuppressWarnings("unused")
@@ -180,5 +193,6 @@ public class ToDoItem extends AbstractDomainObject  {
         this.toDoItems = toDoItems;
     }
     // }}
+    
 
 }

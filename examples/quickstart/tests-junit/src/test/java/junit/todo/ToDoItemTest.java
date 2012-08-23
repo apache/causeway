@@ -49,7 +49,7 @@ public class ToDoItemTest extends AbstractTest {
     @Test
     public void canMarkAsDone() throws Exception {
         toDoItem.markAsDone();
-        assertThat(toDoItem.isDone(), is(true));
+        assertThat(toDoItem.getDone(), is(true));
     }
 
     @Test

@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.base.Objects;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
@@ -49,25 +50,22 @@ public class ToDoItemsMongo extends AbstractFactoryAndRepository implements ToDo
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem t) {
-                return Objects.equal(t.getOwnedBy(), userName) && !t.isDone();
+                return Objects.equal(t.getOwnedBy(), userName) && !t.getDone();
             }
         });
     }
 
     // {{ NewToDo  (action)
     @Override
-    public ToDoItem newToDo(final String description, String category) {
+    public ToDoItem newToDo(final String description, Category category) {
         final String ownedBy = getContainer().getUser().getName();
         return newToDo(description, category, ownedBy);
-    }
-    public List<String> choices1NewToDo() {
-        return ToDoItem.CATEGORIES;
     }
     // }}
 
     // {{ NewToDo  (hidden)
     @Override
-    public ToDoItem newToDo(final String description, String category, String ownedBy) {
+    public ToDoItem newToDo(final String description, Category category, String ownedBy) {
         final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);

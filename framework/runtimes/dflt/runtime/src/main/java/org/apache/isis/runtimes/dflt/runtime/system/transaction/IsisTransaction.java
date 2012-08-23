@@ -301,17 +301,19 @@ public class IsisTransaction implements TransactionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public final void flush() {
-        ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("flush transaction " + this);
-        }
-
-        try {
-            doFlush();
-        } catch (final RuntimeException ex) {
-            setState(State.MUST_ABORT);
-            setAbortCause(ex);
-            throw ex;
+        synchronized (IsisContext.getSession()) {
+            ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("flush transaction " + this);
+            }
+    
+            try {
+                doFlush();
+            } catch (final RuntimeException ex) {
+                setState(State.MUST_ABORT);
+                setAbortCause(ex);
+                throw ex;
+            }
         }
     }
 
@@ -339,12 +341,12 @@ public class IsisTransaction implements TransactionScopedComponent {
      * </table>
      */
     private void doFlush() {
-
-        doAudit(getAuditEntries());
         
-        if (commands.size() > 0) {
+        try {
+            doAudit(getAuditEntries());
+            
             objectStore.execute(Collections.unmodifiableList(commands));
-
+            
             for (final PersistenceCommand command : commands) {
                 if (command instanceof DestroyObjectCommand) {
                     final ObjectAdapter adapter = command.onAdapter();
@@ -352,6 +354,12 @@ public class IsisTransaction implements TransactionScopedComponent {
                     adapter.changeState(ResolveState.DESTROYED);
                 }
             }
+        } finally {
+            // even if there's an exception, we want to clear the commands
+            // this is because the Wicket viewer uses an implementation of IsisContext 
+            // whereby there are several threads which could be sharing the same context
+            // if the first fails, we don't want the others to pick up the same command list
+            // and try again
             commands.clear();
         }
     }
@@ -373,26 +381,29 @@ public class IsisTransaction implements TransactionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public final void commit() {
-        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
-        ensureThatState(exceptions.isEmpty(), is(true), "cannot commit: " + exceptions.size() + " exceptions have been raised");
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("commit transaction " + this);
-        }
-
-        if (getState() == State.COMMITTED) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("already committed; ignoring");
+        synchronized (IsisContext.getSession()) {
+            ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
+            ensureThatState(exceptions.isEmpty(), is(true), "cannot commit: " + exceptions.size() + " exceptions have been raised");
+    
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("commit transaction " + this);
             }
-            return;
-        }
-        
-        try {
-            doFlush();
-            setState(State.COMMITTED);
-        } catch (final RuntimeException ex) {
-            setAbortCause(ex);
-            throw ex;
+    
+            if (getState() == State.COMMITTED) {
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("already committed; ignoring");
+                }
+                return;
+            }
+            
+            try {
+                doFlush();
+                setState(State.COMMITTED);
+            } catch (final RuntimeException ex) {
+                setAbortCause(ex);
+                throw ex;
+            }
         }
     }
 
@@ -402,17 +413,19 @@ public class IsisTransaction implements TransactionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public final void abort() {
-        ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
-        if (LOG.isInfoEnabled()) {
-            LOG.info("abort transaction " + this);
+        synchronized (IsisContext.getSession()) {
+            ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
+            if (LOG.isInfoEnabled()) {
+                LOG.info("abort transaction " + this);
+            }
+    
+            setState(State.ABORTED);
         }
-
-        setState(State.ABORTED);
     }
 
     
 
-    protected void setAbortCause(final RuntimeException cause) {
+    private void setAbortCause(final RuntimeException cause) {
         this.cause = cause;
     }
 

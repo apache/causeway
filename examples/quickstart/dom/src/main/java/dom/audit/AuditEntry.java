@@ -1,5 +1,6 @@
-package org.apache.isis.runtimes.dflt.objectstores.jdo.applib;
+package dom.audit;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.annotation.Hidden;
@@ -12,7 +13,7 @@ import org.apache.isis.applib.bookmarks.BookmarkHolder;
 import org.apache.isis.applib.value.DateTime;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.jdo.annotations.DatastoreIdentity(strategy=IdGeneratorStrategy.UUIDHEX)
 @Immutable
 public class AuditEntry implements BookmarkHolder {
 
@@ -28,7 +29,6 @@ public class AuditEntry implements BookmarkHolder {
         this.timestampEpoch = timestampEpoch;
     }
     // }}
-
     
     // {{ Timestamp (property)
     @Title(sequence="1")
@@ -38,7 +38,6 @@ public class AuditEntry implements BookmarkHolder {
     }
 
     // }}
-
     
     // {{ User (property)
     private String user;
@@ -52,9 +51,6 @@ public class AuditEntry implements BookmarkHolder {
         this.user = user;
     }
     // }}
-
-
-    
 
     // {{ ObjectType (property)
     private String objectType;
@@ -82,7 +78,6 @@ public class AuditEntry implements BookmarkHolder {
         this.identifier = identifier;
     }
     // }}
-
     
     // {{ PreValue (property)
     private String preValue;
@@ -97,7 +92,6 @@ public class AuditEntry implements BookmarkHolder {
     }
     // }}
 
-
     // {{ PostValue (property)
     private String postValue;
 
@@ -110,7 +104,6 @@ public class AuditEntry implements BookmarkHolder {
         this.postValue = postValue;
     }
     // }}
-
 
     // {{ bookmark (action)
     @Override

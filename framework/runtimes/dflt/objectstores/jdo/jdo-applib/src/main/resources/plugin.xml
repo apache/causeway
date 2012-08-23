@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<plugin>
+
+    <extension point="org.datanucleus.java_type">
+        <java-type 
+        	name="org.apache.isis.applib.value.Date" 
+        	persistent="true" 
+        	dfg="true" 
+        	embedded="true"
+            long-converter="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes.IsisDateConverter"/>
+        <java-type 
+            name="org.apache.isis.applib.value.DateTime" 
+            persistent="true" 
+            dfg="true" 
+            embedded="true"
+            long-converter="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes.IsisDateTimeConverter"/>
+    </extension>
+
+    <extension point="org.datanucleus.store_mapping">
+        <mapping 
+            java-type="org.apache.isis.applib.value.Date" 
+            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes.IsisDateMapping"/>
+        <mapping 
+            java-type="org.apache.isis.applib.value.DateTime" 
+            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes.IsisDateTimeMapping"/>
+    </extension>
+</plugin>

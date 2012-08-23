@@ -24,6 +24,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
 public interface MetaModelValidator extends SpecificationLoaderSpiAware, ApplicationScopedComponent {
 
-    public void validate() throws MetaModelInvalidException;
+    public void validate(ValidationFailures validationFailures);
 
 }

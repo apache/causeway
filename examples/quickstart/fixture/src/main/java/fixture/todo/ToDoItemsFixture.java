@@ -20,6 +20,7 @@
 package fixture.todo;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
@@ -41,29 +42,29 @@ public class ToDoItemsFixture extends AbstractFixture {
     }
 
     private void createFiveFor(String ownedBy) {
-        createToDoItem("Buy milk", "Domestic", ownedBy);
-        createToDoItem("Pick up laundry", "Domestic", ownedBy);
-        createToDoItem("Buy stamps", "Domestic", ownedBy);
-        createToDoItem("Write blog post", "Professional", ownedBy);
-        createToDoItem("Organize brown bag", "Professional", ownedBy);
+        createToDoItem("Buy milk", Category.Domestic, ownedBy);
+        createToDoItem("Pick up laundry", Category.Domestic, ownedBy);
+        createToDoItem("Buy stamps", Category.Domestic, ownedBy);
+        createToDoItem("Write blog post", Category.Professional, ownedBy);
+        createToDoItem("Organize brown bag", Category.Professional, ownedBy);
     }
 
     private void createThreeFor(String ownedBy) {
-        createToDoItem("Book car in for service", "Domestic", ownedBy);
-        createToDoItem("Buy birthday present for sven", "Domestic", ownedBy);
-        createToDoItem("Write presentation for conference", "Professional", ownedBy);
+        createToDoItem("Book car in for service", Category.Domestic, ownedBy);
+        createToDoItem("Buy birthday present for sven", Category.Domestic, ownedBy);
+        createToDoItem("Write presentation for conference", Category.Professional, ownedBy);
     }
 
     private void createTwoFor(String ownedBy) {
-        createToDoItem("Write thank you notes", "Domestic", ownedBy);
-        createToDoItem("Look into solar panels", "Domestic", ownedBy);
+        createToDoItem("Write thank you notes", Category.Domestic, ownedBy);
+        createToDoItem("Look into solar panels", Category.Domestic, ownedBy);
     }
 
     private void createOneFor(String ownedBy) {
-        createToDoItem("Pitch book idea to publisher", "Professional", ownedBy);
+        createToDoItem("Pitch book idea to publisher", Category.Professional, ownedBy);
     }
 
-    private ToDoItem createToDoItem(final String description, String category, String ownedBy) {
+    private ToDoItem createToDoItem(final String description, Category category, String ownedBy) {
         return toDoItems.newToDo(description, category, ownedBy);
     }
 

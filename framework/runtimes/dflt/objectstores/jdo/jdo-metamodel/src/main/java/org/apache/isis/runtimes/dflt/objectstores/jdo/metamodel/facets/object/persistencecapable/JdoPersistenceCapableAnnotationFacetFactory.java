@@ -47,7 +47,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends
             annotationTableAttribute = cls.getSimpleName();
         }
 
-        IdentityType annotationIdentityType = annotation.identityType();
+        final IdentityType annotationIdentityType = annotation.identityType();
         
         FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
                 annotationTableAttribute, annotationIdentityType, processClassContext.getFacetHolder()));
