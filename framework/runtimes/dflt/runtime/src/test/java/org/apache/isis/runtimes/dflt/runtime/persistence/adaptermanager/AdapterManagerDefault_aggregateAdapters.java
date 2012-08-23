@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -98,6 +99,9 @@ public class AdapterManagerDefault_aggregateAdapters {
     @Mock
     private AuthenticationSession mockAuthenticationSession;
     
+    @Mock
+    private IsisConfiguration mockConfiguration;
+    
     private IsisMetaModel isisMetaModel;
     
     private ObjectAdapterFactory adapterFactory;
@@ -110,6 +114,7 @@ public class AdapterManagerDefault_aggregateAdapters {
     private ObjectAdapter persistentParentAdapter;
     private ObjectAdapter aggregatedAdapter;
 
+
     
     
     @Before
@@ -118,6 +123,7 @@ public class AdapterManagerDefault_aggregateAdapters {
 
         context.ignoring(mockRuntimeContext);
         context.ignoring(mockAuthenticationSession);
+        context.ignoring(mockConfiguration);
         
         isisMetaModel = IsisMetaModel.builder(mockRuntimeContext, new ProgrammingModelFacetsJava5()).withServices(new CustomerRepository()).build();
         isisMetaModel.init();
@@ -138,7 +144,7 @@ public class AdapterManagerDefault_aggregateAdapters {
             }
         };
 
-        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault()) {
+        adapterManager = new AdapterManagerDefault(mockConfiguration, new PojoRecreatorDefault()) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();

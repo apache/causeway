@@ -111,7 +111,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
             final ServicesInjectorSpi servicesInjector) {
 
         final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
-        final AdapterManagerDefault adapterManager = new AdapterManagerDefault(pojoRecreator);
+        final AdapterManagerDefault adapterManager = new AdapterManagerDefault(getConfiguration(), pojoRecreator);
         
         ObjectStoreSpi objectStore = createObjectStore(getConfiguration(), objectAdapterFactory, adapterManager);
 
@@ -299,15 +299,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return InstanceUtil.createInstance(identifierGeneratorClassName, IdentifierGenerator.class);
     }
 
-    /**
-     * Hook method to return {@link AdapterManagerSpi}.
-     * 
-     * <p>
-     * By default returns an {@link AdapterManagerDefault}.
-     */
-    private AdapterManagerSpi createAdapterManager(final IsisConfiguration configuration) {
-        return new AdapterManagerDefault(createPojoRecreator(configuration));
-    }
 
     /**
      * Hook method to return {@link PojoRecreator}.

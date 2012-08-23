@@ -30,6 +30,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -63,12 +64,16 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 
 public class AdapterManagerDefault implements AdapterManagerSpi {
 
+    private static final String ISIS_PERSISTOR_CONCURRENCY_CHECKING = "isis.persistor.concurrencyChecking";
+
     private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
 
     protected final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     protected final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
 
     private final PojoRecreator pojoRecreator;
+
+    private final boolean concurrencyChecking;
     
 
     // //////////////////////////////////////////////////////////////////
@@ -79,10 +84,12 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      * For object store implementations (eg JDO) that do not provide any mechanism
      * to allow transient objects to be reattached; can instead provide a
      * {@link PojoRecreator} implementation that is injected into the Adapter Manager.
+     * @param isisConfiguration TODO
      * 
      * @see http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976
      */
-    public AdapterManagerDefault(PojoRecreator pojoRecreator) {
+    public AdapterManagerDefault(IsisConfiguration isisConfiguration, PojoRecreator pojoRecreator) {
+        concurrencyChecking = isisConfiguration.getBoolean(ISIS_PERSISTOR_CONCURRENCY_CHECKING, false);
         this.pojoRecreator = pojoRecreator;
     }
 
@@ -286,11 +293,13 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         final Object pojo = pojoRecreator.recreatePojo(typedOid);
         ObjectAdapter adapter = mapRecreatedPojo(typedOid, pojo);
         
-        Oid adapterOid = adapter.getOid();
-        if(adapterOid instanceof RootOid) {
-            final RootOid recreatedOid = (RootOid) adapterOid;
-            final RootOid originalOid = (RootOid) typedOid;
-            recreatedOid.checkLock(getAuthenticationSession().getUserName(), originalOid);
+        if(concurrencyChecking) {
+            final Oid adapterOid = adapter.getOid();
+            if(adapterOid instanceof RootOid) {
+                final RootOid recreatedOid = (RootOid) adapterOid;
+                final RootOid originalOid = (RootOid) typedOid;
+                recreatedOid.checkLock(getAuthenticationSession().getUserName(), originalOid);
+            }
         }
         return adapter;
     }

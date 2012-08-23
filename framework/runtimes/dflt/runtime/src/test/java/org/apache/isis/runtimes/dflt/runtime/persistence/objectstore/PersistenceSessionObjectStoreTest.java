@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
@@ -101,9 +102,12 @@ public class PersistenceSessionObjectStoreTest {
     @Mock
     private RuntimeContext mockRuntimeContext;
 
+    @Mock
+    private IsisConfiguration mockConfiguration;
     
     
     private IsisMetaModel isisMetaModel;
+
 
 
     public static class Customer {
@@ -118,6 +122,7 @@ public class PersistenceSessionObjectStoreTest {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         context.ignoring(mockRuntimeContext);
+        context.ignoring(mockConfiguration);
 
         isisMetaModel = new IsisMetaModel(mockRuntimeContext, new ProgrammingModelFacetsJava5(), new CustomerRepository());
         isisMetaModel.init();
@@ -145,7 +150,7 @@ public class PersistenceSessionObjectStoreTest {
         servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
 
-        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
+        adapterManager = new AdapterManagerDefault(mockConfiguration, new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore) {
             @Override
