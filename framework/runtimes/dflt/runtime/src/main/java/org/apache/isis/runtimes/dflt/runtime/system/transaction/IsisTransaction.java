@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -176,7 +176,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
     private final UpdateNotifier updateNotifier;
-    private final List<ObjectPersistenceException> exceptions = Lists.newArrayList();
+    private final List<IsisException> exceptions = Lists.newArrayList();
 
     private State state;
 
@@ -286,11 +286,11 @@ public class IsisTransaction implements TransactionScopedComponent {
         Ensure.ensureThatArg(exceptions.isEmpty(), is(true), "exceptions list is not empty");
     }
 
-    public void addException(ObjectPersistenceException exception) {
+    public void addException(IsisException exception) {
         exceptions.add(exception);
     }
     
-    public List<ObjectPersistenceException> getExceptionsIfAny() {
+    public List<IsisException> getExceptionsIfAny() {
         return Collections.unmodifiableList(exceptions);
     }
 

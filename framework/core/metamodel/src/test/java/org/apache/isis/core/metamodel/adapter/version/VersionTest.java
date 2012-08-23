@@ -64,10 +64,9 @@ public class VersionTest {
     }
 
     @Test
-    public void different_and_sequence_and_equals() throws Exception {
+    public void sequence_and_toString() throws Exception {
         final Version testVersion = new Version(extended);
         
-        assertFalse(testVersion.different(version));
         assertTrue(testVersion.sequence().length() > 0);
         assertTrue(testVersion.getSequence() == 0);
         assertTrue(testVersion.toString().length() > 0);

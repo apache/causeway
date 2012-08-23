@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -118,7 +118,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
 	public void postLoadProcessingFor(final PersistenceCapable pojo) {
 
-		final Version pojoVersion = getVersionIfAny(pojo);
+		final Version datastoreVersion = getVersionIfAny(pojo);
         
         final RootOid oid ;
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
@@ -132,9 +132,9 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             getPersistenceSession().remapRecreatedPojo(adapter, pojo);
 
             // since there was already an adapter, do concurrency check
-            if(previousVersion != null && pojoVersion != null) {
-            	if(previousVersion.different(pojoVersion)) {
-            	    getCurrentTransaction().addException(new ConcurrencyException(adapter, pojoVersion));
+            if(previousVersion != null && datastoreVersion != null) {
+            	if(previousVersion.different(datastoreVersion)) {
+            	    getCurrentTransaction().addException(new ConcurrencyException(getAuthenticationSession().getUserName(), oid, previousVersion, datastoreVersion));
             	}
             }
         } else {
@@ -154,7 +154,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             PersistorUtil.startResolving(adapter);
             PersistorUtil.endResolving(adapter);
         }
-        adapter.setVersion(pojoVersion);
+        adapter.setVersion(datastoreVersion);
 
         ensureFrameworksInAgreement(pojo);
 	}

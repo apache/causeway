@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.TransactionalResource;
@@ -289,7 +290,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             // once the contract/API for the objectstore is better tied down, hopefully can simplify this...
             //
             
-            List<ObjectPersistenceException> exceptions = this.getTransaction().getExceptionsIfAny();
+            List<IsisException> exceptions = this.getTransaction().getExceptionsIfAny();
             if(exceptions.isEmpty()) {
             
                 if (LOG.isDebugEnabled()) {
@@ -337,15 +338,15 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
 
-    private ObjectPersistenceException exceptionToThrowFrom(List<ObjectPersistenceException> exceptions) {
+    private IsisException exceptionToThrowFrom(List<IsisException> exceptions) {
         if(exceptions.size() == 1) {
             return exceptions.get(0);
         } 
         final StringBuilder buf = new StringBuilder();
-        for (ObjectPersistenceException ope : exceptions) {
+        for (IsisException ope : exceptions) {
             buf.append(ope.getMessage()).append("\n");
         }
-        return new ObjectPersistenceException(buf.toString());
+        return new IsisException(buf.toString());
     }
     
 

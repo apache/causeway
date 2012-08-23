@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -283,9 +284,17 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         }
         
         final Object pojo = pojoRecreator.recreatePojo(typedOid);
-        return mapRecreatedPojo(typedOid, pojo);
+        ObjectAdapter adapter = mapRecreatedPojo(typedOid, pojo);
+        
+        Oid adapterOid = adapter.getOid();
+        if(adapterOid instanceof RootOid) {
+            final RootOid recreatedOid = (RootOid) adapterOid;
+            final RootOid originalOid = (RootOid) typedOid;
+            recreatedOid.checkLock(getAuthenticationSession().getUserName(), originalOid);
+        }
+        return adapter;
     }
-    
+
     
     @Override
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
@@ -750,6 +759,11 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     protected ServicesInjector getServicesInjector() {
         return IsisContext.getPersistenceSession().getServicesInjector();
     }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+    
 
 
 }

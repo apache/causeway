@@ -29,9 +29,10 @@ import java.io.PrintWriter;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.file.server.Util;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 
 public class ClientConnection {
@@ -92,10 +93,10 @@ public class ClientConnection {
             // TODO create better exceptions (requires way to restore
             // object/version)
             if (data.startsWith("{")) {
-                throw new ConcurrencyException(data, (Throwable) null);
+                throw new ConcurrencyException(data, null);
 
             } else {
-                throw new ConcurrencyException(data, (Throwable) null);
+                throw new ConcurrencyException(data, null);
 
             }
         } else if (!status.equals("ok")) {

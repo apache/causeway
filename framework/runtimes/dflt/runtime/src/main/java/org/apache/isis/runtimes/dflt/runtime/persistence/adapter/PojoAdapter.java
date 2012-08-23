@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -35,6 +36,8 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -42,8 +45,8 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
@@ -53,28 +56,31 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private static final int INCOMPLETE_COLLECTION = -1;
 
-    private final SpecificationLoaderSpi specificationLoader;
+    private final SpecificationLoader specificationLoader;
     private final AdapterManager objectAdapterLookup;
     private final Localization localization;
     
     private Object pojo;
     private Oid oid;
-    private Version version;
     private ResolveState resolveState;
 
     private String defaultTitle;
 
     private ElementSpecificationProvider elementSpecificationProvider;
 
+    private AuthenticationSession authenticationSession;
+
 
     // ///////////////////////////////////////////////////////////////////
     // Constructor, finalizer
     // ///////////////////////////////////////////////////////////////////
 
-    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoaderSpi specificationLoader, AdapterManager objectAdapterLookup, Localization localization) {
+    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoader specificationLoader, AdapterManager adapterManager, Localization localization, AuthenticationSession authenticationSession) {
         this.specificationLoader = specificationLoader;
-        this.objectAdapterLookup = objectAdapterLookup;
+        this.objectAdapterLookup = adapterManager;
         this.localization = localization;
+        this.authenticationSession = authenticationSession;
+        
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
         }
@@ -314,22 +320,24 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         if(isParented()) {
             return getAggregateRoot().getVersion();
         } else {
-            return version;
+            return getOid().getVersion();
         }
     }
 
 
     @Override
-    public void checkLock(final Version version) {
+    public void checkLock(final Version otherVersion) {
         if(isParented()) {
-            getAggregateRoot().checkLock(version);
+            getAggregateRoot().checkLock(otherVersion);
             return;
         }
-        if (this.version != null && this.version.different(version)) {
-            LOG.info("concurrency conflict on " + this + " (" + version + ")");
-            throw new ConcurrencyException(this, version);
+        final Version version = getOid().getVersion();
+        if (version != null && version.different(otherVersion)) {
+            LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
+            throw new ConcurrencyException(getAuthenticationSession().getUserName(), getOid(), version, otherVersion);
         }
     }
+
 
     @Override
     public void setVersion(final Version version) {
@@ -338,12 +346,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return;
         }
         if (shouldSetVersion(version)) {
-            this.version = version;
+            RootOid rootOid = (RootOid) getOid(); // since not parented
+            rootOid.setVersion(version);
         }
     }
 
-    private boolean shouldSetVersion(final Version version) {
-        return this.version == null || version == null || version.different(this.version);
+    private boolean shouldSetVersion(final Version otherVersion) {
+        final Version version = getOid().getVersion();
+        return version == null || otherVersion == null || otherVersion.different(version);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -459,7 +469,10 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         } else {
             str.append("specification", getSpecification().getShortIdentifier());
         }
-        str.append("version", version == null ? null : version.sequence());
+        if(getOid() != null) {
+            final Version version = getOid().getVersion();
+            str.append("version", version != null ? version.sequence() : null);
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -536,5 +549,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return IsisContext.getPersistenceSession();
     }
 
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSession;
+    }
 
 }

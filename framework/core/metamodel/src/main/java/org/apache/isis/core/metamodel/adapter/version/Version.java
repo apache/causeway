@@ -58,6 +58,11 @@ public class Version implements Serializable, Encodable {
     // factory methods
     // ///////////////////////////////////////////////////////
 
+
+    public static Version create(final Long sequence) {
+        return create(sequence, null, (Long)null);
+    }
+
     public static Version create(String sequence, String user, String utcTimestamp) {
         if(sequence == null) { 
             return null;
@@ -194,7 +199,7 @@ public class Version implements Serializable, Encodable {
      * version will normally cause a concurrency exception.
      */
     public boolean different(Version version) {
-        return !equals(this);
+        return !equals(version);
     }
     
     

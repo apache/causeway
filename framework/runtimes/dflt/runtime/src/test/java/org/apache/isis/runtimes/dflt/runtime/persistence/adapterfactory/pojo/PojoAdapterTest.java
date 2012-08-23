@@ -31,16 +31,17 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 
@@ -59,6 +60,8 @@ public class PojoAdapterTest {
     @Mock
     private SpecificationLoaderSpi mockSpecificationLoader;
     @Mock
+    private AuthenticationSession mockAuthenticationSession;
+    @Mock
     private AdapterManager mockObjectAdapterLookup;
     @Mock
     private Localization mockLocalization;
@@ -67,7 +70,7 @@ public class PojoAdapterTest {
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
         
-        adapter = new PojoAdapter(domainObject, RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), mockSpecificationLoader, mockObjectAdapterLookup, mockLocalization);
+        adapter = new PojoAdapter(domainObject, RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), mockSpecificationLoader, mockObjectAdapterLookup, mockLocalization, mockAuthenticationSession);
         adapter.setVersion(mockVersion);
         
         allowUnimportantMethodCallsOn(mockVersion);
@@ -77,10 +80,16 @@ public class PojoAdapterTest {
     private void allowUnimportantMethodCallsOn(final Version version) {
         context.checking(new Expectations() {
             {
+                allowing(version).getSequence();
+                allowing(version).getUtcTimestamp();
                 allowing(version).sequence();
                 allowing(version).getUser();
+                
                 allowing(version).getTime();
                 will(returnValue(new Date()));
+                
+                allowing(mockAuthenticationSession).getUserName();
+                will(returnValue("fredbloggs"));
             }
         });
     }
@@ -127,7 +136,7 @@ public class PojoAdapterTest {
     @Test(expected=ConcurrencyException.class)
     public void checkLock_whenVersionsDifferent() throws Exception {
 
-        adapter = PojoAdapterBuilder.create().with(mockSpecificationLoader).withTitleString("some pojo").with(mockVersion).build();
+        adapter = PojoAdapterBuilder.create().with(mockSpecificationLoader).withTitleString("some pojo").with(mockVersion).with(mockAuthenticationSession).build();
         
         context.checking(new Expectations() {
             {

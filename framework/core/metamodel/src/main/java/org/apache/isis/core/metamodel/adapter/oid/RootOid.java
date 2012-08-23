@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
@@ -45,6 +46,11 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 public interface RootOid extends TypedOid {
 
     String getIdentifier();
+    
+    void setVersion(Version version);
+
+    void checkLock(String currentUser, RootOid oid);
+
 
     /**
      * Returns a new RootOid for the same {@link #getObjectSpecId()}, but persistent and with the specified {@link #getIdentifier() identifier}.
@@ -86,5 +92,6 @@ public interface RootOid extends TypedOid {
     }
     
     Comparison compareAgainst(RootOid oid2);
+
 
 }

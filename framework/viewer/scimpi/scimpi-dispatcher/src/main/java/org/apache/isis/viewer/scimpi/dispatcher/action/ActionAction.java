@@ -27,6 +27,8 @@ import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -34,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
@@ -122,7 +123,7 @@ public class ActionAction implements Action {
                 }
                 context.setRequestPath(view);
                 if (message != null) {
-                    final MessageBroker messageBroker = IsisContext.getMessageBroker();
+                    final MessageBroker messageBroker = getMessageBroker();
                     messageBroker.addMessage(message);
                 }
                 if (override != null) {
@@ -148,17 +149,15 @@ public class ActionAction implements Action {
                 final String view = context.getParameter("_" + ERROR);
                 context.setRequestPath(view, Dispatcher.ACTION);
 
-                final MessageBroker messageBroker = IsisContext.getMessageBroker();
+                final MessageBroker messageBroker = getMessageBroker();
                 messageBroker.addWarning(error);
             }
-
         } catch (final ConcurrencyException e) {
-            ObjectAdapter object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(e.getSource()); 
-            String exceptionMessage = e.getMessage();
-            String user = exceptionMessage.substring(0, exceptionMessage.indexOf(" "));
-            String errorMessage = "The data for '" + object.titleString() + "' was changed by " + user
+            final ObjectAdapter adapter = getAdapterManager().getAdapterFor(e.getOid()); 
+            String user = adapter.getOid().getVersion().getUser();
+            String errorMessage = "The data for '" + adapter.titleString() + "' was changed by " + user
                     + ". Please repeat the action based on those changes.";
-            IsisContext.getMessageBroker().addMessage(errorMessage);
+            getMessageBroker().addMessage(errorMessage);
 
             entryState.setForm(formId);
             context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
@@ -175,8 +174,8 @@ public class ActionAction implements Action {
             context.setRequestPath(view, Dispatcher.ACTION);
 
         } catch (final RuntimeException e) {
-            IsisContext.getMessageBroker().getMessages();
-            IsisContext.getMessageBroker().getWarnings();
+            getMessageBroker().getMessages();
+            getMessageBroker().getWarnings();
             IsisContext.getUpdateNotifier().clear();
             IsisContext.getUpdateNotifier().clear();
             throw e;
@@ -274,4 +273,19 @@ public class ActionAction implements Action {
     @Override
     public void debug(final DebugBuilder debug) {
     }
+    
+
+    ///////////////////////////////////////////////////////////////////////////
+    // from context
+    ///////////////////////////////////////////////////////////////////////////
+    
+    protected MessageBroker getMessageBroker() {
+        return IsisContext.getMessageBroker();
+    }
+
+    protected AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
+
 }

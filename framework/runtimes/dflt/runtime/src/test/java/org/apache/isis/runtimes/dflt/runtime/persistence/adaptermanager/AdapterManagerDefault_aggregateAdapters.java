@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence;
+package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -78,6 +79,7 @@ public class AdapterManagerDefault_aggregateAdapters {
         public Customer x() { return null; }
     }
 
+
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
@@ -87,30 +89,35 @@ public class AdapterManagerDefault_aggregateAdapters {
     @Mock
     private RuntimeContext mockRuntimeContext;
     
+    @Mock
+    private OidGenerator mockOidGenerator;
+
+    @Mock
+    protected Localization mockLocalization;
+    
+    @Mock
+    private AuthenticationSession mockAuthenticationSession;
+    
+    private IsisMetaModel isisMetaModel;
+    
+    private ObjectAdapterFactory adapterFactory;
+    
     private AdapterManagerDefault adapterManager;
+    
+    private Customer rootObject;
+    private Name aggregatedObject;
     
     private ObjectAdapter persistentParentAdapter;
     private ObjectAdapter aggregatedAdapter;
 
-    private Name aggregatedObject;
-    private ObjectAdapterFactory adapterFactory;
-
-
-    private IsisMetaModel isisMetaModel;
-
-    @Mock
-    private OidGenerator mockOidGenerator;
-
-    private Customer rootObject;
-
-    @Mock
-    protected Localization mockLocalization;
+    
     
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         context.ignoring(mockRuntimeContext);
+        context.ignoring(mockAuthenticationSession);
         
         isisMetaModel = IsisMetaModel.builder(mockRuntimeContext, new ProgrammingModelFacetsJava5()).withServices(new CustomerRepository()).build();
         isisMetaModel.init();
@@ -123,6 +130,11 @@ public class AdapterManagerDefault_aggregateAdapters {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();
+            }
+            
+            @Override
+            protected AuthenticationSession getAuthenticationSession() {
+                return mockAuthenticationSession;
             }
         };
 

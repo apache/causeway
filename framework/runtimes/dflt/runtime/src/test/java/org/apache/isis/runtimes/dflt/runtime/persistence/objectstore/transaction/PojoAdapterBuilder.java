@@ -24,6 +24,7 @@ import java.util.Iterator;
 import com.google.common.base.Splitter;
 
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -34,6 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapter;
 
@@ -47,8 +49,7 @@ public class PojoAdapterBuilder {
     // override; else will delegate to SpecificationLoader
     private ObjectSpecification objectSpec;
     
-    // substitute the SpecLoader
-    private SpecificationLoaderSpi specificationLoader;
+    private SpecificationLoader specificationLoader;
     
     private AdapterManager objectAdapterLookup;
     
@@ -65,6 +66,8 @@ public class PojoAdapterBuilder {
     private Version version;
 
     private Localization localization;
+
+    private AuthenticationSession authenticationSession;
 
     
     public static enum Persistence {
@@ -200,8 +203,13 @@ public class PojoAdapterBuilder {
         return this;
     }
     
-    public PojoAdapterBuilder with(SpecificationLoaderSpi specificationLoader) {
+    public PojoAdapterBuilder with(SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
+        return this;
+    }
+    
+    public PojoAdapterBuilder with(AuthenticationSession authenticationSession) {
+        this.authenticationSession = authenticationSession;
         return this;
     }
     
@@ -223,7 +231,7 @@ public class PojoAdapterBuilder {
     public PojoAdapter build() {
         final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
         final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
-        final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, specificationLoader, objectAdapterLookup, localization) {
+        final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, specificationLoader, objectAdapterLookup, localization, authenticationSession) {
             @Override
             public ObjectSpecification getSpecification() { return objectSpec != null? objectSpec: super.getSpecification(); }
             @Override

@@ -31,8 +31,9 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.IoUtils;
-import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 
 public class ClientConnectionTest {

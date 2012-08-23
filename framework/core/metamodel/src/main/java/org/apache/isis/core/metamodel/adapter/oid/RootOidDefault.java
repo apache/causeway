@@ -31,12 +31,16 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.log4j.Logger;
 
 import com.google.common.base.Objects;
 
 public final class RootOidDefault implements Serializable, RootOid {
+
+    private final static Logger LOG = Logger.getLogger(RootOidDefault.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +49,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     private final State state;
     
     // not part of equality check
-    private final Version version;
+    private Version version;
 
     private int cachedHashCode;
 
@@ -202,7 +206,6 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
     // asPersistent
     // ////////////////////////////////////////////
-
     
     @Override
     public RootOidDefault asPersistent(String identifier) {
@@ -213,9 +216,18 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
 
+    // ////////////////////////////////////////////
+    // Version
+    // ////////////////////////////////////////////
+
 	public Version getVersion() {
 		return version;
 	}
+
+    @Override
+    public void setVersion(Version version) {
+        this.version = version;
+    }
 
     @Override
     public Comparison compareAgainst(RootOid other) {
@@ -270,7 +282,18 @@ public final class RootOidDefault implements Serializable, RootOid {
         return enString(new OidMarshaller());
     }
 
+    @Override
+    public void checkLock(String currentUser, RootOid otherOid) {
+        Version otherVersion = otherOid.getVersion();
+        if(version == null || otherVersion == null) {
+            return;
+        }
+        if (version.different(otherVersion)) {
+            LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
+            throw new ConcurrencyException(currentUser, this, version, otherVersion);
+        }
+    }
+
     
-
-
+    
 }
