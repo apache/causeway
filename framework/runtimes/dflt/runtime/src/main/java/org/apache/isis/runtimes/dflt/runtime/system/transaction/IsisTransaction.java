@@ -300,20 +300,18 @@ public class IsisTransaction implements TransactionScopedComponent {
     // flush
     // ////////////////////////////////////////////////////////////////
 
-    public final void flush() {
-        synchronized (IsisContext.getSession()) {
-            ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("flush transaction " + this);
-            }
-    
-            try {
-                doFlush();
-            } catch (final RuntimeException ex) {
-                setState(State.MUST_ABORT);
-                setAbortCause(ex);
-                throw ex;
-            }
+    public synchronized final void flush() {
+        ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("flush transaction " + this);
+        }
+
+        try {
+            doFlush();
+        } catch (final RuntimeException ex) {
+            setState(State.MUST_ABORT);
+            setAbortCause(ex);
+            throw ex;
         }
     }
 
@@ -380,30 +378,28 @@ public class IsisTransaction implements TransactionScopedComponent {
     // commit
     // ////////////////////////////////////////////////////////////////
 
-    public final void commit() {
+    public synchronized final void commit() {
 
-        synchronized (IsisContext.getSession()) {
-            ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
-            ensureThatState(exceptions.isEmpty(), is(true), "cannot commit: " + exceptions.size() + " exceptions have been raised");
-    
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("commit transaction " + this);
+        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
+        ensureThatState(exceptions.isEmpty(), is(true), "cannot commit: " + exceptions.size() + " exceptions have been raised");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("commit transaction " + this);
+        }
+
+        if (getState() == State.COMMITTED) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("already committed; ignoring");
             }
-    
-            if (getState() == State.COMMITTED) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("already committed; ignoring");
-                }
-                return;
-            }
-            
-            try {
-                doFlush();
-                setState(State.COMMITTED);
-            } catch (final RuntimeException ex) {
-                setAbortCause(ex);
-                throw ex;
-            }
+            return;
+        }
+        
+        try {
+            doFlush();
+            setState(State.COMMITTED);
+        } catch (final RuntimeException ex) {
+            setAbortCause(ex);
+            throw ex;
         }
     }
 
@@ -412,15 +408,13 @@ public class IsisTransaction implements TransactionScopedComponent {
     // abort
     // ////////////////////////////////////////////////////////////////
 
-    public final void abort() {
-        synchronized (IsisContext.getSession()) {
-            ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
-            if (LOG.isInfoEnabled()) {
-                LOG.info("abort transaction " + this);
-            }
-    
-            setState(State.ABORTED);
+    public synchronized final void abort() {
+        ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
+        if (LOG.isInfoEnabled()) {
+            LOG.info("abort transaction " + this);
         }
+
+        setState(State.ABORTED);
     }
 
     

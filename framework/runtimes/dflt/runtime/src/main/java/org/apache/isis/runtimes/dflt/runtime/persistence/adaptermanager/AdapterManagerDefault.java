@@ -27,10 +27,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -61,10 +58,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.log4j.Logger;
 
 public class AdapterManagerDefault implements AdapterManagerSpi {
-
-    private static final String ISIS_PERSISTOR_CONCURRENCY_CHECKING = "isis.persistor.concurrencyChecking";
 
     private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
 
@@ -73,8 +69,6 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
 
     private final PojoRecreator pojoRecreator;
 
-    private final boolean concurrencyChecking;
-    
 
     // //////////////////////////////////////////////////////////////////
     // constructor
@@ -84,12 +78,10 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      * For object store implementations (eg JDO) that do not provide any mechanism
      * to allow transient objects to be reattached; can instead provide a
      * {@link PojoRecreator} implementation that is injected into the Adapter Manager.
-     * @param isisConfiguration TODO
      * 
      * @see http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976
      */
-    public AdapterManagerDefault(IsisConfiguration isisConfiguration, PojoRecreator pojoRecreator) {
-        concurrencyChecking = isisConfiguration.getBoolean(ISIS_PERSISTOR_CONCURRENCY_CHECKING, false);
+    public AdapterManagerDefault(PojoRecreator pojoRecreator) {
         this.pojoRecreator = pojoRecreator;
     }
 
@@ -283,17 +275,23 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
 
     @Override
     public ObjectAdapter adapterFor(final TypedOid typedOid) {
+        return adapterFor(typedOid, ConcurrencyChecking.NO_CHECK);
+    }
+
+
+    @Override
+    public ObjectAdapter adapterFor(final TypedOid typedOid, final ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
-        final ObjectAdapter adapterLookedUpByOid = getAdapterFor(typedOid);
-        if (adapterLookedUpByOid != null) {
-            return adapterLookedUpByOid;
-        }
+        ObjectAdapter adapter = getAdapterFor(typedOid);
+        if (adapter != null) {
+            return adapter;
+        } 
         
         final Object pojo = pojoRecreator.recreatePojo(typedOid);
-        ObjectAdapter adapter = mapRecreatedPojo(typedOid, pojo);
+        adapter = mapRecreatedPojo(typedOid, pojo);
         
-        if(concurrencyChecking) {
+        if(concurrencyChecking == ConcurrencyChecking.CHECK) {
             final Oid adapterOid = adapter.getOid();
             if(adapterOid instanceof RootOid) {
                 final RootOid recreatedOid = (RootOid) adapterOid;
@@ -305,6 +303,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     }
 
     
+
     @Override
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         removeAdapter(adapter);

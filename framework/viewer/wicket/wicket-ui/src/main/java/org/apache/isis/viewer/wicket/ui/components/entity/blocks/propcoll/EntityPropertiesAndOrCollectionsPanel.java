@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -32,6 +31,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IFormSubmittingComponent;
 import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -42,6 +42,8 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -56,6 +58,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
+import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
+import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
@@ -216,21 +220,27 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 			component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
 		}
 
-        @SuppressWarnings("unchecked")
         private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
             return noSpec.getAssociations(visibleAssociationFilter(adapter));
         }
 
+        @SuppressWarnings("unchecked")
         private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter) {
             return Filters.and(render.getFilters(), ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
         }
 
         private void addButtons() {
-            editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
+            editButton = new AjaxButtonWithPreSubmitHook(ID_EDIT_BUTTON, Model.of("Edit")) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
+                public void preSubmit() {
+                    getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                }
+
+                @Override
                 public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                    getEntityModel().resetPropertyModels();
                     toEditMode(target);
                 }
 
@@ -241,8 +251,17 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             };
             add(editButton);
 
-            okButton = new Button(ID_OK_BUTTON, Model.of("OK")) {
+            okButton = new ButtonWithPreSubmitHook(ID_OK_BUTTON, Model.of("OK")) {
                 private static final long serialVersionUID = 1L;
+
+                @Override
+                public void preSubmit() {
+                    try {
+                        getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
+                    } catch(ConcurrencyException ex){
+                        Session.get().getFeedbackMessages().add(new FeedbackMessage(EntityPropertiesAndOrCollectionsPanel.PropCollForm.this, ex.getMessage(), FeedbackMessage.ERROR));
+                    }
+                }
 
                 @Override
                 public void onSubmit() {
@@ -262,19 +281,27 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                             snapshotToRollbackToIfInvalid.recreateObject();
                             return;
                         } else {
+                            getEntityModel().resetPropertyModels();
                             toViewMode(null);
                         }
                     } else {
                         // stay in edit mode
                     }
                 }
+
             };
             add(okButton);
 
-            cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
+            cancelButton = new AjaxButtonWithPreSubmitHook(ID_CANCEL_BUTTON, Model.of("Cancel")) {
                 private static final long serialVersionUID = 1L;
+                
                 {
                     setDefaultFormProcessing(false);
+                }
+
+                @Override
+                public void preSubmit() {
+                    getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
                 }
 
                 @Override
@@ -331,12 +358,17 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                 @Override
                 public void validate(final Form<?> form) {
                     final EntityModel entityModel = (EntityModel) getModel();
-                    final ObjectAdapter adapter = entityModel.getObject();
-                    final ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
-                    if (facet == null) {
-                        return;
+                    String invalidReasonIfAny;
+                    try {
+                        final ObjectAdapter adapter = entityModel.getObject();
+                        final ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
+                        if (facet == null) {
+                            return;
+                        }
+                        invalidReasonIfAny = facet.invalidReason(adapter);
+                    } catch(ConcurrencyException ex) {
+                        invalidReasonIfAny = ex.getMessage();
                     }
-                    final String invalidReasonIfAny = facet.invalidReason(adapter);
                     if (invalidReasonIfAny != null) {
                         Session.get().getFeedbackMessages().add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
                     }
@@ -364,6 +396,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             requestRepaintPanel(target);
         }
 
+        
         @Override
         protected void onValidate() {
             Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {

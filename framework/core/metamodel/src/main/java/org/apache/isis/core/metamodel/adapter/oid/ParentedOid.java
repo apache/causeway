@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+
 
 /**
  * Base type of the {@link Oid} for collections and for <tt>@Aggregated</tt>
@@ -29,12 +32,33 @@ package org.apache.isis.core.metamodel.adapter.oid;
  */
 public abstract class ParentedOid implements Oid {
 
-    public abstract TypedOid getParentOid();
+    private final TypedOid parentOid;
+    
+    public ParentedOid(TypedOid parentOid) {
+        Assert.assertNotNull("parentOid required", parentOid);
+        this.parentOid = parentOid;
+    }
+
+    public TypedOid getParentOid() {
+        return parentOid;
+    }
+
+    @Override
+    public Version getVersion() {
+        return parentOid.getVersion();
+    }
+
+    @Override
+    public void setVersion(Version version) {
+        parentOid.setVersion(version);
+    }
+
 
     @Override
     public boolean isTransient() {
         return getParentOid().isTransient();
     }
+
 
 
 }

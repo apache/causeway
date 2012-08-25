@@ -144,7 +144,7 @@ public class AdapterManagerDefault_aggregateAdapters {
             }
         };
 
-        adapterManager = new AdapterManagerDefault(mockConfiguration, new PojoRecreatorDefault()) {
+        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault()) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();

@@ -22,7 +22,12 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import org.apache.wicket.PageParameters;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -33,9 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.wicket.PageParameters;
-
-import com.google.common.collect.Maps;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -150,7 +152,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         if (adapterMemento == null) {
             return null;
         }
-        return adapterMemento.getObjectAdapter();
+        return adapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
     }
 
     @Override
@@ -238,6 +240,9 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
      * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
+        
+        adapterMemento.resetVersion();
+        
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter associatedAdapter = pm.getProperty().get(getObject());
@@ -294,13 +299,13 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     // //////////////////////////////////////////////////////////
 
     public String getReasonInvalidIfAny() {
-        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter();
+        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         final Consent validity = adapter.getSpecification().isValid(adapter);
         return validity.isAllowed() ? null : validity.getReason();
     }
 
     public void apply() {
-        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter();
+        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
             final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
             final ObjectAdapter associate = scalarModel.getObject();

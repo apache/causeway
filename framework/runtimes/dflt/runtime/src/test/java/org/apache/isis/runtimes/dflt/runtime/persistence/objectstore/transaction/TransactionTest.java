@@ -19,8 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
+import java.util.Collections;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hamcrest.CoreMatchers;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -266,7 +269,7 @@ public class TransactionTest {
     public void commit_testNoCommands() throws Exception {
         context.checking(new Expectations() {
             {
-                never(mockObjectStore);
+                one(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
             }
         });
 
@@ -290,6 +293,12 @@ public class TransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyCommitedTransaction() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+            }
+        });
+
         transaction.commit();
 
         transaction.abort();
@@ -297,6 +306,11 @@ public class TransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyCommitedTransaction() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+            }
+        });
         transaction.commit();
 
         transaction.commit();

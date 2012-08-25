@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 public class DropDownChoicesForValueMementos extends DropDownChoice<ObjectAdapterMemento> {
@@ -35,7 +36,7 @@ public class DropDownChoicesForValueMementos extends DropDownChoice<ObjectAdapte
 
         @Override
         public Object getDisplayValue(final ObjectAdapterMemento nom) {
-            return nom.getObjectAdapter().titleString();
+            return nom.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString();
         }
 
         @Override

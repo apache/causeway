@@ -22,16 +22,15 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.io.IOException;
 import java.io.Serializable;
 
+import com.google.common.base.Objects;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-
-import com.google.common.base.Objects;
 
 /**
  * Used as the {@link Oid} for {@link Aggregated} {@link ObjectAdapter}s
@@ -46,7 +45,6 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
 
     private final ObjectSpecId objectSpecId;
     private final String localId;
-    private final TypedOid parentOid;
 
     private int cachedHashCode;
 
@@ -55,12 +53,11 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
     // /////////////////////////////////////////////////////////
 
     public AggregatedOid(ObjectSpecId objectSpecId, final TypedOid parentOid, final String localId) {
-        Assert.assertNotNull("parentOid required", parentOid);
+        super(parentOid);
         Assert.assertNotNull("objectSpecId required", objectSpecId);
         Assert.assertNotNull("LocalId required", localId);
         this.objectSpecId = objectSpecId;
         this.localId = localId;
-        this.parentOid = parentOid;
         cacheState();
     }
 
@@ -89,9 +86,11 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
 
 
     public AggregatedOid(final DataInputExtended input) throws IOException {
-        final String oidStr = input.readUTF();
-        final AggregatedOid oid = deString(oidStr, getEncodingMarshaller());
-        this.parentOid = oid.parentOid;
+        this(deString(input.readUTF(), getEncodingMarshaller()));
+    }
+
+    private AggregatedOid(final AggregatedOid oid) throws IOException {
+        super(oid.getParentOid());
         this.objectSpecId = oid.objectSpecId;
         this.localId = oid.localId;
         cacheState();
@@ -105,7 +104,7 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
     /**
      * Cannot be a reference because Oid gets serialized by wicket viewer
      */
-    private OidMarshaller getEncodingMarshaller() {
+    private static OidMarshaller getEncodingMarshaller() {
         return new OidMarshaller();
     }
 
@@ -122,11 +121,6 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
     
     public String getLocalId() {
         return localId;
-    }
-
-    @Override
-    public TypedOid getParentOid() {
-        return parentOid;
     }
 
     
@@ -181,11 +175,6 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
     }
 
 
-	@Override
-	public Version getVersion() {
-		return parentOid.getVersion();
-	}
-
     // /////////////////////////////////////////////////////////
     // toString
     // /////////////////////////////////////////////////////////
@@ -194,6 +183,7 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
     public String toString() {
         return enString(new OidMarshaller());
     }
+
 
 
 }

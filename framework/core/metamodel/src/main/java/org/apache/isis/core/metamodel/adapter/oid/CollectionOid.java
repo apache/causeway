@@ -26,7 +26,6 @@ import com.google.common.base.Objects;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
@@ -36,9 +35,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final TypedOid parentOid;
     private final String name;
-
     private int cachedHashCode;
 
     // /////////////////////////////////////////////////////////
@@ -50,7 +47,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     }
 
     public CollectionOid(TypedOid parentOid, String name) {
-        this.parentOid = parentOid;
+        super(parentOid);
         this.name = name;
         cacheState();
     }
@@ -82,10 +79,14 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
 
     public CollectionOid(DataInputExtended inputStream) throws IOException {
-        final CollectionOid oid = CollectionOid.deString(inputStream.readUTF(), getEncodingMarshaller());
-        this.parentOid = oid.parentOid;
+        this(CollectionOid.deString(inputStream.readUTF(), getEncodingMarshaller()));
+    }
+
+    private CollectionOid(CollectionOid oid) throws IOException {
+        super(oid.getParentOid());
         this.name = oid.name;
     }
+
 
     @Override
     public void encode(DataOutputExtended outputStream) throws IOException {
@@ -95,7 +96,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     /**
      * Cannot be a reference because Oid gets serialized by wicket viewer
      */
-    private OidMarshaller getEncodingMarshaller() {
+    private static OidMarshaller getEncodingMarshaller() {
         return new OidMarshaller();
     }
 
@@ -103,19 +104,10 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     // Properties
     // /////////////////////////////////////////////////////////
 
-    @Override
-    public TypedOid getParentOid() {
-        return parentOid;
-    }
-
     public String getName() {
         return name;
     }
 
-    @Override
-    public Version getVersion() {
-        return parentOid.getVersion();
-    }
 
     // /////////////////////////////////////////////////////////
     // Value semantics

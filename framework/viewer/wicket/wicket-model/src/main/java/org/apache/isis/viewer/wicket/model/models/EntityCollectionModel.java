@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -70,7 +71,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
         PARENTED {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-                final ObjectAdapter adapter = entityCollectionModel.parentObjectAdapterMemento.getObjectAdapter();
+                final ObjectAdapter adapter = entityCollectionModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection();
                 final ObjectAdapter collectionAsAdapter = collection.get(adapter);
 

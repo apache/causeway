@@ -19,7 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -150,7 +154,7 @@ public class PersistenceSessionObjectStoreTest {
         servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
 
-        adapterManager = new AdapterManagerDefault(mockConfiguration, new PojoRecreatorDefault());
+        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore) {
             @Override
@@ -228,6 +232,8 @@ public class PersistenceSessionObjectStoreTest {
                 one(mockObjectStore).startTransaction();
                 inSequence(tran);
                 one(mockPersistAlgorithm).makePersistent(transientAdapter, persistenceSession);
+                inSequence(tran);
+                one(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(tran);
                 one(mockObjectStore).endTransaction();
                 inSequence(tran);

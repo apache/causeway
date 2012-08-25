@@ -31,6 +31,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -113,7 +114,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("TextField: setting to pending: " + pending.toString());
                     }
-                    scalarModel.setObject(pending.getObjectAdapter());
+                    scalarModel.setObject(pending.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
                 }
 
             }

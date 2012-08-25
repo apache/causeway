@@ -7,4 +7,5 @@ public interface TypedOid extends Oid {
     
     ObjectSpecId getObjectSpecId();
 
+
 }

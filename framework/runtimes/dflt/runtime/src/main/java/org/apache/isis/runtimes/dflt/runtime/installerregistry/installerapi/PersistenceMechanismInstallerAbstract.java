@@ -111,7 +111,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
             final ServicesInjectorSpi servicesInjector) {
 
         final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
-        final AdapterManagerDefault adapterManager = new AdapterManagerDefault(getConfiguration(), pojoRecreator);
+        final AdapterManagerDefault adapterManager = new AdapterManagerDefault(pojoRecreator);
         
         ObjectStoreSpi objectStore = createObjectStore(getConfiguration(), objectAdapterFactory, adapterManager);
 

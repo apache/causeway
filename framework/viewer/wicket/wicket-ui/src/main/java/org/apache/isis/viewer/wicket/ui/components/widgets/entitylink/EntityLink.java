@@ -38,6 +38,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -213,7 +214,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     private ObjectAdapter getPendingAdapter() {
         final ObjectAdapterMemento memento = entityOidField.getModelObject();
-        return memento != null ? memento.getObjectAdapter() : null;
+        return memento != null ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK) : null;
     }
 
     @Override

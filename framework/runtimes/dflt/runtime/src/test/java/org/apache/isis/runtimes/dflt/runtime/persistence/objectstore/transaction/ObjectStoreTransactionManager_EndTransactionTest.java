@@ -19,8 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import java.util.Collections;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -87,6 +90,9 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
             {
                 final Sequence transactionOrdering = context.sequence("transactionOrdering");
                 one(mockObjectStore).startTransaction();
+                inSequence(transactionOrdering);
+
+                one(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(transactionOrdering);
 
                 one(mockObjectStore).endTransaction();

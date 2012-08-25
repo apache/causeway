@@ -124,7 +124,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public ObjectAdapter adapterFor(TypedOid oid) {
             	return getRuntimeAdapterManager().adapterFor(oid);
             }
-            
+
+            @Override
+            public ObjectAdapter adapterFor(TypedOid oid, ConcurrencyChecking concurrencyChecking) {
+                return getRuntimeAdapterManager().adapterFor(oid, concurrencyChecking);
+            }
+
             @Override
             public void injectInto(Object candidate) {
                 if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
@@ -132,6 +137,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                     cast.setAdapterManager(this);
                 }
             }
+
 
         };
         this.objectInstantiator = new ObjectInstantiatorAbstract() {

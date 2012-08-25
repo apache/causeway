@@ -24,6 +24,7 @@ import java.io.Serializable;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -66,7 +67,7 @@ public class ObjectAdapterMemento implements Serializable {
          */
         ENCODEABLE {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
                 ObjectSpecId objectSpecId = oam.objectSpecId;
                 ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(objectSpecId);
                 final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
@@ -87,6 +88,10 @@ public class ObjectAdapterMemento implements Serializable {
             public String toString(final ObjectAdapterMemento oam) {
                 return oam.encodableValue;
             }
+
+            @Override
+            public void resetVersion(ObjectAdapterMemento objectAdapterMemento) {
+            }
         },
         /**
          * The {@link ObjectAdapter} that this is for is already known by its
@@ -94,9 +99,16 @@ public class ObjectAdapterMemento implements Serializable {
          */
         PERSISTENT {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
                 TypedOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, TypedOid.class);
-                return getAdapterManager().adapterFor(oid);
+                return getAdapterManager().adapterFor(oid, concurrencyChecking);
+            }
+
+            @Override
+            public void resetVersion(ObjectAdapterMemento oam) {
+                final ObjectAdapter adapter = recreateAdapter(oam, ConcurrencyChecking.NO_CHECK);
+                Oid oid = adapter.getOid();
+                oam.persistentOidStr = oid.enString(getOidMarshaller());
             }
 
             @Override
@@ -113,16 +125,19 @@ public class ObjectAdapterMemento implements Serializable {
             public String toString(final ObjectAdapterMemento oam) {
                 return oam.persistentOidStr;
             }
+
         },
         /**
          * Uses Isis' own {@link Memento}, to capture the state of a transient
          * object.
          */
         TRANSIENT {
+            /**
+             * {@link ConcurrencyChecking} is ignored for transients.
+             */
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam) {
-                final ObjectAdapter adapter = oam.transientMemento.recreateObject();
-                return adapter;
+            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
+                return oam.transientMemento.recreateObject();
             }
 
             @Override
@@ -139,18 +154,24 @@ public class ObjectAdapterMemento implements Serializable {
             public String toString(final ObjectAdapterMemento oam) {
                 return oam.transientMemento.toString();
             }
+
+            @Override
+            public void resetVersion(ObjectAdapterMemento objectAdapterMemento) {
+            }
         };
 
-        public synchronized ObjectAdapter getAdapter(final ObjectAdapterMemento nom) {
-            return recreateAdapter(nom);
+        public synchronized ObjectAdapter getAdapter(final ObjectAdapterMemento nom, ConcurrencyChecking concurrencyChecking) {
+            return recreateAdapter(nom, concurrencyChecking);
         }
 
-        abstract ObjectAdapter recreateAdapter(ObjectAdapterMemento nom);
+        abstract ObjectAdapter recreateAdapter(ObjectAdapterMemento nom, ConcurrencyChecking concurrencyChecking);
 
         public abstract boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other);
         public abstract int hashCode(ObjectAdapterMemento objectAdapterMemento);
         
         public abstract String toString(ObjectAdapterMemento adapterMemento);
+
+        public abstract void resetVersion(ObjectAdapterMemento objectAdapterMemento);
     }
 
     private Type type;
@@ -222,12 +243,17 @@ public class ObjectAdapterMemento implements Serializable {
         type = Type.PERSISTENT;
     }
 
+    public void resetVersion() {
+        type.resetVersion(this);
+    }
+    
+
     
     public void captureTitleHintIfPossible() {
         if (this.titleHint != null) {
             return;
         } 
-        ObjectAdapter objectAdapter = this.getObjectAdapter();
+        ObjectAdapter objectAdapter = this.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         if (objectAdapter.isTitleAvailable()) {
             this.titleHint = objectAdapter.titleString();
         }
@@ -247,8 +273,8 @@ public class ObjectAdapterMemento implements Serializable {
      * best to call once and then hold onto the value thereafter. Alternatively,
      * can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.
      */
-    public ObjectAdapter getObjectAdapter() {
-        return type.getAdapter(this);
+    public ObjectAdapter getObjectAdapter(ConcurrencyChecking concurrencyChecking) {
+        return type.getAdapter(this, concurrencyChecking);
     }
 
     /**
@@ -299,7 +325,7 @@ public class ObjectAdapterMemento implements Serializable {
 	protected static OidMarshaller getOidMarshaller() {
 		return IsisContext.getOidMarshaller();
 	}
-    
+
 
 
 }

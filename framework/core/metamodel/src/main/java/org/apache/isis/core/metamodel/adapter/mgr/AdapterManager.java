@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -67,6 +68,18 @@ public interface AdapterManager extends Injectable {
     ObjectAdapter getAdapterFor(Object pojo);
 
     
+    public enum ConcurrencyChecking {
+        NO_CHECK,
+        CHECK
+    }
+
+    /**
+     * As per {@link #adapterFor(TypedOid, ConcurrencyChecking)}, with
+     * {@value ConcurrencyChecking#NO_CHECK no checking}.
+     */
+    ObjectAdapter adapterFor(TypedOid oid);
+    
+
     /**
      * Either returns an existing {@link ObjectAdapter adapter} (as per 
      * {@link #getAdapterFor(Oid)}), otherwise re-creates an adapter with the 
@@ -87,8 +100,14 @@ public interface AdapterManager extends Injectable {
      * <p>
      * If the {@link ObjectAdapter adapter} is recreated, its
      * {@link ResolveState} will be set to {@link ResolveState#GHOST}.
+     *
+     * <p>
+     * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.
+     * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version} 
+     * of the {@link TypedOid oid} of the recreated adapter is the same as that of the provided {@link TypedOid oid}.
+     * If the version differs, then a {@link ConcurrencyException} is thrown. 
      */
-    ObjectAdapter adapterFor(TypedOid oid);
+    ObjectAdapter adapterFor(TypedOid oid, ConcurrencyChecking concurrencyChecking);
 
     /**
      * Looks up or creates a standalone (value) or root adapter.

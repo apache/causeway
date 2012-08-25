@@ -23,9 +23,9 @@ import com.google.common.base.Function;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
@@ -47,7 +47,7 @@ public final class ObjectAdapters {
         return new Function<ObjectAdapterMemento, ObjectAdapter>() {
             @Override
             public ObjectAdapter apply(final ObjectAdapterMemento from) {
-                return from.getObjectAdapter();
+                return from.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
             }
         };
     }

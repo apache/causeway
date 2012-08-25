@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -66,7 +67,7 @@ public class ConverterForObjectAdapterMemento implements IConverter {
             return null;
         }
         final ObjectAdapterMemento memento = (ObjectAdapterMemento) object;
-        final Oid oid = memento.getObjectAdapter().getOid();
+        final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getOid();
         if (oid == null) {
             // values don't have an Oid...
             // REVIEW: is this right?
