@@ -19,13 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
 
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
 
 /**
  * Panel for rendering scalars of type {@link Password Isis' applib.Password}.

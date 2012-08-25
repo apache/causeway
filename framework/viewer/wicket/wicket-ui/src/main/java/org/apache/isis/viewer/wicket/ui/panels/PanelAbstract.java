@@ -21,6 +21,16 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
+import com.google.inject.Inject;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -32,15 +42,6 @@ import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.wicket.Component;
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-
-import com.google.inject.Inject;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
