@@ -43,6 +43,9 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.settings.IRequestCycleSettings;
+import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.wicket.util.convert.ConverterLocator;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -240,6 +243,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // Wicket Hooks
     // /////////////////////////////////////////////////
 
+    @Override
+    public IRequestCycleSettings getRequestCycleSettings() {
+        final IRequestCycleSettings requestCycleSettings = super.getRequestCycleSettings();
+        requestCycleSettings.setRenderStrategy(IRequestCycleSettings.REDIRECT_TO_RENDER);
+        return requestCycleSettings;
+    }
+    
     /**
      * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
      * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
