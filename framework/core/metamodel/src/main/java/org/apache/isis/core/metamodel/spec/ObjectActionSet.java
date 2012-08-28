@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.spec.feature.ActionSemantics;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -127,6 +128,11 @@ public class ObjectActionSet implements ObjectAction {
      */
     @Override
     public ObjectSpecification getSpecification() {
+        return null;
+    }
+
+    @Override
+    public ActionSemantics getSemantics() {
         return null;
     }
 
@@ -370,5 +376,6 @@ public class ObjectActionSet implements ObjectAction {
         final ObjectAction specification = this;
         return adapter.getInstance(specification);
     }
+
 
 }

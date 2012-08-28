@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
+import org.apache.isis.core.metamodel.spec.feature.ActionSemantics;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
@@ -145,6 +146,11 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     @Override
     public List<ObjectAction> getActions() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public ActionSemantics getSemantics() {
+        return ActionSemantics.determine(this);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -621,5 +627,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public ServicesProvider getServicesProvider() {
         return servicesProvider;
     }
+
 
 }

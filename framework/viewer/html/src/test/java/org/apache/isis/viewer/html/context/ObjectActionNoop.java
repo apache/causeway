@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
+import org.apache.isis.core.metamodel.spec.feature.ActionSemantics;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -306,6 +307,11 @@ public class ObjectActionNoop implements ObjectAction {
     @Override
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;
+    }
+
+    @Override
+    public ActionSemantics getSemantics() {
+        return null;
     }
 
 }
