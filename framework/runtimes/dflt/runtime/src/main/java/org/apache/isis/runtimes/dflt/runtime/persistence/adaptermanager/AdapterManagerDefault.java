@@ -291,12 +291,16 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         final Object pojo = pojoRecreator.recreatePojo(typedOid);
         adapter = mapRecreatedPojo(typedOid, pojo);
         
-        if(concurrencyChecking == ConcurrencyChecking.CHECK) {
-            final Oid adapterOid = adapter.getOid();
-            if(adapterOid instanceof RootOid) {
-                final RootOid recreatedOid = (RootOid) adapterOid;
-                final RootOid originalOid = (RootOid) typedOid;
-                recreatedOid.checkLock(getAuthenticationSession().getUserName(), originalOid);
+        final Oid adapterOid = adapter.getOid();
+        if(adapterOid instanceof RootOid) {
+            final RootOid recreatedOid = (RootOid) adapterOid;
+            final RootOid originalOid = (RootOid) typedOid;
+            try {
+                if(concurrencyChecking == ConcurrencyChecking.CHECK) {
+                    recreatedOid.checkLock(getAuthenticationSession().getUserName(), originalOid);
+                }
+            } finally {
+                originalOid.setVersion(recreatedOid.getVersion());
             }
         }
         return adapter;

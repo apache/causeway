@@ -285,17 +285,13 @@ public final class RootOidDefault implements Serializable, RootOid {
     @Override
     public void checkLock(String currentUser, RootOid otherOid) {
         Version otherVersion = otherOid.getVersion();
-        try {
-            if(version == null || otherVersion == null) {
-                return;
-            }
-            if (version.different(otherVersion)) {
-                LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
-                // reset this Oid to latest
-                throw new ConcurrencyException(currentUser, this, version, otherVersion);
-            }
-        } finally {
-            setVersion(otherVersion);
+        if(version == null || otherVersion == null) {
+            return;
+        }
+        if (version.different(otherVersion)) {
+            LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
+            // reset this Oid to latest
+            throw new ConcurrencyException(currentUser, this, version, otherVersion);
         }
     }
 
