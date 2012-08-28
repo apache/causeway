@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.blocks.action;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -43,6 +43,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFa
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
+import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public final class EntityActionLinkFactory implements CssMenuLinkFactory {
 
@@ -58,14 +59,14 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
-        final Link<?> link = createLink(adapterMemento, action, linkId, adapter);
+        final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
         final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
         final String label = Actions.labelFor(action, contextAdapter);
 
         return new LinkAndLabel(link, label);
     }
 
-    private Link<?> createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
+    private AbstractLink createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
         final Boolean persistent = adapter.representsPersistent();
         if (persistent) {
             return createLinkForPersistent(linkId, adapterMemento, action);
@@ -74,20 +75,13 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         }
     }
 
-    private Link<?> createLinkForPersistent(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
+    private AbstractLink createLinkForPersistent(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
 
         final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, contextAdapter, ActionModel.SingleResultsMode.REDIRECT);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
-        return newBookmarkablePageLink(linkId, pageClass, pageParameters);
-    }
-
-    /*
-     * Separate method in order to capture the generic
-     */
-    private <T extends Page> Link<T> newBookmarkablePageLink(final String linkId, final Class<T> pageClass, final PageParameters pageParameters) {
-        return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
+        return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }
 
     private Link<?> createLinkForTransient(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {

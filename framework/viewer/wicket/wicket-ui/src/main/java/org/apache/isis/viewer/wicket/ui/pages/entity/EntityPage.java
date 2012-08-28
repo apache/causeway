@@ -21,9 +21,10 @@ package org.apache.isis.viewer.wicket.ui.pages.entity;
 
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -34,16 +35,41 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class EntityPage extends PageAbstract {
 
+    private final EntityModel model;
+
     public EntityPage(final PageParameters pageParameters) {
         super(pageParameters, ComponentType.ENTITY);
-        final IModel<?> model = new EntityModel(getPageParameters());
+        this.model = new EntityModel(pageParameters);
         addChildComponents(model);
     }
 
     public EntityPage(final ObjectAdapter adapter) {
+        this(adapter, null);
+    }
+
+    /**
+     * Ensure that any {@link ConcurrencyException} that might have occurred already
+     * (eg from an action invocation) is show.
+     */
+    public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny) {
         super(new PageParameters(), ComponentType.ENTITY);
-        final IModel<?> model = new EntityModel(adapter);
+        this.model = new EntityModel(adapter);
+        model.setException(exIfAny);
         addChildComponents(model);
+    }
+
+
+    /**
+     * A rather crude way of intercepting the redirect-and-post strategy.
+     * 
+     * <p>
+     * Performs eager loading of corresponding {@link EntityModel}, with
+     * {@link ConcurrencyChecking#NO_CHECK no} concurrency checking.
+     */
+    @Override
+    protected void onBeforeRender() {
+        this.model.load(ConcurrencyChecking.NO_CHECK);
+        super.onBeforeRender();
     }
 
 }

@@ -22,7 +22,10 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.wicket.PageParameters;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
@@ -84,35 +87,56 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     @Override
     public void executeActionAndProcessResults() {
 
-        final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
+        ObjectAdapter targetAdapter = null;
+        try {
+            targetAdapter = getModel().getTargetAdapter();
 
-        final ActionModel actionModel = getActionModel();
-        final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
-        if (invalidReasonIfAny != null) {
-            error(invalidReasonIfAny);
+            // validate the action parameters (if any)
+            final ActionModel actionModel = getActionModel();
+            final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
+            if (invalidReasonIfAny != null) {
+                error(invalidReasonIfAny);
+                return;
+            }
+
+            // executes the action
+            ObjectAdapter resultAdapter = actionModel.getObject();
+            if(resultAdapter == null) {
+                // handle void methods
+                resultAdapter = targetAdapter;
+            }
+
+            final ResultType resultType = ResultType.determineFor(resultAdapter);
+            resultType.addResults(this, resultAdapter);
+
+        } catch(ConcurrencyException ex) {
+            
+            // second attempt should succeed, because the Oid would have been updated in the attempt
+            if(targetAdapter == null) {
+                targetAdapter = getModel().getTargetAdapter();
+            }
+
+            // forward onto the target page with the concurrency exception
+            final ResultType resultType = ResultType.determineFor(targetAdapter);
+            resultType.addResults(this, targetAdapter, ex);
+
             return;
         }
-
-        // executes the action
-        ObjectAdapter resultAdapter = actionModel.getObject();
-        if (resultAdapter == null) {
-            // TODO: a void; should indicate somehow
-            resultAdapter = targetAdapter;
-        }
-
-        final ResultType resultType = ResultType.determineFor(resultAdapter);
-
-        resultType.addResults(this, resultAdapter);
     }
 
     enum ResultType {
         OBJECT {
             @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+            public void addResults(final ActionPanel actionPanel, final ObjectAdapter resultAdapter) {
 
-                final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, panel);
+                final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, actionPanel);
 
-                addResultsAccordingToSingleResultsMode(panel, actualAdapter);
+                addResultsAccordingToSingleResultsMode(actionPanel, actualAdapter, null);
+            }
+
+            @Override
+            public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
+                addResultsAccordingToSingleResultsMode(actionPanel, targetAdapter, ex);
             }
 
             private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionProvider psa) {
@@ -128,12 +152,18 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 return actualAdapter;
             }
 
-            private void addResultsAccordingToSingleResultsMode(final ActionPanel panel, final ObjectAdapter actualAdapter) {
+            private void addResultsAccordingToSingleResultsMode(final ActionPanel panel, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
                 final ActionModel actionModel = panel.getActionModel();
                 final ActionModel.SingleResultsMode singleResultsMode = actionModel.getSingleResultsMode();
 
                 if (singleResultsMode == ActionModel.SingleResultsMode.REDIRECT) {
-                    panel.setResponsePage(new EntityPage(actualAdapter));
+
+                    // build page, also propogate any concurrency exception that might have occurred already
+                    final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
+                    
+                    // "redirect-after-post"
+                    panel.setRedirect(true);
+                    panel.setResponsePage(entityPage);
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
                     panel.hideAll();
                     actionModel.getSelectionHandler().onSelected(panel, actualAdapter);
@@ -194,6 +224,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         };
 
         public abstract void addResults(ActionPanel panel, ObjectAdapter resultAdapter);
+
+        public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
+            ResultType.OBJECT.addResults(actionPanel, targetAdapter, ex);
+        }
 
         static ResultType determineFor(final ObjectAdapter resultAdapter) {
             final ObjectSpecification resultSpec = resultAdapter.getSpecification();

@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.pages.action;
 
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -42,9 +41,6 @@ public class ActionPage extends PageAbstract {
         addChildComponents(actionModel);
     }
 
-    /**
-     * For use through {@link BookmarkablePageLink}s.
-     */
     public ActionPage(final PageParameters pageParameters) {
         super(pageParameters, ComponentType.ACTION);
         final IModel<?> model = buildModel();

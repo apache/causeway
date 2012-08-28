@@ -30,8 +30,10 @@ import org.apache.wicket.markup.html.PackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -63,6 +65,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormCom
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Links;
 
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
@@ -364,7 +367,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private void addOrReplaceLink(final ObjectAdapter adapter) {
         final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
-        final BookmarkablePageLink<EntityPage> link = new BookmarkablePageLink<EntityPage>(ID_ENTITY_LINK, pageClass, pageParameters);
+        final String linkId = ID_ENTITY_LINK;
+        final AbstractLink link = newLink(linkId, pageClass, pageParameters);
         label = new Label(ID_ENTITY_TITLE, adapter.titleString());
         link.add(label);
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
@@ -373,6 +377,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         entityLinkWrapper.setEnabled(true);
 
         addOrReplace(entityLinkWrapper);
+    }
+
+    protected AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
+        return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }
 
     private static List<ObjectAction> findServiceActionsFor(final ObjectSpecification scalarTypeSpec) {

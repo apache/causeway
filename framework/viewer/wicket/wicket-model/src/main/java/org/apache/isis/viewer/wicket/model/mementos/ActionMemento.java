@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.feature.ActionSemantics;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -31,22 +33,24 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 public class ActionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     private final ObjectSpecId owningType;
     private final ActionType actionType;
     private final String nameParmsId;
+    private final ActionSemantics actionSemantics;
 
     private transient ObjectAction action;
+
+    public ActionMemento(final ObjectAction action) {
+        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString());
+        this.action = action;
+    }
 
     public ActionMemento(final ObjectSpecId owningType, final ActionType actionType, final String nameParmsId) {
         this.owningType = owningType;
         this.actionType = actionType;
         this.nameParmsId = nameParmsId;
-    }
-
-    public ActionMemento(final ObjectAction action) {
-        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString());
-        this.action = action;
+        this.actionSemantics = getAction().getSemantics();
     }
 
     public ObjectSpecId getOwningType() {
@@ -61,11 +65,16 @@ public class ActionMemento implements Serializable {
         return nameParmsId;
     }
 
+    public ConcurrencyChecking getConcurrencyChecking() {
+        return this.actionSemantics.getConcurrencyChecking();
+    }
+
     public ObjectAction getAction() {
         if (action == null) {
             action = SpecUtils.getSpecificationFor(owningType).getObjectAction(actionType, nameParmsId);
         }
         return action;
     }
+
 
 }

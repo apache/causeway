@@ -101,11 +101,17 @@ public class ObjectAdapterMemento implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
                 TypedOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, TypedOid.class);
-                return getAdapterManager().adapterFor(oid, concurrencyChecking);
+                final ObjectAdapter adapter = getAdapterManager().adapterFor(oid, concurrencyChecking);
+                // reset version
+                if(concurrencyChecking == ConcurrencyChecking.NO_CHECK) {
+                    oam.persistentOidStr = oid.enString(getOidMarshaller());
+                }
+                return adapter;
             }
 
             @Override
             public void resetVersion(ObjectAdapterMemento oam) {
+                // REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 final ObjectAdapter adapter = recreateAdapter(oam, ConcurrencyChecking.NO_CHECK);
                 Oid oid = adapter.getOid();
                 oam.persistentOidStr = oid.enString(getOidMarshaller());

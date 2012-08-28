@@ -22,8 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -34,6 +33,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFa
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
+import org.apache.isis.viewer.wicket.ui.util.Links;
 
 class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
 
@@ -45,15 +45,13 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
 
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
 
-        final Link<? extends Page> link = createLink(linkId, pageParameters, pageClass);
+        final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
         final String actionLabel = Actions.labelFor(action);
 
         return new LinkAndLabel(link, actionLabel);
     }
 
-    private <T extends Page> Link<T> createLink(final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
-        return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
-    }
+    
 
     // ////////////////////////////////////////////////////////////
     // Dependencies

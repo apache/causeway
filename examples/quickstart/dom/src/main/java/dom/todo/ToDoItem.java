@@ -19,13 +19,6 @@
 
 package dom.todo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -37,7 +30,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Date;
@@ -154,7 +146,8 @@ public class ToDoItem extends AbstractDomainObject  {
             return null;
         } 
         PersistenceCapable persistenceCapable = (PersistenceCapable) this;
-        return (Long) JDOHelper.getVersion(persistenceCapable);
+        final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
+        return version;
     }
     public boolean hideVersionSequence() {
         return !(this instanceof PersistenceCapable);

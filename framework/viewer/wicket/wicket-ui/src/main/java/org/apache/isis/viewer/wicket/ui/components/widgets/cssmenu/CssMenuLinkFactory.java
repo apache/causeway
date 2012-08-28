@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.io.Serializable;
 
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -32,15 +32,15 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 public interface CssMenuLinkFactory extends Serializable {
 
     public class LinkAndLabel {
-        private final Link<?> link;
+        private final AbstractLink link;
         private final String label;
 
-        public LinkAndLabel(final Link<?> link, final String label) {
+        public LinkAndLabel(final AbstractLink link, final String label) {
             this.link = link;
             this.label = label;
         }
 
-        public Link<?> getLink() {
+        public AbstractLink getLink() {
             return link;
         }
 

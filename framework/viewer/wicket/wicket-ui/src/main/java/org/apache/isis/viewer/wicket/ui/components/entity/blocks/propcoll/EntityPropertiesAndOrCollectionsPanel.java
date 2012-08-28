@@ -37,6 +37,7 @@ import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.filter.Filter;
@@ -148,6 +149,13 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             this.render = render;
 
             buildGui();
+            
+            // add any concurrency exception that might have been propogated into the entity model 
+            // as a result of a previous action invocation
+            final String concurrencyExceptionIfAny = entityModel.getAndClearConcurrencyExceptionIfAny();
+            if(concurrencyExceptionIfAny != null) {
+                error(concurrencyExceptionIfAny);
+            }
         }
 
         private void buildGui() {
