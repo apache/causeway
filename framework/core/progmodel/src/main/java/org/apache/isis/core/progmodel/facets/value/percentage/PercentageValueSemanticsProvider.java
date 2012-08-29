@@ -44,8 +44,6 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     private static final Percentage DEFAULT_VALUE = new Percentage(0.0f);
     private static final int TYPICAL_LENGTH = 12;
-    private static final boolean IMMUTABLE = true;
-    private static final boolean EQUAL_BY_CONTENT = true;
 
     public static Class<? extends Facet> type() {
         return FloatingPointValueFacet.class;
@@ -62,7 +60,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     public PercentageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Percentage.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.percentage");
         if (formatRequired == null) {

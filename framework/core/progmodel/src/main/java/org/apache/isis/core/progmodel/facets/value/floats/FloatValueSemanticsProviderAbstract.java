@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.EqualByContent;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.Immutability;
 
 public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Float> implements FloatingPointValueFacet {
 
@@ -40,13 +42,11 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     private static final Float DEFAULT_VALUE = new Float(0.0f);
     private static final int TYPICAL_LENGTH = 12;
-    private static final boolean IMMUTABLE = true;
-    private static final boolean EQUAL_BY_CONTENT = true;
 
     private final NumberFormat format;
 
     public FloatValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Float> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.float");
     }
 

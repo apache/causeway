@@ -28,7 +28,7 @@ public class FacetFiltersTest extends TestCase {
 
     public class FooSuperFacet extends FacetAbstract {
         public FooSuperFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
-            super(facetType, holder, false);
+            super(facetType, holder, Derivation.NOT_DERIVED);
         }
     }
 
@@ -46,7 +46,7 @@ public class FacetFiltersTest extends TestCase {
 
     public class BarFacet extends FacetAbstract {
         public BarFacet(final FacetHolder holder) {
-            super(BarFacet.class, holder, false);
+            super(BarFacet.class, holder, Derivation.NOT_DERIVED);
         }
     }
 

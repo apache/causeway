@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.dirty.DirtyObjectFacet;
 public abstract class DirtyObjectFacetAbstract extends FacetAbstract implements DirtyObjectFacet {
 
     public DirtyObjectFacetAbstract(final Class<? extends Facet> type, final FacetHolder holder) {
-        super(type, holder, false);
+        super(type, holder, Derivation.NOT_DERIVED);
     }
 
 }

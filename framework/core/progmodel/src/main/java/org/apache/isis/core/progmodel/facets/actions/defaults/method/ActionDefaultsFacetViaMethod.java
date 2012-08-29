@@ -40,7 +40,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     private final Method actionMethod;
 
     public ActionDefaultsFacetViaMethod(final Method defaultMethod, final FacetHolder holder) {
-        super(holder, false);
+        super(holder, Derivation.NOT_DERIVED);
         this.defaultMethod = defaultMethod;
         this.actionMethod = determineActionMethod(holder);
     }

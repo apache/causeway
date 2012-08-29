@@ -30,7 +30,7 @@ public abstract class ChoicesFacetAbstract extends FacetAbstract implements Choi
     }
 
     public ChoicesFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
 }

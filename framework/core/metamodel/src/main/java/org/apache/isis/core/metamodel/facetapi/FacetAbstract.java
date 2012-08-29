@@ -29,6 +29,11 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 
 public abstract class FacetAbstract implements Facet {
 
+    public enum Derivation {
+        DERIVED,
+        NOT_DERIVED
+    }
+    
     private Facet underlyingFacet;
 
     private final Class<? extends Facet> facetType;
@@ -45,10 +50,10 @@ public abstract class FacetAbstract implements Facet {
     private IdentifiedHolder identifiedHolder;
 
     @SuppressWarnings("unchecked")
-    public FacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final boolean derived) {
+    public FacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final Derivation derivation) {
         this.facetType = ensureThatArg(facetType, is(not(nullValue(Class.class))));
         setFacetHolder(ensureThatArg(holder, is(not(nullValue(FacetHolder.class)))));
-        this.derived = derived;
+        this.derived = derivation == Derivation.DERIVED;
     }
 
     @Override

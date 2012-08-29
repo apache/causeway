@@ -36,7 +36,7 @@ public abstract class JdoDatastoreIdentityFacetAbstract extends FacetAbstract im
     private final IdGeneratorStrategy strategy;
 
     public JdoDatastoreIdentityFacetAbstract(IdGeneratorStrategy strategy, FacetHolder facetHolder) {
-        super(JdoDatastoreIdentityFacetAbstract.type(), facetHolder, false);
+        super(JdoDatastoreIdentityFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
         this.strategy = strategy;
     }
 

@@ -39,7 +39,7 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     private final ServicesInjector dependencyInjector;
 
     public EncodableFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
-        super(EncodableFacet.class, holder, false);
+        super(EncodableFacet.class, holder, Derivation.NOT_DERIVED);
         this.adapterManager = adapterManager;
         this.dependencyInjector = dependencyInjector;
 

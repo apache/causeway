@@ -30,7 +30,7 @@ public abstract class ActionChoicesFacetAbstract extends FacetAbstract implement
     }
 
     public ActionChoicesFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
 }

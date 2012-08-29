@@ -36,7 +36,7 @@ public abstract class ObjectSpecIdFacetAbstract extends
 
     public ObjectSpecIdFacetAbstract(final String value,
             final FacetHolder holder) {
-        super(ObjectSpecIdFacetAbstract.type(), holder, false);
+        super(ObjectSpecIdFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         this.value = ObjectSpecId.of(value);
     }
     

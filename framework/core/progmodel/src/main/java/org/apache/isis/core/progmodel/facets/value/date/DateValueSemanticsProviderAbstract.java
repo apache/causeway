@@ -45,8 +45,8 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
-    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("date", holder, adaptedClass, 12, immutable, equalByContent, defaultValue, configuration, context);
+    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super("date", holder, adaptedClass, 12, immutability, equalByContent, defaultValue, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.date");
         if (formatRequired == null) {
@@ -59,11 +59,6 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
     // //////////////////////////////////////////////////////////////////
     // DateValueFacet
     // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public int getLevel() {
-        return DATE_ONLY;
-    }
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff

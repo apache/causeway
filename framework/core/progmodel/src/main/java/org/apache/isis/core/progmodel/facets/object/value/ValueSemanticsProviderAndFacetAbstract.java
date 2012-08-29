@@ -54,6 +54,24 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private final boolean immutable;
     private final boolean equalByContent;
     private final T defaultValue;
+    
+    public enum Immutability {
+        IMMUTABLE,
+        NOT_IMMUTABLE;
+
+        public static Immutability of(boolean immutable) {
+            return immutable? IMMUTABLE: NOT_IMMUTABLE;
+        }
+    }
+
+    public enum EqualByContent {
+        HONOURED,
+        NOT_HONOURED;
+
+        public static EqualByContent of(boolean equalByContent) {
+            return equalByContent? HONOURED: NOT_HONOURED;
+        }
+    }
 
     /**
      * Lazily looked up per {@link #getSpecification()}.
@@ -63,13 +81,13 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private final IsisConfiguration configuration;
     private final ValueSemanticsProviderContext context;
 
-    public ValueSemanticsProviderAndFacetAbstract(final Class<? extends Facet> adapterFacetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
+    public ValueSemanticsProviderAndFacetAbstract(final Class<? extends Facet> adapterFacetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue, final IsisConfiguration configuration,
             final ValueSemanticsProviderContext context) {
-        super(adapterFacetType, holder, false);
+        super(adapterFacetType, holder, Derivation.NOT_DERIVED);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
-        this.immutable = immutable;
-        this.equalByContent = equalByContent;
+        this.immutable = (immutability == Immutability.IMMUTABLE);
+        this.equalByContent = (equalByContent == EqualByContent.HONOURED);
         this.defaultValue = defaultValue;
 
         this.configuration = configuration;

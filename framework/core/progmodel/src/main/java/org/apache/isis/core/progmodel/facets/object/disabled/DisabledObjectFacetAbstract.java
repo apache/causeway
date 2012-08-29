@@ -34,7 +34,7 @@ public abstract class DisabledObjectFacetAbstract extends FacetAbstract implemen
     }
 
     public DisabledObjectFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     @Override

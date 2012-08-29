@@ -28,7 +28,7 @@ public abstract class SingleIntValueFacetAbstract extends FacetAbstract implemen
     private final int value;
 
     public SingleIntValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final int value) {
-        super(facetType, holder, false);
+        super(facetType, holder, Derivation.NOT_DERIVED);
         this.value = value;
     }
 

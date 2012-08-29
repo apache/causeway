@@ -36,7 +36,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
     private final ServicesInjector dependencyInjector;
 
     public DefaultedFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final ServicesInjector dependencyInjector) {
-        super(DefaultedFacet.class, holder, false);
+        super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         this.dependencyInjector = dependencyInjector;

@@ -37,11 +37,9 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     }
 
     private static final int TYPICAL_LENGTH = 5;
-    private static final boolean IMMUTABLE = true;
-    private static final boolean EQUAL_BY_CONTENT = true;
 
     public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass, final Boolean defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////

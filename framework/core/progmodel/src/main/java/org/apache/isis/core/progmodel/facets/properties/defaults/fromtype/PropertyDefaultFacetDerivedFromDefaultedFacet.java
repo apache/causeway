@@ -32,7 +32,7 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
     private final AdapterManager adapterManager;
 
     public PropertyDefaultFacetDerivedFromDefaultedFacet(final DefaultedFacet typeFacet, final FacetHolder holder, final AdapterManager adapterManager) {
-        super(PropertyDefaultFacet.class, holder, false);
+        super(PropertyDefaultFacet.class, holder, Derivation.NOT_DERIVED);
         this.typeFacet = typeFacet;
         this.adapterManager = adapterManager;
     }

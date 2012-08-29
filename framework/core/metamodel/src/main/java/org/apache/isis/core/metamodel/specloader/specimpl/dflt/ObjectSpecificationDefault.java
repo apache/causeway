@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -133,18 +134,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         // names
         addNamedFacetAndPluralFacetIfRequired();
 
+        // go no further if a value
+        if(this.containsFacet(ValueFacet.class)) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("skipping full introspection for value type " + getFullIdentifier());
+            }
+            return;
+        }
+
         // superclass
         final Class<?> superclass = getCorrespondingClass().getSuperclass();
         setSuperclass(superclass);
 
-        // go no further if required
-        final boolean skipFurtherIntrospection = JavaClassUtils.isJavaClass(getCorrespondingClass()) || isAppLibValue(getCorrespondingClass());
-        if (skipFurtherIntrospection) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping introspection of interfaces, properties, actions and interfaces for " + getFullIdentifier() + " (java.xxx or applib value class)");
-            }
-            return;
-        }
 
         // walk superinterfaces
 
@@ -195,19 +196,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             addFacet(namedFacet);
         }
 
-        PluralFacet pluralFacet = getFacet(PluralFacet.class);
+        final PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
             pluralFacet = new PluralFacetInferred(NameUtils.pluralName(namedFacet.value()), this);
             addFacet(pluralFacet);
         }
-    }
-
-    /**
-     * TODO: review this, should be more general and check for value facet,
-     * surely?
-     */
-    private boolean isAppLibValue(final Class<?> type) {
-        return type.getName().startsWith("org.apache.isis.applib.value.");
     }
 
     private List<ObjectAssociation> asAssociations(final OrderSet orderSet) {

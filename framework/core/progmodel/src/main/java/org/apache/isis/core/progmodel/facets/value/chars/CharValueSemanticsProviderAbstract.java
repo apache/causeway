@@ -37,12 +37,10 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     private static final Character DEFAULT_VALUE = Character.valueOf((char) 0);
-    private static final boolean IMMUTABLE = true;
-    private static final boolean EQUAL_BY_CONTENT = true;
     private static final int TYPICAL_LENGTH = 1;
 
     public CharValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Character> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////

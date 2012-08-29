@@ -21,8 +21,11 @@ package dom.todo;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
+
+import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
@@ -30,13 +33,13 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.Discriminator("TODO")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
@@ -47,6 +50,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditab
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
 })
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
+@ObjectType("TODO")
 @Auditable
 public class ToDoItem extends AbstractDomainObject  {
     
@@ -96,15 +100,16 @@ public class ToDoItem extends AbstractDomainObject  {
     // }}
 
     // {{ DueBy (property)
-    private Date dueBy;
+    private LocalDate dueBy;
 
     @MemberOrder(sequence = "4")
     @Optional
-    public Date getDueBy() {
+    @Persistent
+    public LocalDate getDueBy() {
         return dueBy;
     }
 
-    public void setDueBy(final Date dueBy) {
+    public void setDueBy(final LocalDate dueBy) {
         this.dueBy = dueBy;
     }
     // }}

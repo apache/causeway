@@ -34,7 +34,7 @@ public abstract class PropertyChoicesFacetAbstract extends FacetAbstract impleme
     private final SpecificationLoader specificationLookup;
 
     public PropertyChoicesFacetAbstract(final FacetHolder holder, final SpecificationLoader specificationLookup) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
         this.specificationLookup = specificationLookup;
     }
 

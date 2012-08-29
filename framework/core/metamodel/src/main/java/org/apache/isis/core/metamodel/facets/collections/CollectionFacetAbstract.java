@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 public abstract class CollectionFacetAbstract extends FacetAbstract implements CollectionFacet {
 
     public CollectionFacetAbstract(final FacetHolder holder) {
-        super(CollectionFacet.class, holder, false);
+        super(CollectionFacet.class, holder, Derivation.NOT_DERIVED);
     }
 
     @Override

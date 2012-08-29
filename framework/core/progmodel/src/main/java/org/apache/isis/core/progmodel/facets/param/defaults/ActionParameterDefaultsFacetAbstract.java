@@ -31,7 +31,7 @@ public abstract class ActionParameterDefaultsFacetAbstract extends FacetAbstract
     }
 
     public ActionParameterDefaultsFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
 }

@@ -33,7 +33,7 @@ public abstract class AuditableFacetAbstract extends FacetAbstract implements
     }
 
     public AuditableFacetAbstract(FacetHolder facetHolder) {
-        super(AuditableFacetAbstract.type(), facetHolder, false);
+        super(AuditableFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
     }
 
 }

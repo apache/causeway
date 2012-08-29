@@ -31,7 +31,7 @@ public class JdoEmbeddedOnlyFacetAnnotation extends FacetAbstract implements
     }
 
     public JdoEmbeddedOnlyFacetAnnotation(final FacetHolder holder) {
-        super(JdoEmbeddedOnlyFacetAnnotation.type(), holder, false);
+        super(JdoEmbeddedOnlyFacetAnnotation.type(), holder, Derivation.NOT_DERIVED);
     }
 
 }

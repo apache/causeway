@@ -27,11 +27,11 @@ import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.EqualByContent;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.Immutability;
 import org.apache.isis.core.progmodel.facets.value.DateAndTimeValueSemanticsProviderAbstract;
 
 public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsProviderAbstract<DateTime> {
-    private static final boolean IMMUTABLE = false;
-    private static final boolean EQUAL_BY_CONTENT = false;
 
     /**
      * Required because implementation of {@link Parser} and
@@ -42,7 +42,7 @@ public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsPro
     }
 
     public DateTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, DateTime.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
+        super(holder, DateTime.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, configuration, context);
     }
 
     @Override

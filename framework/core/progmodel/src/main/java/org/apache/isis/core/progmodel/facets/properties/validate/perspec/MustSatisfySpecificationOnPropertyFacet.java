@@ -41,7 +41,7 @@ public class MustSatisfySpecificationOnPropertyFacet extends FacetAbstract imple
     private final List<Specification> specifications;
 
     public MustSatisfySpecificationOnPropertyFacet(final List<Specification> specifications, final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
         this.specifications = specifications;
     }
 

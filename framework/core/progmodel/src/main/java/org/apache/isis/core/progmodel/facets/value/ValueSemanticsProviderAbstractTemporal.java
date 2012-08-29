@@ -102,18 +102,18 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
+    public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue, final IsisConfiguration configuration,
             final ValueSemanticsProviderContext context) {
-        this(propertyName, type(), holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration, context);
+        this(propertyName, type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue, configuration, context);
     }
 
     /**
      * Allows the specific facet subclass to be specified (rather than use
      * {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue,
+    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue,
             final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration, context);
+        super(facetType, holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue, configuration, context);
         configureFormats();
 
         this.propertyType = propertyType;
@@ -333,11 +333,6 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         return getAdapterManager().adapterFor(setDate(date));
     }
 
-    /**
-     * For subclasses to implement.
-     */
-    @Override
-    public abstract int getLevel();
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff

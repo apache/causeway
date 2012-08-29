@@ -28,9 +28,8 @@ import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Date> {
 
     public JavaSqlDateValueTypeFacetFactory() {
-        super(DateValueFacet.class); // as per inherited
-                                     // TimeValueSemanticsProvider#facetType
-                                     // (inherited)
+        // as per inherited TimeValueSemanticsProvider#facetType 
+        super(DateValueFacet.class); 
     }
 
     @Override

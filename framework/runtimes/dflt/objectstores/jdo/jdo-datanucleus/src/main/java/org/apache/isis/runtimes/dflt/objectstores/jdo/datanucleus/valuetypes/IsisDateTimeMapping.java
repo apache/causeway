@@ -1,4 +1,4 @@
-package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes;
 
 import org.datanucleus.store.mapped.mapping.ObjectAsLongMapping;
 

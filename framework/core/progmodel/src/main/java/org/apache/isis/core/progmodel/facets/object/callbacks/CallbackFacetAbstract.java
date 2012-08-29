@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 public abstract class CallbackFacetAbstract extends FacetAbstract implements CallbackFacet {
 
     public CallbackFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
-        super(facetType, holder, false);
+        super(facetType, holder, Derivation.NOT_DERIVED);
     }
 
     @Override

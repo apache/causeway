@@ -48,8 +48,8 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     private static final int TYPICAL_LENGTH = 18;
 
     @SuppressWarnings("unchecked")
-    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final boolean immutable, final boolean equalByContent, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, (T) DEFAULT_VALUE, configuration, context);
+    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.datetime");
         if (formatRequired == null) {
@@ -59,14 +59,6 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
         }
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // DateValueFacet
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public int getLevel() {
-        return DATE_AND_TIME;
-    }
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff

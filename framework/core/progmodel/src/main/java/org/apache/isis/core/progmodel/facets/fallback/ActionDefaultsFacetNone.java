@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
 
     public ActionDefaultsFacetNone(final FacetHolder holder) {
-        super(holder, false);
+        super(holder, Derivation.NOT_DERIVED);
     }
 
     @Override

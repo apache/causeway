@@ -31,14 +31,16 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
-    private static final boolean IMMUTABLE = true;
-    private static final boolean EQUAL_BY_CONTENT = true;
     private static final int TYPICAL_LENGTH = 8;
+
+    private static <T> T defaultFor(final Class<T> adaptedClass) {
+        return adaptedClass.getEnumConstants()[0];
+    }
 
     private static Class<? extends Facet> type() {
         return EnumFacet.class;
     }
-
+    
     /**
      * Required because {@link Parser} and {@link EncoderDecoder}.
      */
@@ -47,12 +49,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     }
 
     public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        this(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, adaptedClass.getEnumConstants()[0], configuration, context);
-    }
-
-    private EnumValueSemanticsProvider(final Class<? extends Facet> adapterFacetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
-        super(adapterFacetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultFor(adaptedClass), configuration, context);
     }
 
     @Override

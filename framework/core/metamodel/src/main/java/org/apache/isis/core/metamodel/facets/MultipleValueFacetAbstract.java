@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public abstract class MultipleValueFacetAbstract extends FacetAbstract implements MultipleValueFacet {
 
     public MultipleValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
-        super(facetType, holder, false);
+        super(facetType, holder, Derivation.NOT_DERIVED);
     }
 
 }

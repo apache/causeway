@@ -41,7 +41,7 @@ public class MustSatisfySpecificationOnTypeFacet extends FacetAbstract implement
     private final List<Specification> specifications;
 
     public MustSatisfySpecificationOnTypeFacet(final List<Specification> specifications, final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
         this.specifications = specifications;
     }
 

@@ -30,7 +30,7 @@ public abstract class TypicalLengthFacetAbstract extends FacetAbstract implement
     }
 
     public TypicalLengthFacetAbstract(final FacetHolder holder, final boolean derived) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     @Override

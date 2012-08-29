@@ -36,7 +36,7 @@ public abstract class JdoPersistenceCapableFacetAbstract extends FacetAbstract i
     private final IdentityType identityType;
 
     public JdoPersistenceCapableFacetAbstract(final String table, IdentityType identityType, final FacetHolder holder) {
-        super(JdoPersistenceCapableFacetAbstract.type(), holder, false);
+        super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         this.table = table;
         this.identityType = identityType;
     }

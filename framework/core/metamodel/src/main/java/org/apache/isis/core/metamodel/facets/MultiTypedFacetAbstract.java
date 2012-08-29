@@ -32,7 +32,7 @@ public abstract class MultiTypedFacetAbstract extends FacetAbstract implements M
     private final Class<? extends Facet>[] facetTypes;
 
     public MultiTypedFacetAbstract(final Class<? extends Facet> facetType, final Class<? extends Facet>[] facetTypes, final FacetHolder holder) {
-        super(facetType, holder, false);
+        super(facetType, holder, Derivation.NOT_DERIVED);
         this.facetTypes = facetTypes;
     }
 

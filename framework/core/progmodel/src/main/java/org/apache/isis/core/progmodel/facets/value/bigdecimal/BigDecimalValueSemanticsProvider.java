@@ -42,8 +42,6 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     private static final int TYPICAL_LENGTH = 19;
-    private static final boolean IMMUTABLE = true;
-    private static final boolean EQUAL_BY_CONTENT = true;
     private static final BigDecimal DEFAULT_VALUE = new BigDecimal(0);
 
     private final NumberFormat format;
@@ -57,7 +55,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     public BigDecimalValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.decimal");
     }
 

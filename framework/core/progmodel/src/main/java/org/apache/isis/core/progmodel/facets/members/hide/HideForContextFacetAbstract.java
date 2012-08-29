@@ -32,7 +32,7 @@ public abstract class HideForContextFacetAbstract extends FacetAbstract implemen
     }
 
     public HideForContextFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     @Override

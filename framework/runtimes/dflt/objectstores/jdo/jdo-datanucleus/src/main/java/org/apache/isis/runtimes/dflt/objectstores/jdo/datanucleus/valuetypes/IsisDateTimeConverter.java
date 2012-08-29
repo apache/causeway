@@ -1,4 +1,4 @@
-package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.applibtypes;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes;
 
 import org.apache.isis.applib.value.DateTime;
 import org.datanucleus.store.types.converters.TypeConverter;

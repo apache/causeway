@@ -38,7 +38,7 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     private final ParseableFacetUsingParser parseableFacetUsingParser;
 
     public ParseableFacetAbstract(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
-        super(ParseableFacet.class, holder, false);
+        super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         this.parseableFacetUsingParser = isValid()?

@@ -38,9 +38,6 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 8;
 
-    private static final boolean IMMUTABLE = false;
-    private static final boolean EQUAL_BY_CONTENT = false;
-
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS")); 
         formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT)); 
@@ -48,7 +45,7 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
 
     @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE, configuration, context);
+        super("time", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.time");
         if (formatRequired == null) {
@@ -61,11 +58,6 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     // //////////////////////////////////////////////////////////////////
     // DateValueFacet
     // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public int getLevel() {
-        return TIME_ONLY;
-    }
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff

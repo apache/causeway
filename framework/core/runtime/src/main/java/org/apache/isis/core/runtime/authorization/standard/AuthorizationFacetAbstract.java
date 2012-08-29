@@ -37,7 +37,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     private final AuthorizationManager authorizationManager;
 
     public AuthorizationFacetAbstract(final FacetHolder holder, final AuthorizationManager authorizationManager) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
         this.authorizationManager = authorizationManager;
     }
 

@@ -50,7 +50,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public ParseableFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
-        super(ParseableFacet.class, holder, false);
+        super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.dependencyInjector = dependencyInjector;

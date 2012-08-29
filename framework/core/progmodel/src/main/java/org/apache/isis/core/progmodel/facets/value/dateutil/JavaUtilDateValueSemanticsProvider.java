@@ -41,9 +41,6 @@ import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSeman
  */
 public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemanticsProviderAbstract<java.util.Date> {
 
-    private static final boolean IMMUTABLE = false;
-    private static final boolean EQUAL_BY_CONTENT = false;
-
     /**
      * Required because implementation of {@link Parser} and
      * {@link EncoderDecoder}.
@@ -53,7 +50,7 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
     }
 
     public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
+        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, configuration, context);
     }
 
     @Override

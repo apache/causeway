@@ -40,7 +40,7 @@ public class JdoQueryFacetAbstract extends FacetAbstract implements
     private final List<JdoNamedQuery> namedQueries = new ArrayList<JdoNamedQuery>();
 
     public JdoQueryFacetAbstract(final FacetHolder holder) {
-        super(JdoQueryFacetAbstract.type(), holder, false);
+        super(JdoQueryFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
     }
 
     protected void add(final Query... jdoNamedQueries) {

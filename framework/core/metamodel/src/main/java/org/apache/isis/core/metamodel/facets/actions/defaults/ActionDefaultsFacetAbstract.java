@@ -29,8 +29,8 @@ public abstract class ActionDefaultsFacetAbstract extends FacetAbstract implemen
         return ActionDefaultsFacet.class;
     }
 
-    public ActionDefaultsFacetAbstract(final FacetHolder holder, final boolean derived) {
-        super(type(), holder, derived);
+    public ActionDefaultsFacetAbstract(final FacetHolder holder, final Derivation derivation) {
+        super(type(), holder, derivation);
     }
 
 }

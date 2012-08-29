@@ -39,7 +39,7 @@ public abstract class ActionInvocationFacetAbstract extends FacetAbstract implem
     }
 
     public ActionInvocationFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
 }

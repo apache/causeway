@@ -27,7 +27,7 @@ public abstract class SingleWhenValueFacetAbstract extends FacetAbstract impleme
     private final When value;
 
     public SingleWhenValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final When value) {
-        super(facetType, holder, false);
+        super(facetType, holder, Derivation.NOT_DERIVED);
         this.value = value;
     }
 

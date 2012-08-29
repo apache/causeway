@@ -31,7 +31,7 @@ public abstract class PropertyDefaultFacetAbstract extends FacetAbstract impleme
     }
 
     public PropertyDefaultFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
 }

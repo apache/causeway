@@ -40,8 +40,6 @@ import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSeman
  */
 public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<Date> {
 
-    private static final boolean IMMUTABLE = false;
-    private static final boolean EQUAL_BY_CONTENT = false;
     private static final Date DEFAULT_VALUE = null; // no default
 
     /**
@@ -53,7 +51,7 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
     }
 
     public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
     }
 
     @Override

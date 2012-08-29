@@ -33,7 +33,7 @@ public abstract class DisableForSessionFacetAbstract extends FacetAbstract imple
     }
 
     public DisableForSessionFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     @Override

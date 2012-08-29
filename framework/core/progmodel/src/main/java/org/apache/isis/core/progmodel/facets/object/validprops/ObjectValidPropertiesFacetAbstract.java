@@ -33,7 +33,7 @@ public abstract class ObjectValidPropertiesFacetAbstract extends FacetAbstract i
     }
 
     public ObjectValidPropertiesFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     @Override

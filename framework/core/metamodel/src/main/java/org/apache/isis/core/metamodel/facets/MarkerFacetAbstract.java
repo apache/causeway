@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public abstract class MarkerFacetAbstract extends FacetAbstract implements MarkerFacet {
 
     public MarkerFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
-        super(facetType, holder, false);
+        super(facetType, holder, Derivation.NOT_DERIVED);
     }
 
 }

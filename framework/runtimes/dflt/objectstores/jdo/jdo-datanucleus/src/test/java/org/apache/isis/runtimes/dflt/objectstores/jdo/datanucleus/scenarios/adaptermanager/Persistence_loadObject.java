@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scenarios.adaptermgr;
+package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.scenarios.adaptermanager;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

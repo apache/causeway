@@ -29,7 +29,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
     private final DefaultedFacet[] defaultedFacets;
 
     public ActionParameterDefaultFacetDerivedFromTypeFacets(final DefaultedFacet[] defaultedFacets, final FacetHolder holder) {
-        super(holder, true);
+        super(holder, Derivation.DERIVED);
         this.defaultedFacets = defaultedFacets;
     }
 

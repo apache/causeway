@@ -30,7 +30,7 @@ public abstract class CollectionRemoveFromFacetAbstract extends FacetAbstract im
     }
 
     public CollectionRemoveFromFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
     }
 
 }
