@@ -196,7 +196,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             addFacet(namedFacet);
         }
 
-        final PluralFacet pluralFacet = getFacet(PluralFacet.class);
+        PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
             pluralFacet = new PluralFacetInferred(NameUtils.pluralName(namedFacet.value()), this);
             addFacet(pluralFacet);
