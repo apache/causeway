@@ -155,6 +155,9 @@ public class FrameworkSynchronizer {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
             public ObjectAdapter call() {
+                if(getJdoPersistenceManager().getObjectId(pojo) == null) {
+                    return null;
+                }
                 final RootOid oid = getPersistenceSession().getOidGenerator().createPersistent(pojo, null);
                 final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(oid, pojo);
                 return adapter;
