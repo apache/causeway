@@ -1,5 +1,6 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -15,6 +16,15 @@ public class PojoRecreatorDefault implements PojoRecreator {
     
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
+    }
+
+
+    /**
+     * Default implementation simply returns <tt>null</tt>.
+     */
+    @Override
+    public ObjectAdapter lazilyLoaded(Object pojo) {
+        return null;
     }
 
 }

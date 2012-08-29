@@ -9,14 +9,15 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     private static final Logger LOG = Logger.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
-    public PersistenceQueryFindAllInstancesProcessor(final PersistenceManager persistenceManager) {
-        super(persistenceManager);
+    public PersistenceQueryFindAllInstancesProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
+        super(persistenceManager, frameworkSynchronizer);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {

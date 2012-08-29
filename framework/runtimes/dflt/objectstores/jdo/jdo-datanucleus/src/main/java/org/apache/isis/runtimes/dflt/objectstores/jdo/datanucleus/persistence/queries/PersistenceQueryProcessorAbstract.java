@@ -15,6 +15,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
@@ -24,13 +26,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
         implements PersistenceQueryProcessor<T> {
 
-    // TODO: review this, want to reuse
-    private final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener();
-
     private final PersistenceManager persistenceManager;
+    private final FrameworkSynchronizer frameworkSynchronizer;
 
-    protected PersistenceQueryProcessorAbstract(final PersistenceManager persistenceManager) {
+    protected PersistenceQueryProcessorAbstract(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
         this.persistenceManager = persistenceManager;
+        this.frameworkSynchronizer = frameworkSynchronizer;
     }
 
     protected PersistenceManager getPersistenceManager() {
@@ -61,7 +62,7 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         for (final Object pojo : pojos) {
         	// ought not to be necessary, however for some queries it seems that the 
         	// lifecycle listener is not called
-        	isisLifecycleListener.postLoadProcessingFor((PersistenceCapable) pojo);
+        	frameworkSynchronizer.postLoadProcessingFor((PersistenceCapable) pojo, CalledFrom.OS_QUERY);
             ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
             Assert.assertNotNull(adapter);
             adapters.add(adapter);

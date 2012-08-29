@@ -20,6 +20,7 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -30,7 +31,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     private final PersistenceManagerFactory persistenceManagerFactory;
     private final Map<String, JdoNamedQuery> namedQueryByName;
+    
     private final IsisLifecycleListener lifecycleListener;
+    private final FrameworkSynchronizer synchronizer;
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -46,9 +49,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
         namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries(objectSpecs));
 
-        lifecycleListener = new IsisLifecycleListener();
+        synchronizer = new FrameworkSynchronizer();
+        lifecycleListener = new IsisLifecycleListener(synchronizer);
     }
-
+    
     private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
@@ -100,6 +104,15 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // FrameworkSynchronizer
+    ///////////////////////////////////////////////////////////////////////////
+
+    public FrameworkSynchronizer getFrameworkSynchronizer() {
+        return synchronizer;
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     //
     ///////////////////////////////////////////////////////////////////////////
     
@@ -126,5 +139,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     public void resumeListener() {
         lifecycleListener.setSuspended(false);
     }
+
 
 }

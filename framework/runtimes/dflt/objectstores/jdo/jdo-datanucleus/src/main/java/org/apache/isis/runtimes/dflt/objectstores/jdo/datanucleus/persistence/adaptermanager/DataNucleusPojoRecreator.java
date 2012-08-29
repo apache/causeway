@@ -1,5 +1,6 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
@@ -13,6 +14,12 @@ public class DataNucleusPojoRecreator implements PojoRecreator {
         return getObjectStore().loadPojo(oid);
     }
 
+    
+    @Override
+    public ObjectAdapter lazilyLoaded(Object pojo) {
+        return getObjectStore().lazilyLoaded(pojo);
+    }
+
     ///////////////////////////////
     
 
@@ -23,6 +30,8 @@ public class DataNucleusPojoRecreator implements PojoRecreator {
     protected DataNucleusObjectStore getObjectStore() {
         return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
     }
+
+    
     
     
 }

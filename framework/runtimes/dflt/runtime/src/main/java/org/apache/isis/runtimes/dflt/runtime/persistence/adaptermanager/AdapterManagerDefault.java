@@ -171,6 +171,13 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
             return adapter;
         }
         
+        // pojo may have been lazily loaded by object store, but we haven't yet seen it
+        final ObjectAdapter lazilyLoadedAdapter = pojoRecreator.lazilyLoaded(pojo);
+        if(lazilyLoadedAdapter != null) {
+            return lazilyLoadedAdapter;
+        }
+        
+        
         // need to create (and possibly map) the adapter.
         final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
         

@@ -39,6 +39,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
@@ -108,8 +110,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     private TransactionMode transactionMode;
 
     
-    // TODO: review this, want to reuse
-    private final IsisLifecycleListener lifecycleListener = new IsisLifecycleListener();
+    private final FrameworkSynchronizer frameworkSynchronizer;
 
     public DataNucleusObjectStore(ObjectAdapterFactory adapterFactory, DataNucleusApplicationComponents applicationComponents) {
         ensureThatArg(adapterFactory, is(notNullValue()));
@@ -120,6 +121,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
 
         this.adapterFactory = adapterFactory;
         this.applicationComponents = applicationComponents;
+        this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
     }
 
     @Override
@@ -163,7 +165,6 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         }
 
         persistenceManager.close();
-
         state = State.CLOSED;
     }
 
@@ -173,10 +174,10 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     }
 
     private void addPersistenceQueryProcessors(final PersistenceManager persistenceManager) {
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class, new PersistenceQueryFindAllInstancesProcessor(persistenceManager));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class, new PersistenceQueryFindByTitleProcessor(persistenceManager));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class, new PersistenceQueryFindByPatternProcessor(persistenceManager));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindUsingApplibQueryDefault.class, new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class, new PersistenceQueryFindAllInstancesProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class, new PersistenceQueryFindByTitleProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class, new PersistenceQueryFindByPatternProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindUsingApplibQueryDefault.class, new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager, frameworkSynchronizer));
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -354,10 +355,12 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         return getPersistenceSession().mapRecreatedPojo(oid, pojo);
     }
 
+    
+    
+    /////////////////////////////////////////////////////////////
+    // delegated to by PojoRecreator
+    /////////////////////////////////////////////////////////////
 
-    /**
-     * not API.
-     */
     public Object loadPojo(final TypedOid oid) {
     	
         // REVIEW: does it make sense to get these directly?  not sure, so for now have decided to fail fast. 
@@ -383,6 +386,14 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     }
 
     
+    public ObjectAdapter lazilyLoaded(Object pojo) {
+        if(!(pojo instanceof PersistenceCapable)) {
+            return null;
+        } 
+        final PersistenceCapable persistenceCapable = (PersistenceCapable) pojo;
+        return frameworkSynchronizer.lazilyLoaded(persistenceCapable, CalledFrom.OS_LAZILYLOADED);
+    }
+
 
 
     /**
@@ -446,7 +457,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         // listener, but (with JPA impl) found it was required if we were ever to 
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         
-        lifecycleListener.postLoadProcessingFor((PersistenceCapable) domainObject);
+        frameworkSynchronizer.postLoadProcessingFor((PersistenceCapable) domainObject, CalledFrom.OS_RESOLVE);
     }
 
     /**
@@ -534,6 +545,8 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         }
         return adapters;
     }
+
+    
 
     // ///////////////////////////////////////////////////////////////////////
     // Services
@@ -692,5 +705,6 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     protected OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
+
 
 }
