@@ -90,7 +90,13 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     @Override
     public void postDirty(InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableEnsureFrameworksInAgreement(event));
+        
+        // cannot assert on the frameworks being in agreement, due to the scenario documented
+        // in the FrameworkSynchronizer#preDirtyProcessing(...)
+        //
+        // 1<->m bidirectional, persistence-by-reachability
+        
+        withLogging(Phase.POST, event, new RunnableNoop(event));
     }    
 
     @Override

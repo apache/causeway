@@ -24,6 +24,12 @@ public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCom
             LOG.debug("create object - executing command for: " + onAdapter());
         }
         final ObjectAdapter adapter = onAdapter();
+        if(!adapter.isTransient()) {
+            // this could happen if DN's persistence-by-reachability has already caused the domainobject
+            // to be persisted.  It's Isis adapter will have been updated as a result of the postStore
+            // lifecycle callback, so in essence there's nothing to be done.
+            return;
+        }
         final Object domainObject = adapter.getObject();
 
         getPersistenceManager().makePersistent(domainObject);

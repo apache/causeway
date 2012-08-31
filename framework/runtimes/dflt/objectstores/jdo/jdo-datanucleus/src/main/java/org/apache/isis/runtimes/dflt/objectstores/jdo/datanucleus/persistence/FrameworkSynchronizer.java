@@ -141,6 +141,16 @@ public class FrameworkSynchronizer {
             public void run() {
                 final IsisTransaction transaction = getCurrentTransaction();
                 final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                
+                if(adapter.isTransient()) {
+                    // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
+                    // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
+                    // and it "helpfully" sets up the parent attribute on the child, causing this callback to fire.
+                    // 
+                    // however, at the same time, Isis has only queued up a CreateObjectCommand for the transient object, but it
+                    // hasn't yet executed, so thinks that the adapter is still transient. 
+                    return;
+                }
                 transaction.auditDirty(adapter);
 
                 ensureRootObject(pojo);
