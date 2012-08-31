@@ -215,23 +215,23 @@ public class FrameworkSynchronizer {
         if(!pojo.jdoIsPersistent()) {
             // make sure the adapter is transient
             if (!adapter.getResolveState().isTransient()) {
-                throw new IsisException(MessageFormat.format("adapter is in invalid state; should be {0} but is {1}", ResolveState.TRANSIENT, adapter.getResolveState()));
+                throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be transient but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
             }
 
             // make sure the oid is transient
             if (!oid.isTransient()) {
-                throw new IsisException(MessageFormat.format("Not transient: oid={0}, for {1}", oid, pojo));
+                throw new IsisException(MessageFormat.format("adapter oid={0} has oid in invalid state; should be transient; pojo: {1}", oid, pojo));
             }
 
         } else {
             // make sure the adapter is persistent
             if (!adapter.getResolveState().representsPersistent()) {
-                throw new IsisException(MessageFormat.format("adapter is in invalid state; should be in a persistent state but is {1}", ResolveState.RESOLVED, adapter.getResolveState()));
+                throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be in a persistent but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
             }
 
             // make sure the oid is persistent
             if (oid.isTransient()) {
-                throw new IsisException(MessageFormat.format("Transient: oid={0}, for {1}", oid, pojo));
+                throw new IsisException(MessageFormat.format("adapter oid={0} has oid in invalid state; should be persistent; pojo: {1}", oid, pojo));
             }
         }
     }
