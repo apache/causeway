@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
@@ -131,6 +132,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
                 final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, actionPanel);
 
+                //actionPanel.set
                 addResultsAccordingToSingleResultsMode(actionPanel, actualAdapter, null);
             }
 
@@ -158,12 +160,17 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
                 if (singleResultsMode == ActionModel.SingleResultsMode.REDIRECT) {
 
+                    // force any changes in state etc to happen now prior to the redirect;
+                    // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
+                    IsisContext.getTransactionManager().getTransaction().flush();
+                    
                     // build page, also propogate any concurrency exception that might have occurred already
                     final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
                     
                     // "redirect-after-post"
                     panel.setRedirect(true);
                     panel.setResponsePage(entityPage);
+                    
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
                     panel.hideAll();
                     actionModel.getSelectionHandler().onSelected(panel, actualAdapter);
