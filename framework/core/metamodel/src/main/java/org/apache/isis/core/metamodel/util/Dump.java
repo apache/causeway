@@ -182,7 +182,7 @@ public final class Dump {
         }
         debugBuilder.unindent();
 
-        final List<ObjectAssociation> fields2 = specification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final List<ObjectAssociation> fields2 = specification.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
         debugBuilder.appendln("Static");
         debugBuilder.indent();
         for (int i = 0; i < fields2.size(); i++) {

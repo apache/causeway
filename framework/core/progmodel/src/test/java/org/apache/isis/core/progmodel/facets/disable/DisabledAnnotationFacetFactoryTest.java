@@ -170,7 +170,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledWhereCollectionTableAnnotationPickedUpOn() {
         class Customer {
-            @Disabled(where = Where.COLLECTION_TABLE)
+            @Disabled(where = Where.PARENTED_TABLE)
             public void someAction() {
             }
         }
@@ -182,13 +182,13 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(When.ALWAYS, disabledFacetAbstract.when());
-        assertEquals(Where.COLLECTION_TABLE, disabledFacetAbstract.where());
+        assertEquals(Where.PARENTED_TABLE, disabledFacetAbstract.where());
     }
 
 
     public void testDisabledWhenAndWhereAnnotationPickedUpOn() {
         class Customer {
-            @Disabled(where = Where.COLLECTION_TABLE, when=When.UNTIL_PERSISTED)
+            @Disabled(where = Where.PARENTED_TABLE, when=When.UNTIL_PERSISTED)
             public void someAction() {
             }
         }
@@ -200,7 +200,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(When.UNTIL_PERSISTED, disabledFacetAbstract.when());
-        assertEquals(Where.COLLECTION_TABLE, disabledFacetAbstract.where());
+        assertEquals(Where.PARENTED_TABLE, disabledFacetAbstract.where());
     }
 
 

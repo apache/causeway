@@ -48,18 +48,19 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-public class ObjectAssociationAbstractTest {
+public class ObjectAssociationAbstractTest_alwaysHidden {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
 
-
     @Mock
     private ObjectSpecification objectSpecification;
+
+    @Mock
+    private HiddenFacet facet;
 
 
     public static class Customer {
@@ -126,66 +127,54 @@ public class ObjectAssociationAbstractTest {
                 return false;
             }
         };
-    }
 
-    @Test
-    public void notPersistedWhenDerived() throws Exception {
-        // TODO: ISIS-5, need to reinstate DerivedFacet
-        final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isNotPersisted());
-    }
-
-    @Test
-    public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isNotPersisted());
-    }
-
-    @Test
-    public void persisted() throws Exception {
-        assertFalse(objectAssociation.isNotPersisted());
-    }
-
-    @Test
-    public void notHidden() throws Exception {
-        assertFalse(objectAssociation.isAlwaysHidden());
-    }
-
-    @Test
-    public void optional() throws Exception {
-        assertFalse(objectAssociation.isMandatory());
-    }
-
-    @Test
-    public void mandatory() throws Exception {
-        final MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isMandatory());
-    }
-
-    @Test
-    public void hasNoChoices() throws Exception {
-        assertFalse(objectAssociation.hasChoices());
-    }
-
-    @Test
-    public void hasChoices() throws Exception {
-        final PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.hasChoices());
-    }
-
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
-        final T facet = context.mock(typeToMock);
         context.checking(new Expectations() {
             {
                 allowing(facet).facetType();
-                will(returnValue(typeToMock));
-                ignoring(facet);
+                will(returnValue(HiddenFacet.class));
+                allowing(facet).when();
+                will(returnValue(When.ALWAYS));
             }
         });
-        return facet;
+
     }
+
+
+    @Test
+    public void alwaysHidden_forHiddenAlwaysEverywhere() throws Exception {
+        context.checking(new Expectations() {
+            {
+                allowing(facet).where();
+                will(returnValue(Where.EVERYWHERE));
+            }
+        });
+        facetedMethod.addFacet(facet);
+        assertTrue(objectAssociation.isAlwaysHidden());
+    }
+
+
+    @Test
+    public void alwaysHidden_forHiddenAlwaysObjectForm() throws Exception {
+        context.checking(new Expectations() {
+            {
+                allowing(facet).where();
+                will(returnValue(Where.OBJECT_FORM));
+            }
+        });
+        facetedMethod.addFacet(facet);
+        assertTrue(objectAssociation.isAlwaysHidden());
+    }
+    
+    @Test
+    public void alwaysHidden_forHiddenAlwaysNowhere() throws Exception {
+        context.checking(new Expectations() {
+            {
+                allowing(facet).where();
+                will(returnValue(Where.NOWHERE));
+            }
+        });
+        facetedMethod.addFacet(facet);
+        assertFalse(objectAssociation.isAlwaysHidden());
+    }
+
 }

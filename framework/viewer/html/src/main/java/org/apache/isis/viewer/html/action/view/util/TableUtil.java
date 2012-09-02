@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.html.action.view.util;
 
 import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;
-import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS;
+import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class TableUtil {
     public static Table createTable(final Context context, final boolean addSelector, final ObjectAdapter collection, final String summary, final ObjectSpecification elementType) {
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAssociation> columnAssociations = elementType.getAssociations(Filters.and(STATICALLY_VISIBLE_ASSOCIATIONS, PROPERTIES));
+        final List<ObjectAssociation> columnAssociations = elementType.getAssociations(Filters.and(WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE, PROPERTIES));
 
         final int len = columnAssociations.size();
 

@@ -80,7 +80,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        final List<ObjectAssociation> allFields = elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final List<ObjectAssociation> allFields = elementSpec.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
         final TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
         write(request, collection, summary, rowBuilder, tableId, tableClass, rowClasses);
 

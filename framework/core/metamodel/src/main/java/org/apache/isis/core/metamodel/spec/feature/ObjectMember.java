@@ -19,11 +19,13 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -51,7 +53,12 @@ public interface ObjectMember extends ObjectFeature {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Determines if a member is always hidden.
+     * When the member is always hidden.
+     * 
+     * <p>
+     * Determined as per the {@link HiddenFacet} being present and 
+     * {@link HiddenFacet#when()} returning {@link When#ALWAYS}, and
+     * {@link HiddenFacet#where()} NOT returning {@link When#NOWHERE}.
      */
     boolean isAlwaysHidden();
 

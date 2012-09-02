@@ -57,7 +57,7 @@ public class CollectionView implements Action {
         }
         content.setIconName(iconName);
 
-        if (elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS).size() != 0) {
+        if (elementSpecification.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE).size() != 0) {
             final Table table = TableUtil.createTable(context, false, collection, titleString, elementSpecification);
             content.add(table);
         } else {

@@ -28,6 +28,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -50,9 +51,6 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
 
     private static final long serialVersionUID = 1L;
     
-    @SuppressWarnings("unchecked")
-    private static final Filter<ObjectAssociation> STATICALLY_VISIBLE_PROPERTIES = Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
-
     public CollectionContentsAsAjaxTable(final String id, final EntityCollectionModel model) {
         super(id, model);
 
@@ -82,7 +80,12 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         if (getModel().hasSelectionHandler()) {
             return;
         }
-        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(STATICALLY_VISIBLE_PROPERTIES);
+        
+        @SuppressWarnings("unchecked")
+        final Filter<ObjectAssociation> filter = Filters.and(
+                ObjectAssociationFilters.PROPERTIES, 
+                ObjectAssociationFilters.visibleWhere(getModel().isParented()? Where.PARENTED_TABLE: Where.STANDALONE_TABLE));
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(filter);
         for (final ObjectAssociation property : propertyList) {
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
             columns.add(nopc);

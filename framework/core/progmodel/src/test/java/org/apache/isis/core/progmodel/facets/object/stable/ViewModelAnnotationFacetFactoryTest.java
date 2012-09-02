@@ -22,10 +22,10 @@ package org.apache.isis.core.progmodel.facets.object.stable;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.stable.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.stable.annotation.ViewModelAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.stable.annotation.ViewModelFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelFacetAnnotation;
 
 public class ViewModelAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

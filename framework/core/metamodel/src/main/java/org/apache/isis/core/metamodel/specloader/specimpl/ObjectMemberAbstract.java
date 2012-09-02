@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -194,7 +196,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     @Override
     public boolean isAlwaysHidden() {
-        return containsFacet(HiddenFacet.class);
+        final HiddenFacet hiddenFacet = getFacet(HiddenFacet.class);
+        return hiddenFacet != null && hiddenFacet.when() == When.ALWAYS && hiddenFacet.where() != Where.NOWHERE;
     }
 
     /**

@@ -46,7 +46,7 @@ public class LongFormView extends AbstractFormView {
             IsisContext.getPersistenceSession().resolveField(object, field);
             final ObjectAdapter collection = field.get(object);
             final ObjectSpecification elementSpec = collection.getElementSpecification();
-            final List<ObjectAssociation> fields = elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            final List<ObjectAssociation> fields = elementSpec.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
             if (noColumnsString.equalsIgnoreCase("all")) {
                 noColumns = fields.size();
             } else {

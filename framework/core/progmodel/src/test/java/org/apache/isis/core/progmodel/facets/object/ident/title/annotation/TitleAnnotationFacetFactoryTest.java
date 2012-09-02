@@ -35,12 +35,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
@@ -239,4 +242,57 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 
+    
+    public static class Customer5 {
+
+        @Title(sequence = "1")
+        public String titleProperty() {
+            return "titleElement1";
+        }
+
+        public String otherProperty() {
+            return null;
+        }
+    }
+
+    @Test
+    public void hiddenFacetAnnotationInferredFromTitleAnnotation() throws Exception {
+
+        final Method propertyMethod = findMethod(Customer5.class, "titleProperty");
+        
+        facetFactory.process(new ProcessMethodContext(Customer5.class, propertyMethod, methodRemover, facetedMethod));
+
+        final Customer5 customer = new Customer5();
+
+        context.checking(new Expectations() {
+            {
+                allowing(objectAdapter).getObject();
+                will(returnValue(customer));
+            }
+        });
+        final HiddenFacet facet = facetedMethod.getFacet(HiddenFacet.class);
+        assertNotNull(facet);
+        assertThat(facet.where(), is(Where.ALL_TABLES));
+    }
+
+
+    @Test
+    public void hiddenFacetAnnotationNotInferredIfTitleAnnotationNotPresent() throws Exception {
+
+        final Method propertyMethod = findMethod(Customer5.class, "otherProperty");
+        
+        facetFactory.process(new ProcessMethodContext(Customer5.class, propertyMethod, methodRemover, facetedMethod));
+
+        final Customer5 customer = new Customer5();
+
+        context.checking(new Expectations() {
+            {
+                allowing(objectAdapter).getObject();
+                will(returnValue(customer));
+            }
+        });
+        final HiddenFacet facet = facetedMethod.getFacet(HiddenFacet.class);
+        assertNull(facet);
+    }
+    
 }

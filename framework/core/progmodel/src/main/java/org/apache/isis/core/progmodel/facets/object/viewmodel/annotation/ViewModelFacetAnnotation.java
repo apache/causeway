@@ -17,28 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.progmodel.facets.object.viewmodel.annotation;
 
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetAbstract;
 
-public abstract class WhenAndWhereValueFacetAbstract extends WhenValueFacetAbstract implements WhenAndWhereValueFacet {
-    private final Where where;
+public class ViewModelFacetAnnotation extends ViewModelFacetAbstract {
 
-    public WhenAndWhereValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final When when, final Where where) {
-        super(facetType, holder, when);
-        this.where = where;
+    public ViewModelFacetAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
-    @Override
-    public Where where() {
-        return where;
-    }
-
-    @Override
-    protected String toStringValues() {
-        return super.toStringValues() + "; where =" + where.getFriendlyName();
-    }
 }

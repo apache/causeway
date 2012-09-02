@@ -17,15 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.stable.annotation;
+package org.apache.isis.core.progmodel.facets.object.title.annotation;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.stable.ViewModelFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
 
-public class ViewModelFacetAnnotation extends ViewModelFacetAbstract {
+public class HiddenFacetInTablesInferredFromTitleAnnotation extends HiddenFacetImpl {
 
-    public ViewModelFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public HiddenFacetInTablesInferredFromTitleAnnotation(FacetHolder holder) {
+        super(When.ALWAYS, Where.ALL_TABLES, holder);
     }
 
 }

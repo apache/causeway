@@ -25,22 +25,27 @@ public enum Where {
     /**
      * The member should be disabled/hidden everywhere.
      */
-    EVERYWHERE,
+    EVERYWHERE {
+        @Override
+        public boolean includes(Where context) {
+            return true;
+        }
+    },
     /**
      * The member should be disabled/hidden when displayed within an object form.
      * 
      * <p>
      * For most viewers, this applies to property and collection members, not actions.
      */
-    OBJECT_FORM, 
+    OBJECT_FORM,
     /**
      * The member should be disabled/hidden when displayed as a column of a table within
-     * an object's collection.
+     * a parent object's collection.
      * 
      * <p>
      * For most (all?) viewers, this will have meaning only if applied to a property member.
      */
-    COLLECTION_TABLE,
+    PARENTED_TABLE ,
     /**
      * The member should be disabled/hidden when displayed as a column of a table showing a standalone list
      * of objects, for example as returned by a repository query.
@@ -54,11 +59,42 @@ public enum Where {
      * collection or a standalone list.
      * 
      * <p>
-     * This combines {@link #COLLECTION_TABLE} and {@link #STANDALONE_TABLE}.
+     * This combines {@link #PARENTED_TABLE} and {@link #STANDALONE_TABLE}.
      */
-    ALL_TABLES;
+    ALL_TABLES {
+        @Override
+        public boolean includes(Where context) {
+            return context == this || context == PARENTED_TABLE || context == STANDALONE_TABLE;
+        } 
+    },
+    /**
+     * To act as an override if a member would normally be hidden as a result of some other convention.
+     * 
+     * <p>
+     * For example, if a property is annotated with <tt>@Title</tt>, then normally this should be hidden
+     * from all tables.  Additionally annotating with <tt>@Hidden(where=Where.NOWHERE)</tt> overrides this.
+     */
+    NOWHERE {
+        @Override
+        public boolean includes(Where context) {
+            return false;
+        }
+    };
     
     public String getFriendlyName() {
         return Enums.getFriendlyNameOf(this);
     }
+
+    public boolean inParentedTable() {
+        return this == PARENTED_TABLE || this == ALL_TABLES;
+    }
+
+    public boolean inStandaloneTable() {
+        return this == STANDALONE_TABLE || this == ALL_TABLES;
+    }
+
+    public boolean includes(Where context) {
+        return context == this;
+    }
+
 }

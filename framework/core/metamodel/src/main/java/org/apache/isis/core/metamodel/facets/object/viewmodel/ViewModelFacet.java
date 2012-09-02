@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.stable;
+package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
-public abstract class ViewModelFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
-
-    public static Class<? extends Facet> type() {
-        return ViewModelFacet.class;
-    }
-
-    public ViewModelFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
+/**
+ * Indicates that this class is a view model, that is, any changes to its structure
+ * will be backwards compatible.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * applying the <tt>@ViewModel</tt> annotation at the class level.
+ */
+public interface ViewModelFacet extends MarkerFacet {
 
 }
