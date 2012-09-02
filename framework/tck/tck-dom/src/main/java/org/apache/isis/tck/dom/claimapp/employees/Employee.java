@@ -79,7 +79,7 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
     private String password;
 
     @MemberOrder(sequence = "2")
-    @Disabled(When.ONCE_PERSISTED)
+    @Disabled(when = When.ONCE_PERSISTED)
     public String getPassword() {
         return password;
     }

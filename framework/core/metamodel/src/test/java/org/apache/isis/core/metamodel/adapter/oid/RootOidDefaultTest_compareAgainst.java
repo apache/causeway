@@ -1,12 +1,13 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.junit.Test;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class RootOidDefaultTest_compareAgainst  {
 

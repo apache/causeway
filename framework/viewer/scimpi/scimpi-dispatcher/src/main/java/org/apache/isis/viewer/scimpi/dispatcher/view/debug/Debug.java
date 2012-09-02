@@ -323,7 +323,6 @@ public class Debug extends AbstractElementProcessor {
             view.appendln("Name", action.getName());
             view.appendln("Specification", specificationLink(action.getSpecification()));
 
-            view.appendln("Target", action.getTarget());
             view.appendln("On type", specificationLink(action.getOnType()));
 
             final ObjectSpecification returnType = action.getReturnType();

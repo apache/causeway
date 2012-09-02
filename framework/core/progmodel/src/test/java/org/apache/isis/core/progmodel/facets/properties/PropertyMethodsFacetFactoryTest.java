@@ -44,7 +44,7 @@ import org.apache.isis.core.progmodel.facets.members.disable.forsession.DisableF
 import org.apache.isis.core.progmodel.facets.members.disable.forsession.DisabledFacetViaDisableForSessionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.disable.method.DisabledFacetViaDisableMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlways;
+import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlwaysEverywhere;
 import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetViaProtectMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacet;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacet;
@@ -52,7 +52,7 @@ import org.apache.isis.core.progmodel.facets.members.hide.forsession.HiddenFacet
 import org.apache.isis.core.progmodel.facets.members.hide.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.hide.method.HiddenFacetViaHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hide.method.HideForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
+import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlwaysEverywhere;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
@@ -238,7 +238,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAlways);
+        assertTrue(facet instanceof DisabledFacetAlwaysEverywhere);
     }
 
     public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
@@ -707,7 +707,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAlways);
+        assertTrue(facet instanceof HiddenFacetAlwaysEverywhere);
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAlwaysHideMethod));
     }
@@ -737,7 +737,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAlways);
+        assertTrue(facet instanceof DisabledFacetAlwaysEverywhere);
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyProtectMethod));
     }

@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -53,7 +52,7 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     private ImmutableFacet create(final Immutable annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ImmutableFacetAnnotation(When.decode(annotation.value()), holder);
+        return annotation == null ? null : new ImmutableFacetAnnotation(annotation.value(), holder);
     }
 
 }

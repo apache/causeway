@@ -31,8 +31,6 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.EqualByContent;
-import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.Immutability;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
 public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {

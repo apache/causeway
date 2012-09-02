@@ -21,11 +21,11 @@ package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 
 public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {
@@ -40,11 +40,11 @@ public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbst
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final InitiatedBy initiatedBy = InitiatedBy.forCorrespondingMarkerSubType(processClassContaxt.getCls());
+        final NotPersistable.By initiatedBy = NotPersistable.By.lookupForMarkerInterface(processClassContaxt.getCls());
         FacetUtil.addFacet(create(initiatedBy, processClassContaxt.getFacetHolder()));
     }
 
-    private NotPersistableFacet create(final InitiatedBy initiatedBy, final FacetHolder holder) {
+    private NotPersistableFacet create(final NotPersistable.By initiatedBy, final FacetHolder holder) {
         return initiatedBy != null ? new NotPersistableFacetMarkerInterface(initiatedBy, holder) : null;
     }
 

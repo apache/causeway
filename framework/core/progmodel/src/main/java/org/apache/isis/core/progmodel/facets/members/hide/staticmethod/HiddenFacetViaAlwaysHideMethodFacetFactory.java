@@ -75,7 +75,7 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenFacetAlways(facetedMethod));
+        FacetUtil.addFacet(new HiddenFacetAlwaysEverywhere(facetedMethod));
     }
 
     private static Boolean invokeAlwaysHideMethod(final Method alwaysHideMethod) {

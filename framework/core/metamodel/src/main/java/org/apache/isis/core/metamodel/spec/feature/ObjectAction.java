@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,21 +31,17 @@ import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Target;
 
 public interface ObjectAction extends ObjectMember {
 
     // //////////////////////////////////////////////////////
-    // Target, realTarget, getOnType
+    // semantics, realTarget, getOnType
     // //////////////////////////////////////////////////////
 
     /**
-     * Returns where the action should be executed: explicitly locally on the
-     * client; explicitly remotely on the server; or where it normally should be
-     * executed. By default instance methods should execute on the server,
-     * static methods should execute on the client.
+     * The semantics of this action.
      */
-    Target getTarget();
+    ActionSemantics.Of getSemantics();
 
     /**
      * Determine the real target for this action. If this action represents an
@@ -197,6 +194,5 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectAdapter[][] getChoices(ObjectAdapter target);
 
-    ActionSemantics getSemantics();
 
 }

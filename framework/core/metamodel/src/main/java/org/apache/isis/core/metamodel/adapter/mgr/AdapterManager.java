@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter.mgr;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -70,7 +71,14 @@ public interface AdapterManager extends Injectable {
     
     public enum ConcurrencyChecking {
         NO_CHECK,
-        CHECK
+        CHECK;
+        
+        public static ConcurrencyChecking concurrencyCheckingFor(ActionSemantics.Of actionSemantics) {
+            return actionSemantics == ActionSemantics.Of.SAFE
+                    ? ConcurrencyChecking.NO_CHECK
+                    : ConcurrencyChecking.CHECK;
+        }
+
     }
 
     /**

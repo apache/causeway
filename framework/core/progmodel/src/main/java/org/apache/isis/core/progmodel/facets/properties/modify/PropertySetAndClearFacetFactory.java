@@ -31,7 +31,7 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlways;
+import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlwaysEverywhere;
 import org.apache.isis.core.progmodel.facets.properties.derived.inferred.NotPersistableFacetInferred;
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
@@ -74,7 +74,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
             FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
         } else {
             FacetUtil.addFacet(new NotPersistableFacetInferred(property));
-            FacetUtil.addFacet(new DisabledFacetAlways(property));
+            FacetUtil.addFacet(new DisabledFacetAlwaysEverywhere(property));
         }
 
         return setMethod;

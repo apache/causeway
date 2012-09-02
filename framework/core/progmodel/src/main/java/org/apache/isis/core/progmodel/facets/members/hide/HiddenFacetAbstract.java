@@ -19,27 +19,29 @@
 
 package org.apache.isis.core.progmodel.facets.members.hide;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.When;
+import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
-public abstract class HiddenFacetAbstract extends SingleWhenValueFacetAbstract implements HiddenFacet {
+public abstract class HiddenFacetAbstract extends WhenAndWhereValueFacetAbstract implements HiddenFacet {
 
     public static Class<? extends Facet> type() {
         return HiddenFacet.class;
     }
 
-    public HiddenFacetAbstract(final When value, final FacetHolder holder) {
-        super(type(), holder, value);
+    public HiddenFacetAbstract(final When when, Where where, final FacetHolder holder) {
+        super(type(), holder, when, where);
     }
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return hiddenReason(ic.getTarget());
     }
+
 
 }

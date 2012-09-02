@@ -23,10 +23,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

@@ -24,15 +24,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
@@ -214,58 +213,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facet = facetedMethod.getFacet(DebugFacet.class);
         assertNull(facet);
-    }
-
-    public void testPicksUpLocalPrefixAndSetsNameAppropriatelyAlso() {
-        final ActionInvocationFacetFactory facetFactory = new ActionInvocationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void localAnActionWithLocalPrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "localAnActionWithLocalPrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(ExecutedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ExecutedFacet);
-        final ExecutedFacet executedFacet = (ExecutedFacet) facet;
-        assertEquals(ExecutedFacet.Where.LOCALLY, executedFacet.value());
-
-        facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacet);
-        final NamedFacet namedFacet = (NamedFacet) facet;
-        assertEquals("An Action With Local Prefix", namedFacet.value());
-    }
-
-    public void testPicksUpRemotePrefixAndSetsNameAppropriatelyAlso() {
-        final ActionInvocationFacetFactory facetFactory = new ActionInvocationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void remoteAnActionWithRemotePrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "remoteAnActionWithRemotePrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(ExecutedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ExecutedFacet);
-        final ExecutedFacet executedFacet = (ExecutedFacet) facet;
-        assertEquals(ExecutedFacet.Where.REMOTELY, executedFacet.value());
-
-        facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacet);
-        final NamedFacet namedFacet = (NamedFacet) facet;
-        assertEquals("An Action With Remote Prefix", namedFacet.value());
     }
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
@@ -522,7 +469,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof HiddenFacetAbstract);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
-        assertEquals(When.ALWAYS, hiddenFacetAbstract.value());
+        assertEquals(When.ALWAYS, hiddenFacetAbstract.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
@@ -556,7 +503,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
-        assertEquals(When.ALWAYS, disabledFacetAbstract.value());
+        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
     }

@@ -32,5 +32,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Disabled {
-    When value() default When.ALWAYS;
+    When when() default When.ALWAYS;
+    Where where() default Where.EVERYWHERE;
 }

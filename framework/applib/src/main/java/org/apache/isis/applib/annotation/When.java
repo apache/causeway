@@ -19,6 +19,77 @@
 
 package org.apache.isis.applib.annotation;
 
+import org.apache.isis.applib.marker.AlwaysImmutable;
+import org.apache.isis.applib.marker.ImmutableOncePersisted;
+import org.apache.isis.applib.marker.ImmutableUntilPersisted;
+import org.apache.isis.applib.marker.NeverImmutable;
+import org.apache.isis.applib.util.Enums;
+
 public enum When {
-    ALWAYS, ONCE_PERSISTED, UNTIL_PERSISTED, NEVER
+    /**
+     * If annotated on a member, then that member should be disabled/hidden for persisted objects, but should be
+     * visible for transient objects.
+     * 
+     * <p>
+     * If annotated on an class, then applies to all members of that class.
+     */
+    ONCE_PERSISTED,
+    /**
+     * If annotated on a member, then that member should be disabled/hidden for transient objects, but should be
+     * visible for persisted objects.
+     * 
+     * <p>
+     * If annotated on an class, then applies to all members of that class.
+     */
+    UNTIL_PERSISTED,
+    /**
+     * If annotated on a member, then that member should be disabled/hidden both for objects that are persisted
+     * and for objects that are not persisted.
+     * 
+     * <p>
+     * Combines {@link #ONCE_PERSISTED} and {@link #UNTIL_PERSISTED}. 
+     * 
+     * <p>
+     * If annotated on an class, then applies to all members of that class.
+     */
+    ALWAYS,
+    /**
+     * If annotated on a member, then that member should not be disabled/hidden.
+     * 
+     * <p>
+     * If annotated on an class, then applies to all members of that class.
+     */
+    NEVER;
+
+    public String getFriendlyName() {
+        return Enums.getFriendlyNameOf(this);
+    }
+    
+    /**
+     * As an alternative to annotating an object with {@link Disabled}, can instead have the
+     * class implement a marker interface.   
+     */
+    public static When lookupForMarkerInterface(final Class<?> cls) {
+        if (AlwaysImmutable.class.isAssignableFrom(cls)) {
+            return ALWAYS;
+        } else if (ImmutableOncePersisted.class.isAssignableFrom(cls)) {
+            return ONCE_PERSISTED;
+        } else if (ImmutableUntilPersisted.class.isAssignableFrom(cls)) {
+            return UNTIL_PERSISTED;
+        } else if (NeverImmutable.class.isAssignableFrom(cls)) {
+            return NEVER;
+        }
+        return null;
+    }
+
+    public interface Persistable {
+        public boolean isTransient();
+    }
+    
+    public boolean appliesTo(final Persistable persistable) {
+        final boolean isTransient = persistable.isTransient();
+        return this == When.ALWAYS || 
+               this == When.ONCE_PERSISTED && !isTransient || 
+               this == When.UNTIL_PERSISTED && isTransient;
+    }
 }

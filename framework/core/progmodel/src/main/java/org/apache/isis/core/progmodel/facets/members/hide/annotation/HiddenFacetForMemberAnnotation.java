@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.progmodel.facets.members.hide.annotation;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
 
 public class HiddenFacetForMemberAnnotation extends HiddenFacetImpl {
 
-    public HiddenFacetForMemberAnnotation(final When value, final FacetHolder holder) {
-        super(value, holder);
+    public HiddenFacetForMemberAnnotation(final When when, Where where, final FacetHolder holder) {
+        super(when, where, holder);
     }
 
 }

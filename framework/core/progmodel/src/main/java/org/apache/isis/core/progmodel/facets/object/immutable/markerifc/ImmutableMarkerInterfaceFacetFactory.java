@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable.markerifc;
 
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 public class ImmutableMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
@@ -34,7 +34,7 @@ public class ImmutableMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final When when = When.forCorrespondingMarkerSubType(processClassContext.getCls());
+        final When when = When.lookupForMarkerInterface(processClassContext.getCls());
         FacetUtil.addFacet(create(when, processClassContext.getFacetHolder()));
     }
 

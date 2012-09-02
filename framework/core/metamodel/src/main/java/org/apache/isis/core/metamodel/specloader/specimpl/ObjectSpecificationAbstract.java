@@ -30,6 +30,7 @@ import com.google.common.collect.Maps;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -56,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -327,10 +327,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (notPersistableFacet == null) {
             return Persistability.USER_PERSISTABLE;
         }
-        final InitiatedBy initiatedBy = notPersistableFacet.value();
-        if (initiatedBy == InitiatedBy.USER_OR_PROGRAM) {
+        final NotPersistable.By initiatedBy = notPersistableFacet.value();
+        if (initiatedBy == NotPersistable.By.USER_OR_PROGRAM) {
             return Persistability.TRANSIENT;
-        } else if (initiatedBy == InitiatedBy.USER) {
+        } else if (initiatedBy == NotPersistable.By.USER) {
             return Persistability.PROGRAM_PERSISTABLE;
         } else {
             return Persistability.USER_PERSISTABLE;

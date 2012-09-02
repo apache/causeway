@@ -19,12 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
+import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 
 public class NotPersistableFacetAnnotation extends NotPersistableFacetImpl {
 
-    public NotPersistableFacetAnnotation(final InitiatedBy value, final FacetHolder holder) {
+    public NotPersistableFacetAnnotation(final NotPersistable.By value, final FacetHolder holder) {
         super(value, holder);
     }
 

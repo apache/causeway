@@ -34,6 +34,7 @@ import com.google.common.io.ByteStreams;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -220,8 +221,8 @@ public final class DomainResourceHelper {
     Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.ACCESS);
 
-        final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
-        if (!actionSemantics.isQueryOnly()) {
+        final ActionSemantics.Of actionSemantics = action.getSemantics();
+        if (actionSemantics != ActionSemantics.Of.SAFE) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not query only", action.getId());
         }
 
@@ -232,8 +233,8 @@ public final class DomainResourceHelper {
 
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE);
 
-        final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
-        if (!actionSemantics.isIdempotent()) {
+        final ActionSemantics.Of actionSemantics = action.getSemantics();
+        if (actionSemantics.isIdempotentInNature()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }
         final String bodyAsString = asStringUtf8(body);

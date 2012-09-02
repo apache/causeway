@@ -21,20 +21,14 @@ package org.apache.isis.core.metamodel.facets;
 
 public abstract class EnumerationAbstract implements Enumeration {
 
-    private final int num;
     private final String nameInCode;
     private final String friendlyName;
 
-    protected EnumerationAbstract(final int num, final String nameInCode, final String friendlyName) {
-        this.num = num;
+    protected EnumerationAbstract(final String nameInCode, final String friendlyName) {
         this.nameInCode = nameInCode;
         this.friendlyName = friendlyName;
     }
 
-    @Override
-    public int getNum() {
-        return num;
-    }
 
     @Override
     public String getNameInCode() {
@@ -45,32 +39,32 @@ public abstract class EnumerationAbstract implements Enumeration {
     public String getFriendlyName() {
         return friendlyName;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + num;
+        result = prime * result + ((nameInCode == null) ? 0 : nameInCode.hashCode());
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
             return false;
-        }
-        final EnumerationAbstract other = (EnumerationAbstract) obj;
-        if (num != other.num) {
+        EnumerationAbstract other = (EnumerationAbstract) obj;
+        if (nameInCode == null) {
+            if (other.nameInCode != null)
+                return false;
+        } else if (!nameInCode.equals(other.nameInCode))
             return false;
-        }
         return true;
     }
+
 
     @Override
     public String toString() {

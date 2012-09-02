@@ -22,14 +22,15 @@ package org.apache.isis.core.metamodel.adapter.version;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
 public class VersionTest {
     

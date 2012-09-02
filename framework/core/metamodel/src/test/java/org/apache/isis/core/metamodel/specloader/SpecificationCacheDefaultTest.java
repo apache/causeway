@@ -1,7 +1,9 @@
 package org.apache.isis.core.metamodel.specloader;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
 import java.util.Map;

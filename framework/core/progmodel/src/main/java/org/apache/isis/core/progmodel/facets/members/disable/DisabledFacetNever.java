@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.progmodel.facets.members.disable;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.When;
 
 public class DisabledFacetNever extends DisabledFacetAbstract {
 
     public DisabledFacetNever(final FacetHolder holder) {
-        super(When.NEVER, holder);
+        super(When.NEVER, Where.EVERYWHERE, holder);
     }
 
     /**

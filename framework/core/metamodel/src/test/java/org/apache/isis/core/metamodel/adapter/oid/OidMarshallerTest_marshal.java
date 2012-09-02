@@ -3,9 +3,10 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class OidMarshallerTest_marshal {
 

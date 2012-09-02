@@ -19,22 +19,22 @@
 
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
+import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 public class NotPersistableFacetImpl extends NotPersistableFacetAbstract {
 
-    public NotPersistableFacetImpl(final InitiatedBy value, final FacetHolder holder) {
+    public NotPersistableFacetImpl(final NotPersistable.By value, final FacetHolder holder) {
         super(value, holder);
     }
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        final InitiatedBy initiatedBy = value();
-        if (initiatedBy == InitiatedBy.USER_OR_PROGRAM) {
+        final NotPersistable.By initiatedBy = value();
+        if (initiatedBy == NotPersistable.By.USER_OR_PROGRAM) {
             // never persistable
             return "Not persistable";
         } else {

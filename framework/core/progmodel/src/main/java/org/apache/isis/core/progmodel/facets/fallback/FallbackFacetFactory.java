@@ -100,7 +100,6 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
                 facets.add(new MultiLineFacetNone(true, processMethodContext.getFacetHolder()));
             }
             if (featureType.isAction()) {
-                facets.add(new ExecutedFacetAtDefault(processMethodContext.getFacetHolder()));
                 facets.add(new ActionDefaultsFacetNone(processMethodContext.getFacetHolder()));
                 facets.add(new ActionChoicesFacetNone(processMethodContext.getFacetHolder()));
             }

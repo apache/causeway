@@ -54,8 +54,8 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetAnnotation);
         final NotPersistableFacetAnnotation notPersistableFacetAnnotation = (NotPersistableFacetAnnotation) facet;
-        final org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetAnnotation.value();
-        assertEquals(org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy.USER_OR_PROGRAM, value);
+        final NotPersistable.By value = notPersistableFacetAnnotation.value();
+        assertEquals(NotPersistable.By.USER_OR_PROGRAM, value);
 
         assertNoMethodsRemoved();
     }
@@ -71,8 +71,8 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetAnnotation);
         final NotPersistableFacetAnnotation notPersistableFacetAnnotation = (NotPersistableFacetAnnotation) facet;
-        final org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetAnnotation.value();
-        assertEquals(org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy.USER_OR_PROGRAM, value);
+        final NotPersistable.By value = notPersistableFacetAnnotation.value();
+        assertEquals(NotPersistable.By.USER_OR_PROGRAM, value);
 
         assertNoMethodsRemoved();
     }
@@ -88,8 +88,8 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetAnnotation);
         final NotPersistableFacetAnnotation notPersistableFacetAnnotation = (NotPersistableFacetAnnotation) facet;
-        final org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetAnnotation.value();
-        assertEquals(org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy.USER, value);
+        final NotPersistable.By value = notPersistableFacetAnnotation.value();
+        assertEquals(NotPersistable.By.USER, value);
 
         assertNoMethodsRemoved();
     }

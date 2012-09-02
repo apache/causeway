@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
+import org.apache.isis.core.metamodel.facets.WhenValueFacet;
 import org.apache.isis.core.metamodel.facets.ebc.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * @see EqualByContentFacet
  * @see ValueFacet
  */
-public interface ImmutableFacet extends SingleWhenValueFacet, DisablingInteractionAdvisor {
+public interface ImmutableFacet extends WhenValueFacet, DisablingInteractionAdvisor {
 
     /**
      * Clone this facet onto another {@link FacetHolder}.

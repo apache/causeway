@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.notpersistable;
 
+import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
@@ -30,6 +31,6 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  * In the standard Apache Isis Programming Model, typically corresponds to
  * applying the <tt>@NotPersistable</tt> annotation at the class level.
  */
-public interface NotPersistableFacet extends SingleValueFacet<InitiatedBy>, DisablingInteractionAdvisor {
+public interface NotPersistableFacet extends SingleValueFacet<NotPersistable.By>, DisablingInteractionAdvisor {
 
 }

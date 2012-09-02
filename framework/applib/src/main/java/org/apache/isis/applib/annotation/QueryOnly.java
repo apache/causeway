@@ -28,7 +28,11 @@ import java.lang.annotation.Target;
 /**
  * Indicates that an action is query only; invoking it will not modify any
  * domain object state.
+ * 
+ * <p>
+ * Deprecated - use <tt>@ActionSemantics(Of.SAFE)</tt> instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

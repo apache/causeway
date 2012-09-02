@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable.annotation;
 
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
 public class ImmutableFacetAnnotation extends ImmutableFacetAbstract {

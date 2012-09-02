@@ -26,8 +26,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.EqualByContent;
-import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract.Immutability;
 
 public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<org.apache.isis.applib.value.Date> {
 

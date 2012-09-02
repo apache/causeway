@@ -26,14 +26,14 @@ public class EnumerationAbstractTest extends TestCase {
     public static class ConcreteEnumeration extends EnumerationAbstract {
 
         protected ConcreteEnumeration(final int num, final String nameInCode, final String friendlyName) {
-            super(num, nameInCode, friendlyName);
+            super(nameInCode, friendlyName);
         }
     }
 
     public static class OtherConcreteEnumeration extends EnumerationAbstract {
 
         protected OtherConcreteEnumeration(final int num, final String nameInCode, final String friendlyName) {
-            super(num, nameInCode, friendlyName);
+            super(nameInCode, friendlyName);
         }
     }
 
@@ -52,10 +52,6 @@ public class EnumerationAbstractTest extends TestCase {
     protected void tearDown() throws Exception {
         foo1 = foo2 = bar1 = null;
         super.tearDown();
-    }
-
-    public void testGetNum() {
-        assertEquals(1, foo1.getNum());
     }
 
     public void testGetNameInCode() {

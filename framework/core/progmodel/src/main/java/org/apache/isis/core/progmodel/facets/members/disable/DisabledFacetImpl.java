@@ -19,21 +19,22 @@
 
 package org.apache.isis.core.progmodel.facets.members.disable;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.When;
 
 public class DisabledFacetImpl extends DisabledFacetAbstract {
 
-    public DisabledFacetImpl(final When value, final FacetHolder holder) {
-        super(value, holder);
+    public DisabledFacetImpl(final When when, Where where, final FacetHolder holder) {
+        super(when, where, holder);
     }
 
     @Override
     public String disabledReason(final ObjectAdapter targetAdapter) {
-        if (value() == When.ALWAYS) {
+        if (when() == When.ALWAYS) {
             return "Always disabled";
-        } else if (value() == When.NEVER) {
+        } else if (when() == When.NEVER) {
             return null;
         }
 
@@ -42,9 +43,9 @@ public class DisabledFacetImpl extends DisabledFacetAbstract {
             return null;
         }
 
-        if (value() == When.UNTIL_PERSISTED) {
+        if (when() == When.UNTIL_PERSISTED) {
             return targetAdapter.isTransient() ? "Disabled until persisted" : null;
-        } else if (value() == When.ONCE_PERSISTED) {
+        } else if (when() == When.ONCE_PERSISTED) {
             return targetAdapter.representsPersistent() ? "Disabled once persisted" : null;
         }
         return null;

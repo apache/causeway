@@ -200,7 +200,7 @@ public class Customer extends AbstractDomainObject {
     // {{ AlwaysDisabledValue
     private String alwaysDisabledValue;
 
-    @Disabled(When.ALWAYS)
+    @Disabled(when = When.ALWAYS)
     public String getAlwaysDisabledValue() {
         return this.alwaysDisabledValue;
     }
@@ -214,7 +214,7 @@ public class Customer extends AbstractDomainObject {
     // {{ AlwaysDisabledAssociation
     private Country alwaysDisabledAssociation;
 
-    @Disabled(When.ALWAYS)
+    @Disabled(when = When.ALWAYS)
     public Country getAlwaysDisabledAssociation() {
         return this.alwaysDisabledAssociation;
     }
@@ -228,7 +228,7 @@ public class Customer extends AbstractDomainObject {
     // {{ AlwaysDisabledCollection
     private List<Country> alwaysDisabledCollection = new ArrayList<Country>();
 
-    @Disabled(When.ALWAYS)
+    @Disabled(when = When.ALWAYS)
     public List<Country> getAlwaysDisabledCollection() {
         return this.alwaysDisabledCollection;
     }
@@ -249,7 +249,7 @@ public class Customer extends AbstractDomainObject {
     // }}
 
     // {{ AlwaysDisabledAction
-    @Disabled(When.ALWAYS)
+    @Disabled(when = When.ALWAYS)
     public void alwaysDisabledAction() {
     }
 
@@ -328,7 +328,7 @@ public class Customer extends AbstractDomainObject {
     // {{ AlwaysHiddenValue
     private String alwaysHiddenValue;
 
-    @Hidden(When.ALWAYS)
+    @Hidden(when=When.ALWAYS)
     public String getAlwaysHiddenValue() {
         return this.alwaysHiddenValue;
     }
@@ -342,7 +342,7 @@ public class Customer extends AbstractDomainObject {
     // {{ AlwaysHiddenAssociation
     private Country alwaysHiddenAssociation;
 
-    @Hidden(When.ALWAYS)
+    @Hidden(when=When.ALWAYS)
     public Country getAlwaysHiddenAssociation() {
         return this.alwaysHiddenAssociation;
     }
@@ -356,7 +356,7 @@ public class Customer extends AbstractDomainObject {
     // {{ AlwaysHiddenCollection
     private List<Country> alwaysHiddenCollection = new ArrayList<Country>();
 
-    @Hidden(When.ALWAYS)
+    @Hidden(when=When.ALWAYS)
     public List<Country> getAlwaysHiddenCollection() {
         return this.alwaysHiddenCollection;
     }
@@ -377,7 +377,7 @@ public class Customer extends AbstractDomainObject {
     // }}
 
     // {{ SessionDisabledAction
-    @Hidden(When.ALWAYS)
+    @Hidden(when=When.ALWAYS)
     public void alwaysHiddenAction() {
     }
 
@@ -596,7 +596,7 @@ public class Customer extends AbstractDomainObject {
     // {{ CustomerNumber
     private Integer customerNumber;
 
-    @Disabled(When.ONCE_PERSISTED)
+    @Disabled(when = When.ONCE_PERSISTED)
     public Integer getCustomerNumber() {
         return this.customerNumber;
     }

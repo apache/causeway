@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -47,11 +48,10 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
-import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -66,8 +66,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Target;
-import org.apache.isis.core.metamodel.spec.feature.ActionSemantics;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
@@ -149,8 +147,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     @Override
-    public ActionSemantics getSemantics() {
-        return ActionSemantics.determine(this);
+    public ActionSemantics.Of getSemantics() {
+        final ActionSemanticsFacet facet = getFacet(ActionSemanticsFacet.class);
+        return facet != null? facet.value(): ActionSemantics.Of.NON_IDEMPOTENT;
     }
 
     // /////////////////////////////////////////////////////////////
@@ -164,23 +163,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     // /////////////////////////////////////////////////////////////
-    // Target, Type, IsContributed
+    // Type, IsContributed
     // /////////////////////////////////////////////////////////////
-
-    @Override
-    public Target getTarget() {
-        final ExecutedFacet facet = getFacet(ExecutedFacet.class);
-        final Where executeWhere = facet.value();
-        if (executeWhere == Where.LOCALLY) {
-            return Target.LOCAL;
-        } else if (executeWhere == Where.REMOTELY) {
-            return Target.REMOTE;
-        } else if (executeWhere == Where.DEFAULT) {
-            return Target.DEFAULT;
-        } else {
-            throw new UnknownTypeException(executeWhere);
-        }
-    }
 
     @Override
     public ActionType getType() {

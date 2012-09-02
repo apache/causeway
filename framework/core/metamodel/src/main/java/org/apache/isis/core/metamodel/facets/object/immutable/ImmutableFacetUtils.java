@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.core.metamodel.facets.When;
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ImmutableFacetUtils {
@@ -34,7 +34,7 @@ public class ImmutableFacetUtils {
         if (immutableFacet == null) {
             return false;
         }
-        return immutableFacet.value() == When.ALWAYS;
+        return immutableFacet.when() == When.ALWAYS;
     }
 
     public static boolean isImmutableOncePersisted(final ObjectSpecification specification) {
@@ -47,7 +47,7 @@ public class ImmutableFacetUtils {
         if (immutableFacet == null) {
             return false;
         }
-        return immutableFacet.value() == When.ONCE_PERSISTED;
+        return immutableFacet.when() == When.ONCE_PERSISTED;
     }
 
     private ImmutableFacetUtils() {

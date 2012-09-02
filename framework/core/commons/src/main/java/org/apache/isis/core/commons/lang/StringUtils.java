@@ -25,31 +25,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.util.Enums;
 
 public final class StringUtils {
     private StringUtils() {
     }
-
-    private static Function<String, String> LOWER_CASE_THEN_CAPITALIZE = new Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return StringUtils.capitalize(input.toLowerCase());
-        }
-    };
-
-    private static Function<String, String> UPPER_CASE = new Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return input.toUpperCase();
-        }
-    };
 
     // ////////////////////////////////////////////////////////////
     // naturalName, naturalize, simpleName, camel, memberIdFor
@@ -377,12 +359,12 @@ public final class StringUtils {
         return null;
     }
 
-    public static String enumTitle(String string) {
-        return Joiner.on(" ").join(Iterables.transform(Splitter.on("_").split(string), LOWER_CASE_THEN_CAPITALIZE));
+    public static String enumTitle(String enumName) {
+        return Enums.getFriendlyNameOf(enumName);
     }
 
-    public static String enumDeTitle(String string) {
-        return Joiner.on("_").join(Iterables.transform(Splitter.on(" ").split(string), UPPER_CASE));
+    public static String enumDeTitle(String enumFriendlyName) {
+        return Enums.getEnumNameFromFriendly(enumFriendlyName);
     }
 
 }

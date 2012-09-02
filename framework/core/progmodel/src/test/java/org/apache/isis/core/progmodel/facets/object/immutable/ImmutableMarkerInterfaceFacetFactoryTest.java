@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.marker.AlwaysImmutable;
 import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
@@ -57,7 +58,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, immutableFacetMarkerInterface.value());
+        assertEquals(When.ALWAYS, immutableFacetMarkerInterface.when());
 
         assertNoMethodsRemoved();
     }
@@ -72,7 +73,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, immutableFacetMarkerInterface.value());
+        assertEquals(When.ONCE_PERSISTED, immutableFacetMarkerInterface.when());
 
         assertNoMethodsRemoved();
     }
@@ -87,7 +88,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, immutableFacetMarkerInterface.value());
+        assertEquals(When.UNTIL_PERSISTED, immutableFacetMarkerInterface.when());
 
         assertNoMethodsRemoved();
     }
@@ -102,7 +103,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, immutableFacetMarkerInterface.value());
+        assertEquals(When.NEVER, immutableFacetMarkerInterface.when());
 
         assertNoMethodsRemoved();
     }

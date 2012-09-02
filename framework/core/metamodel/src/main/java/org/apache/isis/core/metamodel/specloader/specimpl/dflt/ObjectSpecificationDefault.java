@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.ToString;

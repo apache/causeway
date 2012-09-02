@@ -19,15 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.When;
+import org.apache.isis.core.metamodel.facets.WhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstract implements ImmutableFacet {
+public abstract class ImmutableFacetAbstract extends WhenValueFacetAbstract implements ImmutableFacet {
 
     public static Class<? extends Facet> type() {
         return ImmutableFacet.class;
@@ -44,18 +44,19 @@ public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstrac
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         final ObjectAdapter target = ic.getTarget();
         switch (ic.getInteractionType()) {
-        case PROPERTY_MODIFY:
-        case COLLECTION_ADD_TO:
-        case COLLECTION_REMOVE_FROM:
-            return disabledReason(target);
+            case PROPERTY_MODIFY:
+            case COLLECTION_ADD_TO:
+            case COLLECTION_REMOVE_FROM:
+                return disabledReason(target);
+            default:
+                return null;
         }
-        return null;
     }
 
     public String disabledReason(final ObjectAdapter targetAdapter) {
-        if (value() == When.ALWAYS) {
+        if (when() == When.ALWAYS) {
             return "Always immmutable";
-        } else if (value() == When.NEVER) {
+        } else if (when() == When.NEVER) {
             return null;
         }
 
@@ -64,9 +65,9 @@ public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstrac
             return null;
         }
 
-        if (value() == When.UNTIL_PERSISTED) {
+        if (when() == When.UNTIL_PERSISTED) {
             return targetAdapter.isTransient() ? "Immutable until persisted" : null;
-        } else if (value() == When.ONCE_PERSISTED) {
+        } else if (when() == When.ONCE_PERSISTED) {
             return targetAdapter.representsPersistent() ? "Immutable once persisted" : null;
         }
         return null;

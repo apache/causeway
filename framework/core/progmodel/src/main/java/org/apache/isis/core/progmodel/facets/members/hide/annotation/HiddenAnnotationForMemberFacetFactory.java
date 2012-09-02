@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 
 public class HiddenAnnotationForMemberFacetFactory extends AnnotationBasedFacetFactoryAbstract {
@@ -40,7 +39,7 @@ public class HiddenAnnotationForMemberFacetFactory extends AnnotationBasedFacetF
     }
 
     private static HiddenFacet create(final Hidden annotation, final FacetHolder holder) {
-        return annotation == null ? null : new HiddenFacetForMemberAnnotation(When.decode(annotation.value()), holder);
+        return annotation == null ? null : new HiddenFacetForMemberAnnotation(annotation.when(), annotation.where(), holder);
     }
 
 }

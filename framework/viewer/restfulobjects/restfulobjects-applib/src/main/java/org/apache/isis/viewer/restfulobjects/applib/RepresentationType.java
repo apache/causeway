@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.applib.util.Enums;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.ActionDescriptionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.ActionParameterDescriptionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.CollectionDescriptionRepresentation;
@@ -30,7 +31,6 @@ import org.apache.isis.viewer.restfulobjects.applib.domaintypes.TypeListRepresen
 import org.apache.isis.viewer.restfulobjects.applib.errors.ErrorRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.util.Enums;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 import org.apache.isis.viewer.restfulobjects.domainobjects.ActionResultRepresentation;

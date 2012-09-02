@@ -68,7 +68,7 @@ public class Product extends AbstractDomainObject {
 
     @TypicalLength(9)
     @MaxLength(9)
-    @Disabled(When.ONCE_PERSISTED)
+    @Disabled(when = When.ONCE_PERSISTED)
     public String getCode() {
         return this.code;
     }

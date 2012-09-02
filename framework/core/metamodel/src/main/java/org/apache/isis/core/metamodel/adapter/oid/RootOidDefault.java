@@ -26,6 +26,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.io.IOException;
 import java.io.Serializable;
 
+import com.google.common.base.Objects;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -34,9 +38,6 @@ import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
 
 public final class RootOidDefault implements Serializable, RootOid {
 

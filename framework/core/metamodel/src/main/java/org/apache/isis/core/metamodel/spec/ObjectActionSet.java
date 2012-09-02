@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -38,7 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.feature.ActionSemantics;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -104,11 +104,6 @@ public class ObjectActionSet implements ObjectAction {
     }
 
     @Override
-    public Target getTarget() {
-        return Target.DEFAULT;
-    }
-
-    @Override
     public ActionType getType() {
         return ActionType.SET;
     }
@@ -132,7 +127,7 @@ public class ObjectActionSet implements ObjectAction {
     }
 
     @Override
-    public ActionSemantics getSemantics() {
+    public ActionSemantics.Of getSemantics() {
         return null;
     }
 

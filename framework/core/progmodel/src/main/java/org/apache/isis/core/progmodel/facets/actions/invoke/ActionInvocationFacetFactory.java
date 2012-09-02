@@ -30,8 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
-import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
-import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
@@ -53,7 +51,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
 
-    private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX, ExecutedFacet.Where.REMOTE_PREFIX, ExecutedFacet.Where.LOCAL_PREFIX };
+    private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX };
 
     private AdapterManager adapterManager;
 
@@ -75,19 +73,13 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         // InvocationFacet
         attachInvocationFacet(processMethodContext);
 
-        // DebugFacet, ExplorationFacet, ExecutedFacet
+        // DebugFacet, ExplorationFacet
         attachDebugFacetIfActionMethodNamePrefixed(processMethodContext);
         attachExplorationFacetIfActionMethodNamePrefixed(processMethodContext);
-        attachExecutedFacetIfActionMethodNamePrefixed(processMethodContext);
 
         // inferred name
-        attachNamedFacetInferredFromMethodName(processMethodContext); // must be
-                                                                      // called
-                                                                      // after
-                                                                      // the
-                                                                      // attachinvocationFacet
-                                                                      // methods
-
+        // (must be called after the attachinvocationFacet methods)
+        attachNamedFacetInferredFromMethodName(processMethodContext); 
     }
 
     private void attachInvocationFacet(final ProcessMethodContext processMethodContext) {
@@ -109,21 +101,6 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
-    }
-
-    /**
-     * Adds the {@link ExecutedFacet} (indicating where the action should be
-     * executed, either {@link Where#LOCALLY locally} or {@link Where#REMOTELY
-     * remotely}.
-     */
-    private void attachExecutedFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
-        final Method actionMethod = processMethodContext.getMethod();
-        final Where where = Where.lookup(actionMethod);
-        if (where == null) {
-            return;
-        }
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new ExecutedFacetViaNamingConvention(where, facetedMethod));
     }
 
     private void attachDebugFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
@@ -160,12 +137,9 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         final String capitalizedName = NameUtils.capitalizeName(method.getName());
 
         // this is nasty...
-        String name = StringUtils.removePrefix(capitalizedName, ExecutedFacet.Where.LOCAL_PREFIX);
-        name = StringUtils.removePrefix(name, ExecutedFacet.Where.REMOTE_PREFIX);
+        String name = capitalizedName;
         name = StringUtils.removePrefix(name, DEBUG_PREFIX);
         name = StringUtils.removePrefix(name, EXPLORATION_PREFIX);
-        name = StringUtils.removePrefix(name, ExecutedFacet.Where.LOCAL_PREFIX);
-        name = StringUtils.removePrefix(name, ExecutedFacet.Where.REMOTE_PREFIX);
         name = NameUtils.naturalName(name);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();

@@ -19,6 +19,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -164,8 +165,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         final MemberType memberType = MemberType.of(action);
         final Map<String, MutatorSpec> mutators = memberType.getMutators();
 
-        final ActionSemantics semantics = ActionSemantics.determine(getResourceContext(), action);
-        final String mutator = semantics.getInvokeKey();
+        final String mutator = InvokeKeys.getKeyFor(action.getSemantics());
         final MutatorSpec mutatorSpec = mutators.get(mutator);
         selfLinkBuilder.withHttpMethod(mutatorSpec.httpMethod);
 

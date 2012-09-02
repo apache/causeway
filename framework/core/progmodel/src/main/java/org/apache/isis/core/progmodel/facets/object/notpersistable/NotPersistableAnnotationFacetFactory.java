@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 
 public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
@@ -46,7 +45,7 @@ public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFa
     }
 
     private NotPersistableFacet create(final NotPersistable annotation, final FacetHolder holder) {
-        return annotation != null ? new NotPersistableFacetAnnotation(InitiatedBy.decodeBy(annotation.value()), holder) : null;
+        return annotation != null ? new NotPersistableFacetAnnotation(annotation.value(), holder) : null;
     }
 
 }

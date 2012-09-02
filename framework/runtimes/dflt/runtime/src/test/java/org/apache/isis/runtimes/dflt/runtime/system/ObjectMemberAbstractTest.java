@@ -29,13 +29,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
@@ -52,7 +53,7 @@ import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
 import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetNever;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacetNone;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
+import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlwaysEverywhere;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
@@ -101,7 +102,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenHiddenFacetSetToAlways() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetAbstract(When.ALWAYS, testMember) {
+        testMember.addFacet(new HiddenFacetAbstract(When.ALWAYS, Where.EVERYWHERE, testMember) {
             @Override
             public String hiddenReason(final ObjectAdapter target) {
                 return null;
@@ -114,14 +115,14 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToOncePersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetImpl(When.ONCE_PERSISTED, testMember));
+        testMember.addFacet(new HiddenFacetImpl(When.ONCE_PERSISTED, Where.EVERYWHERE, testMember));
         assertFalse(testMember.isVisible(null, persistentAdapter).isAllowed());
     }
 
     @Test
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetImpl(When.UNTIL_PERSISTED, testMember));
+        testMember.addFacet(new HiddenFacetImpl(When.UNTIL_PERSISTED, Where.EVERYWHERE, testMember));
         final Consent visible = testMember.isVisible(null, persistentAdapter);
         assertTrue(visible.isAllowed());
     }
@@ -129,7 +130,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleWhenTargetTransientAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
-        testMember.addFacet(new HiddenFacetImpl(When.UNTIL_PERSISTED, testMember));
+        testMember.addFacet(new HiddenFacetImpl(When.UNTIL_PERSISTED, Where.EVERYWHERE, testMember));
         
         final Consent visible = testMember.isVisible(null, transientAdapter);
         assertFalse(visible.isAllowed());
@@ -144,7 +145,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleDeclaratively() {
-        testMember.addFacet(new HiddenFacetAlways(testMember) {
+        testMember.addFacet(new HiddenFacetAlwaysEverywhere(testMember) {
         });
         assertFalse(testMember.isVisible(null, persistentAdapter).isAllowed());
     }

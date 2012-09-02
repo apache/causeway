@@ -19,22 +19,23 @@
 
 package org.apache.isis.core.progmodel.facets.members.disable;
 
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.When;
+import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-public abstract class DisabledFacetAbstract extends SingleWhenValueFacetAbstract implements DisabledFacet {
+public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstract implements DisabledFacet {
 
     public static Class<? extends Facet> type() {
         return DisabledFacet.class;
     }
 
-    public DisabledFacetAbstract(final When value, final FacetHolder holder) {
-        super(type(), holder, value);
+    public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder) {
+        super(type(), holder, when, where);
     }
 
     @Override

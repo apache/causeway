@@ -290,7 +290,6 @@ public final class Dump {
                 // f.getReturnType().getFullName());
 
                 debugBuilder.appendln(objectAction.debugData());
-                debugBuilder.appendln("Target", objectAction.getTarget());
                 debugBuilder.appendln("On type", objectAction.getOnType());
 
                 final Class<? extends Facet>[] facets = objectAction.getFacetTypes();

@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-
 import com.google.common.collect.Lists;
+
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 

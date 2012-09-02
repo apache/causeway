@@ -33,7 +33,11 @@ import java.lang.annotation.Target;
  * <p>
  * More formally, the post-conditions of the action are guaranteed to be the
  * same whether called once or more than once.
+ * 
+ * <p>
+ * Deprecated - use <tt>@ActionSemantics(Of.IDEMPOTENT)</tt> instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

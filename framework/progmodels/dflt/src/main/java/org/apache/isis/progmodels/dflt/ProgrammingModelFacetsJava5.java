@@ -22,16 +22,16 @@ package org.apache.isis.progmodels.dflt;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.executed.annotation.ExecutedAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.executed.prefix.ExecutedViaNamingConventionFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.idempotent.IdempotentAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.queryonly.QueryOnlyAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsFallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.semantics.IdempotentAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.semantics.QueryOnlyAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.typeof.annotation.TypeOfAnnotationForActionsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaValidateMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.accessor.CollectionAccessorFacetFactory;
@@ -241,6 +241,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(ActionParameterDefaultsFacetFactory.class);
         addFactory(QueryOnlyAnnotationFacetFactory.class);
         addFactory(IdempotentAnnotationFacetFactory.class);
+        addFactory(ActionSemanticsAnnotationFacetFactory.class);
+        addFactory(ActionSemanticsFallbackFacetFactory.class);
 
         // members in general
         addFactory(NamedFacetViaNameMethodFacetFactory.class);
@@ -287,8 +289,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(DisabledAnnotationFacetFactory.class);
         addFactory(EncodableAnnotationFacetFactory.class);
-        addFactory(ExecutedAnnotationFacetFactory.class);
-        addFactory(ExecutedViaNamingConventionFacetFactory.class);
         addFactory(ExplorationAnnotationFacetFactory.class);
         addFactory(PrototypeAnnotationFacetFactory.class);
         addFactory(NotContributedAnnotationFacetFactory.class);

@@ -25,6 +25,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.marker.NonPersistable;
+import org.apache.isis.applib.marker.ProgramPersistable;
+import org.apache.isis.applib.util.Enums;
+
 /**
  * Indicates that an instance cannot be persisted by a user, but only
  * programmatically.
@@ -35,7 +39,21 @@ import java.lang.annotation.Target;
 public @interface NotPersistable {
 
     public enum By {
-        USER, USER_OR_PROGRAM
+        USER, 
+        USER_OR_PROGRAM;
+        
+        public static By lookupForMarkerInterface(final Class<?> cls) {
+            if (ProgramPersistable.class.isAssignableFrom(cls)) {
+                return USER;
+            } else if (NonPersistable.class.isAssignableFrom(cls)) {
+                return USER_OR_PROGRAM;
+            }
+            return null;
+        }
+        
+        public String getFriendlyName() {
+            return Enums.getFriendlyNameOf(this);
+        }
     }
 
     By value() default By.USER_OR_PROGRAM;

@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
@@ -50,7 +51,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         class Customer {
-            @SuppressWarnings("unused")
             @Disabled
             public int getNumberOfOrders() {
                 return 0;
@@ -69,7 +69,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledAnnotationPickedUpOnCollection() {
         class Customer {
-            @SuppressWarnings("unused")
             @Disabled
             public Collection<?> getOrders() {
                 return null;
@@ -88,7 +87,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledAnnotationPickedUpOnAction() {
         class Customer {
-            @SuppressWarnings("unused")
             @Disabled
             public void someAction() {
             }
@@ -106,8 +104,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
-            @SuppressWarnings("unused")
-            @Disabled(When.ALWAYS)
+            @Disabled(when = When.ALWAYS)
             public void someAction() {
             }
         }
@@ -118,13 +115,12 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, disabledFacetAbstract.value());
+        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
     }
 
     public void testDisabledWhenNeverAnnotationPickedUpOn() {
         class Customer {
-            @SuppressWarnings("unused")
-            @Disabled(When.NEVER)
+            @Disabled(when = When.NEVER)
             public void someAction() {
             }
         }
@@ -135,13 +131,12 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, disabledFacetAbstract.value());
+        assertEquals(When.NEVER, disabledFacetAbstract.when());
     }
 
     public void testDisabledWhenOncePersistedAnnotationPickedUpOn() {
         class Customer {
-            @SuppressWarnings("unused")
-            @Disabled(When.ONCE_PERSISTED)
+            @Disabled(when = When.ONCE_PERSISTED)
             public void someAction() {
             }
         }
@@ -152,13 +147,12 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, disabledFacetAbstract.value());
+        assertEquals(When.ONCE_PERSISTED, disabledFacetAbstract.when());
     }
 
     public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
         class Customer {
-            @SuppressWarnings("unused")
-            @Disabled(When.UNTIL_PERSISTED)
+            @Disabled(when = When.UNTIL_PERSISTED)
             public void someAction() {
             }
         }
@@ -169,7 +163,45 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, disabledFacetAbstract.value());
+        assertEquals(When.UNTIL_PERSISTED, disabledFacetAbstract.when());
+        assertEquals(Where.EVERYWHERE, disabledFacetAbstract.where());
     }
+
+
+    public void testDisabledWhereCollectionTableAnnotationPickedUpOn() {
+        class Customer {
+            @Disabled(where = Where.COLLECTION_TABLE)
+            public void someAction() {
+            }
+        }
+        final Method actionMethod = findMethod(Customer.class, "someAction");
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
+        final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
+
+        assertEquals(When.ALWAYS, disabledFacetAbstract.when());
+        assertEquals(Where.COLLECTION_TABLE, disabledFacetAbstract.where());
+    }
+
+
+    public void testDisabledWhenAndWhereAnnotationPickedUpOn() {
+        class Customer {
+            @Disabled(where = Where.COLLECTION_TABLE, when=When.UNTIL_PERSISTED)
+            public void someAction() {
+            }
+        }
+        final Method actionMethod = findMethod(Customer.class, "someAction");
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
+        final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
+
+        assertEquals(When.UNTIL_PERSISTED, disabledFacetAbstract.when());
+        assertEquals(Where.COLLECTION_TABLE, disabledFacetAbstract.where());
+    }
+
 
 }

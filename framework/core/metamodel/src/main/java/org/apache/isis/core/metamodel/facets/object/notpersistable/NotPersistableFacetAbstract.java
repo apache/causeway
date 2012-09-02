@@ -19,17 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.object.notpersistable;
 
+import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstract<InitiatedBy> implements NotPersistableFacet {
+public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstract<NotPersistable.By> implements NotPersistableFacet {
 
     public static Class<? extends Facet> type() {
         return NotPersistableFacet.class;
     }
 
-    public NotPersistableFacetAbstract(final InitiatedBy value, final FacetHolder holder) {
+    public NotPersistableFacetAbstract(final NotPersistable.By value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 

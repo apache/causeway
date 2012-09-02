@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.hide;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
+import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Hidden</tt>.
  */
-public interface HiddenFacet extends SingleWhenValueFacet, HidingInteractionAdvisor {
+public interface HiddenFacet extends WhenAndWhereValueFacet, HidingInteractionAdvisor {
 
     /**
      * The reason why the (feature of the) target object is currently hidden, or

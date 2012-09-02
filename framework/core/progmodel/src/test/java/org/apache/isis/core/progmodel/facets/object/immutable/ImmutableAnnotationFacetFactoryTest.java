@@ -56,7 +56,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, immutableFacetAnnotation.value());
+        assertEquals(When.ALWAYS, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
     }
@@ -72,7 +72,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, immutableFacetAnnotation.value());
+        assertEquals(When.ALWAYS, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
     }
@@ -88,7 +88,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, immutableFacetAnnotation.value());
+        assertEquals(When.NEVER, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
     }
@@ -104,7 +104,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, immutableFacetAnnotation.value());
+        assertEquals(When.ONCE_PERSISTED, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
     }
@@ -120,7 +120,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, immutableFacetAnnotation.value());
+        assertEquals(When.UNTIL_PERSISTED, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
     }

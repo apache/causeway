@@ -76,7 +76,7 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisabledFacetAlways(facetedMethod));
+        FacetUtil.addFacet(new DisabledFacetAlwaysEverywhere(facetedMethod));
     }
 
     private static Boolean invokeProtectMethod(final Method protectMethod) {

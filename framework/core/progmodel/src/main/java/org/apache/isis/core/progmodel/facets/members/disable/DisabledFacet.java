@@ -20,7 +20,7 @@
 package org.apache.isis.core.progmodel.facets.members.disable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
+import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Disabled</tt>.
  */
-public interface DisabledFacet extends SingleWhenValueFacet, DisablingInteractionAdvisor {
+public interface DisabledFacet extends WhenAndWhereValueFacet, DisablingInteractionAdvisor {
 
     /**
      * The reason why the (feature of the) target object is currently disabled,

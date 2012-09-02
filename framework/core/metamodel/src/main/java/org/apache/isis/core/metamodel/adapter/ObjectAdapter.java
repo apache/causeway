@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
@@ -34,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.Specification;
  * domain objects and those objects are represented within the NOF through these
  * adapter, and not directly.
  */
-public interface ObjectAdapter extends Instance {
+public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotation.When.Persistable {
 
     
     /**

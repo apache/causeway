@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 
 public class HiddenAnnotationForTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
@@ -34,13 +33,13 @@ public class HiddenAnnotationForTypeFacetFactory extends AnnotationBasedFacetFac
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final Hidden annotation = getAnnotation(processClassContaxt.getCls(), Hidden.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final Hidden annotation = getAnnotation(processClassContext.getCls(), Hidden.class);
+        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private static HiddenFacet create(final Hidden annotation, final FacetHolder holder) {
-        return annotation == null ? null : new HiddenFacetForTypeAnnotation(When.decode(annotation.value()), holder);
+        return annotation == null ? null : new HiddenFacetForTypeAnnotation(annotation.when(), holder);
     }
 
 }

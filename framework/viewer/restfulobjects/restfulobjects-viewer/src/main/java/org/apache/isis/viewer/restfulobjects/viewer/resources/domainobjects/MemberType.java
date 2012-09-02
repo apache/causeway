@@ -20,6 +20,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.util.Enums;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
@@ -38,7 +40,6 @@ import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidat
 import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.util.Enums;
 
 public enum MemberType {
 
