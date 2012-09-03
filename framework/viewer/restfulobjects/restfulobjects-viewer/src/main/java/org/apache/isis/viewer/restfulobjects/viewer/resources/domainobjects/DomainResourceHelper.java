@@ -1,3 +1,4 @@
+
 /**
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
@@ -40,6 +41,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -99,8 +101,19 @@ public final class DomainResourceHelper {
             final ObjectSpecification propertySpec = property.getSpecification();
             final String id = property.getId();
             final JsonRepresentation propertyRepr = propertiesList.getRepresentation("[id=%s]", id);
+            if (propertyRepr == null) {
+                if (property.isMandatory()) {
+                    throw new IllegalArgumentException(String.format("Mandatory field %s missing", property.getName()));
+                }
+                continue;
+            }
             final JsonRepresentation valueRepr = propertyRepr.getRepresentation("value");
-
+            final Consent usable = property.isUsable(resourceContext.getAuthenticationSession() , objectAdapter);
+            if (usable.isVetoed()) {
+                propertyRepr.mapPut("invalidReason", usable.getReason());
+                allOk = false;
+                continue;
+            }
             final ObjectAdapter valueAdapter = objectAdapterFor(resourceContext, propertySpec, valueRepr);
             final Consent consent = property.isAssociationValid(objectAdapter, valueAdapter);
             if (consent.isAllowed()) {
@@ -234,7 +247,7 @@ public final class DomainResourceHelper {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE);
 
         final ActionSemantics.Of actionSemantics = action.getSemantics();
-        if (actionSemantics.isIdempotentInNature()) {
+        if (!actionSemantics.isIdempotentInNature()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }
         final String bodyAsString = asStringUtf8(body);
@@ -300,7 +313,7 @@ public final class DomainResourceHelper {
     }
 
     /**
-     * 
+     *
      * @param resourceContext
      * @param objectSpec
      *            - the {@link ObjectSpecification} to interpret the object as.
@@ -341,7 +354,7 @@ public final class DomainResourceHelper {
      * {@link #objectAdapterFor(ResourceContext, ObjectSpecification, Object)},
      * however the object being interpreted is a String holding URL encoded JSON
      * (rather than having already been parsed into a Map representation).
-     * 
+     *
      * @throws IOException
      * @throws JsonMappingException
      * @throws JsonParseException
@@ -425,7 +438,7 @@ public final class DomainResourceHelper {
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * 
+     *
      * @param objectSpec
      * @param bodyAsString
      *            - as per {@link #asStringUtf8(InputStream)}
