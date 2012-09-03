@@ -119,11 +119,6 @@
             <artifactId>applib</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-        </dependency>
-
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
         <dependency>
             <groupId>javax.jdo</groupId>
