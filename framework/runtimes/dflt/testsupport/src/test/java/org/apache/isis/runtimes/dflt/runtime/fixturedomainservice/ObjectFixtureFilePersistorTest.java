@@ -80,6 +80,8 @@ public class ObjectFixtureFilePersistorTest {
 
         iswf.fixtures.smpl2.setName("Joe Bloggs");
         iswf.fixtures.smpl2.setDate(dateFormat.parse("09-Apr-2011 02:10 UTC"));
+
+        assumeThat(TimeZone.getDefault().getDisplayName(), is("Greenwich Mean Time"));
     }
     
 
@@ -95,7 +97,6 @@ public class ObjectFixtureFilePersistorTest {
         final SimpleEntity epv = (SimpleEntity) object;
         assertEquals("Fred Smith", epv.getName());
         
-        assumeThat(TimeZone.getDefault().getDisplayName(), is("Greenwich Mean Time"));
         assertEquals(dateFormat.parse("08-Mar-2010 01:00 GMT"), epv.getDate());
     }
 
