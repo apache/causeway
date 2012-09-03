@@ -28,7 +28,7 @@
  * {@link org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath locations} 
  * and {@link org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem technologies} 
  * on the classpath through
- * the use of a {@link org.apache.isis.core.commons.resource.ResourceStreamSourceComposite composite}
+ * the use of a {@link org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility composite}
  * pattern.
  */
 package org.apache.isis.core.commons.resource;

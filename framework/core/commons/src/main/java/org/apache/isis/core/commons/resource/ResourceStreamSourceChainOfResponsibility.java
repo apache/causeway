@@ -26,13 +26,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class ResourceStreamSourceComposite extends ResourceStreamSourceAbstract {
+public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSourceAbstract {
 
-    private static Logger LOG = Logger.getLogger(ResourceStreamSourceComposite.class);
+    private static Logger LOG = Logger.getLogger(ResourceStreamSourceChainOfResponsibility.class);
 
     private final List<ResourceStreamSource> resourceStreamSources = new ArrayList<ResourceStreamSource>();
 
-    public ResourceStreamSourceComposite(final ResourceStreamSource... resourceStreamSources) {
+    public ResourceStreamSourceChainOfResponsibility(final ResourceStreamSource... resourceStreamSources) {
         for (final ResourceStreamSource rss : resourceStreamSources) {
             addResourceStreamSource(rss);
         }

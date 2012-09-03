@@ -23,7 +23,7 @@ import java.util.Properties;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 
 /**
  * Holds a mutable set of properties representing the configuration.
@@ -53,7 +53,7 @@ public interface IsisConfigurationBuilder extends Injectable {
      * is being read.
      * 
      * <p>
-     * Note that this may be a {@link ResourceStreamSourceComposite composite}.
+     * Note that this may be a {@link ResourceStreamSourceChainOfResponsibility composite}.
      */
     public ResourceStreamSource getResourceStreamSource();
     

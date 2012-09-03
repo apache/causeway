@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 
 /**
@@ -94,7 +94,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     // ////////////////////////////////////////////////////////////
 
     private static ResourceStreamSource createComposite(final ResourceStreamSource... resourceStreamSources) {
-        final ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
+        final ResourceStreamSourceChainOfResponsibility composite = new ResourceStreamSourceChainOfResponsibility();
         for (final ResourceStreamSource rss : resourceStreamSources) {
             if (rss == null) {
                 continue;

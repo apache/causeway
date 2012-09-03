@@ -22,7 +22,7 @@ package org.apache.isis.core.commons.config;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 
 /**
@@ -38,7 +38,7 @@ public class IsisConfigurationBuilderFileSystem extends IsisConfigurationBuilder
     private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderFileSystem.class);
 
     private static ResourceStreamSource createResourceStreamSource(final String... directories) {
-        final ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
+        final ResourceStreamSourceChainOfResponsibility composite = new ResourceStreamSourceChainOfResponsibility();
         for (final String directory : directories) {
             composite.addResourceStreamSource(new ResourceStreamSourceFileSystem(directory));
         }
