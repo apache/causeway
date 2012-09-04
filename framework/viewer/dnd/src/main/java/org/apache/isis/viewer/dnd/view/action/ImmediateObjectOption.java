@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -37,9 +38,16 @@ import org.apache.isis.viewer.dnd.view.Workspace;
  */
 public class ImmediateObjectOption extends AbstractObjectOption {
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
+
     public static ImmediateObjectOption createOption(final ObjectAction action, final ObjectAdapter object) {
         Assert.assertTrue("Only suitable for 0 param methods", action.getParameterCount() == 0);
-        if (!action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+        if (!action.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
             return null;
         }
         final ImmediateObjectOption option = new ImmediateObjectOption(action, object);
@@ -48,7 +56,7 @@ public class ImmediateObjectOption extends AbstractObjectOption {
 
     public static ImmediateObjectOption createServiceOption(final ObjectAction action, final ObjectAdapter object) {
         Assert.assertTrue("Only suitable for 1 param methods", action.getParameterCount() == 1);
-        if (!action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+        if (!action.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
             return null;
         }
         final ImmediateObjectOption option = new ImmediateObjectOption(action, object);

@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -51,7 +52,15 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             if (field == null) {
                 throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
             }
-            if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
+            
+            // REVIEW: should provide this rendering context, rather than hardcoding.
+            // the net effect currently is that class members annotated with 
+            // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+            // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+            // for any other value for Where
+            final Where where = Where.ANYWHERE;
+            
+            if (field.isVisible(IsisContext.getAuthenticationSession(), adapter, where).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
             IsisContext.getPersistenceSession().resolveField(adapter, field);

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -64,8 +65,8 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter) {
-        return new CollectionVisibilityContext(session, invocationMethod, ownerAdapter, getIdentifier());
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
+        return new CollectionVisibilityContext(session, invocationMethod, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -73,8 +74,8 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter) {
-        return new CollectionUsabilityContext(session, invocationMethod, ownerAdapter, getIdentifier());
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
+        return new CollectionUsabilityContext(session, invocationMethod, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////

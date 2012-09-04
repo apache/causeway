@@ -21,6 +21,7 @@ package org.apache.isis.viewer.dnd.table;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -51,6 +52,14 @@ import org.apache.isis.viewer.dnd.viewer.basic.UnlinedTextFieldSpecification;
 
 class TableCellBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(TableCellBuilder.class);
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with
+    // @Hidden(where=Where.ALL_TABLES) will indeed be hidden from all tables
+    // but will be shown (perhaps incorrectly) if annotated with Where.PARENTED_TABLE
+    // or Where.STANDALONE_TABLE
+    private final Where where = Where.ALL_TABLES;
+    
 
     private void addField(final View view, final Axes axes, final ObjectAdapter object, final ObjectAssociation field) {
         final ObjectAdapter value = field.get(object);
@@ -92,7 +101,7 @@ class TableCellBuilder extends AbstractViewBuilder {
             // to replace what was
             // typed in with the actual title.
             if (field.getSpecification().isParseable()) {
-                final boolean visiblityChange = !field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() ^ (subview instanceof BlankView);
+                final boolean visiblityChange = !field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed() ^ (subview instanceof BlankView);
                 final ObjectAdapter adapter = subview.getContent().getAdapter();
                 final boolean valueChange = value != null && value.getObject() != null && !value.getObject().equals(adapter.getObject());
 
@@ -155,7 +164,7 @@ class TableCellBuilder extends AbstractViewBuilder {
                     return new BlankView(content);
                 }
 
-                if (!field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+                if (!field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
                     return new BlankView(content);
                 }
                 if (((TextParseableContent) content).getNoLines() > 0) {
@@ -175,7 +184,8 @@ class TableCellBuilder extends AbstractViewBuilder {
                 }
             } else {
                 content = new OneToOneFieldImpl(object, value, (OneToOneAssociation) field);
-                if (!field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+                
+                if (!field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
                     return new BlankView(content);
                 }
                 return factory.createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));

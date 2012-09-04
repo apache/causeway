@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -37,6 +38,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
 public class ActionButton extends AbstractElementProcessor {
     private static final Logger LOG = Logger.getLogger(ActionButton.class);
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
 
     @Override
     public void process(final Request request) {
@@ -78,13 +86,13 @@ public class ActionButton extends AbstractElementProcessor {
             i++;
         }
 
-        if (MethodsUtils.isVisibleAndUsable(object, action) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
+        if (MethodsUtils.isVisibleAndUsable(object, action, where) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
             write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
         }
 
         if (showMessage) {
-            final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
+            final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object, where);
             if (usable.isVetoed()) {
                 final String notUsable = usable.getReason();
                 if (notUsable != null) {
@@ -137,11 +145,11 @@ public class ActionButton extends AbstractElementProcessor {
 
         buttonTitle = buttonTitle != null ? buttonTitle : action.getName();
 
-        if (action.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+        if (action.isVisible(IsisContext.getAuthenticationSession(), object, where).isVetoed()) {
             LOG.info("action not visible " + action.getName());
             return;
         }
-        final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object);
+        final Consent usable = action.isUsable(IsisContext.getAuthenticationSession(), object, where);
         if (usable.isVetoed()) {
             LOG.info("action not available: " + usable.getReason());
             return;

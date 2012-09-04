@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -31,10 +32,17 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class ObjectLink extends AbstractLink {
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
+
     @Override
     protected boolean valid(final Request request, final ObjectAdapter object) {
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        final List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, where));
         return visibleFields.size() > 0;
     }
 

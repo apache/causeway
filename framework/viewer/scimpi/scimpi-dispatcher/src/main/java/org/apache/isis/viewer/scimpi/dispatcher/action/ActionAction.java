@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.action;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -49,6 +50,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 public class ActionAction implements Action {
 
     public static final String ACTION = "action";
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     @Override
     public String getName() {
@@ -79,7 +87,7 @@ public class ActionAction implements Action {
             entryState = validateParameters(context, action, object);
 
             AuthenticationSession session = context.getSession();
-            if (session == null && action.isVisible(new AnonymousSession(), object).isVetoed()) {
+            if (session == null && action.isVisible(new AnonymousSession(), object, where).isVetoed()) {
                 session = new AnonymousSession();
             }
 

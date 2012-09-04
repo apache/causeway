@@ -29,6 +29,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -76,10 +77,11 @@ public class ResourceContext {
             return mediaType.getParameters().containsKey("profile");
         }
     };
+    private final Where where;
     private JsonRepresentation readQueryStringAsMap;
 
     public ResourceContext(final RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request, final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final SecurityContext securityContext,
-            final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, IsisConfiguration configuration) {
+            final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, IsisConfiguration configuration, Where where) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -93,6 +95,7 @@ public class ResourceContext {
         this.persistenceSession = persistenceSession;
         this.adapterManager = objectAdapterLookup;
         this.specificationLookup = specificationLookup;
+        this.where = where;
 
         init(representationType);
     }
@@ -212,4 +215,8 @@ public class ResourceContext {
         return specificationLookup;
     }
 
+    public Where getWhere() {
+        return where;
+    }
+    
 }

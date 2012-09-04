@@ -164,7 +164,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
         assertEquals(When.UNTIL_PERSISTED, hiddenFacetAbstract.when());
-        assertEquals(Where.EVERYWHERE, hiddenFacetAbstract.where());
+        assertEquals(Where.ANYWHERE, hiddenFacetAbstract.where());
     }
 
     public void testHiddenWhereCollectionTableAnnotationPickedUpOn() {

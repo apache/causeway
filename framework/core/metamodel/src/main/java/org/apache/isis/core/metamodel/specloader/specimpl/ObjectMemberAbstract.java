@@ -209,12 +209,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
-        return isVisibleResult(session, target).createConsent();
+    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        return isVisibleResult(session, target, where).createConsent();
     }
 
-    private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target) {
-        final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
+    private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
 
@@ -231,12 +231,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
-        return isUsableResult(session, target).createConsent();
+    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        return isUsableResult(session, target, where).createConsent();
     }
 
-    private InteractionResult isUsableResult(final AuthenticationSession session, final ObjectAdapter target) {
-        final UsabilityContext<?> ic = createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
+    private InteractionResult isUsableResult(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        final UsabilityContext<?> ic = createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target, where);
         return InteractionUtils.isUsableResult(this, ic);
     }
 

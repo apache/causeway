@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.ObjectTitleEvent;
@@ -504,14 +505,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // visibility and usability checks (common to all members)
     // /////////////////////////////////////////////////////////////////
 
+    /**
+     * REVIEW: ideally should provide some way to allow to caller to indicate the 'where' context.  Having
+     * a hard-coded value like this is an approximation. 
+     */
+    private final Where where = Where.ANYWHERE;
+
     private void checkVisibility(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter, final ObjectMember objectMember) {
-        final Consent visibleConsent = objectMember.isVisible(getAuthenticationSession(), targetObjectAdapter);
+        final Consent visibleConsent = objectMember.isVisible(getAuthenticationSession(), targetObjectAdapter, where);
         final InteractionResult interactionResult = visibleConsent.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
     private void checkUsability(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter, final ObjectMember objectMember) {
-        final InteractionResult interactionResult = objectMember.isUsable(getAuthenticationSession(), targetObjectAdapter).getInteractionResult();
+        final InteractionResult interactionResult = objectMember.isUsable(getAuthenticationSession(), targetObjectAdapter, where).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 

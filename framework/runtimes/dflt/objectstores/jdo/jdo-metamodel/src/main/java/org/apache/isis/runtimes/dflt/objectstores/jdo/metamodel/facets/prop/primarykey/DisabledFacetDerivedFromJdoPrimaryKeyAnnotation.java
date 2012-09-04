@@ -30,7 +30,7 @@ import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetImpl;
 public class DisabledFacetDerivedFromJdoPrimaryKeyAnnotation extends DisabledFacetImpl {
 
     public DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(When.ALWAYS, Where.EVERYWHERE, holder);
+        super(When.ALWAYS, Where.ANYWHERE, holder);
     }
 
 }

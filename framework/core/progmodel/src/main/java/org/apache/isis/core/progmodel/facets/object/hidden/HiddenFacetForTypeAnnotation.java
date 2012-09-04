@@ -27,7 +27,7 @@ import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
 public class HiddenFacetForTypeAnnotation extends HiddenFacetImpl {
 
     public HiddenFacetForTypeAnnotation(final When when, final FacetHolder holder) {
-        super(when, Where.EVERYWHERE, holder);
+        super(when, Where.ANYWHERE, holder);
     }
 
 }

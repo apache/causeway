@@ -28,14 +28,14 @@ import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetAbstract;
 public class HiddenFacetAlwaysEverywhere extends HiddenFacetAbstract {
 
     public HiddenFacetAlwaysEverywhere(final FacetHolder holder) {
-        super(When.ALWAYS, Where.EVERYWHERE, holder);
+        super(When.ALWAYS, Where.ANYWHERE, holder);
     }
 
     /**
      * Always returns <i>Always hidden</i>.
      */
     @Override
-    public String hiddenReason(final ObjectAdapter target) {
+    public String hiddenReason(final ObjectAdapter target, Where where) {
         return "Always hidden";
     }
 

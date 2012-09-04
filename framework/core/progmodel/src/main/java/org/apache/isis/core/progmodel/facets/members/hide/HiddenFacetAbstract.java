@@ -40,7 +40,7 @@ public abstract class HiddenFacetAbstract extends WhenAndWhereValueFacetAbstract
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        return hiddenReason(ic.getTarget());
+        return hiddenReason(ic.getTarget(), ic.getWhere());
     }
 
 

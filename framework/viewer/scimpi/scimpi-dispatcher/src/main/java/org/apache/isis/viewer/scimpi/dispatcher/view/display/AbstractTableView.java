@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
@@ -37,6 +38,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public abstract class AbstractTableView extends AbstractElementProcessor {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with
+    // @Hidden(where=Where.ALL_TABLES) or @Disabled(where=Where.ALL_TABLES) will indeed
+    // be hidden from all tables but will be visible/enabled (perhaps incorrectly) 
+    // if annotated with Where.PARENTED_TABLE or Where.STANDALONE_TABLE
+    private final Where where = Where.ALL_TABLES;
 
     @Override
     public void process(final Request request) {
@@ -59,7 +67,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             if (!objectField.isOneToManyAssociation()) {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
-            isFieldEditable = objectField.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+            isFieldEditable = objectField.isUsable(IsisContext.getAuthenticationSession(), object, where).isAllowed();
             getPersistenceSession().resolveField(object, objectField);
             collection = objectField.get(object);
             final TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);

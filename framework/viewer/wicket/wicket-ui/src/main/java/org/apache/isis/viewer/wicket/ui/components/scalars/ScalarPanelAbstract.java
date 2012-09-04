@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -54,6 +55,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
             public void buildGui(final ScalarPanelAbstract panel) {
                 panel.getComponentForRegular().setVisible(false);
             }
+
+            @Override
+            public Where getWhere() {
+                return Where.PARENTED_TABLE;
+            }
         },
         /**
          * Does show labels, eg for use in forms.
@@ -68,11 +74,18 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
             public void buildGui(final ScalarPanelAbstract panel) {
                 panel.getLabelForCompact().setVisible(false);
             }
+
+            @Override
+            public Where getWhere() {
+                return Where.OBJECT_FORM;
+            }
         };
 
         public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
 
         public abstract void buildGui(ScalarPanelAbstract panel);
+
+        public abstract Where getWhere();
     }
 
     private Format format;
@@ -112,7 +125,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
         if (scalarModel.isViewMode()) {
             onBeforeRenderWhenViewMode();
         } else {
-            final String disableReasonIfAny = scalarModel.disable();
+            final String disableReasonIfAny = scalarModel.disable(format.getWhere());
             if (disableReasonIfAny != null) {
                 onBeforeRenderWhenDisabled(disableReasonIfAny);
             } else {

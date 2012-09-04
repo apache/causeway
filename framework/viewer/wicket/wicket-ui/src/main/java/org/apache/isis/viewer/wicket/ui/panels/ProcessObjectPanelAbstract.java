@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -56,9 +57,12 @@ import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
+    
+    private final Where where;
 
-    public ProcessObjectPanelAbstract(final String id, final EntityModel model) {
+    public ProcessObjectPanelAbstract(final String id, final EntityModel model, Where where) {
         super(id, model);
+        this.where = where;
     }
 
     protected EntityModel getEntityModel() {
@@ -92,7 +96,7 @@ public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityMod
     }
 
     private Filter<ObjectAssociation> visiblePropertyFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
+        return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
     }
 
     private List<PropertyMemento> buildPropertyMementos(final List<OneToOneAssociation> properties) {

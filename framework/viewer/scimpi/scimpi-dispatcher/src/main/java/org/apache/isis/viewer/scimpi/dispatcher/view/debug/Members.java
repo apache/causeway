@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -35,6 +36,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Members extends AbstractElementProcessor {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     @Override
     public String getName() {
@@ -55,7 +63,7 @@ public class Members extends AbstractElementProcessor {
             ObjectAssociation field = null;
             if (fieldName != null) {
                 field = object.getSpecification().getAssociation(fieldName);
-                if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+                if (field.isVisible(IsisContext.getAuthenticationSession(), object, where).isVetoed()) {
                     throw new ForbiddenException(field, ForbiddenException.VISIBLE);
                 }
                 object = field.get(object);

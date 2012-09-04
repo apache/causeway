@@ -20,6 +20,7 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -38,6 +39,13 @@ import org.apache.isis.viewer.bdd.common.parsers.DateParser;
  * of a table.
  */
 public class PerformContext {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     private final UsingIsisViewerPeer peer;
 
@@ -69,11 +77,11 @@ public class PerformContext {
     }
 
     public Consent visibleMemberConsent() {
-        return getObjectMember().isVisible(getAuthenticationSession(), getOnAdapter());
+        return getObjectMember().isVisible(getAuthenticationSession(), getOnAdapter(), where);
     }
 
     public Consent usableMemberConsent() {
-        return getObjectMember().isUsable(getAuthenticationSession(), getOnAdapter());
+        return getObjectMember().isUsable(getAuthenticationSession(), getOnAdapter(), where);
     }
 
     public Consent validObjectConsent() {
@@ -82,14 +90,14 @@ public class PerformContext {
     }
 
     public void ensureVisible(final CellBinding onMemberBinding, final ScenarioCell onMemberCell) throws ScenarioBoundValueException {
-        final Consent visible = objectMember.isVisible(getAuthenticationSession(), getOnAdapter());
+        final Consent visible = objectMember.isVisible(getAuthenticationSession(), getOnAdapter(), where);
         if (visible.isVetoed()) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(not visible)");
         }
     }
 
     public void ensureUsable(final CellBinding onMemberBinding, final ScenarioCell onMemberCell) throws ScenarioBoundValueException {
-        final Consent usable = objectMember.isUsable(getAuthenticationSession(), getOnAdapter());
+        final Consent usable = objectMember.isUsable(getAuthenticationSession(), getOnAdapter(), where);
         if (usable.isVetoed()) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(not usable)");
         }

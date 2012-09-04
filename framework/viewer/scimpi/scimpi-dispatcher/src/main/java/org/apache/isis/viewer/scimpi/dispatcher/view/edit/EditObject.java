@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -44,6 +45,9 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.HtmlFormBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
 public class EditObject extends AbstractElementProcessor {
+
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
 
     @Override
     public void process(final Request request) {
@@ -77,8 +81,8 @@ public class EditObject extends AbstractElementProcessor {
             @Override
             public boolean isVisible(final String name) {
                 final ObjectAssociation fld = specification.getAssociation(name);
-                final boolean isVisible = fld.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
-                final boolean isUseable = fld.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+                final boolean isVisible = fld.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed();
+                final boolean isUseable = fld.isUsable(IsisContext.getAuthenticationSession(), object, where).isAllowed();
                 return isVisible && isUseable;
             }
 
@@ -107,7 +111,7 @@ public class EditObject extends AbstractElementProcessor {
         request.processUtilCloseTag();
 
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> viewFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        List<ObjectAssociation> viewFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, where));
         viewFields = containedBlock.includedFields(viewFields);
         final InputField[] formFields = createFields(viewFields);
 
@@ -187,7 +191,7 @@ public class EditObject extends AbstractElementProcessor {
             final String fieldId = formField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
             final AuthenticationSession session = IsisContext.getAuthenticationSession();
-            final Consent usable = field.isUsable(session, object);
+            final Consent usable = field.isUsable(session, object, where);
             final ObjectAdapter[] options = field.getChoices(object);
             FieldFactory.initializeField(context, object, field, options, field.isMandatory(), formField);
 
@@ -196,7 +200,7 @@ public class EditObject extends AbstractElementProcessor {
                 formField.setDescription(usable.getReason());
             }
             formField.setEditable(isEditable);
-            final boolean hiddenField = field.isVisible(session, object).isVetoed();
+            final boolean hiddenField = field.isVisible(session, object, where).isVetoed();
             final boolean unusable = usable.isVetoed();
             final boolean hideAsUnusable = unusable && !includeUnusableFields;
             if (hiddenField || hideAsUnusable) {
@@ -209,7 +213,7 @@ public class EditObject extends AbstractElementProcessor {
         for (final InputField inputField : formFields) {
             final String fieldName = inputField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+            if (field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
                 IsisContext.getPersistenceSession().resolveField(object, field);
                 final ObjectAdapter fieldValue = field.get(object);
                 if (inputField.isEditable()) {
@@ -281,7 +285,7 @@ public class EditObject extends AbstractElementProcessor {
         for (final InputField formField : formFields) {
             final String fieldId = formField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() && formField.isEditable()) {
+            if (field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed() && formField.isEditable()) {
                 final FieldEditState fieldState = entryState.getField(field.getId());
                 final String entry = fieldState == null ? "" : fieldState.getEntry();
                 formField.setValue(entry);

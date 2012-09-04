@@ -28,7 +28,7 @@ import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstra
 public class DisabledFacetForPropertyDerivedFromImmutable extends DisabledFacetAbstract {
 
     public DisabledFacetForPropertyDerivedFromImmutable(final ImmutableFacet immutableFacet, final FacetHolder holder) {
-        super(immutableFacet.when(), Where.EVERYWHERE, holder);
+        super(immutableFacet.when(), Where.ANYWHERE, holder);
     }
 
     @Override

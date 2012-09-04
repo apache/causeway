@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -39,6 +40,9 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
  */
 public class RemoveAction implements Action {
     public static final String ACTION = "remove";
+
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
 
     @Override
     public String getName() {
@@ -64,7 +68,7 @@ public class RemoveAction implements Action {
             if (field == null) {
                 throw new ScimpiException("No field " + fieldName + " in " + parent.getSpecification().getFullIdentifier());
             }
-            if (field.isVisible(IsisContext.getAuthenticationSession(), parent).isVetoed()) {
+            if (field.isVisible(IsisContext.getAuthenticationSession(), parent, where).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
 

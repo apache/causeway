@@ -18,6 +18,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 
 import org.codehaus.jackson.node.NullNode;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -63,8 +64,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected T objectMember;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
 
-    public AbstractObjectMemberReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private final Where where;
+
+    public AbstractObjectMemberReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
         super(resourceContext, linkFollower, representationType, representation);
+        this.where = where;
     }
 
     @Override
@@ -244,11 +248,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     protected Consent usability() {
-        return objectMember.isUsable(getSession(), objectAdapter);
+        return objectMember.isUsable(getSession(), objectAdapter, where);
     }
 
     protected Consent visibility() {
-        return objectMember.isVisible(getSession(), objectAdapter);
+        return objectMember.isVisible(getSession(), objectAdapter, where);
     }
 
 }

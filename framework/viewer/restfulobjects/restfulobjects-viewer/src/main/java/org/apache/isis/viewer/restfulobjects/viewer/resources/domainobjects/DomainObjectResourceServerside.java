@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.ClientResponseType;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -64,7 +65,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @ClientResponseType(entityType = String.class)
     public Response persist(final InputStream object) {
 
-        init(RepresentationType.DOMAIN_OBJECT);
+        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORM);
 
         final String objectStr = DomainResourceHelper.asStringUtf8(object);
         final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
@@ -114,7 +115,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response object(@PathParam("oid") final String oidStr) {
-        init(RepresentationType.DOMAIN_OBJECT);
+        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORM);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
 
@@ -129,7 +130,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response object(@PathParam("oid") final String oidStr, final InputStream object) {
 
-        init(RepresentationType.DOMAIN_OBJECT);
+        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORM);
 
         final String objectStr = DomainResourceHelper.asStringUtf8(object);
         final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
@@ -180,12 +181,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response propertyDetails(@PathParam("oid") final String oidStr, @PathParam("propertyId") final String propertyId) {
-        init(RepresentationType.OBJECT_PROPERTY);
+        init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORM);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.NOT_MUTATING, Caching.NONE);
+        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.NOT_MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     @Override
@@ -194,12 +195,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response modifyProperty(@PathParam("oid") final String oidStr, @PathParam("propertyId") final String propertyId, final InputStream body) {
-        init();
+        init(Where.OBJECT_FORM);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(propertyId, Intent.MUTATE);
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(propertyId, Intent.MUTATE, getResourceContext().getWhere());
 
         final ObjectSpecification propertySpec = property.getSpecification();
         final String bodyAsString = DomainResourceHelper.asStringUtf8(body);
@@ -213,7 +214,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, argAdapter);
 
-        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.MUTATING, Caching.NONE);
+        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     @Override
@@ -221,12 +222,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response clearProperty(@PathParam("oid") final String oidStr, @PathParam("propertyId") final String propertyId) {
-        init();
+        init(Where.OBJECT_FORM);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(propertyId, Intent.MUTATE);
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(propertyId, Intent.MUTATE, getResourceContext().getWhere());
 
         final Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
@@ -235,7 +236,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, null);
 
-        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.MUTATING, Caching.NONE);
+        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     // //////////////////////////////////////////////////////////
@@ -247,12 +248,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response accessCollection(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId) {
-        init(RepresentationType.OBJECT_COLLECTION);
+        init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLE);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.NOT_MUTATING, Caching.NONE);
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.NOT_MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     @Override
@@ -261,12 +262,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToSet(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId, final InputStream body) {
-        init();
+        init(Where.PARENTED_TABLE);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE);
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         if (!collection.getCollectionSemantics().isSet()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
@@ -283,7 +284,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE);
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     @Override
@@ -292,12 +293,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToList(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId, final InputStream body) {
-        init();
+        init(Where.PARENTED_TABLE);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE);
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
@@ -314,7 +315,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE);
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     @Override
@@ -322,13 +323,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response removeFromCollection(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId) {
-
-        init();
+        init(Where.PARENTED_TABLE);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE);
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, getResourceContext().getQueryString());
@@ -340,7 +340,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.removeElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE);
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     // //////////////////////////////////////////////////////////
@@ -352,12 +352,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{oid}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response actionPrompt(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId) {
-        init(RepresentationType.OBJECT_ACTION);
+        init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORM);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.actionPrompt(actionId);
+        return helper.actionPrompt(actionId, getResourceContext().getWhere());
     }
 
     // //////////////////////////////////////////////////////////
@@ -369,14 +369,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId) {
-        init(RepresentationType.ACTION_RESULT);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLE);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.invokeActionQueryOnly(actionId, arguments);
+        return helper.invokeActionQueryOnly(actionId, arguments, getResourceContext().getWhere());
     }
 
     @Override
@@ -385,12 +385,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionIdempotent(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId, final InputStream arguments) {
-        init(RepresentationType.ACTION_RESULT);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLE);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.invokeActionIdempotent(actionId, arguments);
+        return helper.invokeActionIdempotent(actionId, arguments, getResourceContext().getWhere());
     }
 
     @Override
@@ -399,12 +399,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeAction(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId, final InputStream body) {
-        init(RepresentationType.ACTION_RESULT);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLE);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.invokeAction(actionId, body);
+        return helper.invokeAction(actionId, body, getResourceContext().getWhere());
     }
 
 }

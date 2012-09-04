@@ -21,6 +21,7 @@ package org.apache.isis.viewer.dnd.combined;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -69,7 +70,7 @@ public class TwoPartViewSpecification extends SplitViewSpecification {
         final ObjectSpecification spec = content.getSpecification();
         final ObjectAdapter target = content.getAdapter();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target, where));
         for (final ObjectAssociation field : fields) {
             if (validField(field)) {
                 return Toolkit.getContentFactory().createFieldContent(field, target);

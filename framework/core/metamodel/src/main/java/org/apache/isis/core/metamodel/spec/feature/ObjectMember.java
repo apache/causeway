@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -68,22 +69,25 @@ public interface ObjectMember extends ObjectFeature {
      * 
      * <p>
      * Typically it is easier to just call
-     * {@link #isVisible(AuthenticationSession, ObjectAdapter)} or
+     * {@link #isVisible(AuthenticationSession, ObjectAdapter, Where)} or
      * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * @param where TODO
      */
-    VisibilityContext<?> createVisibleInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
+    VisibilityContext<?> createVisibleInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter, Where where);
 
     /**
      * Determines if this member is visible, represented as a {@link Consent}.
      * 
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
+     * @param where 
+     *            the member is being rendered in the UI
      * 
      * @see #isVisibleResult(AuthenticationSession, ObjectAdapter)
      */
-    Consent isVisible(AuthenticationSession session, ObjectAdapter target);
+    Consent isVisible(AuthenticationSession session, ObjectAdapter target, Where where);
 
     // /////////////////////////////////////////////////////////////
     // Disabled (or enabled)
@@ -96,23 +100,25 @@ public interface ObjectMember extends ObjectFeature {
      * 
      * <p>
      * Typically it is easier to just call
-     * {@link #isUsable(AuthenticationSession, ObjectAdapter)} or
+     * {@link #isUsable(AuthenticationSession, ObjectAdapter, Where)} or
      * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * @param where TODO
      */
-    UsabilityContext<?> createUsableInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter target);
+    UsabilityContext<?> createUsableInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter target, Where where);
 
     /**
      * Determines whether this member is usable, represented as a
      * {@link Consent}.
-     * 
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
+     * @param where 
+     *            the member is being rendered in the UI
      * 
      * @see #isUsableResult(AuthenticationSession, ObjectAdapter)
      */
-    Consent isUsable(AuthenticationSession session, ObjectAdapter target);
+    Consent isUsable(AuthenticationSession session, ObjectAdapter target, Where where);
 
     // /////////////////////////////////////////////////////////////
     // isAssociation, isAction

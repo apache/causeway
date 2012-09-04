@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -162,7 +163,7 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
 
     @Override
     public Consent isEditable() {
-        return getValueAssociation().isUsable(IsisContext.getAuthenticationSession(), getParent());
+        return getValueAssociation().isUsable(IsisContext.getAuthenticationSession(), getParent(), Where.ANYWHERE);
     }
 
     @Override

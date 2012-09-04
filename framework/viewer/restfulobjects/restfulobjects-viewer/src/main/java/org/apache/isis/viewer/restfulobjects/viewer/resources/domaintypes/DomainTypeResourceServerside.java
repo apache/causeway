@@ -32,6 +32,7 @@ import com.google.common.base.Strings;
 
 import org.jboss.resteasy.annotations.ClientResponseType;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -67,7 +68,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public Response domainTypes() {
         final RepresentationType representationType = RepresentationType.TYPE_LIST;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
 
@@ -86,7 +87,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response domainType(@PathParam("domainType") final String domainType) {
 
         final RepresentationType representationType = RepresentationType.DOMAIN_TYPE;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
 
@@ -104,7 +105,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
     public Response typeProperty(@PathParam("domainType") final String domainType, @PathParam("propertyId") final String propertyId) {
         final RepresentationType representationType = RepresentationType.PROPERTY_DESCRIPTION;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
         if (parentSpec == null) {
@@ -131,7 +132,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     public Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId) {
         final RepresentationType representationType = RepresentationType.COLLECTION_DESCRIPTION;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
         if (parentSpec == null) {
@@ -158,7 +159,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     public Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId) {
         final RepresentationType representationType = RepresentationType.ACTION_DESCRIPTION;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
         if (parentSpec == null) {
@@ -185,7 +186,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramName") final String paramName) {
         final RepresentationType representationType = RepresentationType.ACTION_PARAMETER_DESCRIPTION;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
         if (parentSpec == null) {
@@ -222,7 +223,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     ) {
 
         final RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
-        init();
+        init(Where.ANYWHERE);
 
         final String supertype = domainTypeFor(superTypeStr, args, "supertype");
 
@@ -247,13 +248,14 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @GET
     @Path("/{domainType}/typeactions/isSupertypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response domainTypeIsSupertypeOf(@PathParam("domainType") final String domainType, @QueryParam("subtype") final String subTypeStr, // simple
-                                                                                                                                              // style
+    public Response domainTypeIsSupertypeOf(
+            @PathParam("domainType") final String domainType, 
+            @QueryParam("subtype") final String subTypeStr, // simple style
             @QueryParam("args") final String args // formal style
-    ) {
+            ) {
 
         final RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
-        init();
+        init(Where.ANYWHERE);
 
         final String subtype = domainTypeFor(subTypeStr, args, "subtype");
 
@@ -282,7 +284,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response newTransientInstance(@PathParam("domainType") final String domainTypeStr, @QueryParam("args") final String args) {
 
         final RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
-        init(representationType);
+        init(representationType, Where.ANYWHERE);
 
         final String domainType = domainTypeFor(domainTypeStr, args, "domainType");
 

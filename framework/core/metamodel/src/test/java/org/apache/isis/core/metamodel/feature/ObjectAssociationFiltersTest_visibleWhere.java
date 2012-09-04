@@ -52,10 +52,10 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {When.ALWAYS, Where.EVERYWHERE, Where.EVERYWHERE, false},
-                {When.UNTIL_PERSISTED, Where.EVERYWHERE, Where.EVERYWHERE, true},
-                {When.ONCE_PERSISTED, Where.EVERYWHERE, Where.EVERYWHERE, true},
-                {When.NEVER, Where.EVERYWHERE, Where.EVERYWHERE, true},
+                {When.ALWAYS, Where.ANYWHERE, Where.ANYWHERE, false},
+                {When.UNTIL_PERSISTED, Where.ANYWHERE, Where.ANYWHERE, true},
+                {When.ONCE_PERSISTED, Where.ANYWHERE, Where.ANYWHERE, true},
+                {When.NEVER, Where.ANYWHERE, Where.ANYWHERE, true},
                 {When.ALWAYS, Where.OBJECT_FORM, Where.OBJECT_FORM, false},
                 {When.ALWAYS, Where.OBJECT_FORM, Where.ALL_TABLES, true},
                 {When.ALWAYS, Where.OBJECT_FORM, Where.PARENTED_TABLE, true},
@@ -95,7 +95,7 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     
     @Test
     public void test() {
-        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.visibleWhere(whereContext);
+        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.staticallyVisible(whereContext);
         assertThat(filter.accept(mockObjectAssociation), is(expectedVisibility));
     }
 

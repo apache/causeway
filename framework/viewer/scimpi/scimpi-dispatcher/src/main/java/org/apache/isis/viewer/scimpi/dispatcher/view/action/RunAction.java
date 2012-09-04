@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -32,6 +33,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public class RunAction extends AbstractElementProcessor {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     @Override
     public void process(final Request request) {
@@ -51,7 +59,7 @@ public class RunAction extends AbstractElementProcessor {
         request.processUtilCloseTag();
         final ObjectAdapter[] parameters = parameterBlock.getParameters(request);
 
-        if (!MethodsUtils.isVisibleAndUsable(object, action)) {
+        if (!MethodsUtils.isVisibleAndUsable(object, action, where)) {
             throw new ForbiddenException(action, ForbiddenException.VISIBLE_AND_USABLE);
         }
 

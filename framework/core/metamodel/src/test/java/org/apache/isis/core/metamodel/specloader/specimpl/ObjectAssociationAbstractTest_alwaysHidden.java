@@ -102,12 +102,12 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, Where where) {
                 return null;
             }
 
             @Override
-            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
                 return null;
             }
 
@@ -145,7 +145,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         context.checking(new Expectations() {
             {
                 allowing(facet).where();
-                will(returnValue(Where.EVERYWHERE));
+                will(returnValue(Where.ANYWHERE));
             }
         });
         facetedMethod.addFacet(facet);

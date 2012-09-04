@@ -24,6 +24,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -44,7 +45,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     @Produces({ RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        init(representationType);
+        init(representationType, Where.NOWHERE);
 
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
         final HomePageReprRenderer renderer = (HomePageReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -57,7 +58,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             request.processUtilCloseTag();
 
             final AuthenticationSession session = IsisContext.getAuthenticationSession(); 
-            List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+            List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, Where.OBJECT_FORM));
             final List<ObjectAssociation> fields = tag.includedFields(associations);
             final LinkedObject[] linkFields = tag.linkedFields(fields);
 
@@ -97,7 +98,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             if (ignoreField(field)) {
                 continue;
             }
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+            if (field.isVisible(IsisContext.getAuthenticationSession(), object, Where.OBJECT_FORM).isVetoed()) {
                 continue;
             }
 

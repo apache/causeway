@@ -22,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -35,7 +36,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
         final RepresentationType user = RepresentationType.USER;
-        init(user);
+        init(user, Where.NOWHERE);
 
         final RendererFactory factory = rendererFactoryRegistry.find(user);
         final UserReprRenderer renderer = (UserReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());

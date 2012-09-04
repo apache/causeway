@@ -20,48 +20,39 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class ObjectAssociationFiltersTests {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
     private AuthenticationSession mockSession;
+    @Mock
     private ObjectAdapter mockTarget;
+    @Mock
     private ObjectAssociation mockAssociation;
-
-    @Before
-    public void setUp() throws Exception {
-        mockSession = mockery.mock(AuthenticationSession.class);
-        mockTarget = mockery.mock(ObjectAdapter.class, "target");
-        mockAssociation = mockery.mock(ObjectAssociation.class);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void shouldNotJustCheckIfAssociationContainsHiddenFacet() {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 never(mockAssociation).containsFacet(HiddenFacet.class);
-                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)));
+                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), Where.ANYWHERE);
             }
         });
-        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget);
+        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget, Where.ANYWHERE);
         filter.accept(mockAssociation);
     }
 

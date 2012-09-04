@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,6 +41,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public class RemoveElement extends AbstractElementProcessor {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
 
     @Override
     public void process(final Request request) {
@@ -79,12 +87,12 @@ public class RemoveElement extends AbstractElementProcessor {
         if (!field.isOneToManyAssociation()) {
             throw new ScimpiException("Field " + fieldName + " not a collection, in " + adapter.getSpecification().getFullIdentifier());
         }
-        if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
+        if (field.isVisible(IsisContext.getAuthenticationSession(), adapter, where).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         IsisContext.getPersistenceSession().resolveField(adapter, field);
 
-        Consent usable = field.isUsable(IsisContext.getAuthenticationSession(), adapter);
+        Consent usable = field.isUsable(IsisContext.getAuthenticationSession(), adapter, where);
         if (usable.isAllowed()) {
             usable = ((OneToManyAssociation) field).isValidToRemove(adapter, element);
         }
@@ -124,7 +132,7 @@ public class RemoveElement extends AbstractElementProcessor {
 
         // TODO check is valid to remove element
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(session, adapter);
+        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(session, adapter, where);
         final List<ObjectAssociation> visibleFields = adapter.getSpecification().getAssociations(filter);
         if (visibleFields.size() == 0) {
             return false;

@@ -24,6 +24,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -38,6 +39,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class GetField extends AbstractElementProcessor {
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
+
     @Override
     public void process(final Request request) {
         final String id = request.getOptionalProperty(OBJECT);
@@ -51,7 +59,7 @@ public class GetField extends AbstractElementProcessor {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        if (field.isVisible(session, object).isVetoed()) {
+        if (field.isVisible(session, object, where).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
 

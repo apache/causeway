@@ -40,6 +40,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -89,6 +90,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             }
         },
         PROPERTIES_AND_COLLECTIONS {
+            @SuppressWarnings("unchecked")
             @Override
             public Filter<ObjectAssociation> getFilters() {
                 return Filters.or(PROPERTIES_ONLY.getFilters(), COLLECTIONS_ONLY.getFilters());
@@ -171,7 +173,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             final ObjectAdapter adapter = entityModel.getObject();
             final ObjectSpecification noSpec = adapter.getSpecification();
 
-            final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec);
+            final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec, Where.OBJECT_FORM);
 
             final RepeatingView rv = new RepeatingView(ID_PROPERTIES_AND_OR_COLLECTIONS);
             final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
@@ -228,13 +230,13 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 			component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
 		}
 
-        private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
-            return noSpec.getAssociations(visibleAssociationFilter(adapter));
+        private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
+            return objSpec.getAssociations(visibleAssociationFilter(adapter, where));
         }
 
         @SuppressWarnings("unchecked")
-        private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter) {
-            return Filters.and(render.getFilters(), ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
+        private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter, Where where) {
+            return Filters.and(render.getFilters(), ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
         }
 
         private void addButtons() {

@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.html.action.view;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -30,6 +31,9 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
 public class FieldCollectionView extends ObjectViewAbstract {
+    
+    private final Where where = Where.PARENTED_TABLE;
+
     @Override
     protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {
         final String id = context.mapObject(object);
@@ -43,7 +47,7 @@ public class FieldCollectionView extends ObjectViewAbstract {
         content.add(context.getComponentFactory().createHeading(collection.getName()));
         final Table table = TableUtil.createTable(context, id, object, collection);
         content.add(table);
-        if (collection.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+        if (collection.isUsable(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
             content.add(context.getComponentFactory().createAddOption(id, collection.getId()));
         }
     }

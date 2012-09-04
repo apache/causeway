@@ -105,7 +105,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
 
     @Override
     public Consent isEditable() {
-        return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());
+        return getField().isUsable(IsisContext.getAuthenticationSession(), getParent(), where);
     }
 
     @Override

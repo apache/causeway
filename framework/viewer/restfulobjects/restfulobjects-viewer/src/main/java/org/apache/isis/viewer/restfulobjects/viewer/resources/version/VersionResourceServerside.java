@@ -25,6 +25,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -48,7 +49,7 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
     public Response version() {
         final RepresentationType representationType = RepresentationType.VERSION;
 
-        init(representationType);
+        init(representationType, Where.NOWHERE);
         fakeRuntimeExceptionIfXFail();
 
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);

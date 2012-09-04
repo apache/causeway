@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.action.view;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,6 +36,9 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
 public class ObjectView extends ObjectViewAbstract {
+
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
 
     @Override
     protected boolean addObjectToHistory() {
@@ -61,7 +65,7 @@ public class ObjectView extends ObjectViewAbstract {
         boolean atLeastOneFieldVisibleAndEditable = false;
         final List<ObjectAssociation> flds = specification.getAssociations();
         for (int i = 0; i < flds.size(); i++) {
-            if (flds.get(i).isVisible(authenticationSession, adapter).isAllowed() && flds.get(i).isUsable(authenticationSession, adapter).isAllowed()) {
+            if (flds.get(i).isVisible(authenticationSession, adapter, where).isAllowed() && flds.get(i).isUsable(authenticationSession, adapter, where).isAllowed()) {
                 atLeastOneFieldVisibleAndEditable = true;
                 break;
             }
@@ -76,7 +80,7 @@ public class ObjectView extends ObjectViewAbstract {
     private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane, final String id) {
 
         final ObjectSpecification specification = object.getSpecification();
-        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
+        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object, where));
         for (int i = 0; i < visibleFields.size(); i++) {
             final ObjectAssociation field = visibleFields.get(i);
 

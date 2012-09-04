@@ -23,6 +23,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.ConsentAbstract;
@@ -96,7 +97,7 @@ public final class ActionFixtures {
     public void isVisible(final ObjectAction mockAction, final boolean returns) {
         context.checking(new Expectations() {
             {
-                allowing(mockAction).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)));
+                allowing(mockAction).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), Where.ANYWHERE);
                 will(returnValue(ConsentAbstract.allowIf(returns)));
             }
         });
@@ -105,7 +106,7 @@ public final class ActionFixtures {
     public void isUsable(final ObjectAction mockAction, final boolean returns) {
         context.checking(new Expectations() {
             {
-                allowing(mockAction).isUsable(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)));
+                allowing(mockAction).isUsable(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), Where.ANYWHERE);
                 will(returnValue(ConsentAbstract.allowIf(returns)));
             }
         });

@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,6 +36,14 @@ import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.collection.AbstractCollectionContent;
 
 public class OneToManyFieldImpl extends AbstractCollectionContent implements OneToManyField {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
+
     private final ObjectAdapter collection;
     private final ObjectField field;
 
@@ -55,7 +64,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
                 return new Veto("Collection not set up; can't add elements to a non-existant collection");
             }
 
-            final Consent usableInState = getOneToManyAssociation().isUsable(IsisContext.getAuthenticationSession(), parentAdapter);
+            final Consent usableInState = getOneToManyAssociation().isUsable(IsisContext.getAuthenticationSession(), parentAdapter, where);
             if (usableInState.isVetoed()) {
                 return usableInState;
             }
@@ -177,7 +186,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
 
     @Override
     public Consent isEditable() {
-        return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());
+        return getField().isUsable(IsisContext.getAuthenticationSession(), getParent(), where);
     }
 
     @Override

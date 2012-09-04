@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.validprops;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
@@ -27,6 +28,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAbstract {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     public ObjectValidPropertiesFacetImpl(final FacetHolder holder) {
         super(holder);
@@ -38,11 +46,11 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
         final ObjectAdapter adapter = context.getTarget();
         for (final ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
             // ignore hidden properties
-            if (property.isVisible(context.getSession(), adapter).isVetoed()) {
+            if (property.isVisible(context.getSession(), adapter, where).isVetoed()) {
                 continue;
             }
             // ignore disabled properties
-            if (property.isUsable(context.getSession(), adapter).isVetoed()) {
+            if (property.isUsable(context.getSession(), adapter, where).isVetoed()) {
                 continue;
             }
             final OneToOneAssociation otoa = (OneToOneAssociation) property;

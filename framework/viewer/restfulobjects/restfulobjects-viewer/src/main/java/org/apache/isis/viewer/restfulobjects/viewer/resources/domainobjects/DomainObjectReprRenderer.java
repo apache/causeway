@@ -186,7 +186,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         for (final ObjectAssociation assoc : associations) {
 
             if (!mode.isCutDown()) {
-                final Consent visibility = assoc.isVisible(getSession(), objectAdapter);
+                final Consent visibility = assoc.isVisible(getSession(), objectAdapter, resourceContext.getWhere());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -226,7 +226,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private void addActions(final ObjectAdapter objectAdapter, final List<ObjectAction> actions, final JsonRepresentation members) {
         final LinkFollower linkFollower = getLinkFollower().follow("members");
         for (final ObjectAction action : actions) {
-            final Consent visibility = action.isVisible(getSession(), objectAdapter);
+            final Consent visibility = action.isVisible(getSession(), objectAdapter, resourceContext.getWhere());
             if (!visibility.isAllowed()) {
                 continue;
             }

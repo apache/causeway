@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class DisabledFacetNever extends DisabledFacetAbstract {
 
     public DisabledFacetNever(final FacetHolder holder) {
-        super(When.NEVER, Where.EVERYWHERE, holder);
+        super(When.NEVER, Where.ANYWHERE, holder);
     }
 
     /**

@@ -28,7 +28,7 @@ import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstra
 public class DisabledFacetAlwaysEverywhere extends DisabledFacetAbstract {
 
     public DisabledFacetAlwaysEverywhere(final FacetHolder holder) {
-        super(When.ALWAYS, Where.EVERYWHERE, holder);
+        super(When.ALWAYS, Where.ANYWHERE, holder);
     }
 
     /**

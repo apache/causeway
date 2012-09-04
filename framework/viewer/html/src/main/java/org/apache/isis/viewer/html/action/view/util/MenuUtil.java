@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -34,6 +35,9 @@ import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.context.Context;
 
 public class MenuUtil {
+
+    // REVIEW: confirm this rendering context
+    private final static Where where = Where.OBJECT_FORM;
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {
         final ObjectSpecification specification = target.getSpecification();
@@ -52,7 +56,7 @@ public class MenuUtil {
                 final Component[] components = createMenu(name, target, action.getActions(), context, targetObjectId);
                 menuItem = context.getComponentFactory().createSubmenu(name, components);
             } else {
-                if (!action.isVisible(IsisContext.getAuthenticationSession(), target).isAllowed()) {
+                if (!action.isVisible(IsisContext.getAuthenticationSession(), target, where).isAllowed()) {
                     continue;
                 }
 
@@ -92,7 +96,7 @@ public class MenuUtil {
                 } else {
                     collectParameters = true;
                 }
-                final Consent consent = action.isUsable(IsisContext.getAuthenticationSession(), target);
+                final Consent consent = action.isUsable(IsisContext.getAuthenticationSession(), target, where);
                 final String consentReason = consent.getReason();
                 menuItem = context.getComponentFactory().createMenuItem(actionId, action.getName(), action.getDescription(), consentReason, action.getType(), collectParameters, targetObjectId);
             }

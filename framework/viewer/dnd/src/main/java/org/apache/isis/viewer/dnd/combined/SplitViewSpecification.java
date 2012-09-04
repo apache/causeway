@@ -22,6 +22,7 @@ package org.apache.isis.viewer.dnd.combined;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -36,6 +37,13 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 
 public abstract class SplitViewSpecification extends CompositeViewSpecification {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    final Where where = Where.ANYWHERE;
 
     public SplitViewSpecification() {
         builder = new SplitViewBuilder(this);
@@ -67,7 +75,7 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
         final ObjectSpecification spec = content.getSpecification();
         final ObjectAdapter target = content.getAdapter();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target, where));
         final List<ObjectAssociation> selectableFields = new ArrayList<ObjectAssociation>();
         for (final ObjectAssociation field : fields) {
             if (validField(field)) {

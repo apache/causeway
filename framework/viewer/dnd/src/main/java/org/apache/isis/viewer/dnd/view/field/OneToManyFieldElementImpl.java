@@ -62,7 +62,7 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
 
     @Override
     public Consent isEditable() {
-        return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());
+        return getField().isUsable(IsisContext.getAuthenticationSession(), getParent(), where);
     }
 
     @Override

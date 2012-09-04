@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.task;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -42,13 +43,20 @@ import org.apache.isis.viewer.html.context.Context;
 
 public class EditTask extends Task {
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
+
     private static int size(final ObjectAdapter object) {
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object, where));
         return fields.size();
     }
 
     private static boolean skipField(final ObjectAdapter object, final ObjectAssociation fld) {
-        return fld.isOneToManyAssociation() || fld.isUsable(getAuthenticationSession(), object).isVetoed();
+        return fld.isOneToManyAssociation() || fld.isUsable(getAuthenticationSession(), object, where).isVetoed();
     }
 
     private final ObjectAssociation[] fields;
@@ -57,7 +65,7 @@ public class EditTask extends Task {
     public EditTask(final Context context, final ObjectAdapter adapter) {
         super(context, "Edit", "", adapter, size(adapter));
 
-        final List<ObjectAssociation> allFields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
+        final List<ObjectAssociation> allFields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
 
         fields = new ObjectAssociation[names.length];
         for (int i = 0, j = 0; j < allFields.size(); j++) {
@@ -66,7 +74,7 @@ public class EditTask extends Task {
             names[i] = fld.getName();
             descriptions[i] = fld.getDescription();
 
-            final Consent usableByUser = fld.isUsable(getAuthenticationSession(), adapter);
+            final Consent usableByUser = fld.isUsable(getAuthenticationSession(), adapter, where);
             if (usableByUser.isVetoed()) {
                 descriptions[i] = usableByUser.getReason();
             }

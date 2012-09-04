@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -44,6 +45,10 @@ import org.apache.isis.viewer.dnd.view.content.FieldContent;
 
 public class ObjectFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ObjectFieldBuilder.class);
+
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
+
     private final ViewFactory subviewDesign;
 
     // TODO remove - transitional
@@ -66,7 +71,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("build view " + view + " for " + object);
 
         final ObjectSpecification spec = object.getSpecification();
-        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object);
+        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where);
         final List<ObjectAssociation> flds = spec.getAssociations(filter);
 
         if (view.getSubviews().length == 0) {

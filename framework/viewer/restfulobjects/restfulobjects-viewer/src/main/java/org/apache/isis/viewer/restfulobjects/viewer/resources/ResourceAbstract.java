@@ -34,6 +34,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -56,8 +60,6 @@ import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFact
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.viewer.util.OidUtils;
 import org.apache.isis.viewer.restfulobjects.viewer.util.UrlDecoderUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 
 public abstract class ResourceAbstract {
 
@@ -108,11 +110,11 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-    protected void init() {
-        init(RepresentationType.GENERIC);
+    protected void init(Where where) {
+        init(RepresentationType.GENERIC, where);
     }
 
-    protected void init(final RepresentationType representationType) {
+    protected void init(final RepresentationType representationType, Where where) {
         if (!IsisContext.inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         } 
@@ -120,7 +122,7 @@ public abstract class ResourceAbstract {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
+        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration(), where);
     }
 
     protected ResourceContext getResourceContext() {

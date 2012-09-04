@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -46,6 +47,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 public final class Dump {
 
     private static DebugBuilder debugBuilder;
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
 
     private Dump() {
     }
@@ -507,7 +515,7 @@ public final class Dump {
                 final String name = field.getId();
                 graphIndent(level, s);
 
-                if (field.isVisible(authenticationSession, adapter).isVetoed()) {
+                if (field.isVisible(authenticationSession, adapter, where).isVetoed()) {
                     s.append(name + ": (not visible)");
                     s.append("\n");
                 } else {

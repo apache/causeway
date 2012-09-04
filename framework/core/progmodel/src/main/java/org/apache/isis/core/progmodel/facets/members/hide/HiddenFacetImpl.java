@@ -31,10 +31,15 @@ public class HiddenFacetImpl extends HiddenFacetAbstract {
     }
 
     @Override
-    public String hiddenReason(final ObjectAdapter targetAdapter) {
+    public String hiddenReason(final ObjectAdapter targetAdapter, Where whereContext) {
+        if(!where().includes(whereContext)) {
+            return null;
+        }
+        
         if (when() == When.ALWAYS) {
             return "Always hidden";
-        } else if (when() == When.NEVER) {
+        }
+        if (when() == When.NEVER) {
             return null;
         }
 

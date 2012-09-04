@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -274,12 +275,12 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing, but shouldn't be called.
      */
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
         return null;
     }
 
     @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
+    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
         return Allow.DEFAULT;
     }
 
@@ -288,12 +289,12 @@ public class ObjectActionSet implements ObjectAction {
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, Where where) {
         return null;
     }
 
     @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
+    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
         return Allow.DEFAULT;
     }
 

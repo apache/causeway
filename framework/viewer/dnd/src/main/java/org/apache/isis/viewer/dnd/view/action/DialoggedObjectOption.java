@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,10 +39,18 @@ import org.apache.isis.viewer.dnd.view.Workspace;
  * vetoing the option and giving the option an name respectively.
  */
 public class DialoggedObjectOption extends AbstractObjectOption {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
+
     public static DialoggedObjectOption createOption(final ObjectAction action, final ObjectAdapter object) {
         final int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-        if (!action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() || !action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+        if (!action.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed() || !action.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
             return null;
         }
 

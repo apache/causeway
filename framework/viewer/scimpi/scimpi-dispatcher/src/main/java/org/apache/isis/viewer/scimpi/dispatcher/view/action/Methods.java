@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
@@ -35,6 +36,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
 
 public class Methods extends AbstractElementProcessor {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final static Where where = Where.ANYWHERE;
 
     @Override
     public void process(final Request request) {
@@ -108,7 +116,7 @@ public class Methods extends AbstractElementProcessor {
         // if (action.isVisible(IsisContext.getSession(), null) &&
         // action.isVisible(IsisContext.getSession(), adapter))
         // {
-        if (action.isVisible(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
+        if (action.isVisible(IsisContext.getAuthenticationSession(), adapter, where).isAllowed()) {
             request.appendHtml("<div class=\"action\">");
             if (IsisContext.getSession() == null) {
                 request.appendHtml("<span class=\"disabled\" title=\"no user logged in\">");
@@ -121,8 +129,8 @@ public class Methods extends AbstractElementProcessor {
                  * action.isUsable(IsisContext.getSession(), null).getReason() +
                  * "\">"); request.appendHtml(action.getName());
                  * request.appendHtml("</span>");
-                 */} else if (action.isUsable(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
-                request.appendHtml("<span class=\"disabled\" title=\"" + action.isUsable(IsisContext.getAuthenticationSession(), adapter).getReason() + "\">");
+                 */} else if (action.isUsable(IsisContext.getAuthenticationSession(), adapter, where).isVetoed()) {
+                request.appendHtml("<span class=\"disabled\" title=\"" + action.isUsable(IsisContext.getAuthenticationSession(), adapter, where).getReason() + "\">");
                 request.appendAsHtmlEncoded(action.getName());
                 request.appendHtml("</span>");
             } else {

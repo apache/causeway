@@ -31,6 +31,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
@@ -128,7 +129,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     }
 
     private ResourceContext instantiateResourceContext(final RepresentationType representationType) {
-        return new ResourceContext(representationType, httpHeaders, null, null, httpServletRequest, null, null, null, null, null, null, null, null);
+        return new ResourceContext(representationType, httpHeaders, null, null, httpServletRequest, null, null, null, null, null, null, null, null, null);
     }
 
 }

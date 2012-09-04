@@ -21,11 +21,28 @@ package org.apache.isis.applib.annotation;
 
 import org.apache.isis.applib.util.Enums;
 
+/**
+ * Represents the location in the user interface where a class member is to be rendered.
+ * 
+ * <p>
+ * Used to control visibility (eg using the {@link Hidden} annotation) and enablement
+ * (eg using the {@link Disabled} annotation) in different regions of the user interface.
+ * 
+ * <p>
+ * The application programmer may use any of the values of this enum.  Some represent
+ * concrete locations (eg {@link #OBJECT_FORM}, {@link #PARENTED_TABLE}), whereas some 
+ * represent a combination of locations (eg {@link #ALL_TABLES}, {@link #ANYWHERE}).
+ * 
+ * <h4>Framework Implementation Notes</h4>
+ * <p>
+ * This enum is also used internally within the framework.  When rendering an element,
+ * the framework developer should only use those values that represent concrete locations.  
+ */
 public enum Where {
     /**
      * The member should be disabled/hidden everywhere.
      */
-    EVERYWHERE {
+    ANYWHERE {
         @Override
         public boolean includes(Where context) {
             return true;
@@ -93,6 +110,12 @@ public enum Where {
         return this == STANDALONE_TABLE || this == ALL_TABLES;
     }
 
+    /**
+     * Whether this <tt>Where</tt> is a superset of the context <tt>Where</tt> provided.
+     * 
+     * <p>
+     * For example, {@link #ALL_TABLES} includes {@link #STANDALONE_TABLE}; {@link #ANYWHERE} includes all others.
+     */
     public boolean includes(Where context) {
         return context == this;
     }

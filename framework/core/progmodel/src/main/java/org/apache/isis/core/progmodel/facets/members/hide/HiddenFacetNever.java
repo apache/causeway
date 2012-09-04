@@ -27,14 +27,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class HiddenFacetNever extends HiddenFacetAbstract {
 
     public HiddenFacetNever(final FacetHolder holder) {
-        super(When.NEVER, Where.EVERYWHERE, holder);
+        super(When.NEVER, Where.ANYWHERE, holder);
     }
 
     /**
      * Always returns <tt>null</tt>.
      */
     @Override
-    public String hiddenReason(final ObjectAdapter target) {
+    public String hiddenReason(final ObjectAdapter target, Where where) {
         return null;
     }
 

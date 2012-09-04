@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -41,6 +42,9 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.HtmlFormBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
 public class ActionForm extends AbstractElementProcessor {
+
+    // REVIEW: confirm this rendering context
+    private final static Where where = Where.OBJECT_FORM;
 
     @Override
     public void process(final Request request) {
@@ -80,8 +84,8 @@ public class ActionForm extends AbstractElementProcessor {
         if (action.getParameterCount() == 0) {
             throw new ScimpiException("Action form can only be used for actions with parameters");
         }
-        if (parameterObject.showMessage && MethodsUtils.isVisible(object, action)) {
-            final String notUsable = MethodsUtils.isUsable(object, action);
+        if (parameterObject.showMessage && MethodsUtils.isVisible(object, action, where)) {
+            final String notUsable = MethodsUtils.isUsable(object, action, where);
             if (notUsable != null) {
                 if (!withoutProcessing) {
                     request.skipUntilClose();
@@ -92,7 +96,7 @@ public class ActionForm extends AbstractElementProcessor {
                 return;
             }
         }
-        if (!MethodsUtils.isVisibleAndUsable(object, action)) {
+        if (!MethodsUtils.isVisibleAndUsable(object, action, where)) {
             if (!withoutProcessing) {
                 request.skipUntilClose();
             }

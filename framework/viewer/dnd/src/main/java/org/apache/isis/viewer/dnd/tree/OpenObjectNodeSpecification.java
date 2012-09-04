@@ -21,6 +21,7 @@ package org.apache.isis.viewer.dnd.tree;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -43,7 +44,15 @@ import org.apache.isis.viewer.dnd.view.composite.StackLayout;
  *      displaying a closed collection within an object.
  */
 public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
+
     private final SubviewDecorator decorator = new SelectObjectBorder.Factory();
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     public OpenObjectNodeSpecification() {
         builder = new ObjectFieldBuilder(this);
@@ -62,7 +71,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
     public boolean canDisplay(final ViewRequirement requirement) {
         if (requirement.isObject() && requirement.hasReference()) {
             final ObjectAdapter object = requirement.getAdapter();
-            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where));
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToManyAssociation()) {
                     return true;

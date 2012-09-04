@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -45,7 +46,7 @@ public class TitleString extends AbstractElementProcessor {
             titleString = object.titleString();
         } else {
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+            if (field.isVisible(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
             final ObjectAdapter fieldReference = field.get(object);

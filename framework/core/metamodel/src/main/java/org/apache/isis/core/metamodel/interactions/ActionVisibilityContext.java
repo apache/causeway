@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.interactions;
 import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionVisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,8 +35,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
  */
 public class ActionVisibilityContext extends VisibilityContext<ActionVisibilityEvent> {
 
-    public ActionVisibilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
-        super(InteractionContextType.ACTION_VISIBLE, session, invocationMethod, identifier, target);
+    public ActionVisibilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
+        super(InteractionContextType.ACTION_VISIBLE, session, invocationMethod, identifier, target, where);
     }
 
     @Override

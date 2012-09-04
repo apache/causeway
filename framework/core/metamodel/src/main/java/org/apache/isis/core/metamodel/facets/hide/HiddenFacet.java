@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.hide;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
@@ -36,6 +37,6 @@ public interface HiddenFacet extends WhenAndWhereValueFacet, HidingInteractionAd
      * The reason why the (feature of the) target object is currently hidden, or
      * <tt>null</tt> if visible.
      */
-    public String hiddenReason(ObjectAdapter target);
+    public String hiddenReason(ObjectAdapter target, Where whereContext);
 
 }

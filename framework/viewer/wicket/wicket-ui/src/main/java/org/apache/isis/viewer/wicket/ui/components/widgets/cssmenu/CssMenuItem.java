@@ -38,6 +38,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -186,6 +187,13 @@ public class CssMenuItem implements Serializable {
     // To add submenu items
     // //////////////////////////////////////////////////////////////
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
+
     /**
      * @return the builder, else <tt>null</tt> if the action is not visible for
      *         the current user.
@@ -197,7 +205,7 @@ public class CssMenuItem implements Serializable {
         final CssMenuItem parentMenuItem = this;
 
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-        final Consent visibility = noAction.isVisible(session, adapter);
+        final Consent visibility = noAction.isVisible(session, adapter, where);
         if (visibility.isVetoed()) {
             return null;
         }
@@ -207,7 +215,7 @@ public class CssMenuItem implements Serializable {
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
-        final Consent usability = noAction.isUsable(session, adapter);
+        final Consent usability = noAction.isUsable(session, adapter, where);
         final String reasonDisabledIfAny = usability.getReason();
 
         return parentMenuItem.newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny);

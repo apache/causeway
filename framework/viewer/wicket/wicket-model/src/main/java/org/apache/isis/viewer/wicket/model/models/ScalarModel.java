@@ -25,12 +25,12 @@ import java.util.List;
 
 import org.apache.wicket.Session;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -86,12 +86,12 @@ public class ScalarModel extends EntityModel {
             }
 
             @Override
-            public String disable(final ScalarModel scalarModel) {
+            public String disable(final ScalarModel scalarModel, final Where where) {
                 final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
                 try {
                     final AuthenticationSession session = scalarModel.getAuthenticationSession();
-                    final Consent usable = property.isUsable(session, parentAdapter);
+                    final Consent usable = property.isUsable(session, parentAdapter, where);
                     return usable.isAllowed() ? null : usable.getReason();
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -188,7 +188,7 @@ public class ScalarModel extends EntityModel {
             }
 
             @Override
-            public String disable(final ScalarModel scalarModel) {
+            public String disable(final ScalarModel scalarModel, Where where) {
                 // always enabled
                 return null;
             }
@@ -255,7 +255,7 @@ public class ScalarModel extends EntityModel {
 
         public abstract String getIdentifier(ScalarModel scalarModel);
 
-        public abstract String disable(ScalarModel scalarModel);
+        public abstract String disable(ScalarModel scalarModel, Where where);
 
         public abstract String parseAndValidate(ScalarModel scalarModel, String proposedPojoAsStr);
 
@@ -406,8 +406,8 @@ public class ScalarModel extends EntityModel {
         setObject(adapter);
     }
 
-    public String disable() {
-        return kind.disable(this);
+    public String disable(Where where) {
+        return kind.disable(this, where);
     }
 
     public String parseAndValidate(final String proposedPojoAsStr) {

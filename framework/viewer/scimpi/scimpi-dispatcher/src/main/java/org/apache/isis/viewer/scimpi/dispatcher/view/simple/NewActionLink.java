@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
@@ -27,11 +28,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public class NewActionLink extends AbstractLink {
 
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
+
     @Override
     protected boolean valid(final Request request, final ObjectAdapter object) {
         final String method = request.getRequiredProperty(METHOD);
         final ObjectAction action = MethodsUtils.findAction(object, method);
-        return MethodsUtils.isVisibleAndUsable(object, action);
+        return MethodsUtils.isVisibleAndUsable(object, action, where);
     }
 
     @Override

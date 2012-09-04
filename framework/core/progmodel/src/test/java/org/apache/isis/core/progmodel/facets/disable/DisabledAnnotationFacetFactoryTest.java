@@ -164,7 +164,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(When.UNTIL_PERSISTED, disabledFacetAbstract.when());
-        assertEquals(Where.EVERYWHERE, disabledFacetAbstract.where());
+        assertEquals(Where.ANYWHERE, disabledFacetAbstract.where());
     }
 
 

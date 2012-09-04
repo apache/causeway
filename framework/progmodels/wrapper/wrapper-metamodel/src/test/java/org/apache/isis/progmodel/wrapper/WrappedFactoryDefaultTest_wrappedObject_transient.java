@@ -34,6 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.PropertyModifyEvent;
 import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
@@ -183,10 +184,10 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
                 will(returnValue(facets));
                 
-                allowing(mockPasswordMember).isVisible(session, mockEmployeeAdapter);
+                allowing(mockPasswordMember).isVisible(session, mockEmployeeAdapter, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
                 
-                allowing(mockPasswordMember).isUsable(session, mockEmployeeAdapter);
+                allowing(mockPasswordMember).isUsable(session, mockEmployeeAdapter, Where.ANYWHERE);
                 will(returnValue(usabilityConsent));
             }
         });
@@ -207,10 +208,10 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
 
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).isVisible(session, mockEmployeeAdapter);
+                allowing(mockPasswordMember).isVisible(session, mockEmployeeAdapter, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
                 
-                allowing(mockPasswordMember).isUsable(session, mockEmployeeAdapter);
+                allowing(mockPasswordMember).isUsable(session, mockEmployeeAdapter, Where.ANYWHERE);
                 will(returnValue(usabilityConsent));
                 
                 allowing(mockPasswordMember).isAssociationValid(mockEmployeeAdapter, mockPasswordAdapter);

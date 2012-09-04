@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -29,6 +30,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class TableCell extends AbstractElementProcessor {
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with
+    // @Hidden(where=Where.ALL_TABLES) or @Disabled(where=Where.ALL_TABLES) will indeed
+    // be hidden from all tables but will be visible/enabled (perhaps incorrectly) 
+    // if annotated with Where.PARENTED_TABLE or Where.STANDALONE_TABLE
+    private final Where where = Where.ALL_TABLES;
 
     @Override
     public void process(final Request request) {
@@ -45,7 +53,7 @@ public class TableCell extends AbstractElementProcessor {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         request.appendHtml("<td" + className + ">");
-        if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+        if (field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
             final ObjectAdapter fieldReference = field.get(object);
             final String source = fieldReference == null ? "" : context.mapObject(fieldReference, Scope.REQUEST);
             final String name = request.getOptionalProperty(RESULT_NAME, fieldName);

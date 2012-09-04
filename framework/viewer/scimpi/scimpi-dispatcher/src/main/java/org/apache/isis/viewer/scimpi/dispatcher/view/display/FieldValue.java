@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -35,6 +36,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
 public class FieldValue extends AbstractElementProcessor {
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
+
     @Override
     public void process(final Request request) {
         final String className = request.getOptionalProperty(CLASS);
@@ -45,7 +53,7 @@ public class FieldValue extends AbstractElementProcessor {
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
-        if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+        if (field.isVisible(IsisContext.getAuthenticationSession(), object, where).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
         final boolean isIconShowing = request.isRequested(SHOW_ICON, showIconByDefault());

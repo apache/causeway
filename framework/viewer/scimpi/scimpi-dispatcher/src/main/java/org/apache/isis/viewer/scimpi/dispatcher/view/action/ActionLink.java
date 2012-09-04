@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.net.URLEncoder;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -32,6 +33,9 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
 public class ActionLink extends AbstractElementProcessor {
 
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
+
     @Override
     public void process(final Request request) {
         String objectId = request.getOptionalProperty(OBJECT);
@@ -39,7 +43,10 @@ public class ActionLink extends AbstractElementProcessor {
         final String forwardResultTo = request.getOptionalProperty(VIEW);
         final String forwardVoidTo = request.getOptionalProperty(VOID);
         final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
+        
+        @SuppressWarnings("unused")
         final String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
+        
         final String resultName = request.getOptionalProperty(RESULT_NAME);
         final String resultNameSegment = resultName == null ? "" : "&amp;" + RESULT_NAME + "=" + resultName;
         final String scope = request.getOptionalProperty(SCOPE);
@@ -65,7 +72,7 @@ public class ActionLink extends AbstractElementProcessor {
         request.processUtilCloseTag();
         final String text = request.popBuffer();
 
-        if (MethodsUtils.isVisibleAndUsable(object, action)) {
+        if (MethodsUtils.isVisibleAndUsable(object, action, where)) {
             writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, scopeSegment, confirmSegment, messageSegment, context, action, parameterBlock, text);
         }
         request.popBlockContent();

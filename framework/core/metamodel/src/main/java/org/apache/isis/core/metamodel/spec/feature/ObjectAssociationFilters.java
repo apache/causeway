@@ -101,7 +101,7 @@ public class ObjectAssociationFilters {
         }
     };
 
-    public static final Filter<ObjectAssociation> visibleWhere(final Where context) {
+    public static final Filter<ObjectAssociation> staticallyVisible(final Where context) {
         return new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation association) {
@@ -109,24 +109,17 @@ public class ObjectAssociationFilters {
                 if(facet == null) {
                     return true;
                 }
-                if(facet.when() != When.ALWAYS) {
-                    return true;
-                }
-                return !facet.where().includes(context);
+                return !(facet.where().includes(context) && facet.when() == When.ALWAYS);
             }
         };
     }
 
     
-    /**
-     * Filters only properties that are visible statically, ie have not been
-     * hidden at compile time.
-     */
-    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target) {
+    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
         return new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation objectAssociation) {
-                final Consent visible = objectAssociation.isVisible(session, target);
+                final Consent visible = objectAssociation.isVisible(session, target, where);
                 return visible.isAllowed();
             }
         };

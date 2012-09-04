@@ -22,6 +22,7 @@ package org.apache.isis.viewer.dnd.view.content;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -128,6 +129,13 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         }
     }
 
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    protected final Where where = Where.ANYWHERE;
+
     @Override
     public abstract Consent canClear();
 
@@ -159,7 +167,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             // TODO: use Facet for this test instead.
             return new Veto("Can't set field in persistent object with reference to non-persistent object");
         }
-        final List<ObjectAssociation> fields = targetAdapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), targetAdapter));
+        final List<ObjectAssociation> fields = targetAdapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), targetAdapter, where));
         for (final ObjectAssociation fld : fields) {
             if (!fld.isOneToOneAssociation()) {
                 continue;
@@ -207,7 +215,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             return action.execute(target, new ObjectAdapter[] { source });
         }
 
-        final List<ObjectAssociation> associations = target.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), target));
+        final List<ObjectAssociation> associations = target.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), target, where));
 
         for (int i = 0; i < associations.size(); i++) {
             final ObjectAssociation association = associations.get(i);

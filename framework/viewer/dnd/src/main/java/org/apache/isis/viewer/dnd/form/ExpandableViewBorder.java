@@ -21,6 +21,7 @@ package org.apache.isis.viewer.dnd.form;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -93,6 +94,13 @@ public class ExpandableViewBorder extends AbstractBorder {
     private final ViewSpecification openViewSpecification;
     private final ViewSpecification closedViewSpecification;
     private int canOpen;
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with 
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
+    // for any other value for Where
+    private final Where where = Where.ANYWHERE;
 
     public ExpandableViewBorder(final View view, final ViewSpecification closedViewSpecification, final ViewSpecification openViewSpecification) {
         super(view);
@@ -197,7 +205,7 @@ public class ExpandableViewBorder extends AbstractBorder {
     private int canOpenObject(final Content content) {
         final ObjectAdapter object = ((ObjectContent) content).getObject();
         if (object != null) {
-            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where));
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToManyAssociation()) {
                     return CAN_OPEN;

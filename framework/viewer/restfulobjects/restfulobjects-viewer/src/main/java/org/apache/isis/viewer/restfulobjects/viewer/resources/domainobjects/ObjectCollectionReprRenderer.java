@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -52,7 +53,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private ObjectCollectionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+        super(resourceContext, linkFollower, representationType, representation, Where.PARENTED_TABLE);
     }
 
     @Override

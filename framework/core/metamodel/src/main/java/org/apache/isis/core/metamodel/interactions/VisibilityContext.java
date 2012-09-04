@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,8 +33,17 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
  */
 public abstract class VisibilityContext<T extends VisibilityEvent> extends InteractionContext<T> {
 
-    public VisibilityContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
+    private Where where;
+
+    public VisibilityContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target, Where where) {
         super(interactionType, session, invocationMethod, identifier, target);
+        this.where = where;
     }
 
+    /**
+     * Where the element is to be rendered.
+     */
+    public Where getWhere() {
+        return where;
+    }
 }

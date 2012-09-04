@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 
 import org.codehaus.jackson.node.NullNode;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -52,7 +53,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     private ObjectPropertyReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORM);
     }
 
     @Override

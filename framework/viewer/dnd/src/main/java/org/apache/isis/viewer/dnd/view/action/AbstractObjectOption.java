@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -31,6 +32,10 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
 public abstract class AbstractObjectOption extends UserActionAbstract {
+
+    // REVIEW: confirm this rendering context
+    private final Where where = Where.OBJECT_FORM;
+
     protected final ObjectAction action;
     protected final ObjectAdapter target;
 
@@ -47,7 +52,7 @@ public abstract class AbstractObjectOption extends UserActionAbstract {
             // TODO: move logic into Facet
             return new Veto("Can't do anything with a destroyed object");
         }
-        final Consent usableForUser = action.isUsable(IsisContext.getAuthenticationSession(), target);
+        final Consent usableForUser = action.isUsable(IsisContext.getAuthenticationSession(), target, where);
         if (usableForUser.isVetoed()) {
             return usableForUser;
         }

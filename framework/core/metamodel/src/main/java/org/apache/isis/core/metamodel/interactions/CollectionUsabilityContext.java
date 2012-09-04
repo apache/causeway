@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.CollectionUsabilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,8 +33,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
  */
 public class CollectionUsabilityContext extends UsabilityContext<CollectionUsabilityEvent> {
 
-    public CollectionUsabilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
-        super(InteractionContextType.COLLECTION_USABLE, session, invocationMethod, identifier, target);
+    public CollectionUsabilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
+        super(InteractionContextType.COLLECTION_USABLE, session, invocationMethod, identifier, target, where);
     }
 
     @Override

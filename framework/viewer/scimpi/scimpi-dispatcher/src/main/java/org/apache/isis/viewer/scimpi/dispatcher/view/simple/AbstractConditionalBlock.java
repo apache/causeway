@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -401,7 +402,7 @@ class TestMethodVisible extends Test {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         // TODO needs to work irrespective of parameters
         final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
-        final Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object);
+        final Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return visible.isAllowed();
     }
 }
@@ -412,7 +413,7 @@ class TestMethodUseable extends Test {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         // TODO needs to work irrespective of parameters
         final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
-        final Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object);
+        final Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return usable.isAllowed();
     }
 }
@@ -438,7 +439,7 @@ class TestFieldVisible extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         final ObjectAssociation objectField = object.getSpecification().getAssociation(attributeName);
-        final Consent visible = objectField.isVisible(IsisContext.getAuthenticationSession(), object);
+        final Consent visible = objectField.isVisible(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return visible.isAllowed();
     }
 }
@@ -448,7 +449,7 @@ class TestFieldEditable extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         final ObjectAssociation objectField = object.getSpecification().getAssociation(attributeName);
-        final Consent usable = objectField.isUsable(IsisContext.getAuthenticationSession(), object);
+        final Consent usable = objectField.isUsable(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return usable.isAllowed();
     }
 }

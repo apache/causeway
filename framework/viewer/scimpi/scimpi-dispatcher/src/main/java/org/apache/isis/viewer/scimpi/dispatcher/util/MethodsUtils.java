@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.util;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -124,19 +125,19 @@ public class MethodsUtils {
         }
     }
 
-    public static boolean isVisible(final ObjectAdapter object, final ObjectAction action) {
-        return action.isVisible(getAuthenticationSession(), object).isAllowed();
+    public static boolean isVisible(final ObjectAdapter object, final ObjectAction action, Where where) {
+        return action.isVisible(getAuthenticationSession(), object, where).isAllowed();
     }
 
-    public static String isUsable(final ObjectAdapter object, final ObjectAction action) {
-        final Consent usable = action.isUsable(getAuthenticationSession(), object);
+    public static String isUsable(final ObjectAdapter object, final ObjectAction action, Where where) {
+        final Consent usable = action.isUsable(getAuthenticationSession(), object, where);
         final boolean isUsable = getSession() != null && usable.isAllowed();
         return isUsable ? null : usable.getReason();
     }
 
-    public static boolean isVisibleAndUsable(final ObjectAdapter object, final ObjectAction action) {
-        final boolean isVisible = action.isVisible(getAuthenticationSession(), object).isAllowed();
-        final boolean isUsable = getSession() != null && action.isUsable(getAuthenticationSession(), object).isAllowed();
+    public static boolean isVisibleAndUsable(final ObjectAdapter object, final ObjectAction action, Where where) {
+        final boolean isVisible = action.isVisible(getAuthenticationSession(), object, where).isAllowed();
+        final boolean isUsable = getSession() != null && action.isUsable(getAuthenticationSession(), object, where).isAllowed();
         final boolean isVisibleAndUsable = isVisible && isUsable;
         return isVisibleAndUsable;
     }

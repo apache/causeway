@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -317,13 +318,13 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ActionVisibilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier());
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
+        return new ActionVisibilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
     @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
-        return super.isVisible(session, realTarget(target));
+    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        return super.isVisible(session, realTarget(target), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -331,13 +332,13 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ActionUsabilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier());
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
+        return new ActionUsabilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
     @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
-        return super.isUsable(session, realTarget(target));
+    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        return super.isUsable(session, realTarget(target), where);
     }
 
     // //////////////////////////////////////////////////////////////////
