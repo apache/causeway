@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
-import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 
 public class DisabledFacetViaDisabledMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 

@@ -67,7 +67,7 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         addSelectedButtonIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter> dataProvider = new CollectionContentsSortableDataProvider(model);
-        final AjaxFallbackDefaultDataTable<ObjectAdapter> dataTable = new AjaxFallbackDefaultDataTable<ObjectAdapter>("table", columns, dataProvider, 8);
+        final AjaxFallbackDefaultDataTable<ObjectAdapter> dataTable = new AjaxFallbackDefaultDataTable<ObjectAdapter>("table", columns, dataProvider, model.getPageSize());
         add(dataTable);
     }
 

@@ -67,8 +67,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.hide.method.HideForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaClearMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;

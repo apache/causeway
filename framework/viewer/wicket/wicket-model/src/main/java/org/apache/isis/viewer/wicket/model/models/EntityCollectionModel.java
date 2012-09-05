@@ -29,6 +29,7 @@ import org.apache.wicket.Component;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -51,6 +52,9 @@ import org.apache.isis.viewer.wicket.model.util.ObjectAdapters;
 public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
 
     private static final long serialVersionUID = 1L;
+
+    private static final int PAGE_SIZE_DEFAULT_FOR_PARENTED = 12;
+    private static final int PAGE_SIZE_DEFAULT_FOR_STANDALONE = 25;
 
     public enum Type {
         /**
@@ -103,7 +107,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
 
         final ObjectSpecification elementSpec = collectionAsAdapter.getElementSpecification();
         final Class<?> elementType = elementSpec.getCorrespondingClass();
-        return new EntityCollectionModel(elementType, mementoList);
+        int pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
+        
+        return new EntityCollectionModel(elementType, mementoList, pageSize);
     }
 
     /**
@@ -142,10 +148,13 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
 
     private SelectionHandler selectionHandler;
 
-    private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList) {
+    private final int pageSize;
+
+    private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList, final int pageSize) {
         this.type = Type.STANDALONE;
         this.typeOf = typeOf;
         this.mementoList = mementoList;
+        this.pageSize = pageSize;
     }
 
     private EntityCollectionModel(final ObjectAdapter adapter, final OneToManyAssociation collection) {
@@ -161,6 +170,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
         this.typeOf = ClassLoaders.forName(collection.getSpecification());
         this.parentObjectAdapterMemento = parentAdapterMemento;
         this.collectionMemento = new CollectionMemento(collection);
+        this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
+    }
+
+    private static int pageSize(final PagedFacet pagedFacet, final int defaultPageSize) {
+        return pagedFacet != null ? pagedFacet.value(): defaultPageSize;
     }
 
     public boolean isParented() {
@@ -171,6 +185,10 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
         return type == Type.STANDALONE;
     }
 
+    public int getPageSize() {
+        return pageSize;
+    }
+    
     /**
      * The name of the collection (if has an entity, ie, if
      * {@link #isParented() is parented}.)

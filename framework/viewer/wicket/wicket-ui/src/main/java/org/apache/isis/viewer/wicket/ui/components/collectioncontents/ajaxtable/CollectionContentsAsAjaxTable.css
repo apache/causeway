@@ -22,6 +22,7 @@ table.collectionContentsAsAjaxTable {
 	border-bottom: 1px solid #407098;
 	font-size: 1em;
 	font-family: arial;
+	width: 95%
 }
 
 table.collectionContentsAsAjaxTable caption { text-align: left; }
@@ -46,7 +47,7 @@ table.collectionContentsAsAjaxTable tr th {
 	padding-left: 8px; 
 	padding-right: 30px; 
 	background-color: #EEEEEE; 
-	border-bottom: 1px solid #407098; 
+	/*border-bottom: 1px solid #407098;*/ 
 	border-top: 1px solid #407098; 
 	text-align: left; 
 	white-space: nowrap; 

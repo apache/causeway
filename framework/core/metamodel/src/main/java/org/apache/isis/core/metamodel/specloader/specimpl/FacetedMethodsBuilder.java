@@ -261,7 +261,7 @@ public class FacetedMethodsBuilder {
             }
 
             // create property and add facets
-            final FacetedMethod facetedMethod = FacetedMethod.createCollectionFacetedMethod(introspectedClass, accessorMethod);
+            final FacetedMethod facetedMethod = FacetedMethod.createForCollection(introspectedClass, accessorMethod);
             getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod, FeatureType.COLLECTION);
 
             // figure out what the type is
@@ -294,7 +294,7 @@ public class FacetedMethodsBuilder {
             }
 
             // create a 1:1 association peer
-            final FacetedMethod facetedMethod = FacetedMethod.createPropertyFacetedMethod(introspectedClass, accessorMethod);
+            final FacetedMethod facetedMethod = FacetedMethod.createForProperty(introspectedClass, accessorMethod);
 
             // process facets for the 1:1 association
             getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod, FeatureType.PROPERTY);
@@ -377,7 +377,7 @@ public class FacetedMethodsBuilder {
             return null;
         }
 
-        final FacetedMethod action = FacetedMethod.createActionFacetedMethod(introspectedClass, actionMethod);
+        final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod);
 
         // process facets on the action & parameters
         getFacetProcessor().process(introspectedClass, actionMethod, methodRemover, action, FeatureType.ACTION);

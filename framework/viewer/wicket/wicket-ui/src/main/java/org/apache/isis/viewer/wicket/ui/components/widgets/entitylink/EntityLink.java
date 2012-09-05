@@ -80,7 +80,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private static final String ID_ENTITY_OID = "entityOid";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
-    private static final String ID_ENTITY_IMAGE = "entityImage";
+    private static final String ID_ENTITY_ICON = "entityImage";
     private static final String ID_CHOICES = "choices";
     private static final String ID_FIND_USING = "findUsing";
     private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
@@ -231,8 +231,6 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
         final ObjectAdapter adapter = Generics.coalesce(getPendingAdapter(), entityModel.getObject());
 
-        syncImageWithInput(adapter);
-
         final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
         if (choicesMementos != null) {
 
@@ -265,11 +263,27 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         syncFindUsingVisibility();
     }
 
-    private void syncImageWithInput(final ObjectAdapter adapter) {
+    private void syncLinkWithInput(final ObjectAdapter adapter) {
+        if (adapter != null) {
+            addOrReplaceLink(adapter);
+        } else {
+            permanentlyHide(ID_ENTITY_LINK_WRAPPER);
+        }
+    }
+
+    private void syncEntityIconWithInput(final ObjectAdapter adapter) {
         if (adapter != null) {
             addOrReplaceImage(adapter);
         } else {
-            permanentlyHide(ID_ENTITY_IMAGE);
+            permanentlyHide(ID_ENTITY_ICON);
+        }
+    }
+
+    private void syncEntityTitleNullWithInput(final ObjectAdapter adapter) {
+        if (adapter != null) {
+            permanentlyHide(ID_ENTITY_TITLE_NULL);
+        } else {
+            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(null)"));
         }
     }
 
@@ -293,22 +307,6 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private Model<String> buildEntityDetailsModel() {
         final String label = getEntityModel().isEntityDetailsVisible() ? "hide" : "show";
         return Model.of(label);
-    }
-
-    private void syncLinkWithInput(final ObjectAdapter adapter) {
-        if (adapter != null) {
-            addOrReplaceLink(adapter);
-        } else {
-            permanentlyHide(ID_ENTITY_LINK_WRAPPER);
-        }
-    }
-
-    private void syncEntityTitleNullWithInput(final ObjectAdapter adapter) {
-        if (adapter != null) {
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
-        } else {
-            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(null)"));
-        }
     }
 
     private void syncEntityDetailsWithInput(final ObjectAdapter adapter) {
@@ -339,10 +337,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         final PackageResource imageResource = determineImageResource(adapter);
 
         if (imageResource != null) {
-            image = new Image(ID_ENTITY_IMAGE, imageResource);
+            image = new Image(ID_ENTITY_ICON, imageResource);
             addOrReplace(image);
         } else {
-            permanentlyHide(ID_ENTITY_IMAGE);
+            permanentlyHide(ID_ENTITY_ICON);
         }
     }
 
@@ -365,12 +363,31 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private void addOrReplaceLink(final ObjectAdapter adapter) {
+        
         final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
-        final String linkId = ID_ENTITY_LINK;
-        final AbstractLink link = newLink(linkId, pageClass, pageParameters);
+        
+        final AbstractLink link = newLink(ID_ENTITY_LINK, pageClass, pageParameters);
         label = new Label(ID_ENTITY_TITLE, adapter.titleString());
         link.add(label);
+
+        
+//      if (adapter != null) {
+        final PackageResource imageResource = determineImageResource(adapter);
+        
+        if (imageResource != null) {
+            image = new Image(ID_ENTITY_ICON, imageResource);
+            link.addOrReplace(image);
+        } else {
+            permanentlyHide(ID_ENTITY_ICON);
+        }
+//    } else {
+//        permanentlyHide(ID_ENTITY_ICON);
+//    }
+
+
+        
+        
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
         entityLinkWrapper.addOrReplace(link);
 

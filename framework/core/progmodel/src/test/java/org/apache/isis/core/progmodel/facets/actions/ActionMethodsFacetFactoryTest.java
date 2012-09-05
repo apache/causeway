@@ -52,20 +52,20 @@ import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaValidateMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaDescriptionMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.disable.DisableForContextFacet;
-import org.apache.isis.core.progmodel.facets.members.disable.DisableForSessionFacet;
-import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.disable.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.disable.forsession.DisabledFacetViaDisableForSessionMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.disable.method.DisabledFacetViaDisableMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetViaProtectMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacet;
-import org.apache.isis.core.progmodel.facets.members.hide.forsession.HiddenFacetViaHideForSessionMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.hide.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisableForContextFacet;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisableForSessionFacet;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disabled.forsession.DisabledFacetViaDisableForSessionMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disabled.method.DisabledFacetViaDisableMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disabled.staticmethod.DisabledFacetViaProtectMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.hidden.HideForSessionFacet;
+import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HiddenFacetViaHideForSessionMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetViaMethod;
@@ -646,7 +646,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method default0Method = findMethod(Customer.class, "default0SomeAction", new Class[] {});
         final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createActionFacetedMethod(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -693,7 +693,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method choices0Method = findMethod(Customer.class, "choices0SomeAction", new Class[] {});
         final Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createActionFacetedMethod(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -731,7 +731,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createActionFacetedMethod(CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(CustomerEx.class, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -785,7 +785,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createActionFacetedMethod(CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
@@ -847,7 +847,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createActionFacetedMethod(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
@@ -890,7 +890,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createActionFacetedMethod(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);

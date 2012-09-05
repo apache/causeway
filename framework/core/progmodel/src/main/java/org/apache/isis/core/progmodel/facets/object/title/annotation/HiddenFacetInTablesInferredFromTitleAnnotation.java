@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.title.annotation;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
+import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetImpl;
 
 public class HiddenFacetInTablesInferredFromTitleAnnotation extends HiddenFacetImpl {
 

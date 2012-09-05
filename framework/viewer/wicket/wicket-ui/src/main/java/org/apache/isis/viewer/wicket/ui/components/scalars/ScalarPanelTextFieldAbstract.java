@@ -28,6 +28,9 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetProvider;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -109,27 +112,27 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
     }
 
     private void setTextFieldSizeIfSpecified() {
-        final int size = determineSize();
-        if (size != -1) {
+        final Integer size = determineSize();
+        if (size != null) {
             textField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
         }
     }
 
-    private int determineSize() {
-        final ScalarModel scalarModel = getModel();
-        final ObjectSpecification noSpec = scalarModel.getTypeOfSpecification();
-
-        final TypicalLengthFacet typicalLengthFacet = noSpec.getFacet(TypicalLengthFacet.class);
-        if (typicalLengthFacet != null) {
-            return typicalLengthFacet.value();
-        }
-        final MaxLengthFacet maxLengthFacet = noSpec.getFacet(MaxLengthFacet.class);
-        if (maxLengthFacet != null) {
-            return maxLengthFacet.value();
-        }
-        return -1;
+    @SuppressWarnings("unchecked")
+    private Integer determineSize() {
+        return firstValueOf(getModel(), TypicalLengthFacet.class, MaxLengthFacet.class);
     }
-
+    
+    private Integer firstValueOf(ScalarModel model, Class<? extends SingleIntValueFacet>... facetTypes) {
+        for(Class<? extends SingleIntValueFacet> facetType: facetTypes) {
+        final SingleIntValueFacet facet = model.getFacet(facetType);
+            if (facet != null) {
+                return facet.value();
+            }
+        }
+        return null;
+    }
+    
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Format#COMPACT compact} format.

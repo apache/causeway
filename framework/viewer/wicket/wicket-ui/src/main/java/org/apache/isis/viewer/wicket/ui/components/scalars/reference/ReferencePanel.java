@@ -79,25 +79,25 @@ public class ReferencePanel extends ScalarPanelAbstract {
     protected FormComponentLabel addComponentForRegular() {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
-
+        
         entityLink = (EntityLink) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
-
+        
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
-
+        
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
-
         labelIfRegular.add(entityLink);
+        
         final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(entityLink));
         labelIfRegular.add(scalarName);
-
+        
         addOrReplace(labelIfRegular);
-
+        
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
-
+        
         addStandardSemantics();
         addSemantics();
-
+        
         return labelIfRegular;
     }
 
@@ -142,9 +142,40 @@ public class ReferencePanel extends ScalarPanelAbstract {
      */
     @Override
     protected Component addComponentForCompact() {
-        final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+
+        //final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+        //addOrReplace(labelIfCompact);
+        //return labelIfCompact;
+
+        
+        final ScalarModel scalarModel = getModel();
+        final String name = scalarModel.getName();
+        
+        entityLink = (EntityLink) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        
+        entityLink.setOutputMarkupId(true);
+        entityLink.setLabel(Model.of(name));
+        
+        final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entityLink);
+        labelIfCompact.add(entityLink);
+        
+//        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(entityLink));
+//        labelIfCompact.add(scalarName);
+        
         addOrReplace(labelIfCompact);
+        
+        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
+        
+//        addStandardSemantics();
+//        addSemantics();
+        
         return labelIfCompact;
+        
+        //return addComponentIfCompact(idScalar);
     }
+
+//    @SuppressWarnings("unused")
+//    private Component addComponentIfCompact(final String idScalar) {
+//    }
 
 }

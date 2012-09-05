@@ -27,7 +27,7 @@ import org.apache.isis.applib.filter.Filter;
  * Anything in the metamodel (which also includes peers in the reflector) that
  * can be extended.
  */
-public interface FacetHolder {
+public interface FacetHolder extends FacetProvider {
 
     /**
      * Get the list of all facet <i>types</i> that are supported by objects of
@@ -36,11 +36,13 @@ public interface FacetHolder {
     Class<? extends Facet>[] getFacetTypes();
 
     /**
+     * Get the facet of the specified type (as per the type it reports from
+     * {@link Facet#facetType()}).
+     */
+    <T extends Facet> T getFacet(Class<T> cls);
+
+    /**
      * Whether there is a facet registered of the specified type.
-     * 
-     * <p>
-     * Convenience; saves having to {@link #getFacet(Class)} and then check if
-     * <tt>null</tt>.
      */
     boolean containsFacet(Class<? extends Facet> facetType);
 
@@ -54,11 +56,6 @@ public interface FacetHolder {
      */
     boolean containsDoOpFacet(Class<? extends Facet> facetType);
 
-    /**
-     * Get the facet of the specified type (as per the type it reports from
-     * {@link Facet#facetType()}).
-     */
-    <T extends Facet> T getFacet(Class<T> cls);
 
     /**
      * Returns all {@link Facet}s matching the specified {@link FacetFilter}.

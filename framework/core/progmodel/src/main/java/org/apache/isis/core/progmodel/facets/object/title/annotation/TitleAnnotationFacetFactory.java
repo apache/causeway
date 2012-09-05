@@ -44,8 +44,8 @@ import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetAnnotation;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 
 public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, LocalizationProviderAware {
@@ -54,7 +54,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     private LocalizationProvider localizationProvider;
 
     public TitleAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_PROPERTIES_ONLY);
+        super(FeatureType.OBJECTS_AND_PROPERTIES);
     }
 
     /**

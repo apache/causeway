@@ -197,7 +197,7 @@
       published on InfoQ</ulink>.</para>
 
       <sect1>
-        <title>Apache Isis implements naked objects pattern... but what is
+        <title>Apache Isis implements the naked objects pattern... but what is
         that, exactly?</title>
 
         <para>Naked objects is an architectural pattern where the idea is to
@@ -771,8 +771,8 @@
 
           <listitem>
             <para>The <acronym>JSON</acronym> viewer (in
-            <filename>viewers/restfulobjects</filename>) which exposes your domain
-            objects through a <ulink
+            <filename>viewers/restfulobjects</filename>) which exposes your
+            domain objects through a <ulink
             url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
             interface.</para>
 
@@ -5963,6 +5963,12 @@ public class Customer {
       </sect1>
 
       <sect1>
+        <title>@ActionSemantics</title>
+
+        <para>***</para>
+      </sect1>
+
+      <sect1>
         <title>@Aggregated</title>
 
         <para>This annotation indicates that the object is aggregated, or
@@ -6008,6 +6014,12 @@ public class County {
           moreinfo="none">final</literal> classes. Its behaviour when used on
           interfaces, or classes with sub-classes is not specified</para>
         </note>
+      </sect1>
+
+      <sect1>
+        <title>@CommonlyUsed</title>
+
+        <para>***</para>
       </sect1>
 
       <sect1 id="sec.DebugAnnotation">
@@ -6186,6 +6198,12 @@ public class ProspectiveSale {
 
         <para>By default the annotated property or action is always disabled
         (ie defaults to <classname>When.ALWAYS</classname>).</para>
+
+        <para></para>
+
+        <para>*** where</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -6389,10 +6407,22 @@ public class EmailService {
 
         <para>By default the annotated property or action is always hidden (ie
         defaults to <classname>When.ALWAYS</classname>).</para>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
-        <title>@Ignore</title>
+        <title>@Idempotent (deprecated)</title>
+
+        <para>***</para>
+      </sect1>
+
+      <sect1>
+        <title>@Ignore (deprecated)</title>
 
         <para>The <classname>@Ignore</classname> annotation can be used to
         cause Apache Isis to complete ignore a class member. This means it
@@ -6416,6 +6446,8 @@ public class EmailService {
         <methodname>@Hidden</methodname> and
         <methodname>@NotPersisted</methodname>; it actually means that the
         class member will not be part of the Isis metamodel.</para>
+
+        <para>***</para>
       </sect1>
 
       <sect1>
@@ -7045,6 +7077,12 @@ public class Order {
       </sect1>
 
       <sect1>
+        <title>@Paged</title>
+
+        <para>***</para>
+      </sect1>
+
+      <sect1>
         <title>@Parseable</title>
 
         <para>Parseability means being able to parse a string representation
@@ -7086,6 +7124,12 @@ public class Child {
 }</programlisting>
       </sect1>
 
+      <sect1>
+        <title>@Programmatic</title>
+
+        <para>***</para>
+      </sect1>
+
       <sect1 id="sec.PrototypeAnnotation">
         <title>@Prototype</title>
 
@@ -7106,6 +7150,12 @@ public class Child {
 
         <para>See also the <classname>@Exploration</classname> annotation,
         <xref linkend="sec.ExplorationAnnotation" /></para>
+      </sect1>
+
+      <sect1>
+        <title>@QueryOnly (deprecated)</title>
+
+        <para>***</para>
       </sect1>
 
       <sect1 id="sec.RegExAnnotation">
@@ -7290,8 +7340,8 @@ public class ComplexNumber {
         backwardly compatible.</para>
 
         <para>The annotation was originally introduced to support a
-        requirement of the RestfulObjects viewer which directly expose
-        the domain objects as RESTful representations</para>
+        requirement of the RestfulObjects viewer which directly expose the
+        domain objects as RESTful representations</para>
 
         <para>For example, a domain object that represents a summary of a
         <classname>Customer</classname> and their most recent

@@ -48,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimeP
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaUtilDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigDecimalPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisColorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisDateTimePanelFactory;
@@ -205,6 +206,8 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 
         componentFactories.add(new JavaMathBigIntegerPanelFactory());
         componentFactories.add(new JavaMathBigDecimalPanelFactory());
+
+        componentFactories.add(new JodaLocalDatePanelFactory());
 
         componentFactories.add(new ValuePanelFactory());
     }

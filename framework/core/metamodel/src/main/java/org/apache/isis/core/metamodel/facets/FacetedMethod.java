@@ -41,17 +41,13 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     // Factory methods
     // //////////////////////////////////////////////////
 
-    public static FacetedMethod createPropertyFacetedMethod(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
-    }
-
     /**
      * Principally for testing purposes.
      */
-    public static FacetedMethod createProperty(final Class<?> owningClass, final String name) {
+    public static FacetedMethod createForProperty(final Class<?> declaringType, final String propertyName) {
         try {
-            final Method method = owningClass.getMethod("get" + StringUtils.pascal(name));
-            return FacetedMethod.createPropertyFacetedMethod(owningClass, method);
+            final Method method = declaringType.getMethod("get" + StringUtils.pascal(propertyName));
+            return FacetedMethod.createForProperty(declaringType, method);
         } catch (final SecurityException e) {
             throw new RuntimeException(e);
         } catch (final NoSuchMethodException e) {
@@ -59,11 +55,30 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         }
     }
 
-    public static FacetedMethod createCollectionFacetedMethod(final Class<?> declaringType, final Method method) {
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForCollection(final Class<?> declaringType, final String collectionName) {
+        try {
+            final Method method = declaringType.getMethod("get" + StringUtils.pascal(collectionName));
+            return FacetedMethod.createForCollection(declaringType, method);
+        } catch (final SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (final NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static FacetedMethod createForProperty(final Class<?> declaringType, final Method method) {
+        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
+    }
+
+    public static FacetedMethod createForCollection(final Class<?> declaringType, final Method method) {
         return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
     }
 
-    public static FacetedMethod createActionFacetedMethod(final Class<?> declaringType, final Method method) {
+    public static FacetedMethod createForAction(final Class<?> declaringType, final Method method) {
         return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(method));
     }
 

@@ -28,8 +28,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledFacetAnnotation;
-import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 

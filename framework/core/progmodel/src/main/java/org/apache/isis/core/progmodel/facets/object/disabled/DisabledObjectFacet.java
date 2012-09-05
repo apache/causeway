@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
- * Mechanism for determining whether this object is should be disabled.
+ * Mechanism for determining whether this object should be disabled.
  * 
  * <p>
  * Even though all the properties of an object may themselves be enabled, there

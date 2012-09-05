@@ -63,7 +63,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         BasicConfigurator.configure();
         reflector = new ProgrammableReflector();
         facetHolder = new FacetHolderImpl();
-        facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
+        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(String.class);
         methodRemover = new ProgrammableMethodRemover();
     }

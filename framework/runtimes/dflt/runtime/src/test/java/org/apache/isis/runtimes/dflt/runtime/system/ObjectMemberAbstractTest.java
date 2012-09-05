@@ -47,13 +47,13 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
-import org.apache.isis.core.progmodel.facets.members.disable.DisableForSessionFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetImpl;
-import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetNever;
-import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacetNone;
-import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlwaysEverywhere;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisableForSessionFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetImpl;
+import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetNever;
+import org.apache.isis.core.progmodel.facets.members.hidden.HideForContextFacetNone;
+import org.apache.isis.core.progmodel.facets.members.hidden.HideForSessionFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenFacetAlwaysEverywhere;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
@@ -206,7 +206,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(null, null, null, null, null));
+        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(null, null, null, null, null));
     }
 
     @Override

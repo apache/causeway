@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetAbstract;
 
 public class DisabledFacetForCollectionDerivedFromImmutable extends DisabledFacetAbstract {
 

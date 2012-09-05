@@ -26,13 +26,17 @@
 	<body>
 		<wicket:panel>
 			<div class="reference scalarPanel">
-				<label for="entityLink" wicket:id="scalarIfRegular">
+				<label for="entityLink" wicket:id="scalarIfRegular" class="scalarIfRegular">
 	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
 	      			<span class="scalarValue">
 		      			<span class="entityLink" wicket:id="entityLink">[property or parameter value]</span>
 	      			</span>
 				</label>
-				<label wicket:id="scalarIfCompact"></label>
+				<label wicket:id="scalarIfCompact" class="scalarIfCompact">
+	      			<span class="scalarValue">
+		      			<span class="entityLink" wicket:id="entityLink">[property or parameter value]</span>
+	      			</span>
+				</label>
       			<span wicket:id="feedback"></span>
   			</div>
 		</wicket:panel>

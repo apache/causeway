@@ -45,8 +45,8 @@ public class MemberOrderComparatorTest extends TestCase {
         }
     }
 
-    private final FacetedMethod m1 = FacetedMethod.createProperty(Customer.class, "abc");
-    private final FacetedMethod m2 = FacetedMethod.createProperty(Customer.class, "abc");
+    private final FacetedMethod m1 = FacetedMethod.createForProperty(Customer.class, "abc");
+    private final FacetedMethod m2 = FacetedMethod.createForProperty(Customer.class, "abc");
 
     @Override
     protected void setUp() {

@@ -21,8 +21,12 @@ package org.apache.isis.viewer.wicket.ui.selector;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -30,8 +34,12 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.facets.members.commonlyused.CommonlyUsedFacet;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
@@ -53,11 +61,13 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
 
     private void addUnderlyingViews(final String underlyingId, final T model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
-        final ComponentFactory firstComponentFactory = componentFactories.get(0);
-        final Model<ComponentFactory> componentFactoryModel = new Model<ComponentFactory>();
-        componentFactoryModel.setObject(firstComponentFactory);
 
+        final ComponentFactory selectedComponentFactory = Iterables.find(componentFactories, determineInitialFactory(model));
         if (componentFactories.size() > 1) {
+            final Model<ComponentFactory> componentFactoryModel = new Model<ComponentFactory>();
+            
+            componentFactoryModel.setObject(selectedComponentFactory);
+
             final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
             final DropDownChoiceComponentFactory viewsDropDown = new DropDownChoiceComponentFactory(ID_VIEWS_DROP_DOWN, componentFactoryModel, componentFactories, this, underlyingId, model);
             views.addOrReplace(viewsDropDown);
@@ -65,7 +75,32 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
         } else {
             permanentlyHide(ID_VIEWS);
         }
-        addOrReplace(firstComponentFactory.createComponent(underlyingId, model));
+        addOrReplace(selectedComponentFactory.createComponent(underlyingId, model));
+    }
+    
+    private static Predicate<ComponentFactory> determineInitialFactory(IModel<?> model) {
+        return isCommonlyUsed(model) 
+                ? new Predicate<ComponentFactory>() {
+                    @Override
+                    public boolean apply(@Nullable ComponentFactory input) {
+                        return !(input instanceof CollectionContentsAsUnresolvedFactory);
+                    }
+                }
+                : Predicates.<ComponentFactory>alwaysTrue();
+    }
+
+    private static boolean isCommonlyUsed(IModel<?> model) {
+        if(!(model instanceof EntityCollectionModel)) {
+            return false;
+        }
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        if(!entityCollectionModel.isParented()) {
+            return false;
+        }
+
+        final OneToManyAssociation collection = 
+                entityCollectionModel.getCollectionMemento().getCollection();
+        return collection.containsDoOpFacet(CommonlyUsedFacet.class);
     }
 
     private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {

@@ -27,8 +27,8 @@
 	-moz-column-width: 14em;
 	-webkit-column-width: 14em;
 	column-width: 14em;
-	
 }
+
 
 .entityCombined .entityProperties div.scalarPanel {
 }
@@ -43,10 +43,10 @@
 
 #entityPropertiesForLayout {
 	float: left;
-	width: 47%
+	width: 35%
 }
 
 #entityCollectionsForLayout {
 	float: right;
-	width: 47%
+	width: 64%
 }

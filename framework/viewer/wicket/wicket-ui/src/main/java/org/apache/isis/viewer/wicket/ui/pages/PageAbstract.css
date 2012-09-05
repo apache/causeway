@@ -49,6 +49,7 @@
 
 
 .feedbackPanel {
+	padding-left: 8em; //HACK
 }
 
 .leftSide {
@@ -233,8 +234,11 @@ tr.section td {
 /*************** Styling Entity Forms and Parameters ********************/
 
 fieldset.propertiesAndOrCollections {
+
+	/*
 	padding-top: 1em;
 	padding-bottom: 1em;
+	*/
 	/* background-color: #D7E7F5; */
 }
 
@@ -249,7 +253,7 @@ fieldset.propertiesAndOrCollections {
 }
 
 .odd {
-	background-color: #eeeeee; 
+	/*background-color: #eeeeee;*/ 
 }
 
 
@@ -266,17 +270,29 @@ fieldset.propertiesAndOrCollections {
 	float: left;
 	font-style: italic;
 	text-align: right;
-	width: 15%;
 }
 
 .scalarName:after, .collectionName:after {
-	content: " :";
+	content: ":";
 	font-style: normal;
 }
-.scalarValue, .collectionContents  {
+
+.scalarValue,.collectionContents  {
 	padding-left: 0.5em;
 	float: left;
-	width: 83%;
+}
+
+.scalarName {
+	width: 24%;
+}
+.scalarValue {
+	width: 74%;
+}
+.collectionName {
+	width: 16%;
+}
+.collectionContents {
+	width: 82%;
 }
 
 
