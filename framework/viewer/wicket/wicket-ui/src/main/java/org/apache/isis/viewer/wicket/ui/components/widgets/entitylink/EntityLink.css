@@ -65,10 +65,13 @@ a.entityClearLink, a.entityDetailsLink {
 }
 
 a.entityClearLink {
+	margin-left: -10px;
 	padding-left: 2px;
-	padding-right: 0px;
+	padding-right: 2px;
 }
 a.entityDetailsLink {
+	font-family: monospace;
+	margin-left: 20px;
 	padding-right: 3px;
 	padding-left: 3px;
 }
@@ -78,3 +81,13 @@ a.entityDetailsLink:hover {
 	background-color: #407098;
 }
 
+
+.entityDetails {
+	width: 400px;
+	padding-top: 20px;
+	margin-left: -30px;
+}
+
+.entityDetails a.entityDetailsLink {
+	display:none; /* don't nest forever */
+}

@@ -35,6 +35,9 @@
 				<select wicket:id="choices"/>
 				<span wicket:id="entityIconAndTitle">[icon and title]</span>
 				<span wicket:id="entityTitleNull">(null)</span>
+				<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">
+					<span wicket:id="entityDetailsLinkLabel">[+/-]</span>
+				</a>
 				<div class="findUsingClearDetails">
 					<table wicket:id="findUsing" class="findUsing">
 			   			<tbody>
@@ -49,12 +52,9 @@
 						<a href="#" wicket:id="entityClearLink" class="entityClearLink">
 							<span>clear</span>
 						</a>
-						<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">
-							<span wicket:id="entityDetailsLinkLabel">[+/-]</span>
-						</a>
 		  			</div>
 				</div>
-	  			<div wicket:id="entityDetails">
+	  			<div wicket:id="entityDetails" class="entityDetails">
 	  			</div>
 			    <div class="feedbackPanel">
 			        <span wicket:id="feedback"/>

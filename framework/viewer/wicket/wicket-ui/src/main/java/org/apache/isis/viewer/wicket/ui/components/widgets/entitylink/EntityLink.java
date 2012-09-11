@@ -179,8 +179,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     /**
      * Must be called after {@link #setEnabled(boolean)} to ensure that the
-     * <tt>findUsing</tt> button, the <tt>entityDetailsLink</tt> 
-     * and the <tt>entityClearLink</tt> are shown/not shown as required.
+     * <tt>findUsing</tt> button, and the <tt>entityClearLink</tt> are 
+     * shown/not shown as required.
      * 
      * <p>
      * REVIEW: there ought to be a better way to do this. I'd hoped to override
@@ -188,14 +188,11 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      * seem to be anyway to install a listener. One option might be to move it
      * to {@link #onBeforeRender()} ?
      */
-    public void syncFindUsingAndEntityDetailsLinkVisibility() {
+    public void syncFindUsingAndEntityClearLinkVisibility() {
         final boolean visibility = isEnableAllowed() && !getEntityModel().isViewMode();
         findUsing.setVisible(visibility);
         
         // REVIEW: this is a hack, should be symmetrical with findUsing
-        if(entityDetailsLink != null) {
-            entityDetailsLink.setVisible(visibility);
-        }
         if(entityClearLink != null) {
             entityClearLink.setVisible(visibility);
         }
@@ -272,7 +269,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         syncEntityClearAndDetailsLinksWithInput(adapter);
 
         syncEntityDetailsWithInput(adapter);
-        syncFindUsingAndEntityDetailsLinkVisibility();
+        syncFindUsingAndEntityClearLinkVisibility();
     }
 
     private ObjectAdapter getPendingElseCurrentAdapter() {
@@ -333,7 +330,12 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private void syncEntityDetailsWithInput(final ObjectAdapter adapter) {
         if (adapter != null && getEntityModel().isEntityDetailsVisible()) {
             final EntityModel entityModel = new EntityModel(adapter);
-            addOrReplace(new EntityCombinedPanel(ID_ENTITY_DETAILS, entityModel));
+            
+            final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_PROPERTIES, entityModel);
+            final Component entityPanel = componentFactory.createComponent(ID_ENTITY_DETAILS, entityModel);
+            //final EntityCombinedPanel entityPanel = new EntityCombinedPanel(ID_ENTITY_DETAILS, entityModel);
+            
+            addOrReplace(entityPanel);
         } else {
             permanentlyHide(ID_ENTITY_DETAILS);
         }
