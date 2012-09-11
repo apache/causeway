@@ -30,6 +30,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -76,9 +78,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
     private static final String ID_ENTITY_DETAILS = "entityDetails";
 
+    private static final String ID_FEEDBACK = "feedback";
+
     private final FindUsingLinkFactory linkFactory;
 
-    private TextField<ObjectAdapterMemento> entityOidField;
     
     private WebMarkupContainer findUsing;
     private Link<String> entityDetailsLink;
@@ -86,7 +89,15 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     
     private PanelAbstract<?> actionFindUsingComponent;
 
+    /**
+     * Whether pending has been set (could have been set to null)
+     */
+    private boolean hasPending;
+    /**
+     * The new value (could be set to null; hasPending is used to distinguish).
+     */
     private ObjectAdapterMemento pending;
+    private TextField<ObjectAdapterMemento> pendingOid;
 
 
     public EntityLink(final String id, final EntityModel entityModel) {
@@ -106,17 +117,19 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private void buildGui() {
         addOrReplaceOidField();
         rebuildFindUsingMenu();
+        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
+
         syncWithInput();
     }
 
     private void addOrReplaceOidField() {
-        entityOidField = new TextField<ObjectAdapterMemento>(ID_ENTITY_OID, new Model<ObjectAdapterMemento>() {
+        pendingOid = new TextField<ObjectAdapterMemento>(ID_ENTITY_OID, new Model<ObjectAdapterMemento>() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public ObjectAdapterMemento getObject() {
-                if (pending != null) {
+                if (hasPending) {
                     return pending;
                 }
                 final ObjectAdapter adapter = EntityLink.this.getModelObject();
@@ -126,6 +139,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             @Override
             public void setObject(final ObjectAdapterMemento adapterMemento) {
                 pending = adapterMemento;
+                hasPending = true;
             }
 
         }) {
@@ -136,11 +150,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
                 super.onModelChanged();
                 syncWithInput();
             }
-
         };
-        entityOidField.setType(ObjectAdapterMemento.class);
-        addOrReplace(entityOidField);
-        entityOidField.setVisible(false);
+        pendingOid.setType(ObjectAdapterMemento.class);
+        addOrReplace(pendingOid);
+        pendingOid.setVisible(false);
     }
 
     void rebuildFindUsingMenu() {
@@ -196,7 +209,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      */
     @Override
     public String getInput() {
-        return entityOidField.getInput();
+        return pendingOid.getInput();
     }
 
     /**
@@ -215,7 +228,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private ObjectAdapter getPendingAdapter() {
-        final ObjectAdapterMemento memento = entityOidField.getModelObject();
+        final ObjectAdapterMemento memento = pendingOid.getModelObject();
         return memento != null ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK) : null;
     }
 
@@ -232,7 +245,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         if (choicesMementos != null) {
 
             // choices drop-down
-            final IModel<ObjectAdapterMemento> modelObject = entityOidField.getModel();
+            final IModel<ObjectAdapterMemento> modelObject = pendingOid.getModel();
             final DropDownChoicesForObjectAdapterMementos dropDownChoices = new DropDownChoicesForObjectAdapterMementos(ID_CHOICES, modelObject, choicesMementos);
             addOrReplace(dropDownChoices);
             dropDownChoices.setEnabled(getEntityModel().isEditMode());
@@ -263,7 +276,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private ObjectAdapter getPendingElseCurrentAdapter() {
-        return Generics.coalesce(getPendingAdapter(), getEntityModel().getObject());
+        return hasPending ? getPendingAdapter() : getEntityModel().getObject();
+        //return Generics.coalesce(getPendingAdapter(), getEntityModel().getObject());
     }
 
     private void syncLinkWithInput(final ObjectAdapter adapter) {
@@ -374,7 +388,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private void onSelected(final ObjectAdapterMemento selectedAdapterMemento) {
-        entityOidField.setDefaultModelObject(selectedAdapterMemento);
+        pendingOid.setDefaultModelObject(selectedAdapterMemento);
         rebuildFindUsingMenu();
         renderSamePage();
     }
@@ -386,7 +400,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     @Override
     public void onCancel() {
-        entityOidField.clearInput();
+        pendingOid.clearInput();
+        this.hasPending = false;
         this.pending = null;
     }
 
