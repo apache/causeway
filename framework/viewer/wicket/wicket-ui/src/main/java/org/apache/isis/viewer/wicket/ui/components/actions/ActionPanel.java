@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -55,12 +57,15 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private static final long serialVersionUID = 1L;
 
+    
     /**
      * The various component types, one of which will be rendered.
      * 
      * @see #hideAllBut(ComponentType)
      */
     private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(ComponentType.PARAMETERS, ComponentType.ENTITY_LINK, ComponentType.ENTITY, ComponentType.VALUE, ComponentType.EMPTY_COLLECTION, ComponentType.VOID_RETURN, ComponentType.COLLECTION_CONTENTS);
+
+    private static final String ID_ACTION_NAME = "actionName";
 
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
@@ -70,7 +75,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private void buildGui(final ActionModel actionModel) {
         if (actionModel.getActionMode() == ActionModel.Mode.PARAMETERS) {
-            buildGuiForParameters();
+            buildGuiForParameters(actionModel);
         } else {
             executeActionAndProcessResults();
         }
@@ -80,13 +85,20 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         return super.getModel();
     }
 
-    private void buildGuiForParameters() {
-        hideAllBut(ComponentType.PARAMETERS);
+    private void buildGuiForParameters(ActionModel actionModel) {
+        hideAllBut(ComponentType.PARAMETERS, ComponentType.ENTITY_ICON_AND_TITLE);
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(getActionModel().getTargetAdapter()));
+
+        final String actionName = actionModel.getActionMemento().getAction().getName();
+        addOrReplace(new Label(ID_ACTION_NAME, Model.of(actionName)));
     }
 
     @Override
     public void executeActionAndProcessResults() {
+
+        permanentlyHide(ComponentType.ENTITY_ICON_AND_TITLE);
+        permanentlyHide(ID_ACTION_NAME);
 
         ObjectAdapter targetAdapter = null;
         try {
@@ -263,16 +275,17 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         }
     }
 
-    private void hideAllBut(final ComponentType visibleComponentType) {
+    private void hideAllBut(final ComponentType... visibleComponentTypes) {
+        final List<ComponentType> visibleComponentTypeList = Arrays.asList(visibleComponentTypes);
         for (final ComponentType componentType : COMPONENT_TYPES) {
-            if (componentType != visibleComponentType) {
+            if (!visibleComponentTypeList.contains(componentType)) {
                 permanentlyHide(componentType);
             }
         }
     }
 
     private void hideAll() {
-        hideAllBut(null);
+        hideAllBut();
     }
 
 }

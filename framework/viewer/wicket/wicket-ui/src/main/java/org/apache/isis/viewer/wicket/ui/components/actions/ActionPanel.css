@@ -16,3 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+.actionPanel {
+}
+
+div.actionPanel .iconAndTitle {
+	float: left;
+    padding:1em;
+}
+
+.actionPanel .iconAndTitle .entityImage {
+	width: 32px;
+	height: 32px;
+}
+
+.actionPanel .iconAndTitle .entityTitle {
+	font-size: x-large;
+}
+
+.actionPanel .iconAndTitle .actionName {
+	padding-top: 1em;
+	font-size: large;
+}
+ 

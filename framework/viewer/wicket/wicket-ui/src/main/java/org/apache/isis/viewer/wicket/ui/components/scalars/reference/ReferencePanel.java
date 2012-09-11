@@ -23,7 +23,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -67,15 +66,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
     @Override
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
-        entityLink.setEnabled(false);
+        entityLink.setEnabled(true);
         entityLink.syncFindUsingAndEntityClearLinkVisibility();
     }
 
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
-        // TODO: this is a hack; can't figure out why entityLink isn't staying as disabled.
-        //entityLink.setEnabled(false);
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
         
@@ -153,11 +150,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
     @Override
     protected Component addComponentForCompact() {
 
-        //final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-        //addOrReplace(labelIfCompact);
-        //return labelIfCompact;
-
-        
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
@@ -169,23 +161,10 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entityLink);
         labelIfCompact.add(entityLink);
         
-//        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(entityLink));
-//        labelIfCompact.add(scalarName);
-        
         addOrReplace(labelIfCompact);
         
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
         
-//        addStandardSemantics();
-//        addSemantics();
-        
         return labelIfCompact;
-        
-        //return addComponentIfCompact(idScalar);
     }
-
-//    @SuppressWarnings("unused")
-//    private Component addComponentIfCompact(final String idScalar) {
-//    }
-
 }

@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -46,13 +45,11 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.Generics;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropDownChoicesForObjectAdapterMementos;
@@ -192,10 +189,17 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         final boolean visibility = isEnableAllowed() && !getEntityModel().isViewMode();
         findUsing.setVisible(visibility);
         
-        // REVIEW: this is a hack, should be symmetrical with findUsing
+
+        // REVIEW: this is also hack, should be symmetrical with findUsing
         if(entityClearLink != null) {
             entityClearLink.setVisible(visibility);
         }
+
+        // TODO: this is also a hack.
+        if(entityDetailsLink != null) {
+            entityDetailsLink.setVisible(!getEntityModel().isViewMode());
+        }
+
     }
 
     /**

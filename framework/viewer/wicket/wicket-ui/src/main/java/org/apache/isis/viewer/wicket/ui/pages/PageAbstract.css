@@ -47,6 +47,9 @@
 
 /********** CLASSes **********/
 
+.clear {
+    clear: both;
+}
 
 .feedbackPanel {
 	padding-left: 8em; //HACK
