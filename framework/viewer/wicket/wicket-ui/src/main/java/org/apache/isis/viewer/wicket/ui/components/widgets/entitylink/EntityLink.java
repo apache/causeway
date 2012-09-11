@@ -219,9 +219,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private void syncWithInput() {
-        final EntityModel entityModel = getEntityModel();
-
-        final ObjectAdapter adapter = Generics.coalesce(getPendingAdapter(), entityModel.getObject());
+        final ObjectAdapter adapter = getPendingElseCurrentAdapter();
 
         final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
         if (choicesMementos != null) {
@@ -257,9 +255,13 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         syncFindUsingAndEntityDetailsLinkVisibility();
     }
 
+    private ObjectAdapter getPendingElseCurrentAdapter() {
+        return Generics.coalesce(getPendingAdapter(), getEntityModel().getObject());
+    }
+
     private void syncLinkWithInput(final ObjectAdapter adapter) {
         if (adapter != null) {
-            addOrReplaceIconAndTitle();
+            addOrReplaceIconAndTitle(adapter);
         } else {
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
         }
@@ -319,9 +321,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         return null;
     }
 
-    private void addOrReplaceIconAndTitle() {
-        final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, getEntityModel());
-        final Component component = componentFactory.createComponent(getEntityModel());
+    private void addOrReplaceIconAndTitle(ObjectAdapter pendingOrCurrentAdapter) {
+        final EntityModel entityModelForLink = new EntityModel(pendingOrCurrentAdapter);
+        final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+        final Component component = componentFactory.createComponent(entityModelForLink);
         addOrReplace(component);
     }
 
