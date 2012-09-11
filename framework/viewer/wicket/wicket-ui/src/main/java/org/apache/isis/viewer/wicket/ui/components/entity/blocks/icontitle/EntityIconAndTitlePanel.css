@@ -16,33 +16,4 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.entitySummary {
-}
-
-div.entitySummary {
-	/*padding:1em;*/
-}
-
-div.entitySummary .iconAndTitle {
-	float: left;
-    padding:1em;
-}
-
-div.entitySummary .actions {
-	float: left;
-    padding:1em;
-	padding-top: 1.54em; 
-	padding-left: 50px;
-}
-
-.entitySummary .entityImage {
-}
-
-.entitySummary .entityTitle {
-	font-size: x-large;
-}
-
-div.entitySummary .clear {
-    clear: both;
-}
 

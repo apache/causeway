@@ -189,7 +189,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      * to {@link #onBeforeRender()} ?
      */
     public void syncFindUsingAndEntityDetailsLinkVisibility() {
-        final boolean visibility = isEnabled() && !getEntityModel().isViewMode();
+        final boolean visibility = isEnableAllowed() && !getEntityModel().isViewMode();
         findUsing.setVisible(visibility);
         
         // REVIEW: this is a hack, should be symmetrical with findUsing
@@ -218,7 +218,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return super.isEnabled();
     }
 
     @Override

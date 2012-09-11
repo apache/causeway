@@ -32,7 +32,7 @@ div.entitySummary .actions {
 	float: left;
     padding:1em;
     
-	padding-top: 1.8em; 
+	padding-top: 2.0em; 
 	padding-left: 50px;
 }
 
@@ -48,4 +48,3 @@ div.entitySummary .actions {
 div.entitySummary .clear {
     clear: both;
 }
-

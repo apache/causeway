@@ -23,16 +23,19 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLink;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
@@ -71,7 +74,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
-        entityLink.setEnabled(false);
+        // TODO: this is a hack; can't figure out why entityLink isn't staying as disabled.
+        //entityLink.setEnabled(false);
+        final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
+        entityLinkModel.toViewMode();
+        
         entityLink.syncFindUsingAndEntityDetailsLinkVisibility();
     }
 
@@ -97,7 +104,10 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         addStandardSemantics();
         addSemantics();
-        
+
+        if(getModel().isRequired()) {
+            labelIfRegular.add(new CssClassAppender("mandatory"));
+        }
         return labelIfRegular;
     }
 
