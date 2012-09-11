@@ -66,7 +66,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_LINK_WRAPPER = "entityLinkWrapper";
+    private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_OID = "entityOid";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
     private static final String ID_CHOICES = "choices";
@@ -105,7 +105,6 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         addOrReplaceOidField();
         rebuildFindUsingMenu();
         syncWithInput();
-        
     }
 
     private void addOrReplaceOidField() {
@@ -176,7 +175,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     public void syncFindUsingAndEntityDetailsLinkVisibility() {
         final boolean visibility = isEnabled() && !getEntityModel().isViewMode();
         findUsing.setVisible(visibility);
+        // REVIEW: this is a hack, should be symmetrical with findUsing
+        if(entityDetailsLink != null) {
         entityDetailsLink.setVisible(visibility);
+        }
     }
 
     /**
@@ -231,7 +233,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             dropDownChoices.setEnabled(getEntityModel().isEditMode());
 
             // no need for link, since can see in drop-down
-            permanentlyHide(ID_ENTITY_LINK_WRAPPER);
+            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
 
             // no need for the 'null' title, since if there is no object yet
             // can represent this fact in the drop-down
@@ -259,7 +261,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         if (adapter != null) {
             addOrReplaceIconAndTitle();
         } else {
-            permanentlyHide(ID_ENTITY_LINK_WRAPPER);
+            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
         }
     }
 
