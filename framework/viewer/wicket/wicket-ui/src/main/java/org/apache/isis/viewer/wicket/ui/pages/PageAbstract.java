@@ -41,6 +41,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 
 /**
@@ -51,6 +52,7 @@ public abstract class PageAbstract extends WebPage {
 
     public static final String ID_MENU_LINK = "menuLink";
     public static final String ID_LOGOUT_LINK = "logoutLink";
+    public static final String ID_ABOUT_LINK = "aboutLink";
 
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
@@ -60,6 +62,7 @@ public abstract class PageAbstract extends WebPage {
         this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
         this.pageParameters = pageParameters;
         addLogoutLink();
+        addAboutLink();
     }
 
     private void addLogoutLink() {
@@ -70,6 +73,17 @@ public abstract class PageAbstract extends WebPage {
             public void onClick() {
                 getSession().invalidate();
                 throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+            }
+        });
+    }
+
+    private void addAboutLink() {
+        add(new Link<Object>(ID_ABOUT_LINK) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                setResponsePage(AboutPage.class);
             }
         });
     }

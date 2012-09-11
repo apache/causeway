@@ -26,6 +26,7 @@ import java.util.ServiceLoader;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.actions.params.ActionParametersFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
+import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActionsCssMenuFactory;
@@ -118,7 +119,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 
     private void addBuiltInComponentFactories(final List<ComponentFactory> componentFactories) {
         addComponentFactoriesForSpecial(componentFactories);
-        addComponentFactoriesForWelcome(componentFactories);
+        addComponentFactoriesForWelcomeAndAbout(componentFactories);
         addComponentFactoriesForApplicationActions(componentFactories);
         addComponentFactoriesForEntity(componentFactories);
         addComponentFactoriesForActionInfo(componentFactories);
@@ -140,8 +141,9 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         componentFactories.add(new WizardPageDescriptionPanelFactory());
     }
 
-    protected void addComponentFactoriesForWelcome(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForWelcomeAndAbout(final List<ComponentFactory> componentFactories) {
         componentFactories.add(new WelcomePanelFactory());
+        componentFactories.add(new AboutPanelFactory());
     }
 
     protected void addComponentFactoriesForEntity(final List<ComponentFactory> componentFactories) {

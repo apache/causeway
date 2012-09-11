@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import com.google.inject.Singleton;
 
+import org.apache.wicket.Page;
+
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
@@ -39,10 +41,45 @@ public class PageClassListDefault implements PageClassList {
 
     @Override
     public void registerPages(final PageRegistrySpi pageRegistry) {
-        pageRegistry.registerPage(PageType.SIGN_IN, WicketSignInPage.class);
-        //pageRegistry.registerPage(PageType.ABOUT, AboutPage.class);
-        pageRegistry.registerPage(PageType.ENTITY, EntityPage.class);
-        pageRegistry.registerPage(PageType.HOME, HomePage.class);
-        pageRegistry.registerPage(PageType.ACTION, ActionPage.class);
+        pageRegistry.registerPage(PageType.SIGN_IN, getSignInPageClass());
+        pageRegistry.registerPage(PageType.ABOUT, getAboutPageClass());
+        pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
+        pageRegistry.registerPage(PageType.HOME, getHomePageClass());
+        pageRegistry.registerPage(PageType.ACTION, getActionPageClass());
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getActionPageClass() {
+        return ActionPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getEntityPageClass() {
+        return EntityPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getSignInPageClass() {
+        return WicketSignInPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getHomePageClass() {
+        return HomePage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getAboutPageClass() {
+        return AboutPage.class;
     }
 }

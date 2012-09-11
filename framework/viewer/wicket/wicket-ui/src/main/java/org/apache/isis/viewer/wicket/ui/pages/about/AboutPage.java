@@ -32,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 public class AboutPage extends PageAbstract {
 
     public AboutPage() {
-        super(new PageParameters(), ComponentType.ACTION); // TODO: sort out!!!
+        super(new PageParameters(), ComponentType.ABOUT);
         final IModel<?> model = buildModel();
         addChildComponents(model);
     }

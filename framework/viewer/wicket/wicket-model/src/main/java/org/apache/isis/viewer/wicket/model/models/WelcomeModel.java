@@ -29,25 +29,22 @@ public class WelcomeModel extends ModelAbstract<String> {
     private static final String DEFAULT_MESSAGE = "Apache Isis' Wicket Viewer combines the power of Apache Wicket " + "for web UIs with Apache Isis for domain modelling.  " + "Out-of-the box you get a fully-functional webapp just from " + "your domain objects; you can then customize the UI by "
             + "writing custom Wicket components, replacing the page layouts or " + "simply by altering the CSS";
 
-    private String welcomeMessage;
-
-    public WelcomeModel(final String welcomeMessage) {
-        this.welcomeMessage = welcomeMessage;
-    }
-
     public WelcomeModel() {
         this(DEFAULT_MESSAGE);
     }
 
-    @Override
-    protected String load() {
-        return welcomeMessage;
+    public WelcomeModel(final String message) {
+        setObject(message);
     }
 
     @Override
-    public void setObject(final String welcomeMessage) {
-        super.setObject(welcomeMessage);
-        this.welcomeMessage = welcomeMessage;
+    protected String load() {
+        return getObject();
+    }
+
+    @Override
+    public void setObject(final String message) {
+        super.setObject(message);
     }
 
 }
