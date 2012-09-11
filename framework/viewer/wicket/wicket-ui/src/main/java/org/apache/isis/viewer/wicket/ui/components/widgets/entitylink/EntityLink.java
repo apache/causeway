@@ -71,6 +71,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
     private static final String ID_CHOICES = "choices";
     private static final String ID_FIND_USING = "findUsing";
+    private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
     private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
     private static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
     private static final String ID_ENTITY_DETAILS = "entityDetails";
@@ -81,6 +82,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     
     private WebMarkupContainer findUsing;
     private Link<String> entityDetailsLink;
+    private Link<String> entityClearLink;
     
     private PanelAbstract<?> actionFindUsingComponent;
 
@@ -164,7 +166,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     /**
      * Must be called after {@link #setEnabled(boolean)} to ensure that the
-     * <tt>findUsing</tt> button and the <tt>entityDetailsLink</tt> are shown/not shown as required.
+     * <tt>findUsing</tt> button, the <tt>entityDetailsLink</tt> 
+     * and the <tt>entityClearLink</tt> are shown/not shown as required.
      * 
      * <p>
      * REVIEW: there ought to be a better way to do this. I'd hoped to override
@@ -175,9 +178,13 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     public void syncFindUsingAndEntityDetailsLinkVisibility() {
         final boolean visibility = isEnabled() && !getEntityModel().isViewMode();
         findUsing.setVisible(visibility);
+        
         // REVIEW: this is a hack, should be symmetrical with findUsing
         if(entityDetailsLink != null) {
-        entityDetailsLink.setVisible(visibility);
+            entityDetailsLink.setVisible(visibility);
+        }
+        if(entityClearLink != null) {
+            entityClearLink.setVisible(visibility);
         }
     }
 
@@ -249,7 +256,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         }
 
         // link
-        syncEntityDetailsButtonWithInput(adapter);
+        syncEntityClearAndDetailsLinksWithInput(adapter);
 
         syncEntityDetailsWithInput(adapter);
         syncFindUsingAndEntityDetailsLinkVisibility();
@@ -275,7 +282,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         }
     }
 
-    private void syncEntityDetailsButtonWithInput(final ObjectAdapter adapter) {
+    private void syncEntityClearAndDetailsLinksWithInput(final ObjectAdapter adapter) {
         if (adapter != null) {
             entityDetailsLink = new Link<String>(ID_ENTITY_DETAILS_LINK) {
                 private static final long serialVersionUID = 1L;
@@ -287,8 +294,20 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             };
             addOrReplace(entityDetailsLink);
             entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
+
+            entityClearLink = new Link<String>(ID_ENTITY_CLEAR_LINK) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onClick() {
+                    onSelected((ObjectAdapterMemento)null);
+                }
+            };
+            addOrReplace(entityClearLink);
+
         } else {
             permanentlyHide(ID_ENTITY_DETAILS_LINK);
+            permanentlyHide(ID_ENTITY_CLEAR_LINK);
         }
     }
 

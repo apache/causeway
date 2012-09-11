@@ -16,39 +16,61 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+div.entityLink  {
+	display: inline
+}
+
 .entityLink .entityImage {
 	width: 16px;
 	height: 16px;
 }
 
+div.findUsingClearDetails {
+	height: 0px; // consume no height if empty
+}
+
+div.entityDetailsLinkDiv {
+	display: inline-table;
+	vertical-align: top;
+	padding-top: 1px;
+}
+
 .entityLink table.findUsing {
-	display: block;
+	display: inline-table;
 	font-size: smaller;
 }
 
-a.entityDetailsLink {
+a.entityClearLink, a.entityDetailsLink {
 	text-align: left;
 	display:inline;
 	border: 1px  #00477F solid;
 	white-space:nowrap;
 	margin:0em;
-	margin-left: 10px;
-	padding: 0px;
-	padding-right: 3px;
-	padding-left: 3px;
+
+	margin-left: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 	font-weight: normal;
 	cursor:default;
+	font-size: smaller;
 	
 	color: #00477F;
 	background-color: #EEEEEE;
 	text-decoration:none;
-	font-size: smaller;
-	font-family: monospace;
 	/*
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
 	*/ 
+}
+
+a.entityClearLink {
+	padding-left: 2px;
+	padding-right: 0px;
+}
+a.entityDetailsLink {
+	padding-right: 3px;
+	padding-left: 3px;
 }
 
 a.entityDetailsLink:hover {

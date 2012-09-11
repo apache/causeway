@@ -29,26 +29,34 @@
 	</wicket:head>
 	<body>
 		<wicket:panel>
-			<span class="entityLink">
+			<div class="entityLink">
 				<input type="text" wicket:id="entityOid"/>
 				
 				<select wicket:id="choices"/>
 				<span wicket:id="entityIconAndTitle">[icon and title]</span>
-				
-				<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink"><span wicket:id="entityDetailsLinkLabel">[+/-]</span></a>
 				<span wicket:id="entityTitleNull">(null)</span>
-				<table wicket:id="findUsing" class="findUsing">
-		   			<tbody>
-		      			<tr>
-							<td>
-				      			<span wicket:id="action">[find using...]</span>
-			      			</td>
-		     			</tr>
-	     			</tbody>
-	  			</table>
+				<div class="findUsingClearDetails">
+					<table wicket:id="findUsing" class="findUsing">
+			   			<tbody>
+			      			<tr>
+								<td>
+					      			<span wicket:id="action">[find using...]</span>
+				      			</td>
+			     			</tr>
+		     			</tbody>
+		  			</table>
+		  			<div class="entityDetailsLinkDiv">
+						<a href="#" wicket:id="entityClearLink" class="entityClearLink">
+							<span>revert</span>
+						</a>
+						<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">
+							<span wicket:id="entityDetailsLinkLabel">[+/-]</span>
+						</a>
+		  			</div>
+				</div>
 	  			<div wicket:id="entityDetails">
 	  			</div>
-			</span>
+			</div>
 		</wicket:panel>
 	</body>
 </html>
