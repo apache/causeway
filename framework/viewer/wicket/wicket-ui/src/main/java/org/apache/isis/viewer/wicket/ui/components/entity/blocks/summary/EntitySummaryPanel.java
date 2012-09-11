@@ -23,26 +23,35 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.action.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Links;
 
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
@@ -52,13 +61,11 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_TITLE = "entityTitle";
-    private static final String ID_ENTITY_IMAGE = "entityImage";
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
     private final EntityActionLinkFactory linkFactory;
 
-    private ImageCache imageCache;
+    private ImageResourceCache imageCache;
 
     public EntitySummaryPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -79,46 +86,16 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
     }
 
     private void buildGui() {
-        addOrReplaceTitleAndImage();
+        addOrReplaceIconAndTitle();
         buildEntityActionsGui();
     }
 
-    private void addOrReplaceTitleAndImage() {
-        final String titleString = determineTitle();
-        addOrReplace(new Label(ID_ENTITY_TITLE, titleString));
-        addOrReplaceImage();
+    private void addOrReplaceIconAndTitle() {
+        final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, getEntityModel());
+        final Component component = componentFactory.createComponent(getEntityModel());
+        addOrReplace(component);
     }
 
-    private String determineTitle() {
-        final ObjectAdapter adapter = getModel().getObject();
-        final String titleString = adapter != null ? adapter.titleString() : "(no object)"; // TODO:
-                                                                                            // i18n
-        return titleString;
-    }
-
-    private void addOrReplaceImage() {
-        final ObjectAdapter adapter = getModel().getObject();
-        ObjectSpecification typeOfSpec;
-        PackageResource imageResource = null;
-        if (adapter != null) {
-            typeOfSpec = adapter.getSpecification();
-            final IconFacet iconFacet = typeOfSpec.getFacet(IconFacet.class);
-            if (iconFacet != null) {
-                final String iconName = iconFacet.iconName(adapter);
-                imageResource = getImageCache().findImage(iconName);
-            }
-        }
-        if (imageResource == null) {
-            typeOfSpec = getModel().getTypeOfSpecification();
-            imageResource = getImageCache().findImage(typeOfSpec);
-        }
-
-        if (imageResource != null) {
-            addOrReplace(new Image(ID_ENTITY_IMAGE, imageResource));
-        } else {
-            permanentlyHide(ID_ENTITY_IMAGE);
-        }
-    }
 
     private void buildEntityActionsGui() {
         final EntityModel model = getModel();
@@ -142,16 +119,27 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
         setResponsePage(new ActionPage(actionModel));
     }
 
+    
+    // ///////////////////////////////////////////////////////////////////
+    // Convenience
+    // ///////////////////////////////////////////////////////////////////
+
+    protected PageClassRegistry getPageClassRegistry() {
+        final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
+        return pcra.getPageClassRegistry();
+    }
+
+
     // ///////////////////////////////////////////////
     // Dependency Injection
     // ///////////////////////////////////////////////
 
-    protected ImageCache getImageCache() {
+    protected ImageResourceCache getImageCache() {
         return imageCache;
     }
 
     @Inject
-    public void setImageCache(final ImageCache imageCache) {
+    public void setImageCache(final ImageResourceCache imageCache) {
         this.imageCache = imageCache;
     }
 

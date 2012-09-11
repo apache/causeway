@@ -178,7 +178,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
             }
             adapter.setVersion(data.getVersion());
         } finally {
-            PersistorUtil.endResolving(adapter);
+            PersistorUtil.toEndState(adapter);
         }
     }
 
@@ -254,7 +254,7 @@ public class XmlObjectStore implements ObjectStoreSpi {
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);
             facet.init(collectionAdapter, elements);
         } finally {
-            PersistorUtil.endResolving(collectionAdapter);
+            PersistorUtil.toEndState(collectionAdapter);
         }
     }
 

@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.persistence;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 
@@ -36,12 +35,24 @@ public class PersistorUtil {
     // update resolve state
     // //////////////////////////////////////////////////////////////////
 
-    public static void startResolving(final ObjectAdapter adapter) {
-        final ResolveState state = ResolveState.RESOLVING;
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("start " + adapter + " as " + state.name());
+    public static void startResolvingOrUpdating(ObjectAdapter objectAdapter) {
+        if(objectAdapter.canTransitionToResolving()) {
+            startResolving(objectAdapter);
+        } else {
+            startUpdating(objectAdapter);
         }
-        adapter.changeState(state);
+    }
+
+    public static void startResolving(final ObjectAdapter adapter) {
+        changeTo(adapter, ResolveState.RESOLVING);
+    }
+
+    public static void startUpdating(final ObjectAdapter adapter) {
+        changeTo(adapter, ResolveState.UPDATING);
+    }
+
+    private static void changeTo(final ObjectAdapter adapter, final ResolveState state) {
+        changeTo("start ", adapter, state);
     }
 
     /**
@@ -49,13 +60,16 @@ public class PersistorUtil {
      * as specified by the second parameter. Attempting to specify any other
      * state throws a run time exception.
      */
-    public static void endResolving(final ObjectAdapter adapter) {
-        final ResolveState endState = adapter.getResolveState().getEndState();
-        Assert.assertNotNull("end state required", endState);
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("end " + adapter + " as " + endState.name());
-        }
-        adapter.changeState(endState);
+    public static void toEndState(final ObjectAdapter adapter) {
+        changeTo("end ", adapter, adapter.getResolveState().getEndState());
     }
+
+    private static void changeTo(final String direction, final ObjectAdapter adapter, final ResolveState state) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace(direction + adapter + " as " + state.name());
+        }
+        adapter.changeState(state);
+    }
+
 
 }

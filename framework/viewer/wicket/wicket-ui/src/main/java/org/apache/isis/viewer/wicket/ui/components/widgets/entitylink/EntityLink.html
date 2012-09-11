@@ -33,13 +33,9 @@
 				<input type="text" wicket:id="entityOid"/>
 				
 				<select wicket:id="choices"/>
-				<span wicket:id="entityLinkWrapper">
-					<a href="#" wicket:id="entityLink">
-						<img wicket:id="entityImage" class="entityImage" width="16" height="16"/>
-						<span wicket:id="entityTitle">[property or parameter value]</span>
-					</a>
-				</span>
-				<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink"><span wicket:id="entityDetailsLinkLabel">show/hide</span></a>
+				<span wicket:id="entityIconAndTitle">[icon and title]</span>
+				
+				<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink"><span wicket:id="entityDetailsLinkLabel">[+/-]</span></a>
 				<span wicket:id="entityTitleNull">(null)</span>
 				<table wicket:id="findUsing" class="findUsing">
 		   			<tbody>

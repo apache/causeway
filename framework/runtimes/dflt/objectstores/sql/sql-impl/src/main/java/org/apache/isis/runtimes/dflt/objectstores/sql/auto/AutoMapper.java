@@ -324,7 +324,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
              */
             adapter.setVersion(versionMapping.getLock(rs));
         } finally {
-            PersistorUtil.endResolving(adapter);
+            PersistorUtil.toEndState(adapter);
         }
     }
 

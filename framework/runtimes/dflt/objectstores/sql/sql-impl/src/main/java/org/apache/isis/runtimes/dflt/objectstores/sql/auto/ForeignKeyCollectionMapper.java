@@ -208,7 +208,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
             collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
             
         } finally {
-            PersistorUtil.endResolving(collectionAdapter);
+            PersistorUtil.toEndState(collectionAdapter);
         }
 
         // TODO: Need to finalise this behaviour. At the moment, all
@@ -265,7 +265,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
             }
             adapter.setVersion(versionMapping.getLock(rs));
         } finally {
-            PersistorUtil.endResolving(adapter);
+            PersistorUtil.toEndState(adapter);
         }
     }
 

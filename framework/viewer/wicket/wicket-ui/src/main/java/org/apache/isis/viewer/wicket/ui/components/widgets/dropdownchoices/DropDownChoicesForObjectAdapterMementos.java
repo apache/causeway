@@ -63,7 +63,7 @@ public class DropDownChoicesForObjectAdapterMementos extends DropDownChoice<Obje
 
     @Override
     protected boolean wantOnSelectionChangedNotifications() {
-        return true;
+        return false;//true;
     }
     
 

@@ -17,15 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.app.imagecache;
+package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.markup.html.PackageResource;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface ImageCache {
+public interface ImageResourceCache {
 
     public PackageResource findImage(ObjectSpecification objectSpec);
 
-    public PackageResource findImage(String imageName);
+    public PackageResource findImageResource(String imageName);
 }

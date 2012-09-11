@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
@@ -292,12 +293,11 @@ public class Memento implements Serializable {
         
         if (!dataIsTransient) {
             try {
-                PersistorUtil.startResolving(objectAdapter);
+                PersistorUtil.startResolvingOrUpdating(objectAdapter);
                 updateFields(objectAdapter, data);
             } finally {
-                PersistorUtil.endResolving(objectAdapter);
+                PersistorUtil.toEndState(objectAdapter);
             }
-            
         } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
             

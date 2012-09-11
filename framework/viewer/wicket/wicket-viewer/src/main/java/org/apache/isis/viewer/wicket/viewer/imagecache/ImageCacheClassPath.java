@@ -31,7 +31,7 @@ import com.google.inject.Singleton;
 import org.apache.wicket.markup.html.PackageResource;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
 /**
  * Caches images loaded up the <tt>images</tt> package (using the {@link Images}
@@ -41,7 +41,7 @@ import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
  * Searches for a fixed set of suffixes: {@value #IMAGE_SUFFICES}.
  */
 @Singleton
-public class ImageCacheClassPath implements ImageCache {
+public class ImageCacheClassPath implements ImageResourceCache {
 
     public final static List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
 
@@ -50,7 +50,7 @@ public class ImageCacheClassPath implements ImageCache {
     @Override
     public PackageResource findImage(final ObjectSpecification noSpec) {
         final String specFullName = noSpec.getFullIdentifier();
-        final PackageResource packageResource = findImage(specFullName);
+        final PackageResource packageResource = findImageResource(specFullName);
         if (packageResource != null) {
             return packageResource;
         } else {
@@ -59,7 +59,7 @@ public class ImageCacheClassPath implements ImageCache {
     }
 
     @Override
-    public PackageResource findImage(final String imageName) {
+    public PackageResource findImageResource(final String imageName) {
         final PackageResource packageResource = imagesByName.get(imageName);
         if (packageResource != null) {
             return packageResource;

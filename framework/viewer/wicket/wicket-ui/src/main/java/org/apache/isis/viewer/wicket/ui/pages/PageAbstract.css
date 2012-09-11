@@ -309,3 +309,7 @@ div.scalarPanel {
 	clear: both;
 	display: block;
 }	
+
+.mandatory {
+	font-weight: bold;
+}

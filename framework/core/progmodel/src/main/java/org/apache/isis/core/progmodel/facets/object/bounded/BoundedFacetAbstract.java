@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implements BoundedFacet {
 
@@ -43,7 +44,7 @@ public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implement
     /**
      * Hook method for subclasses to override.
      */
-    public abstract String disabledReason(ObjectAdapter no);
+    public abstract String disabledReason(ObjectAdapter objectAdapter);
 
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
@@ -51,7 +52,18 @@ public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implement
             return null;
         }
         final ObjectAdapter target = context.getTarget();
-        return disabledReason(target);
+        if(target == null) {
+            return null;
+        }
+        
+        // ensure that the target is of the correct type
+        if(!(getFacetHolder() instanceof ObjectSpecification)) {
+            // should never be the case
+            return null;
+        }
+        
+        final ObjectSpecification objectSpec = (ObjectSpecification) getFacetHolder();
+        return objectSpec == target.getSpecification()? null: "Invalid type";
     }
 
     @Override

@@ -16,9 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.entityLink .entityImage {
+	width: 16px;
+	height: 16px;
+}
+
 .entityLink table.findUsing {
-	display: inline;
-	float: right;
+	display: block;
+	font-size: smaller;
 }
 
 a.entityDetailsLink {
@@ -27,21 +32,27 @@ a.entityDetailsLink {
 	border: 1px  #00477F solid;
 	white-space:nowrap;
 	margin:0em;
-	padding: 1px;
-	padding-right: 1.6em;
-	padding-left: 0.4em;
+	margin-left: 10px;
+	padding: 0px;
+	padding-right: 3px;
+	padding-left: 3px;
 	font-weight: normal;
 	cursor:default;
 	
 	color: #00477F;
 	background-color: #EEEEEE;
 	text-decoration:none;
-/*	-moz-border-radius: 6px;
+	font-size: smaller;
+	font-family: monospace;
+	/*
+	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	border-radius: 6px; */
+	border-radius: 6px;
+	*/ 
 }
 
 a.entityDetailsLink:hover {
 	color: #D7E7F5;
 	background-color: #407098;
 }
+

@@ -58,21 +58,21 @@ public class ReferencePanel extends ScalarPanelAbstract {
     protected void onBeforeRenderWhenEnabled() {
         super.onBeforeRenderWhenEnabled();
         entityLink.setEnabled(true);
-        entityLink.syncFindUsingVisibility();
+        entityLink.syncFindUsingAndEntityDetailsLinkVisibility();
     }
 
     @Override
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
         entityLink.setEnabled(false);
-        entityLink.syncFindUsingVisibility();
+        entityLink.syncFindUsingAndEntityDetailsLinkVisibility();
     }
 
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
         entityLink.setEnabled(false);
-        entityLink.syncFindUsingVisibility();
+        entityLink.syncFindUsingAndEntityDetailsLinkVisibility();
     }
 
     @Override

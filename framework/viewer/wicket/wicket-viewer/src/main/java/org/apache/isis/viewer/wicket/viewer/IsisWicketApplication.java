@@ -65,9 +65,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
 import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCacheAccessor;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -371,7 +371,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // /////////////////////////////////////////////////
 
     @Override
-    public ImageCache getImageCache() {
+    public ImageResourceCache getImageCache() {
         return imageCache;
     }
 

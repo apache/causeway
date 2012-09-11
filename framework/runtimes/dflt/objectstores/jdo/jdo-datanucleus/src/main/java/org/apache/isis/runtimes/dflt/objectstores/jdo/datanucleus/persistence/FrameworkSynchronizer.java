@@ -89,7 +89,7 @@ public class FrameworkSynchronizer {
                 }
                 if(!adapter.isResolved()) {
                     PersistorUtil.startResolving(adapter);
-                    PersistorUtil.endResolving(adapter);
+                    PersistorUtil.toEndState(adapter);
                 }
                 adapter.setVersion(datastoreVersion);
 

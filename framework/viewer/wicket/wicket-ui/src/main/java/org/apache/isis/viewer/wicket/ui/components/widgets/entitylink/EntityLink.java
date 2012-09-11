@@ -23,25 +23,18 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.yui.calendar.DateField;
-import org.apache.wicket.markup.html.PackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -53,6 +46,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Generics;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
@@ -62,10 +56,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropDownChoicesForObjectAdapterMementos;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Links;
 
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
@@ -76,11 +67,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_LINK_WRAPPER = "entityLinkWrapper";
-    private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_OID = "entityOid";
-    private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
-    private static final String ID_ENTITY_ICON = "entityImage";
     private static final String ID_CHOICES = "choices";
     private static final String ID_FIND_USING = "findUsing";
     private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
@@ -90,12 +78,14 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private final FindUsingLinkFactory linkFactory;
 
     private TextField<ObjectAdapterMemento> entityOidField;
+    
     private WebMarkupContainer findUsing;
+    private Link<String> entityDetailsLink;
+    
     private PanelAbstract<?> actionFindUsingComponent;
 
-    private Image image;
-    private Label label;
     private ObjectAdapterMemento pending;
+
 
     public EntityLink(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -115,6 +105,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         addOrReplaceOidField();
         rebuildFindUsingMenu();
         syncWithInput();
+        
     }
 
     private void addOrReplaceOidField() {
@@ -174,7 +165,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     /**
      * Must be called after {@link #setEnabled(boolean)} to ensure that the
-     * <tt>findUsing</tt> button is shown/not shown as required.
+     * <tt>findUsing</tt> button and the <tt>entityDetailsLink</tt> are shown/not shown as required.
      * 
      * <p>
      * REVIEW: there ought to be a better way to do this. I'd hoped to override
@@ -182,8 +173,10 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      * seem to be anyway to install a listener. One option might be to move it
      * to {@link #onBeforeRender()} ?
      */
-    public void syncFindUsingVisibility() {
-        findUsing.setVisible(isEnabled() && !getEntityModel().isViewMode());
+    public void syncFindUsingAndEntityDetailsLinkVisibility() {
+        final boolean visibility = isEnabled() && !getEntityModel().isViewMode();
+        findUsing.setVisible(visibility);
+        entityDetailsLink.setVisible(visibility);
     }
 
     /**
@@ -198,11 +191,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     /**
-     * Ensures that the link is always enabled and traversable, even if (in the
-     * context of an entity property form) the entity model is in view mode.
-     * 
-     * <p>
-     * A slight hack, but works...
+     * Always enabled; but subcomponents we disable/hide if required based on the 
+     * {@link EntityModel#isEditMode() state} of the {@link EntityModel}.
      */
     @Override
     public boolean isEnabled() {
@@ -236,7 +226,9 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
             // choices drop-down
             final IModel<ObjectAdapterMemento> modelObject = entityOidField.getModel();
-            addOrReplace(new DropDownChoicesForObjectAdapterMementos(ID_CHOICES, modelObject, choicesMementos));
+            final DropDownChoicesForObjectAdapterMementos dropDownChoices = new DropDownChoicesForObjectAdapterMementos(ID_CHOICES, modelObject, choicesMementos);
+            addOrReplace(dropDownChoices);
+            dropDownChoices.setEnabled(getEntityModel().isEditMode());
 
             // no need for link, since can see in drop-down
             permanentlyHide(ID_ENTITY_LINK_WRAPPER);
@@ -260,22 +252,14 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         syncEntityDetailsButtonWithInput(adapter);
 
         syncEntityDetailsWithInput(adapter);
-        syncFindUsingVisibility();
+        syncFindUsingAndEntityDetailsLinkVisibility();
     }
 
     private void syncLinkWithInput(final ObjectAdapter adapter) {
         if (adapter != null) {
-            addOrReplaceLink(adapter);
+            addOrReplaceIconAndTitle();
         } else {
             permanentlyHide(ID_ENTITY_LINK_WRAPPER);
-        }
-    }
-
-    private void syncEntityIconWithInput(final ObjectAdapter adapter) {
-        if (adapter != null) {
-            addOrReplaceImage(adapter);
-        } else {
-            permanentlyHide(ID_ENTITY_ICON);
         }
     }
 
@@ -288,8 +272,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     private void syncEntityDetailsButtonWithInput(final ObjectAdapter adapter) {
-        if (adapter != null && getEntityModel().isEditMode()) {
-            final Link<String> link = new Link<String>(ID_ENTITY_DETAILS_LINK) {
+        if (adapter != null) {
+            entityDetailsLink = new Link<String>(ID_ENTITY_DETAILS_LINK) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -297,15 +281,15 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
                     getEntityModel().toggleDetails();
                 }
             };
-            addOrReplace(link);
-            link.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
+            addOrReplace(entityDetailsLink);
+            entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
         } else {
             permanentlyHide(ID_ENTITY_DETAILS_LINK);
         }
     }
 
     private Model<String> buildEntityDetailsModel() {
-        final String label = getEntityModel().isEntityDetailsVisible() ? "hide" : "show";
+        final String label = getEntityModel().isEntityDetailsVisible() ? "-" : "+";
         return Model.of(label);
     }
 
@@ -333,72 +317,12 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         return null;
     }
 
-    private void addOrReplaceImage(final ObjectAdapter adapter) {
-        final PackageResource imageResource = determineImageResource(adapter);
-
-        if (imageResource != null) {
-            image = new Image(ID_ENTITY_ICON, imageResource);
-            addOrReplace(image);
-        } else {
-            permanentlyHide(ID_ENTITY_ICON);
-        }
+    private void addOrReplaceIconAndTitle() {
+        final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, getEntityModel());
+        final Component component = componentFactory.createComponent(getEntityModel());
+        addOrReplace(component);
     }
 
-    private PackageResource determineImageResource(final ObjectAdapter adapter) {
-        ObjectSpecification typeOfSpec;
-        PackageResource imageResource = null;
-        if (adapter != null) {
-            typeOfSpec = adapter.getSpecification();
-            final IconFacet iconFacet = typeOfSpec.getFacet(IconFacet.class);
-            if (iconFacet != null) {
-                final String iconName = iconFacet.iconName(adapter);
-                imageResource = getImageCache().findImage(iconName);
-            }
-        }
-        if (imageResource == null) {
-            typeOfSpec = getEntityModel().getTypeOfSpecification();
-            imageResource = getImageCache().findImage(typeOfSpec);
-        }
-        return imageResource;
-    }
-
-    private void addOrReplaceLink(final ObjectAdapter adapter) {
-        
-        final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
-        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
-        
-        final AbstractLink link = newLink(ID_ENTITY_LINK, pageClass, pageParameters);
-        label = new Label(ID_ENTITY_TITLE, adapter.titleString());
-        link.add(label);
-
-        
-//      if (adapter != null) {
-        final PackageResource imageResource = determineImageResource(adapter);
-        
-        if (imageResource != null) {
-            image = new Image(ID_ENTITY_ICON, imageResource);
-            link.addOrReplace(image);
-        } else {
-            permanentlyHide(ID_ENTITY_ICON);
-        }
-//    } else {
-//        permanentlyHide(ID_ENTITY_ICON);
-//    }
-
-
-        
-        
-        final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
-        entityLinkWrapper.addOrReplace(link);
-
-        entityLinkWrapper.setEnabled(true);
-
-        addOrReplace(entityLinkWrapper);
-    }
-
-    protected AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
-        return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
-    }
 
     private static List<ObjectAction> findServiceActionsFor(final ObjectSpecification scalarTypeSpec) {
         final List<ObjectAction> actionList = Lists.newArrayList();

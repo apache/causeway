@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer;
 
 import com.google.inject.AbstractModule;
 
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -40,7 +40,7 @@ public class IsisWicketModule extends AbstractModule {
         bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
         bind(PageClassList.class).to(PageClassListDefault.class);
         bind(ComponentFactoryList.class).to(ComponentFactoryListDefault.class);
-        bind(ImageCache.class).to(ImageCacheClassPath.class);
+        bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
         bindConstant().annotatedWith(ApplicationCssUrl.class).to("application.css");
     }
 

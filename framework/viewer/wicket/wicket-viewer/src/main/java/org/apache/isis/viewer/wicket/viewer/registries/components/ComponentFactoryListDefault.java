@@ -35,6 +35,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.Coll
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.CollectionContentsSelectorFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.blocks.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityCollectionsReadOnlyFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityCollectionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityPropertiesAndCollectionsPanelFactory;
@@ -150,6 +151,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 //        componentFactories.add(new EntityTabbedPanelFactory());
         
         // lower-level
+        componentFactories.add(new EntityIconAndTitlePanelFactory());
         componentFactories.add(new EntitySummaryPanelFactory());
         componentFactories.add(new EntityPropertiesPanelFactory());
         componentFactories.add(new EntityCollectionsPanelFactory());

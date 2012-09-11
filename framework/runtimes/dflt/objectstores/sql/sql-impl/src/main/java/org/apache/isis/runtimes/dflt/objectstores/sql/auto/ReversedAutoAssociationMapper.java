@@ -126,7 +126,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
             rs.close();
         } finally {
-            PersistorUtil.endResolving(collectionAdapter);
+            PersistorUtil.toEndState(collectionAdapter);
         }
 
     }
@@ -149,7 +149,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             object.setVersion(versionMapping.getLock(rs));
             
         } finally {
-            PersistorUtil.endResolving(object);
+            PersistorUtil.toEndState(object);
         }
     }
 

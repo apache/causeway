@@ -25,6 +25,7 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.PackageResource;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -348,7 +350,38 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         toViewMode();
     }
 
-    
+
+    // //////////////////////////////////////////////////////////
+    // lookupImageResource
+    // //////////////////////////////////////////////////////////
+
+    public PackageResource lookupImageResource(final ImageResourceCache imageResourceCache) {
+        PackageResource imageResource = null;
+        try {
+            final ObjectAdapter objectAdapter = getObject();
+            ObjectSpecification typeOfSpec = objectAdapter.getSpecification();
+            final IconFacet iconFacet = typeOfSpec.getFacet(IconFacet.class);
+            if (iconFacet != null) {
+                final String iconName = iconFacet.iconName(objectAdapter);
+                imageResource = imageResourceCache.findImageResource(iconName);
+            }
+            if(imageResource != null) {
+                return imageResource;
+            }
+            typeOfSpec = getTypeOfSpecification();
+            imageResource = imageResourceCache.findImage(typeOfSpec);
+            if(imageResource != null) {
+                return imageResource;
+            }
+            return null;
+        } finally {
+            if(imageResource != null) {
+                imageResource.setCacheable(true);
+            }
+        }
+    }
+
+
     // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////

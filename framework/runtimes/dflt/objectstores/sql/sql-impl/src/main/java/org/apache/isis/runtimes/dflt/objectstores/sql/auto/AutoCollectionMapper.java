@@ -117,7 +117,7 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
             collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
             rs.close();
         } finally {
-            PersistorUtil.endResolving(collectionAdapter);
+            PersistorUtil.toEndState(collectionAdapter);
         }
     }
 

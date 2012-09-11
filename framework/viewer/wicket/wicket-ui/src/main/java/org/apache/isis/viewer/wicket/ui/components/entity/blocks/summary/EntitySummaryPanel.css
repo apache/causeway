@@ -31,11 +31,14 @@ div.entitySummary .iconAndTitle {
 div.entitySummary .actions {
 	float: left;
     padding:1em;
-	padding-top: 1.54em; 
+    
+	padding-top: 1.8em; 
 	padding-left: 50px;
 }
 
 .entitySummary .entityImage {
+	width: 32px;
+	height: 32px;
 }
 
 .entitySummary .entityTitle {

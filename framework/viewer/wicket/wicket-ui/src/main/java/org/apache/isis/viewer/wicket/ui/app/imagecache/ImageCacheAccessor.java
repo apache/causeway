@@ -19,8 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.app.imagecache;
 
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+
 public interface ImageCacheAccessor {
 
-    ImageCache getImageCache();
+    ImageResourceCache getImageCache();
 
 }
