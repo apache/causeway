@@ -69,6 +69,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePa
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.ValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.wizardpagedesc.WizardPageDescriptionPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
@@ -129,6 +130,8 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         addComponentFactoriesForVoidReturn(componentFactories);
         addComponentFactoriesForValue(componentFactories);
         addComponentFactoriesForParameters(componentFactories);
+        
+        addComponentFactoriesForUnknown(componentFactories);
 
     }
 
@@ -145,7 +148,6 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         // top-level
         componentFactories.add(new EntityCombinedPanelFactory());
 //        componentFactories.add(new EntityTabbedPanelFactory());
-
         
         // lower-level
         componentFactories.add(new EntitySummaryPanelFactory());
@@ -235,6 +237,12 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
     protected void addComponentFactoriesForApplicationActions(final List<ComponentFactory> componentFactories) {
         componentFactories.add(new AppActionsCssMenuFactory());
     }
+
+
+    protected void addComponentFactoriesForUnknown(final List<ComponentFactory> componentFactories) {
+        componentFactories.add(new UnknownModelPanelFactory());
+    }
+
 
     /**
      * Allows the subclass to remove any built-in factories.

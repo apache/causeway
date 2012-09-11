@@ -132,7 +132,13 @@ public enum ComponentType {
     /**
      * A void result from an action.
      */
-    VOID_RETURN;
+    VOID_RETURN, 
+    /**
+     * Place holder for a component used to represent an unknown model;
+     * not used for matching, since the {@link ComponentFactory} implementation
+     * acts as a fallback whenever a more suitable factory cannot be located.
+     */
+    UNKNOWN;
 
     /**
      * Returns the {@link #name()} formatted as

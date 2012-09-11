@@ -131,7 +131,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     @Override
     public List<ComponentFactory> findComponentFactories(final ComponentType componentType, final IModel<?> model) {
         final Collection<ComponentFactory> componentFactoryList = componentFactoriesByType.get(componentType);
-        final ArrayList<ComponentFactory> matching = new ArrayList<ComponentFactory>();
+        final List<ComponentFactory> matching = Lists.newArrayList();
         for (final ComponentFactory componentFactory : componentFactoryList) {
             final ApplicationAdvice appliesTo = componentFactory.appliesTo(componentType, model);
             if (appliesTo.applies()) {
@@ -140,6 +140,10 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
             if (appliesTo.exclusively()) {
                 break;
             }
+        }
+        if (matching.isEmpty()) {
+            // will just be one
+            matching.addAll(componentFactoriesByType.get(ComponentType.UNKNOWN));
         }
         return matching;
     }

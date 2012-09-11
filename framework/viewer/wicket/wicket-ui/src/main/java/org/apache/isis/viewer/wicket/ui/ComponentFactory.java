@@ -48,7 +48,9 @@ public interface ComponentFactory extends Serializable {
     ComponentType getComponentType();
 
     public enum ApplicationAdvice {
-        APPLIES(true, false), APPLIES_EXCLUSIVELY(true, true), DOES_NOT_APPLY(false, false);
+        APPLIES(true, false), 
+        APPLIES_EXCLUSIVELY(true, true), 
+        DOES_NOT_APPLY(false, false);
         private final boolean applies;
         private final boolean exclusively;
 
