@@ -30,7 +30,7 @@ import org.apache.isis.applib.util.Enums;
  * 
  * <p>
  * The application programmer may use any of the values of this enum.  Some represent
- * concrete locations (eg {@link #OBJECT_FORM}, {@link #PARENTED_TABLE}), whereas some 
+ * concrete locations (eg {@link #OBJECT_FORMS}, {@link #PARENTED_TABLES}), whereas some 
  * represent a combination of locations (eg {@link #ALL_TABLES}, {@link #ANYWHERE}).
  * 
  * <h4>Framework Implementation Notes</h4>
@@ -54,7 +54,7 @@ public enum Where {
      * <p>
      * For most viewers, this applies to property and collection members, not actions.
      */
-    OBJECT_FORM,
+    OBJECT_FORMS,
     /**
      * The member should be disabled/hidden when displayed as a column of a table within
      * a parent object's collection.
@@ -62,7 +62,7 @@ public enum Where {
      * <p>
      * For most (all?) viewers, this will have meaning only if applied to a property member.
      */
-    PARENTED_TABLE ,
+    PARENTED_TABLES ,
     /**
      * The member should be disabled/hidden when displayed as a column of a table showing a standalone list
      * of objects, for example as returned by a repository query.
@@ -70,7 +70,7 @@ public enum Where {
      * <p>
      * For most (all?) viewers, this will have meaning only if applied to a property member.
      */
-    STANDALONE_TABLE,
+    STANDALONE_TABLES,
     /**
      * The member should be disabled/hidden when displayed as a column of a table, either an object's
      * collection or a standalone list.
@@ -81,7 +81,7 @@ public enum Where {
     ALL_TABLES {
         @Override
         public boolean includes(Where context) {
-            return context == this || context == PARENTED_TABLE || context == STANDALONE_TABLE;
+            return context == this || context == PARENTED_TABLES || context == STANDALONE_TABLES;
         } 
     },
     /**
@@ -103,18 +103,18 @@ public enum Where {
     }
 
     public boolean inParentedTable() {
-        return this == PARENTED_TABLE || this == ALL_TABLES;
+        return this == PARENTED_TABLES || this == ALL_TABLES;
     }
 
     public boolean inStandaloneTable() {
-        return this == STANDALONE_TABLE || this == ALL_TABLES;
+        return this == STANDALONE_TABLES || this == ALL_TABLES;
     }
 
     /**
      * Whether this <tt>Where</tt> is a superset of the context <tt>Where</tt> provided.
      * 
      * <p>
-     * For example, {@link #ALL_TABLES} includes {@link #STANDALONE_TABLE}; {@link #ANYWHERE} includes all others.
+     * For example, {@link #ALL_TABLES} includes {@link #STANDALONE_TABLES}; {@link #ANYWHERE} includes all others.
      */
     public boolean includes(Where context) {
         return context == this;

@@ -34,7 +34,7 @@ import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 public abstract class AbstractObjectOption extends UserActionAbstract {
 
     // REVIEW: confirm this rendering context
-    private final Where where = Where.OBJECT_FORM;
+    private final Where where = Where.OBJECT_FORMS;
 
     protected final ObjectAction action;
     protected final ObjectAdapter target;

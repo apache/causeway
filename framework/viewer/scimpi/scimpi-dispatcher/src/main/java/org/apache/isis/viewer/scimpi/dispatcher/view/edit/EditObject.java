@@ -47,7 +47,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 public class EditObject extends AbstractElementProcessor {
 
     // REVIEW: confirm this rendering context
-    private final Where where = Where.OBJECT_FORM;
+    private final Where where = Where.OBJECT_FORMS;
 
     @Override
     public void process(final Request request) {

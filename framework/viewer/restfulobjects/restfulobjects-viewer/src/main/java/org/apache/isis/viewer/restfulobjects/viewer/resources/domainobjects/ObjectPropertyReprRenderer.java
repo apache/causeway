@@ -53,7 +53,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     private ObjectPropertyReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORM);
+        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORMS);
     }
 
     @Override

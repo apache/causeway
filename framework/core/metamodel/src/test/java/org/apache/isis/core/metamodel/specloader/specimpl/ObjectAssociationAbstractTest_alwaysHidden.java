@@ -158,7 +158,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         context.checking(new Expectations() {
             {
                 allowing(facet).where();
-                will(returnValue(Where.OBJECT_FORM));
+                will(returnValue(Where.OBJECT_FORMS));
             }
         });
         facetedMethod.addFacet(facet);

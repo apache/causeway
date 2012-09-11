@@ -178,7 +178,7 @@ public class EntityCollectionsReadOnlyFormPanel extends PanelAbstract<EntityMode
 
         @SuppressWarnings("unchecked")
 		private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter) {
-            return Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLE));
+            return Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLES));
         }
 
 

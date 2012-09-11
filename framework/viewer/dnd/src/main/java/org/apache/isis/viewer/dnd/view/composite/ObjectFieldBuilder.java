@@ -47,7 +47,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ObjectFieldBuilder.class);
 
     // REVIEW: confirm this rendering context
-    private final Where where = Where.OBJECT_FORM;
+    private final Where where = Where.OBJECT_FORMS;
 
     private final ViewFactory subviewDesign;
 

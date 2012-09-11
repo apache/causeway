@@ -32,7 +32,7 @@ import org.apache.isis.viewer.html.request.Request;
 
 public class FieldCollectionView extends ObjectViewAbstract {
     
-    private final Where where = Where.PARENTED_TABLE;
+    private final Where where = Where.PARENTED_TABLES;
 
     @Override
     protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {

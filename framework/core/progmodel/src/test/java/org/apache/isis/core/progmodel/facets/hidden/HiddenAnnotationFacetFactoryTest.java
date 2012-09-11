@@ -169,7 +169,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenWhereCollectionTableAnnotationPickedUpOn() {
         class Customer {
-            @Hidden(where=Where.PARENTED_TABLE)
+            @Hidden(where=Where.PARENTED_TABLES)
             public void someAction() {
             }
         }
@@ -180,14 +180,14 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
-        assertEquals(Where.PARENTED_TABLE, hiddenFacetAbstract.where());
+        assertEquals(Where.PARENTED_TABLES, hiddenFacetAbstract.where());
         assertEquals(When.ALWAYS, hiddenFacetAbstract.when());
     }
 
 
     public void testHiddenWhenAndWhereTableAnnotationPickedUpOn() {
         class Customer {
-            @Hidden(where=Where.PARENTED_TABLE, when=When.UNTIL_PERSISTED)
+            @Hidden(where=Where.PARENTED_TABLES, when=When.UNTIL_PERSISTED)
             public void someAction() {
             }
         }
@@ -198,7 +198,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
-        assertEquals(Where.PARENTED_TABLE, hiddenFacetAbstract.where());
+        assertEquals(Where.PARENTED_TABLES, hiddenFacetAbstract.where());
         assertEquals(When.UNTIL_PERSISTED, hiddenFacetAbstract.when());
     }
 

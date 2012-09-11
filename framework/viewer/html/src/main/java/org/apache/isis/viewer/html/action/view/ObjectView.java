@@ -38,7 +38,7 @@ import org.apache.isis.viewer.html.request.Request;
 public class ObjectView extends ObjectViewAbstract {
 
     // REVIEW: confirm this rendering context
-    private final Where where = Where.OBJECT_FORM;
+    private final Where where = Where.OBJECT_FORMS;
 
     @Override
     protected boolean addObjectToHistory() {

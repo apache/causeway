@@ -37,7 +37,7 @@ import org.apache.isis.viewer.html.context.Context;
 public class MenuUtil {
 
     // REVIEW: confirm this rendering context
-    private final static Where where = Where.OBJECT_FORM;
+    private final static Where where = Where.OBJECT_FORMS;
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {
         final ObjectSpecification specification = target.getSpecification();

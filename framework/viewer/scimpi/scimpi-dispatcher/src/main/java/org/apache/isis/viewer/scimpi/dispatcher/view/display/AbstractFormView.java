@@ -58,7 +58,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             request.processUtilCloseTag();
 
             final AuthenticationSession session = IsisContext.getAuthenticationSession(); 
-            List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, Where.OBJECT_FORM));
+            List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, Where.OBJECT_FORMS));
             final List<ObjectAssociation> fields = tag.includedFields(associations);
             final LinkedObject[] linkFields = tag.linkedFields(fields);
 
@@ -98,7 +98,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             if (ignoreField(field)) {
                 continue;
             }
-            if (field.isVisible(IsisContext.getAuthenticationSession(), object, Where.OBJECT_FORM).isVetoed()) {
+            if (field.isVisible(IsisContext.getAuthenticationSession(), object, Where.OBJECT_FORMS).isVetoed()) {
                 continue;
             }
 

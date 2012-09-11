@@ -42,7 +42,7 @@ public class RemoveAction implements Action {
     public static final String ACTION = "remove";
 
     // REVIEW: confirm this rendering context
-    private final Where where = Where.OBJECT_FORM;
+    private final Where where = Where.OBJECT_FORMS;
 
     @Override
     public String getName() {

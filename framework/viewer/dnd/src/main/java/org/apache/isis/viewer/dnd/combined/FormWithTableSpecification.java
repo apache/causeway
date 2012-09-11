@@ -41,7 +41,7 @@ import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 public class FormWithTableSpecification extends SplitViewSpecification {
 
     // REVIEW: confirm this rendering context
-    final Where where = Where.OBJECT_FORM;
+    final Where where = Where.OBJECT_FORMS;
 
     @Override
     public Layout createLayout(final Content content, final Axes axes) {

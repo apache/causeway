@@ -56,7 +56,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private ObjectActionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORM);
+        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORMS);
     }
 
     @Override

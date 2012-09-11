@@ -84,7 +84,7 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         @SuppressWarnings("unchecked")
         final Filter<ObjectAssociation> filter = Filters.and(
                 ObjectAssociationFilters.PROPERTIES, 
-                ObjectAssociationFilters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLE: Where.STANDALONE_TABLE));
+                ObjectAssociationFilters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(filter);
         for (final ObjectAssociation property : propertyList) {
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);

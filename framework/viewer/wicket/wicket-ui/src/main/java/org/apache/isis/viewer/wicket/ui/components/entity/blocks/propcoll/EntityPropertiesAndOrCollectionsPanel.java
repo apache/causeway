@@ -173,7 +173,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             final ObjectAdapter adapter = entityModel.getObject();
             final ObjectSpecification noSpec = adapter.getSpecification();
 
-            final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec, Where.OBJECT_FORM);
+            final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec, Where.OBJECT_FORMS);
 
             final RepeatingView rv = new RepeatingView(ID_PROPERTIES_AND_OR_COLLECTIONS);
             final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();

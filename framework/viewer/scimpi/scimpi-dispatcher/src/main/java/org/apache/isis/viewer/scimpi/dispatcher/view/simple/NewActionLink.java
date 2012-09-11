@@ -29,7 +29,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 public class NewActionLink extends AbstractLink {
 
     // REVIEW: confirm this rendering context
-    private final Where where = Where.OBJECT_FORM;
+    private final Where where = Where.OBJECT_FORMS;
 
     @Override
     protected boolean valid(final Request request, final ObjectAdapter object) {

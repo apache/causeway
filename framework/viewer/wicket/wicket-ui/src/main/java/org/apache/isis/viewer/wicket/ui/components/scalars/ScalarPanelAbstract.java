@@ -58,7 +58,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
             @Override
             public Where getWhere() {
-                return Where.PARENTED_TABLE;
+                return Where.PARENTED_TABLES;
             }
         },
         /**
@@ -77,7 +77,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
             @Override
             public Where getWhere() {
-                return Where.OBJECT_FORM;
+                return Where.OBJECT_FORMS;
             }
         };
 

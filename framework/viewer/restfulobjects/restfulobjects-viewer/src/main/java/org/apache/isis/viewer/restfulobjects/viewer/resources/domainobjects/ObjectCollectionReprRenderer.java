@@ -53,7 +53,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private ObjectCollectionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation, Where.PARENTED_TABLE);
+        super(resourceContext, linkFollower, representationType, representation, Where.PARENTED_TABLES);
     }
 
     @Override

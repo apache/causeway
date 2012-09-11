@@ -49,7 +49,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
         final RepresentationType representationType = RepresentationType.LIST;
-        init(representationType, Where.STANDALONE_TABLE);
+        init(representationType, Where.STANDALONE_TABLES);
 
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
 
@@ -70,7 +70,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response service(@PathParam("serviceId") final String serviceId) {
-        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORM);
+        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
 
@@ -91,7 +91,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response propertyDetails(@PathParam("serviceId") final String serviceId, @PathParam("propertyId") final String propertyId) {
-        init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORM);
+        init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
@@ -108,7 +108,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
-        init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORM);
+        init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
@@ -125,7 +125,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLE);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
@@ -142,7 +142,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     // to save the client having to specify a Content-Type: application/json
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLE);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
@@ -157,7 +157,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     // to save the client having to specify a Content-Type: application/json
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLE);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());

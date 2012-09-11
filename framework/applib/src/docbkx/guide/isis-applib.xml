@@ -5949,9 +5949,9 @@ public class Customer {
 
         <programlisting format="linespecific">@ActionOrder("(Account Management: PlaceOrder, CheckCredit), (Personal Details: ChangeOfAddress, AddEmail)")
 public class Customer {
-    public Order placeNewOrder() { ... }
     public CreditRating checkCredit() { ... }
     public void changeOfAddress() { ... }
+    public Order placeNewOrder() { ... }
     public void addEmail(String emailAddress) { ... }
     ...
 }</programlisting>
@@ -5965,7 +5965,33 @@ public class Customer {
       <sect1>
         <title>@ActionSemantics</title>
 
-        <para>***</para>
+        <para>This annotation, which applies only to actions, describes
+        whether the invocation is safe (as no side-effects), is idempotent
+        (may have side-effects but always has the same postconditions), or is
+        neither safe nor idempotent. If the annotation is missing then the
+        framework assumes non-idempotent.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer {
+    @ActionSemantics(Of.SAFE)
+    public CreditRating checkCredit() { ... }
+
+    @ActionSemantics(Of.IDEMPOTENT)
+    public void changeOfAddress(Address address) { ... }
+
+    @ActionSemantics(Of.NON_IDEMPOTENT)
+    public Order placeNewOrder() { ... }
+    ...
+}</programlisting>
+
+        <para>The annotation was introduced for the restfulobjects viewer in
+        order that action invocations could be made available using either
+        <acronym>HTTP</acronym> <acronym>GET</acronym>, <acronym>PUT</acronym>
+        or <acronym>POST</acronym> (respectively). It is now also used in core
+        runtime's in-built concurrency checking; the invocation of a safe
+        action does not perform a concurrency check, whereas non-safe actions
+        do perform a concurrency check.</para>
       </sect1>
 
       <sect1>
@@ -6019,7 +6045,47 @@ public class County {
       <sect1>
         <title>@CommonlyUsed</title>
 
-        <para>***</para>
+        <para>The <classname>@CommonlyUsed</classname> annotation indicates
+        that a class member is likely to be used frequently by an end user and
+        so should be presented in the viewer in an appropriate manner:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>an <classname>Order</classname>'s
+            <methodname>lineItems</methodname> collection might initially be
+            rendered expanded form so that the user could see a list of line
+            items immediately when the order is rendered.</para>
+          </listitem>
+
+          <listitem>
+            <para>a property of type <classname>Address</classname> might show
+            the details of the referenced <classname>Address</classname> in a
+            box</para>
+          </listitem>
+
+          <listitem>
+            <para>an action <methodname>submit()</methodname> might be
+            rendered as a button rather than * buried inside a submenu
+            somewhere.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Order {
+    @CommonlyUsed
+    public List&lt;LineItem&gt; getDetails() { ... }
+
+    @CommonlyUsed
+    public void submit() { ... }
+    ...
+}</programlisting>
+
+        <para>For properties and collections there is some similarity between
+        this concept and that of eager-loading as supported by some object
+        stores. Indeed, some object stores may choose use their own specific
+        annotations (eg a JDO default fetch group) in order to infer this
+        semantic.</para>
       </sect1>
 
       <sect1 id="sec.DebugAnnotation">
@@ -6165,45 +6231,116 @@ public class ProspectiveSale {
         be marked as <literal moreinfo="none">@Hidden</literal>
         instead.</para>
 
-        <para>This annotation can also take a single parameter indicating when
-        it is to be hidden. For example:</para>
+        <para>This annotation can also take two parameter indicating where (in
+        the UI) it is to be disabled, and when (in the object's lifecycle) it
+        is to be disabled. For example:</para>
 
         <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@Disabled</emphasis>(When.UNTIL_PERSISTED)
+    <emphasis role="strong">@Disabled</emphasis>(when=When.UNTIL_PERSISTED)
     public void assessCreditWorthiness() { ... }
 }</programlisting>
 
-        <para>This would disable the action until the object has been
-        saved.</para>
+        <para>would disable the action until the object has been saved.
+        And:</para>
 
-        <para>The acceptable values for the parameter are:</para>
+        <programlisting format="linespecific">public class Customer {
+    <emphasis role="strong">@Disabled</emphasis>(where=Where.PARENTED_TABLES)
+    public void getFirstName() { ... }
+}</programlisting>
+
+        <para>would disable the property in parented tables but not in regular
+        object forms (though note: this would only be used by viewers that
+        provide in-table editing capability).</para>
+
+        <para>The acceptable values for the <varname>where</varname> parameter
+        are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>Where.ANYWHERE</code></para>
+
+            <para>The member should be disabled everywhere.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.OBJECT_FORMS</code></para>
+
+            <para>The member should be disabled when displayed within an
+            object form. For most viewers, this applies to property and
+            collection members, not actions.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.PARENTED_TABLES</code></para>
+
+            <para>The member should be disabled when displayed as a column of
+            a table within a parent object's collection. For most (all?)
+            viewers, this will have meaning only if applied to a property
+            member.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.STANDALONE_TABLES</code></para>
+
+            <para>The member should be disabled when displayed as a column of
+            a table showing a standalone list of objects, for example as
+            returned by a repository query. For most (all?) viewers, this will
+            have meaning only if applied to a property member.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.ALL_TABLES</code></para>
+
+            <para>The member should be disabled when displayed as a column of
+            a table, either an object's * collection or a standalone list.
+            This combines PARENTED_TABLE} and STANDALONE_TABLE</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.NOWHERE</code></para>
+
+            <para>Has no meaning for the <classname>@Disabled</classname>
+            annotation (though is used by the <classname>@Hidden</classname>
+            annotation, see <xref linkend="sec.HiddenAnnotation" />).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The acceptable values for the <varname>when</varname> parameter
+        are:</para>
 
         <itemizedlist>
           <listitem>
             <para><code>When.ALWAYS</code></para>
+
+            <para>The member should be disabled at all times.</para>
           </listitem>
 
           <listitem>
             <para><code>When.NEVER</code></para>
+
+            <para>The member should never be disabled (unless disabled through
+            some other mechanism, for example an imperative
+            <methodname>disableXxx()</methodname> supporting method).. </para>
           </listitem>
 
           <listitem>
             <para><code>When.ONCE_PERSISTED</code></para>
+
+            <para>The member should be enabled for transient objects, but
+            disabled for persisted objects.</para>
           </listitem>
 
           <listitem>
             <para><code>When.UNTIL_PERSISTED</code></para>
+
+            <para>The member should be disabled for transient objects, but
+            enabled for persisted objects.</para>
           </listitem>
         </itemizedlist>
 
         <para>By default the annotated property or action is always disabled
-        (ie defaults to <classname>When.ALWAYS</classname>).</para>
-
-        <para></para>
-
-        <para>*** where</para>
-
-        <para></para>
+        (ie defaults to <classname>Where.ANYWHERE</classname>,
+        <classname>When.ALWAYS</classname>).</para>
       </sect1>
 
       <sect1>
@@ -6373,81 +6510,136 @@ public class EmailService {
     ...
 }</programlisting>
 
-        <para>This annotation can also take a single parameter indicating when
-        it is to be hidden. For example:</para>
+        <para>This annotation can also take a parameters indicating where and
+        when it is to be hidden. For example:</para>
 
         <programlisting format="linespecific">public class Customer {
-    @Hidden(When.ONCE_PERSISTED)
+    @Hidden(when=When.ONCE_PERSISTED)
     public int getInternalId() { ... }
     ...
 }</programlisting>
 
-        <para>This would show the <varname>Id</varname> until the object has
-        been saved, and then would hide it.</para>
+        <para>would show the <varname>Id</varname> until the object has been
+        saved, and then would hide it. And:</para>
 
-        <para>The acceptable values for the parameter are:</para>
+        <programlisting format="linespecific">public class Customer {
+    @Hidden(where=Where.ALL_TABLES)
+    public int getDateOfBirth() { ... }
+    ...
+}</programlisting>
+
+        <para>would suppress the <varname>dateOfBirth</varname> property of a
+        Customer from all tables.</para>
+
+        <para>The acceptable values for the <varname>where</varname> parameter
+        are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>Where.ANYWHERE</code></para>
+
+            <para>The member should be hidden everywhere.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.OBJECT_FORMS</code></para>
+
+            <para>The member should be hidden when displayed within an object
+            form. For most viewers, this applies to property and collection
+            members, not actions.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.PARENTED_TABLES</code></para>
+
+            <para>The member should be hidden when displayed as a column of a
+            table within a parent object's collection. For most (all?)
+            viewers, this will have meaning only if applied to a property
+            member.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.STANDALONE_TABLES</code></para>
+
+            <para>The member should be hidden when displayed as a column of a
+            table showing a standalone list of objects, for example as
+            returned by a repository query. For most (all?) viewers, this will
+            have meaning only if applied to a property member.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.ALL_TABLES</code></para>
+
+            <para>The member should be /hidden when displayed as a column of a
+            table, either an object's * collection or a standalone list. This
+            combines <classname>PARENTED_TABLES</classname> and
+            <classname>STANDALONE_TABLES</classname>.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>Where.NOWHERE</code></para>
+
+            <para>Acts as an override if a member would normally be hidden as
+            a result of some other convention. For example, if a property is
+            annotated with <classname>@Title</classname> (see <xref
+            linkend="sec.TitleAnnotation" />), then normally this should be
+            hidden from all tables. Additionally annotating with
+            <code>@Hidden(where=Where.NOWHERE)</code> overrides this.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The acceptable values for the <varname>when</varname> parameter
+        are:</para>
 
         <itemizedlist>
           <listitem>
             <para><code>When.ALWAYS</code></para>
+
+            <para>The member should be hidden at all times.</para>
           </listitem>
 
           <listitem>
             <para><code>When.NEVER</code></para>
+
+            <para>The member should never be hidden (unless disabled through
+            some other mechanism, for example an imperative
+            <methodname>disableXxx()</methodname> supporting method)..</para>
           </listitem>
 
           <listitem>
             <para><code>When.ONCE_PERSISTED</code></para>
+
+            <para>The member should be visible for transient objects, but
+            hidden for persisted objects.</para>
           </listitem>
 
           <listitem>
             <para><code>When.UNTIL_PERSISTED</code></para>
+
+            <para>The member should be hidden for transient objects, but
+            visible for persisted objects.</para>
           </listitem>
         </itemizedlist>
 
         <para>By default the annotated property or action is always hidden (ie
-        defaults to <classname>When.ALWAYS</classname>).</para>
-
-        <para></para>
-
-        <para>***</para>
-
-        <para></para>
+        defaults to <classname>Where.ANYWHERE</classname>,
+        <classname>When.ALWAYS</classname>).</para>
       </sect1>
 
       <sect1>
         <title>@Idempotent (deprecated)</title>
 
-        <para>***</para>
+        <para>Equivalent to using <code>@ActionSemantics(Of.IDEMPOTENT)</code>
+        on an action.</para>
       </sect1>
 
       <sect1>
         <title>@Ignore (deprecated)</title>
 
-        <para>The <classname>@Ignore</classname> annotation can be used to
-        cause Apache Isis to complete ignore a class member. This means it
-        won't appear in any viewer, its value will not be persisted, and it
-        won't appear in any XML snapshots (see <xref
-        linkend="chp.XmlSnapshots" />).</para>
-
-        <para>A common use-case is to ignore implementation-level artifacts.
-        For example:</para>
-
-        <programlisting format="linespecific">public class Customer implements Comparable&lt;Customer&gt; {
-    ...
-    @Ignore
-    public int compareTo(Customer c) { 
-        return getSalary() - c.getSalary();
-    }
-    ...
-}</programlisting>
-
-        <para>Note that <methodname>@Ignore</methodname> does not simply imply
-        <methodname>@Hidden</methodname> and
-        <methodname>@NotPersisted</methodname>; it actually means that the
-        class member will not be part of the Isis metamodel.</para>
-
-        <para>***</para>
+        <para>Equivalent to using <code>@Programmatic</code>. The
+        <classname>@Programmatic</classname> annotation was introduced because
+        <classname>@Ignore</classname> can easily clash with
+        <classname>@org.junit.Ignore</classname>.</para>
       </sect1>
 
       <sect1>
@@ -7079,7 +7271,25 @@ public class Order {
       <sect1>
         <title>@Paged</title>
 
-        <para>***</para>
+        <para>This annotation is used to indicate that parented and/or
+        standalone collections should be paginated.</para>
+
+        <para>When annotated on a collection, <classname>@Paged</classname>
+        indicates the page size of a parented collection. When annotated on a
+        type, <classname>@Paged</classname> indicates the page size of a
+        standalone collection.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">@Paged(30)
+public class Order {
+
+    @Paged(15)
+    public List&lt;LineItem&gt; getDetails() {...}
+}</programlisting>
+
+        <para>This indicates a page size of 15 for parented collections, and a
+        page size of 30 for standalone collections.</para>
       </sect1>
 
       <sect1>
@@ -7116,7 +7326,8 @@ public class Order {
         - for example a collection of <literal
         moreinfo="none">Country</literal> objects will be titled 'Countries'.
         Where these conventions do not work, the programmer may specify the
-        plural form of the name using @Plural. For example:</para>
+        plural form of the name using <classname>@Plural</classname>. For
+        example:</para>
 
         <programlisting format="linespecific"><emphasis role="strong">@Plural("Children")</emphasis>
 public class Child {
@@ -7127,7 +7338,28 @@ public class Child {
       <sect1>
         <title>@Programmatic</title>
 
-        <para>***</para>
+        <para>The <classname>@Programmatic</classname> annotation can be used
+        to cause Apache Isis to complete ignore a class member. This means it
+        won't appear in any viewer, its value will not be persisted, and it
+        won't appear in any XML snapshots (see <xref
+        linkend="chp.XmlSnapshots" />).</para>
+
+        <para>A common use-case is to ignore implementation-level artifacts.
+        For example:</para>
+
+        <programlisting format="linespecific">public class Customer implements Comparable&lt;Customer&gt; {
+    ...
+    @Programmatic
+    public int compareTo(Customer c) { 
+        return getSalary() - c.getSalary();
+    }
+    ...
+}</programlisting>
+
+        <para>Note that <methodname>@Programmatic</methodname> does not simply
+        imply <methodname>@Hidden</methodname> and
+        <methodname>@NotPersisted</methodname>; it actually means that the
+        class member will not be part of the Isis metamodel.</para>
       </sect1>
 
       <sect1 id="sec.PrototypeAnnotation">
@@ -7155,7 +7387,8 @@ public class Child {
       <sect1>
         <title>@QueryOnly (deprecated)</title>
 
-        <para>***</para>
+        <para>Equivalent to using <code>@ActionSemantics(Of.SAFE)</code> on an
+        action.</para>
       </sect1>
 
       <sect1 id="sec.RegExAnnotation">
@@ -7206,7 +7439,7 @@ public class EmailAddress {
 y}</programlisting>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.TitleAnnotation">
         <title>@Title</title>
 
         <para>The <literal moreinfo="none">@Title</literal> annotation is used
@@ -7236,6 +7469,14 @@ y}</programlisting>
         <para>It is also possible to annotate reference properties; in this
         case the title will return the title of the referenced object (rather
         than, say, its string representation).</para>
+
+        <para>An additional convention for <classname>@Title</classname>
+        properties is that they are hidden in tables (in other words, it
+        implies <code>@Hidden(where=Where.ALL_TABLES)</code>. For viewers that
+        support this annotation (for example, the Wicket viewer), this
+        convention excludes any properties whose value is already present in
+        the title column. This convention can be overridden using
+        <code>@Hidden(where=Where.NOWHERE)</code>.</para>
       </sect1>
 
       <sect1>
