@@ -220,11 +220,24 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public boolean promptForParameters(final ObjectAdapter target) {
-        final List<ObjectActionParameter> parameters = getParameters();
-        if (isContributed() && !target.getSpecification().isService()) {
-            return getParameterCount() > 1 || !target.getSpecification().isOfType(parameters.get(0).getSpecification());
-        } else {
-            return getParameterCount() > 0;
+        switch(getParameterCount()) {
+            case 0:
+                return false;
+            case 1:
+                if(!isContributed()) {
+                    return true;
+                }
+                if(target == null) {
+                    return true;
+                }
+                if (target.getSpecification().isService()) {
+                    return true;
+                }
+                final ObjectSpecification targetSpec = target.getSpecification();
+                final ObjectSpecification param0Spec = getParameters().get(0).getSpecification();
+                return !targetSpec.isOfType(param0Spec);
+            default:
+                return true;
         }
     }
 

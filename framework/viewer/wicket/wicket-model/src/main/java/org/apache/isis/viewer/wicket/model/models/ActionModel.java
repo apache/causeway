@@ -125,27 +125,20 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return pageParameters;
     }
 
-    private static Mode determineActionMode(final ObjectAction noAction, final ObjectAdapter contextAdapter) {
-        final int parameterCount = noAction.getParameterCount();
-        if (parameterCount == 0) {
-            return Mode.RESULTS;
-        }
-        if (parameterCount > 1) {
-            return Mode.PARAMETERS;
-        }
-        // no need to prompt for contributed actions (ie if have a context
-        // adapter)
-        final ObjectActionParameter actionParam = noAction.getParameters().get(0);
-        return ActionParams.compatibleWith(contextAdapter, actionParam) ? Mode.RESULTS : Mode.PARAMETERS;
+    private static Mode determineActionMode(final ObjectAction objectAction, final ObjectAdapter contextAdapter) {
+        return objectAction.promptForParameters(contextAdapter)?Mode.PARAMETERS:Mode.RESULTS;
     }
+    
 
-
-	private static void addActionParamContextIfPossible(final ObjectAction noAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
+	private static void addActionParamContextIfPossible(final ObjectAction objectAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
         if (contextAdapter == null) {
             return;
         }
+        if(!objectAction.isContributed()) {
+            return;
+        }
         int i = 0;
-        for (final ObjectActionParameter actionParam : noAction.getParameters()) {
+        for (final ObjectActionParameter actionParam : objectAction.getParameters()) {
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
                 final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
                 PageParameterNames.ACTION_PARAM_CONTEXT.addTo(pageParameters, oidKeyValue);

@@ -41,23 +41,17 @@ public final class Actions {
         };
     }
 
-    public static String labelFor(final ObjectAction noAction) {
-        final String actionName = Actions.nameFor(noAction);
+    public static String labelFor(final ObjectAction objectAction) {
+        final String actionName = Actions.nameFor(objectAction);
         String actionLabel = actionName;
-        if (noAction.getParameterCount() > 0) {
+        if (objectAction.getParameterCount() > 0) {
             actionLabel += "...";
         }
         return actionLabel;
     }
 
     public static String labelFor(final ObjectAction action, final ObjectAdapter contextAdapter) {
-        if (action.getParameterCount() == 1) {
-            final ObjectActionParameter actionParam = action.getParameters().get(0);
-            if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
-                return nameFor(action);
-            }
-        }
-        return labelFor(action);
+        return action.promptForParameters(contextAdapter) ? labelFor(action) : nameFor(action);
     }
 
     private static String nameFor(final ObjectAction noAction) {
