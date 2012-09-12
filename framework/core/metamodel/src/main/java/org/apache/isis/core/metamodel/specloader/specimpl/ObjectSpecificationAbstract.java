@@ -357,9 +357,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public String getTitle(final ObjectAdapter object, final Localization localization) {
+    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
         if (titleFacet != null) {
-            final String titleString = titleFacet.title(object, localization);
+            final String titleString = titleFacet.title(adapter, localization);
             if (titleString != null && !titleString.equals("")) {
                 return titleString;
             }

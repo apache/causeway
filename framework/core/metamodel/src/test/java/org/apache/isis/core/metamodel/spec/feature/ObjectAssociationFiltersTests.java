@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
@@ -49,7 +52,7 @@ public class ObjectAssociationFiltersTests {
         context.checking(new Expectations() {
             {
                 never(mockAssociation).containsFacet(HiddenFacet.class);
-                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), Where.ANYWHERE);
+                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), with(equalTo(Where.ANYWHERE)));
             }
         });
         final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget, Where.ANYWHERE);

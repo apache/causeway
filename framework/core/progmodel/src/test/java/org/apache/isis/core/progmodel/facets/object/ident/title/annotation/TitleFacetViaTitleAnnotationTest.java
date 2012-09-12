@@ -104,13 +104,13 @@ public class TitleFacetViaTitleAnnotationTest {
                 allowing(mockObjectAdapter).getObject();
                 will(returnValue(normalPojo));
 
-                allowing(mockAdapterManager).getAdapterFor("Normal");
+                allowing(mockAdapterManager).adapterFor("Normal");
                 inSequence(sequence);
 
-                allowing(mockAdapterManager).getAdapterFor("Domain");
+                allowing(mockAdapterManager).adapterFor("Domain");
                 inSequence(sequence);
 
-                allowing(mockAdapterManager).getAdapterFor("Object");
+                allowing(mockAdapterManager).adapterFor("Object");
                 inSequence(sequence);
             }
         });

@@ -1,7 +1,1 @@
-#
-# included back-in, for the DataNucleus builder
-#
-# DataNucleus plugin can be installed from 
-# http://www.datanucleus.org/plugins/ide.eclipse.html
-#
-!.project
+.project

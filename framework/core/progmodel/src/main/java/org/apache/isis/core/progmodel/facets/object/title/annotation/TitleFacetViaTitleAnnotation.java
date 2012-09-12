@@ -127,7 +127,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     private String titleOf(final Object domainObject) {
-        final ObjectAdapter adapter = adapterManager.getAdapterFor(domainObject);
+        final ObjectAdapter adapter = adapterManager.adapterFor(domainObject);
         if (adapter == null) {
             return null;
         }
