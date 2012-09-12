@@ -21,11 +21,11 @@ package org.apache.isis.core.progmodel.facets.actions.semantics;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-public class ActionSemanticsFallbackFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ActionSemanticsFallbackFacetFactory extends FacetFactoryAbstract {
 
     public ActionSemanticsFallbackFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);

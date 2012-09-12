@@ -23,12 +23,13 @@ import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ImmutableAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public ImmutableAnnotationFacetFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS);
@@ -36,7 +37,7 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Immutable annotation = getAnnotation(processClassContaxt.getCls(), Immutable.class);
+        final Immutable annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Immutable.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 

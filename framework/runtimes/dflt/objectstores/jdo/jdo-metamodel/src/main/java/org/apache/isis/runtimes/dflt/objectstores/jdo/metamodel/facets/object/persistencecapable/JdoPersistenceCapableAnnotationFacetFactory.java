@@ -25,11 +25,11 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class JdoPersistenceCapableAnnotationFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public JdoPersistenceCapableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -38,7 +38,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final PersistenceCapable annotation = getAnnotation(cls, PersistenceCapable.class);
+        final PersistenceCapable annotation = Annotations.getAnnotation(cls, PersistenceCapable.class);
         if (annotation == null) {
             return;
         }

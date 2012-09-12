@@ -23,11 +23,11 @@ import javax.jdo.annotations.EmbeddedOnly;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class JdoEmbeddedOnlyAnnotationFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class JdoEmbeddedOnlyAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public JdoEmbeddedOnlyAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -35,7 +35,7 @@ public class JdoEmbeddedOnlyAnnotationFacetFactory extends
 
     @Override
     public void process(ProcessClassContext processMethodContext) {
-        final EmbeddedOnly annotation = getAnnotation(processMethodContext.getCls(), EmbeddedOnly.class);
+        final EmbeddedOnly annotation = Annotations.getAnnotation(processMethodContext.getCls(), EmbeddedOnly.class);
         if (annotation == null) {
             return;
         }

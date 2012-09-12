@@ -26,13 +26,14 @@ import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultsProviderUtil;
 
-public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, ServicesInjectorAware {
+public class DefaultedAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
     private ServicesInjector servicesInjector;
@@ -47,7 +48,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     private DefaultedFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-        final Defaulted annotation = getAnnotation(cls, Defaulted.class);
+        final Defaulted annotation = Annotations.getAnnotation(cls, Defaulted.class);
 
         // create from annotation, if present
         if (annotation != null) {

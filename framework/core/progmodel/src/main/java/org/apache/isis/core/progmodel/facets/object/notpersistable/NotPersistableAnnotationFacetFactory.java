@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 
-public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class NotPersistableAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public NotPersistableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,13 +35,13 @@ public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFa
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final NotPersistable annotation = getAnnotation(processClassContaxt.getCls(), NotPersistable.class);
+        final NotPersistable annotation = Annotations.getAnnotation(processClassContaxt.getCls(), NotPersistable.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final NotPersistable annotation = getAnnotation(processMethodContext.getMethod(), NotPersistable.class);
+        final NotPersistable annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotPersistable.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

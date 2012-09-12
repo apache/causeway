@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskFacet;
 
-public class MaskAnnotationForTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MaskAnnotationForTypeFacetFactory extends FacetFactoryAbstract {
 
     public MaskAnnotationForTypeFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -37,7 +38,7 @@ public class MaskAnnotationForTypeFacetFactory extends AnnotationBasedFacetFacto
      */
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Mask annotation = getAnnotation(processClassContaxt.getCls(), Mask.class);
+        final Mask annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Mask.class);
         FacetUtil.addFacet(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
     }
 

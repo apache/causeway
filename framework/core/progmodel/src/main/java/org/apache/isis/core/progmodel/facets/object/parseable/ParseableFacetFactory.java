@@ -30,11 +30,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
+public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
 
@@ -52,7 +53,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
     }
 
     private ParseableFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-        final Parseable annotation = getAnnotation(cls, Parseable.class);
+        final Parseable annotation = Annotations.getAnnotation(cls, Parseable.class);
 
         // create from annotation, if present
         if (annotation != null) {

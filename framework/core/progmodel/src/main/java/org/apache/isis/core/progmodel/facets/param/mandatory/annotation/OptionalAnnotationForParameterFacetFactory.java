@@ -24,9 +24,10 @@ import java.lang.annotation.Annotation;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class OptionalAnnotationForParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class OptionalAnnotationForParameterFacetFactory extends FacetFactoryAbstract {
 
     public OptionalAnnotationForParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -42,7 +43,7 @@ public class OptionalAnnotationForParameterFacetFactory extends AnnotationBasedF
         if (parameterTypes[processParameterContext.getParamNum()].isPrimitive()) {
             return;
         }
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof Optional) {
                 FacetUtil.addFacet(new MandatoryFacetInvertedByOptionalForParameter(processParameterContext.getFacetHolder()));

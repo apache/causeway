@@ -26,13 +26,14 @@ import java.lang.reflect.TypeVariable;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public class TypeOfAnnotationForActionsFacetFactory extends AnnotationBasedFacetFactoryAbstract implements CollectionTypeRegistryAware {
+public class TypeOfAnnotationForActionsFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware {
     private CollectionTypeRegistry collectionTypeRegistry;
 
     public TypeOfAnnotationForActionsFacetFactory() {
@@ -42,7 +43,7 @@ public class TypeOfAnnotationForActionsFacetFactory extends AnnotationBasedFacet
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final TypeOf annotation = getAnnotation(processMethodContext.getMethod(), TypeOf.class);
+        final TypeOf annotation = Annotations.getAnnotation(processMethodContext.getMethod(), TypeOf.class);
 
         final Class<?> methodReturnType = processMethodContext.getMethod().getReturnType();
         if (!collectionTypeRegistry.isCollectionType(methodReturnType) && !collectionTypeRegistry.isArrayType(methodReturnType)) {

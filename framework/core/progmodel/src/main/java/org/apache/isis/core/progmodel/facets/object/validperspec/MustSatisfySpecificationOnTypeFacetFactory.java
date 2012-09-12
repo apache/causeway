@@ -28,9 +28,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class MustSatisfySpecificationOnTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MustSatisfySpecificationOnTypeFacetFactory extends FacetFactoryAbstract {
 
     public MustSatisfySpecificationOnTypeFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -42,7 +43,7 @@ public class MustSatisfySpecificationOnTypeFacetFactory extends AnnotationBasedF
     }
 
     private Facet create(final Class<?> clazz, final FacetHolder holder) {
-        return create(getAnnotation(clazz, MustSatisfy.class), holder);
+        return create(Annotations.getAnnotation(clazz, MustSatisfy.class), holder);
     }
 
     private static Facet create(final MustSatisfy annotation, final FacetHolder holder) {

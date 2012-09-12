@@ -22,12 +22,12 @@ package org.apache.isis.core.progmodel.facets.object.objecttype;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
 
-public class ObjectTypeDerivedFromClassNameFacetFactory extends AnnotationBasedFacetFactoryAbstract implements ClassSubstitutorAware {
+public class ObjectTypeDerivedFromClassNameFacetFactory extends FacetFactoryAbstract implements ClassSubstitutorAware {
 
     private ClassSubstitutor classSubstitutor;
 

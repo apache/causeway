@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 
-public class BoundedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class BoundedAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public BoundedAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +35,7 @@ public class BoundedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAb
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Bounded annotation = getAnnotation(processClassContaxt.getCls(), Bounded.class);
+        final Bounded annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Bounded.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 

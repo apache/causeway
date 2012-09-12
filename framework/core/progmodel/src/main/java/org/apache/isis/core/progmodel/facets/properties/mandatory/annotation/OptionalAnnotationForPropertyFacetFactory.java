@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 
-public class OptionalAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class OptionalAnnotationForPropertyFacetFactory extends FacetFactoryAbstract {
 
     public OptionalAnnotationForPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -38,10 +39,10 @@ public class OptionalAnnotationForPropertyFacetFactory extends AnnotationBasedFa
         if (returnType.isPrimitive()) {
             return;
         }
-        if (!isAnnotationPresent(processMethodContext.getMethod(), Optional.class)) {
+        if (!Annotations.isAnnotationPresent(processMethodContext.getMethod(), Optional.class)) {
             return;
         }
-        final Optional annotation = getAnnotation(processMethodContext.getMethod(), Optional.class);
+        final Optional annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Optional.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

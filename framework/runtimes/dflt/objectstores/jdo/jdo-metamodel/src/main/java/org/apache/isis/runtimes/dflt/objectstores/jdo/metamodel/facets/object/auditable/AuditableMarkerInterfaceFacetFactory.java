@@ -21,12 +21,11 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.a
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.Auditable;
 
 
-public class AuditableMarkerInterfaceFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class AuditableMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
 
     public AuditableMarkerInterfaceFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 
-public class NamedAnnotationOnMemberFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class NamedAnnotationOnMemberFacetFactory extends FacetFactoryAbstract {
 
     public NamedAnnotationOnMemberFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -34,7 +35,7 @@ public class NamedAnnotationOnMemberFacetFactory extends AnnotationBasedFacetFac
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Named annotation = getAnnotation(processMethodContext.getMethod(), Named.class);
+        final Named annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Named.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

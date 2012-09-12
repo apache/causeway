@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
 
-public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class DisabledAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public DisabledAnnotationFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -34,7 +35,7 @@ public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryA
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Disabled annotation = getAnnotation(processMethodContext.getMethod(), Disabled.class);
+        final Disabled annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Disabled.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

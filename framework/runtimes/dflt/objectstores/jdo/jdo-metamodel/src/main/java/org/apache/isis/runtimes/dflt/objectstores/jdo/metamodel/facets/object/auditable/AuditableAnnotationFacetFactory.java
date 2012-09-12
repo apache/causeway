@@ -21,12 +21,12 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.a
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
 
-public class AuditableAnnotationFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class AuditableAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public AuditableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -35,7 +35,7 @@ public class AuditableAnnotationFacetFactory extends
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final Auditable annotation = getAnnotation(cls, Auditable.class);
+        final Auditable annotation = Annotations.getAnnotation(cls, Auditable.class);
         if (annotation == null) {
             return;
         }

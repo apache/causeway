@@ -21,17 +21,14 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.d
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class JdoDatastoreIdentityAnnotationFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public JdoDatastoreIdentityAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -40,7 +37,7 @@ public class JdoDatastoreIdentityAnnotationFacetFactory extends
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DatastoreIdentity annotation = getAnnotation(cls, DatastoreIdentity.class);
+        final DatastoreIdentity annotation = Annotations.getAnnotation(cls, DatastoreIdentity.class);
         if (annotation == null) {
             return;
         }

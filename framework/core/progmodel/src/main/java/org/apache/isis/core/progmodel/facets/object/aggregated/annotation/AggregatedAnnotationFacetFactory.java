@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
 
-public class AggregatedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class AggregatedAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public AggregatedAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +35,7 @@ public class AggregatedAnnotationFacetFactory extends AnnotationBasedFacetFactor
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Aggregated annotation = getAnnotation(processClassContext.getCls(), Aggregated.class);
+        final Aggregated annotation = Annotations.getAnnotation(processClassContext.getCls(), Aggregated.class);
         FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 

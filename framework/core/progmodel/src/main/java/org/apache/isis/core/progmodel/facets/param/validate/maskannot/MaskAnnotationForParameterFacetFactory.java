@@ -23,13 +23,14 @@ import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskFacet;
 import org.apache.isis.core.progmodel.facets.object.mask.TitleFacetBasedOnMask;
 
-public class MaskAnnotationForParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MaskAnnotationForParameterFacetFactory extends FacetFactoryAbstract {
 
     public MaskAnnotationForParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -43,7 +44,7 @@ public class MaskAnnotationForParameterFacetFactory extends AnnotationBasedFacet
             return;
         }
 
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];

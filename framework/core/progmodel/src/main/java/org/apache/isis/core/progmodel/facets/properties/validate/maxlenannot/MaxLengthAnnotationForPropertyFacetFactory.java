@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 
-public class MaxLengthAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MaxLengthAnnotationForPropertyFacetFactory extends FacetFactoryAbstract {
 
     public MaxLengthAnnotationForPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -34,7 +35,7 @@ public class MaxLengthAnnotationForPropertyFacetFactory extends AnnotationBasedF
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final MaxLength annotation = getAnnotation(processMethodContext.getMethod(), MaxLength.class);
+        final MaxLength annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MaxLength.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

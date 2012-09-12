@@ -26,9 +26,10 @@ import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory extends FacetFactoryAbstract {
 
     public RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -53,7 +54,7 @@ public class RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory extends Ann
     }
 
     private static <T extends Annotation> void removeAnnotatedMethods(final MethodRemover methodRemover, final Method method, Class<T> annotationClass) {
-        if (!isAnnotationPresent(method, annotationClass)) {
+        if (!Annotations.isAnnotationPresent(method, annotationClass)) {
             return;
         } 
         methodRemover.removeMethod(method);

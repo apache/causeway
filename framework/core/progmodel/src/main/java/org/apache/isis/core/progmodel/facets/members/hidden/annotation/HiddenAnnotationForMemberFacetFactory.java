@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 
-public class HiddenAnnotationForMemberFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class HiddenAnnotationForMemberFacetFactory extends FacetFactoryAbstract {
 
     public HiddenAnnotationForMemberFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -34,7 +35,7 @@ public class HiddenAnnotationForMemberFacetFactory extends AnnotationBasedFacetF
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Hidden annotation = getAnnotation(processMethodContext.getMethod(), Hidden.class);
+        final Hidden annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

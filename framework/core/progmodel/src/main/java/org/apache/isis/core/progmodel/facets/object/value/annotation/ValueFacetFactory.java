@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.object.value.annotation;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -31,7 +32,8 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ebc.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -72,7 +74,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
  * <p>
  * Note that {@link ParentedFacet} is <i>not</i> installed.
  */
-public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
+public class ValueFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -94,7 +96,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
     private ValueFacet create(final Class<?> cls, final FacetHolder holder) {
 
         // create from annotation, if present
-        final Value annotation = getAnnotation(cls, Value.class);
+        final Value annotation = Annotations.getAnnotation(cls, Value.class);
         if (annotation != null) {
             final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {

@@ -22,10 +22,11 @@ package org.apache.isis.core.progmodel.facets.actions.semantics;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
-public class QueryOnlyAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class QueryOnlyAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public QueryOnlyAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -33,7 +34,7 @@ public class QueryOnlyAnnotationFacetFactory extends AnnotationBasedFacetFactory
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final QueryOnly annotation = getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
+        final QueryOnly annotation = Annotations.getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
         if (annotation == null) {
             return;
         }

@@ -25,10 +25,11 @@ import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 
-public class MaxLengthAnnotationForParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MaxLengthAnnotationForParameterFacetFactory extends FacetFactoryAbstract {
 
     public MaxLengthAnnotationForParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -36,7 +37,7 @@ public class MaxLengthAnnotationForParameterFacetFactory extends AnnotationBased
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MaxLength) {

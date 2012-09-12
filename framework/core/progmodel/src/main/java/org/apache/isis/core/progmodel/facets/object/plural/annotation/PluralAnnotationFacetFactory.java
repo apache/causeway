@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Plural;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 
-public class PluralAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class PluralAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public PluralAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +35,7 @@ public class PluralAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Plural annotation = getAnnotation(processClassContaxt.getCls(), Plural.class);
+        final Plural annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Plural.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 

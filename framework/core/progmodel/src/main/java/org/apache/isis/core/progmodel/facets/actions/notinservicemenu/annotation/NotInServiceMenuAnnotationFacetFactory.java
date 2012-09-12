@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 
-public class NotInServiceMenuAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class NotInServiceMenuAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public NotInServiceMenuAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -34,7 +35,7 @@ public class NotInServiceMenuAnnotationFacetFactory extends AnnotationBasedFacet
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final NotInServiceMenu annotation = getAnnotation(processMethodContext.getMethod(), NotInServiceMenu.class);
+        final NotInServiceMenu annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotInServiceMenu.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
-public class PagedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class PagedAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public PagedAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_AND_COLLECTIONS);
@@ -34,13 +35,13 @@ public class PagedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbst
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Paged annotation = getAnnotation(processClassContext.getCls(), Paged.class);
+        final Paged annotation = Annotations.getAnnotation(processClassContext.getCls(), Paged.class);
         FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Paged annotation = getAnnotation(processMethodContext.getMethod(), Paged.class);
+        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

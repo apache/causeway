@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-public class ActionSemanticsAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ActionSemanticsAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public ActionSemanticsAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -34,7 +35,7 @@ public class ActionSemanticsAnnotationFacetFactory extends AnnotationBasedFacetF
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final ActionSemantics annotation = getAnnotation(processMethodContext.getMethod(), ActionSemantics.class);
+        final ActionSemantics annotation = Annotations.getAnnotation(processMethodContext.getMethod(), ActionSemantics.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

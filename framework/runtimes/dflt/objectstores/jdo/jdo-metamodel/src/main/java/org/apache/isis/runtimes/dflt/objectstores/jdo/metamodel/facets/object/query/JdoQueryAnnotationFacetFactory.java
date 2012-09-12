@@ -24,11 +24,11 @@ import javax.jdo.annotations.Query;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class JdoQueryAnnotationFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public JdoQueryAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -37,8 +37,7 @@ public class JdoQueryAnnotationFacetFactory extends
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final Queries namedQueriesAnnotation = getAnnotation(cls,
-                Queries.class);
+        final Queries namedQueriesAnnotation = Annotations.getAnnotation(cls, Queries.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         
         if (namedQueriesAnnotation != null) {
@@ -47,8 +46,7 @@ public class JdoQueryAnnotationFacetFactory extends
             return;
         }
 
-        final Query namedQueryAnnotation = getAnnotation(cls,
-                Query.class);
+        final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
         if (namedQueryAnnotation != null) {
             FacetUtil.addFacet(new JdoQueryFacetAnnotation(
                     namedQueryAnnotation, facetHolder));

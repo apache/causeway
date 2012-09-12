@@ -22,12 +22,12 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 
-public class JdoPrimaryKeyAnnotationFacetFactory extends
-        AnnotationBasedFacetFactoryAbstract {
+public class JdoPrimaryKeyAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public JdoPrimaryKeyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -35,7 +35,7 @@ public class JdoPrimaryKeyAnnotationFacetFactory extends
 
     @Override
     public void process(ProcessMethodContext processMethodContext) {
-        final PrimaryKey annotation = getAnnotation(processMethodContext.getMethod(), PrimaryKey.class);
+        final PrimaryKey annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PrimaryKey.class);
         if (annotation == null) {
             return;
         }

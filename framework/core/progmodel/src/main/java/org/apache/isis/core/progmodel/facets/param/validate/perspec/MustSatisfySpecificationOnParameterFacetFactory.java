@@ -29,9 +29,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class MustSatisfySpecificationOnParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MustSatisfySpecificationOnParameterFacetFactory extends FacetFactoryAbstract {
 
     public MustSatisfySpecificationOnParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -39,7 +40,7 @@ public class MustSatisfySpecificationOnParameterFacetFactory extends AnnotationB
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MustSatisfy) {

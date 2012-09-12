@@ -23,13 +23,14 @@ import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.object.mask.MaskFacet;
 import org.apache.isis.core.progmodel.facets.object.mask.TitleFacetBasedOnMask;
 
-public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MaskAnnotationForPropertyFacetFactory extends FacetFactoryAbstract {
 
     public MaskAnnotationForPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -40,7 +41,7 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
      */
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Mask annotation = getAnnotation(processClassContaxt.getCls(), Mask.class);
+        final Mask annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Mask.class);
         FacetUtil.addFacet(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
     }
 
@@ -50,7 +51,7 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
             return;
         }
 
-        final Mask annotation = getAnnotation(processMethodContext.getMethod(), Mask.class);
+        final Mask annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Mask.class);
         addMaskFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation, processMethodContext.getMethod().getReturnType());
     }
 
@@ -62,7 +63,7 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
             return;
         }
 
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];

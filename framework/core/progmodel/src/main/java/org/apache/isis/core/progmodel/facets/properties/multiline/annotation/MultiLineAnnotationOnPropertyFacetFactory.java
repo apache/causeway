@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 
-public class MultiLineAnnotationOnPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class MultiLineAnnotationOnPropertyFacetFactory extends FacetFactoryAbstract {
 
     public MultiLineAnnotationOnPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -35,10 +36,10 @@ public class MultiLineAnnotationOnPropertyFacetFactory extends AnnotationBasedFa
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        if (!isString(returnType)) {
+        if (!Annotations.isString(returnType)) {
             return;
         }
-        final MultiLine annotation = getAnnotation(processMethodContext.getMethod(), MultiLine.class);
+        final MultiLine annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MultiLine.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

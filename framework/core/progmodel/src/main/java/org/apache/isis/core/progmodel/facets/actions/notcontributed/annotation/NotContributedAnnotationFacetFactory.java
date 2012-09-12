@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 
-public class NotContributedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class NotContributedAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public NotContributedAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -34,7 +35,7 @@ public class NotContributedAnnotationFacetFactory extends AnnotationBasedFacetFa
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final NotContributed annotation = getAnnotation(processMethodContext.getMethod(), NotContributed.class);
+        final NotContributed annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotContributed.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

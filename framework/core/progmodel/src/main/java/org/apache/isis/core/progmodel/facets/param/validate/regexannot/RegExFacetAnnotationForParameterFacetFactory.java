@@ -25,12 +25,13 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.TitleFacetFormattedByRegex;
 
-public class RegExFacetAnnotationForParameterFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class RegExFacetAnnotationForParameterFacetFactory extends FacetFactoryAbstract {
 
     public RegExFacetAnnotationForParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -43,11 +44,11 @@ public class RegExFacetAnnotationForParameterFacetFactory extends AnnotationBase
             // ignore
             return;
         }
-        if (!isString(parameterTypes[processParameterContext.getParamNum()])) {
+        if (!Annotations.isString(parameterTypes[processParameterContext.getParamNum()])) {
             return;
         }
 
-        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof RegEx) {
                 final RegEx annotation = (RegEx) parameterAnnotation;

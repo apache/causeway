@@ -23,12 +23,13 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.progmodel.facets.object.regex.TitleFacetFormattedByRegex;
 
-public class RegExFacetAnnotationForPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class RegExFacetAnnotationForPropertyFacetFactory extends FacetFactoryAbstract {
 
     public RegExFacetAnnotationForPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -37,10 +38,10 @@ public class RegExFacetAnnotationForPropertyFacetFactory extends AnnotationBased
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        if (!isString(returnType)) {
+        if (!Annotations.isString(returnType)) {
             return;
         }
-        final RegEx annotation = getAnnotation(processMethodContext.getMethod(), RegEx.class);
+        final RegEx annotation = Annotations.getAnnotation(processMethodContext.getMethod(), RegEx.class);
         addRegexFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation);
     }
 

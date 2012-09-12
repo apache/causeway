@@ -23,7 +23,8 @@ import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
@@ -31,7 +32,7 @@ import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFace
  * {@link ExplorationFacet} can also be installed via a naming convention, see
  * {@link ActionInvocationFacetFactory}.
  */
-public class ExplorationAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ExplorationAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public ExplorationAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -39,7 +40,7 @@ public class ExplorationAnnotationFacetFactory extends AnnotationBasedFacetFacto
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Exploration annotation = getAnnotation(processMethodContext.getMethod(), Exploration.class);
+        final Exploration annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Exploration.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

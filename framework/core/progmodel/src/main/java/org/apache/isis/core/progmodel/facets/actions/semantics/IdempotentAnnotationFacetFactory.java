@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-public class IdempotentAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class IdempotentAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public IdempotentAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -34,7 +35,7 @@ public class IdempotentAnnotationFacetFactory extends AnnotationBasedFacetFactor
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Idempotent annotation = getAnnotation(processMethodContext.getMethod(), Idempotent.class);
+        final Idempotent annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Idempotent.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 

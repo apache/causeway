@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
-public class ViewModelAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ViewModelAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public ViewModelAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +35,7 @@ public class ViewModelAnnotationFacetFactory extends AnnotationBasedFacetFactory
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final ViewModel annotation = getAnnotation(processClassContaxt.getCls(), ViewModel.class);
+        final ViewModel annotation = Annotations.getAnnotation(processClassContaxt.getCls(), ViewModel.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 

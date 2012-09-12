@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
 
-public class RegExFacetAnnotationForTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class RegExFacetAnnotationForTypeFacetFactory extends FacetFactoryAbstract {
 
     public RegExFacetAnnotationForTypeFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +35,7 @@ public class RegExFacetAnnotationForTypeFacetFactory extends AnnotationBasedFace
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final RegEx annotation = getAnnotation(processClassContaxt.getCls(), RegEx.class);
+        final RegEx annotation = Annotations.getAnnotation(processClassContaxt.getCls(), RegEx.class);
         FacetUtil.addFacet(createRegexFacet(annotation, processClassContaxt.getFacetHolder()));
     }
 

@@ -23,10 +23,11 @@ import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 
-public class TypicalLengthAnnotationOnPropertyFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class TypicalLengthAnnotationOnPropertyFacetFactory extends FacetFactoryAbstract {
 
     public TypicalLengthAnnotationOnPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -34,7 +35,7 @@ public class TypicalLengthAnnotationOnPropertyFacetFactory extends AnnotationBas
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final TypicalLength annotation = getAnnotation(processMethodContext.getMethod(), TypicalLength.class);
+        final TypicalLength annotation = Annotations.getAnnotation(processMethodContext.getMethod(), TypicalLength.class);
         final TypicalLengthFacet facet = create(annotation, processMethodContext.getFacetHolder());
 
         FacetUtil.addFacet(facet);

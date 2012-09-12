@@ -22,10 +22,11 @@ package org.apache.isis.viewer.wicket.metamodel.wizardpagedesc;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.viewer.wicket.applib.WizardPageDescription;
 
-public class WizardPageDescriptionAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class WizardPageDescriptionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public WizardPageDescriptionAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -35,7 +36,7 @@ public class WizardPageDescriptionAnnotationFacetFactory extends AnnotationBased
     public void process(final ProcessMethodContext processMethodContext) {
 
         // look for annotation on the property
-        final WizardPageDescription annotation = getAnnotation(processMethodContext.getMethod(), WizardPageDescription.class);
+        final WizardPageDescription annotation = Annotations.getAnnotation(processMethodContext.getMethod(), WizardPageDescription.class);
         final WizardPageDescriptionFacet facet = create(annotation, processMethodContext.getFacetHolder());
         if (facet != null) {
             FacetUtil.addFacet(facet);

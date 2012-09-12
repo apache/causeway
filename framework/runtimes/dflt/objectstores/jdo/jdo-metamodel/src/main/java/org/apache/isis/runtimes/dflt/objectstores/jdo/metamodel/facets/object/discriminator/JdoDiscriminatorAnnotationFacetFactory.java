@@ -23,9 +23,10 @@ import javax.jdo.annotations.Discriminator;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class JdoDiscriminatorAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +35,7 @@ public class JdoDiscriminatorAnnotationFacetFactory extends AnnotationBasedFacet
     @Override
     public void process(ProcessClassContext processClassContext) {
 
-        final Discriminator annotation = getAnnotation(processClassContext.getCls(), Discriminator.class);
+        final Discriminator annotation = Annotations.getAnnotation(processClassContext.getCls(), Discriminator.class);
         if (annotation == null) {
             return;
         }

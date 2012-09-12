@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * because a type is immutable, doesn't imply that the property can't change the
  * instance that it refers to?
  */
-public class DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory extends FacetFactoryAbstract {
 
     public DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
