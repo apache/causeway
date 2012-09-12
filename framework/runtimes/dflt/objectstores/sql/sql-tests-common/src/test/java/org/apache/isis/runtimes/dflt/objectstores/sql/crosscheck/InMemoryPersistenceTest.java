@@ -25,6 +25,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.crosscheck;
 import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
 
 public class InMemoryPersistenceTest extends SqlIntegrationTestData {
 
@@ -32,8 +34,20 @@ public class InMemoryPersistenceTest extends SqlIntegrationTestData {
     public Properties getProperties() {
         final Properties properties = new Properties();
         properties.put("isis.persistor", "in-memory");
-        properties.put("isis.logging.objectstore", "on");
+        properties.put("isis.logging.objectstore", "off");
         return properties;
+    }
+
+    @Override
+    protected void testSetup() {
+        resetPersistenceStoreDirectlyIfRequired();
+        SqlIntegrationTestFixtures.recreate();
+        try {
+            SqlIntegrationTestFixtures.getInstance().initSystem(getProperties());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        getSqlIntegrationTestFixtures().setState(State.INITIALIZE);
     }
 
     @Override

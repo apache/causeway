@@ -20,6 +20,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import org.apache.isis.core.testsupport.files.Files;
 import org.apache.isis.core.testsupport.files.Files.Recursion;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.Data;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
 
 public class HsqlTest extends SqlIntegrationTestData {
@@ -27,6 +28,14 @@ public class HsqlTest extends SqlIntegrationTestData {
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
         Files.deleteFilesWithPrefix("hsql-db", "tests", Recursion.DONT_RECURSE);
+    }
+
+    @Override
+    protected void testCreate() throws Exception {
+        for (final String tableName : Data.getTableNames()) {
+            getSqlIntegrationTestFixtures().dropTable(tableName);
+        }
+        super.testCreate();
     }
 
     @Override

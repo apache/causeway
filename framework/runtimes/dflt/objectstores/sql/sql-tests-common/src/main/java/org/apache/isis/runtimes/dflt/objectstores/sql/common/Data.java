@@ -75,7 +75,7 @@ public class Data {
     static final List<String> stringList2 = Arrays.asList("Fridge", "Deli", "Fresh Produce", "Frozen", "Household",
         "Other..");
 
-    static List<String> getTableNames() {
+    public static List<String> getTableNames() {
         return Arrays.asList("sqldataclass", "simpleclass", "simpleclasstwo", "primitivevaluedentity");
     }
 

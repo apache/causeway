@@ -27,6 +27,8 @@ import java.util.Properties;
 import org.apache.isis.core.testsupport.files.Files;
 import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
 
 public class XmlPersistenceTest extends SqlIntegrationTestData {
 
@@ -36,10 +38,22 @@ public class XmlPersistenceTest extends SqlIntegrationTestData {
     }
 
     @Override
+    protected void testSetup() {
+        resetPersistenceStoreDirectlyIfRequired();
+        SqlIntegrationTestFixtures.recreate();
+        try {
+            SqlIntegrationTestFixtures.getInstance().initSystem(getProperties());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        getSqlIntegrationTestFixtures().setState(State.INITIALIZE);
+    }
+
+    @Override
     public Properties getProperties() {
         final Properties properties = new Properties();
         properties.put("isis.persistor", "xml");
-        properties.put("isis.logging.objectstore", "on");
+        properties.put("isis.logging.objectstore", "off");
         return properties;
     }
 

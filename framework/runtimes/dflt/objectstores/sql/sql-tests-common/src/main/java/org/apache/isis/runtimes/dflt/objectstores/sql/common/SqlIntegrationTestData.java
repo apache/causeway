@@ -120,15 +120,12 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
 
     }
 
-    private void testSetup() {
+    protected void testSetup() {
         resetPersistenceStoreDirectlyIfRequired();
         getSqlIntegrationTestFixtures().setState(State.INITIALIZE);
     }
 
-    private void testCreate() throws Exception {
-        for (final String tableName : Data.getTableNames()) {
-            getSqlIntegrationTestFixtures().dropTable(tableName);
-        }
+    protected void testCreate() throws Exception {
 
         sqlDataClass = factory.newDataClass();
 
@@ -164,6 +161,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         pve2.setLongProperty(Data.longMinValue);
         pve2.setDoubleProperty(Data.doubleMinValue);
         pve2.setFloatProperty(Data.floatMinValue);
+        pve2.setCharProperty((char) (32)); // temporary work around: See ISIS-269
 
         sqlDataClass.setPrimitiveValuedEntityMin(pve2);
 
@@ -174,6 +172,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         pve1.setLongProperty(Data.longMaxValue);
         pve1.setDoubleProperty(Data.doubleMaxValue);
         pve1.setFloatProperty(Data.floatMaxValue);
+        pve1.setCharProperty((char) (255));
 
         sqlDataClass.setPrimitiveValuedEntityMax(pve1);
 
