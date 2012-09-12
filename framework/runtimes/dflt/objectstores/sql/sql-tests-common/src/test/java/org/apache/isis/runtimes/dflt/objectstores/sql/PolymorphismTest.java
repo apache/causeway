@@ -103,16 +103,14 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         resetPersistenceStoreDirectlyIfRequired();
         setFixtureInitializationState(State.INITIALIZE);
 
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYTESTCLASS");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYBASECLASS");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACE");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYSUBCLASS");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYSUBCLASSONE");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYSUBCLASSTWO");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYSUBCLASSTHREE");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACEIMPLA");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACEIMPLB");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_POLYSELFREFCLASS");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_SELFREFERENCINGENTITY");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGABLEENTITYWITHOWNPROPERTY");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUB");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUBTWO");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUBTHREE");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_REFERENCINGPOLYTYPESENTITY");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITY");
+        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGABLE");
     }
 
     private void create() throws Exception {
