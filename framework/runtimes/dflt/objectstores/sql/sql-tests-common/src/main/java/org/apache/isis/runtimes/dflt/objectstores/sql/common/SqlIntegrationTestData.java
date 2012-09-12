@@ -50,12 +50,11 @@ import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
 /**
  * @author Kevin kevin@kmz.co.za
  * 
- *         The Singleton class {@link SqlIntegrationTestFixtures} is used to
- *         preserve values between tests.
- *         
+ *         The Singleton class {@link SqlIntegrationTestFixtures} is used to preserve values between tests.
+ * 
  */
 public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBase {
-    
+
     private static final Logger LOG = Logger.getLogger(SqlIntegrationTestData.class);
 
     private static List<SimpleClass> simpleClassList1 = new ArrayList<SimpleClass>();
@@ -68,38 +67,37 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     private static PrimitiveValuedEntity pve2;
 
     @Test
-    public void testAll() throws Exception {
+    public void testSetupStore() throws Exception {
         testSetup();
         setUpFactory();
 
         testCreate();
+    }
+
+    @Test
+    public void testAll() throws Exception {
         testLoad();
-        
+
         setUpFactory();
 
         testString();
         setStringToDifferentValue();
         testSimpleClassCollection1Lazy();
-        testApplibDate();
-        testSqlDate();
-        //testDateTimezoneIssue();
+
         testMoney();
-        testDateTime();
-        testTimeStamp();
-        testTime();
         testColor();
         testPassword();
         testPercentage();
         testStandardValueTypesMaxima();
         testStandardValueTypesMinima();
-        
+
         // broken it...
-        //testSingleReferenceLazy();
-        //testSimpleClassTwoReferenceLazy();
-        
+        testSingleReferenceLazy();
+        testSimpleClassTwoReferenceLazy();
+
         testSimpleClassCollection1();
         testSimpleClassCollection2();
-        
+
         testSingleReferenceResolve();
         testSimpleClassTwoReferenceResolve();
         testSimpleClassTwo();
@@ -108,10 +106,18 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         testUpdateCollectionIsDirty();
         testFindByMatchString();
         testFindByMatchEntity();
-        reinitializeFixtures();
-        
+
+        testApplibDate();
+        testSqlDate();
+        testTime();
+        testDateTimezoneIssue();
+
+        testTimeStamp();
+        testDateTime();
+
+        // reinitializeFixtures();
+
     }
-    
 
     private void testSetup() {
         resetPersistenceStoreDirectlyIfRequired();
@@ -122,9 +128,9 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         for (final String tableName : Data.getTableNames()) {
             getSqlIntegrationTestFixtures().dropTable(tableName);
         }
-        
+
         sqlDataClass = factory.newDataClass();
-        
+
         sqlDataClass.setString("Test String");
         sqlDataClass.setDate(Data.applibDate);
         sqlDataClass.setSqlDate(Data.sqlDate);
@@ -205,7 +211,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         assertEquals(1, dataClasses.size());
         final SqlDataClass sqlDataClass = dataClasses.get(0);
         getSqlIntegrationTestFixtures().setSqlDataClass(sqlDataClass);
-        
+
         setFixtureInitializationState(State.DONT_INITIALIZE);
     }
 
@@ -241,7 +247,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: " + sqlDataClass.getDate().getMillisSinceEpoch());
 
         if (!Data.applibDate.isEqualTo(sqlDataClass.getDate())) {
-            fail("Applib date: Test '2010-3-5', expected " + Data.applibDate.toString() + ", but got " + sqlDataClass.getDate().toString() + ". Check log for more info.");
+            fail("Applib date: Test '2010-3-5', expected " + Data.applibDate.toString() + ", but got "
+                + sqlDataClass.getDate().toString() + ". Check log for more info.");
             // LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " +
             // applibDate.toString() + ", but got "
             // +
@@ -264,8 +271,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
 
         // 2011-4-8 = 1302220800000
         LOG.log(Level.INFO, "sqlDate.toString() as String:" + Data.sqlDate); // shows
-                                                                        // as
-                                                                        // 2011-04-07
+        // as
+        // 2011-04-07
         LOG.log(Level.INFO, "sqlDate.getTime() as Long:" + Data.sqlDate.getTime());
 
         // 2011-4-8 = 1302220800000
@@ -275,7 +282,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:" + sqlDataClass.getSqlDate().getTime());
 
         if (Data.sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0) {
-            fail("SQL date: Test '2011-4-8', expected " + Data.sqlDate.toString() + ", but got " + sqlDataClass.getSqlDate().toString() + ". Check log for more info.");
+            fail("SQL date: Test '2011-4-8', expected " + Data.sqlDate.toString() + ", but got "
+                + sqlDataClass.getSqlDate().toString() + ". Check log for more info.");
             // LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " +
             // sqlDate.toString() + ", and got "
             // + sqlDataClass.getSqlDate().toString()
@@ -289,33 +297,25 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     @Ignore
     private void testDateTimezoneIssue() {
         /*
-         * At the moment, applib Date and java.sql.Date are restored from
-         * ValueSemanticsProviderAbstractTemporal with an explicit hourly offset
-         * that comes from the timezone. I.e. in South Africa, with TZ +2h00,
-         * they have an implicit time of 02h00 (2AM). This can potentially
-         * seriously screw up GMT-X dates, which, I suspect, will actually be
-         * set to the dat BEFORE.
+         * At the moment, applib Date and java.sql.Date are restored from ValueSemanticsProviderAbstractTemporal with an
+         * explicit hourly offset that comes from the timezone. I.e. in South Africa, with TZ +2h00, they have an
+         * implicit time of 02h00 (2AM). This can potentially seriously screw up GMT-X dates, which, I suspect, will
+         * actually be set to the dat BEFORE.
          * 
-         * This test is a simple test to confirm that date/time before and after
-         * checks work as expected.
+         * This test is a simple test to confirm that date/time before and after checks work as expected.
          */
-        /*
-         * *
-         * SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-         * 
-         * DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010,
-         * 3, 5, 1, 23); Date date = sqlDataClass.getDate(); // new Date(2010,
-         * 3, 5);
-         * 
-         * //java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
-         * //assertTrue("dateTime's value ("+dateTime.dateValue()+ //
-         * ") should be after java.sql.date's ("+ sqlDate +")",
-         * dateTime.dateValue().after(sqlDate));
-         * 
-         * assertTrue("dateTime's value ("+dateTime.dateValue()+
-         * ") should be after date's ("+ date +")",
-         * dateTime.dateValue().after(date.dateValue()));
-         */
+
+        DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010, 3, 5, 1, 23);
+        Date date = sqlDataClass.getDate(); // new Date(2010, 3, 5);
+
+        // java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
+        // assertTrue("dateTime's value (" + dateTime.dateValue() + ") should be after java.sql.date's (" + sqlDate +
+        // ")",
+        // dateTime.dateValue().after(sqlDate));
+
+        assertTrue("dateTime's value (" + dateTime.dateValue() + ") should be after date's (" + date + ")", dateTime
+            .dateValue().after(date.dateValue()));
+
     }
 
     /**
@@ -323,9 +323,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      */
     private void testMoney() {
         assertEquals(Data.money, sqlDataClass.getMoney());
-        // assertTrue("Money " + money.toString() + " is not equal to " +
-        // sqlDataClass.getMoney().toString(),
-        // money.equals(sqlDataClass.getMoney()));
     }
 
     /**
@@ -337,7 +334,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         LOG.log(Level.INFO, "sqlDataClass.getDateTime() as String:" + sqlDataClass.getDateTime());
         LOG.log(Level.INFO, "dateTime.toString() as String:" + Data.dateTime);
 
-        LOG.log(Level.INFO, "sqlDataClass.getDateTime().getTime() as Long:" + sqlDataClass.getDateTime().millisSinceEpoch());
+        LOG.log(Level.INFO, "sqlDataClass.getDateTime().getTime() as Long:"
+            + sqlDataClass.getDateTime().millisSinceEpoch());
         LOG.log(Level.INFO, "dateTime.getTime() as Long:" + Data.dateTime.millisSinceEpoch());
 
         if (!Data.dateTime.equals(sqlDataClass.getDateTime())) {
@@ -349,7 +347,9 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      * Test {@link TimeStamp} type.
      */
     private void testTimeStamp() {
-        assertTrue("TimeStamp " + Data.timeStamp.toString() + " is not equal to " + sqlDataClass.getTimeStamp().toString(), Data.timeStamp.isEqualTo(sqlDataClass.getTimeStamp()));
+        assertTrue(
+            "TimeStamp " + sqlDataClass.getTimeStamp().toString() + " does not equal expected "
+                + Data.timeStamp.toString(), Data.timeStamp.isEqualTo(sqlDataClass.getTimeStamp()));
     }
 
     /**
@@ -359,7 +359,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     private void testTime() {
         assertNotNull("sqlDataClass is null", sqlDataClass);
         assertNotNull("getTime() is null", sqlDataClass.getTime());
-        assertTrue("Time 14h56: expected " + Data.time.toString() + ", but got " + sqlDataClass.getTime().toString(), Data.time.isEqualTo(sqlDataClass.getTime()));
+        assertTrue("Time 14h56: expected " + Data.time.toString() + ", but got " + sqlDataClass.getTime().toString(),
+            Data.time.isEqualTo(sqlDataClass.getTime()));
     }
 
     /**
@@ -367,9 +368,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      */
     private void testColor() {
         assertEquals(Data.color, sqlDataClass.getColor());
-        // assertTrue("Color Black, expected " + color.toString() + " but got "
-        // + sqlDataClass.getColor().toString(),
-        // color.isEqualTo(sqlDataClass.getColor()));
     }
 
     /**
@@ -377,20 +375,15 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      */
     // TODO: Images are not equal...
     /*
-     * public void testImage(){ SqlDataClass sqlDataClass =
-     * SqlIntegrationTestSingleton.getPerson(); Image image2 =
+     * public void testImage(){ SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson(); Image image2 =
      * sqlDataClass.getImage(); assertEqual(image, image2); }
      * 
-     * private void assertEqual(Image image2, Image image3) {
-     * assertEquals(image2.getHeight(), image3.getHeight());
-     * assertEquals(image2.getWidth(), image3.getWidth()); boolean same = true;
-     * int i=0,j=0; int p1=0, p2=0; String error = ""; int [][] i1 =
-     * image2.getImage(), i2 = image3.getImage(); for(i = 0; same &&
-     * i<image2.getHeight();i++){ int [] r1 = i1[i], r2 = i2[i]; for (j = 0;
-     * same && j < image2.getWidth(); j++){ if (r1[j] != r2[j]){ same = false;
-     * p1 = r1[j]; p2 = r2[j]; error =
-     * "Images differ at i = "+i+", j = "+j+", "+p1+ " is not "+p2+"!"; break; }
-     * } } assertTrue(error, same); }
+     * private void assertEqual(Image image2, Image image3) { assertEquals(image2.getHeight(), image3.getHeight());
+     * assertEquals(image2.getWidth(), image3.getWidth()); boolean same = true; int i=0,j=0; int p1=0, p2=0; String
+     * error = ""; int [][] i1 = image2.getImage(), i2 = image3.getImage(); for(i = 0; same &&
+     * i<image2.getHeight();i++){ int [] r1 = i1[i], r2 = i2[i]; for (j = 0; same && j < image2.getWidth(); j++){ if
+     * (r1[j] != r2[j]){ same = false; p1 = r1[j]; p2 = r2[j]; error = "Images differ at i = "+i+", j = "+j+", "+p1+
+     * " is not "+p2+"!"; break; } } } assertTrue(error, same); }
      */
 
     /**
@@ -414,7 +407,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         assertEquals(Data.intMaxValue, pveMax.getIntProperty());
         assertEquals(Data.longMaxValue, pveMax.getLongProperty());
         assertEquals(Data.doubleMaxValue, pveMax.getDoubleProperty(), 0.00001f); // fails
-                                                                            // in
+        // in
         assertEquals(Data.floatMaxValue, pveMax.getFloatProperty(), 0.00001f);
     }
 
@@ -425,10 +418,10 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         assertEquals(Data.intMinValue, pveMin.getIntProperty());
         assertEquals(Data.longMinValue, pveMin.getLongProperty());
         assertEquals(Data.doubleMinValue, pveMin.getDoubleProperty(), 0.00001f); // fails
-                                                                            // in
-                                                                            // MySQL
-                                                                            // =
-                                                                            // infinity
+        // in
+        // MySQL
+        // =
+        // infinity
         assertEquals(Data.floatMinValue, pveMin.getFloatProperty(), 0.00001f);
     }
 
@@ -436,11 +429,9 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      * Test {@link StringCollection} type.
      */
     /*
-     * public void testStringCollection(){ SqlDataClass sqlDataClass =
-     * SqlIntegrationTestSingleton.getPerson(); List<String> collection =
-     * sqlDataClass.getStringCollection(); int i = 0; for (String string :
-     * collection) { assertEquals(SqlIntegrationTestCommon.stringList.get(i++),
-     * string); } }
+     * public void testStringCollection(){ SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+     * List<String> collection = sqlDataClass.getStringCollection(); int i = 0; for (String string : collection) {
+     * assertEquals(SqlIntegrationTestCommon.stringList.get(i++), string); } }
      */
 
     private void testSingleReferenceLazy() {
@@ -526,7 +517,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         simpleClass.setText("XXX");
         simpleClass.setBooleanValue(false);
         simpleClassTwoA.setBooleanValue(false);
-        
+
         setFixtureInitializationStateIfNot(State.INITIALIZE, "in-memory");
     }
 
@@ -551,13 +542,13 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         // simpleClass1.setString(stringList1.get(3));
 
         collection.remove(simpleClass1);
-        
+
         // REVIEW: I'm very doubtful about this...
         // what exactly is meant by updating an internal collection?
-        if (!persistenceMechanismIs("xml") ) {
+        if (!persistenceMechanismIs("xml")) {
             factory.update(collection);
         }
-        
+
         factory.update(sqlDataClass);
     }
 
@@ -577,7 +568,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         simpleClassMatch.setSimpleClassTwoA(classTwos.get(0));
 
         final List<SimpleClass> classes = factory.allSimpleClassesThatMatch(simpleClassMatch);
-        
+
         // TODO: Why is this hack required?
         if (!getProperties().getProperty("isis.persistor").equals("in-memory")) {
             assertEquals(Data.stringList1.size(), classes.size());
