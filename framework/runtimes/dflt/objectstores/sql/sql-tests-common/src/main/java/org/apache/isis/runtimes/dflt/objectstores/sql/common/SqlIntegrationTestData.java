@@ -110,9 +110,10 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         testApplibDate();
         testSqlDate();
         testTime();
+        testTimeStamp();
+
         testDateTimezoneIssue();
 
-        testTimeStamp();
         testDateTime();
 
         // reinitializeFixtures();
@@ -339,7 +340,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         LOG.log(Level.INFO, "dateTime.getTime() as Long:" + Data.dateTime.millisSinceEpoch());
 
         if (!Data.dateTime.equals(sqlDataClass.getDateTime())) {
-            fail("DateTime " + Data.dateTime.toString() + " is not equal to " + sqlDataClass.getDateTime().toString());
+            fail("DateTime " + Data.dateTime.toString() + " is not expected " + sqlDataClass.getDateTime().toString());
         }
     }
 

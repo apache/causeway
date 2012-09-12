@@ -38,7 +38,7 @@ public class Data {
          * Calendar.getInstance(); cal.setTimeZone(UTC_TIME_ZONE); cal.clear(); cal.set(Calendar.YEAR, 2011);
          * cal.set(Calendar.MONTH, 4-1); cal.set(Calendar.DAY_OF_MONTH, 8);
          */
-        // 2011-4-8 = 1270684800000
+        // 2011-4-8 = 1,270,684,800,000
         final Date date20100308 = new Date(2010, 4, 8);
         sqlDate = new java.sql.Date(date20100308.getMillisSinceEpoch());
 
@@ -46,10 +46,10 @@ public class Data {
     }
 
     static final Date applibDate = new Date(2010, 3, 5); // 2010-03-05 =
-                                                         // 1267747200000
-    static final DateTime dateTime = new DateTime(2010, 3, 5, 1, 23);
+                                                         // 1,267,747,200,000
+    static final DateTime dateTime = new DateTime(2010, 3, 5, 1, 23); // 1,267,752,180,000
     static final TimeStamp timeStamp = new TimeStamp(dateTime.millisSinceEpoch());
-    static final Time time = new Time(14, 56);
+    static final Time time = new Time(14, 56); // 53,760,000
 
     static final Color color = Color.WHITE;
     static final Image image = new Image(new int[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });

@@ -22,8 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.List;
 
 import org.junit.Test;
@@ -52,7 +50,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     private static final String IMPL_A_STRING = "Impl A String";
     private static final String CHILD_1 = "Child 1";
-    
+
     private static StringableEntityWithOwnProperty polyIntImpA;
     private static StringableEntityWithOwnProperties polyIntImpB;
 
@@ -63,27 +61,29 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
-        Files.deleteFiles("hsql-db", ".xml", Recursion.DONT_RECURSE);
+        Files.deleteFilesWithPrefix("hsql-db", "poly", Recursion.DONT_RECURSE);
     }
-
 
     @Override
     public String getSqlTeardownString() {
         return "SHUTDOWN;";
     }
 
+    @Test
+    public void testSetupStore() throws Exception {
+        setupFixtures();
+
+        setUpFactory();
+
+        create();
+    }
 
     @Test
     public void testAll() throws Exception {
-        setupFixtures();
-        
-        setUpFactory();
-        
-        create();
         load();
-        
+
         setUpFactory();
-        
+
         polymorphicLoad();
         interfaceLoad();
         loadSelfReferencingCollection();
@@ -102,7 +102,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     private void setupFixtures() {
         resetPersistenceStoreDirectlyIfRequired();
         setFixtureInitializationState(State.INITIALIZE);
-        
+
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYTESTCLASS");
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYBASECLASS");
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACE");
@@ -185,7 +185,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final List<ReferencingPolyTypesEntity> dataClasses = factory.allPolyTestClasses();
         assertEquals(1, dataClasses.size());
         final ReferencingPolyTypesEntity referencingPolyTypesEntity = dataClasses.get(0);
-        
+
         getSqlIntegrationTestFixtures().setPolyTestClass(referencingPolyTypesEntity);
 
         setFixtureInitializationState(State.DONT_INITIALIZE);

@@ -30,10 +30,9 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestD
 
 public class XmlPersistenceTest extends SqlIntegrationTestData {
 
-
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
-        Files.deleteFiles("xml/objects", ".xml", Recursion.DONT_RECURSE);
+        Files.deleteFiles("xml/objects", ".xml", Recursion.DO_RECURSE);
     }
 
     @Override
@@ -47,11 +46,6 @@ public class XmlPersistenceTest extends SqlIntegrationTestData {
     @Override
     public String getPropertiesFilename() {
         return "xml.properties";
-    }
-
-    @Override
-    public String getSqlTeardownString() {
-        return "SHUTDOWN;";
     }
 
 }

@@ -26,7 +26,7 @@ public class HsqlTest extends SqlIntegrationTestData {
 
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
-        Files.deleteFiles("hsql-db", "", Recursion.DONT_RECURSE);
+        Files.deleteFilesWithPrefix("hsql-db", "tests", Recursion.DONT_RECURSE);
     }
 
     @Override
