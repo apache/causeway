@@ -257,6 +257,9 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             // no need for the 'null' title, since if there is no object yet
             // can represent this fact in the drop-down
             permanentlyHide(ID_ENTITY_TITLE_NULL);
+            
+            // hide links
+            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK);
         } else {
 
             // choices drop-down
