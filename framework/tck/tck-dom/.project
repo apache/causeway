@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>org.apache.isis.tck.tck-dom</name>
-  <comment>Root POM for core framework, the viewers, and 
+	<name>org.apache.isis.tck.tck-dom</name>
+	<comment>Root POM for core framework, the viewers, and 
         the runtime implementations.
         Defines standard build process, as well as
         standard set of 3rd party dependencies
         (eg for testing and logging frameworks). NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects>
-    <project>org.apache.isis.applib</project>
-    <project>org.apache.isis.runtimes.dflt.objectstores.jdo-applib</project>
-    <project>org.apache.isis.viewer.wicket-applib</project>
-  </projects>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-    </buildCommand>
-  </buildSpec>
-  <natures>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-  </natures>
+	<projects>
+		<project>org.apache.isis.applib</project>
+		<project>org.apache.isis.runtimes.dflt.objectstores.jdo-applib</project>
+		<project>org.apache.isis.viewer.wicket-applib</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.maven.ide.eclipse.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.maven.ide.eclipse.maven2Nature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
 </projectDescription>
