@@ -19,15 +19,16 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
 
@@ -55,18 +56,17 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
 
     @Override
     public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
-        final String encodedValue = results.getString(columnName);
-        if (encodedValue == null) {
-            return null;
+
+        ObjectAdapter restoredValue;
+        final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
+        if (correspondingClass == DateTime.class) {
+            final java.sql.Timestamp o = (java.sql.Timestamp) results.getObject(columnName);
+            final DateTime timeValue = new DateTime(o.getTime());
+            restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(timeValue);
+        } else {
+            throw new PersistFailedException("Unhandled time type: " + correspondingClass.getCanonicalName());
         }
-        // convert date to yyyymmddhhmm
-        final String year = encodedValue.substring(0, 4);
-        final String month = encodedValue.substring(5, 7);
-        final String day = encodedValue.substring(8, 10);
-        final String hour = encodedValue.substring(11, 13);
-        final String minute = encodedValue.substring(14, 16);
-        final String valueString = year + month + day + "T" + hour + minute + "00000";
-        return field.getSpecification().getFacet(EncodableFacet.class).fromEncodedString(valueString);
+        return restoredValue;
     }
 
     @Override
