@@ -25,31 +25,18 @@ div.entityLink  {
 	height: 16px;
 }
 
-div.findUsingClearDetails {
-	height: 0px; // consume no height if empty
-}
-
-div.entityDetailsLinkDiv {
-	display: inline-table;
-	vertical-align: top;
-	padding-top: 1px;
-}
-
 .entityLink table.findUsing {
 	display: inline-table;
 	font-size: smaller;
 }
 
-a.entityClearLink, a.entityDetailsLink {
+a.entityDetailsLink {
 	text-align: left;
-	display:inline;
 	border: 1px  #00477F solid;
 	white-space:nowrap;
 	margin:0em;
 
 	margin-left: 5px;
-	padding-top: 1px;
-	padding-bottom: 1px;
 	font-weight: normal;
 	cursor:default;
 	font-size: smaller;
@@ -65,15 +52,20 @@ a.entityClearLink, a.entityDetailsLink {
 }
 
 a.entityClearLink {
-	margin-left: -10px;
-	padding-left: 2px;
-	padding-right: 2px;
+	display:inline-table;
+	margin-left: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	font-size: smaller;
 }
 a.entityDetailsLink {
+	display:inline;
 	font-family: monospace;
 	margin-left: 20px;
 	padding-right: 3px;
 	padding-left: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 
 a.entityDetailsLink:hover {

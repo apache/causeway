@@ -17,28 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
-
-import org.apache.wicket.Component;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * {@link ComponentFactory} for {@link IsisTimePanel}.
+ * Panel for rendering scalars of type {@link DateTime Isis' applib.DateTime}.
  */
-public class IsisTimePanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisDateTimePanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_SCALAR_VALUE = "scalarValue";
 
-    public IsisTimePanelFactory() {
-        super(org.apache.isis.applib.value.Time.class);
+    public IsisDateTimePanel(final String id, final ScalarModel scalarModel) {
+        super(id, ID_SCALAR_VALUE, scalarModel);
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new IsisTimePanel(id, scalarModel);
+    protected void addSemantics() {
+        super.addSemantics();
     }
 
 }

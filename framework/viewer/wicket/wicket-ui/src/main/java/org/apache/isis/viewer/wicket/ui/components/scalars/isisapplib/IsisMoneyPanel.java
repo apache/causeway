@@ -17,22 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import org.apache.isis.applib.value.Percentage;
+import org.apache.isis.applib.value.Money;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * Panel for rendering scalars of type {@link Percentage Isis'
- * applib.Percentage}.
+ * Panel for rendering scalars of type {@link Money Isis' applib.Money}.
  */
-public class IsisPercentagePanel extends ScalarPanelTextFieldParseableAbstract {
+public class IsisMoneyPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_SCALAR_VALUE = "scalarValue";
 
-    public IsisPercentagePanel(final String id, final ScalarModel scalarModel) {
+    public IsisMoneyPanel(final String id, final ScalarModel scalarModel) {
         super(id, ID_SCALAR_VALUE, scalarModel);
     }
 

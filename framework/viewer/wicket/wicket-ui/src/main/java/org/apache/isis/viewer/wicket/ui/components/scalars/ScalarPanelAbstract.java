@@ -26,7 +26,9 @@ import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -34,14 +36,14 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * their backing model.
  * 
  * <p>
- * Supports the concept of being {@link Format#COMPACT} (eg within a table) or
- * {@link Format#REGULAR regular} (eg within a form).
+ * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
+ * {@link Rendering#REGULAR regular} (eg within a form).
  */
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public enum Format {
+    public enum Rendering {
         /**
          * Does not show labels, eg for use in tables
          */
@@ -86,9 +88,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
         public abstract void buildGui(ScalarPanelAbstract panel);
 
         public abstract Where getWhere();
-    }
 
-    private Format format;
+        private static Rendering renderingFor(RenderingHint renderingHint) {
+            return renderingHint==RenderingHint.COMPACT? Rendering.COMPACT: Rendering.REGULAR;
+        }
+    }
 
     protected Component componentIfCompact;
     private Component componentIfRegular;
@@ -96,16 +100,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-        setFormat(Format.REGULAR);
         this.scalarModel = scalarModel;
     }
 
-    protected Format getFormat() {
-        return format;
-    }
-
-    public void setFormat(final Format format) {
-        this.format = format;
+    protected Rendering getRendering() {
+        return Rendering.renderingFor(getModel().getRenderingHint());
     }
 
     protected Component getLabelForCompact() {
@@ -125,7 +124,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
         if (scalarModel.isViewMode()) {
             onBeforeRenderWhenViewMode();
         } else {
-            final String disableReasonIfAny = scalarModel.disable(format.getWhere());
+            final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
             if (disableReasonIfAny != null) {
                 onBeforeRenderWhenDisabled(disableReasonIfAny);
             } else {
@@ -140,17 +139,18 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
      * 
      * <p>
      * This design allows the panel to be configured first, using
-     * {@link #setFormat(Format)}.
+     * {@link #setFormat(Rendering)}.
      * 
      * @see #onBeforeRender()
-     * @see #setFormat(Format)
+     * @see #setFormat(Rendering)
      */
     private void buildGui() {
         componentIfRegular = addComponentForRegular();
         componentIfCompact = addComponentForCompact();
-        getFormat().buildGui(this);
+        getRendering().buildGui(this);
         addCssForMetaModel();
     }
+
 
     private void addCssForMetaModel() {
         final String cssForMetaModel = getModel().getLongName();
@@ -161,7 +161,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link Format#REGULAR regular} format.
+     * {@link Rendering#REGULAR regular} format.
      */
     protected abstract FormComponentLabel addComponentForRegular();
 

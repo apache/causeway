@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;

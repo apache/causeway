@@ -17,28 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
-
-import org.apache.wicket.Component;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * {@link ComponentFactory} for {@link IsisPercentagePanel}.
+ * Panel for rendering scalars of type {@link Color Isis' applib.Color}.
  */
-public class IsisPercentagePanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisColorPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_SCALAR_VALUE = "scalarValue";
 
-    public IsisPercentagePanelFactory() {
-        super(org.apache.isis.applib.value.Percentage.class);
+    public IsisColorPanel(final String id, final ScalarModel scalarModel) {
+        super(id, ID_SCALAR_VALUE, scalarModel);
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new IsisPercentagePanel(id, scalarModel);
+    protected void addSemantics() {
+        super.addSemantics();
     }
 
 }

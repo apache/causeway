@@ -162,7 +162,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
 
         final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueField);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(valueField));
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(valueField));
         scalarNameAndValue.add(scalarName);
         scalarNameAndValue.add(valueField);
 

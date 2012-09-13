@@ -28,13 +28,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTable;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Format;
 
 /**
  * A {@link ColumnAbstract column} within a
@@ -73,13 +72,12 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         final PropertyMemento pm = new PropertyMemento(property);
         final ScalarModel scalarModel = model.getPropertyModel(pm);
 
+        scalarModel.setRenderingHint(RenderingHint.COMPACT);
+        scalarModel.toViewMode();
+
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
         final Component component = componentFactory.createComponent(id, scalarModel);
-        if (component instanceof ScalarPanelAbstract) {
-            final ScalarPanelAbstract scalarPanel = (ScalarPanelAbstract) component;
-            scalarPanel.setFormat(Format.COMPACT);
-            scalarModel.toViewMode();
-        }
+        
         return component;
     }
 

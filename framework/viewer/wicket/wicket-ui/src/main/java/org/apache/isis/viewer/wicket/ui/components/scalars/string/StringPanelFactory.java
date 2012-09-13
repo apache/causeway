@@ -35,9 +35,7 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        final Component component;
         final int numberOfLines = getNumberOfLines(scalarModel);
-        
         if (numberOfLines > 1) {
             return new MultiLineStringPanel(id, scalarModel, numberOfLines);
         } else {

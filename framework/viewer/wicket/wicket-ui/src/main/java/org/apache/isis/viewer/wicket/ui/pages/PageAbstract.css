@@ -51,8 +51,8 @@
     clear: both;
 }
 
-.feedbackPanel {
-	padding-left: 8em; //HACK
+.feedbackPanel li {
+	list-style: none;	
 }
 
 .leftSide {

@@ -25,15 +25,15 @@
 	<head></head>
 	<body>
 		<wicket:panel>
-			<div class="noMoney money decimal number scalarPanel">
+			<div class="noPercentage percentage integral number scalarPanel">
 				<label for="scalarValue" wicket:id="scalarIfRegular">
 	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
 	      			<span class="scalarValue">
 	      				<input type="text" name="scalarValue" id="scalarValue" wicket:id="scalarValue" />
+		      			<span wicket:id="feedback"></span>
 	      			</span>
 				</label>
 				<label wicket:id="scalarIfCompact"></label>
-      			<span wicket:id="feedback"></span>
 			</div>
 		</wicket:panel>
 	</body>

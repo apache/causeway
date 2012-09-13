@@ -44,6 +44,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -185,21 +186,18 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      * seem to be anyway to install a listener. One option might be to move it
      * to {@link #onBeforeRender()} ?
      */
-    public void syncFindUsingAndEntityClearLinkVisibility() {
+    public void syncVisibility() {
         final boolean visibility = isEnableAllowed() && !getEntityModel().isViewMode();
         findUsing.setVisible(visibility);
         
 
-        // REVIEW: this is also hack, should be symmetrical with findUsing
         if(entityClearLink != null) {
             entityClearLink.setVisible(visibility);
         }
 
-        // TODO: this is also a hack.
         if(entityDetailsLink != null) {
-            entityDetailsLink.setVisible(!getEntityModel().isViewMode());
+            entityDetailsLink.setVisible(getEntityModel().getRenderingHint() == RenderingHint.REGULAR);
         }
-
     }
 
     /**
@@ -270,13 +268,16 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
             // represent no object by a simple label displaying '(null)'
             syncEntityTitleNullWithInput(adapter);
+
+            // link
+            syncEntityClearLinksWithInput(adapter);
         }
-
-        // link
-        syncEntityClearAndDetailsLinksWithInput(adapter);
-
+        
+        syncEntityDetailsLinksWithInput(adapter);
         syncEntityDetailsWithInput(adapter);
-        syncFindUsingAndEntityClearLinkVisibility();
+
+
+        syncVisibility();
     }
 
     private ObjectAdapter getPendingElseCurrentAdapter() {
@@ -300,33 +301,37 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         }
     }
 
-    private void syncEntityClearAndDetailsLinksWithInput(final ObjectAdapter adapter) {
-        if (adapter != null) {
-            entityDetailsLink = new Link<String>(ID_ENTITY_DETAILS_LINK) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onClick() {
-                    getEntityModel().toggleDetails();
-                }
-            };
-            addOrReplace(entityDetailsLink);
-            entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
-
-            entityClearLink = new Link<String>(ID_ENTITY_CLEAR_LINK) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onClick() {
-                    onSelected((ObjectAdapterMemento)null);
-                }
-            };
-            addOrReplace(entityClearLink);
-
-        } else {
+    private void syncEntityDetailsLinksWithInput(final ObjectAdapter adapter) {
+        if (adapter == null) {
             permanentlyHide(ID_ENTITY_DETAILS_LINK);
+            return;
+        } 
+        entityDetailsLink = new Link<String>(ID_ENTITY_DETAILS_LINK) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                getEntityModel().toggleDetails();
+            }
+        };
+        addOrReplace(entityDetailsLink);
+        entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
+    }
+
+    private void syncEntityClearLinksWithInput(final ObjectAdapter adapter) {
+        if (adapter == null) {
             permanentlyHide(ID_ENTITY_CLEAR_LINK);
-        }
+            return;
+        } 
+        entityClearLink = new Link<String>(ID_ENTITY_CLEAR_LINK) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                onSelected((ObjectAdapterMemento)null);
+            }
+        };
+        addOrReplace(entityClearLink);
     }
 
     private Model<String> buildEntityDetailsModel() {
@@ -340,7 +345,6 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             
             final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_PROPERTIES, entityModel);
             final Component entityPanel = componentFactory.createComponent(ID_ENTITY_DETAILS, entityModel);
-            //final EntityCombinedPanel entityPanel = new EntityCombinedPanel(ID_ENTITY_DETAILS, entityModel);
             
             addOrReplace(entityPanel);
         } else {

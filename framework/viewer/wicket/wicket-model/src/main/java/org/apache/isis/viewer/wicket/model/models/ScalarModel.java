@@ -280,8 +280,10 @@ public class ScalarModel extends EntityModel implements FacetProvider {
 
     }
 
+
     private final Kind kind;
     private final ObjectAdapterMemento parentObjectAdapterMemento;
+
 
     /**
      * Populated only if {@link #getKind()} is {@link Kind#PARAMETER}
@@ -446,6 +448,8 @@ public class ScalarModel extends EntityModel implements FacetProvider {
     public void resetVersion() {
         kind.resetVersion(this);
     }
+    
+    
 
 
 }

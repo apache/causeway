@@ -17,20 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * Panel for rendering scalars of type {@link Color Isis' applib.Color}.
+ * Panel for rendering scalars of type {@link Time Isis' applib.Time}.
  */
-public class IsisColorPanel extends ScalarPanelTextFieldParseableAbstract {
+public class IsisTimePanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_SCALAR_VALUE = "scalarValue";
 
-    public IsisColorPanel(final String id, final ScalarModel scalarModel) {
+    public IsisTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, ID_SCALAR_VALUE, scalarModel);
     }
 

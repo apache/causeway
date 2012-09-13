@@ -76,7 +76,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
             labelIfRegular.add(new CssClassAppender("mandatory"));
         }
 
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
+        labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
         return labelIfRegular;
     }
 
@@ -99,7 +99,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
 
         scalarNameAndValue.add(textField);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(textField));
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
         scalarNameAndValue.add(scalarName);
 
         return scalarNameAndValue;
@@ -140,7 +140,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
     
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link Format#COMPACT compact} format.
+     * {@link Rendering#COMPACT compact} format.
      */
     @Override
     protected Component addComponentForCompact() {

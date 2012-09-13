@@ -17,28 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import org.apache.wicket.Component;
-
+import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * {@link ComponentFactory} for {@link IsisPasswordPanel}.
+ * Panel for rendering scalars of type {@link TimeStamp Isis' applib.Timestamp}.
  */
-public class IsisPasswordPanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisTimeStampPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_SCALAR_VALUE = "scalarValue";
 
-    public IsisPasswordPanelFactory() {
-        super(org.apache.isis.applib.value.Password.class);
+    public IsisTimeStampPanel(final String id, final ScalarModel scalarModel) {
+        super(id, ID_SCALAR_VALUE, scalarModel);
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new IsisPasswordPanel(id, scalarModel);
+    protected void addSemantics() {
+        super.addSemantics();
     }
 
 }

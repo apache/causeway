@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.wicket.Component;
 
@@ -26,19 +26,19 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
 /**
- * {@link ComponentFactory} for {@link IsisTimeStampPanel}.
+ * {@link ComponentFactory} for {@link IsisDateTimePanel}.
  */
-public class IsisTimeStampPanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisDateTimePanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisTimeStampPanelFactory() {
-        super(org.apache.isis.applib.value.TimeStamp.class);
+    public IsisDateTimePanelFactory() {
+        super(org.apache.isis.applib.value.DateTime.class);
     }
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new IsisTimeStampPanel(id, scalarModel);
+        return new IsisDateTimePanel(id, scalarModel);
     }
 
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
+package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.wicket.Component;
 
@@ -26,19 +26,19 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
 /**
- * {@link ComponentFactory} for {@link IsisMoneyPanel}.
+ * {@link ComponentFactory} for {@link IsisPercentagePanel}.
  */
-public class IsisMoneyPanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisPercentagePanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisMoneyPanelFactory() {
-        super(org.apache.isis.applib.value.Money.class);
+    public IsisPercentagePanelFactory() {
+        super(org.apache.isis.applib.value.Percentage.class);
     }
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new IsisMoneyPanel(id, scalarModel);
+        return new IsisPercentagePanel(id, scalarModel);
     }
 
 }

@@ -61,7 +61,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, checkBox);
         labelIfRegular.add(checkBox);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(checkBox));
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
         labelIfRegular.add(scalarName);
 
         addOrReplace(labelIfRegular);
@@ -72,7 +72,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link Format#COMPACT compact} format.
+     * {@link Rendering#COMPACT compact} format.
      */
     @Override
     protected Component addComponentForCompact() {

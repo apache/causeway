@@ -60,14 +60,14 @@ public class ReferencePanel extends ScalarPanelAbstract {
     protected void onBeforeRenderWhenEnabled() {
         super.onBeforeRenderWhenEnabled();
         entityLink.setEnabled(true);
-        entityLink.syncFindUsingAndEntityClearLinkVisibility();
+        entityLink.syncVisibility();
     }
 
     @Override
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
         entityLink.setEnabled(true);
-        entityLink.syncFindUsingAndEntityClearLinkVisibility();
+        entityLink.syncVisibility();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
         
-        entityLink.syncFindUsingAndEntityClearLinkVisibility();
+        entityLink.syncVisibility();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
         
-        final Label scalarName = new Label(ID_SCALAR_NAME, getFormat().getLabelCaption(entityLink));
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
         labelIfRegular.add(scalarName);
         
         addOrReplace(labelIfRegular);
@@ -145,7 +145,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link Format#COMPACT compact} format.
+     * {@link Rendering#COMPACT compact} format.
      */
     @Override
     protected Component addComponentForCompact() {

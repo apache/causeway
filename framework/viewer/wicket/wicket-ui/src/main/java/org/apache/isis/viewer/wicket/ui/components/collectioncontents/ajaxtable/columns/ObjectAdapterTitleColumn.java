@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
@@ -45,7 +46,8 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
         final ObjectAdapter adapter = rowModel.getObject();
-        final IModel<?> model = new EntityModel(adapter);
+        final EntityModel model = new EntityModel(adapter);
+        model.setRenderingHint(RenderingHint.COMPACT);
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
         return componentFactory.createComponent(id, model);
     }
