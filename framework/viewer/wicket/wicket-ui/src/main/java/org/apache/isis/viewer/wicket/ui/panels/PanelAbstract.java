@@ -84,7 +84,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     }
 
     @SuppressWarnings("unchecked")
-    protected T getModel() {
+    public T getModel() {
         return (T) getDefaultModel();
     }
 
@@ -161,7 +161,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         return IsisContext.getPersistenceSession();
     }
 
-    protected AdapterManager getAdapterManager() {
+    public AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
 

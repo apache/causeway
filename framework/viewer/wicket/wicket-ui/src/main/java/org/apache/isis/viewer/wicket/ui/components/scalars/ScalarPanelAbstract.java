@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -39,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
  * {@link Rendering#REGULAR regular} (eg within a form).
  */
-public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
+public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 

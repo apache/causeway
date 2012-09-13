@@ -249,14 +249,7 @@ fieldset.propertiesAndOrCollections {
 .even, .odd {
 	margin-left: 1em;
 	margin-right: 1em;
-}
-
-.even {
 	background-color: #ffffff; 
-}
-
-.odd {
-	/*background-color: #eeeeee;*/ 
 }
 
 
@@ -315,4 +308,8 @@ div.scalarPanel {
 
 .mandatory {
 	font-weight: bold;
+}
+
+.number input {
+ 	text-align: right;
 }
