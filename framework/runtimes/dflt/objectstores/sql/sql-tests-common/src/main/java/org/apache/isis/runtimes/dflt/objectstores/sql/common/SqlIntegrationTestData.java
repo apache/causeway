@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.applib.value.Color;
@@ -294,7 +293,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
 
     }/**/
 
-    @Ignore
     private void testDateTimezoneIssue() {
         /*
          * At the moment, applib Date and java.sql.Date are restored from ValueSemanticsProviderAbstractTemporal with an
