@@ -75,13 +75,19 @@ public final class Files {
     }
 
     static void deleteFiles(final File directory, final FilenameFilter filter, Recursion recursion, Deleter deleter) {
-        for (final File file : directory.listFiles(filter)) {
-            deleter.deleteFile(file);
+        try {
+            for (final File file : directory.listFiles(filter)) {
+                deleter.deleteFile(file);
+            }
+        } catch (NullPointerException e) {
         }
 
         if (recursion == Recursion.DO_RECURSE) {
-            for (final File subdir : directory.listFiles(filterDirectory())) {
-                deleteFiles(subdir, filter, recursion, deleter);
+            try {
+                for (final File subdir : directory.listFiles(filterDirectory())) {
+                    deleteFiles(subdir, filter, recursion, deleter);
+                }
+            } catch (NullPointerException e) {
             }
         }
     }
