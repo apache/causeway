@@ -133,42 +133,24 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
         valueField.setRequired(required);
     }
 
-    private void setSizeIfSpecified() {
-        final int size = determineSize();
-
-        if (size != -1) {
-            valueField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
-        }
-    }
-
-    private int determineSize() {
-        final ScalarModel scalarModel = getModel();
-        final ObjectSpecification noSpec = scalarModel.getTypeOfSpecification();
-
-        final TypicalLengthFacet typicalLengthFacet = noSpec.getFacet(TypicalLengthFacet.class);
-        if (typicalLengthFacet != null) {
-            return typicalLengthFacet.value();
-        }
-        final MaxLengthFacet maxLengthFacet = noSpec.getFacet(MaxLengthFacet.class);
-        if (maxLengthFacet != null) {
-            return maxLengthFacet.value();
-        }
-        return -1;
-    }
-
     protected FormComponentLabel createFormComponentLabel() {
         final String name = getModel().getName();
         valueField.setLabel(Model.of(name));
 
-        final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueField);
+        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueField);
+
+        final String describedAs = getModel().getDescribedAs();
+        if(describedAs != null) {
+            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+        }
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(valueField));
-        scalarNameAndValue.add(scalarName);
-        scalarNameAndValue.add(valueField);
+        labelIfRegular.add(scalarName);
+        labelIfRegular.add(valueField);
 
         // scalarNameAndValue.add(dropDownChoicesForValueMementos);
 
-        return scalarNameAndValue;
+        return labelIfRegular;
     }
 
     @Override

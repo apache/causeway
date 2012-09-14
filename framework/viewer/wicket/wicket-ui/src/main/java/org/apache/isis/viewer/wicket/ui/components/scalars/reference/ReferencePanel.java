@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -91,6 +92,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
+        
+        final String describedAs = getModel().getDescribedAs();
+        if(describedAs != null) {
+            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+        }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
         labelIfRegular.add(scalarName);

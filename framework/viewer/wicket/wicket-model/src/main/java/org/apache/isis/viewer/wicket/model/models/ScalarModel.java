@@ -158,6 +158,13 @@ public class ScalarModel extends EntityModel implements FacetProvider {
             public void resetVersion(ScalarModel scalarModel) {
                 scalarModel.parentObjectAdapterMemento.resetVersion();
             }
+
+            @Override
+            public String getDescribedAs(final ScalarModel scalarModel) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty();
+                return property.getDescription();
+            }
         },
         PARAMETER {
             @Override
@@ -213,7 +220,7 @@ public class ScalarModel extends EntityModel implements FacetProvider {
 
             @Override
             public String validate(final ScalarModel scalarModel, final ObjectAdapter proposedAdapter) {
-                // TODO - not supported in NOF 4.0.0
+                // TODO - not yet supported.
                 return null;
             }
 
@@ -240,6 +247,12 @@ public class ScalarModel extends EntityModel implements FacetProvider {
             @Override
             public void resetVersion(ScalarModel scalarModel) {
                 // no-op?
+            }
+            @Override
+            public String getDescribedAs(final ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                return actionParameter.getDescription();
             }
         };
 
@@ -278,6 +291,7 @@ public class ScalarModel extends EntityModel implements FacetProvider {
 
         public abstract void resetVersion(ScalarModel scalarModel);
 
+        public abstract String getDescribedAs(ScalarModel scalarModel);
     }
 
 
@@ -448,8 +462,9 @@ public class ScalarModel extends EntityModel implements FacetProvider {
     public void resetVersion() {
         kind.resetVersion(this);
     }
-    
-    
 
+    public String getDescribedAs() {
+        return kind.getDescribedAs(this);
+    }
 
 }

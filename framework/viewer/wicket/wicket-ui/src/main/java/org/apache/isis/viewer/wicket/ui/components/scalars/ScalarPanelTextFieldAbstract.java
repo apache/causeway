@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.IBehavior;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -31,6 +33,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.IValidator;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
@@ -80,6 +83,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             labelIfRegular.add(new CssClassAppender("mandatory"));
         }
 
+        final String describedAs = getModel().getDescribedAs();
+        if(describedAs != null) {
+            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+        }
+        
         labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
         return labelIfRegular;
     }
@@ -99,12 +107,13 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         final AbstractTextComponent<T> textField = getTextField();
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
-
+        
         final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, textField);
-
+        
         scalarNameAndValue.add(textField);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
+        
         scalarNameAndValue.add(scalarName);
 
         return scalarNameAndValue;
@@ -124,7 +133,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void setTextFieldSizeIfSpecified(AbstractTextComponent<T> textField) {
         final Integer size = determineSize();
         if (size != null) {
-            textField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
+            textField.add(new AttributeModifier("size", true, Model.of("" + size)));
         }
     }
 
