@@ -102,7 +102,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     private void setupFixtures() {
         resetPersistenceStoreDirectlyIfRequired();
         setFixtureInitializationState(State.INITIALIZE);
+    }
 
+    private void create() throws Exception {
         getSqlIntegrationTestFixtures().dropTable("ISIS_SELFREFERENCINGENTITY");
         getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGABLEENTITYWITHOWNPROPERTY");
         getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUB");
@@ -111,9 +113,6 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         getSqlIntegrationTestFixtures().dropTable("ISIS_REFERENCINGPOLYTYPESENTITY");
         getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITY");
         getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGABLE");
-    }
-
-    private void create() throws Exception {
 
         final ReferencingPolyTypesEntity referencingPolyTypesEntity = factory.newPolyTestClass();
         referencingPolyTypesEntity.setString("polyTestClassString");
