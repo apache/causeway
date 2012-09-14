@@ -22,8 +22,10 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 
 public interface ObjectActionContainer {
 
@@ -75,11 +77,15 @@ public interface ObjectActionContainer {
      */
     List<ObjectAction> getObjectActions(ActionType type, Contributed contributed);
 
+    List<ObjectAction> getObjectActions(ActionType type, Contributed contributed, Filter<ObjectAction> filter);
+
     /**
      * Returns an array of actions of the specified types, including or
      * excluding contributed actions as required.
      */
     List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed);
+
+    List<ObjectAction> getObjectActions(List<ActionType> requestedTypes, Contributed contributed, Filter<ObjectAction> filter);
 
     /**
      * Returns a list of all object actions, including or excluding contributed
@@ -90,5 +96,6 @@ public interface ObjectActionContainer {
     List<ObjectAction> getServiceActionsReturning(ActionType type);
 
     List<ObjectAction> getServiceActionsReturning(List<ActionType> type);
+
 
 }

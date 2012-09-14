@@ -207,27 +207,23 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 		private void addPropertyToForm(final EntityModel entityModel,
 				final ObjectAssociation association,
 				final WebMarkupContainer container) {
-			@SuppressWarnings("unused")
-			Component component;
 			final OneToOneAssociation otoa = (OneToOneAssociation) association;
 			final PropertyMemento pm = new PropertyMemento(otoa);
 
 			final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-			component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+			getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 		}
 
 		private void addCollectionToForm(final EntityModel entityModel,
 				final ObjectAssociation association,
 				final WebMarkupContainer container) {
-			@SuppressWarnings("unused")
-			Component component;
 			final OneToManyAssociation otma = (OneToManyAssociation) association;
 
 			final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModel, otma);
 			final CollectionPanel collectionPanel = new CollectionPanel(ID_PROPERTY_OR_COLLECTION, entityCollectionModel);
 			container.addOrReplace(collectionPanel);
 
-			component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
+			getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
 		}
 
         private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
@@ -392,11 +388,28 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
         void toViewMode(final AjaxRequestTarget target) {
             getEntityModel().toViewMode();
-            editButton.setVisible(true);
+            editButton.setVisible(isAnythingEditable());
             okButton.setVisible(false);
             cancelButton.setVisible(false);
             requestRepaintPanel(target);
         }
+
+        private boolean isAnythingEditable() {
+            final EntityModel entityModel = (EntityModel) getModel();
+            final ObjectAdapter adapter = entityModel.getObject();
+
+            return !enabledAssociations(adapter, adapter.getSpecification()).isEmpty();
+        }
+        
+        private List<ObjectAssociation> enabledAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec) {
+            return objSpec.getAssociations(enabledAssociationFilter(adapter));
+        }
+
+        @SuppressWarnings("unchecked")
+        private Filter<ObjectAssociation> enabledAssociationFilter(final ObjectAdapter adapter) {
+            return Filters.and(render.getFilters(), ObjectAssociationFilters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
+        }
+
 
         private void toEditMode(final AjaxRequestTarget target) {
             getEntityModel().toEditMode();

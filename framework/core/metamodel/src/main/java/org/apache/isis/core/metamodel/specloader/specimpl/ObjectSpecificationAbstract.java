@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -79,6 +80,7 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -681,46 +683,58 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes, final Contributed contributed) {
+        return getObjectActions(requestedTypes, contributed, Filters.<ObjectAction>any());
+    }
+
+    @Override
+    public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes, final Contributed contributed, Filter<ObjectAction> filter) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : requestedTypes) {
-            addActions(type, actions, contributed);
+            addActions(type, contributed, filter, actions);
         }
         return actions;
     }
 
     @Override
     public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
-        final List<ObjectAction> actions = Lists.newArrayList();
-        return addActions(type, actions, contributed);
+        return getObjectActions(type, contributed, Filters.<ObjectAction>any());
     }
 
-    private List<ObjectAction> addActions(final ActionType type, final List<ObjectAction> actionListToAppendTo, final Contributed contributed) {
+    @Override
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, Filter<ObjectAction> filter) {
+        final List<ObjectAction> actions = Lists.newArrayList();
+        return addActions(type, contributed, filter, actions);
+    }
+
+    private List<ObjectAction> addActions(final ActionType type, final Contributed contributed, final Filter<ObjectAction> filter, final List<ObjectAction> actionListToAppendTo) {
         if (!isService() && contributed.isIncluded()) {
-            actionListToAppendTo.addAll(getContributedActions(type));
+            actionListToAppendTo.addAll(getContributedActions(type, filter));
         }
-        actionListToAppendTo.addAll(getFlattenedActions(objectActions, type));
+        actionListToAppendTo.addAll(getFlattenedActions(objectActions, type, filter));
         return actionListToAppendTo;
     }
 
-    private List<ObjectAction> getFlattenedActions(final List<ObjectAction> objectActions, final ActionType type) {
+    private List<ObjectAction> getFlattenedActions(final List<ObjectAction> objectActions, final ActionType type, final Filter<ObjectAction> filter) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ObjectAction action : objectActions) {
             if (action.getType().isSet()) {
                 final ObjectActionSet actionSet = (ObjectActionSet) action;
                 final List<ObjectAction> subActions = actionSet.getActions();
                 for (final ObjectAction subAction : subActions) {
-                    if (type.matchesTypeOf(subAction)) {
-                        actions.add(subAction);
-                    }
+                    addAction(type, actions, subAction, filter);
                 }
             } else {
-                if (type.matchesTypeOf(action)) {
-                    actions.add(action);
-                }
+                addAction(type, actions, action, filter);
             }
         }
 
         return actions;
+    }
+
+    private void addAction(final ActionType type, final List<ObjectAction> actions, final ObjectAction subAction, Filter<ObjectAction> filter) {
+        if (type.matchesTypeOf(subAction) && filter.accept(subAction)) {
+            actions.add(subAction);
+        }
     }
 
     @Override
@@ -784,12 +798,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * <p>
      * If this specification {@link #isService() is actually for} a service,
      * then returns an empty array.
+     * @param filter TODO
      * 
      * @return an array of {@link ObjectActionSet}s (!!), each of which contains
      *         {@link ObjectAction}s of the requested type.
      * 
      */
-    protected List<ObjectAction> getContributedActions(final ActionType actionType) {
+    protected List<ObjectAction> getContributedActions(final ActionType actionType, Filter<ObjectAction> filter) {
         if (isService()) {
             return Collections.emptyList();
         }
@@ -800,19 +815,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             contributedActionSets = Lists.newArrayList();
             final List<ObjectAdapter> services = getServicesProvider().getServices();
             for (final ObjectAdapter serviceAdapter : services) {
-                addContributedActionsIfAny(serviceAdapter, actionType, contributedActionSets);
+                addContributedActionsIfAny(serviceAdapter, actionType, filter, contributedActionSets);
             }
             contributedActionSetsByType.put(actionType, contributedActionSets);
         }
         return contributedActionSets;
     }
 
-    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, final List<ObjectAction> contributedActionSetsToAppendTo) {
+    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, Filter<ObjectAction> filter, final List<ObjectAction> contributedActionSetsToAppendTo) {
         final ObjectSpecification specification = serviceAdapter.getSpecification();
         if (specification == this) {
             return;
         }
-        final List<ObjectAction> contributedActions = findContributedActions(specification, actionType);
+        final List<ObjectAction> contributedActions = findContributedActions(specification, actionType, filter);
         // only add if there are matching subactions.
         if (contributedActions.size() == 0) {
             return;
@@ -821,9 +836,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         contributedActionSetsToAppendTo.add(contributedActionSet);
     }
 
-    private List<ObjectAction> findContributedActions(final ObjectSpecification specification, final ActionType actionType) {
+    private List<ObjectAction> findContributedActions(final ObjectSpecification specification, final ActionType actionType, Filter<ObjectAction> filter) {
         final List<ObjectAction> contributedActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED);
+        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED, filter);
         for (final ObjectAction serviceAction : serviceActions) {
             if (serviceAction.isAlwaysHidden()) {
                 continue;

@@ -125,4 +125,15 @@ public class ObjectAssociationFilters {
         };
     }
 
+
+    public static Filter<ObjectAssociation> enabled(final AuthenticationSession session, final ObjectAdapter adapter, final Where where) {
+        return new Filter<ObjectAssociation>() {
+            @Override
+            public boolean accept(final ObjectAssociation objectAssociation) {
+                final Consent usable = objectAssociation.isUsable(session, adapter, where);
+                return usable.isAllowed();
+            }
+        };
+    }
+
 }

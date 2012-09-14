@@ -32,10 +32,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -102,13 +106,19 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
         final ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            final List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
+            final ObjectSpecification adapterSpec = adapter.getSpecification();
+            
+            final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, ObjectActionFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE));
 
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
-            // TODO: i18n
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+            if(!userActions.isEmpty()) {
+                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
+                // TODO: i18n
+                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
-            this.addOrReplace(cssMenuPanel);
+                this.addOrReplace(cssMenuPanel);
+            } else {
+                permanentlyHide(ID_ENTITY_ACTIONS);
+            }
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }

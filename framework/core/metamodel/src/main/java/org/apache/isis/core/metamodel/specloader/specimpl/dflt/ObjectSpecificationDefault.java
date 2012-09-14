@@ -331,13 +331,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
-        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(Contributed.EXCLUDED), getContributedActions(type));
+        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(Contributed.EXCLUDED), getContributedActions(type, Filters.<ObjectAction>any()));
         return getAction(availableActions, type, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
-        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(type, Contributed.INCLUDED), getContributedActions(type));
+        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(type, Contributed.INCLUDED), getContributedActions(type, Filters.<ObjectAction>any()));
         return getAction(availableActions, type, id);
     }
 
