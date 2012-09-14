@@ -35,7 +35,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 
 public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigInteger> implements BigIntegerValueFacet {
 
-    private static final int TYPICAL_LENGTH = 8;
+    private static final int TYPICAL_LENGTH = 10;
 
     private static Class<? extends Facet> type() {
         return BigIntegerValueFacet.class;

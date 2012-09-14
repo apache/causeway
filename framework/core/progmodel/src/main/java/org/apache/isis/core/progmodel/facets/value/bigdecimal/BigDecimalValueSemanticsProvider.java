@@ -41,7 +41,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
         return BigDecimalValueFacet.class;
     }
 
-    private static final int TYPICAL_LENGTH = 8;
+    private static final int TYPICAL_LENGTH = 10;
     private static final BigDecimal DEFAULT_VALUE = new BigDecimal(0);
 
     private final NumberFormat format;

@@ -28,13 +28,13 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converters.AbstractIntegerConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 
 /**
  * Panel for rendering scalars of type {@link BigInteger}.
  */
-public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldAbstract<BigInteger> {
+public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInteger> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_SCALAR_VALUE = "scalarValue";
@@ -52,12 +52,7 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldAbstract<BigInt
     };
 
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
-    }
-
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
+        super(id, scalarModel, BigInteger.class);
     }
 
     @Override

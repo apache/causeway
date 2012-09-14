@@ -36,7 +36,7 @@ table.collectionContentsAsAjaxTable tr.odd { background-color: #fff; }
 
 table.collectionContentsAsAjaxTable tr td { 
 	padding-left: 8px; 
-	padding-right: 30px; 
+	padding-right: 10px; 
 	padding-left: 4px;
 	padding-right: 4px;
 }
@@ -45,7 +45,7 @@ table.collectionContentsAsAjaxTable tr th {
 	padding-top: 3px; 
 	padding-bottom: 3px; 
 	padding-left: 8px; 
-	padding-right: 30px; 
+	padding-right: 10px; 
 	background-color: #EEEEEE; 
 	/*border-bottom: 1px solid #407098;*/ 
 	border-top: 1px solid #407098; 
@@ -76,4 +76,9 @@ table.collectionContentsAsAjaxTable #message {
 }
 table.collectionContentsAsAjaxTable caption { 
 	padding-bottom: 2px;
+}
+
+table.collectionContentsAsAjaxTable input:disabled {
+	background-color: white;
+	border: none;
 }

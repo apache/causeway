@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,8 +29,10 @@ import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
@@ -38,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
  * using a simple {@link TextField}.
  */
-public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstract {
+public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,12 +51,15 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
     private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_FEEDBACK = "feedback";
 
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
+    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
+    protected final Class<T> cls;
+    
     private AbstractTextComponent<T> textField;
 
-    public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
+        this.cls = cls;
     }
 
     protected AbstractTextComponent<T> getTextField() {
@@ -86,6 +94,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
 
     protected abstract AbstractTextComponent<T> createTextField();
 
+
     private FormComponentLabel createFormComponentLabel() {
         final AbstractTextComponent<T> textField = getTextField();
         final String name = getModel().getName();
@@ -103,7 +112,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
 
     protected void addStandardSemantics() {
         setRequiredIfSpecified();
-        setTextFieldSizeIfSpecified();
+        setTextFieldSizeIfSpecified(textField);
     }
 
     private void setRequiredIfSpecified() {
@@ -112,7 +121,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
         textField.setRequired(required);
     }
 
-    private void setTextFieldSizeIfSpecified() {
+    protected void setTextFieldSizeIfSpecified(AbstractTextComponent<T> textField) {
         final Integer size = determineSize();
         if (size != null) {
             textField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
@@ -120,7 +129,7 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
     }
 
     @SuppressWarnings("unchecked")
-    private Integer determineSize() {
+    protected Integer determineSize() {
         return firstValueOf(getModel(), TypicalLengthFacet.class, MaxLengthFacet.class);
     }
     

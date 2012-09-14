@@ -46,7 +46,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T> extends ScalarPa
     private final String idScalarValue;
 
     public ScalarPanelTextFieldDatePickerAbstract(final String id, String idScalarValue, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, java.util.Date.class);
         this.idScalarValue = idScalarValue;
     }
 

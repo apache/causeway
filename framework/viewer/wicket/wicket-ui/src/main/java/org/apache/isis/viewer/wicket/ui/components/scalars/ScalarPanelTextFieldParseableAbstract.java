@@ -42,7 +42,7 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
     protected final String idTextField;
 
     public ScalarPanelTextFieldParseableAbstract(final String id, final String idTextField, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, String.class);
         this.idTextField = idTextField;
     }
 

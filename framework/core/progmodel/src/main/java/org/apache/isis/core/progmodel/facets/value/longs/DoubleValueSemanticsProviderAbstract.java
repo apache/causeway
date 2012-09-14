@@ -39,7 +39,7 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     }
 
     private static final Double DEFAULT_VALUE = new Double(0.0d);
-    private static final int TYPICAL_LENGTH = 22;
+    private static final int TYPICAL_LENGTH = 10;
 
     private final NumberFormat format;
 
