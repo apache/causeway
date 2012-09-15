@@ -44,11 +44,23 @@ import org.apache.isis.tck.dom.poly.StringableEntityWithOwnDerivedProperty;
 import org.apache.isis.tck.dom.poly.StringableEntityWithOwnProperties;
 import org.apache.isis.tck.dom.poly.StringableEntityWithOwnProperty;
 
+/**
+ * @author Kevin kevin@kmz.co.za
+ * 
+ *         This test implementation uses the HyperSQL database engine to perform "serverless" tests of polymorphic class
+ *         object creation and reloading.
+ * 
+ *         The sql object store thus allows your domain objects to have properties referenced via interface or
+ *         superclass. Both single reference properties and property collections are supported.
+ * 
+ * 
+ * @version $Rev$ $Date$
+ */
+
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
-    private static final String IMPL_B_STRING = "Impl B String";
-
     private static final String IMPL_A_STRING = "Impl A String";
+    private static final String IMPL_B_STRING = "Impl B String";
     private static final String CHILD_1 = "Child 1";
 
     private static StringableEntityWithOwnProperty polyIntImpA;
@@ -69,50 +81,38 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         return "SHUTDOWN;";
     }
 
+    // Order is important. The next three "tests" must be executed in the correct sequential order.
     @Test
-    public void testSetupStore() throws Exception {
-        setupFixtures();
-
-        setUpFactory();
-
-        create();
+    /**
+     * Sets up the database connection and tells the test framework to create an instance of the 
+     * Isis framework for the next "test".
+     */
+    public void test1SetupStoreAndDatabaseConnection() throws Exception {
+        testSetup();
     }
 
     @Test
-    public void testAll() throws Exception {
-        load();
-
-        setUpFactory();
-
-        polymorphicLoad();
-        interfaceLoad();
-        loadSelfReferencingCollection();
-        interfaceLoadProperty();
-        interfaceLoadCollection();
-        interfaceEditSave();
-        interfaceEditLoad();
-        allInterfacesInstancesLoaded();
-        interfacesLoadedByQuery();
-        interfacesLoadedByQuerySpecial();
-        findByMatchPartialEntity();
-        cannotFindByMatchWithWrongValue();
-        reinitializeFixtures();
-    }
-
-    private void setupFixtures() {
-        resetPersistenceStoreDirectlyIfRequired();
-        setFixtureInitializationState(State.INITIALIZE);
-    }
-
-    private void create() throws Exception {
-        getSqlIntegrationTestFixtures().dropTable("ISIS_SELFREFERENCINGENTITY");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGABLEENTITYWITHOWNPROPERTY");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUB");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUBTWO");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITYSUBTHREE");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_REFERENCINGPOLYTYPESENTITY");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGBASEENTITY");
-        getSqlIntegrationTestFixtures().dropTable("ISIS_STRINGABLE");
+    /**
+     * Uses the database connection to drop database tables related to these tests.
+     * This forces (and exercises the ability of) the object store to re-create the tables.
+     *  
+     * Also uses factory methods within the Isis framework to create the test data,
+     * thus exercising the "create data" portion of the object store.
+     * 
+     * The Isis framework will be again be re-created in the next test unless the 
+     * object store is "in-memory" (this is required since "in-memory" has to be
+     * left alone for created data to still be present in the next test).
+     */
+    public void test2SetupDataWithDatabaseConnection() throws Exception {
+        final SqlIntegrationTestFixtures sqlIntegrationTestFixtures = getSqlIntegrationTestFixtures();
+        sqlIntegrationTestFixtures.dropTable("ISIS_SELFREFERENCINGENTITY");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGABLEENTITYWITHOWNPROPERTY");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITYSUB");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITYSUBTWO");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITYSUBTHREE");
+        sqlIntegrationTestFixtures.dropTable("ISIS_REFERENCINGPOLYTYPESENTITY");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITY");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGABLE");
 
         final ReferencingPolyTypesEntity referencingPolyTypesEntity = factory.newPolyTestClass();
         referencingPolyTypesEntity.setString("polyTestClassString");
@@ -176,6 +176,37 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         factory.save(referencingPolyTypesEntity);
 
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
+    }
+
+    @Test
+    /**
+     * The actual "tests". Unless the test is using the "in-memory" object store 
+     * the Isis framework is re-created, thus ensuring that no domain objects are
+     * left over from the previous "create" step, forcing the objects to be created
+     * via the object store.
+     * 
+     * Exercises the "restore data" portion of the object store.
+     * 
+     * Confirms that polymorphic classes are loaded as expected (via interface, 
+     * via super-class, etc.)
+     */
+    public void test3All() throws Exception {
+        load();
+
+        setUpFactory();
+
+        polymorphicLoad();
+        interfaceLoad();
+        loadSelfReferencingCollection();
+        interfaceLoadProperty();
+        interfaceLoadCollection();
+        interfaceEditSave();
+        interfaceEditLoad();
+        allInterfacesInstancesLoaded();
+        interfacesLoadedByQuery();
+        interfacesLoadedByQuerySpecial();
+        findByMatchPartialEntity();
+        cannotFindByMatchWithWrongValue();
     }
 
     private void load() {
@@ -310,10 +341,4 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final List<Empty> matches = factory.allEmptyInterfacesThatMatch(match);
         assertEquals(0, matches.size());
     }
-
-    private void reinitializeFixtures() {
-        setFixtureInitializationState(State.INITIALIZE);
-        SqlIntegrationTestFixtures.recreate();
-    }
-
 }

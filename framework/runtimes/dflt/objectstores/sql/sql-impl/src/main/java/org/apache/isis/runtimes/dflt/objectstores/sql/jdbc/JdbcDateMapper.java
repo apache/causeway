@@ -33,12 +33,10 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * Handles reading and writing java.sql.Date and
- * org.apache.isis.applib.value.Date values to and from the data store.
+ * Handles reading and writing java.sql.Date and org.apache.isis.applib.value.Date values to and from the data store.
  * 
  * 
  * @version $Rev$ $Date$
@@ -71,7 +69,8 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
             final Date asDate = (Date) value.getObject();
             return new LocalDate(asDate.getMillisSinceEpoch());
         } else {
-            throw new IsisApplicationException("Unimplemented JdbcDateMapper instance type: " + value.getClass().toString());
+            throw new IsisApplicationException("Unimplemented JdbcDateMapper instance type: "
+                + value.getClass().toString());
         }
     }
 
@@ -102,10 +101,8 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-    
+
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 }
-
-

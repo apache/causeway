@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -33,7 +35,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -56,18 +57,17 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
-	
+
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
     private final TitleMapping titleMapping;
     private final boolean useVersioning;
-    
-    
-    public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
+
+    public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
+        final ObjectMappingLookup objectMapperLookup) {
         super(className, parameterBase, lookup, objectMapperLookup);
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
@@ -170,7 +170,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final PersistenceQueryFindByPattern query) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
+        final PersistenceQueryFindByPattern query) {
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
@@ -252,7 +253,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final String title) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
+        final String title) {
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
@@ -297,8 +299,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append(" from " + table);
         return sql;
     } /*
-       * if (whereClause != null) { sql.append(" WHERE ");
-       * sql.append(whereClause); } else if (whereClause != null) {
+       * if (whereClause != null) { sql.append(" WHERE "); sql.append(whereClause); } else if (whereClause != null) {
        * sql.append(" WHERE "); idMapping.appendWhereClause(sql, oid); }
        */
 
@@ -315,8 +316,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                 mapping.initializeField(adapter, rs);
             }
             /*
-             * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
-             * up collection to be a ghost before we access as below
+             * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set up collection to be a ghost before
+             * we access as below
              */
             // CollectionAdapter collection = (CollectionAdapter)
             /*
@@ -336,7 +337,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         }
     }
 
-    private void loadInstancesToVector(final DatabaseConnector connector, final ObjectSpecification cls, final String selectStatment, final Vector<ObjectAdapter> instances) {
+    private void loadInstancesToVector(final DatabaseConnector connector, final ObjectSpecification cls,
+        final String selectStatment, final Vector<ObjectAdapter> instances) {
         LOG.debug("loading instances from SQL " + table);
 
         try {
@@ -354,7 +356,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         }
     }
 
-    private ObjectAdapter loadMappedObject(final DatabaseConnector connector, final ObjectSpecification cls, final Results rs) {
+    private ObjectAdapter loadMappedObject(final DatabaseConnector connector, final ObjectSpecification cls,
+        final Results rs) {
         final Oid oid = idMapping.recreateOid(rs, specification);
         final ObjectAdapter adapter = getAdapter(cls, oid);
 
@@ -387,12 +390,14 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             }
         } else {
             rs.close();
-            throw new SqlObjectStoreException("Unable to load data from " + table + " with id " + object.getOid().enString(getOidMarshaller()));
+            throw new SqlObjectStoreException("Unable to load data from " + table + " with id "
+                + object.getOid().enString(getOidMarshaller()));
         }
     }
 
     @Override
-    public void resolveCollection(final DatabaseConnector connector, final ObjectAdapter object, final ObjectAssociation field) {
+    public void resolveCollection(final DatabaseConnector connector, final ObjectAdapter object,
+        final ObjectAssociation field) {
         if (collectionMappers.length > 0) {
             final DatabaseConnector secondConnector = connector.getConnectionPool().acquire();
             for (final CollectionMapper collectionMapper : collectionMappers) {
@@ -465,11 +470,10 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         return false;
     }
 
-
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // debugging, toString
-    ////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////
+
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("ID mapping", idMapping);
@@ -489,20 +493,18 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         return toString();
     }
 
-    
     @Override
     public String toString() {
-        return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappingByField.size() + ",specification=" + specification.getFullIdentifier() + "]";
+        return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappingByField.size()
+            + ",specification=" + specification.getFullIdentifier() + "]";
     }
 
-    
-
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // dependencies (from context)
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
     protected OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
+        return IsisContext.getOidMarshaller();
+    }
 
 }

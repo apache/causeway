@@ -49,8 +49,15 @@ import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
 /**
  * @author Kevin kevin@kmz.co.za
  * 
+ *         This common class is used by the datatype tests (values, objects, collections) to ensure proper creation and
+ *         reloading of domain objects.
+ * 
+ *         There are two "tests", with the framework re-initialised each time (to flush any objectstore memory of any
+ *         created domain objects).
+ * 
  *         The Singleton class {@link SqlIntegrationTestFixtures} is used to preserve values between tests.
  * 
+ * @version $Rev$ $Date$
  */
 public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBase {
 
@@ -66,15 +73,34 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     private static PrimitiveValuedEntity pve2;
 
     @Test
+    /**
+     * Uses factory methods within the Isis framework to create the test data,
+     * thus exercising the "create data" portion of the object store.
+     * 
+     * The Isis framework will be again be re-created in the next test unless the 
+     * object store is "in-memory" (this is required since "in-memory" has to be
+     * left alone for created data to still be present in the next test).
+     */
     public void testSetupStore() throws Exception {
         testSetup();
         setUpFactory();
-
         testCreate();
     }
 
     @Test
-    public void testAll() throws Exception {
+    /**
+     * The actual "tests". Unless the test is using the "in-memory" object store 
+     * the Isis framework is re-created, thus ensuring that no domain objects are
+     * left over from the previous "create" step, forcing the objects to be created
+     * via the object store.
+     * 
+     * Exercises the "restore data" portion of the object store.
+     * 
+     * Confirms that values and objects (single and collections) are loaded as expected.
+     * Especially, it confirms that dates, times, etc, do not suffer from differences in
+     * time zones between the database and the Isis framework.
+     */
+    public void testTestAll() throws Exception {
         testLoad();
 
         setUpFactory();
@@ -90,7 +116,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         testStandardValueTypesMaxima();
         testStandardValueTypesMinima();
 
-        // broken it...
         testSingleReferenceLazy();
         testSimpleClassTwoReferenceLazy();
 
@@ -110,18 +135,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         testSqlDate();
         testTime();
         testTimeStamp();
-
         testDateTimezoneIssue();
-
         testDateTime();
-
-        // reinitializeFixtures();
-
-    }
-
-    protected void testSetup() {
-        resetPersistenceStoreDirectlyIfRequired();
-        getSqlIntegrationTestFixtures().setState(State.INITIALIZE);
     }
 
     protected void testCreate() throws Exception {

@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class IdMappingAbstract {
@@ -72,7 +71,7 @@ public class IdMappingAbstract {
         if (object == null) {
             sql.append("NULL");
         } else {
-            appendObjectId(connector, sql, (RootOid)object.getOid());
+            appendObjectId(connector, sql, (RootOid) object.getOid());
             // sql.append(connector.addToQueryValues(primaryKeyAsObject(object.getOid())));
         }
     }
@@ -85,23 +84,23 @@ public class IdMappingAbstract {
         final Object object = rs.getObject(column);
         if (object == null) {
             return null;
-        } 
+        }
         final int id = ((Integer) object).intValue();
-        return new RootOidDefault(specification.getSpecId(), ""+id, Oid.State.PERSISTENT);
+        return new RootOidDefault(specification.getSpecId(), "" + id, Oid.State.PERSISTENT);
     }
 
     protected ObjectAdapter getAdapter(final ObjectSpecification spec, final Oid oid) {
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
-        } 
-        // REVIEW: where the oid is a TypedOid, the following two lines could be replaced by getPersistenceSession().recreatePersistentAdapter(oid)
+        }
+        // REVIEW: where the oid is a TypedOid, the following two lines could be replaced by
+        // getPersistenceSession().recreatePersistentAdapter(oid)
         // is preferable, since then reuses the PojoRecreator impl defined within SqlPersistorInstaller
         final Object recreatedPojo = spec.createObject();
         return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
     }
 
-    
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }

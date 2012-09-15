@@ -23,6 +23,15 @@ import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.Data;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
 
+/**
+ * @author Kevin kevin@kmz.co.za
+ * 
+ *         This test implementation uses the HyperSQL database engine to perform "serverless" tests of data creation and
+ *         reloading.
+ * 
+ * 
+ * @version $Rev$ $Date$
+ */
 public class HsqlTest extends SqlIntegrationTestData {
 
     @Override

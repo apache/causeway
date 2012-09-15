@@ -37,6 +37,13 @@ import org.apache.isis.tck.dom.poly.ReferencingPolyTypesEntity;
 import org.apache.isis.tck.dom.sqlos.SqlDomainObjectRepository;
 import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
 
+/**
+ * @author Kevin kevin@kmz.co.za
+ * 
+ *         This common test class is used by all sql objectstore tests to manage the Isis framework.
+ * 
+ * @version $Rev$ $Date$
+ */
 public abstract class SqlIntegrationTestCommonBase {
 
     @Rule
@@ -91,6 +98,11 @@ public abstract class SqlIntegrationTestCommonBase {
      * test, it must delete all XML files in the data store directory.
      */
     public void resetPersistenceStoreDirectlyIfRequired() {
+    }
+
+    protected void testSetup() {
+        resetPersistenceStoreDirectlyIfRequired();
+        getSqlIntegrationTestFixtures().setState(State.INITIALIZE);
     }
 
     // //////////////////////////////////////////////////////////////////////////////
