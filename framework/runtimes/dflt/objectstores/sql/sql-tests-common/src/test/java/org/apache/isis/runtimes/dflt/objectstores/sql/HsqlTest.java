@@ -22,6 +22,7 @@ import org.apache.isis.core.testsupport.files.Files;
 import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.Data;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures;
 
 /**
  * @author Kevin kevin@kmz.co.za
@@ -41,10 +42,16 @@ public class HsqlTest extends SqlIntegrationTestData {
 
     @Override
     protected void testCreate() throws Exception {
+        final SqlIntegrationTestFixtures sqlIntegrationTestFixtures = getSqlIntegrationTestFixtures();
         for (final String tableName : Data.getTableNames()) {
-            getSqlIntegrationTestFixtures().dropTable(tableName);
+            sqlIntegrationTestFixtures.dropTable(tableName);
         }
         super.testCreate();
+    }
+
+    @Override
+    protected String getSqlSetupString() {
+        return "COMMIT;";
     }
 
     @Override

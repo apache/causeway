@@ -74,6 +74,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
         Files.deleteFilesWithPrefix("hsql-db", "poly", Recursion.DONT_RECURSE);
+        getSqlIntegrationTestFixtures();
     }
 
     @Override
@@ -107,6 +108,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final SqlIntegrationTestFixtures sqlIntegrationTestFixtures = getSqlIntegrationTestFixtures();
         sqlIntegrationTestFixtures.dropTable("ISIS_SELFREFERENCINGENTITY");
         sqlIntegrationTestFixtures.dropTable("ISIS_STRINGABLEENTITYWITHOWNPROPERTY");
+        sqlIntegrationTestFixtures.dropTable("ISIS_STRINGABLEENTITYWITHOWNPROPERTIES");
         sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITYSUB");
         sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITYSUBTWO");
         sqlIntegrationTestFixtures.dropTable("ISIS_STRINGBASEENTITYSUBTHREE");
@@ -207,6 +209,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         interfacesLoadedByQuerySpecial();
         findByMatchPartialEntity();
         cannotFindByMatchWithWrongValue();
+
+        // Must be here so that the Isis framework is initialised for the next test package.
+        setFixtureInitializationState(State.INITIALIZE);
     }
 
     private void load() {

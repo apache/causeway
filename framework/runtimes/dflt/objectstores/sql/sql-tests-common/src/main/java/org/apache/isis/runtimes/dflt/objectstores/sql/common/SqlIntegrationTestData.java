@@ -87,58 +87,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         testCreate();
     }
 
-    @Test
-    /**
-     * The actual "tests". Unless the test is using the "in-memory" object store 
-     * the Isis framework is re-created, thus ensuring that no domain objects are
-     * left over from the previous "create" step, forcing the objects to be created
-     * via the object store.
-     * 
-     * Exercises the "restore data" portion of the object store.
-     * 
-     * Confirms that values and objects (single and collections) are loaded as expected.
-     * Especially, it confirms that dates, times, etc, do not suffer from differences in
-     * time zones between the database and the Isis framework.
-     */
-    public void testTestAll() throws Exception {
-        testLoad();
-
-        setUpFactory();
-
-        testString();
-        setStringToDifferentValue();
-        testSimpleClassCollection1Lazy();
-
-        testMoney();
-        testColor();
-        testPassword();
-        testPercentage();
-        testStandardValueTypesMaxima();
-        testStandardValueTypesMinima();
-
-        testSingleReferenceLazy();
-        testSimpleClassTwoReferenceLazy();
-
-        testSimpleClassCollection1();
-        testSimpleClassCollection2();
-
-        testSingleReferenceResolve();
-        testSimpleClassTwoReferenceResolve();
-        testSimpleClassTwo();
-        testUpdate1();
-        testUpdate2();
-        testUpdateCollectionIsDirty();
-        testFindByMatchString();
-        testFindByMatchEntity();
-
-        testApplibDate();
-        testSqlDate();
-        testTime();
-        testTimeStamp();
-        testDateTimezoneIssue();
-        testDateTime();
-    }
-
     protected void testCreate() throws Exception {
 
         sqlDataClass = factory.newDataClass();
@@ -218,6 +166,61 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         factory.save(sqlDataClass);
 
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
+    }
+
+    @Test
+    /**
+     * The actual "tests". Unless the test is using the "in-memory" object store 
+     * the Isis framework is re-created, thus ensuring that no domain objects are
+     * left over from the previous "create" step, forcing the objects to be created
+     * via the object store.
+     * 
+     * Exercises the "restore data" portion of the object store.
+     * 
+     * Confirms that values and objects (single and collections) are loaded as expected.
+     * Especially, it confirms that dates, times, etc, do not suffer from differences in
+     * time zones between the database and the Isis framework.
+     */
+    public void testTestAll() throws Exception {
+        testLoad();
+
+        setUpFactory();
+
+        testString();
+        setStringToDifferentValue();
+        testSimpleClassCollection1Lazy();
+
+        testMoney();
+        testColor();
+        testPassword();
+        testPercentage();
+        testStandardValueTypesMaxima();
+        testStandardValueTypesMinima();
+
+        testSingleReferenceLazy();
+        testSimpleClassTwoReferenceLazy();
+
+        testSimpleClassCollection1();
+        testSimpleClassCollection2();
+
+        testSingleReferenceResolve();
+        testSimpleClassTwoReferenceResolve();
+        testSimpleClassTwo();
+        testUpdate1();
+        testUpdate2();
+        testUpdateCollectionIsDirty();
+        testFindByMatchString();
+        testFindByMatchEntity();
+
+        testApplibDate();
+        testSqlDate();
+        testTime();
+        testTimeStamp();
+        testDateTimezoneIssue();
+        testDateTime();
+
+        // Must be here so that the Isis framework is initialised for the next test package.
+        setFixtureInitializationState(State.INITIALIZE);
     }
 
     private void testLoad() throws Exception {
