@@ -31,14 +31,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IFormSubmittingComponent;
-import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -314,16 +313,25 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                 protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                     Session.get().getFeedbackMessages().clear();
                     getForm().clearInput();
-                    getForm().visitFormComponentsPostOrder(new IVisitor() {
+                    getForm().visitFormComponentsPostOrder(new IVisitor<FormComponent<?>, Void>() {
 
                         @Override
-                        public Object formComponent(final IFormVisitorParticipant formComponent) {
+                        public void component(FormComponent<?> formComponent, IVisit<Void> visit) {
                             if (formComponent instanceof CancelHintRequired) {
                                 final CancelHintRequired cancelHintRequired = (CancelHintRequired) formComponent;
                                 cancelHintRequired.onCancel();
                             }
-                            return null;
                         }
+
+//                        @Override
+//                        public Object formComponent(final IFormVisitorParticipant formComponent) {
+//                            if (formComponent instanceof CancelHintRequired) {
+//                                final CancelHintRequired cancelHintRequired = (CancelHintRequired) formComponent;
+//                                cancelHintRequired.onCancel();
+//                            }
+//                            return null;
+//                        }
+                    
                     });
                     getEntityModel().resetPropertyModels();
                     toViewMode(target);
@@ -342,12 +350,16 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
         private void requestRepaintPanel(final AjaxRequestTarget target) {
             if (target != null) {
-                target.addComponent(owningPanel);
+//                target.addComponent(owningPanel);
+//                // TODO: is it necessary to add these too?
+//                target.addComponent(editButton);
+//                target.addComponent(okButton);
+//                target.addComponent(cancelButton);
+//                target.addComponent(feedback);
+                
+                target.add(owningPanel);
                 // TODO: is it necessary to add these too?
-                target.addComponent(editButton);
-                target.addComponent(okButton);
-                target.addComponent(cancelButton);
-                target.addComponent(feedback);
+                target.add(editButton, okButton, cancelButton, feedback);
             }
         }
 

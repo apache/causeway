@@ -20,12 +20,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 
 public interface SpecificationLoader extends Injectable {
 
     ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
-
-
 
     /**
      * Return the specification for the specified class of object.
@@ -50,9 +50,18 @@ public interface SpecificationLoader extends Injectable {
      * Loads the specifications of the specified types except the one specified
      * (to prevent an infinite loop).
      */
-    public boolean loadSpecifications(List<Class<?>> typesToLoad, final Class<?> typeToIgnore);
+    boolean loadSpecifications(List<Class<?>> typesToLoad, final Class<?> typeToIgnore);
 
 
+    /**
+     * Typically does not need to be called, but is available for {@link FacetFactory}s to force
+     * early introspection of referenced specs in certain circumstances.
+     * 
+     * <p>
+     * Originally introduced to support {@link AutoCompleteFacet}.
+     */
+    ObjectSpecification introspectIfRequired(final ObjectSpecification spec);
+    
     
     Collection<ObjectSpecification> allSpecifications();
 

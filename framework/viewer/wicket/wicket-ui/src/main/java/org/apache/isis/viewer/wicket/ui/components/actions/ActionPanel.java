@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -39,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -180,7 +180,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                     final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
                     
                     // "redirect-after-post"
-                    panel.setRedirect(true);
+                    
+                    // panel.setRedirect(true); // no longer required, http://mail-archives.apache.org/mod_mbox/wicket-users/201103.mbox/%3CAANLkTin3NmEBaMY9CF8diXA+wTMamQPc2O+tWvG_HCiW@mail.gmail.com%3E
                     panel.setResponsePage(entityPage);
                     
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
@@ -214,7 +215,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 if (selectionHandler != null) {
                     collectionModel.setSelectionHandler(selectionHandler);
                 }
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
+                final ComponentFactoryRegistry componentFactoryRegistry = panel.getComponentFactoryRegistry();
+                componentFactoryRegistry.addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
             }
         },
         EMPTY {

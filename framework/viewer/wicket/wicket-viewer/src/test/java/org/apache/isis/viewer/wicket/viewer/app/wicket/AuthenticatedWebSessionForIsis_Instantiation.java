@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import java.util.Locale;
 
-import org.apache.wicket.Request;
+import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;

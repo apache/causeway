@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.autocomplete;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 
@@ -30,21 +30,16 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         return AutoCompleteFacet.class;
     }
 
-    private final ObjectSpecification repositorySpec;
-    private final String actionId;
+    private final ObjectAction repositoryAction;
 
-    public AutoCompleteFacetAbstract(final FacetHolder holder, ObjectSpecification repositorySpec, String actionId) {
+    public AutoCompleteFacetAbstract(final FacetHolder holder, ObjectAction repositoryAction) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.repositorySpec = repositorySpec;
-        this.actionId = actionId;
+        this.repositoryAction = repositoryAction;
     }
 
-    public ObjectSpecification getRepositorySpec() {
-        return repositorySpec;
-    }
-    
-    public String getActionId() {
-        return actionId;
+    @Override
+    public ObjectAction getRepositoryAction() {
+        return repositoryAction;
     }
 
 }

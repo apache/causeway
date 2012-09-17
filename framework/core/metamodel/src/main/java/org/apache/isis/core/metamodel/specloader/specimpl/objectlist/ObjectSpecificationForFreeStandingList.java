@@ -59,7 +59,7 @@ public class ObjectSpecificationForFreeStandingList extends ObjectSpecificationA
 
     @Override
     public void introspectTypeHierarchyAndMembers() {
-        setSuperclass(Object.class);
+        updateSuperclass(Object.class);
 
         addFacet(new CollectionFacetForFreeStandingList(this));
         addFacet(new TypeOfFacetDefaultToObject(this, getSpecificationLookup()) {

@@ -73,6 +73,8 @@ import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForFreeStandingList;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
@@ -373,7 +375,7 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
             // infinite loops
             specificationCache.cache(typeName, specification);
 
-            introspectSpecificationIfRequired(specification);
+            introspectIfRequired(specification);
 
             return specification;
         }
@@ -456,11 +458,29 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
         return getCache().get(fullyQualifiedClassName) != null;
     }
 
-    private ObjectSpecification introspectSpecificationIfRequired(final ObjectSpecification spec) {
-        if (!spec.isIntrospected()) {
-            spec.introspectTypeHierarchyAndMembers();
+    public ObjectSpecification introspectIfRequired(final ObjectSpecification spec) {
+        final ObjectSpecificationAbstract specSpi = (ObjectSpecificationAbstract)spec;
+        final IntrospectionState introspectionState = specSpi.getIntrospectionState();
+
+        if (introspectionState == IntrospectionState.NOT_INTROSPECTED) {
+            specSpi.setIntrospectionState(IntrospectionState.BEING_INTROSPECTED);
+            
+            specSpi.introspectTypeHierarchyAndMembers();
             facetDecoratorSet.decorate(spec);
-            spec.updateFromFacetValues();
+            specSpi.updateFromFacetValues();
+            
+            specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+        } else if (introspectionState == IntrospectionState.BEING_INTROSPECTED) {
+            // nothing to do
+
+            specSpi.introspectTypeHierarchyAndMembers();
+            facetDecoratorSet.decorate(spec);
+            specSpi.updateFromFacetValues();
+            
+            specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+
+        } else if (introspectionState == IntrospectionState.INTROSPECTED) {
+            // nothing to do
         }
         return spec;
     }

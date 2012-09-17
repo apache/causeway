@@ -28,7 +28,8 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
 
-import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.request.resource.PackageResource;
+import org.apache.wicket.request.resource.PackageResourceReference;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -77,12 +78,12 @@ public class ImageCacheClassPath implements ImageResourceCache {
     }
 
     private PackageResource findImageSuffixed(final String imageName) {
-        for (final String imageSuffix : IMAGE_SUFFICES) {
-            final String path = buildImagePath(imageName, imageSuffix);
-            if (PackageResource.exists(Images.class, path, null, null)) {
-                return PackageResource.get(Images.class, path);
-            }
-        }
+//        for (final String imageSuffix : IMAGE_SUFFICES) {
+//            final String path = buildImagePath(imageName, imageSuffix);
+//            if (PackageResource.exists(Images.class, path, null, null, null)) {
+//                return PackageResource.get(Images.class, path);
+//            }
+//        }
         return null;
     }
 
@@ -93,26 +94,27 @@ public class ImageCacheClassPath implements ImageResourceCache {
     }
 
     private PackageResource findImageSearchUpHierarchy(final ObjectSpecification noSpec) {
-        for (final String imageSuffix : IMAGE_SUFFICES) {
-            final String fullName = noSpec.getFullIdentifier();
-            final String path = buildImagePath(fullName, imageSuffix);
-            if (PackageResource.exists(Images.class, path, null, null)) {
-                return PackageResource.get(Images.class, path);
-            }
-        }
-        for (final String imageSuffix : IMAGE_SUFFICES) {
-            final String shortName = noSpec.getShortIdentifier();
-            final String path = buildImagePath(shortName, imageSuffix);
-            if (PackageResource.exists(Images.class, path, null, null)) {
-                return PackageResource.get(Images.class, path);
-            }
-        }
+//        for (final String imageSuffix : IMAGE_SUFFICES) {
+//            final String fullName = noSpec.getFullIdentifier();
+//            final String path = buildImagePath(fullName, imageSuffix);
+//            if (PackageResource.exists(Images.class, path, null, null, null)) {
+//                return PackageResource.get(Images.class, path);
+//            }
+//        }
+//        for (final String imageSuffix : IMAGE_SUFFICES) {
+//            final String shortName = noSpec.getShortIdentifier();
+//            final String path = buildImagePath(shortName, imageSuffix);
+//            if (PackageResource.exists(Images.class, path, null, null, null)) {
+//                return PackageResource.get(Images.class, path);
+//            }
+//        }
         final ObjectSpecification superSpec = noSpec.superclass();
         if (superSpec != null) {
             return findAndCacheImage(superSpec);
         }
         // fallback
-        return PackageResource.get(Images.class, "Default.png");
+//        return PackageResource.get(Images.class, "Default.png");
+        return null;
     }
 
     private String buildImagePath(final String name, final String imageSuffix) {

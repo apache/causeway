@@ -32,10 +32,6 @@ import org.apache.isis.core.progmodel.facets.value.image.ImageValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-/**
- * {@link FormComponentPanel} representing a reference to an entity: a link and
- * a findUsing button.
- */
 public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
 
     private static final long serialVersionUID = 1L;
@@ -58,12 +54,13 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
         final ObjectAdapter adapter = getModel().getObject();
         if (adapter != null) {
             final java.awt.Image imageValue = imageValueFacet.getImage(adapter);
-            final RenderedDynamicImageResource imageResource = new RenderedDynamicImageResource(imageValue.getWidth(null), imageValue.getHeight(null)) {
+            final RenderedDynamicImageResource imageResource = new RenderedDynamicImageResource(
+                    imageValue.getWidth(null), imageValue.getHeight(null)) {
 
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected boolean render(final Graphics2D graphics) {
+                protected boolean render(final Graphics2D graphics, Attributes attributes) {
                     graphics.drawImage(imageValue, 0, 0, null);
                     return true;
                 }

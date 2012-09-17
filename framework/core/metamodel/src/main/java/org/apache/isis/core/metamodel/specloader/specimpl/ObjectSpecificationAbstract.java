@@ -80,7 +80,6 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -96,6 +95,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         private final List<ObjectSpecification> classes = Lists.newArrayList();
 
         public void addSubclass(final ObjectSpecification subclass) {
+            if(classes.contains(subclass)) { 
+                return;
+            }
             classes.add(subclass);
         }
 
@@ -142,7 +144,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
 
-    private boolean introspected = false;
+    private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
 
     // //////////////////////////////////////////////////////////////////////
     // Constructor
@@ -219,24 +221,36 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return fullName;
     }
 
+    
+    public enum IntrospectionState {
+        NOT_INTROSPECTED,
+        BEING_INTROSPECTED,
+        INTROSPECTED,
+    }
+
     /**
      * Only if {@link #setIntrospected(boolean)} has been called (should be
      * called within {@link #updateFromFacetValues()}.
      */
-    @Override
-    public boolean isIntrospected() {
+    public IntrospectionState getIntrospectionState() {
         return introspected;
+    }
+
+    public void setIntrospectionState(IntrospectionState introspectationState) {
+        this.introspected = introspectationState;
     }
 
     // //////////////////////////////////////////////////////////////////////
     // Introspection (part 1)
     // //////////////////////////////////////////////////////////////////////
 
+    public abstract void introspectTypeHierarchyAndMembers();
+
     /**
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
      * .
      */
-    protected void setSuperclass(final Class<?> superclass) {
+    protected void updateSuperclass(final Class<?> superclass) {
         if (superclass == null) {
             return;
         }
@@ -245,7 +259,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (LOG.isDebugEnabled()) {
                 LOG.debug("  Superclass " + superclass.getName());
             }
-            addAsSubclassTo(superclassSpec);
+            updateAsSubclassTo(superclassSpec);
         }
     }
 
@@ -253,7 +267,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
      * .
      */
-    protected void addInterfaces(final List<ObjectSpecification> interfaces) {
+    protected void updateInterfaces(final List<ObjectSpecification> interfaces) {
+        this.interfaces.clear();
         this.interfaces.addAll(interfaces);
     }
 
@@ -261,27 +276,27 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
      * .
      */
-    protected void addAsSubclassTo(final ObjectSpecification supertypeSpec) {
+    protected void updateAsSubclassTo(final ObjectSpecification supertypeSpec) {
         if (!(supertypeSpec instanceof ObjectSpecificationAbstract)) {
             return;
         }
         // downcast required because addSubclass is (deliberately) not public
         // API
         final ObjectSpecificationAbstract introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
-        introspectableSpec.addSubclass(this);
+        introspectableSpec.updateSubclasses(this);
     }
 
     /**
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
      * .
      */
-    protected void addAsSubclassTo(final List<ObjectSpecification> supertypeSpecs) {
+    protected void updateAsSubclassTo(final List<ObjectSpecification> supertypeSpecs) {
         for (final ObjectSpecification supertypeSpec : supertypeSpecs) {
-            addAsSubclassTo(supertypeSpec);
+            updateAsSubclassTo(supertypeSpec);
         }
     }
 
-    private void addSubclass(final ObjectSpecification subclass) {
+    private void updateSubclasses(final ObjectSpecification subclass) {
         this.subclasses.addSubclass(subclass);
     }
 
@@ -289,10 +304,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
      * .
      */
-    protected void addAssociations(final List<ObjectAssociation> associations) {
+    protected void updateAssociations(final List<ObjectAssociation> associations) {
         if (associations == null) {
             return;
         }
+        this.associations.clear();
         this.associations.addAll(associations);
     }
 
@@ -300,10 +316,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
      * .
      */
-    protected void addObjectActions(final List<ObjectAction> objectActions) {
+    protected void updateObjectActions(final List<ObjectAction> objectActions) {
         if (objectActions == null) {
             return;
         }
+        this.objectActions.clear();
         this.objectActions.addAll(objectActions);
     }
 
@@ -311,7 +328,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // Introspection (part 2)
     // //////////////////////////////////////////////////////////////////////
 
-    @Override
     public void updateFromFacetValues() {
         clearDirtyObjectFacet = getFacet(ClearDirtyObjectFacet.class);
         markDirtyObjectFacet = getFacet(MarkDirtyObjectFacet.class);
@@ -320,8 +336,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
 
-        final Persistability persistability = determinePersistability();
-        this.persistability = persistability;
+        this.persistability = determinePersistability();
     }
 
     private Persistability determinePersistability() {
@@ -347,12 +362,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.clearDirtyObjectFacet = clearDirtyObjectFacet;
     }
 
-    /**
-     * Intended to be called within {@link #updateFromFacetValues()}.
-     */
-    protected void setIntrospected(final boolean introspected) {
-        this.introspected = introspected;
-    }
 
     // //////////////////////////////////////////////////////////////////////
     // Title, Icon
@@ -995,4 +1004,5 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
+
 }

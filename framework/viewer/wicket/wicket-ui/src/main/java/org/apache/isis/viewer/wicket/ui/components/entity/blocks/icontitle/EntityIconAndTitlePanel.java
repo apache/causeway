@@ -22,15 +22,13 @@ package org.apache.isis.viewer.wicket.ui.components.entity.blocks.icontitle;
 import com.google.inject.Inject;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.markup.html.PackageResource;
-import org.apache.wicket.markup.html.PackageResourceReference;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.resources.PackagedResourceReference;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -40,7 +38,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 /**
@@ -101,7 +98,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         final Class<?> correspondingClass = entityModel.getObject().getSpecification().getCorrespondingClass();
         final String specName = correspondingClass.getSimpleName();
 
-        final ResourceReference imageResource = new ResourceReference(correspondingClass, specName + ".png");
+        final ResourceReference imageResource = new PackageResourceReference(correspondingClass, specName + ".png");
         image = new Image(ID_ENTITY_ICON, imageResource);
         link.addOrReplace(image);
         

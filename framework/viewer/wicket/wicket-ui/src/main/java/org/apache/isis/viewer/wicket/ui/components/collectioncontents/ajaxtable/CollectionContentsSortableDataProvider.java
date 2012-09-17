@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
  * <p>
  * TODO: not yet fully supported.
  */
-public class CollectionContentsSortableDataProvider extends SortableDataProvider<ObjectAdapter> {
+public class CollectionContentsSortableDataProvider extends SortableDataProvider<ObjectAdapter,String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,8 +46,8 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     @Override
-    public Iterator<ObjectAdapter> iterator(final int first, final int count) {
-        return model.getObject().subList(first, first + count).iterator();
+    public Iterator<ObjectAdapter> iterator(final long first, final long count) {
+        return model.getObject().subList((int)first, (int)(first + count)).iterator();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     @Override
-    public int size() {
+    public long size() {
         return model.getObject().size();
     }
 

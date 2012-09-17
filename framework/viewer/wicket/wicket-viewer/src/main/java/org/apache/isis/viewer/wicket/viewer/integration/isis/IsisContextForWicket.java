@@ -27,6 +27,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -49,6 +50,8 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebS
  */
 public class IsisContextForWicket extends IsisContext {
 
+    private static final Logger LOG = Logger.getLogger(IsisContextForWicket.class);
+    
     public static class WicketContextCategory extends ContextCategory {
 
         @Override
@@ -131,18 +134,30 @@ public class IsisContextForWicket extends IsisContext {
         // there could be multiple threads using a session.
 
         final AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
-        webSession.registerUseByThread();
-
-        IsisSession isisSession = sessionMap.get(webSession);
-        if (isisSession == null) {
-            isisSession = getSessionFactoryInstance().openSession(authSession);
-            // put into map prior to opening, so that subsequent calls to
-            // getSessionInstance() will find this new session.
-            sessionMap.put(webSession, isisSession);
-            isisSession.open();
+        synchronized (webSession) {
+            final String webSessionId = webSession.getId();
+        
+            final int before = webSession.getThreadUsage();
+            webSession.registerUseByThread();
+            final int after = webSession.getThreadUsage();
+    
+            final String logMsg; 
+            IsisSession isisSession = sessionMap.get(webSession);
+            if (isisSession == null) {
+                isisSession = getSessionFactoryInstance().openSession(authSession);
+                // put into map prior to opening, so that subsequent calls to
+                // getSessionInstance() will find this new session.
+                sessionMap.put(webSession, isisSession);
+                isisSession.open();
+                
+                logMsg = "NEW    ";
+            } else {
+                logMsg = "BUMP_UP";
+            }
+            LOG.debug(String.format("webSession: %s OPEN  %d -> %d %s %s", webSessionId, before, after, logMsg, isisSession.getId()));
+    
+            return isisSession;
         }
-
-        return isisSession;
     }
 
     @Override
@@ -161,21 +176,33 @@ public class IsisContextForWicket extends IsisContext {
 
     private synchronized void closeSessionOrDeregisterUsageOnExisting() {
         final AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
-        final boolean shouldClose = webSession.deregisterUseByThread();
+        synchronized (webSession) {
+            final String webSessionId = webSession.getId();
+            
+            final int before = webSession.getThreadUsage();
+            final boolean shouldClose = webSession.deregisterUseByThread();
+            final int after = webSession.getThreadUsage();
 
-        final IsisSession isisSession = sessionMap.get(webSession);
-        if (isisSession == null) {
-            // nothing to be done
-            return;
+            final IsisSession isisSession = sessionMap.get(webSession);
+            
+            final String logMsg; 
+            if (isisSession == null) {
+                // nothing to be done !?!?
+                logMsg = "NO_SESSION";
+            } else {
+                if (shouldClose) {
+                    isisSession.close();
+                    // remove after closing, so that any calls to getSessionInstance()
+                    // made while closing will still find this session
+                    sessionMap.remove(webSession);
+                    logMsg = "DISCARDING";
+                } else {
+                    logMsg = "BUMP_DOWN ";
+                }
+            }
+
+            LOG.debug(String.format("webSession: %s CLOSE %d -> %d %s %s", webSessionId, before, after, logMsg, (isisSession != null? isisSession.getId(): "[null]")));
         }
-
-        if (shouldClose) {
-            isisSession.close();
-            // remove after closing, so that any calls to getSessionInstance()
-            // made while closing will still find this session
-            sessionMap.remove(webSession);
-        }
-
     }
 
     @Override

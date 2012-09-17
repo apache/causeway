@@ -19,9 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.authentication.pages.SignInPage;
+import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 

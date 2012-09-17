@@ -130,6 +130,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             public boolean loaded(String fullyQualifiedClassName) {
                 return specificationLoader.loaded(fullyQualifiedClassName);
             }
+
+            @Override
+            public ObjectSpecification introspectIfRequired(ObjectSpecification spec) {
+                return specificationLoader.introspectIfRequired(spec);
+            }
         });
     }
 

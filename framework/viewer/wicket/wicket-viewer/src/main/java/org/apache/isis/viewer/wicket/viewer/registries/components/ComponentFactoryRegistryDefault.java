@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;

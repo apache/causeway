@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.object.autocomplete.annotation;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -26,12 +28,16 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 
 public class AutoCompleteAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public AutoCompleteAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_POST_PROCESSING_ONLY);
     }
 
     @Override
@@ -42,10 +48,17 @@ public class AutoCompleteAnnotationFacetFactory extends FacetFactoryAbstract {
 
     private AutoCompleteFacet create(final AutoComplete annotation, final FacetHolder holder) {
         if(annotation == null) { return null; }
+
         Class<?> repositoryClass = annotation.repository();
+        String actionName = annotation.action();
+        
         final ObjectSpecification repositorySpec = getSpecificationLookup().loadSpecification(repositoryClass);
-        String action = annotation.action();
-        return annotation == null ? null : new AutoCompleteFacetAnnotation(holder, repositorySpec, action);
+        getSpecificationLookup().introspectIfRequired(repositorySpec);
+         
+        
+        final List<ObjectAction> objectActions = repositorySpec.getObjectActions(ActionType.USER, Contributed.EXCLUDED, ObjectActionFilters.withId(actionName));
+        
+        return objectActions.size() != 1 ? null : new AutoCompleteFacetAnnotation(holder, objectActions.get(0));
     }
 
 }

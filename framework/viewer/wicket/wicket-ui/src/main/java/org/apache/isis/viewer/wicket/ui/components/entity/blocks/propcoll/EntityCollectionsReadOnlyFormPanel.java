@@ -184,7 +184,8 @@ public class EntityCollectionsReadOnlyFormPanel extends PanelAbstract<EntityMode
 
         private void requestRepaintPanel(final AjaxRequestTarget target) {
             if (target != null) {
-                target.addComponent(owningPanel);
+                //target.addComponent(owningPanel);
+                target.add(owningPanel);
             }
         }
 

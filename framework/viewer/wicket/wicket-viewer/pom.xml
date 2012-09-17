@@ -92,10 +92,12 @@
 			<artifactId>wicket-auth-roles</artifactId>
 		</dependency>
 
+<!-- 
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>scriptaculous</artifactId>
 		</dependency>
+-->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>

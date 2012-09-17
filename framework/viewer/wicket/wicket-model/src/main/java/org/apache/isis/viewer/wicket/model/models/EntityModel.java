@@ -24,8 +24,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.PackageResource;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -367,37 +367,6 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         }
         getObjectAdapterMemento().setAdapter(adapter);
         toViewMode();
-    }
-
-
-    // //////////////////////////////////////////////////////////
-    // lookupImageResource
-    // //////////////////////////////////////////////////////////
-
-    public PackageResource lookupImageResource(final ImageResourceCache imageResourceCache) {
-        PackageResource imageResource = null;
-        try {
-            final ObjectAdapter objectAdapter = getObject();
-            ObjectSpecification typeOfSpec = objectAdapter.getSpecification();
-            final IconFacet iconFacet = typeOfSpec.getFacet(IconFacet.class);
-            if (iconFacet != null) {
-                final String iconName = iconFacet.iconName(objectAdapter);
-                imageResource = imageResourceCache.findImageResource(iconName);
-            }
-            if(imageResource != null) {
-                return imageResource;
-            }
-            typeOfSpec = getTypeOfSpecification();
-            imageResource = imageResourceCache.findImage(typeOfSpec);
-            if(imageResource != null) {
-                return imageResource;
-            }
-            return null;
-        } finally {
-            if(imageResource != null) {
-                imageResource.setCacheable(true);
-            }
-        }
     }
 
 

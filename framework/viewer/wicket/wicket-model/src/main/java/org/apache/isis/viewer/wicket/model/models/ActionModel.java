@@ -27,8 +27,7 @@ import java.util.regex.Pattern;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -341,8 +340,12 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return actionMemento;
     }
 
-    @Override
-    public ObjectAdapter getObject() {
+//    @Override
+//    public ObjectAdapter getObject() {
+//        return reExecute();
+//    }
+
+    private ObjectAdapter reExecute() {
         detach(); // force re-execute
         final ObjectAdapter result = super.getObject();
         arguments.clear();
@@ -351,8 +354,16 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
 
     @Override
     protected ObjectAdapter load() {
+        
+        // from getObject()/reExecute
+        detach(); // force re-execute
+        
         final ObjectAdapter results = executeAction();
         this.actionMode = Mode.RESULTS;
+        
+        // from getObject()/reExecute
+        arguments.clear();
+        
         return results;
     }
 

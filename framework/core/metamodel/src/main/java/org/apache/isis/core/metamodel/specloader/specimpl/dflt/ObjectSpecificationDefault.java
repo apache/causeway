@@ -77,6 +77,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderC
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
 
@@ -123,15 +124,16 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public void introspectTypeHierarchyAndMembers() {
-        if (facetedMethodsBuilder == null) {
-            throw new MetaModelException("Introspection already taken place, cannot introspect again");
-        }
 
         // class
-        facetedMethodsBuilder.introspectClass();
-
-        // names
-        addNamedFacetAndPluralFacetIfRequired();
+        if(isNotIntrospected()) {
+            facetedMethodsBuilder.introspectClass();
+        }
+        
+        // name
+        if(isNotIntrospected()) {
+            addNamedFacetAndPluralFacetIfRequired();
+        }
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
@@ -142,8 +144,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
 
         // superclass
-        final Class<?> superclass = getCorrespondingClass().getSuperclass();
-        setSuperclass(superclass);
+        if(isNotIntrospected()) {
+            final Class<?> superclass = getCorrespondingClass().getSuperclass();
+            updateSuperclass(superclass);
+        }
 
 
         // walk superinterfaces
@@ -165,27 +169,39 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 interfaceSpecList.add(interfaceSpec);
             }
         }
-        addAsSubclassTo(interfaceSpecList);
-        addInterfaces(interfaceSpecList);
+
+        if(isNotIntrospected()) {
+            updateAsSubclassTo(interfaceSpecList);
+        }
+        if(isNotIntrospected()) {
+            updateInterfaces(interfaceSpecList);
+        }
 
         // associations and actions
         final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
-        // actions
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
 
-        // ordering
-        final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
-        addAssociations(asAssociations(associationOrderSet));
+        if(isNotIntrospected()) {
+            final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
+            updateAssociations(asAssociations(associationOrderSet));
+        }
 
-        final OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
-        addObjectActions(asObjectActions(actionOrderSet));
+        if(isNotIntrospected()) {
+            final OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
+            updateObjectActions(asObjectActions(actionOrderSet));
+        }
 
-        facetedMethodsBuilder.introspectClassPostProcessing();
+        if(isNotIntrospected()) {
+            facetedMethodsBuilder.introspectClassPostProcessing();    
+        }
+        
+        if(isNotIntrospected()) {
+            updateFromFacetValues();    
+        }
+    }
 
-        updateFromFacetValues();
-
-        facetedMethodsBuilder = null;
-        setIntrospected(true);
+    private boolean isNotIntrospected() {
+        return !(getIntrospectionState() == IntrospectionState.INTROSPECTED);
     }
 
     private void addNamedFacetAndPluralFacetIfRequired() {
@@ -262,13 +278,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return new ObjectActionSet("", set.getGroupFullName(), asObjectActions(set));
     }
 
-    /**
-     * Added to try to track down a race condition.
-     */
-    @Override
-    public boolean isIntrospected() {
-        return facetedMethodsBuilder == null;
-    }
+    
+
 
     // //////////////////////////////////////////////////////////////////////
     // Whether a service or not

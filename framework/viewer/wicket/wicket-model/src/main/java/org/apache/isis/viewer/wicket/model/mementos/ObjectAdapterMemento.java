@@ -259,9 +259,14 @@ public class ObjectAdapterMemento implements Serializable {
         if (this.titleHint != null) {
             return;
         } 
-        ObjectAdapter objectAdapter = this.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-        if (objectAdapter.isTitleAvailable()) {
-            this.titleHint = objectAdapter.titleString();
+        
+        // REVIEW: this check is because Wicket 6.0.0 seems to call onEndRequest prior to onDetach
+        // so by the time we get here, there is no session to use...
+        if(IsisContext.inSession()) {
+            ObjectAdapter objectAdapter = this.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            if (objectAdapter.isTitleAvailable()) {
+                this.titleHint = objectAdapter.titleString();
+            }
         }
     }
 

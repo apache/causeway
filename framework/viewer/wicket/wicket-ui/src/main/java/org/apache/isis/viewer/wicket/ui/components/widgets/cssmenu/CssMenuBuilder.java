@@ -80,7 +80,8 @@ public class CssMenuBuilder {
      * Protected so can be overridden in testing if required.
      */
     protected boolean isExplorationMode() {
-        return Application.get().getConfigurationType().equalsIgnoreCase(Application.DEVELOPMENT);
+        //return Application.get().getConfigurationType().equalsIgnoreCase(Application.DEVELOPMENT);
+        return Application.get().usesDeploymentConfig();
     }
 
     /**

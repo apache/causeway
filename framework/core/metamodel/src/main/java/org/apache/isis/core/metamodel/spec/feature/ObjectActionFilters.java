@@ -18,4 +18,13 @@ public class ObjectActionFilters {
         };
     }
 
+    public static Filter<ObjectAction> withId(final String actionId) {
+        return new Filter<ObjectAction>(){
+    
+            @Override
+            public boolean accept(ObjectAction objectAction) {
+                return objectAction.getId().equals(actionId);
+            }};
+    }
+
 }

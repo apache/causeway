@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.tabs;
 
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import org.apache.wicket.behavior.IBehavior;
+import org.apache.wicket.behavior.Behavior;
+
 
 public class EvenOrOddCssClassAppenderFactory {
 
@@ -36,7 +37,8 @@ public class EvenOrOddCssClassAppenderFactory {
 
     private EvenOrOddCssClassAppenderFactory.EvenOrOdd eo = EvenOrOdd.EVEN;
 
-    public IBehavior nextClass() {
+    //public IBehavior nextClass() {
+    public Behavior nextClass() {
         final String className = eo.className();
         eo = eo.next();
         return new CssClassAppender(className);

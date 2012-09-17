@@ -76,7 +76,11 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
         return specificationLoaderDelegate.loadSpecifications(typesToLoad);
     }
 
-    
+    @Override
+    public ObjectSpecification introspectIfRequired(ObjectSpecification spec) {
+        return specificationLoaderDelegate.introspectIfRequired(spec);
+    }
+
     @Override
     public void injectInto(Object candidate) {
         super.injectInto(candidate);
@@ -84,5 +88,8 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
             specificationLoaderDelegate.injectInto(candidate);
         }
     }
+
+
+
 
 }

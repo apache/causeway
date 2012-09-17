@@ -19,8 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.about;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;

@@ -136,4 +136,9 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
         throw new NotYetImplementedException();
     }
 
+    @Override
+    public ObjectSpecification introspectIfRequired(ObjectSpecification spec) {
+        throw new NotYetImplementedException();
+    }
+
 }

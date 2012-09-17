@@ -64,7 +64,8 @@ public class ContainedButton extends PanelAbstract<Model<String>> {
                 ContainedButton.this.onSubmit();
                 if (target != null) {
                     for (final Component component : componentsToRerender) {
-                        target.addComponent(component);
+                        //target.addComponent(component);
+                        target.add(component);
                     }
                 }
             }

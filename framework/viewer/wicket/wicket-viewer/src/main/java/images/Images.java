@@ -19,7 +19,7 @@
 
 package images;
 
-import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.request.resource.PackageResource;
 
 /**
  * This is a bit of a hack, but the Isis convention is to plonk all the images

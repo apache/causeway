@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.unknown;
 
-import com.google.common.base.Objects;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;

@@ -19,25 +19,30 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import images.Images;
+
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.util.convert.ConverterLocator;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -79,7 +84,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
 
     private static final long serialVersionUID = 1L;
 
-    private static final String WICKET_CONFIGURATION_TYPE_DEVELOPMENT = Application.DEVELOPMENT;
+    //private static final String WICKET_CONFIGURATION_TYPE_DEVELOPMENT = Application.DEVELOPMENT;
 
     /**
      * Convenience locator, downcasts inherited functionality.
@@ -135,8 +140,15 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     @Override
     protected void init() {
         super.init();
-        getResourceSettings().setParentFolderPlaceholder("$up$");
 
+        // 6.0.0 rather than overriding getRequestCycleSettings
+        getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
+        // 6.0.0 instead of subclassing newRequestCycle 
+        getRequestCycleListeners().add(new WebRequestCycleForIsis());
+
+        
+        
+        getResourceSettings().setParentFolderPlaceholder("$up$");
         final DeploymentType deploymentType = determineDeploymentType();
 
         final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
@@ -149,7 +161,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     private DeploymentType determineDeploymentType() {
-        if (getConfigurationType().equalsIgnoreCase(WICKET_CONFIGURATION_TYPE_DEVELOPMENT)) {
+        if(usesDevelopmentConfig()) {
+        //if (getConfigurationType().equalsIgnoreCase(WICKET_CONFIGURATION_TYPE_DEVELOPMENT)) {
             return new WicketServerPrototype();
         } else {
             return new WicketServer();
@@ -165,7 +178,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     protected void initWicketComponentInjection(final Injector injector) {
-        addComponentInstantiationListener(new GuiceComponentInjector(this, injector));
+        getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector));
     }
 
     /**
@@ -215,19 +228,19 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         return authenticationManager;
     }
 
-    /**
-     * Installs a {@link WebRequestCycleForIsis custom implementation} of
-     * Wicket's own {@link RequestCycle}, hooking in to provide session and
-     * transaction management across potentially multiple concurrent requests
-     * for the same Wicket session.
-     * 
-     * <p>
-     * In general, it shouldn't be necessary to override this method.
-     */
-    @Override
-    public RequestCycle newRequestCycle(final Request request, final Response response) {
-        return new WebRequestCycleForIsis(this, (WebRequest) request, response);
-    }
+//    /**
+//     * Installs a {@link WebRequestCycleForIsis custom implementation} of
+//     * Wicket's own {@link RequestCycle}, hooking in to provide session and
+//     * transaction management across potentially multiple concurrent requests
+//     * for the same Wicket session.
+//     * 
+//     * <p>
+//     * In general, it shouldn't be necessary to override this method.
+//     */
+//    @Override
+//    public RequestCycle newRequestCycle(final Request request, final Response response) {
+//        return new WebRequestCycleForIsis(this, (WebRequest) request, response);
+//    }
 
     /**
      * Installs a {@link ConverterLocator} preconfigured with a number of
@@ -269,8 +282,9 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         if (cssUrl == null) {
             return;
         }
-        final IHeaderResponse headerResponse = container.getHeaderResponse();
-        headerResponse.renderCSSReference(cssUrl);
+        final IHeaderResponse response = container.getHeaderResponse();
+        //response.renderCSSReference(cssUrl);
+        response.render(CssHeaderItem.forReference(new CssResourceReference(this.getClass(), cssUrl)));
     }
 
     // /////////////////////////////////////////////////

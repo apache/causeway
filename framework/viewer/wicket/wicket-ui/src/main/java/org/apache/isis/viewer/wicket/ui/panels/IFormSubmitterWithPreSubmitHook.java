@@ -1,5 +1,5 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
-public interface IFormSubmittingComponentWithPreSubmitHook {
+public interface IFormSubmitterWithPreSubmitHook {
     void preSubmit();
 }

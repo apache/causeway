@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
  * <p>
  * Part of the implementation of {@link CollectionContentsAsAjaxTable}.
  */
-public abstract class ColumnAbstract<T> extends AbstractColumn<T> {
+public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
 
     private static final long serialVersionUID = 1L;
 

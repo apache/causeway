@@ -26,11 +26,11 @@ import static org.hamcrest.Matchers.nullValue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.Request;
 import org.apache.wicket.Session;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.request.Request;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -107,11 +107,13 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
      * Session; for example to obtain img resources for entities. This counter
      * keeps track of one of these threadUsages, when it gets back down to zero
      * then we can close the thread.
+     * @return 
      * 
      * @see #deregisterUseByThread()
      */
-    public void registerUseByThread() {
+    public int registerUseByThread() {
         threadUsages++;
+        return getThreadUsage();
     }
 
     /**

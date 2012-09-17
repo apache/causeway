@@ -325,31 +325,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     public void markAsService();
 
-    // //////////////////////////////////////////////////////////////
-    // Introspection
-    // //////////////////////////////////////////////////////////////
 
-    /**
-     * Builds actions and associations.
-     * 
-     * <p>
-     * Is called prior to running the <tt>FacetDecoratorSet</tt>
-     */
-    public void introspectTypeHierarchyAndMembers();
-
-    /**
-     * Is called after to running the <tt>FacetDecoratorSet</tt>.
-     * 
-     * <p>
-     * TODO: it's possible that this could be merged with
-     * {@link #introspectTypeHierarchyAndMembers()}; need to check though,
-     * because this would cause facets to be decorated at the end of
-     * introspection, rather than midway as is currently.
-     * 
-     */
-    public void updateFromFacetValues();
-
-    public boolean isIntrospected();
 
 
 }

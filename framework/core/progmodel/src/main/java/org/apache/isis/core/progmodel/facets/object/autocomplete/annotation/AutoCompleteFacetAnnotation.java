@@ -22,12 +22,12 @@ package org.apache.isis.core.progmodel.facets.object.autocomplete.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public class AutoCompleteFacetAnnotation extends AutoCompleteFacetAbstract {
 
-
-    public AutoCompleteFacetAnnotation(FacetHolder holder, ObjectSpecification repositorySpec, String action) {
-        super(holder, repositorySpec, action);
+    public AutoCompleteFacetAnnotation(FacetHolder holder, ObjectAction repositoryAction) {
+        super(holder, repositoryAction);
     }
 
 

@@ -20,9 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public interface AutoCompleteFacet extends Facet {
-    public ObjectSpecification getRepositorySpec();
-    public String getActionId();
+    public ObjectAction getRepositoryAction();
 }

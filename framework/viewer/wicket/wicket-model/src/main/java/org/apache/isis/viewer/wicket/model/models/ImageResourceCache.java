@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.request.resource.PackageResource;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

@@ -15,7 +15,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
@@ -57,7 +57,8 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
                 }
             }
         });
-        textField.add(new SimpleAttributeModifier("rows", Integer.toString(numberOfLines)));
+        //textField.add(new SimpleAttributeModifier("rows", Integer.toString(numberOfLines)));
+        textField.add(AttributeModifier.replace("rows", Integer.toString(numberOfLines)));
         return textField;
     }
     

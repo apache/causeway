@@ -23,13 +23,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -50,6 +50,8 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
  */
 public abstract class PageAbstract extends WebPage {
 
+    private static final long serialVersionUID = 1L;
+    
     public static final String ID_MENU_LINK = "menuLink";
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_ABOUT_LINK = "aboutLink";
@@ -130,10 +132,6 @@ public abstract class PageAbstract extends WebPage {
         getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
     }
 
-    @Override
-    protected void onRender(final MarkupStream markupStream) {
-        super.onRender(markupStream);
-    }
 
     /**
      * Renders the application-supplied CSS, if any.

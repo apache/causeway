@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.mementos;
 
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.viewer.wicket.model.util.Strings;
@@ -86,7 +86,8 @@ public enum PageParameterNames {
     }
 
     public String getFrom(final PageParameters pageParameters) {
-        return pageParameters.getString(this.toString());
+        //return pageParameters.getString(this.toString());
+        return pageParameters.get(this.toString()).toString();
     }
 
     public void addTo(final PageParameters pageParameters, final String value) {

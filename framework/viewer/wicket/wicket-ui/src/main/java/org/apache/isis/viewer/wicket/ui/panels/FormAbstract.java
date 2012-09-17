@@ -21,12 +21,14 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import org.apache.wicket.ResourceReference;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IFormSubmitter;
 import org.apache.wicket.markup.html.form.IFormSubmittingComponent;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -71,7 +73,8 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
      */
     protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
         final String url = cls.getSimpleName() + ".css";
-        response.renderCSSReference(new ResourceReference(cls, url));
+        //response.renderCSSReference(new PackageResourceReference(cls, url));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(cls, url)));
     }
 
 
@@ -80,9 +83,9 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     // ///////////////////////////////////////////////////////////////////
 
     @Override
-    public void process(IFormSubmittingComponent submittingComponent) {
-        if(submittingComponent instanceof IFormSubmittingComponentWithPreSubmitHook) {
-            IFormSubmittingComponentWithPreSubmitHook componentWithPreSubmitHook = (IFormSubmittingComponentWithPreSubmitHook) submittingComponent;
+    public void process(IFormSubmitter submittingComponent) {
+        if(submittingComponent instanceof IFormSubmitterWithPreSubmitHook) {
+            IFormSubmitterWithPreSubmitHook componentWithPreSubmitHook = (IFormSubmitterWithPreSubmitHook) submittingComponent;
             componentWithPreSubmitHook.preSubmit();
         }
         super.process(submittingComponent);

@@ -38,8 +38,13 @@
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>viewer/wicket/</relativeUrl>
 
+		<wicket.version>6.0.0</wicket.version>
+		<wicketstuff.version>6.0.0</wicketstuff.version>
+
+<!-- 
 		<wicket.version>1.4.12</wicket.version>
 		<wicketstuff.version>1.4.12</wicketstuff.version>
+-->
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -171,6 +176,25 @@
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
 				<version>${wicket.version}</version>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-core</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-request</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-util</artifactId>
+				<version>${wicket.version}</version>
 			</dependency>
 
 			<dependency>
@@ -197,12 +221,14 @@
 				<version>${wicket.version}</version>
 			</dependency>
 
-            <!-- Wicket & WicketStuff -->
+            <!-- WicketStuff -->
+            <!-- 
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>scriptaculous</artifactId>
 				<version>${wicketstuff.version}</version>
 			</dependency>
+            -->
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>objectautocomplete</artifactId>
