@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.feedback.FeedbackCollector;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -434,15 +435,17 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
         
         @Override
         protected void onValidate() {
-            Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public boolean accept(final FeedbackMessage message) {
-                    return message.getReporter() == owningPanel;
-                }
-            });
+            // 6.0.0 - no longer required because feedback messages are automatically cleaned up
+            // see https://cwiki.apache.org/WICKET/migration-to-wicket-60.html#MigrationtoWicket6.0-FeedbackStorageRefactoring
+//            Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
+//
+//                private static final long serialVersionUID = 1L;
+//
+//                @Override
+//                public boolean accept(final FeedbackMessage message) {
+//                    return message.getReporter() == owningPanel;
+//                }
+//            });
             super.onValidate();
         }
 

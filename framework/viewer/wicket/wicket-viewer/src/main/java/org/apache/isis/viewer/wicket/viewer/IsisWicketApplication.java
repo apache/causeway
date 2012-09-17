@@ -125,8 +125,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     private static final long serialVersionUID = 1L;
 
-    //private static final String WICKET_CONFIGURATION_TYPE_DEVELOPMENT = Application.DEVELOPMENT;
-
     /**
      * Convenience locator, downcasts inherited functionality.
      */
@@ -163,7 +161,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * {@link Inject}ed when {@link #init() initialized}.
      */
     @Inject
-    @SuppressWarnings("unused")
     private IsisSystem system;
 
     // /////////////////////////////////////////////////
@@ -183,11 +180,19 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         super.init();
         
         // 6.0.0 rather than overriding getRequestCycleSettings
-        getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
+        //
+        // TODO: to reinstate for our optimistic locking strategy; 
+        // need to use REDIRECT_TO_BUFFER temporarily in order to get FeedbackMessage's to render
+        // see enquiry raised on wicket-user@a.o
+        
+        //final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_RENDER;
+        final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_BUFFER;
+        
+        getRequestCycleSettings().setRenderStrategy(renderStrategy);
+        
         // 6.0.0 instead of subclassing newRequestCycle 
         getRequestCycleListeners().add(new WebRequestCycleForIsis());
 
-        
         getResourceSettings().setParentFolderPlaceholder("$up$");
 
         final DeploymentType deploymentType = determineDeploymentType();
@@ -208,7 +213,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     private DeploymentType determineDeploymentType() {
         if (usesDevelopmentConfig()) {
-        //if (getConfigurationType().equalsIgnoreCase(WICKET_CONFIGURATION_TYPE_DEVELOPMENT)) {
             return new WicketServerPrototype();
         } else {
             return new WicketServer();

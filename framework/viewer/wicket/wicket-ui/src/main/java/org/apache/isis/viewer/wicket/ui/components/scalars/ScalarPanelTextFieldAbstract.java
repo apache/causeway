@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -79,11 +80,16 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
         
-        labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
+        addFeedbackTo(labelIfRegular);
         return labelIfRegular;
+    }
+
+    protected void addFeedbackTo(MarkupContainer markupContainer) {
+        // 6.0.0
+        markupContainer.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
     }
 
     /**
@@ -127,7 +133,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void setTextFieldSizeIfSpecified(AbstractTextComponent<T> textField) {
         final Integer size = determineSize();
         if (size != null) {
-            textField.add(new AttributeModifier("size", true, Model.of("" + size)));
+            textField.add(new AttributeModifier("size", Model.of("" + size)));
         }
     }
 
@@ -179,7 +185,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     private void setTitleAttribute(final String titleAttribute) {
-        textField.add(new AttributeModifier("title", true, Model.of(titleAttribute)));
+        textField.add(new AttributeModifier("title", Model.of(titleAttribute)));
     }
 
 }

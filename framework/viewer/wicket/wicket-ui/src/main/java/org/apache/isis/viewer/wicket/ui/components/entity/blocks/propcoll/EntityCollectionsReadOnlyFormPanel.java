@@ -226,15 +226,17 @@ public class EntityCollectionsReadOnlyFormPanel extends PanelAbstract<EntityMode
 
         @Override
         protected void onValidate() {
-            Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public boolean accept(final FeedbackMessage message) {
-                    return message.getReporter() == owningPanel;
-                }
-            });
+            // 6.0.0 - no longer required because feedback messages are automatically cleaned up
+            // see https://cwiki.apache.org/WICKET/migration-to-wicket-60.html#MigrationtoWicket6.0-FeedbackStorageRefactoring
+//            Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
+//
+//                private static final long serialVersionUID = 1L;
+//
+//                @Override
+//                public boolean accept(final FeedbackMessage message) {
+//                    return message.getReporter() == owningPanel;
+//                }
+//            });
             super.onValidate();
         }
     }
