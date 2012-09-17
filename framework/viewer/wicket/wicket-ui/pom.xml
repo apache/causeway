@@ -94,6 +94,12 @@
 			<artifactId>scriptaculous</artifactId>
 		</dependency>
 
+<!-- 
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>objectautocomplete</artifactId>
+		</dependency>
+-->
 
 		<!-- Dependency Injection support -->
 		<dependency>

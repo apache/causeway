@@ -58,6 +58,7 @@ import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnot
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.autocomplete.annotation.AutoCompleteAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bounded.annotation.BoundedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bounded.markerifc.BoundedMarkerInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.create.CreatedCallbackFacetFactory;
@@ -344,6 +345,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(ParseableFacetFactory.class);
         addFactory(PluralAnnotationFacetFactory.class);
         addFactory(PagedAnnotationFacetFactory.class);
+        addFactory(AutoCompleteAnnotationFacetFactory.class);
 
 
         // must come after any facets that install titles

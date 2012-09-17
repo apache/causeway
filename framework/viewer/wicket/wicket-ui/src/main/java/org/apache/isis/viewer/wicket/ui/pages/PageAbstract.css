@@ -313,3 +313,19 @@ div.scalarPanel {
 .number input {
  	text-align: right;
 }
+
+
+div.wicket-aa {
+	border: thin;
+	border-color: #00477F;
+}
+
+.wicket-aa li {
+	background-color: white;
+}
+
+.wicket-aa .selected {
+	background-color: #00477F;
+	color: white;
+	
+}

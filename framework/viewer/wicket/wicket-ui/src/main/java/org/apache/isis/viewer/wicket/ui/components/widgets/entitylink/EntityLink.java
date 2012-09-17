@@ -19,11 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
+import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -36,6 +39,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -70,6 +74,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private static final String ID_ENTITY_OID = "entityOid";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
     private static final String ID_CHOICES = "choices";
+    private static final String ID_AUTOCOMPLETE = "autocomplete";
     private static final String ID_FIND_USING = "findUsing";
     private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
     private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
@@ -96,6 +101,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      */
     private ObjectAdapterMemento pending;
     private TextField<ObjectAdapterMemento> pendingOid;
+
+    private AutoCompleteTextField<String> autoCompleteTextField;
 
 
     public EntityLink(final String id, final EntityModel entityModel) {
@@ -194,6 +201,9 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         if(entityClearLink != null) {
             entityClearLink.setVisible(visibility);
         }
+        if(autoCompleteTextField != null) {
+            autoCompleteTextField.setVisible(visibility);
+        }
 
         if(entityDetailsLink != null) {
             entityDetailsLink.setVisible(getEntityModel().getRenderingHint() == RenderingHint.REGULAR);
@@ -257,7 +267,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             permanentlyHide(ID_ENTITY_TITLE_NULL);
             
             // hide links
-            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK);
+            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK, ID_AUTOCOMPLETE);
         } else {
 
             // choices drop-down
@@ -271,6 +281,26 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
             // link
             syncEntityClearLinksWithInput(adapter);
+        }
+
+        AutoCompleteFacet autoCompleteFacet = null;
+        final ObjectSpecification typeOfSpecification = getEntityModel().getTypeOfSpecification();
+        if(typeOfSpecification != null) {
+            autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+        }
+        
+        if(autoCompleteFacet != null){
+            autoCompleteTextField = new AutoCompleteTextField<String>(ID_AUTOCOMPLETE) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected Iterator<String> getChoices(String input) {
+                    return Iterators.forArray("foo", "bar");
+                }
+            };
+            addOrReplace(autoCompleteTextField);
+        } else {
+            permanentlyHide(ID_AUTOCOMPLETE);
         }
         
         syncEntityDetailsLinksWithInput(adapter);

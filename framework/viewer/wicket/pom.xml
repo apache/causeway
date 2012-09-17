@@ -203,6 +203,11 @@
 				<artifactId>scriptaculous</artifactId>
 				<version>${wicketstuff.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>objectautocomplete</artifactId>
+				<version>${wicketstuff.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.wicketstuff</groupId>

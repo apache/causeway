@@ -33,27 +33,30 @@
 				<input type="text" wicket:id="entityOid"/>
 				
 				<select wicket:id="choices"/>
-				<span wicket:id="entityIconAndTitle">[icon and title]</span>
-				<span wicket:id="entityTitleNull">(null)</span>
-				<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">
-					<span wicket:id="entityDetailsLinkLabel">[+/-]</span>
-				</a>
-				<div class="findUsingClearDetails">
-					<table wicket:id="findUsing" class="findUsing">
-			   			<tbody>
-			      			<tr>
-								<td>
-					      			<span wicket:id="action">[find using...]</span>
-				      			</td>
-			     			</tr>
-		     			</tbody>
-		  			</table>
-						<a href="#" wicket:id="entityClearLink" class="entityClearLink">
-							<span>clear</span>
-						</a>
+				<input wicket:id="autocomplete" type="text" class="autoComplete" />
+				<div>
+					<span wicket:id="entityIconAndTitle">[icon and title]</span>
+					<span wicket:id="entityTitleNull">(null)</span>
+					<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">
+						<span wicket:id="entityDetailsLinkLabel">[+/-]</span>
+					</a>
+					<div class="findUsingClearDetails">
+						<table wicket:id="findUsing" class="findUsing">
+				   			<tbody>
+				      			<tr>
+									<td>
+						      			<span wicket:id="action">[find using...]</span>
+					      			</td>
+				     			</tr>
+			     			</tbody>
+			  			</table>
+							<a href="#" wicket:id="entityClearLink" class="entityClearLink">
+								<span>clear</span>
+							</a>
+					</div>
+				    <div class="clear"/>
+		  			<div wicket:id="entityDetails" class="entityDetails">
 				</div>
-			    <div class="clear"/>
-	  			<div wicket:id="entityDetails" class="entityDetails">
 	  			</div>
 			    <div class="feedbackPanel">
 			        <span wicket:id="feedback"/>

@@ -83,3 +83,7 @@ a.entityDetailsLink:hover {
 .entityDetails a.entityDetailsLink {
 	display:none; /* don't nest forever */
 }
+
+input.autoComplete {
+	margin-bottom: 5px;
+}
