@@ -333,7 +333,7 @@ public class ObjectAdapterMemento implements Serializable {
         return IsisContext.getPersistenceSession();
     }
 
-	protected static OidMarshaller getOidMarshaller() {
+	public static OidMarshaller getOidMarshaller() {
 		return IsisContext.getOidMarshaller();
 	}
 
