@@ -41,8 +41,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropD
 /**
  * Initial skeleton - trying to add support for value choices.
  */
-public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
-    private static final Logger LOG = Logger.getLogger(ValueChoicesPanel.class);
+public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
+    private static final Logger LOG = Logger.getLogger(ValueChoices.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -57,7 +57,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
     private FormComponent<ObjectAdapterMemento> valueField;
     private ObjectAdapterMemento pending;
 
-    public ValueChoicesPanel(final String id, final ScalarModel scalarModel) {
+    public ValueChoices(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         pending = scalarModel.getObjectAdapterMemento();
     }
@@ -95,7 +95,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("TextField: pending is null");
                 }
-                final ObjectAdapter adapter = ValueChoicesPanel.this.getModelValue();
+                final ObjectAdapter adapter = ValueChoices.this.getModelValue();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
 
@@ -138,7 +138,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(valueField));

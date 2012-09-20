@@ -19,16 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesPanel;
 
 public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbstract {
 
@@ -47,23 +43,14 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        return appliesIf(scalarModel.isScalarTypeAnyOf(scalarTypes));
+        final boolean hasNoChoices = scalarModel.getChoices().isEmpty();
+        return appliesIf(hasNoChoices && scalarModel.isScalarTypeAnyOf(scalarTypes));
     }
-
-    int choiceCount = 0;
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         final ScalarModel scalarModel = (ScalarModel) model;
-        // return createComponent(id, scalarModel);
-
-        // TODO: This is where the ValueChoicesPanel panel gets created.
-        final List<ObjectAdapter> choices = scalarModel.getChoices();
-        if (choices.size() > 0) {
-            return new ValueChoicesPanel(id, scalarModel);
-        } else {
-            return createComponent(id, scalarModel);
-        }
+        return createComponent(id, scalarModel);
     }
 
     protected abstract Component createComponent(String id, ScalarModel scalarModel);

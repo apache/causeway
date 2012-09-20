@@ -77,6 +77,7 @@ import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFac
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesComponentFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -197,8 +198,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new StringPanelFactory());
 
-        // componentFactories.add(new JavaAwtImagePanelFactory()); //
         // work-in-progress
+        // componentFactories.add(new JavaAwtImagePanelFactory()); 
         componentFactories.add(new JavaUtilDatePanelFactory());
         componentFactories.add(new JavaSqlDatePanelFactory());
         componentFactories.add(new JavaSqlTimePanelFactory());
@@ -218,6 +219,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JodaLocalDatePanelFactory());
 
         componentFactories.add(new ValuePanelFactory());
+
+        // or for choices
+        componentFactories.add(new ValueChoicesComponentFactory());
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {

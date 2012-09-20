@@ -44,8 +44,8 @@ public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        final ValueFacet facet = scalarModel.getTypeOfSpecification().getFacet(ValueFacet.class);
-        return appliesIf(facet != null);
+        final ValueFacet valueFacet = scalarModel.getTypeOfSpecification().getFacet(ValueFacet.class);
+        return appliesIf(scalarModel.getChoices().isEmpty() && valueFacet != null);
     }
 
     @Override

@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -40,28 +42,44 @@ public interface ComponentFactoryRegistrar {
     
     public static class ComponentFactoryList implements Iterable<ComponentFactory> {
         private final List<ComponentFactory> componentFactories = Lists.newArrayList();
+
         public void add(ComponentFactory componentFactory) {
             componentFactories.add(componentFactory);
         }
 
         public void replace(final ComponentFactory replacementComponentFactory) {
-            removeExistingthatMatch(replacementComponentFactory);
+            removeExisting(matching(replacementComponentFactory.getComponentType()));
             add(replacementComponentFactory);
         }
 
-        private void removeExistingthatMatch(final ComponentFactory replacementComponentFactory) {
-            final ComponentType componentType = replacementComponentFactory.getComponentType();
-            
-            final Collection<ComponentFactory> matching = Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+        public void replace(final Class<? extends ComponentFactory> toReplace, final ComponentFactory replacementComponentFactory) {
+            removeExisting(matching(toReplace));
+            add(replacementComponentFactory);
+        }
+
+        private void removeExisting(final Predicate<ComponentFactory> predicate) {
+            final Collection<ComponentFactory> matching = Collections2.filter(componentFactories, predicate);
+            componentFactories.removeAll(matching);
+        }
+
+        private static Predicate<ComponentFactory> matching(final ComponentType componentType) {
+            return new Predicate<ComponentFactory>() {
                 @Override
                 public boolean apply(ComponentFactory input) {
                     return input.getComponentType() == componentType;
                 }
-            });
-            
-            componentFactories.removeAll(matching);
+            };
         }
-        
+
+        private static Predicate<ComponentFactory> matching(final Class<? extends ComponentFactory> toReplace) {
+            return new Predicate<ComponentFactory>() {
+                @Override
+                public boolean apply(ComponentFactory input) {
+                    return toReplace.isAssignableFrom(input.getClass());
+                }
+            };
+        }
+
         @Override
         public Iterator<ComponentFactory> iterator() {
             return componentFactories.iterator();

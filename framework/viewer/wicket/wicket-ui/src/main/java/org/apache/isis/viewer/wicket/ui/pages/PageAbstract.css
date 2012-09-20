@@ -315,17 +315,59 @@ div.scalarPanel {
 }
 
 
-div.wicket-aa {
-	border: thin;
-	border-color: #00477F;
+
+/********************* Select2 component styling *****************************/
+
+.entityPage .select2-container {
+	width: 200px;
 }
 
-.wicket-aa li {
-	background-color: white;
+.entityPage .select2-container .select2-choice {
+    padding: 0 0 0 0px;
 }
 
-.wicket-aa .selected {
-	background-color: #00477F;
-	color: white;
+
+.entityPage .select2-container .select2-choice {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
 	
+	height: 20px;
+    line-height: 20px;
+	
+}
+
+.entityPage .select2-container.select2-drop-above .select2-choice
+{
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
+
+.entityPage .select2-drop {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
+
+.entityPage .select2-drop.select2-drop-above {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
+
+.entityPage .select2-container .select2-choice div {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+    background: #EBEBE4;
+}
+
+.entityPage .select2-container.select2-container-disabled .select2-choice {
+	background-color: #EBEBE4;
+	border: 1px solid #AAA;
+}
+
+.entityPage .select2-container a {
+	font-weight: normal;
 }

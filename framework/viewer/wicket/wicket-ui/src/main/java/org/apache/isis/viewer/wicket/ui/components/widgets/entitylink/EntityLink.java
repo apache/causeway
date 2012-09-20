@@ -338,10 +338,18 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             @Override
             public void onClick() {
                 getEntityModel().toggleDetails();
+                doSyncEntityDetailsOnClick();
             }
+
         };
         addOrReplace(entityDetailsLink);
         entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
+    }
+
+    /**
+     * Optional hook
+     */
+    protected void doSyncEntityDetailsOnClick() {
     }
 
     private void syncEntityClearLinksWithInput(final ObjectAdapter adapter) {
