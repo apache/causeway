@@ -59,7 +59,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimeP
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaUtilDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigDecimalPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
@@ -217,6 +219,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new JavaMathBigDecimalPanelFactory());
 
         componentFactories.add(new JodaLocalDatePanelFactory());
+        componentFactories.add(new JodaLocalDateTimePanelFactory());
+        componentFactories.add(new JodaDateTimePanelFactory());
 
         componentFactories.add(new ValuePanelFactory());
 

@@ -165,6 +165,8 @@ import org.apache.isis.core.progmodel.facets.value.date.DateValueTypeFacetFactor
 import org.apache.isis.core.progmodel.facets.value.datejodalocal.JodaLocalDateValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.datesql.JavaSqlDateValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.value.datetimejoda.JodaDateTimeValueTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.value.datetimejodalocal.JodaLocalDateTimeValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.dateutil.JavaUtilDateValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatPrimitiveValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatWrapperValueTypeFacetFactory;
@@ -413,7 +415,9 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         // jodatime values
         addFactory(JodaLocalDateValueTypeFacetFactory.class);
-
+        addFactory(JodaLocalDateTimeValueTypeFacetFactory.class);
+        addFactory(JodaDateTimeValueTypeFacetFactory.class);
+        
         // written to not trample over TypeOf if already installed
         addFactory(CollectionFacetFactory.class);
         // must come after CollectionFacetFactory

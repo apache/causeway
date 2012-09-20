@@ -23,8 +23,15 @@
         <mapping 
             java-type="org.apache.isis.applib.value.DateTime" 
             mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisDateTimeMapping"/>
-        <mapping 
+<!--        <mapping 
             java-type="org.joda.time.LocalDate" 
             mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.JodaLocalDateMapping"/>
+        <mapping 
+            java-type="org.joda.time.DateTime" 
+            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.JodaDateTimeMapping"/>
+        <mapping 
+            java-type="org.joda.time.LocalDateTime" 
+            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.JodaLocalDateTimeMapping"/>
+-->
     </extension>
 </plugin>
