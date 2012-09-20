@@ -32,7 +32,7 @@ table.collectionContentsAsAjaxTable tr {
 	}
 
 table.collectionContentsAsAjaxTable tr.even { background-color: #fff; }
-table.collectionContentsAsAjaxTable tr.odd { background-color: #fff; }
+table.collectionContentsAsAjaxTable tr.odd { background-color: #eee; }
 
 table.collectionContentsAsAjaxTable tr td { 
 	padding-left: 8px; 

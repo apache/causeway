@@ -21,16 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
 import java.util.Date;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.model.Model;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars of type {@link LocalDate}.

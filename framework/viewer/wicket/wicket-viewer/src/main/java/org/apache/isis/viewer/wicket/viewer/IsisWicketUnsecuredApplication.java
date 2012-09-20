@@ -19,14 +19,11 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import images.Images;
-
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
@@ -39,8 +36,6 @@ import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 
@@ -66,13 +61,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCacheAccessor;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
-import org.apache.isis.viewer.wicket.viewer.imagecache.ImageCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AnonymousWebSessionForIsis;
@@ -80,7 +73,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 
-public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
+public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -103,7 +96,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
      * {@link Inject}ed when {@link #init() initialized}.
      */
     @Inject
-    private ImageCacheClassPath imageCache;
+    private ImageResourceCache imageCache;
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -323,14 +316,6 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         return getPageClassRegistry().getPageClass(PageType.HOME);
     }
 
-    // /////////////////////////////////////////////////
-    // Images
-    // /////////////////////////////////////////////////
-
-    @Override
-    public ImageResourceCache getImageCache() {
-        return imageCache;
-    }
 
     // /////////////////////////////////////////////////
     // Authentication Session

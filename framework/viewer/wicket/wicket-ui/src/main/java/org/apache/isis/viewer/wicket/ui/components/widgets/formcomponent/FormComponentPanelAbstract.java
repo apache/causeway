@@ -35,13 +35,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCacheAccessor;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
@@ -120,16 +116,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
-    }
-
-    protected PageClassRegistry getPageClassRegistry() {
-        final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
-        return pcra.getPageClassRegistry();
-    }
-
-    protected ImageResourceCache getImageCache() {
-        final ImageCacheAccessor ica = (ImageCacheAccessor) getApplication();
-        return ica.getImageCache();
     }
 
     /**

@@ -19,6 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.blocks.icontitle;
 
+import java.io.InputStream;
+
+import images.Images;
+
 import com.google.inject.Inject;
 
 import org.apache.wicket.Page;
@@ -27,6 +31,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -52,9 +57,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
-
-
-    private ImageResourceCache imageCache;
 
     private Label label;
     private Image image;
@@ -94,12 +96,15 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         
         label = new Label(ID_ENTITY_TITLE, determineTitle());
         link.add(label);
-        
-        final Class<?> correspondingClass = entityModel.getObject().getSpecification().getCorrespondingClass();
-        final String specName = correspondingClass.getSimpleName();
 
-        final ResourceReference imageResource = new PackageResourceReference(correspondingClass, specName + ".png");
-        image = new Image(ID_ENTITY_ICON, imageResource);
+        final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
+        image = new Image(ID_ENTITY_ICON, imageResource) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected boolean shouldAddAntiCacheParameter() {
+                return false;
+            }
+        };
         link.addOrReplace(image);
         
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
@@ -132,13 +137,11 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     // Dependency Injection
     // ///////////////////////////////////////////////
 
+    @Inject
+    private ImageResourceCache imageCache;
+
     protected ImageResourceCache getImageCache() {
         return imageCache;
-    }
-
-    @Inject
-    public void setImageCache(final ImageResourceCache imageCache) {
-        this.imageCache = imageCache;
     }
 
 }

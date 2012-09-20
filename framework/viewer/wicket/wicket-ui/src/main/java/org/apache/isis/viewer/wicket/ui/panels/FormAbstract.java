@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
@@ -96,9 +98,13 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     // Convenience
     // ///////////////////////////////////////////////////////////////////
 
+    @Inject
+    private ComponentFactoryRegistry componentFactoryRegistry;
+    
     @Override
     public ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
+        //return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
+        return componentFactoryRegistry;
     }
 
     @Override

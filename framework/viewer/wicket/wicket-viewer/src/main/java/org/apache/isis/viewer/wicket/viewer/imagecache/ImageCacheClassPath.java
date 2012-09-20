@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.viewer.imagecache;
 
 import images.Images;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +30,12 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
 
+import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
@@ -44,81 +49,73 @@ import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 @Singleton
 public class ImageCacheClassPath implements ImageResourceCache {
 
-    public final static List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
+    private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
+    private static final String FALLBACK_IMAGE = "Default.png";
+    
+    private final Map<ObjectSpecification, ResourceReference> resourceReferenceBySpec = Maps.newHashMap();
 
-    private final Map<String, PackageResource> imagesByName = Maps.newHashMap();
-
-    @Override
-    public PackageResource findImage(final ObjectSpecification noSpec) {
-        final String specFullName = noSpec.getFullIdentifier();
-        final PackageResource packageResource = findImageResource(specFullName);
-        if (packageResource != null) {
-            return packageResource;
-        } else {
-            return findAndCacheImage(noSpec);
-        }
-    }
 
     @Override
-    public PackageResource findImageResource(final String imageName) {
-        final PackageResource packageResource = imagesByName.get(imageName);
-        if (packageResource != null) {
-            return packageResource;
-        } else {
-            return findAndCacheImage(imageName);
+    public ResourceReference resourceReferenceFor(ObjectAdapter adapter) {
+        return resourceReferenceFor(adapter.getSpecification());
+    }
+
+    private ResourceReference resourceReferenceFor(final ObjectSpecification spec) {
+        ResourceReference resourceReference = resourceReferenceBySpec.get(spec);
+        if(resourceReference != null) {
+            return resourceReference;
         }
+        
+        resourceReference = lookupResourceReferenceFor(spec);
+        
+        resourceReferenceBySpec.put(spec, resourceReference);
+        return resourceReference;
     }
 
-    private PackageResource findAndCacheImage(final String imageName) {
-        final PackageResource packageResource = findImageSuffixed(imageName);
-        if (packageResource != null) {
-            imagesByName.put(imageName, packageResource);
+    private ResourceReference lookupResourceReferenceFor(final ObjectSpecification spec) {
+        final Class<?> correspondingClass = spec.getCorrespondingClass();
+        final String specName = correspondingClass.getSimpleName();
+        
+        final ResourceReference resourceReference = resourceReferenceFor(specName);
+        if(resourceReference != null) {
+            return resourceReference;
         }
-        return packageResource;
-    }
-
-    private PackageResource findImageSuffixed(final String imageName) {
-//        for (final String imageSuffix : IMAGE_SUFFICES) {
-//            final String path = buildImagePath(imageName, imageSuffix);
-//            if (PackageResource.exists(Images.class, path, null, null, null)) {
-//                return PackageResource.get(Images.class, path);
-//            }
-//        }
-        return null;
-    }
-
-    private synchronized PackageResource findAndCacheImage(final ObjectSpecification noSpec) {
-        final PackageResource packageResource = findImageSearchUpHierarchy(noSpec);
-        imagesByName.put(noSpec.getFullIdentifier(), packageResource);
-        return packageResource;
-    }
-
-    private PackageResource findImageSearchUpHierarchy(final ObjectSpecification noSpec) {
-//        for (final String imageSuffix : IMAGE_SUFFICES) {
-//            final String fullName = noSpec.getFullIdentifier();
-//            final String path = buildImagePath(fullName, imageSuffix);
-//            if (PackageResource.exists(Images.class, path, null, null, null)) {
-//                return PackageResource.get(Images.class, path);
-//            }
-//        }
-//        for (final String imageSuffix : IMAGE_SUFFICES) {
-//            final String shortName = noSpec.getShortIdentifier();
-//            final String path = buildImagePath(shortName, imageSuffix);
-//            if (PackageResource.exists(Images.class, path, null, null, null)) {
-//                return PackageResource.get(Images.class, path);
-//            }
-//        }
-        final ObjectSpecification superSpec = noSpec.superclass();
-        if (superSpec != null) {
-            return findAndCacheImage(superSpec);
-        }
+        
+        // search up hierarchy
+        final ObjectSpecification superSpec = spec.superclass();
+        if(superSpec != null) {
+            return resourceReferenceFor(superSpec);
+        } 
+        
         // fallback
-//        return PackageResource.get(Images.class, "Default.png");
+        return newPackageResourceReference(FALLBACK_IMAGE);
+    }
+
+    private static ResourceReference resourceReferenceFor(final String specName) {
+        for(String imageSuffix: IMAGE_SUFFICES) {
+            final String imageName = specName + "." + imageSuffix;
+
+            InputStream resourceAsStream = null;
+            resourceAsStream = Images.class.getResourceAsStream(imageName);
+            if(resourceAsStream == null) {
+                continue;
+            } else {
+                closeSafely(resourceAsStream);
+            }
+            return newPackageResourceReference(imageName);
+        }
         return null;
     }
 
-    private String buildImagePath(final String name, final String imageSuffix) {
-        return name + "." + imageSuffix;
+    private static PackageResourceReference newPackageResourceReference(final String imageFile) {
+        return new PackageResourceReference(Images.class, imageFile);
     }
 
+    private static void closeSafely(InputStream resourceAsStream) {
+        try {
+            resourceAsStream.close();
+        } catch (IOException e) {
+            // ignore
+        }
+    }
 }

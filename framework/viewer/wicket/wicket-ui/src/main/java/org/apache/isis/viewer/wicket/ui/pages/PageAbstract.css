@@ -329,3 +329,20 @@ div.wicket-aa {
 	color: white;
 	
 }
+
+tr.navigation div.navigatorLabel {
+	display: inline;
+}
+
+tr.navigation div.navigatorLabel > div {
+	display: inline;
+}
+
+tr.navigation div.navigator {
+	display: inline;
+}
+
+tr.navigation div.navigator > div {
+	display: inline;
+	float: right;
+}

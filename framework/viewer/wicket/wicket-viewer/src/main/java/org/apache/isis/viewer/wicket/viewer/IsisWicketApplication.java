@@ -66,7 +66,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
-import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCacheAccessor;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -74,7 +73,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
-import org.apache.isis.viewer.wicket.viewer.imagecache.ImageCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
@@ -121,7 +119,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
  * changed.)</li>
  * </ul>
  */
-public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
+public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -142,7 +140,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * {@link Inject}ed when {@link #init() initialized}.
      */
     @Inject
-    private ImageCacheClassPath imageCache;
+    private ImageResourceCache imageCache;
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -212,24 +210,24 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     }
 
     private DeploymentType determineDeploymentType() {
-        if (usesDevelopmentConfig()) {
-            return new WicketServerPrototype();
-        } else {
-            return new WicketServer();
-        }
+        return usesDevelopmentConfig() ? new WicketServerPrototype() : new WicketServer();
     }
 
     private IsisConfigurationBuilder createConfigBuilder() {
-        final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(getServletContext());
+        return createConfigBuilder(getServletContext());
+    }
+
+    protected IsisConfigurationBuilder createConfigBuilder(final ServletContext servletContext) {
+        final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(servletContext);
         final ResourceStreamSource rssTcl = ResourceStreamSourceContextLoaderClassPath.create();
         final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
         final IsisConfigurationBuilderResourceStreams configurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
-        primeConfigurationBuilder(configurationBuilder, getServletContext());
+        primeConfigurationBuilder(configurationBuilder, servletContext);
         return configurationBuilder;
     }
 
     @SuppressWarnings("unchecked")
-    private void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
         final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
         if (isisConfigurationBuilderPrimers == null) {
             return;
@@ -254,13 +252,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // Wicket Hooks
     // /////////////////////////////////////////////////
 
-//    @Override
-//    public IRequestCycleSettings getRequestCycleSettings() {
-//        final IRequestCycleSettings requestCycleSettings = super.getRequestCycleSettings();
-//        requestCycleSettings.setRenderStrategy(IRequestCycleSettings.REDIRECT_TO_RENDER);
-//        return requestCycleSettings;
-//    }
-    
     /**
      * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
      * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
@@ -274,26 +265,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         return AuthenticatedWebSessionForIsis.class;
     }
 
-//    /**
-//     * Installs a {@link WebRequestCycleForIsis custom implementation} of
-//     * Wicket's own {@link RequestCycle}, hooking in to provide session and
-//     * transaction management across potentially multiple concurrent requests
-//     * for the same Wicket session.
-//     * 
-//     * <p>
-//     * In general, it shouldn't be necessary to override this method.
-//     */
-//    @Override
-//    public RequestCycle newRequestCycle(final Request request, final Response response) {
-//        return new WebRequestCycleForIsis(this, (WebRequest) request, response);
-//    }
-
     /**
      * Installs a {@link ConverterLocator} preconfigured with a number of
      * implementations to support Isis specific objects.
-     * 
-     * <p>
-     * In general, it shouldn't be necessary to override this method.
      */
     @Override
     protected IConverterLocator newConverterLocator() {
@@ -329,7 +303,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             return;
         }
         final IHeaderResponse response = container.getHeaderResponse();
-        //headerResponse.renderCSSReference(cssUrl);
         response.render(CssHeaderItem.forReference(new CssResourceReference(this.getClass(), cssUrl)));
     }
 
@@ -378,14 +351,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_IN);
     }
 
-    // /////////////////////////////////////////////////
-    // Images
-    // /////////////////////////////////////////////////
-
-    @Override
-    public ImageResourceCache getImageCache() {
-        return imageCache;
-    }
 
     // /////////////////////////////////////////////////
     // Authentication Session

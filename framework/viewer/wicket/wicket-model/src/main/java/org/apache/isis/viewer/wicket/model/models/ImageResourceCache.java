@@ -19,13 +19,12 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.wicket.request.resource.PackageResource;
+import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface ImageResourceCache {
 
-    public PackageResource findImage(ObjectSpecification objectSpec);
+    ResourceReference resourceReferenceFor(ObjectAdapter adapter);
 
-    public PackageResource findImageResource(String imageName);
 }

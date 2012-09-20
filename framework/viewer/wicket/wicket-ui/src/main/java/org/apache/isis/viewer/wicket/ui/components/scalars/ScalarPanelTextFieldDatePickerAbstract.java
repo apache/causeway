@@ -88,7 +88,17 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T> extends ScalarPa
     protected void addSemantics() {
         super.addSemantics();
 
-        final DatePicker datePicker = new DatePicker();
+        final DatePicker datePicker = new DatePicker(){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected String getAdditionalJavaScript()
+            {
+                return "${calendar}.cfg.setProperty(\"navigator\",true,false); ${calendar}.render();";
+            }
+        };
+        datePicker.setShowOnFieldClick(true);
+        datePicker.setAutoHide(true);
         getTextField().add(datePicker);
 
         addObjectAdapterValidator();

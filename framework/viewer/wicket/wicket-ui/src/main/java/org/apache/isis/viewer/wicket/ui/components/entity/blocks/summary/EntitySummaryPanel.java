@@ -59,7 +59,6 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
 
     private final EntityActionLinkFactory linkFactory;
 
-    private ImageResourceCache imageCache;
 
     public EntitySummaryPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -134,13 +133,12 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
     // Dependency Injection
     // ///////////////////////////////////////////////
 
+    @Inject
+    private ImageResourceCache imageCache;
+
     protected ImageResourceCache getImageCache() {
         return imageCache;
     }
 
-    @Inject
-    public void setImageCache(final ImageResourceCache imageCache) {
-        this.imageCache = imageCache;
-    }
 
 }
