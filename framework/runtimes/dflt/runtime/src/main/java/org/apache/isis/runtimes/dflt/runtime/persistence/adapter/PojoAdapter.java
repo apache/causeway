@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adapter;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -46,9 +44,9 @@ import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.log4j.Logger;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
@@ -332,7 +330,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return;
         }
         final Version version = getOid().getVersion();
-        if (version != null && version.different(otherVersion)) {
+        if (otherVersion != null && version != null && version.different(otherVersion)) {
             LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
             throw new ConcurrencyException(getAuthenticationSession().getUserName(), getOid(), version, otherVersion);
         }
