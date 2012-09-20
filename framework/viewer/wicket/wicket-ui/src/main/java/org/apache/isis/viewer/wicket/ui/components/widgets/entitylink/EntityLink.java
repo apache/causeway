@@ -62,7 +62,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link FormComponentPanel} representing a reference to an entity: a link and
  * a findUsing button.
  */
-public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler {
+public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler, FindUsingLinkFactory.Callback {
 
     private static final long serialVersionUID = 1L;
 

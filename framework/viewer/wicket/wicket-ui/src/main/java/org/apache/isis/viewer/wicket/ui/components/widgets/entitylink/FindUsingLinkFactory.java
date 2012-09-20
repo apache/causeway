@@ -33,14 +33,20 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.util.Actions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 
-final class FindUsingLinkFactory implements CssMenuLinkFactory {
+public final class FindUsingLinkFactory implements CssMenuLinkFactory {
+    
+    public interface Callback {
+        public void onSelected(ObjectAdapter adapter);
+        public void onNoResults();
+        public void onClick(ActionModel actionModel);
+    }
 
     private static final long serialVersionUID = 1L;
 
-    private final EntityLink entityLink;
+    private final Callback callback;
 
-    FindUsingLinkFactory(final EntityLink entityLink) {
-        this.entityLink = entityLink;
+    public FindUsingLinkFactory(final Callback entityLink) {
+        this.callback = entityLink;
     }
 
     @Override
@@ -54,7 +60,7 @@ final class FindUsingLinkFactory implements CssMenuLinkFactory {
 
             @Override
             public void onSelected(final Component context, final ObjectAdapter selectedAdapter) {
-                entityLink.onSelected(selectedAdapter);
+                callback.onSelected(selectedAdapter);
             }
         });
         actionModel.setNoResultsHandler(new NoResultsHandler() {
@@ -62,7 +68,7 @@ final class FindUsingLinkFactory implements CssMenuLinkFactory {
 
             @Override
             public void onNoResults(final Component context) {
-                entityLink.onNoResults();
+                callback.onNoResults();
             }
         });
 
@@ -71,7 +77,7 @@ final class FindUsingLinkFactory implements CssMenuLinkFactory {
 
             @Override
             public void onClick() {
-                entityLink.onClick(actionModel);
+                callback.onClick(actionModel);
             }
         }, Actions.labelFor(action));
     }
