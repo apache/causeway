@@ -113,7 +113,8 @@ import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpec
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.value.annotation.ValueFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnCollectionFacetFactory;
+import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.enums.ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.methodnum.ActionParameterChoicesFacetFactory;
@@ -223,8 +224,9 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         // properties
         addFactory(PropertyAccessorFacetFactory.class);
         addFactory(PropertySetAndClearFacetFactory.class);
-        addFactory(PropertyModifyFacetFactory.class); // must come after
-                                                      // PropertySetAndClearFacetFactory
+        // must come after PropertySetAndClearFacetFactory
+        addFactory(PropertyModifyFacetFactory.class);
+        
         addFactory(PropertyValidateFacetFactory.class);
         addFactory(PropertyChoicesFacetFactory.class);
         addFactory(PropertyDefaultFacetFactory.class);
@@ -344,7 +346,9 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(ParseableFacetFactory.class);
         addFactory(PluralAnnotationFacetFactory.class);
-        addFactory(PagedAnnotationFacetFactory.class);
+        addFactory(PagedAnnotationOnTypeFacetFactory.class);
+        addFactory(PagedAnnotationOnCollectionFacetFactory.class);
+
         addFactory(AutoCompleteAnnotationFacetFactory.class);
 
 

@@ -28,5 +28,4 @@ public interface PagedFacet extends Facet {
     
     int value();
     
-    int standalone();
 }

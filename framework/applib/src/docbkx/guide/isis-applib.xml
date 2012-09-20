@@ -7288,8 +7288,17 @@ public class Order {
     public List&lt;LineItem&gt; getDetails() {...}
 }</programlisting>
 
-        <para>This indicates a page size of 15 for parented collections, and a
-        page size of 30 for standalone collections.</para>
+        <para>This indicates a page size of 15 for parented collections, and a page size of 30 for
+          standalone collections.</para>
+        <para>When ommitting a parameter value or ommitting the annotation completely, the
+          configured defaults in <filename>isis.properties</filename> wil be used.</para>
+        <para>For example:</para>
+        <para>
+          <programlisting>isis.viewers.paged.standalone=20
+isis.viewers.paged.parented=5</programlisting>
+        </para>
+        <para>This indicates a page size of 5 for parented collections and a page size of 20 for
+          standalone collections.</para>
       </sect1>
 
       <sect1>

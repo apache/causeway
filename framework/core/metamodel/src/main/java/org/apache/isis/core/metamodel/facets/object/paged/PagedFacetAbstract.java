@@ -29,24 +29,16 @@ public abstract class PagedFacetAbstract extends FacetAbstract implements PagedF
         return PagedFacet.class;
     }
 
-    private final int parented;
-    private final int standalone;
+    private final int value;
 
-    public PagedFacetAbstract(final FacetHolder holder, int parented, int standalone) {
+    public PagedFacetAbstract(final FacetHolder holder, int value) {
         super(type(), holder, Derivation.DERIVED);
-        this.standalone = standalone;
-        this.parented = parented;
+        this.value = value;
     }
 
     @Override
     public int value() {
-        return parented;
+        return value;
     }
 
-    @Override
-    public int standalone() {
-        return standalone;
-    }
-
-    
 }

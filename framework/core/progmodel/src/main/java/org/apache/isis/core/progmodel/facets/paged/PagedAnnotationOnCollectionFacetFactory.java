@@ -20,6 +20,8 @@
 package org.apache.isis.core.progmodel.facets.paged;
 
 import org.apache.isis.applib.annotation.Paged;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -27,10 +29,13 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
-public class PagedAnnotationFacetFactory extends FacetFactoryAbstract {
+@Paged
+public class PagedAnnotationOnCollectionFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 
-    public PagedAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_AND_COLLECTIONS);
+    private IsisConfiguration configuration;
+
+    public PagedAnnotationOnCollectionFacetFactory() {
+        super(FeatureType.COLLECTIONS_ONLY);
     }
 
     @Override
@@ -46,7 +51,16 @@ public class PagedAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     private PagedFacet create(final Paged annotation, final FacetHolder holder) {
-        return annotation == null ? null : new PagedFacetAnnotation(annotation.value(), annotation.value(), holder);
+        return annotation != null ? new PagedFacetAnnotation(holder, annotation.value() == -1 ? getConfiguration().getInteger("isis.viewers.paged.parented") : annotation.value()) : null;
+    }
+
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    @Override
+    public void setConfiguration(IsisConfiguration configuration) {
+        this.configuration = configuration;
     }
 
 }

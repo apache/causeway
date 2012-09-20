@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -38,7 +40,9 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
  * required by the Apache Isis framework itself.
  * 
  */
-public class FallbackFacetFactory extends FacetFactoryAbstract {
+public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
+
+    private IsisConfiguration configuration;
 
     @SuppressWarnings("unused")
     private final static Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
@@ -75,12 +79,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final NotPersistableFacetNull notPersistableFacet = new NotPersistableFacetNull(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
+        final PagedFacetNone pagedFacet = new PagedFacetNone(facetHolder, getConfiguration().getInteger("isis.viewers.paged.standalone"));
+        
 
         final Facet[] facets = new Facet[] { describedAsFacet,
                 // commenting these out, think this whole isNoop business is a
                 // little bogus
                 // new ImmutableFacetNever(holder),
-                notPersistableFacet, titleFacet, };
+                notPersistableFacet, titleFacet, pagedFacet};
         FacetUtil.addFacets(facets);
     }
 
@@ -102,6 +108,9 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             if (featureType.isAction()) {
                 facets.add(new ActionDefaultsFacetNone(processMethodContext.getFacetHolder()));
                 facets.add(new ActionChoicesFacetNone(processMethodContext.getFacetHolder()));
+            }
+            if (featureType.isCollection()) {
+                facets.add(new PagedFacetNone(processMethodContext.getFacetHolder(), getConfiguration().getInteger("isis.viewers.paged.parented")));
             }
         }
 
@@ -126,6 +135,15 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         }
 
         FacetUtil.addFacets(facets);
+    }
+
+    @Override
+    public void setConfiguration(IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
+    
+    public IsisConfiguration getConfiguration() {
+        return configuration;
     }
 
 }

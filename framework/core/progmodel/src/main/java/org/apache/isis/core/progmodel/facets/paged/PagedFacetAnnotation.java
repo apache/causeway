@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetAnnotation extends PagedFacetAbstract {
 
-    public PagedFacetAnnotation(int parented, int standalone, FacetHolder holder) {
-        super(holder, parented, standalone);
+    public PagedFacetAnnotation(FacetHolder holder, int value) {
+        super(holder, value);
     }
 }
