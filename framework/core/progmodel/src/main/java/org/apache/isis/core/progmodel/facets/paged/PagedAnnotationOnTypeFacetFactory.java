@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
-@Paged
 public class PagedAnnotationOnTypeFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 
     private IsisConfiguration configuration;
@@ -44,14 +43,8 @@ public class PagedAnnotationOnTypeFacetFactory extends FacetFactoryAbstract impl
         FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
-
     private PagedFacet create(final Paged annotation, final FacetHolder holder) {
-        return annotation != null ? new PagedFacetAnnotation(holder, annotation.value() == -1 ? getConfiguration().getInteger("isis.viewers.paged.standalone") : annotation.value()) : null;
+        return annotation != null ? new PagedFacetAnnotation(holder, annotation.value()) : null;
     }
 
     public IsisConfiguration getConfiguration() {

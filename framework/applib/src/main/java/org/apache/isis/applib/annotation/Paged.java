@@ -40,5 +40,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Paged {
     
-    int value() default -1;
+    int value();
 }

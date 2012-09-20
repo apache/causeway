@@ -23,7 +23,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Paged;
@@ -34,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
-public class PagedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class PagedAnnotationOnTypeFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PagedAnnotationOnTypeFacetFactory facetFactory;
 
@@ -65,7 +64,6 @@ public class PagedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
     }
 
-
     public void testAnnotationPickedUpOnType() {
         final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
         facetFactory.process(processClassContext);
@@ -85,28 +83,5 @@ public class PagedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNull(facet);
     }
 
-
-    public void testAnnotationPickedUpOnCollection() {
-        facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
-        final Method method = facetedMethod.getMethod();
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod);
-        facetFactory.process(processMethodContext);
-
-        final Facet facet = facetedMethod.getFacet(PagedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PagedFacetAnnotation);
-        PagedFacet pagedFacet = (PagedFacet) facet;
-        assertThat(pagedFacet.value(), is(10));
-    }
-
-    public void testNoAnnotationOnCollection() {
-        facetedMethod = FacetedMethod.createForCollection(CustomerWithoutPagedAnnotation.class, "orders");
-        final Method method = facetedMethod.getMethod();
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod);
-        facetFactory.process(processMethodContext);
-
-        final Facet facet = facetedMethod.getFacet(PagedFacet.class);
-        assertNull(facet);
-    }
 
 }

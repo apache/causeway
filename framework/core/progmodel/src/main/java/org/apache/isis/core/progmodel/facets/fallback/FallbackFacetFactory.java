@@ -42,6 +42,9 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 
+    public final static int PAGE_SIZE_STANDALONE_DEFAULT = 25;
+    public final static int PAGE_SIZE_PARENTED_DEFAULT = 12;
+
     private IsisConfiguration configuration;
 
     @SuppressWarnings("unused")
@@ -79,12 +82,10 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final NotPersistableFacetNull notPersistableFacet = new NotPersistableFacetNull(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
-        final PagedFacetNone pagedFacet = new PagedFacetNone(facetHolder, getConfiguration().getInteger("isis.viewers.paged.standalone"));
+        final PagedFacetDefault pagedFacet = new PagedFacetDefault(facetHolder, getConfiguration().getInteger("isis.viewers.paged.standalone", PAGE_SIZE_STANDALONE_DEFAULT));
         
-
         final Facet[] facets = new Facet[] { describedAsFacet,
-                // commenting these out, think this whole isNoop business is a
-                // little bogus
+                // commenting these out, think this whole isNoop business is a little bogus
                 // new ImmutableFacetNever(holder),
                 notPersistableFacet, titleFacet, pagedFacet};
         FacetUtil.addFacets(facets);
@@ -94,24 +95,25 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
     public void process(final ProcessMethodContext processMethodContext) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (processMethodContext.getFacetHolder() instanceof FacetedMethod) {
-            facets.add(new NamedFacetNone(processMethodContext.getFacetHolder()));
-            facets.add(new DescribedAsFacetNone(processMethodContext.getFacetHolder()));
-            facets.add(new HelpFacetNone(processMethodContext.getFacetHolder()));
+        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+        
+        
+        facets.add(new NamedFacetNone(facetedMethod));
+        facets.add(new DescribedAsFacetNone(facetedMethod));
+        facets.add(new HelpFacetNone(facetedMethod));
 
-            final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
-            final FeatureType featureType = facetedMethod.getFeatureType();
-            if (featureType.isProperty()) {
-                facets.add(new MaxLengthFacetUnlimited(processMethodContext.getFacetHolder()));
-                facets.add(new MultiLineFacetNone(true, processMethodContext.getFacetHolder()));
-            }
-            if (featureType.isAction()) {
-                facets.add(new ActionDefaultsFacetNone(processMethodContext.getFacetHolder()));
-                facets.add(new ActionChoicesFacetNone(processMethodContext.getFacetHolder()));
-            }
-            if (featureType.isCollection()) {
-                facets.add(new PagedFacetNone(processMethodContext.getFacetHolder(), getConfiguration().getInteger("isis.viewers.paged.parented")));
-            }
+        
+        final FeatureType featureType = facetedMethod.getFeatureType();
+        if (featureType.isProperty()) {
+            facets.add(new MaxLengthFacetUnlimited(facetedMethod));
+            facets.add(new MultiLineFacetNone(true, facetedMethod));
+        }
+        if (featureType.isAction()) {
+            facets.add(new ActionDefaultsFacetNone(facetedMethod));
+            facets.add(new ActionChoicesFacetNone(facetedMethod));
+        }
+        if (featureType.isCollection()) {
+            facets.add(new PagedFacetDefault(facetedMethod, getConfiguration().getInteger("isis.viewers.paged.parented", PAGE_SIZE_PARENTED_DEFAULT)));
         }
 
         FacetUtil.addFacets(facets);
@@ -121,17 +123,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
     public void processParams(final ProcessParameterContext processParameterContext) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (processParameterContext.getFacetHolder() instanceof TypedHolder) {
+        final TypedHolder typedHolder = processParameterContext.getFacetHolder();
+        if (typedHolder.getFeatureType().isActionParameter()) {
+            facets.add(new NamedFacetNone(typedHolder));
+            facets.add(new DescribedAsFacetNone(typedHolder));
+            facets.add(new HelpFacetNone(typedHolder));
+            facets.add(new MultiLineFacetNone(false, typedHolder));
 
-            final TypedHolder typedHolder = processParameterContext.getFacetHolder();
-            if (typedHolder.getFeatureType().isActionParameter()) {
-                facets.add(new NamedFacetNone(processParameterContext.getFacetHolder()));
-                facets.add(new DescribedAsFacetNone(processParameterContext.getFacetHolder()));
-                facets.add(new HelpFacetNone(processParameterContext.getFacetHolder()));
-                facets.add(new MultiLineFacetNone(false, processParameterContext.getFacetHolder()));
-
-                facets.add(new MaxLengthFacetUnlimited(processParameterContext.getFacetHolder()));
-            }
+            facets.add(new MaxLengthFacetUnlimited(typedHolder));
         }
 
         FacetUtil.addFacets(facets);

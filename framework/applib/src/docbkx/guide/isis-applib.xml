@@ -7290,7 +7290,7 @@ public class Order {
 
         <para>This indicates a page size of 15 for parented collections, and a page size of 30 for
           standalone collections.</para>
-        <para>When ommitting a parameter value or ommitting the annotation completely, the
+        <para>When omitting a parameter value or omitting the annotation completely, the
           configured defaults in <filename>isis.properties</filename> wil be used.</para>
         <para>For example:</para>
         <para>
