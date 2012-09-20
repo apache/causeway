@@ -22,12 +22,12 @@ package org.apache.isis.viewer.wicket.viewer;
 import com.google.inject.AbstractModule;
 
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.viewer.imagecache.ImageCacheClassPath;
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryListDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
@@ -39,7 +39,7 @@ public class IsisWicketModule extends AbstractModule {
         bind(ComponentFactoryRegistry.class).to(ComponentFactoryRegistryDefault.class);
         bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
         bind(PageClassList.class).to(PageClassListDefault.class);
-        bind(ComponentFactoryList.class).to(ComponentFactoryListDefault.class);
+        bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
         bindConstant().annotatedWith(ApplicationCssUrl.class).to("application.css");
     }

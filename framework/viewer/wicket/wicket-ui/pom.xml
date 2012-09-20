@@ -95,11 +95,6 @@
 		</dependency>
 
 		<dependency>
-		    <groupId>com.vaynberg.wicket.select2</groupId>
-		    <artifactId>wicket-select2</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-guice</artifactId>
 		</dependency>

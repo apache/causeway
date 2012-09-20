@@ -19,16 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
-import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.vaynberg.wicket.select2.ApplicationSettings;
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2Choice;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.yui.calendar.DateField;
@@ -41,13 +34,8 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.bookmarks.Bookmark;
-import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -57,7 +45,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -79,15 +66,14 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
+    protected static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_OID = "entityOid";
-    private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
+    protected static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
     private static final String ID_CHOICES = "choices";
-    private static final String ID_AUTO_COMPLETE = "autoComplete";
-    private static final String ID_FIND_USING = "findUsing";
-    private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
-    private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
-    private static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
+    protected static final String ID_FIND_USING = "findUsing";
+    protected static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
+    protected static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
+    protected static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
     private static final String ID_ENTITY_DETAILS = "entityDetails";
 
     private static final String ID_FEEDBACK = "feedback";
@@ -110,10 +96,6 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
      */
     private ObjectAdapterMemento pending;
     private TextField<ObjectAdapterMemento> pendingOid;
-
-//    private ObjectAutoCompleteField<ObjectAdapter, Bookmark> autoCompleteField;
-    private Select2Choice<ObjectAdapter> autoCompleteField;
-    
 
 
     public EntityLink(final String id, final EntityModel entityModel) {
@@ -214,17 +196,18 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         if(entityClearLink != null) {
             entityClearLink.setVisible(mutability);
         }
-        if(autoCompleteField != null) {
-            autoCompleteField.setEnabled(mutability);
-        }
 
         if(entityDetailsLink != null) {
             entityDetailsLink.setVisible(getEntityModel().getRenderingHint() == RenderingHint.REGULAR);
         }
         
-        if(hasAutoComplete()) {
-            permanentlyHide(ID_ENTITY_ICON_AND_TITLE, ID_ENTITY_DETAILS_LINK);
-        }
+        doSyncVisibilityAndUsability(mutability);
+    }
+
+    /**
+     * Optional hook
+     */
+    protected void doSyncVisibilityAndUsability(boolean mutability) {
     }
 
     /**
@@ -241,13 +224,16 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     @Override
     protected void convertInput() {
 
-        if(getEntityModel().isEditMode() && hasAutoComplete()) {
-            // flush changes to pending
-            onSelected(autoCompleteField.getConvertedInput());
-        }
+        doConvertInput();
 
         final ObjectAdapter pendingAdapter = getPendingAdapter();
         setConvertedInput(pendingAdapter);
+    }
+
+    /**
+     * Optional hook
+     */
+    protected void doConvertInput() {
     }
 
     private ObjectAdapter getPendingAdapter() {
@@ -281,7 +267,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             permanentlyHide(ID_ENTITY_TITLE_NULL);
             
             // hide links
-            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK, ID_AUTO_COMPLETE);
+            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK);
+            doSyncWithInputWhenChoices();
         } else {
 
             // choices drop-down
@@ -297,81 +284,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
             syncEntityClearLinksWithInput(adapter);
         }
 
-        
-        if(hasAutoComplete()){
 
-            // serializable, referenced by the AutoCompletionChoicesProvider below  
-            final EntityModel entityModel = getEntityModel();
-            
-            ChoiceProvider<ObjectAdapter> provider = new TextChoiceProvider<ObjectAdapter>() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected String getDisplayText(ObjectAdapter choice) {
-                    return choice.titleString();
-                }
-
-                @Override
-                protected Object getId(ObjectAdapter choice) {
-                    final RootOid oid = (RootOid) choice.getOid();
-                    return oid.asBookmark().toString();
-                }
-
-                @Override
-                public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapter> response) {
-                    final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
-                    final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                    final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
-                    response.addAll(results);
-                }
-
-                @Override
-                public Collection<ObjectAdapter> toChoices(Collection<String> ids) {
-                    Function<String, ObjectAdapter> function = new Function<String, ObjectAdapter>() {
-
-                        @Override
-                        public ObjectAdapter apply(String input) {
-                            final Bookmark bookmark = new Bookmark(input);
-                            final RootOid oid = RootOidDefault.create(bookmark);
-
-                            final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
-                            final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-
-                            // REVIEW: this is hacky, but need a serializable way of getting the AdapterManager...
-                            return autoCompleteFacet.lookup(oid);
-                        }
-                    };
-                    return Collections2.transform(ids, function);
-                }
-
-            };
-            final ModelAbstract<ObjectAdapter> model = new ModelAbstract<ObjectAdapter>(){
-
-                private static final long serialVersionUID = 1L;
-                
-                @Override
-                protected ObjectAdapter load() {
-                    return getPendingElseCurrentAdapter();
-                }
-                
-            };
-            autoCompleteField = new Select2Choice<ObjectAdapter>(ID_AUTO_COMPLETE, model, provider);
-            addOrReplace(autoCompleteField);
-            
-            // no need for link, since can see in drop-down
-            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
-
-            // no need for the 'null' title, since if there is no object yet
-            // can represent this fact in the drop-down
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
-            
-            // hide links
-            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK, ID_ENTITY_DETAILS_LINK_LABEL);
-
-        } else {
-            permanentlyHide(ID_AUTO_COMPLETE);
-        }
+        doSyncWithInputOther();
         
         syncEntityDetailsLinksWithInput(adapter);
         syncEntityDetailsWithInput(adapter);
@@ -380,21 +294,20 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         syncVisibilityAndUsability();
     }
 
-    private boolean hasAutoComplete() {
-        // this ugly code is because want to make this dependency optional until it has been formally released.
-        try {
-            Thread.currentThread().getContextClassLoader().loadClass("com.vaynberg.wicket.select2.Select2Choice");
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-        
-        final ObjectSpecification typeOfSpecification = getEntityModel().getTypeOfSpecification();
-        final AutoCompleteFacet autoCompleteFacet = 
-                (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
-        return autoCompleteFacet != null;
+
+    /**
+     * Optional hook
+     */
+    protected void doSyncWithInputWhenChoices() {
     }
 
-    private ObjectAdapter getPendingElseCurrentAdapter() {
+    /**
+     * Optional hook
+     */
+    protected void doSyncWithInputOther() {
+    }
+
+    protected ObjectAdapter getPendingElseCurrentAdapter() {
         return hasPending ? getPendingAdapter() : getEntityModel().getObject();
     }
 

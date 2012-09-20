@@ -35,11 +35,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryListDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
@@ -54,7 +54,7 @@ public class WicketObjectModule_bindingsStandard {
 
     @Parameters
     public static Collection<Object[]> params() {
-        return Arrays.asList(new Object[][] { { ComponentFactoryList.class, ComponentFactoryListDefault.class }, { ComponentFactoryRegistry.class, ComponentFactoryRegistryDefault.class }, { PageClassList.class, PageClassListDefault.class },
+        return Arrays.asList(new Object[][] { { ComponentFactoryRegistrar.class, ComponentFactoryRegistrarDefault.class }, { ComponentFactoryRegistry.class, ComponentFactoryRegistryDefault.class }, { PageClassList.class, PageClassListDefault.class },
                 { PageClassRegistry.class, PageClassRegistryDefault.class }, });
     }
 

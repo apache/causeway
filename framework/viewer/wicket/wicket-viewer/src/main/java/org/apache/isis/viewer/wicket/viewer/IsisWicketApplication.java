@@ -66,7 +66,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -110,7 +110,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
  * <ul>
  * <li> {@link #newComponentFactoryList()} (mentioned above)</li>
  * <li> {@link #newComponentFactoryRegistry()} (uses the
- * {@link ComponentFactoryList} provided by {@link #newComponentFactoryList()})</li>
+ * {@link ComponentFactoryRegistrar} provided by {@link #newComponentFactoryList()})</li>
  * <li> {@link #newPageClassList()}</li>
  * <li> {@link #newPageRegistry()} (uses the {@link PageClassList} provided by
  * {@link #newPageClassList()})</li>

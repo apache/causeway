@@ -23,9 +23,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import com.google.inject.Singleton;
+
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.actions.params.ActionParametersFormPanelFactory;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryList;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
@@ -77,15 +79,16 @@ import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkFactory;
 
 /**
- * Default implementation of {@link ComponentFactoryList} that registers a
+ * Default implementation of {@link ComponentFactoryRegistrar} that registers a
  * hardcoded set of built-in {@link ComponentFactory}s, along with any
  * implementations loaded using {@link ServiceLoader} (ie from
  * <tt>META-INF/services</tt>).
  */
-public class ComponentFactoryListDefault implements ComponentFactoryList {
+@Singleton
+public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
 
     @Override
-    public void addComponentFactories(final List<ComponentFactory> componentFactories) {
+    public void addComponentFactories(final ComponentFactoryList componentFactories) {
 
         addComponentFactoriesActingAsSelectors(componentFactories);
 
@@ -99,7 +102,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
      * should be registered here; they will be loaded first, to ensure that they
      * are found first.
      */
-    protected void addComponentFactoriesActingAsSelectors(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesActingAsSelectors(final ComponentFactoryList componentFactories) {
         
     	componentFactories.add(new EntitySelectorFactory());
     	
@@ -108,7 +111,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
                                                                              // first
     }
 
-    protected void addComponentFactoriesUsingServiceLoader(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {
         final ServiceLoader<ComponentFactory> serviceLoader = ServiceLoader.load(ComponentFactory.class);
 
         for (final ComponentFactory componentFactory : serviceLoader) {
@@ -116,7 +119,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         }
     }
 
-    private void addBuiltInComponentFactories(final List<ComponentFactory> componentFactories) {
+    private void addBuiltInComponentFactories(final ComponentFactoryList componentFactories) {
         addComponentFactoriesForSpecial(componentFactories);
         addComponentFactoriesForWelcomeAndAbout(componentFactories);
         addComponentFactoriesForApplicationActions(componentFactories);
@@ -136,16 +139,16 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 
     }
 
-    protected void addComponentFactoriesForSpecial(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForSpecial(final ComponentFactoryList componentFactories) {
         componentFactories.add(new WizardPageDescriptionPanelFactory());
     }
 
-    protected void addComponentFactoriesForWelcomeAndAbout(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForWelcomeAndAbout(final ComponentFactoryList componentFactories) {
         componentFactories.add(new WelcomePanelFactory());
         componentFactories.add(new AboutPanelFactory());
     }
 
-    protected void addComponentFactoriesForEntity(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForEntity(final ComponentFactoryList componentFactories) {
 
         // top-level
         componentFactories.add(new EntityCombinedPanelFactory());
@@ -160,26 +163,26 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         componentFactories.add(new EntityPropertiesAndCollectionsPanelFactory());
     }
 
-    protected void addComponentFactoriesForEntityCollectionContents(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
         componentFactories.add(new CollectionContentsAsAjaxTableFactory());
         // componentFactories.add(new CollectionContentsAsSimpleTableFactory());
         // // work-in-progress
         componentFactories.add(new CollectionContentsAsIconsFactory());
     }
 
-    protected void addComponentFactoriesForEntityCollection(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForEntityCollection(final ComponentFactoryList componentFactories) {
         componentFactories.add(new CollectionPanelFactory());
     }
 
-    protected void addComponentFactoriesForEmptyCollection(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForEmptyCollection(final ComponentFactoryList componentFactories) {
         componentFactories.add(new EmptyCollectionPanelFactory());
     }
 
-    protected void addComponentFactoriesForValue(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForValue(final ComponentFactoryList componentFactories) {
         componentFactories.add(new StandaloneValuePanelFactory());
     }
 
-    protected void addComponentFactoriesForScalar(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
 
         componentFactories.add(new ReferencePanelFactory());
 
@@ -217,55 +220,33 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         componentFactories.add(new ValuePanelFactory());
     }
 
-    protected void addComponentFactoriesForEntityLink(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {
         componentFactories.add(new EntityLinkFactory());
     }
 
-    protected void addComponentFactoriesForVoidReturn(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForVoidReturn(final ComponentFactoryList componentFactories) {
         componentFactories.add(new VoidReturnPanelFactory());
     }
 
-    protected void addComponentFactoriesForActionInfo(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForActionInfo(final ComponentFactoryList componentFactories) {
         componentFactories.add(new ActionInfoPanelFactory());
     }
 
-    protected void addComponentFactoriesForParameters(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForParameters(final ComponentFactoryList componentFactories) {
         componentFactories.add(new ActionParametersFormPanelFactory());
     }
 
-    protected void addComponentFactoriesForAction(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForAction(final ComponentFactoryList componentFactories) {
         componentFactories.add(new ActionPanelFactory());
     }
 
-    protected void addComponentFactoriesForApplicationActions(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForApplicationActions(final ComponentFactoryList componentFactories) {
         componentFactories.add(new AppActionsCssMenuFactory());
     }
 
 
-    protected void addComponentFactoriesForUnknown(final List<ComponentFactory> componentFactories) {
+    protected void addComponentFactoriesForUnknown(final ComponentFactoryList componentFactories) {
         componentFactories.add(new UnknownModelPanelFactory());
     }
 
-
-    /**
-     * Allows the subclass to remove any built-in factories.
-     */
-    protected void removeComponentFactories(final List<ComponentFactory> componentFactories, final Class<? extends ComponentFactory>... classes) {
-        for (final Iterator<ComponentFactory> iterator = componentFactories.iterator(); iterator.hasNext();) {
-            final ComponentFactory componentFactory = iterator.next();
-            if (isAssignableToAny(componentFactory, classes)) {
-                iterator.remove();
-            }
-        }
-    }
-
-    private boolean isAssignableToAny(final ComponentFactory componentFactory, final Class<? extends ComponentFactory>... classes) {
-        final Class<? extends ComponentFactory> componentFactoryCls = componentFactory.getClass();
-        for (final Class<? extends ComponentFactory> cls : classes) {
-            if (cls.isAssignableFrom(componentFactoryCls)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
