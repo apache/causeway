@@ -21,18 +21,20 @@ package org.apache.isis.core.commons.resource;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.SequenceInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSourceAbstract {
+public class ResourceStreamSourceComposite extends ResourceStreamSourceAbstract {
 
-    private static Logger LOG = Logger.getLogger(ResourceStreamSourceChainOfResponsibility.class);
+    private static Logger LOG = Logger.getLogger(ResourceStreamSourceComposite.class);
 
     private final List<ResourceStreamSource> resourceStreamSources = new ArrayList<ResourceStreamSource>();
 
-    public ResourceStreamSourceChainOfResponsibility(final ResourceStreamSource... resourceStreamSources) {
+    public ResourceStreamSourceComposite(final ResourceStreamSource... resourceStreamSources) {
         for (final ResourceStreamSource rss : resourceStreamSources) {
             addResourceStreamSource(rss);
         }
@@ -44,11 +46,15 @@ public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSou
 
     @Override
     protected InputStream doReadResource(final String resourcePath) {
+        Vector<InputStream> compositionStreams = new Vector<InputStream>();
         for (final ResourceStreamSource rss : resourceStreamSources) {
             final InputStream resourceStream = rss.readResource(resourcePath);
             if (resourceStream != null) {
-                return resourceStream;
+                compositionStreams.add(resourceStream);
             }
+        }
+        if (!compositionStreams.isEmpty()) {
+            return new SequenceInputStream(compositionStreams.elements());
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("could not load resource path '" + resourcePath + "' from " + getName());
@@ -58,18 +64,12 @@ public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSou
 
     @Override
     public OutputStream writeResource(final String resourcePath) {
-        for (final ResourceStreamSource rss : resourceStreamSources) {
-            final OutputStream os = rss.writeResource(resourcePath);
-            if (os != null) {
-                return os;
-            }
-        }
-        return null;
+        return null; // No support for writing resources
     }
 
     @Override
     public String getName() {
-        return "chain [" + resourceStreamNames() + "]";
+        return "composite [" + resourceStreamNames() + "]";
     }
 
     private String resourceStreamNames() {
