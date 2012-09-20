@@ -79,6 +79,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
+            public Object lookupService(Class<?> serviceClass) {
+                return null;
+            }
+
+            @Override
             public void injectInto(Object candidate) {
             }
         };
@@ -176,6 +181,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
+            public Bookmark bookmarkFor(Object domainObject) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
             public void resolve(final Object parent, final Object field) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
@@ -219,6 +229,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public String getProperty(final String name) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
+
         };
         localizationProvider = new LocalizationProviderAbstract() {
 

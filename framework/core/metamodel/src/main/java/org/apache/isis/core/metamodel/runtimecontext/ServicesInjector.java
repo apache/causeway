@@ -19,6 +19,8 @@ package org.apache.isis.core.metamodel.runtimecontext;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ServicesInjector extends Injectable {
 
@@ -36,4 +38,5 @@ public interface ServicesInjector extends Injectable {
      */
     void injectServicesInto(List<Object> objects);
 
+    Object lookupService(Class<?> serviceClass);
 }

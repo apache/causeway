@@ -62,7 +62,7 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
 
     public ValueSemanticsProviderContext getContext() {
         if (context == null) {
-            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(), adapterManager, servicesInjector);
+            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLoader(), adapterManager, servicesInjector);
         }
         return context;
     }

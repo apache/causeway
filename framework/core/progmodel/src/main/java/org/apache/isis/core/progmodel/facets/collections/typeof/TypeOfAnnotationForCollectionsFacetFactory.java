@@ -53,12 +53,12 @@ public class TypeOfAnnotationForCollectionsFacetFactory extends FacetFactoryAbst
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         if (returnType.isArray()) {
             final Class<?> componentType = returnType.getComponentType();
-            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, processMethodContext.getFacetHolder(), getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, processMethodContext.getFacetHolder(), getSpecificationLoader()));
             return;
         }
 
         if (annotation != null) {
-            FacetUtil.addFacet(new TypeOfFacetAnnotationForCollection(annotation.value(), processMethodContext.getFacetHolder(), getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetAnnotationForCollection(annotation.value(), processMethodContext.getFacetHolder(), getSpecificationLoader()));
             return;
         }
 
@@ -76,7 +76,7 @@ public class TypeOfAnnotationForCollectionsFacetFactory extends FacetFactoryAbst
         final Object actualTypeArgument = actualTypeArguments[0];
         if (actualTypeArgument instanceof Class) {
             final Class<?> actualType = (Class<?>) actualTypeArgument;
-            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, processMethodContext.getFacetHolder(), getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, processMethodContext.getFacetHolder(), getSpecificationLoader()));
             return;
         }
 

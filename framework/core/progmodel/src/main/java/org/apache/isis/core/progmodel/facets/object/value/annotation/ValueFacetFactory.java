@@ -118,7 +118,7 @@ public class ValueFacetFactory extends FacetFactoryAbstract implements IsisConfi
     }
 
     protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
-        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getServicesInjector());
+        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLoader(), getAdapterManager(), getServicesInjector());
     }
 
     // ////////////////////////////////////////////////////////////////////

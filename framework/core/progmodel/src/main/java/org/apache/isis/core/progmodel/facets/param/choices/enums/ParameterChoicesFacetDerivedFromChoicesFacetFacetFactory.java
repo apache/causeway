@@ -41,7 +41,7 @@ public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fa
             return;
         }
 
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext.getFacetHolder(), getSpecificationLookup(), getAdapterManager()));
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext.getFacetHolder(), getSpecificationLoader(), getAdapterManager()));
     }
 
     // /////////////////////////////////////////////

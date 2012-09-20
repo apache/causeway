@@ -62,7 +62,7 @@ public class PropertyDefaultFacetFactory extends MethodPrefixBasedFacetFactoryAb
         processMethodContext.removeMethod(method);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLookup(), getAdapterManager()));
+        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLoader(), getAdapterManager()));
     }
 
     // ///////////////////////////////////////////////////////

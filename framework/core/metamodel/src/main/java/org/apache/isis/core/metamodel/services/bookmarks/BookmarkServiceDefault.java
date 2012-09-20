@@ -1,5 +1,6 @@
 package org.apache.isis.core.metamodel.services.bookmarks;
 
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.bookmarks.Bookmark;
@@ -24,6 +25,12 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     @Programmatic
     public void setDomainObjectServices(DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
+    }
+
+    @Override
+    @Hidden
+    public Bookmark bookmarkFor(Object domainObject) {
+        return domainObjectServices.bookmarkFor(domainObject);
     }
 
 }

@@ -64,7 +64,7 @@ public class DescribedAsAnnotationOnParameterFacetFactory extends FacetFactoryAb
     }
 
     private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLookup().loadSpecification(type);
+        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
         return paramTypeSpec.getFacet(DescribedAsFacet.class);
     }
 

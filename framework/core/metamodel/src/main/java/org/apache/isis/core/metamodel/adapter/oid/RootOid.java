@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -92,6 +93,8 @@ public interface RootOid extends TypedOid {
     }
     
     Comparison compareAgainst(RootOid oid2);
+
+    Bookmark asBookmark();
 
 
 }

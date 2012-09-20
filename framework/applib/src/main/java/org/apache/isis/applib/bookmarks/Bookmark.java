@@ -1,16 +1,36 @@
 package org.apache.isis.applib.bookmarks;
 
+import java.io.Serializable;
+import java.util.Iterator;
+
+import com.google.common.base.Splitter;
+
 /**
  * String representation of any persistent object managed by the framework.
  * 
  * <p>
  * Analogous to the <tt>RootOid</tt>.
  */
-public class Bookmark {
+public class Bookmark implements Serializable {
 
+    private static final char SEPARATOR = ':';
+
+    private static final long serialVersionUID = 1L;
+    
     private final String objectType;
     private final String identifier;
-    
+
+    /**
+     * Round-trip with {@link #toString()} representation.
+     */
+    public Bookmark(String toString) {
+        this(Splitter.on(SEPARATOR).split(toString).iterator());
+    }
+
+    private Bookmark(Iterator<String> split) {
+        this(split.next(), split.next());
+    }
+
     public Bookmark(String objectType, String identifier) {
         this.objectType = objectType;
         this.identifier = identifier;
@@ -59,6 +79,6 @@ public class Bookmark {
 
     @Override
     public String toString() {
-        return objectType + ":" + identifier;
+        return objectType + SEPARATOR + identifier;
     }
 }

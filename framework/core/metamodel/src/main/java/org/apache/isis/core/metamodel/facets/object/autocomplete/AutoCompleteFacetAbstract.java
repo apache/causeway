@@ -19,10 +19,24 @@
 
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 
@@ -30,16 +44,77 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         return AutoCompleteFacet.class;
     }
 
-    private final ObjectAction repositoryAction;
+    private final Class<?> repositoryClass;
+    private final String actionName;
 
-    public AutoCompleteFacetAbstract(final FacetHolder holder, ObjectAction repositoryAction) {
+    private final SpecificationLoader specificationLoader;
+    private final AdapterManager adapterManager;
+    private final ServicesInjector servicesInjector;
+
+    /**
+     * cached once searched for
+     */
+    private ObjectAction repositoryAction;
+    private boolean cachedRepositoryAction = false;
+    
+    private boolean cachedRepositoryObject = false;
+    private Object repository;
+
+    public AutoCompleteFacetAbstract(FacetHolder holder, Class<?> repositoryClass, String actionName, SpecificationLoader specificationLoader, AdapterManager adapterManager, ServicesInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.repositoryAction = repositoryAction;
+        this.repositoryClass = repositoryClass;
+        this.actionName = actionName;
+        this.specificationLoader = specificationLoader;
+        this.adapterManager = adapterManager;
+        this.servicesInjector = servicesInjector;
     }
 
     @Override
-    public ObjectAction getRepositoryAction() {
-        return repositoryAction;
+    public List<ObjectAdapter> execute(final String search) {
+
+        cacheRepositoryAndRepositoryActionIfRequired();
+        if(repositoryAction == null || repository == null) {
+            return Collections.<ObjectAdapter>emptyList();
+        }
+        
+        final ObjectAdapter repositoryAdapter = adapterManager.getAdapterFor(repository);
+        final ObjectAdapter searchAdapter = adapterManager.adapterFor(search);
+        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, new ObjectAdapter[] { searchAdapter} );
+        // check a collection was returned
+        if(CollectionFacetUtils.getCollectionFacetFromSpec(resultAdapter) == null) {
+            return Collections.<ObjectAdapter>emptyList();
+        }
+        return CollectionFacetUtils.convertToAdapterList(resultAdapter);
+    }
+
+    @Override
+    public ObjectAdapter lookup(RootOid oid) {
+        return adapterManager.adapterFor(oid);
+    }
+
+    private void cacheRepositoryAndRepositoryActionIfRequired() {
+        if(!cachedRepositoryAction) {
+            cacheRepositoryAction();
+        }
+        if(!cachedRepositoryObject) {
+            cacheRepositoryObject();
+        }
+    }
+
+    private void cacheRepositoryAction() {
+        try {
+            final ObjectSpecification repositorySpec = specificationLoader.loadSpecification(repositoryClass);
+            final List<ObjectAction> objectActions = repositorySpec.getObjectActions(ActionType.USER, Contributed.EXCLUDED, ObjectActionFilters.withId(actionName));
+
+            repositoryAction = objectActions.size() == 1? objectActions.get(0): null;
+        } finally {
+            cachedRepositoryAction = true;
+        }
+    }
+
+    private void cacheRepositoryObject() {
+        repository = servicesInjector.lookupService(repositoryClass);
+        cachedRepositoryObject = true;
     }
 
 }

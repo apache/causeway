@@ -62,7 +62,7 @@ public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAb
         processMethodContext.removeMethod(choicesMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLookup(), getAdapterManager()));
+        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLoader(), getAdapterManager()));
     }
 
     // ///////////////////////////////////////////////////////

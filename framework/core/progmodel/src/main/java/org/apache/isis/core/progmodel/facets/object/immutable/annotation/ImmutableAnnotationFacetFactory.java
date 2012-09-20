@@ -45,7 +45,7 @@ public class ImmutableAnnotationFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
+        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
         final ImmutableFacet facet = owningSpec.getFacet(ImmutableFacet.class);
         if (facet != null) {
             facet.copyOnto(member);

@@ -83,6 +83,8 @@ public interface DomainObjectServices extends Injectable {
      */
     Object lookup(Bookmark bookmark);
 
+    Bookmark bookmarkFor(Object domainObject);
+
 
     // ///////////////////////////////////////////
     // flush, commit
@@ -153,5 +155,6 @@ public interface DomainObjectServices extends Injectable {
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     List<String> getPropertyNames();
+
 
 }

@@ -40,7 +40,7 @@ public class DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory extend
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(processMethodContext.getMethod().getDeclaringClass());
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(processMethodContext.getMethod().getDeclaringClass());
         if (spec.containsDoOpFacet(ImmutableFacet.class)) {
             final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();

@@ -79,6 +79,41 @@ table.collectionContentsAsAjaxTable caption {
 }
 
 table.collectionContentsAsAjaxTable input:disabled {
-	background-color: white;
+	background-color: transparent;
 	border: none;
+}
+
+table.collectionContentsAsAjaxTable tbody td,table.collectionContentsAsAjaxTable thead th {
+	border-left: 1px #DDD solid;
+	border-right: 1px #DDD solid;
+}
+
+table.collectionContentsAsAjaxTable tr.navigation div.navigatorLabel {
+	display: inline;
+}
+
+table.collectionContentsAsAjaxTable tr.navigation div.navigatorLabel > div {
+	display: inline;
+}
+
+table.collectionContentsAsAjaxTable tr.navigation div.navigator {
+	display: inline;
+}
+
+table.collectionContentsAsAjaxTable tr.navigation div.navigator > div {
+	display: inline;
+	float: right;
+}
+
+table.collectionContentsAsAjaxTable .navigator .first,
+table.collectionContentsAsAjaxTable .navigator .prev,
+table.collectionContentsAsAjaxTable .navigator .next, 
+table.collectionContentsAsAjaxTable .navigator .last,
+table.collectionContentsAsAjaxTable .navigator .goto
+{
+	margin-left: 0.5em;
+}
+
+table.collectionContentsAsAjaxTable .navigator .goto em {
+	background-color: #DDD;
 }

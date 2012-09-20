@@ -73,7 +73,7 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
+        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
         final DisabledObjectFacet facet = owningSpec.getFacet(DisabledObjectFacet.class);
         if (facet != null) {
             facet.copyOnto(member);

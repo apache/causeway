@@ -31,7 +31,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
 
     private final List<FeatureType> featureTypes;
 
-    private SpecificationLoader specificationLookup;
+    private SpecificationLoader specificationLoader;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
         this.featureTypes = ImmutableList.copyOf(featureTypes);
@@ -58,8 +58,8 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     // Dependencies (injected)
     // ////////////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
      */
     @Override
     public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLookup;
     }
 
 }

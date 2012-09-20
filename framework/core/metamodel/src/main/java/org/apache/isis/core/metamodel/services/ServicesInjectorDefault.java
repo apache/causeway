@@ -37,8 +37,11 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
@@ -197,6 +200,16 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     private void autowireServicesAndContainer() {
         injectServicesInto(this.services);
         injectServicesInto(this.container);
+    }
+
+    @Override
+    public Object lookupService(Class<?> serviceClass) {
+        for(final Object service: this.services) {
+            if(serviceClass.isAssignableFrom(service.getClass())) {
+                return service;
+            }
+        }
+        return null;
     }
 
 }

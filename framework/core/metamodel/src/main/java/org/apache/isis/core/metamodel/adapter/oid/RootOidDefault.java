@@ -30,6 +30,7 @@ import com.google.common.base.Objects;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -62,6 +63,10 @@ public final class RootOidDefault implements Serializable, RootOid {
 
     public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier) {
         return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT);
+    }
+
+    public static RootOid create(Bookmark bookmark) {
+        return create(ObjectSpecId.of(bookmark.getObjectType()), bookmark.getIdentifier());
     }
 
     public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier) {
@@ -243,7 +248,31 @@ public final class RootOidDefault implements Serializable, RootOid {
                 : Comparison.EQUIVALENT_BUT_CHANGED;
     }
 
+    @Override
+    public void checkLock(String currentUser, RootOid otherOid) {
+        Version otherVersion = otherOid.getVersion();
+        if(version == null || otherVersion == null) {
+            return;
+        }
+        if (version.different(otherVersion)) {
+            LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
+            // reset this Oid to latest
+            throw new ConcurrencyException(currentUser, this, version, otherVersion);
+        }
+    }
+
     
+    // ////////////////////////////////////////////
+    // bookmark
+    // ////////////////////////////////////////////
+
+    @Override
+    public Bookmark asBookmark() {
+        final String objectType = getObjectSpecId().asString();
+        final String identifier = getIdentifier();
+        return new Bookmark(objectType, identifier);
+    }
+
     // ////////////////////////////////////////////
     // equals, hashCode
     // ////////////////////////////////////////////
@@ -283,19 +312,6 @@ public final class RootOidDefault implements Serializable, RootOid {
         return enString(new OidMarshaller());
     }
 
-    @Override
-    public void checkLock(String currentUser, RootOid otherOid) {
-        Version otherVersion = otherOid.getVersion();
-        if(version == null || otherVersion == null) {
-            return;
-        }
-        if (version.different(otherVersion)) {
-            LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
-            // reset this Oid to latest
-            throw new ConcurrencyException(currentUser, this, version, otherVersion);
-        }
-    }
 
-    
     
 }

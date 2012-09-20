@@ -76,7 +76,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final ObjectInstantiator objectInstantiator;
     private final ObjectPersistor objectPersistor;
     private final ServicesProvider servicesProvider;
-    private final ServicesInjector dependencyInjector;
+    private final ServicesInjector servicesInjector;
     private final QuerySubmitter querySubmitter;
     private final DomainObjectServices domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
@@ -195,6 +195,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return new DomainObjectContainerResolve().lookup(bookmark);
             }
 
+
+            @Override
+            public Bookmark bookmarkFor(Object domainObject) {
+                return new DomainObjectContainerResolve().bookmarkFor(domainObject);
+            }
+
             @Override
             public void resolve(final Object parent) {
                 new DomainObjectContainerResolve().resolve(parent);
@@ -240,7 +246,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return RuntimeContextFromSession.this.getPropertyNames();
             }
 
-
         };
         this.querySubmitter = new QuerySubmitterAbstract() {
 
@@ -257,7 +262,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return list.size() > 0 ? list.get(0) : null;
             }
         };
-        this.dependencyInjector = new ServicesInjector() {
+        this.servicesInjector = new ServicesInjector() {
 
             @Override
             public void injectServicesInto(final Object object) {
@@ -268,7 +273,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public void injectServicesInto(List<Object> objects) {
                 getPersistenceSession().getServicesInjector().injectServicesInto(objects);
             }
-            
+
+            @Override
+            public Object lookupService(Class<?> serviceClass) {
+                return getPersistenceSession().getServicesInjector().lookupService(serviceClass);
+            }
+
             @Override
             public void injectInto(Object candidate) {
                 if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {
@@ -332,7 +342,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     @Override
     public ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
+        return servicesInjector;
     }
 
     @Override

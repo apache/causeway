@@ -41,10 +41,7 @@
 		<wicket.version>6.0.0</wicket.version>
 		<wicketstuff.version>6.0.0</wicketstuff.version>
 
-<!-- 
-		<wicket.version>1.4.12</wicket.version>
-		<wicketstuff.version>1.4.12</wicketstuff.version>
--->
+		<wicket-select2.version>wicket6-SNAPSHOT</wicket-select2.version>
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -221,26 +218,13 @@
 				<version>${wicket.version}</version>
 			</dependency>
 
-            <!-- WicketStuff -->
-            <!-- 
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>scriptaculous</artifactId>
-				<version>${wicketstuff.version}</version>
-			</dependency>
-            -->
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>objectautocomplete</artifactId>
-				<version>${wicketstuff.version}</version>
-			</dependency>
 
+            <!-- Wicket-Select2 -->
 			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>calendarviews</artifactId>
-				<version>${wicketstuff.version}</version>
+			    <groupId>com.vaynberg.wicket.select2</groupId>
+			    <artifactId>wicket-select2</artifactId>
+			    <version>${wicket-select2.version}</version>
 			</dependency>
-
 
 			<!-- Other -->
 			<dependency>

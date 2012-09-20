@@ -42,7 +42,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fac
             return;
         }
 
-        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(), getSpecificationLookup()));
+        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(), getSpecificationLoader()));
     }
 
     // /////////////////////////////////////////////

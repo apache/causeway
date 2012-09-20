@@ -88,13 +88,13 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
 
         try {
             final Class<?> returnType = actionMethod.getReturnType();
-            final ObjectSpecification returnSpec = getSpecificationLookup().loadSpecification(returnType);
+            final ObjectSpecification returnSpec = getSpecificationLoader().loadSpecification(returnType);
             if (returnSpec == null) {
                 return;
             }
 
             final Class<?> cls = processMethodContext.getCls();
-            final ObjectSpecification typeSpec = getSpecificationLookup().loadSpecification(cls);
+            final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
             FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterManager()));

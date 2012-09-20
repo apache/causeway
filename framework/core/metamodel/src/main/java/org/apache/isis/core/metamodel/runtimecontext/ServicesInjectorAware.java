@@ -21,6 +21,6 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 public interface ServicesInjectorAware {
 
-    public void setServicesInjector(ServicesInjector dependencyInjector);
+    public void setServicesInjector(ServicesInjector servicesInjector);
 
 }

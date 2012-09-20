@@ -19,16 +19,21 @@
 
 package org.apache.isis.core.progmodel.facets.object.autocomplete.annotation;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class AutoCompleteFacetAnnotation extends AutoCompleteFacetAbstract {
 
-    public AutoCompleteFacetAnnotation(FacetHolder holder, ObjectAction repositoryAction) {
-        super(holder, repositoryAction);
+    public AutoCompleteFacetAnnotation(FacetHolder holder, Class<?> repositoryClass, String actionName, SpecificationLoader specificationLoader, AdapterManager adapterManager, ServicesInjector servicesInjector) {
+        super(holder, repositoryClass, actionName, specificationLoader, adapterManager, servicesInjector);
     }
+
+
 
 
 }

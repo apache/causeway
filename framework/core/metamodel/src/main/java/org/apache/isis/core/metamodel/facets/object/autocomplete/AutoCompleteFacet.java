@@ -19,9 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
+import java.util.List;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public interface AutoCompleteFacet extends Facet {
-    public ObjectAction getRepositoryAction();
+
+    public List<ObjectAdapter> execute(String search);
+
+    public ObjectAdapter lookup(RootOid oid);
 }

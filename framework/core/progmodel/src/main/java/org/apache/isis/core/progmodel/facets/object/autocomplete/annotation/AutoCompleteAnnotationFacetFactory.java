@@ -19,22 +19,23 @@
 
 package org.apache.isis.core.progmodel.facets.object.autocomplete.annotation;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-public class AutoCompleteAnnotationFacetFactory extends FacetFactoryAbstract {
+public class AutoCompleteAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware {
+
+    private AdapterManager adapterManager;
+    private ServicesInjector servicesInjector;
 
     public AutoCompleteAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_POST_PROCESSING_ONLY);
@@ -52,13 +53,17 @@ public class AutoCompleteAnnotationFacetFactory extends FacetFactoryAbstract {
         Class<?> repositoryClass = annotation.repository();
         String actionName = annotation.action();
         
-        final ObjectSpecification repositorySpec = getSpecificationLookup().loadSpecification(repositoryClass);
-        getSpecificationLookup().introspectIfRequired(repositorySpec);
-         
-        
-        final List<ObjectAction> objectActions = repositorySpec.getObjectActions(ActionType.USER, Contributed.EXCLUDED, ObjectActionFilters.withId(actionName));
-        
-        return objectActions.size() != 1 ? null : new AutoCompleteFacetAnnotation(holder, objectActions.get(0));
+        return new AutoCompleteFacetAnnotation(holder, repositoryClass, actionName, getSpecificationLoader(), adapterManager, servicesInjector);
+    }
+
+    @Override
+    public void setAdapterManager(AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
+    }
+
+    @Override
+    public void setServicesInjector(ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
 }

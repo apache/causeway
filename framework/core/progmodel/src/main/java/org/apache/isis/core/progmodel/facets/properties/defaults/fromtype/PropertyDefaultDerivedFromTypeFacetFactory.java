@@ -59,7 +59,7 @@ public class PropertyDefaultDerivedFromTypeFacetFactory extends FacetFactoryAbst
     }
 
     private DefaultedFacet getDefaultedFacet(final Class<?> paramType) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLookup().loadSpecification(paramType);
+        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(paramType);
         return paramTypeSpec.getFacet(DefaultedFacet.class);
     }
 

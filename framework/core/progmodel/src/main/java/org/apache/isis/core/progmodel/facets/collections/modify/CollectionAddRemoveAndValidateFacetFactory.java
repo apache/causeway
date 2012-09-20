@@ -119,7 +119,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
 
         final Class<?> type = addType != null ? addType : removeType;
         if (type != null) {
-            FacetUtil.addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection, getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection, getSpecificationLoader()));
         }
         return type;
     }

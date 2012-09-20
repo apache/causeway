@@ -99,7 +99,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder, getSpecificationLookup(), getAdapterManager()));
+            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder, getSpecificationLoader(), getAdapterManager()));
         }
     }
 
