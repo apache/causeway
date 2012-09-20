@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLink;
+import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -51,7 +51,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-    private EntityLink entityLink;
+    private EntityLinkAbstract entityLink;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -85,7 +85,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = (EntityLink) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entityLink = (EntityLinkAbstract) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
         
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
@@ -95,7 +95,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
@@ -159,7 +159,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = (EntityLink) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entityLink = (EntityLinkAbstract) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
         
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
