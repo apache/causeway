@@ -5995,6 +5995,38 @@ public class Customer {
       </sect1>
 
       <sect1>
+        <title>@AutoComplete</title>
+
+        <para>This annotation is to support an auto-complete capability for
+        reference properties and action parameters, the idea being that the
+        user enters a few characters to locate a reference, and these are
+        shown - for example - in a drop-down list box.</para>
+
+        <para>The annotation is specified on the type, and specifies an action
+        on a repository; this action should take a single string and should
+        return a list of the type.</para>
+
+        <para>For example:</para>
+
+        <programlisting>@AutoComplete(repository=Customers.class, action="autoComplete")
+public class Customer extends AbstractDomainObject {
+   ....
+}</programlisting>
+
+        <para>where:</para>
+
+        <programlisting>public interface Customers {
+
+    @Hidden
+    List&lt;Customer&gt; autoComplete(String search);
+    ...
+}</programlisting>
+
+        <para>This annotation was first implemented in the Wicket
+        viewer.</para>
+      </sect1>
+
+      <sect1>
         <title>@Aggregated</title>
 
         <para>This annotation indicates that the object is aggregated, or
@@ -6320,7 +6352,7 @@ public class ProspectiveSale {
 
             <para>The member should never be disabled (unless disabled through
             some other mechanism, for example an imperative
-            <methodname>disableXxx()</methodname> supporting method).. </para>
+            <methodname>disableXxx()</methodname> supporting method)..</para>
           </listitem>
 
           <listitem>
@@ -7288,17 +7320,20 @@ public class Order {
     public List&lt;LineItem&gt; getDetails() {...}
 }</programlisting>
 
-        <para>This indicates a page size of 15 for parented collections, and a page size of 30 for
-          standalone collections.</para>
-        <para>When omitting a parameter value or omitting the annotation completely, the
-          configured defaults in <filename>isis.properties</filename> wil be used.</para>
+        <para>This indicates a page size of 15 for parented collections, and a
+        page size of 30 for standalone collections.</para>
+
+        <para>When omitting a parameter value or omitting the annotation
+        completely, the configured defaults in
+        <filename>isis.properties</filename> wil be used.</para>
+
         <para>For example:</para>
-        <para>
-          <programlisting>isis.viewers.paged.standalone=20
-isis.viewers.paged.parented=5</programlisting>
-        </para>
-        <para>This indicates a page size of 5 for parented collections and a page size of 20 for
-          standalone collections.</para>
+
+        <para><programlisting>isis.viewers.paged.standalone=20
+isis.viewers.paged.parented=5</programlisting></para>
+
+        <para>This indicates a page size of 5 for parented collections and a
+        page size of 20 for standalone collections.</para>
       </sect1>
 
       <sect1>
