@@ -17,30 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.members.commonlyused;
+package org.apache.isis.core.progmodel.facets.members.resolve;
 
-import org.apache.isis.applib.annotation.CommonlyUsed;
+import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.members.commonlyused.CommonlyUsedFacet;
+import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacet;
 
-public class CommonlyUsedAnnotationFacetFactory extends FacetFactoryAbstract {
+public class ResolveAnnotationFacetFactory extends FacetFactoryAbstract {
 
-    public CommonlyUsedAnnotationFacetFactory() {
+    public ResolveAnnotationFacetFactory() {
         super(FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final CommonlyUsed annotation = Annotations.getAnnotation(processMethodContext.getMethod(), CommonlyUsed.class);
+        final Resolve annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Resolve.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
-    private CommonlyUsedFacet create(final CommonlyUsed annotation, final FacetHolder holder) {
-        return annotation == null ? null : new CommonlyUsedFacetAnnotation(holder);
+    private ResolveFacet create(final Resolve annotation, final FacetHolder holder) {
+        return annotation == null ? null : new ResolveFacetAnnotation(holder, annotation.value());
     }
 
 }

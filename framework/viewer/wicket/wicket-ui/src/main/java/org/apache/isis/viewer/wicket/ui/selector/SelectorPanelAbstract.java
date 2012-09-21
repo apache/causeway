@@ -34,7 +34,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.facets.members.commonlyused.CommonlyUsedFacet;
+import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -100,7 +100,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
 
         final OneToManyAssociation collection = 
                 entityCollectionModel.getCollectionMemento().getCollection();
-        return collection.containsDoOpFacet(CommonlyUsedFacet.class);
+        return collection.containsDoOpFacet(ResolveFacet.class);
     }
 
     private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {

@@ -19,18 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.members.commonlyused;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.applib.annotation.Resolve;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
-public abstract class CommonlyUsedFacetAbstract extends FacetAbstract implements CommonlyUsedFacet {
+/**
+ * Indicates that a class member should be resolved eagerly/lazily and so should
+ * be presented in the viewer in an appropriate manner.
+ * 
+ * <p>
+ * @see Resolve
+ */
+public interface ResolveFacet extends SingleValueFacet<Resolve.Type> {
 
-    public static Class<? extends Facet> type() {
-        return CommonlyUsedFacet.class;
-    }
-
-    public CommonlyUsedFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
-    }
-    
 }

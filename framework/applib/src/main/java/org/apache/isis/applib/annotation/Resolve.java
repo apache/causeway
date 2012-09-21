@@ -26,21 +26,26 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a class member is commonly used and so should
- * be presented in the viewer in an appropriate manner.
+ * Indicates that the resolving (loading from the datastore) of 
+ * a property or collection should be performed lazily or eagerly.
  * 
  * <p>
- * For example, an <tt>Order#lineItems</tt> collection might be 
- * &quot;opened&quot; automatically so that the user could see a list of
+ * By default, collections and reference properties are resolved
+ * lazily, while value properties are resolved eagerly.
+ * 
+ * <p>
+ * Using this annotation, an <tt>Order#lineItems</tt> collection might be
+ * resolved eagerly.  A viewer might use this hint to &quot;open&quot; 
+ * the collection automatically so that the user could see a list of
  * line items immediately when the order is rendered.
  * 
  * <p>
- * Or, a property containing an <tt>Address</tt> might show the referenced
- * address as an embeddded property.
+ * Or, a reference property containing an <tt>Address</tt> might be shown
+ * address as an embedded property.
  *
  * <p>
- * Or, an action <tt>Submit</tt> might be rendered as a button rather than
- * buried inside a submenu somewhere.
+ * Or, a value property might be annotated to resolve lazily; this would be
+ * suitable for handling of BLOBs and CLOBs.
  * 
  * <p>
  * For properties and collections there is some similarity between this concept 
@@ -51,6 +56,15 @@ import java.lang.annotation.Target;
 @Inherited
 @Target( ElementType.METHOD )
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommonlyUsed {
+public @interface Resolve {
 
+    public enum Type {
+        EAGERLY,
+        LAZILY
+    }
+
+    /**
+     * How to resolve; by default {@value Type#EAGERLY}.
+     */
+    Type value() default Type.EAGERLY;
 }

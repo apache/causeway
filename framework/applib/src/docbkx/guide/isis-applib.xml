@@ -6074,52 +6074,6 @@ public class County {
         </note>
       </sect1>
 
-      <sect1>
-        <title>@CommonlyUsed</title>
-
-        <para>The <classname>@CommonlyUsed</classname> annotation indicates
-        that a class member is likely to be used frequently by an end user and
-        so should be presented in the viewer in an appropriate manner:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>an <classname>Order</classname>'s
-            <methodname>lineItems</methodname> collection might initially be
-            rendered expanded form so that the user could see a list of line
-            items immediately when the order is rendered.</para>
-          </listitem>
-
-          <listitem>
-            <para>a property of type <classname>Address</classname> might show
-            the details of the referenced <classname>Address</classname> in a
-            box</para>
-          </listitem>
-
-          <listitem>
-            <para>an action <methodname>submit()</methodname> might be
-            rendered as a button rather than * buried inside a submenu
-            somewhere.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Order {
-    @CommonlyUsed
-    public List&lt;LineItem&gt; getDetails() { ... }
-
-    @CommonlyUsed
-    public void submit() { ... }
-    ...
-}</programlisting>
-
-        <para>For properties and collections there is some similarity between
-        this concept and that of eager-loading as supported by some object
-        stores. Indeed, some object stores may choose use their own specific
-        annotations (eg a JDO default fetch group) in order to infer this
-        semantic.</para>
-      </sect1>
-
       <sect1 id="sec.DebugAnnotation">
         <title>@Debug</title>
 
@@ -7481,6 +7435,52 @@ public class Child {
 public class EmailAddress {
    ...
 y}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>@Resolve</title>
+
+        <para>The <classname>@Resolve</classname> annotation is a hint for
+        properties and collections to indicate that a value property should be
+        resolved lazily (rather than eagerly, as usual), or that a reference
+        property or collection should be resolved eagerly (rather than lazily,
+        as usual).</para>
+
+        <para>Viewers can use this to present the property/collection in an
+        appropriate manner:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>an <classname>Order</classname>'s
+            <methodname>lineItems</methodname> collection might initially be
+            rendered expanded form so that the user could see a list of line
+            items immediately when the order is rendered.</para>
+          </listitem>
+
+          <listitem>
+            <para>a (reference) property of type
+            <classname>Address</classname> might show the details of the
+            referenced <classname>Address</classname> in a box</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>At the same time, an object store might use this to defer lazy
+        loading of values that represent blobs or clobs.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Order {
+    @Resolve(Type.EAGERLY)
+    public List&lt;LineItem&gt; getDetails() { ... }
+
+    ...
+}</programlisting>
+
+        <para>For properties and collections there is some similarity between
+        this concept and that of eager-loading as supported by some object
+        stores. Indeed, some object stores may choose use their own specific
+        annotations (eg a JDO default fetch group) in order to infer this
+        semantic.</para>
       </sect1>
 
       <sect1 id="sec.TitleAnnotation">

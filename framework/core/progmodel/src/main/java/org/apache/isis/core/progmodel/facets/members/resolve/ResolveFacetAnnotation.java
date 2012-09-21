@@ -17,15 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.members.commonlyused;
+package org.apache.isis.core.progmodel.facets.members.resolve;
 
+import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.commonlyused.CommonlyUsedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacetAbstract;
 
-public class CommonlyUsedFacetAnnotation extends CommonlyUsedFacetAbstract {
+public class ResolveFacetAnnotation extends ResolveFacetAbstract {
 
-    public CommonlyUsedFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public ResolveFacetAnnotation(final FacetHolder holder, Resolve.Type value) {
+        super(value, holder);
     }
 
 }
