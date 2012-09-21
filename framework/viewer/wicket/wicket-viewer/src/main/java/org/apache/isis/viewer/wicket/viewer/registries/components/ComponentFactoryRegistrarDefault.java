@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.ServiceLoader;
 
 import com.google.inject.Singleton;
@@ -78,8 +76,8 @@ import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFact
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2Factory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2ComponentFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -225,11 +223,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new ValuePanelFactory());
 
         // or for choices
-        componentFactories.add(new ValueChoicesComponentFactory());
+        componentFactories.add(new ValueChoicesSelect2ComponentFactory());
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityLinkFactory());
+        componentFactories.add(new EntityLinkSelect2Factory());
     }
 
     protected void addComponentFactoriesForVoidReturn(final ComponentFactoryList componentFactories) {

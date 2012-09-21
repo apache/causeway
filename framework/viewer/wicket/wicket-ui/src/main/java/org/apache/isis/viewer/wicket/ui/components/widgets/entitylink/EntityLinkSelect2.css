@@ -20,6 +20,10 @@ div.entityLink  {
 	display: inline
 }
 
+div.entityLink > div {
+	margin-left: 2px;
+}
+
 .entityLink .entityImage {
 	width: 16px;
 	height: 16px;
@@ -84,6 +88,4 @@ a.entityDetailsLink:hover {
 	display:none; /* don't nest forever */
 }
 
-input.autoComplete {
-	margin-bottom: 5px;
-}
+

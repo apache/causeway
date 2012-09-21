@@ -99,7 +99,10 @@
 			<artifactId>wicket-guice</artifactId>
 		</dependency>
 
-
+		<dependency>
+		    <groupId>com.vaynberg.wicket.select2</groupId>
+		    <artifactId>wicket-select2</artifactId>
+		</dependency>
 
 		<!-- LOGGING DEPENDENCIES - LOG4J -->
 

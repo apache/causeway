@@ -17,38 +17,39 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
+package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
-public class EntityLinkFactory extends ComponentFactoryAbstract {
+public class ValueChoicesSelect2ComponentFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityLinkFactory() {
-        super(ComponentType.ENTITY_LINK);
+    public ValueChoicesSelect2ComponentFactory() {
+        super(ComponentType.SCALAR_NAME_AND_VALUE);
     }
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof EntityModel)) {
+        if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final EntityModel entityModel = (EntityModel) model;
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        return appliesIf(specification != null && !specification.containsFacet(ValueFacet.class));
+        final ScalarModel scalarModel = (ScalarModel) model;
+        final boolean hasChoices = !scalarModel.getChoices().isEmpty();
+        return appliesIf(hasChoices);
     }
 
+    int choiceCount = 0;
+
     @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
-        return new EntityLink(id, entityModel);
+    public final Component createComponent(final String id, final IModel<?> model) {
+        final ScalarModel scalarModel = (ScalarModel) model;
+        return new ValueChoicesSelect2(id, scalarModel);
     }
+
 }

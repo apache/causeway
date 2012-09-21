@@ -16,9 +16,17 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
+import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.vaynberg.wicket.select2.ChoiceProvider;
+import com.vaynberg.wicket.select2.Select2Choice;
+import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
@@ -33,16 +41,16 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropDownChoicesForValueMementos;
 
 /**
  * Initial skeleton - trying to add support for value choices.
  */
-public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
-    private static final Logger LOG = Logger.getLogger(ValueChoices.class);
+public class ValueChoicesSelect2 extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
+    private static final Logger LOG = Logger.getLogger(ValueChoicesSelect2.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -57,7 +65,7 @@ public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldA
     private FormComponent<ObjectAdapterMemento> valueField;
     private ObjectAdapterMemento pending;
 
-    public ValueChoices(final String id, final ScalarModel scalarModel) {
+    public ValueChoicesSelect2(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         pending = scalarModel.getObjectAdapterMemento();
     }
@@ -66,7 +74,7 @@ public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldA
     protected FormComponentLabel addComponentForRegular() {
 
         final IModel<ObjectAdapterMemento> modelObject = createModel();
-        final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
+        final IModel<List<ObjectAdapterMemento>> choicesMementos = getChoicesModel();
         valueField = createDropDownChoices(choicesMementos, modelObject);
 
         addStandardSemantics();
@@ -95,7 +103,7 @@ public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldA
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("TextField: pending is null");
                 }
-                final ObjectAdapter adapter = ValueChoices.this.getModelValue();
+                final ObjectAdapter adapter = ValueChoicesSelect2.this.getModelValue();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
 
@@ -145,8 +153,6 @@ public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldA
         labelIfRegular.add(scalarName);
         labelIfRegular.add(valueField);
 
-        // scalarNameAndValue.add(dropDownChoicesForValueMementos);
-
         return labelIfRegular;
     }
 
@@ -162,10 +168,56 @@ public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldA
         return scalarModel.getObject();
     }
 
-    private DropDownChoicesForValueMementos createDropDownChoices(final IModel<List<? extends ObjectAdapterMemento>> choicesMementos, final IModel<ObjectAdapterMemento> modelObject) {
+    private FormComponent<ObjectAdapterMemento> createDropDownChoices(final IModel<List<ObjectAdapterMemento>> choicesMementos, final IModel<ObjectAdapterMemento> modelObject) {
         final String id = ID_VALUE_ID;
-        DropDownChoicesForValueMementos dropDownChoices = new DropDownChoicesForValueMementos(id, modelObject, choicesMementos);
-        return dropDownChoices;
+        
+        ChoiceProvider<ObjectAdapterMemento> provider = new TextChoiceProvider<ObjectAdapterMemento>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected String getDisplayText(ObjectAdapterMemento choice) {
+                
+                final ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                return objectAdapter.titleString();
+            }
+
+            @Override
+            protected Object getId(ObjectAdapterMemento choice) {
+                final ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                return objectAdapter.getObject().toString(); // toString of each value acts as its the key
+            }
+
+            @Override
+            public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapterMemento> response) {
+                response.addAll(choicesMementos.getObject());
+            }
+
+            @Override
+            public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
+                final List<ObjectAdapterMemento> mementos = choicesMementos.getObject();
+                Predicate<ObjectAdapterMemento> predicate = new Predicate<ObjectAdapterMemento>() {
+
+                    @Override
+                    public boolean apply(ObjectAdapterMemento input) {
+                        final String id = (String) getId(input);
+                        return ids.contains(id);
+                    }
+                };
+                return Collections2.filter(mementos, predicate); 
+            }
+
+        };
+        return new Select2Choice<ObjectAdapterMemento>(id, modelObject, provider) {
+
+            private static final long serialVersionUID = 1L;
+            
+//            @Override
+//            protected void convertInput() {
+//                super.convertInput();
+//                modelObject.setObject(getConvertedInput());
+//            }
+        };
     }
 
     @Override
@@ -178,14 +230,22 @@ public class ValueChoices extends ScalarPanelAbstract { // ScalarPanelTextFieldA
         valueField.setEnabled(true);
     }
 
-    private IModel<List<? extends ObjectAdapterMemento>> getChoicesModel() {
+    private IModel<List<ObjectAdapterMemento>> getChoicesModel() {
         final List<ObjectAdapter> choices = scalarModel.getChoices();
         if (choices.size() == 0) {
             return null;
         }
+        
         // take a copy otherwise is only lazily evaluated
         final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
-        return Model.ofList(choicesMementos);
+        
+        return new ModelAbstract<List<ObjectAdapterMemento>>(choicesMementos){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected List<ObjectAdapterMemento> load() {
+                return getObject();
+            }};
     }
 
 }

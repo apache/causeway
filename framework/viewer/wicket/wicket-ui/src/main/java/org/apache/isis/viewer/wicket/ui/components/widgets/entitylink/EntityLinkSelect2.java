@@ -19,23 +19,30 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
+import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.vaynberg.wicket.select2.ChoiceProvider;
+import com.vaynberg.wicket.select2.Select2Choice;
+import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -45,6 +52,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -52,32 +60,29 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices.DropDownChoicesForObjectAdapterMementos;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-/**
- * {@link FormComponentPanel} representing a reference to an entity: a link and
- * a findUsing button.
- */
-public class EntityLink extends EntityLinkAbstract {
+public class EntityLinkSelect2 extends EntityLinkAbstract {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_AUTO_COMPLETE = "autoComplete";
 
-    protected static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
+    private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_OID = "entityOid";
-    protected static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
-    private static final String ID_CHOICES = "choices";
-    protected static final String ID_FIND_USING = "findUsing";
-    protected static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
-    protected static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
-    protected static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
+    private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
+    private static final String ID_FIND_USING = "findUsing";
+    private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
+    private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
+    private static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
     private static final String ID_ENTITY_DETAILS = "entityDetails";
 
     private static final String ID_FEEDBACK = "feedback";
 
     private final FindUsingLinkFactory linkFactory;
 
-    
+    private Select2Choice<ObjectAdapterMemento> autoCompleteField;
+
+
     private WebMarkupContainer findUsing;
     private Link<String> entityDetailsLink;
     private Link<String> entityClearLink;
@@ -95,7 +100,7 @@ public class EntityLink extends EntityLinkAbstract {
     private TextField<ObjectAdapterMemento> pendingOid;
 
 
-    public EntityLink(final String id, final EntityModel entityModel) {
+    public EntityLinkSelect2(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         setType(ObjectAdapter.class);
         linkFactory = new FindUsingLinkFactory(this);
@@ -128,7 +133,7 @@ public class EntityLink extends EntityLinkAbstract {
                 if (hasPending) {
                     return pending;
                 }
-                final ObjectAdapter adapter = EntityLink.this.getModelObject();
+                final ObjectAdapter adapter = EntityLinkSelect2.this.getModelObject();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
 
@@ -198,13 +203,33 @@ public class EntityLink extends EntityLinkAbstract {
             entityDetailsLink.setVisible(getEntityModel().getRenderingHint() == RenderingHint.REGULAR);
         }
         
-        doSyncVisibilityAndUsability(mutability);
+        if(autoCompleteField != null) {
+            autoCompleteField.setEnabled(mutability);
+        }
+        
+        if(hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
+            
+            if(getEntityModel().isEditMode()) {
+                // TODO: haven't figured out how to keep in sync..
+                permanentlyHide(ID_ENTITY_DETAILS_LINK);
+            }
+        }
     }
 
-    /**
-     * Optional hook
-     */
     protected void doSyncVisibilityAndUsability(boolean mutability) {
+        if(autoCompleteField != null) {
+            autoCompleteField.setEnabled(mutability);
+        }
+
+        if(hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
+            
+            if(getEntityModel().isEditMode()) {
+                // TODO: haven't figured out how to keep in sync..
+                permanentlyHide(ID_ENTITY_DETAILS_LINK);
+            }
+        }
     }
 
     /**
@@ -221,17 +246,15 @@ public class EntityLink extends EntityLinkAbstract {
     @Override
     protected void convertInput() {
 
-        doConvertInput();
+        if(getEntityModel().isEditMode() && hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+            // flush changes to pending
+            onSelected(autoCompleteField.getConvertedInput().getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+        }
 
         final ObjectAdapter pendingAdapter = getPendingAdapter();
         setConvertedInput(pendingAdapter);
     }
 
-    /**
-     * Optional hook
-     */
-    protected void doConvertInput() {
-    }
 
     private ObjectAdapter getPendingAdapter() {
         final ObjectAdapterMemento memento = pendingOid.getModelObject();
@@ -247,66 +270,132 @@ public class EntityLink extends EntityLinkAbstract {
     private void syncWithInput() {
         final ObjectAdapter adapter = getPendingElseCurrentAdapter();
 
-        final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
-        if (choicesMementos != null) {
+        syncLinkWithInput(adapter);
 
-            // choices drop-down
-            final IModel<ObjectAdapterMemento> modelObject = pendingOid.getModel();
-            final DropDownChoicesForObjectAdapterMementos dropDownChoices = new DropDownChoicesForObjectAdapterMementos(ID_CHOICES, modelObject, choicesMementos);
-            addOrReplace(dropDownChoices);
-            dropDownChoices.setEnabled(getEntityModel().isEditMode());
+        // represent no object by a simple label displaying '(null)'
+        syncEntityTitleNullWithInput(adapter);
 
-            // no need for link, since can see in drop-down
-            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
+        syncEntityClearLinksWithInput(adapter);
 
-            // no need for the 'null' title, since if there is no object yet
-            // can represent this fact in the drop-down
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
-            
-            // hide links
-            permanentlyHide(ID_FIND_USING, ID_ENTITY_CLEAR_LINK);
-            doSyncWithInputWhenChoices();
-        } else {
-
-            // choices drop-down
-            permanentlyHide(ID_CHOICES);
-
-            // show link if have value
-            syncLinkWithInput(adapter);
-
-            // represent no object by a simple label displaying '(null)'
-            syncEntityTitleNullWithInput(adapter);
-
-            // link
-            syncEntityClearLinksWithInput(adapter);
-        }
-
-
-        doSyncWithInputOther();
+        doSyncWithInputIfAutoCompleteOrChoices();
         
         syncEntityDetailsLinksWithInput(adapter);
         syncEntityDetailsWithInput(adapter);
 
-
         syncVisibilityAndUsability();
     }
 
+    private void doSyncWithInputIfAutoCompleteOrChoices() {
+        
+        if(!hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+            permanentlyHide(ID_AUTO_COMPLETE);
+            return;
+        }
+        
+        final ChoiceProvider<ObjectAdapterMemento> provider = 
+                hasChoices() 
+                    ? providerForChoices(getEntityModel()) 
+                    : providerForAutoComplete(getEntityModel());
 
-    /**
-     * Optional hook
-     */
-    protected void doSyncWithInputWhenChoices() {
+        final ModelAbstract<ObjectAdapterMemento> model = new ModelAbstract<ObjectAdapterMemento>(){
+            private static final long serialVersionUID = 1L;
+            
+            @Override
+            protected ObjectAdapterMemento load() {
+                return ObjectAdapterMemento.createOrNull(getPendingElseCurrentAdapter());
+            }
+            
+        };
+        autoCompleteField = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model, provider);
+        addOrReplace(autoCompleteField);
+        
+        // no need for link, since can see in drop-down
+        permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
+
+        // no need for the 'null' title, since if there is no object yet
+        // can represent this fact in the drop-down
+        permanentlyHide(ID_ENTITY_TITLE_NULL);
+        
+        // hide links
+        permanentlyHide(ID_FIND_USING);
+    }
+
+    abstract static class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        protected String getDisplayText(ObjectAdapterMemento choice) {
+            return choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString();
+        }
+
+        @Override
+        protected Object getId(ObjectAdapterMemento choice) {
+            return choice.toString();
+        }
+
+        @Override
+        public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapterMemento> response) {
+            
+            List<ObjectAdapterMemento> mementos = obtainMementos(term);
+            response.addAll(mementos);
+        }
+
+        protected abstract List<ObjectAdapterMemento> obtainMementos(String term);
+
+        @Override
+        public Collection<ObjectAdapterMemento> toChoices(Collection<String> ids) {
+            Function<String, ObjectAdapterMemento> function = new Function<String, ObjectAdapterMemento>() {
+
+                @Override
+                public ObjectAdapterMemento apply(String input) {
+                    final RootOid oid = RootOidDefault.deString(input, ObjectAdapterMemento.getOidMarshaller());
+                    return ObjectAdapterMemento.createPersistent(oid);
+                }
+            };
+            return Collections2.transform(ids, function);
+        }
     }
 
     /**
-     * Optional hook
+     * @param entityModel - serializable, referenced by the AutoCompletionChoicesProvider below 
      */
-    protected void doSyncWithInputOther() {
+    private static ChoiceProvider<ObjectAdapterMemento> providerForAutoComplete(final EntityModel entityModel) {
+        return new ObjectAdapterMementoProviderAbstract() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
+                final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+                final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
+                return Lists.transform(results, Mementos.fromAdapter());
+            }
+
+        };
     }
 
-    protected ObjectAdapter getPendingElseCurrentAdapter() {
-        return hasPending ? getPendingAdapter() : getEntityModel().getObject();
+    /**
+     * @param entityModel - serializable, referenced by the AutoCompletionChoicesProvider below 
+     */
+    private static ChoiceProvider<ObjectAdapterMemento> providerForChoices(final EntityModel entityModel) {
+        return new ObjectAdapterMementoProviderAbstract() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                final ScalarModel scalarModel = (ScalarModel) entityModel;
+                final List<ObjectAdapter> choices = scalarModel.getChoices();
+                if (choices.size() == 0) {
+                    return null;
+                }
+                // take a copy otherwise is only lazily evaluated
+                return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+            }
+        };
     }
+
 
     private void syncLinkWithInput(final ObjectAdapter adapter) {
         if (adapter != null) {
@@ -335,7 +424,6 @@ public class EntityLink extends EntityLinkAbstract {
             @Override
             public void onClick() {
                 getEntityModel().toggleDetails();
-                doSyncEntityDetailsOnClick();
             }
 
         };
@@ -343,11 +431,6 @@ public class EntityLink extends EntityLinkAbstract {
         entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
     }
 
-    /**
-     * Optional hook
-     */
-    protected void doSyncEntityDetailsOnClick() {
-    }
 
     private void syncEntityClearLinksWithInput(final ObjectAdapter adapter) {
         if (adapter == null) {
@@ -381,21 +464,6 @@ public class EntityLink extends EntityLinkAbstract {
         } else {
             permanentlyHide(ID_ENTITY_DETAILS);
         }
-    }
-
-    private IModel<List<? extends ObjectAdapterMemento>> getChoicesModel() {
-        final EntityModel entityModel = getEntityModel();
-        if (entityModel instanceof ScalarModel) {
-            final ScalarModel scalarModel = (ScalarModel) entityModel;
-            final List<ObjectAdapter> choices = scalarModel.getChoices();
-            if (choices.size() == 0) {
-                return null;
-            }
-            // take a copy otherwise is only lazily evaluated
-            final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
-            return Model.ofList(choicesMementos);
-        }
-        return null;
     }
 
     private void addOrReplaceIconAndTitle(ObjectAdapter pendingOrCurrentAdapter) {
@@ -449,7 +517,38 @@ public class EntityLink extends EntityLinkAbstract {
         this.pending = null;
     }
 
+    private ObjectAdapter getPendingElseCurrentAdapter() {
+        return hasPending ? getPendingAdapter() : getEntityModel().getObject();
+    }
+
     private void renderSamePage() {
         setResponsePage(getPage());
     }
+    
+    private boolean hasAutoCompleteOrChoicesAndNotCompactRendering() {
+        // doesn't apply in compact rendering contexts (ie tables)
+        if(getEntityModel().getRenderingHint() == RenderingHint.COMPACT) {
+            return false;
+        }
+        return hasChoices() || hasAutoComplete();
+    }
+
+    private boolean hasChoices() {
+        final EntityModel entityModel = getEntityModel();
+        if (!(entityModel instanceof ScalarModel)) {
+            return false;
+        } 
+        final ScalarModel scalarModel = (ScalarModel) entityModel;
+        final List<ObjectAdapter> choices = scalarModel.getChoices();
+        return choices.size() == 0 ? false : true;
+    }
+
+    private boolean hasAutoComplete() {
+        final ObjectSpecification typeOfSpecification = getEntityModel().getTypeOfSpecification();
+        final AutoCompleteFacet autoCompleteFacet = 
+                (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
+        return autoCompleteFacet != null;
+    }
+    
+    
 }

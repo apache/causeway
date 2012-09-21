@@ -24,7 +24,7 @@
       lang="en">
 	<wicket:head>
 		<wicket:link>
-			<link href="EntityLink.css" rel="stylesheet" type="text/css"/>
+			<link href="EntityLinkSelect2.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
 	</wicket:head>
 	<body>
@@ -32,8 +32,8 @@
 			<div class="entityLink">
 				<input type="text" wicket:id="entityOid"/>
 				
-				<select wicket:id="choices"/>
 				<div>
+					<input wicket:id="autoComplete" type="hidden" class="autoComplete" />
 					<span wicket:id="entityIconAndTitle">[icon and title]</span>
 					<span wicket:id="entityTitleNull">(null)</span>
 					<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">

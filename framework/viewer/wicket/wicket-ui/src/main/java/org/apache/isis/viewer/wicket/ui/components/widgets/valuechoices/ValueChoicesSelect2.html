@@ -22,45 +22,25 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<wicket:head>
+	<head>
 		<wicket:link>
-			<link href="EntityLink.css" rel="stylesheet" type="text/css"/>
+			<link href="ValueChoicesSelect2.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
-	</wicket:head>
+	</head>
 	<body>
 		<wicket:panel>
-			<div class="entityLink">
-				<input type="text" wicket:id="entityOid"/>
+			<div class="string scalarPanel">
+				<label for="scalarValue" wicket:id="scalarIfRegular">
+					
+					<span wicket:id="scalarName" class="scalarName">[Label text]</span>
+	      			<span class="scalarValue">
+	      				<input wicket:id="valueId" type="hidden" class="choices" />
+					</span>
+				</label>
+			
+				<label wicket:id="scalarIfCompact"></label>
+      			<span wicket:id="feedback"></span>
 				
-				<select wicket:id="choices"/>
-				<input wicket:id="autoComplete" type="hidden" class="autoComplete" />
-				<div>
-					<span wicket:id="entityIconAndTitle">[icon and title]</span>
-					<span wicket:id="entityTitleNull">(null)</span>
-					<a href="#" wicket:id="entityDetailsLink" class="entityDetailsLink">
-						<span wicket:id="entityDetailsLinkLabel">[+/-]</span>
-					</a>
-					<div class="findUsingClearDetails">
-						<table wicket:id="findUsing" class="findUsing">
-				   			<tbody>
-				      			<tr>
-									<td>
-						      			<span wicket:id="action">[find using...]</span>
-					      			</td>
-				     			</tr>
-			     			</tbody>
-			  			</table>
-							<a href="#" wicket:id="entityClearLink" class="entityClearLink">
-								<span>clear</span>
-							</a>
-					</div>
-				    <div class="clear"/>
-		  			<div wicket:id="entityDetails" class="entityDetails">
-				</div>
-	  			</div>
-			    <div class="feedbackPanel">
-			        <span wicket:id="feedback"/>
-			    </div>
 			</div>
 		</wicket:panel>
 	</body>
