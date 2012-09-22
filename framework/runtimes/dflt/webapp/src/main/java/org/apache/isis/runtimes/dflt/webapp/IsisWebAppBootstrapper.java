@@ -34,7 +34,10 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
@@ -79,8 +82,18 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final String webInfDir = servletContext.getRealPath("/WEB-INF");
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
-            // will load either from WEB-INF or from the classpath.
-            final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(new ResourceStreamSourceForWebInf(servletContext), ResourceStreamSourceContextLoaderClassPath.create());
+            String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
+            ResourceStreamSourceComposite compositeSource = null;
+            if ( configLocation == null ) {
+              LOG.info( "Config override location: No override location configured!" );
+              compositeSource = new ResourceStreamSourceComposite(ResourceStreamSourceContextLoaderClassPath.create(), new ResourceStreamSourceForWebInf(servletContext));
+            } else {
+              LOG.info( "Config override location: " + configLocation );
+              ResourceStreamSource configSourceStream = ResourceStreamSourceFileSystem.create(configLocation);
+              compositeSource = new ResourceStreamSourceComposite(ResourceStreamSourceContextLoaderClassPath.create(), new ResourceStreamSourceForWebInf(servletContext), configSourceStream);              
+            }
+            // will load either from WEB-INF, from the classpath or from config directory.
+            final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
 
             primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
 

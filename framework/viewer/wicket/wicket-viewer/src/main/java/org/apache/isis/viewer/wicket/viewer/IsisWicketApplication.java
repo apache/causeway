@@ -53,8 +53,10 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule;
@@ -79,6 +81,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebS
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
+import org.apache.log4j.Logger;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -122,6 +125,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
 public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(IsisWicketApplication.class);
 
     /**
      * Convenience locator, downcasts inherited functionality.

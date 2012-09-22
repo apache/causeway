@@ -23,6 +23,27 @@
 
     <display-name>Quickstart Wicket app</display-name>
 
+    <!-- which configuration directory to read overloaded property files from -->
+    <!-- 
+    Normally configuration like this should be done from outside your web 
+    application. Especially if your configuration is not know in advance or
+    if it can change depending on where the application gets deployed.
+    
+    For instance to configure this in Tomcat outside the application WAR add
+    the following line to your application context ( For more detail see:
+    http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters )
+     
+    <Parameter name="isis.config.dir" value="/usr/local/tomcat/conf/"
+         override="true"/>
+         
+    If your configuration directory is fixed you can enable the following 
+    context parameter in here and forget about the outside part.
+         
+    <context-param>
+      <param-name>isis.config.dir</param-name>
+      <param-value>location of your config directory if fixed</param-value>
+    </context-param>
+    -->
 
     <!-- cache static resources for 1 day -->
     <filter>
