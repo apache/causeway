@@ -39,6 +39,7 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInte
     private static final long serialVersionUID = 1L;
     private static final String ID_SCALAR_VALUE = "scalarValue";
     
+    @SuppressWarnings({ "rawtypes", "unused" })
     private static final IConverter CONVERTER = new AbstractIntegerConverter() {
         private static final long serialVersionUID = 1L;
         @Override

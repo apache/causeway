@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.action;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel.Mode;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -33,22 +34,30 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class ActionPage extends PageAbstract {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
-    public ActionPage(final ActionModel actionModel) {
+    public ActionPage(final ActionModel model) {
         super(new PageParameters(), ComponentType.ACTION);
-        addChildComponents(actionModel);
+        addChildComponents(model);
+
+        bookmarkPage(model);
+        addBreadcrumbs();
     }
 
     public ActionPage(final PageParameters pageParameters) {
         super(pageParameters, ComponentType.ACTION);
-        final IModel<?> model = buildModel();
+        final ActionModel model = buildModel();
         addChildComponents(model);
+        
+        // no need to bookmark because the ActionPanel will have done so for us
+        addBreadcrumbs();
     }
 
-    private IModel<?> buildModel() {
+
+    private ActionModel buildModel() {
         return ActionModel.createForPersistent(getPageParameters());
     }
-
 }

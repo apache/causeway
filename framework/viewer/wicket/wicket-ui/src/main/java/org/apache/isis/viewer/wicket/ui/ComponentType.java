@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.util.Strings;
 
 /**
@@ -122,6 +123,10 @@ public enum ComponentType {
      */
     ACTION,
     /**
+     * Bookmarked link to invoke an action
+     */
+    ACTION_LINK,
+    /**
      * A collection of entities (the value of)
      */
     COLLECTION_CONTENTS,
@@ -136,7 +141,11 @@ public enum ComponentType {
     /**
      * A void result from an action.
      */
-    VOID_RETURN, 
+    VOID_RETURN,
+    /**
+     * A list of {@link IsisModel}s, rendered as a list of links.
+     */
+    RECENT_PAGES, 
     /**
      * Place holder for a component used to represent an unknown model;
      * not used for matching, since the {@link ComponentFactory} implementation

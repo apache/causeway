@@ -19,6 +19,14 @@
 
 package org.apache.isis.viewer.wicket.model.mementos;
 
+import java.util.List;
+import org.apache.wicket.util.string.StringValue;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -52,7 +60,7 @@ public enum PageParameterNames {
     /**
      * 
      */
-    ACTION_NAME_PARMS, 
+    ACTION_ID, 
     
     /**
      * 
@@ -71,7 +79,22 @@ public enum PageParameterNames {
      * In the format N=OBJECT_OID, where N is the 0-based action parameter
      * index.
      */
-    ACTION_PARAM_CONTEXT;
+    ACTION_PARAM_CONTEXT,
+
+    /**
+     * To render as the page title
+     */
+    PAGE_TITLE,
+
+    /**
+     * Whether this bookmarks an action or entity, etc, as per {@link BookmarkablePageType}.
+     */
+    PAGE_TYPE,
+    
+    /**
+     * Action argument(s), if known.
+     */
+    ACTION_ARGS;
 
     /**
      * Returns the {@link #name()} formatted as
@@ -85,13 +108,37 @@ public enum PageParameterNames {
         return Strings.toCamelCase(name());
     }
 
-    public String getFrom(final PageParameters pageParameters) {
-        //return pageParameters.getString(this.toString());
-        return pageParameters.get(this.toString()).toString();
+    public String getStringFrom(final PageParameters pageParameters) {
+        return getStringFrom(pageParameters, null);
     }
 
-    public void addTo(final PageParameters pageParameters, final String value) {
+    public String getStringFrom(PageParameters pageParameters, String defaultValue) {
+        return pageParameters.get(this.toString()).toString(defaultValue);
+    }
+
+    public <T extends Enum<T>> T getEnumFrom(PageParameters pageParameters, Class<T> enumClass) {
+        String value = getStringFrom(pageParameters);
+        return value != null? Enum.valueOf(enumClass, value): null;
+    }
+
+    public List<String> getListFrom(PageParameters pageParameters) {
+        return Lists.transform(pageParameters.getValues(this.toString()), new Function<StringValue, String>() {
+            @Override
+            public String apply(@Nullable StringValue input) {
+                return input.toString();
+            }
+        });
+    }
+
+
+    public void addStringTo(final PageParameters pageParameters, final String value) {
         pageParameters.add(this.toString(), value);
     }
+
+    public void addEnumTo(final PageParameters pageParameters, final Enum<?> someEnum) {
+        addStringTo(pageParameters, someEnum.name());
+    }
+
+
 
 }

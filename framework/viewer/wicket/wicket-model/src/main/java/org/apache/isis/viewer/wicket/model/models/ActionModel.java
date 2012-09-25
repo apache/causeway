@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,9 +57,11 @@ import org.apache.isis.viewer.wicket.model.util.ActionParams;
  * action's {@link Mode#PARAMETERS parameters}, or the handling of the
  * {@link Mode#RESULTS results} once invoked.
  */
-public class ActionModel extends ModelAbstract<ObjectAdapter> {
+public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final String NULL_ARG = "$nullArg$";
 
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
@@ -103,31 +107,65 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
      * see {@link #ActionModel(PageParameters)}
      */
     public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode) {
-        final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
-
-        final String actionType = objectAction.getType().name();
-        final String actionNameParmsId = determineActionId(objectAction);
-
-        final Mode actionMode = determineActionMode(objectAction, contextAdapter);
-
-        PageParameterNames.ACTION_TYPE.addTo(pageParameters, actionType);
-        final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
-        if (actionOnTypeSpec != null) {
-            PageParameterNames.ACTION_OWNING_SPEC.addTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
+        
+        final boolean persistent = adapter.representsPersistent();
+        if (!persistent) {
+            // REVIEW: can this happen?
+            return new PageParameters();
         }
 
-        PageParameterNames.ACTION_NAME_PARMS.addTo(pageParameters, actionNameParmsId);
-        PageParameterNames.ACTION_MODE.addTo(pageParameters, actionMode.name());
-        PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addTo(pageParameters, singleResultsMode.name());
+        final PageParameters pageParameters = createPageParameters(adapter, objectAction, singleResultsMode);
+
+        final Mode actionMode = determineActionMode(objectAction, contextAdapter);
+        PageParameterNames.ACTION_MODE.addEnumTo(pageParameters, actionMode);
 
         addActionParamContextIfPossible(objectAction, contextAdapter, pageParameters);
+        return pageParameters;
+    }
+
+    private static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode) {
+        final PageParameters pageParameters = new PageParameters();
+
+        final String oidStr = adapter.getOid().enString(getOidMarshaller());
+        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
+
+        final ActionType actionType = objectAction.getType();
+        final String actionId = determineActionId(objectAction);
+
+        PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ACTION);
+
+        PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
+        final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
+        if (actionOnTypeSpec != null) {
+            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
+        }
+
+        PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
+        
+        PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addEnumTo(pageParameters, singleResultsMode);
+
+        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionId);
+        return pageParameters;
+    }
+
+    public PageParameters asPageParameters() {
+        final ObjectAdapter adapter = getTargetAdapter();
+        final ObjectAction objectAction = getActionMemento().getAction();
+        final PageParameters pageParameters = createPageParameters(adapter, objectAction, SingleResultsMode.REDIRECT);
+        
+        // capture argument values
+        ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
+        for(ObjectAdapter argumentAdapter: argumentsAsArray) {
+            final String encodedArg = encodeArg(argumentAdapter);
+            PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);    
+        }
+        
         return pageParameters;
     }
 
     private static Mode determineActionMode(final ObjectAction objectAction, final ObjectAdapter contextAdapter) {
         return objectAction.promptForParameters(contextAdapter)?Mode.PARAMETERS:Mode.RESULTS;
     }
-    
 
 	private static void addActionParamContextIfPossible(final ObjectAction objectAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
         if (contextAdapter == null) {
@@ -140,20 +178,20 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         for (final ObjectActionParameter actionParam : objectAction.getParameters()) {
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
                 final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
-                PageParameterNames.ACTION_PARAM_CONTEXT.addTo(pageParameters, oidKeyValue);
+                PageParameterNames.ACTION_PARAM_CONTEXT.addStringTo(pageParameters, oidKeyValue);
                 return;
             }
             i++;
         }
     }
 
-    private static String determineActionId(final ObjectAction noAction) {
-        final Identifier identifier = noAction.getIdentifier();
+    private static String determineActionId(final ObjectAction objectAction) {
+        final Identifier identifier = objectAction.getIdentifier();
         if (identifier != null) {
             return identifier.toNameParmsIdentityString();
         }
         // fallback (used for action sets)
-        return noAction.getId();
+        return objectAction.getId();
     }
 
     public static Mode determineMode(final ObjectAction action) {
@@ -175,8 +213,9 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     private ActionExecutor executor;
 
     private ActionModel(final PageParameters pageParameters) {
-        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFor(pageParameters), singleResultsModeFor(pageParameters));
+        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), PageParameterNames.ACTION_MODE.getEnumFrom(pageParameters, Mode.class), PageParameterNames.ACTION_SINGLE_RESULTS_MODE.getEnumFrom(pageParameters, SingleResultsMode.class));
 
+        setArgumentsIfPossible(pageParameters);
         setContextArgumentIfPossible(pageParameters);
 
         // TODO: if #args < param count, then change the actionMode
@@ -193,27 +232,10 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     }
 
     private static ActionMemento newActionMementoFrom(final PageParameters pageParameters) {
-        return new ActionMemento(actionOwningSpecFor(pageParameters), actionTypeFor(pageParameters), actionNameParmsFor(pageParameters));
-    }
-
-    private static SingleResultsMode singleResultsModeFor(final PageParameters pageParameters) {
-        return SingleResultsMode.valueOf(PageParameterNames.ACTION_SINGLE_RESULTS_MODE.getFrom(pageParameters));
-    }
-
-    private static Mode actionModeFor(final PageParameters pageParameters) {
-        return Mode.valueOf(PageParameterNames.ACTION_MODE.getFrom(pageParameters));
-    }
-
-    private static String actionNameParmsFor(final PageParameters pageParameters) {
-        return PageParameterNames.ACTION_NAME_PARMS.getFrom(pageParameters);
-    }
-
-    private static ActionType actionTypeFor(final PageParameters pageParameters) {
-        return ActionType.valueOf(PageParameterNames.ACTION_TYPE.getFrom(pageParameters));
-    }
-
-    private static ObjectSpecId actionOwningSpecFor(final PageParameters pageParameters) {
-        return ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getFrom(pageParameters));
+        final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
+        final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
+        final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
+        return new ActionMemento(owningSpec, actionType, actionNameParms);
     }
 
     private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters) {
@@ -227,7 +249,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     }
 
     private static RootOid oidFor(final PageParameters pageParameters) {
-        String oidStr = PageParameterNames.OBJECT_OID.getFrom(pageParameters);
+        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
 
@@ -238,13 +260,27 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         this.singleResultsMode = singleResultsMode;
     }
 
+    private void setArgumentsIfPossible(final PageParameters pageParameters) {
+        List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
+
+        final ObjectAction action = actionMemento.getAction();
+        final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
+
+        for (int paramNum = 0; paramNum < args.size(); paramNum++) {
+            String encoded = args.get(paramNum);
+            setArgument(paramNum, parameterTypes.get(paramNum), encoded);
+        }
+    }
+
     private boolean setContextArgumentIfPossible(final PageParameters pageParameters) {
-        final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getFrom(pageParameters);
+        final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getStringFrom(pageParameters);
         if (paramContext == null) {
             return false;
         }
+
         final ObjectAction action = actionMemento.getAction();
-        final int parameterCount = action.getParameterCount();
+        final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
+        final int parameterCount = parameterTypes.size();
 
         final Map.Entry<Integer, String> mapEntry = parse(paramContext);
 
@@ -253,24 +289,55 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
             return false;
         }
 
-        RootOid oid;
+        final String encoded = mapEntry.getValue();
+        setArgument(paramNum, parameterTypes.get(paramNum), encoded);
+
+        return true;
+    }
+
+    private void setArgument(final int paramNum, final ObjectSpecification argSpec, final String encoded) {
+        final ObjectAdapter argumentAdapter = decodeArg(argSpec, encoded);
+        setArgument(paramNum, argumentAdapter);
+    }
+
+    private String encodeArg(ObjectAdapter adapter) {
+        if(adapter == null) {
+            return NULL_ARG;
+        }
+        
+        ObjectSpecification objSpec = adapter.getSpecification();
+        if(objSpec.isEncodeable()) {
+            EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
+            return encodeable.toEncodedString(adapter);
+        }
+        
+        return adapter.getOid().enString(getOidMarshaller());
+    }
+
+    private ObjectAdapter decodeArg(ObjectSpecification objSpec, String encoded) {
+        if(NULL_ARG.equals(encoded)) {
+            return null;
+        }
+        
+        if(objSpec.isEncodeable()) {
+            EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
+            return encodeable.fromEncodedString(encoded);
+        }
+        
         try {
-            oid = RootOidDefault.deStringEncoded(mapEntry.getValue(), getOidMarshaller());
+            final RootOid oid = RootOidDefault.deStringEncoded(encoded, getOidMarshaller());
+            return getAdapterManager().adapterFor(oid);
         } catch (final Exception e) {
-            return false;
+            return null;
         }
+    }
 
-        final ObjectAdapter argumentAdapter = getAdapterManager().adapterFor(oid);
-        if (argumentAdapter == null) {
-            return false;
-        }
-
+    private void setArgument(final int paramNum, final ObjectAdapter argumentAdapter) {
+        final ObjectAction action = actionMemento.getAction();
         final ObjectActionParameter actionParam = action.getParameters().get(paramNum);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
         final ScalarModel argumentModel = getArgumentModel(apm);
         argumentModel.setObject(argumentAdapter);
-
-        return true;
     }
 
     public static Entry<Integer, String> parse(final String paramContext) {
@@ -340,18 +407,6 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return actionMemento;
     }
 
-//    @Override
-//    public ObjectAdapter getObject() {
-//        return reExecute();
-//    }
-
-    private ObjectAdapter reExecute() {
-        detach(); // force re-execute
-        final ObjectAdapter result = super.getObject();
-        arguments.clear();
-        return result;
-    }
-
     @Override
     protected ObjectAdapter load() {
         
@@ -360,9 +415,6 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         
         final ObjectAdapter results = executeAction();
         this.actionMode = Mode.RESULTS;
-        
-        // from getObject()/reExecute
-        arguments.clear();
         
         return results;
     }
@@ -442,6 +494,9 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         this.actionMode = determineMode(actionMemento.getAction());
     }
 
+    public void clearArguments() {
+        arguments.clear();
+    }
     
     //////////////////////////////////////////////////
     // Dependencies (from context)
@@ -450,6 +505,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     protected static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
+
 
 
 }

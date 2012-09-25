@@ -27,9 +27,11 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.actions.params.ActionParametersFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActionsCssMenuFactory;
+import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTableFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.CollectionContentsAsIconsFactory;
@@ -127,6 +129,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForEntity(componentFactories);
         addComponentFactoriesForActionInfo(componentFactories);
         addComponentFactoriesForAction(componentFactories);
+        addComponentFactoriesForActionLink(componentFactories);
         addComponentFactoriesForEntityCollection(componentFactories);
         addComponentFactoriesForEntityCollectionContents(componentFactories);
         addComponentFactoriesForEmptyCollection(componentFactories);
@@ -135,10 +138,12 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForVoidReturn(componentFactories);
         addComponentFactoriesForValue(componentFactories);
         addComponentFactoriesForParameters(componentFactories);
+        addComponentFactoriesForBreadcrumbs(componentFactories);
         
         addComponentFactoriesForUnknown(componentFactories);
 
     }
+
 
     protected void addComponentFactoriesForSpecial(final ComponentFactoryList componentFactories) {
         componentFactories.add(new WizardPageDescriptionPanelFactory());
@@ -246,10 +251,17 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new ActionPanelFactory());
     }
 
+    protected void addComponentFactoriesForActionLink(final ComponentFactoryList componentFactories) {
+        componentFactories.add(new ActionLinkPanelFactory());
+    }
+
     protected void addComponentFactoriesForApplicationActions(final ComponentFactoryList componentFactories) {
         componentFactories.add(new AppActionsCssMenuFactory());
     }
 
+    protected void addComponentFactoriesForBreadcrumbs(ComponentFactoryList componentFactories) {
+        componentFactories.add(new BookmarkedPagesPanelFactory());
+    }
 
     protected void addComponentFactoriesForUnknown(final ComponentFactoryList componentFactories) {
         componentFactories.add(new UnknownModelPanelFactory());

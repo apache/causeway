@@ -33,6 +33,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class HomePage extends PageAbstract {
 
+    private static final long serialVersionUID = 1L;
+
     public HomePage() {
         super(new PageParameters(), ComponentType.WELCOME);
         final IModel<?> model = buildModel();

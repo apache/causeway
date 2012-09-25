@@ -19,20 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 
-/**
- * Specify the pages to use for each {@link PageType}.
- * 
- * <p>
- * The <tt>PageClassListDefault</tt> default implementation returns pages that
- * all inherit from {@link PageAbstract} and which (by component markup
- * inheritance) therefore define a set of CSS, along with the overall layout of
- * each pages. This interface can be used to selectively replace some or all of
- * these pages.
- */
-public interface PageClassList {
 
-    void registerPages(PageRegistrySpi pageRegistry);
+
+public interface BookmarkedPagesModelProvider  {
+    
+    BookmarkedPagesModel getBookmarkedPagesModel();
 
 }

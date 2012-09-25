@@ -17,15 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages;
+package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.WebPage;
 
-import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 
 /**
  * Enumerates the different types of pages that can be rendered.
@@ -36,31 +30,9 @@ import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
  * layout (eg headers, footers) to be altered.
  */
 public enum PageType {
-    SIGN_IN(WebPage.class), 
-    HOME(HomePage.class), 
-    ABOUT(AboutPage.class), 
-    ENTITY(EntityPage.class), 
-    ACTION(ActionPage.class); 
-
-    private Class<? extends Page> superClass;
-
-    private PageType() {
-        this(Page.class);
-    }
-
-    private PageType(final Class<? extends Page> pageClass) {
-        this.superClass = pageClass;
-    }
-
-    /**
-     * The class that pages registered against this page type must be assignable
-     * from (ie have as their superclass).
-     * 
-     * <p>
-     * This allows us to perform fail-fast checking when pages are registered,
-     * rather than when they are used.
-     */
-    public Class<? extends Page> getPageClass() {
-        return superClass;
-    }
+    SIGN_IN, 
+    HOME, 
+    ABOUT, 
+    ENTITY, 
+    ACTION;
 }

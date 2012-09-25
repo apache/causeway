@@ -17,25 +17,15 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
-      xml:lang="en"  
-      lang="en">
-	<wicket:head>
-		<wicket:link>
-			<link href="ActionPage.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</wicket:head>
+<html>
 	<body>
-		<wicket:extend>
-
-			<div wicket:id="breadcrumbs"/>
-
-			<div class="actionPage">
-				<div wicket:id="action">
-				</div>
-			</div>
-		</wicket:extend>
+		<wicket:panel>
+		     <span wicket:id="actionLinkWrapper" class="actionLinkWrapper">
+				<a href="#" wicket:id="actionLink">
+					<span wicket:id="actionTitle" class="actionTitle">[action title]</span>
+				</a>
+			</span>
+		</wicket:panel>
 	</body>
 </html>
+

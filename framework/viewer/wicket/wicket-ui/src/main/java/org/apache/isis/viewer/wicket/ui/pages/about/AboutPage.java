@@ -31,6 +31,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
  */
 public class AboutPage extends PageAbstract {
 
+    private static final long serialVersionUID = 1L;
+
     public AboutPage() {
         super(new PageParameters(), ComponentType.ABOUT);
         final IModel<?> model = buildModel();

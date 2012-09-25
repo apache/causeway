@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -35,7 +35,10 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
@@ -52,19 +55,35 @@ public abstract class PageAbstract extends WebPage {
 
     private static final long serialVersionUID = 1L;
     
+    private static final String DEFAULT_TITLE = "Apache Isis Wicket Viewer";
+    
     public static final String ID_MENU_LINK = "menuLink";
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_ABOUT_LINK = "aboutLink";
 
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
-
+    
     public PageAbstract(final PageParameters pageParameters, final ComponentType... childComponentIds) {
         addApplicationActionsComponent();
         this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
         this.pageParameters = pageParameters;
         addLogoutLink();
         addAboutLink();
+        add(new Label("pageTitle", PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, DEFAULT_TITLE)));
+    }
+
+    protected void addBreadcrumbs() {
+        getComponentFactoryRegistry().addOrReplaceComponent(this, "breadcrumbs", ComponentType.RECENT_PAGES, getBookmarkedPagesModel());
+    }
+
+    protected void bookmarkPage(BookmarkableModel<?> model) {
+        getBookmarkedPagesModel().bookmarkPage(model);
+    }
+
+    private BookmarkedPagesModel getBookmarkedPagesModel() {
+        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getApplication();
+        return application.getBookmarkedPagesModel();
     }
 
     private void addLogoutLink() {

@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,12 +36,21 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
 public class EntityPage extends PageAbstract {
 
+    private static final long serialVersionUID = 1L;
+    
     private final EntityModel model;
 
+    /**
+     * Called reflectively, in support of 
+     * {@link BookmarkablePageLink bookmarkable} links.
+     */
     public EntityPage(final PageParameters pageParameters) {
         super(pageParameters, ComponentType.ENTITY);
         this.model = new EntityModel(pageParameters);
         addChildComponents(model);
+        
+        bookmarkPage(model);
+        addBreadcrumbs();
     }
 
     public EntityPage(final ObjectAdapter adapter) {
@@ -56,6 +66,9 @@ public class EntityPage extends PageAbstract {
         this.model = new EntityModel(adapter);
         model.setException(exIfAny);
         addChildComponents(model);
+        
+        bookmarkPage(model);
+        addBreadcrumbs();
     }
 
 

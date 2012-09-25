@@ -29,12 +29,14 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.extensions.breadcrumb.DefaultBreadCrumbsModel;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -53,10 +55,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule;
@@ -65,7 +65,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -74,14 +76,13 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
-import org.apache.log4j.Logger;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -122,9 +123,10 @@ import org.apache.log4j.Logger;
  * changed.)</li>
  * </ul>
  */
-public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
+public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ApplicationCssRenderer, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(IsisWicketApplication.class);
 
     /**
@@ -164,6 +166,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      */
     @Inject
     private IsisSystem system;
+
+    private BookmarkedPagesModel bookmarkedPagesModel;
 
     // /////////////////////////////////////////////////
     // constructor, init
@@ -205,6 +209,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
         
+        this.bookmarkedPagesModel = new BookmarkedPagesModel();
 
         initWicketComponentInjection(injector);
     }
@@ -288,7 +293,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected String getApplicationCssUrl() {
         return applicationCssUrl;
     }
-
+    
     /**
      * Renders the {@link #getApplicationCssUrl() application-supplied CSS}, if
      * any.
@@ -365,7 +370,17 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         return IsisContext.getAuthenticationSession();
     }
 
+
+    // /////////////////////////////////////////////////
+    // Breadcrumbs support
+    // /////////////////////////////////////////////////
+
+    @Override
+    public BookmarkedPagesModel getBookmarkedPagesModel() {
+        return bookmarkedPagesModel;
+    }
     
+
     // /////////////////////////////////////////////////
     // *Provider impl.
     // /////////////////////////////////////////////////

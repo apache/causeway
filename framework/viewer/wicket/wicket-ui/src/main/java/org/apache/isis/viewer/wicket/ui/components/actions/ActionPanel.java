@@ -34,11 +34,14 @@ import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -94,6 +97,15 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         addOrReplace(new Label(ID_ACTION_NAME, Model.of(actionName)));
     }
 
+    protected void bookmarkPage(BookmarkableModel<?> model) {
+        getBookmarkedPagesModel().bookmarkPage(model);
+    }
+
+    private BookmarkedPagesModel getBookmarkedPagesModel() {
+        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getApplication();
+        return application.getBookmarkedPagesModel();
+    }
+
     @Override
     public void executeActionAndProcessResults() {
 
@@ -114,6 +126,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
             // executes the action
             ObjectAdapter resultAdapter = actionModel.getObject();
+            
             if(resultAdapter == null) {
                 // handle void methods
                 resultAdapter = targetAdapter;
@@ -121,6 +134,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
             final ResultType resultType = ResultType.determineFor(resultAdapter);
             resultType.addResults(this, resultAdapter);
+            
+            bookmarkPage(actionModel);
 
         } catch(ConcurrencyException ex) {
             
@@ -134,6 +149,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             resultType.addResults(this, targetAdapter, ex);
 
             return;
+        } finally {
+            final ActionModel actionModel = getActionModel();
+            actionModel.clearArguments();
         }
     }
 

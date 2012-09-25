@@ -70,6 +70,10 @@ public interface ComponentFactory extends Serializable {
         public boolean exclusively() {
             return exclusively;
         }
+        
+        public static final ApplicationAdvice appliesIf(final boolean b) {
+            return b ? ApplicationAdvice.APPLIES : ApplicationAdvice.DOES_NOT_APPLY;
+        }
     }
 
     /**

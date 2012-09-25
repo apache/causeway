@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.pages;
 
 import org.apache.wicket.Page;
 
+import org.apache.isis.viewer.wicket.model.models.PageType;
+
 /**
  * Registry of the {@link Page} class to use for each {@link PageType}.
  */

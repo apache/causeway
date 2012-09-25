@@ -26,14 +26,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import org.apache.wicket.Page;
-import org.hamcrest.Matcher;
 
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.viewer.wicket.model.util.Classes;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
-import org.apache.isis.viewer.wicket.ui.pages.PageType;
 
 /**
  * Default implementation of {@link PageClassRegistry}; just delegates to an
@@ -81,17 +78,6 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageRegistry
 
     @Override
     public final void registerPage(final PageType pageType, final Class<? extends Page> pageClass) {
-        ensureThatArg(pageClass, Classes.isSubclassOf(pageType.getPageClass()));
         pagesByType.put(pageType, pageClass);
     }
-
-    // /////////////////////////////////////////////////////////
-    // Helpers
-    // /////////////////////////////////////////////////////////
-
-    @SuppressWarnings("unchecked")
-    private static void ensureThatArg(final Class<? extends Page> cls, final Matcher clsMatcher) {
-        Ensure.ensureThatArg(cls, clsMatcher);
-    }
-
 }

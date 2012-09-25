@@ -23,21 +23,22 @@
       xml:lang="en"  
       lang="en">
 	<head>
-		<title>Apache Isis Wicket Viewer</title>
+		<title wicket:id="pageTitle"></title>
 		<wicket:link>
 			<link href="cssreset.css" rel="stylesheet" type="text/css"/>
 			<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
 	</head>
 	<body>
+		
 		<div id="container" class="page">
 
 			<div id="header">
-				<h1>Wicket Objects</h1>
+				<h1>Apache Isis Wicket Viewer</h1>
 			</div>
-			
+
 			<div wicket:id="applicationActions" id="applicationActions"></div>
-			
+
 			<div id="body">
 				<wicket:child/>
 			</div>

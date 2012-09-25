@@ -25,7 +25,6 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.PackageResource;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -33,7 +32,6 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -50,7 +48,7 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends ModelAbstract<ObjectAdapter> {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
     
@@ -72,13 +70,16 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         if (persistent) {
             final String oidStr = adapter.getOid().enString(getOidMarshaller());
 
-            PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);
+            PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
             // an EntityPage so that the underlying EntityModel that contains
             // the
             // memento for the transient ObjectAdapter can be accessed.
         }
+        
+        PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ENTITY);
+        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, adapter.titleString());
 
         return pageParameters;
     }
@@ -128,13 +129,23 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     }
 
     private static String oidStr(final PageParameters pageParameters) {
-        return PageParameterNames.OBJECT_OID.getFrom(pageParameters);
+        return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
     }
 
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
         return getOidMarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
     }
     
+
+
+    // //////////////////////////////////////////////////////////
+    // asPageParameters
+    // //////////////////////////////////////////////////////////
+
+    @Override
+    public PageParameters asPageParameters() {
+        return createPageParameters(getObject());
+    }
 
     // //////////////////////////////////////////////////////////
     // ObjectAdapterMemento, typeOfSpecification
@@ -201,46 +212,6 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         super.detach();
     }
 
-    // hmmm... doesn't seem to be used; get rid of if come back.
-    // I'm guessing the property models stuff below superceded this.
-
-    // ////////////////////////////////////////////////////////////
-    // // child (property) model objects;
-    // ////////////////////////////////////////////////////////////
-    //
-    // public void setChildModelObject(String propertyIdentifier,
-    // ObjectAdapter associatedAdapter) {
-    // ObjectAdapter adapter = getObject();
-    // if (adapter == null) {
-    // // let's fail fast, because this presumably ought not to happen
-    // throw new IllegalStateException(
-    // "no adapter set for the EntityModel");
-    // }
-    // ObjectSpecification noSpec = adapter.getSpecification();
-    // ObjectAssociation association =
-    // noSpec.getAssociation(propertyIdentifier);
-    // if (association == null) {
-    // throw new IllegalArgumentException(String.format(
-    // "Id '%s' does not represent an association in spec '%s'",
-    // propertyIdentifier, noSpec.getFullName()));
-    // }
-    // if (association.isOneToManyAssociation()) {
-    // throw new IllegalArgumentException(String.format(
-    // "Association '%s' is not a property in spec '%s'",
-    // propertyIdentifier, noSpec.getFullName()));
-    // }
-    // OneToOneAssociation property = (OneToOneAssociation) association;
-    //
-    // // TODO: need to add in validation here.
-    // // Also, not sure if should be copying into a pending value rather than
-    // // apply directly.
-    //
-    // if (associatedAdapter != null) {
-    // property.set(adapter, associatedAdapter);
-    // } else {
-    // property.clearAssociation(adapter);
-    // }
-    // }
 
     // //////////////////////////////////////////////////////////
     // PropertyModels
@@ -381,5 +352,6 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 }
