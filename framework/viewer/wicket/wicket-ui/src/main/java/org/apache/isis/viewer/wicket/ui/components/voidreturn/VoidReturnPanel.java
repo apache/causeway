@@ -19,33 +19,20 @@
 
 package org.apache.isis.viewer.wicket.ui.components.voidreturn;
 
-import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-/**
- * {@link ComponentFactory} to represent an action that returns void.
- */
-public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
+public class VoidReturnPanel extends PanelAbstract<IModel<?>> {
 
     private static final long serialVersionUID = 1L;
 
-    public VoidReturnPanelFactory() {
-        super(ComponentType.VOID_RETURN);
-    }
-
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return ApplicationAdvice.APPLIES;
-    }
-
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        return new VoidReturnPanel(id);
+    public VoidReturnPanel(final String id) {
+        super(id);
     }
 
 }

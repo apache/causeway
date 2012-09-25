@@ -22,6 +22,9 @@ package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 import com.google.inject.Inject;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -39,9 +42,12 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
     
+    private static final String BOOKMARK_LIST = "bookmarkList";
     private static final String BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
     private static final String BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
     private static final String BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
+    
+    private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
     @Inject
     private PageClassRegistry pageClassRegistry;
@@ -52,7 +58,14 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     }
 
     private void buildGui() {
+
+        final WebMarkupContainer container = new WebMarkupContainer(BOOKMARK_LIST);
+        // allow to be updated by AjaxLink
+        container.setOutputMarkupId(true); 
+        add(container);
+
         final BookmarkedPagesModel bookmarkedPagesModel = getModel();
+
         final ListView<PageParameters> listView = new ListView<PageParameters>(BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel) {
 
             private static final long serialVersionUID = 1L;
@@ -70,6 +83,25 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 link.setEnabled(!bookmarkedPagesModel.isCurrent(pageParameters));
             }
         };
-        add(listView);
+        container.add(listView);
+        
+        if(!getModel().isEmpty()) {
+            final AjaxLink<Void> ajaxLink = new AjaxLink<Void>(CLEAR_BOOKMARKS){
+    
+                private static final long serialVersionUID = 1L;
+    
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    BookmarkedPagesPanel.this.getModel().clear();
+                    setEnabled(false);
+                    target.add(container, this);
+                }
+            };
+            ajaxLink.setOutputMarkupId(true);
+            add(ajaxLink);
+        } else {
+            permanentlyHide(CLEAR_BOOKMARKS);
+        }
+
     }
 }

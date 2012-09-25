@@ -24,11 +24,14 @@
       lang="en">
 	<body>
 		<wicket:panel>
-			<ul id="bookmarkedPagesList">
-			  <li wicket:id="bookmarkedPageItem" class="bookmarkedPageItem">
-			  	<a href="#" wicket:id="bookmarkedPageLink"><span wicket:id="bookmarkedPageTitle">[link title]</span></a>
-		  	  </li>
-			</ul>
+			<div id="bookmarkedPages">
+				<ul wicket:id="bookmarkList" class="bookmarkedPagesList">
+				  <li wicket:id="bookmarkedPageItem" class="bookmarkedPageItem">
+				  	<a href="#" wicket:id="bookmarkedPageLink"><span wicket:id="bookmarkedPageTitle">[link title]</span></a>
+			  	  </li>
+				</ul>
+			  	<a href="#" wicket:id="clearBookmarks" class="clearBookmarks">clear</a>
+			</div>
 		</wicket:panel>
 	</body>
 </html>

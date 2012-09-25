@@ -108,13 +108,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      */
     public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode) {
         
-        final boolean persistent = adapter.representsPersistent();
-        if (!persistent) {
-            // REVIEW: can this happen?
-            return new PageParameters();
-        }
-
         final PageParameters pageParameters = createPageParameters(adapter, objectAction, singleResultsMode);
+
+        final String actionTitle = objectAction.getName();
+        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionTitle);
 
         final Mode actionMode = determineActionMode(objectAction, contextAdapter);
         PageParameterNames.ACTION_MODE.addEnumTo(pageParameters, actionMode);
@@ -126,25 +123,23 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode) {
         final PageParameters pageParameters = new PageParameters();
 
+        PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ACTION);
+        PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addEnumTo(pageParameters, singleResultsMode);
+
         final String oidStr = adapter.getOid().enString(getOidMarshaller());
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
         final ActionType actionType = objectAction.getType();
-        final String actionId = determineActionId(objectAction);
-
-        PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ACTION);
-
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
+        
         final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
         if (actionOnTypeSpec != null) {
             PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
         }
 
+        final String actionId = determineActionId(objectAction);
         PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
         
-        PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addEnumTo(pageParameters, singleResultsMode);
-
-        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionId);
         return pageParameters;
     }
 
@@ -152,16 +147,34 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getActionMemento().getAction();
         final PageParameters pageParameters = createPageParameters(adapter, objectAction, SingleResultsMode.REDIRECT);
-        
-        // capture argument values
-        ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
+
+
+        // capture argument values and build up a title
+        final StringBuilder buf = new StringBuilder();
+        final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
         for(ObjectAdapter argumentAdapter: argumentsAsArray) {
             final String encodedArg = encodeArg(argumentAdapter);
-            PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);    
+            PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
+            if(buf.length() > 0) {
+                buf.append(",");
+            }
+            buf.append(abbreviated(titleOf(argumentAdapter), 8));
         }
-        
+
+        final String actionTitle = adapter.titleString() + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionTitle);
+
         return pageParameters;
     }
+    
+    private static String titleOf(ObjectAdapter argumentAdapter) {
+        return argumentAdapter!=null?argumentAdapter.titleString():"";
+    }
+    
+    private static String abbreviated(final String str, final int maxLength) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    }
+
 
     private static Mode determineActionMode(final ObjectAction objectAction, final ObjectAdapter contextAdapter) {
         return objectAction.promptForParameters(contextAdapter)?Mode.PARAMETERS:Mode.RESULTS;

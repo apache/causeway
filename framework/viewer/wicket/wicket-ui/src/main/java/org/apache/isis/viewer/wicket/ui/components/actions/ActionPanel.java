@@ -127,11 +127,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             // executes the action
             ObjectAdapter resultAdapter = actionModel.getObject();
             
-            if(resultAdapter == null) {
-                // handle void methods
-                resultAdapter = targetAdapter;
-            }
-
             final ResultType resultType = ResultType.determineFor(resultAdapter);
             resultType.addResults(this, resultAdapter);
             
@@ -256,9 +251,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 panel.hideAllBut(ComponentType.VOID_RETURN);
-
-                // TODO: implement panel for void
-                panel.permanentlyHide(ComponentType.VOID_RETURN);
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VOID_RETURN, null);
             }
         };
 
@@ -269,6 +262,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         }
 
         static ResultType determineFor(final ObjectAdapter resultAdapter) {
+            if(resultAdapter == null) {
+                return ResultType.VOID;
+            }
             final ObjectSpecification resultSpec = resultAdapter.getSpecification();
             if (resultSpec.isNotCollection()) {
                 if (resultSpec.getFacet(ValueFacet.class) != null) {

@@ -76,4 +76,12 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
         return PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters);
     }
 
+    public void clear() {
+        list.clear();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
 }
