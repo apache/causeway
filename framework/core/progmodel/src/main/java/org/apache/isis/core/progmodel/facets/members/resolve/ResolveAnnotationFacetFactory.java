@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacet;
+import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
 
 public class ResolveAnnotationFacetFactory extends FacetFactoryAbstract {
 

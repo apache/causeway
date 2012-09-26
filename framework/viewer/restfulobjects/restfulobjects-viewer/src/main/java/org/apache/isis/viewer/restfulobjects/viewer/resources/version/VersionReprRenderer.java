@@ -33,7 +33,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer
 
 public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRenderer, Void> {
 
-    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/json-viewer/pom.properties";
+    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/restfulobjects-viewer/pom.properties";
 
     public static class Factory extends ReprRendererFactoryAbstract {
         public Factory() {

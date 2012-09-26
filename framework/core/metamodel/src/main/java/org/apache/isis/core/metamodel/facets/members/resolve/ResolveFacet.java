@@ -17,22 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.commonlyused;
+package org.apache.isis.core.metamodel.facets.members.resolve;
 
 import org.apache.isis.applib.annotation.Resolve;
-import org.apache.isis.applib.annotation.Resolve.Type;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
-public abstract class ResolveFacetAbstract extends SingleValueFacetAbstract<Resolve.Type> implements ResolveFacet {
+/**
+ * Indicates that a class member should be resolved eagerly/lazily and so should
+ * be presented in the viewer in an appropriate manner.
+ * 
+ * <p>
+ * @see Resolve
+ */
+public interface ResolveFacet extends SingleValueFacet<Resolve.Type> {
 
-    public static Class<? extends Facet> type() {
-        return ResolveFacet.class;
-    }
-
-    public ResolveFacetAbstract(Type value, final FacetHolder holder) {
-        super(type(), value, holder);
-    }
-    
 }

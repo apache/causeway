@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacet;
+import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

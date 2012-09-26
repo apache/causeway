@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.members.resolve;
 
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacetAbstract;
 
 public class ResolveFacetAnnotation extends ResolveFacetAbstract {
 

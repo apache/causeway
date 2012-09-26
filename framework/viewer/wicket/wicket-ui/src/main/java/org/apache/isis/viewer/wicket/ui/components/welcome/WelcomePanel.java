@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.welcome;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
@@ -35,9 +38,13 @@ public class WelcomePanel extends PanelAbstract<WelcomeModel> {
 
     private static final String ID_MESSAGE = "message";
 
-    public WelcomePanel(final String id, final WelcomeModel model) {
-        super(id, model);
-        add(new Label(ID_MESSAGE, model.getObject()));
-    }
+    @Inject
+    @Named("welcomeMessage")
+    private String welcomeMessage;
 
+    public WelcomePanel(final String id, WelcomeModel model) {
+        super(id, model);
+        model.setObject(welcomeMessage);
+        add(new Label(ID_MESSAGE, getModel().getObject()));
+    }
 }

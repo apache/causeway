@@ -34,7 +34,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.facets.members.commonlyused.ResolveFacet;
+import org.apache.isis.applib.annotation.Resolve.Type;
+import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -79,7 +80,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
     }
     
     private static Predicate<ComponentFactory> determineInitialFactory(IModel<?> model) {
-        return isCommonlyUsed(model) 
+        return isResolveFacet(model) 
                 ? new Predicate<ComponentFactory>() {
                     @Override
                     public boolean apply(@Nullable ComponentFactory input) {
@@ -89,7 +90,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
                 : Predicates.<ComponentFactory>alwaysTrue();
     }
 
-    private static boolean isCommonlyUsed(IModel<?> model) {
+    private static boolean isResolveFacet(IModel<?> model) {
         if(!(model instanceof EntityCollectionModel)) {
             return false;
         }
@@ -100,7 +101,8 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
 
         final OneToManyAssociation collection = 
                 entityCollectionModel.getCollectionMemento().getCollection();
-        return collection.containsDoOpFacet(ResolveFacet.class);
+        ResolveFacet resolveFacet = collection.getFacet(ResolveFacet.class);
+        return resolveFacet != null && resolveFacet.value() == Type.EAGERLY;
     }
 
     private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {

@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
+import com.google.inject.util.Providers;
 
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -41,6 +43,15 @@ public class IsisWicketModule extends AbstractModule {
         bind(PageClassList.class).to(PageClassListDefault.class);
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
+        
+        // override with:
+        // bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("...");
+        bind(String.class).annotatedWith(Names.named("welcomeMessage")).toProvider(Providers.of((String)null));
+
+        // override with:
+        // bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("...");
+        bind(String.class).annotatedWith(Names.named("aboutMessage")).toProvider(Providers.of((String)null));
+
     }
 
 }

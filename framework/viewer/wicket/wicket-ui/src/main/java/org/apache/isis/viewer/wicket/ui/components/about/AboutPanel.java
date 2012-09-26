@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.about;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
@@ -35,8 +38,13 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
 
     private static final String ID_MESSAGE = "message";
 
+    @Inject
+    @Named("aboutMessage")
+    private String aboutMessage;
+
     public AboutPanel(final String id, final AboutModel model) {
         super(id, model);
+        getModel().setObject(aboutMessage);
         add(new Label(ID_MESSAGE, model.getObject()));
     }
 

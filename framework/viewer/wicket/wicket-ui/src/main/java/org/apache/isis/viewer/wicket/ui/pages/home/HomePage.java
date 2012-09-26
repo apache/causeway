@@ -20,10 +20,8 @@
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -37,12 +35,7 @@ public class HomePage extends PageAbstract {
 
     public HomePage() {
         super(new PageParameters(), ComponentType.WELCOME);
-        final IModel<?> model = buildModel();
-        addChildComponents(model);
-    }
-
-    private IModel<?> buildModel() {
-        return new WelcomeModel();
+        addChildComponents(null);
     }
 
 }

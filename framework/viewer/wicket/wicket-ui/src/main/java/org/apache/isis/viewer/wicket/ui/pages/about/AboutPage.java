@@ -19,10 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.about;
 
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -35,12 +33,7 @@ public class AboutPage extends PageAbstract {
 
     public AboutPage() {
         super(new PageParameters(), ComponentType.ABOUT);
-        final IModel<?> model = buildModel();
-        addChildComponents(model);
-    }
-
-    private IModel<?> buildModel() {
-        return new AboutModel();
+        addChildComponents(null);
     }
 
 }

@@ -26,10 +26,6 @@ public class AboutModel extends ModelAbstract<String> {
 
     private static final long serialVersionUID = 1L;
     
-    public AboutModel() {
-        this("MyApp v1.0");
-    }
-    
     public AboutModel(String message) {
         super();
         setObject(message);
@@ -42,6 +38,9 @@ public class AboutModel extends ModelAbstract<String> {
 
     @Override
     public void setObject(final String message) {
+        if(message == null) {
+            return;
+        }
         super.setObject(message);
     }
 
