@@ -26,11 +26,11 @@ import java.util.List;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -52,6 +51,10 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
  * s.
  */
 public abstract class PageAbstract extends WebPage {
+
+    private static final String ID_USER_NAME = "userName";
+
+    private static final String ID_PAGE_TITLE = "pageTitle";
 
     private static final long serialVersionUID = 1L;
     
@@ -68,10 +71,16 @@ public abstract class PageAbstract extends WebPage {
         addApplicationActionsComponent();
         this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
         this.pageParameters = pageParameters;
+        addUserName();
         addLogoutLink();
         addAboutLink();
-        add(new Label("pageTitle", PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, DEFAULT_TITLE)));
+        add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, DEFAULT_TITLE)));
     }
+
+    private void addUserName() {
+        add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
+    }
+
 
     protected void addBreadcrumbs() {
         getComponentFactoryRegistry().addOrReplaceComponent(this, "breadcrumbs", ComponentType.RECENT_PAGES, getBookmarkedPagesModel());
@@ -152,16 +161,6 @@ public abstract class PageAbstract extends WebPage {
     }
 
 
-    /**
-     * Renders the application-supplied CSS, if any.
-     */
-    @Override
-    public void renderHead(final HtmlHeaderContainer container) {
-        super.renderHead(container);
-        final ApplicationCssRenderer applicationCssRenderer = getApplicationCssRenderer();
-        applicationCssRenderer.renderApplicationCss(container);
-    }
-
     // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////
@@ -169,10 +168,6 @@ public abstract class PageAbstract extends WebPage {
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
-    }
-
-    protected ApplicationCssRenderer getApplicationCssRenderer() {
-        return (ApplicationCssRenderer) getApplication();
     }
 
     // ///////////////////////////////////////////////////
@@ -189,5 +184,9 @@ public abstract class PageAbstract extends WebPage {
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
+    }
+    
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
     }
 }

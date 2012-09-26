@@ -28,6 +28,7 @@
 			<link href="cssreset.css" rel="stylesheet" type="text/css"/>
 			<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
+		<link href="application.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
 		
@@ -36,6 +37,11 @@
 			<div id="header">
 				<h1>Apache Isis Wicket Viewer</h1>
 			</div>
+			<div id="secondaryMenu">
+				<span>logged in as: </span><span wicket:id="userName">[username]</span>
+			</div>
+
+			<div class="clear"/>
 
 			<div wicket:id="applicationActions" id="applicationActions"></div>
 

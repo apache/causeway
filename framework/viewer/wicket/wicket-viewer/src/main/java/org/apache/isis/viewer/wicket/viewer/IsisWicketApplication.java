@@ -36,16 +36,10 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.extensions.breadcrumb.DefaultBreadCrumbsModel;
 import org.apache.wicket.guice.GuiceComponentInjector;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -69,14 +63,13 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
@@ -123,7 +116,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
  * changed.)</li>
  * </ul>
  */
-public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ApplicationCssRenderer, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
+public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
     @SuppressWarnings("unused")
@@ -154,12 +147,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Inject
     private PageClassRegistry pageClassRegistry;
 
-    /**
-     * {@link Inject}ed when {@link #init() initialized}.
-     */
-    @ApplicationCssUrl
-    @Inject
-    private String applicationCssUrl;
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -284,35 +271,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
         converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento());
         return converterLocator;
-    }
-
-    // /////////////////////////////////////////////////
-    // Application Css
-    // /////////////////////////////////////////////////
-
-    protected String getApplicationCssUrl() {
-        return applicationCssUrl;
-    }
-    
-    /**
-     * Renders the {@link #getApplicationCssUrl() application-supplied CSS}, if
-     * any.
-     * 
-     * <p>
-     * TODO: doing it this way, as opposed to simply
-     * {@link #addRenderHeadListener(IHeaderContributor) registering} an
-     * {@link IHeaderContributor} does mean that the header is not first in the
-     * list, so can override other page-level CSS. However, it still comes after
-     * any component-level CSS, so is not ideal.
-     */
-    @Override
-    public void renderApplicationCss(final HtmlHeaderContainer container) {
-        final String cssUrl = getApplicationCssUrl();
-        if (cssUrl == null) {
-            return;
-        }
-        final IHeaderResponse response = container.getHeaderResponse();
-        response.render(CssHeaderItem.forReference(new CssResourceReference(this.getClass(), cssUrl)));
     }
 
     // /////////////////////////////////////////////////

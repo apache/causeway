@@ -20,33 +20,19 @@
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
 public final class WicketSignInPage extends SignInPage {
+    
+    private static final long serialVersionUID = 1L;
+
     public WicketSignInPage() {
     }
 
     public WicketSignInPage(final PageParameters parameters) {
-    }
-
-    /**
-     * Renders the application-supplied CSS, if any.
-     */
-    @Override
-    public void renderHead(final HtmlHeaderContainer container) {
-        super.renderHead(container);
-        final ApplicationCssRenderer applicationCssRenderer = getApplicationCssRenderer();
-        applicationCssRenderer.renderApplicationCss(container);
-    }
-
-    protected ApplicationCssRenderer getApplicationCssRenderer() {
-        return (ApplicationCssRenderer) getApplication();
     }
 
 }

@@ -41,7 +41,6 @@ public class IsisWicketModule extends AbstractModule {
         bind(PageClassList.class).to(PageClassListDefault.class);
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
-        bindConstant().annotatedWith(ApplicationCssUrl.class).to("application.css");
     }
 
 }
