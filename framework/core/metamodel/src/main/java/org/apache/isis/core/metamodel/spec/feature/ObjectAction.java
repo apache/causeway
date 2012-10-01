@@ -84,8 +84,8 @@ public interface ObjectAction extends ObjectMember {
     ObjectSpecification getReturnType();
 
     /**
-     * Returns true if the represented action returns something, else returns
-     * false.
+     * Returns <tt>true</tt> if the represented action returns a non-void object, 
+     * else returns false.
      */
     boolean hasReturn();
 

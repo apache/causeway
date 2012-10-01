@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
@@ -137,6 +138,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
     private List<ObjectAdapterMemento> mementoList;
 
     /**
+     * Populated only if {@link Type#STANDALONE}.
+     */
+    private List<ObjectAdapterMemento> toggledMementosList;
+
+    /**
      * Populated only if {@link Type#PARENTED}.
      */
     private ObjectAdapterMemento parentObjectAdapterMemento;
@@ -155,6 +161,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
         this.typeOf = typeOf;
         this.mementoList = mementoList;
         this.pageSize = pageSize;
+        this.toggledMementosList = Lists.newArrayList();
     }
 
     private EntityCollectionModel(final ObjectAdapter adapter, final OneToManyAssociation collection) {
@@ -249,4 +256,24 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
     public static Iterable<Object> asIterable(final ObjectAdapter resultAdapter) {
         return (Iterable<Object>) resultAdapter.getObject();
     }
+
+    
+    public void toggleSelectionOn(ObjectAdapter selectedAdapter) {
+        ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento.createOrNull(selectedAdapter);
+        
+        // try to remove; if couldn't, then mustn't have been in there, in which case add.
+        boolean removed = toggledMementosList.remove(selectedAsMemento);
+        if(!removed) {
+            toggledMementosList.add(selectedAsMemento);
+        }
+    }
+    
+    public List<ObjectAdapterMemento> getToggleMementosList() {
+        return Collections.unmodifiableList(this.toggledMementosList);
+    }
+
+    public void clearToggleMementosList() {
+        this.toggledMementosList.clear();
+    }
+    
 }

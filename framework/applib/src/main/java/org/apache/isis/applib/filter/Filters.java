@@ -29,7 +29,7 @@ public final class Filters {
             @Override
             public boolean accept(final T f) {
                 for(final Filter<T> filter: filters) {
-                    if(!filter.accept(f)) { 
+                    if(!filter.accept(f)) {     
                         return false;
                     }
                 }

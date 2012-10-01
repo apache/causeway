@@ -133,8 +133,13 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      */
     @Override
     public boolean hasReturn() {
-        return getReturnType() != null;
+        if(getReturnType() == null) {
+            // this shouldn't happen; return Type always defined, even if represents void.class
+            return false;
+        }
+        return getReturnType() != getSpecificationLookup().loadSpecification(void.class);
     }
+
 
     @Override
     public ObjectSpecification getOnType() {

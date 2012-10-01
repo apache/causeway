@@ -29,7 +29,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -49,13 +48,13 @@ public class ContainedButton extends PanelAbstract<Model<String>> {
     private final List<Component> componentsToRerender = Lists.newArrayList();
 
     public ContainedButton(final String id, final String caption) {
-        super(id);
+        super(id, Model.of(caption));
 
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_CONTAINER);
         add(markupContainer);
         final Form<Object> form = new Form<Object>(ID_FORM);
         markupContainer.add(form);
-        button = new AjaxButton(ID_BUTTON, Model.of(caption)) {
+        button = new AjaxButton(ID_BUTTON, getModel()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -90,10 +89,5 @@ public class ContainedButton extends PanelAbstract<Model<String>> {
      * Hook method for (typically anonymous) subclasses to override.
      */
     public void onSubmit() {
-    }
-
-    @Override
-    public void renderHead(final HtmlHeaderContainer container) {
-        super.renderHead(container);
     }
 }

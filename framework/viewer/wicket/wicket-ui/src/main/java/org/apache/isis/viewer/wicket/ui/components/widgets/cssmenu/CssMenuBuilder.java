@@ -130,6 +130,9 @@ public class CssMenuBuilder {
         }
 
         final ObjectAdapterMemento serviceAdapterMemento = determineAdapterFor(contributedAction);
+        if(serviceAdapterMemento == null) {
+            return;
+        }
 
         final Builder subMenuItemBuilder = parent.newSubMenuItem(serviceAdapterMemento, contributedAction, cssMenuLinkFactory);
         if (subMenuItemBuilder != null) {
