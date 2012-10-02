@@ -38,7 +38,7 @@ public final class ObjectAdapters {
         return new Function<Object, ObjectAdapter>() {
             @Override
             public ObjectAdapter apply(final Object pojo) {
-                return getAdapterManager().getAdapterFor(pojo);
+                return getAdapterManager().adapterFor(pojo);
             }
         };
     }
