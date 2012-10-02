@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.selector;
+package org.apache.isis.viewer.wicket.ui.selector.dropdown;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
+public abstract class DropDownSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
 
     private final ComponentType componentType;
 
-    public SelectorPanelAbstract(final String id, final String underlyingId, final T model, final ComponentFactory factory) {
+    public DropDownSelectorPanelAbstract(final String id, final String underlyingId, final T model, final ComponentFactory factory) {
         super(id, model);
 
         componentType = factory.getComponentType();
@@ -70,17 +70,19 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
             componentFactoryModel.setObject(selectedComponentFactory);
 
             final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
+            
             final DropDownChoiceComponentFactory viewsDropDown = new DropDownChoiceComponentFactory(ID_VIEWS_DROP_DOWN, componentFactoryModel, componentFactories, this, underlyingId, model);
             views.addOrReplace(viewsDropDown);
+
             addOrReplace(views);
         } else {
             permanentlyHide(ID_VIEWS);
         }
         addOrReplace(selectedComponentFactory.createComponent(underlyingId, model));
     }
-    
+
     private static Predicate<ComponentFactory> determineInitialFactory(IModel<?> model) {
-        return isResolveFacet(model) 
+        return hasResolveEagerlyFacet(model) 
                 ? new Predicate<ComponentFactory>() {
                     @Override
                     public boolean apply(@Nullable ComponentFactory input) {
@@ -90,7 +92,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
                 : Predicates.<ComponentFactory>alwaysTrue();
     }
 
-    private static boolean isResolveFacet(IModel<?> model) {
+    private static boolean hasResolveEagerlyFacet(IModel<?> model) {
         if(!(model instanceof EntityCollectionModel)) {
             return false;
         }
@@ -118,7 +120,6 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        renderHead(response, SelectorPanelAbstract.class);
+        renderHead(response, DropDownSelectorPanelAbstract.class);
     }
-
 }

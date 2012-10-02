@@ -17,35 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 /**
- * {@link ComponentFactory} for {@link CollectionContentsSelector}.
+ * Provides a list of links for selecting other views that support
+ * {@link ComponentType#COLLECTION_CONTENTS} with a backing
+ * {@link EntityCollectionModel}.
+ * 
+ * <p>
+ * Most of the heavy lifting is factored out into the superclass,
+ * {@link LinksSelectorPanelAbstract}.
  */
-public class CollectionContentsSelectorFactory extends ComponentFactoryAbstract {
+public class CollectionContentsLinksSelector extends LinksSelectorPanelAbstract<EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionContentsSelectorFactory() {
-        super(ComponentType.COLLECTION_CONTENTS);
+    public CollectionContentsLinksSelector(final String id, final EntityCollectionModel model, final ComponentFactory factory) {
+        super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
     }
 
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof EntityCollectionModel);
-    }
-
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsSelector(id, collectionModel, this);
-    }
 }

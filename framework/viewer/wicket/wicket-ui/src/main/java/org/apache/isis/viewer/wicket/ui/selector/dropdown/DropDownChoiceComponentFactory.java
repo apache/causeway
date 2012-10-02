@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.selector;
+package org.apache.isis.viewer.wicket.ui.selector.dropdown;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
  * {@link ComponentFactory}s.
  * 
  * <p>
- * Used by {@link SelectorPanelAbstract}.
+ * Used by {@link DropDownSelectorPanelAbstract}.
  */
 public class DropDownChoiceComponentFactory extends DropDownChoice<ComponentFactory> {
 

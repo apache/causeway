@@ -16,6 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.entitiesSelector select {
-	margin-bottom: 1em;
+.dropDownSelector > p {
+	margin-bottom: 0.8em;
 }

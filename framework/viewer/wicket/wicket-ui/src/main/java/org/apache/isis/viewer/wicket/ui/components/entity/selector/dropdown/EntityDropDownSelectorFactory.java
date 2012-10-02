@@ -17,32 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector;
+package org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown;
 
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.selector.SelectorPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorFactory;
 
 /**
- * Provides a drop-down for selecting other views that support
- * {@link ComponentType#COLLECTION_CONTENTS} with a backing
- * {@link EntityCollectionModel}.
+ * {@link ComponentFactory} for {@link EntityDropDownSelector}.
  * 
  * <p>
- * Most of the heavy lifting is factored out into the superclass,
- * {@link SelectorPanelAbstract}.
- * 
- * <p>
- * Note that this class is {@link ComponentFactoryListDefault registered} prior
- * to any other views.
+ * Either this selector, or {@link EntityLinksSelectorFactory} should be registered;
+ * but not both.
  */
-public class CollectionContentsSelector extends SelectorPanelAbstract<EntityCollectionModel> {
+public class EntityDropDownSelectorFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionContentsSelector(final String id, final EntityCollectionModel model, final ComponentFactory factory) {
-        super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
+    public EntityDropDownSelectorFactory() {
+        super(ComponentType.ENTITY);
     }
 
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityDropDownSelector(id, entityModel, this);
+    }
 }

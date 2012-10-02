@@ -17,37 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.isis.viewer.wicket.ui.components.entity.selector.links;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorFactory;
 
 /**
- * {@link ComponentFactory} for {@link CollectionContentsAsAjaxTable}.
+ * {@link ComponentFactory} for {@link EntityLinksSelector}.
+ * 
+ * <p>
+ * Either this selector, or {@link EntityDropDownSelectorFactory} should be registered;
+ * but not both.
  */
-public class CollectionContentsAsAjaxTableFactory extends ComponentFactoryAbstract {
+public class EntityLinksSelectorFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "table";
-
-    public CollectionContentsAsAjaxTableFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
-    }
-
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof EntityCollectionModel);
+    public EntityLinksSelectorFactory() {
+        super(ComponentType.ENTITY);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsAsAjaxTable(id, collectionModel);
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityLinksSelector(id, entityModel, this);
     }
 }

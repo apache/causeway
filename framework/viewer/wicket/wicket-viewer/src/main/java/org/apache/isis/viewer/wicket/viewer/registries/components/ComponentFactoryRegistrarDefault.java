@@ -35,7 +35,8 @@ import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPag
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTableFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.CollectionContentsAsIconsFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.CollectionContentsSelectorFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsDropDownSelectorFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.icontitle.EntityIconAndTitlePanelFactory;
@@ -45,7 +46,8 @@ import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.Entity
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityPropertiesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary.EntitySummaryPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.selector.EntitySelectorFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDateTimePanelFactory;
@@ -107,11 +109,23 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
      */
     protected void addComponentFactoriesActingAsSelectors(final ComponentFactoryList componentFactories) {
         
-    	componentFactories.add(new EntitySelectorFactory());
-    	
-        componentFactories.add(new CollectionContentsSelectorFactory());
-        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // make
-                                                                             // first
+        // either this set...
+    	// addDropDownSelectorFactories(componentFactories);
+
+        // ... or this set (but not both)
+        addLinksSelectorFactories(componentFactories);
+
+        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // to prevent eager loading
+    }
+
+    protected void addLinksSelectorFactories(final ComponentFactoryList componentFactories) {
+        componentFactories.add(new EntityLinksSelectorFactory());
+        componentFactories.add(new CollectionContentsLinksSelectorFactory());
+    }
+
+    protected void addDropDownSelectorFactories(final ComponentFactoryList componentFactories) {
+        componentFactories.add(new EntityDropDownSelectorFactory());
+        componentFactories.add(new CollectionContentsDropDownSelectorFactory());
     }
 
     protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {

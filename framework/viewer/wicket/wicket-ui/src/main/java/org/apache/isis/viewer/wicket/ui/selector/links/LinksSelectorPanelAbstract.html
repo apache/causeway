@@ -21,8 +21,15 @@
 <html>
 	<body>
 		<wicket:panel>
-			<div class="selector">
-				<p wicket:id="views"><select wicket:id="viewsDropDown"/>
+			<div class="linksSelector">
+				<p wicket:id="views">
+					<ul wicket:id="viewList" class="viewList">
+				  		<li wicket:id="viewItem" class="viewItem">
+				  			<a href="#" wicket:id="viewLink">
+				  				<span wicket:id="viewTitle">[link title]</span>
+			  				</a>
+			  	  		</li>
+					</ul>
 				</p>
 				<div class="views">
 					<wicket:child/>

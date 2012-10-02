@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -26,18 +26,21 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorFactory;
 
 /**
- * {@link ComponentFactory} for {@link CollectionContentsAsAjaxTable}.
+ * {@link ComponentFactory} for {@link CollectionContentsDropDownSelector}.
+ * 
+ * <p>
+ * Either this class or {@link CollectionContentsLinksSelectorFactory} should be
+ * registered, but not both.
  */
-public class CollectionContentsAsAjaxTableFactory extends ComponentFactoryAbstract {
+public class CollectionContentsDropDownSelectorFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "table";
-
-    public CollectionContentsAsAjaxTableFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
+    public CollectionContentsDropDownSelectorFactory() {
+        super(ComponentType.COLLECTION_CONTENTS);
     }
 
     @Override
@@ -48,6 +51,6 @@ public class CollectionContentsAsAjaxTableFactory extends ComponentFactoryAbstra
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsAsAjaxTable(id, collectionModel);
+        return new CollectionContentsDropDownSelector(id, collectionModel, this);
     }
 }

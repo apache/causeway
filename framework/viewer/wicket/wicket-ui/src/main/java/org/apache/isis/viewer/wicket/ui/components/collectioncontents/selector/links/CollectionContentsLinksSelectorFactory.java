@@ -17,30 +17,40 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.selector;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsDropDownSelectorFactory;
 
 /**
- * {@link ComponentFactory} for {@link EntitySelector}.
+ * {@link ComponentFactory} for {@link CollectionContentsLinksSelector}.
+ * 
+ * <p>
+ * Either this class or {@link CollectionContentsDropDownSelectorFactory} should be
+ * registered, but not both.
  */
-public class EntitySelectorFactory extends EntityComponentFactoryAbstract {
+public class CollectionContentsLinksSelectorFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntitySelectorFactory() {
-        super(ComponentType.ENTITY);
+    public CollectionContentsLinksSelectorFactory() {
+        super(ComponentType.COLLECTION_CONTENTS);
+    }
+
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return appliesIf(model instanceof EntityCollectionModel);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
-        return new EntitySelector(id, entityModel, this);
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsLinksSelector(id, collectionModel, this);
     }
 }

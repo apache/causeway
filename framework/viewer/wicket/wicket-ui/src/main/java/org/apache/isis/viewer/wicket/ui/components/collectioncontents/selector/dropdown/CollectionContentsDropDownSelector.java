@@ -17,31 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.selector;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
 
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.selector.SelectorPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.selector.dropdown.DropDownSelectorPanelAbstract;
 
 /**
  * Provides a drop-down for selecting other views that support
- * {@link ComponentType#ENTITY} with a backing {@link EntityModel}.
+ * {@link ComponentType#COLLECTION_CONTENTS} with a backing
+ * {@link EntityCollectionModel}.
  * 
  * <p>
  * Most of the heavy lifting is factored out into the superclass,
- * {@link SelectorPanelAbstract}.
+ * {@link DropDownSelectorPanelAbstract}.
  * 
  * <p>
- * Note that this class should be registered (in
- * <tt>ComponentFactoryListDefault</tt>) prior to any other views.
+ * Note that this class is {@link ComponentFactoryListDefault registered} prior
+ * to any other views.
  */
-public class EntitySelector extends SelectorPanelAbstract<EntityModel> {
+public class CollectionContentsDropDownSelector extends DropDownSelectorPanelAbstract<EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public EntitySelector(final String id, final EntityModel model, final ComponentFactory factory) {
-        super(id, "entity", model, factory);
+    public CollectionContentsDropDownSelector(final String id, final EntityCollectionModel model, final ComponentFactory factory) {
+        super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
     }
 
 }
