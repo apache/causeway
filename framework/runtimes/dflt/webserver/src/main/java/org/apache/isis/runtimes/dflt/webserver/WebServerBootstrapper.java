@@ -86,7 +86,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
                 jettyServer.join();
             }
         } catch (final Exception ex) {
-            throw new IsisException("Unable to start Jetty server", ex);
+             throw new IsisException("Unable to start Jetty server", ex);
         }
     }
 

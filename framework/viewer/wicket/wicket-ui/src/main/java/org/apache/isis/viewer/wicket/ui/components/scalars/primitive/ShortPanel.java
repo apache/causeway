@@ -19,33 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 
 /**
  * Panel for rendering scalars of type {@link Short} or <tt>short</tt>.
  */
-public class ShortPanel extends ScalarPanelTextFieldAbstract<Short> {
+public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public ShortPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Short.class);
-    }
-
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
-
-    @Override
-    protected AbstractTextComponent<Short> createTextField() {
-        return new TextField<Short>(ID_SCALAR_VALUE, new TextFieldValueModel<Short>(this), Short.class);
     }
 
 }

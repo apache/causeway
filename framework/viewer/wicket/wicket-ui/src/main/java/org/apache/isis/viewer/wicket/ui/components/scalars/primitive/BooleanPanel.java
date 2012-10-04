@@ -64,17 +64,19 @@ public class BooleanPanel extends ScalarPanelAbstract {
         
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", true, Model.of(describedAs)));
+            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
         labelIfRegular.add(scalarName);
 
         addOrReplace(labelIfRegular);
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, checkBox));
+        
+        labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, checkBox));
 
         return labelIfRegular;
     }
+    
 
     /**
      * Mandatory hook method to build the component to render the model when in

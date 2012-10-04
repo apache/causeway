@@ -44,6 +44,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     private static final long serialVersionUID = 1L;
 
+
     public enum Rendering {
         /**
          * Does not show labels, eg for use in tables
@@ -168,6 +169,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected abstract Component addComponentForCompact();
 
+    
     /**
      * Optional hook.
      */

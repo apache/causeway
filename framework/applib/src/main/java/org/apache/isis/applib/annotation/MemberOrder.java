@@ -39,7 +39,7 @@ public @interface MemberOrder {
     String sequence();
 
     /**
-     * Name of the action group this set should be known as.
+     * Name of the group this set should be known as.
      */
     String name() default "";
 }

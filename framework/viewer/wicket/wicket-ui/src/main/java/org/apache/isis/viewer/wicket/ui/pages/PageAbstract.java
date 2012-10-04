@@ -23,7 +23,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -67,6 +74,20 @@ public abstract class PageAbstract extends WebPage {
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
     
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    @Named("applicationCss")
+    private String applicationCss;
+    
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    @Named("applicationJs")
+    private String applicationJs;
+
     public PageAbstract(final PageParameters pageParameters, final ComponentType... childComponentIds) {
         addApplicationActionsComponent();
         this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
@@ -77,6 +98,18 @@ public abstract class PageAbstract extends WebPage {
         add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, DEFAULT_TITLE)));
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if(applicationCss != null) {
+            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
+        }
+        if(applicationJs != null) {
+            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
+        }
+
+    }
+    
     private void addUserName() {
         add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
     }

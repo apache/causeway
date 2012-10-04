@@ -28,6 +28,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.name.Named;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
@@ -155,6 +156,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     private IsisSystem system;
 
     private BookmarkedPagesModel bookmarkedPagesModel;
+
 
     // /////////////////////////////////////////////////
     // constructor, init

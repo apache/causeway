@@ -34,6 +34,26 @@ import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFacto
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
+/**
+ * To override
+ * 
+ * <pre>
+ * final Module isisDefaults = new IsisWicketModule();
+ *
+ * final Module myAppOverrides = new AbstractModule() {
+ *     @Override
+ *     protected void configure() {
+ *         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForMyApp.class);
+ *              
+ *         bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("application.css");
+ *         bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("application.js");
+ *         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("Hello, welcome to my app");
+ *         bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("MyApp v1.0.0");
+ *      }
+ *  };
+ * final Module overridden = Modules.override(isisDefaults).with(myAppOverrides);
+ * </pre>
+ */
 public class IsisWicketModule extends AbstractModule {
 
     @Override
@@ -44,14 +64,9 @@ public class IsisWicketModule extends AbstractModule {
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
         
-        // override with:
-        // bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("...");
+        bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String)null));
+        bind(String.class).annotatedWith(Names.named("applicationJs")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toProvider(Providers.of((String)null));
-
-        // override with:
-        // bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("...");
         bind(String.class).annotatedWith(Names.named("aboutMessage")).toProvider(Providers.of((String)null));
-
     }
-
 }
