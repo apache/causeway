@@ -21,15 +21,11 @@ package objstore.jdo.todo;
 
 import java.util.List;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableMap;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 
 public class ToDoItemsJdo extends AbstractFactoryAndRepository implements ToDoItems {

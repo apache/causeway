@@ -27,7 +27,7 @@
 	<parent>
     	<groupId>org.apache.isis.examples.apps</groupId>
     	<artifactId>claims</artifactId>
-		<version>0.3.0-incubating-SNAPSHOT</version>
+		<version>0.3.1-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>claims-viewer-dnd</artifactId>
@@ -123,14 +123,13 @@
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>json-viewer</artifactId>
+            <artifactId>restfulobjects-viewer</artifactId>
         </dependency>
 
         <!-- JUnit Viewer dependencies -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>junit</artifactId>
-            <version>0.3.0-incubating-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         

@@ -20,7 +20,8 @@
 package org.apache.isis.example.claims.viewer.wicket.claimwizard;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.example.claims.dom.claim.ClaimWizard;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
@@ -44,7 +45,8 @@ public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract 
 
     private boolean isModelForWizard(EntityModel model) {
         final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-        final ObjectSpecification claimWizardSpec = getSpecificationLoader().loadSpecification(ClaimWizard.class);
+        final ObjectSpecification claimWizardSpec =
+                getSpecificationLoader().loadSpecification(ClaimWizard.class);
         return typeOfSpec.isOfType(claimWizardSpec);
     }
 
@@ -52,6 +54,10 @@ public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract 
     public Component createComponent(String id, IModel<?> model) {
         final EntityModel entityModel = (EntityModel) model;
         return new ClaimWizardPanel(id, entityModel);
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
     }
 
 }

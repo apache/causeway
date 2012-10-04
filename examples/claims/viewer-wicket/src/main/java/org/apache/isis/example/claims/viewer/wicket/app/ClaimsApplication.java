@@ -38,7 +38,6 @@ public class ClaimsApplication extends IsisWicketApplication {
                     new AbstractModule() {
                         @Override
                         protected void configure() {
-                            //bindConstant().annotatedWith(ApplicationCssUrl.class).to("myapp.css");
                         }
                     });
     }

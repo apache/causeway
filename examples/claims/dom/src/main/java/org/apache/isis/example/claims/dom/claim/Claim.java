@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MustSatisfy;
@@ -59,6 +60,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // {{ Rush
     private boolean rush;
 
+    @Hidden
     @MemberOrder(sequence = "1.2")
     public boolean getRush() {
         return rush;

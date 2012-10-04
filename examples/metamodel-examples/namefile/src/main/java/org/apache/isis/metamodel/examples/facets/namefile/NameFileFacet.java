@@ -33,7 +33,7 @@ public class NameFileFacet extends FacetAbstract implements NamedFacet {
     private final String name;
 
     public NameFileFacet(final FacetHolder holder, final String name) {
-        super(type(), holder, false);
+        super(type(), holder, Derivation.NOT_DERIVED);
         this.name = name;
     }
 
