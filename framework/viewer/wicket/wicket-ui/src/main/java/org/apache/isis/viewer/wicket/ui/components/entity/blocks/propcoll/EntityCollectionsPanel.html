@@ -20,22 +20,13 @@
 <html>
 	<body>
 		<wicket:panel>
-			<div class="entityPropertiesAndOrCollections">
-			    <form wicket:id="entityPropertiesAndOrCollections" class="inputForm">
-	    	    	<fieldset class="inputFormTable propertiesAndOrCollections">
-				    	<div wicket:id="propertiesAndOrCollections">
-			              <div wicket:id="propertyOrCollection" class="propertyOrCollection">[property or collection]</div>
-				    	</div>
-					    <div class="feedbackPanel">
-					        <span wicket:id="feedback"/>
-					    </div>
-					    <div class="buttons">
-					    	<input type="submit" class="edit" wicket:id="edit"/>
-					    	<input type="submit" class="ok" wicket:id="ok"/>
-					    	<input type="submit" class="cancel" wicket:id="cancel"/>
-					    </div>
-			    	</fieldset>
-				</form>
+			<div class="entityCollections">
+		    	<div wicket:id="collections">
+		    		<fieldset wicket:id="collectionGroup" class="memberGroup">
+		    			<legend wicket:id="collectionName">[collection name]</legend>
+                		<div wicket:id="collection" class="collection">[collection]</div>
+                	</fieldset>
+		    	</div>
 			</div>
 		</wicket:panel>
 	</body>

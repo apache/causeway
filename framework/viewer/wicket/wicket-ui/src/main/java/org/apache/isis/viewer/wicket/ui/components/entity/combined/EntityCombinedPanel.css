@@ -16,31 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.entityCombined {
-}
-
-.entityCombined .entityProperties fieldset {
-	-moz-column-count: 3;
-	-webkit-column-count: 3;
-	column-count: 3;
-
-	-moz-column-width: 14em;
-	-webkit-column-width: 14em;
-	column-width: 14em;
-}
-
-
-.entityCombined .entityProperties div.scalarPanel {
-}
-
-
-.entityCombined .entitySummary {
-	
-}
-
-.entityCombined .entityCollections {
-}
-
 #entityPropertiesForLayout {
 	float: left;
 	width: 35%

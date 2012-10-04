@@ -24,11 +24,8 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.feedback.FeedbackCollector;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -49,16 +46,13 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacet;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
 import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
@@ -70,42 +64,17 @@ import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link EntityModel}.
  */
-public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityModel> {
+public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS = "entityPropertiesAndOrCollections";
+    private static final String ID_MEMBER_GROUP = "memberGroup";
+    private static final String ID_ENTITY_PROPERTIES = "entityProperties";
 
-    public enum Render {
-        PROPERTIES_ONLY {
-            @Override
-            public Filter<ObjectAssociation> getFilters() {
-                return ObjectAssociationFilters.PROPERTIES;
-            }
-        },
-        COLLECTIONS_ONLY {
-            @Override
-            public Filter<ObjectAssociation> getFilters() {
-                return ObjectAssociationFilters.COLLECTIONS;
-            }
-        },
-        PROPERTIES_AND_COLLECTIONS {
-            @SuppressWarnings("unchecked")
-            @Override
-            public Filter<ObjectAssociation> getFilters() {
-                return Filters.or(PROPERTIES_ONLY.getFilters(), COLLECTIONS_ONLY.getFilters());
-            }
-        };
-
-        public abstract Filter<ObjectAssociation> getFilters();
-    }
-
-    private final Render render;
     private PropCollForm form;
 
-    public EntityPropertiesAndOrCollectionsPanel(final String id, final EntityModel entityModel, final Render render) {
+    public EntityPropertiesPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
-        this.render = render;
         buildGui();
         form.toViewMode(null);
     }
@@ -119,10 +88,10 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
         final EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
         if (adapter != null) {
-            form = new PropCollForm(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS, model, render, this);
+            form = new PropCollForm(ID_ENTITY_PROPERTIES, model, this);
             addOrReplace(form);
         } else {
-            permanentlyHide(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS);
+            permanentlyHide(ID_ENTITY_PROPERTIES);
         }
     }
 
@@ -130,14 +99,12 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
         private static final long serialVersionUID = 1L;
 
-        private static final String ID_PROPERTIES_AND_OR_COLLECTIONS = "propertiesAndOrCollections";
-        private static final String ID_PROPERTY_OR_COLLECTION = "propertyOrCollection";
+        private static final String ID_PROPERTIES = "properties";
+        private static final String ID_PROPERTY = "property";
         private static final String ID_EDIT_BUTTON = "edit";
         private static final String ID_OK_BUTTON = "ok";
         private static final String ID_CANCEL_BUTTON = "cancel";
         private static final String ID_FEEDBACK = "feedback";
-
-        private final Render render;
 
         private final Component owningPanel;
         private Button editButton;
@@ -145,10 +112,9 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
         private Button cancelButton;
         private FeedbackPanel feedback;
 
-        public PropCollForm(final String id, final EntityModel entityModel, final Render render, final Component owningPanel) {
+        public PropCollForm(final String id, final EntityModel entityModel, final Component owningPanel) {
             super(id, entityModel);
             this.owningPanel = owningPanel; // for repainting
-            this.render = render;
 
             buildGui();
             
@@ -175,33 +141,23 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
             final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec, Where.OBJECT_FORMS);
 
-            final RepeatingView rv = new RepeatingView(ID_PROPERTIES_AND_OR_COLLECTIONS);
+            final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
+            add(memberGroupRv);
+            final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
+            memberGroupRv.add(memberGroupRvContainer);
+            
+            final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
             final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
-            add(rv);
+            memberGroupRvContainer.add(propertyRv);
 
             @SuppressWarnings("unused")
             Component component;
             for (final ObjectAssociation association : associations) {
-                if (association instanceof OneToOneAssociation) {
-                    final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
-                    rv.add(container);
-                    container.add(eo.nextClass());
-
-                    addPropertyToForm(entityModel, association, container);
-                } else {
-                    final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
-                    rv.add(container);
-                    container.add(eo.nextClass());
-                    
-                    addCollectionToForm(entityModel, association, container);
-                }
+                final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
+                propertyRv.add(propertyRvContainer);
+                propertyRvContainer.add(eo.nextClass());
+                addPropertyToForm(entityModel, association, propertyRvContainer);
             }
-
-            // massive hack: an empty property line to get CSS correct...!
-            final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
-            rv.add(container);
-            container.add(new Label(ID_PROPERTY_OR_COLLECTION, Model.of(" ")));
-            container.add(eo.nextClass());
         }
 
 		private void addPropertyToForm(final EntityModel entityModel,
@@ -211,19 +167,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 			final PropertyMemento pm = new PropertyMemento(otoa);
 
 			final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-			getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-		}
-
-		private void addCollectionToForm(final EntityModel entityModel,
-				final ObjectAssociation association,
-				final WebMarkupContainer container) {
-			final OneToManyAssociation otma = (OneToManyAssociation) association;
-
-			final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModel, otma);
-			final CollectionPanel collectionPanel = new CollectionPanel(ID_PROPERTY_OR_COLLECTION, entityCollectionModel);
-			container.addOrReplace(collectionPanel);
-
-			getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
+			getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 		}
 
         private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
@@ -232,7 +176,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
         @SuppressWarnings("unchecked")
         private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter, Where where) {
-            return Filters.and(render.getFilters(), ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
+            return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
         }
 
         private void addButtons() {
@@ -265,7 +209,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                     try {
                         getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
                     } catch(ConcurrencyException ex){
-                        Session.get().getFeedbackMessages().add(new FeedbackMessage(EntityPropertiesAndOrCollectionsPanel.PropCollForm.this, ex.getMessage(), FeedbackMessage.ERROR));
+                        Session.get().getFeedbackMessages().add(new FeedbackMessage(EntityPropertiesPanel.PropCollForm.this, ex.getMessage(), FeedbackMessage.ERROR));
                     }
                 }
 
@@ -323,16 +267,6 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                                 cancelHintRequired.onCancel();
                             }
                         }
-
-//                        @Override
-//                        public Object formComponent(final IFormVisitorParticipant formComponent) {
-//                            if (formComponent instanceof CancelHintRequired) {
-//                                final CancelHintRequired cancelHintRequired = (CancelHintRequired) formComponent;
-//                                cancelHintRequired.onCancel();
-//                            }
-//                            return null;
-//                        }
-                    
                     });
                     getEntityModel().resetPropertyModels();
                     toViewMode(target);
@@ -351,13 +285,6 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
         private void requestRepaintPanel(final AjaxRequestTarget target) {
             if (target != null) {
-//                target.addComponent(owningPanel);
-//                // TODO: is it necessary to add these too?
-//                target.addComponent(editButton);
-//                target.addComponent(okButton);
-//                target.addComponent(cancelButton);
-//                target.addComponent(feedback);
-                
                 target.add(owningPanel);
                 // TODO: is it necessary to add these too?
                 target.add(editButton, okButton, cancelButton, feedback);
@@ -420,9 +347,8 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
         @SuppressWarnings("unchecked")
         private Filter<ObjectAssociation> enabledAssociationFilter(final ObjectAdapter adapter) {
-            return Filters.and(render.getFilters(), ObjectAssociationFilters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
+            return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
         }
-
 
         private void toEditMode(final AjaxRequestTarget target) {
             getEntityModel().toEditMode();
@@ -432,22 +358,6 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
             requestRepaintPanel(target);
         }
 
-        
-        @Override
-        protected void onValidate() {
-            // 6.0.0 - no longer required because feedback messages are automatically cleaned up
-            // see https://cwiki.apache.org/WICKET/migration-to-wicket-60.html#MigrationtoWicket6.0-FeedbackStorageRefactoring
-//            Session.get().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
-//
-//                private static final long serialVersionUID = 1L;
-//
-//                @Override
-//                public boolean accept(final FeedbackMessage message) {
-//                    return message.getReporter() == owningPanel;
-//                }
-//            });
-            super.onValidate();
-        }
 
         private void addFeedbackGui() {
             final FeedbackPanel feedback = addOrReplaceFeedback();

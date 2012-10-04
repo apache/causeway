@@ -27,9 +27,19 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.OddEvenItem;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
@@ -69,7 +79,7 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
     private static final String ID_TABLE = "table";
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
-    private AjaxFallbackDefaultDataTable<ObjectAdapter,String> dataTable;
+    private DataTable<ObjectAdapter,String> dataTable;
 
     public CollectionContentsAsAjaxTable(final String id, final EntityCollectionModel model) {
         super(id, model);
@@ -90,10 +100,33 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         addSelectedButtonIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
-        dataTable = new AjaxFallbackDefaultDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
+        dataTable = new MyAjaxFallbackDefaultDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
+        
         add(dataTable);
     }
+    
+    public static class MyAjaxFallbackDefaultDataTable<T, S> extends DataTable<T, S>
+    {
+        private static final long serialVersionUID = 1L;
 
+        public MyAjaxFallbackDefaultDataTable(final String id, final List<? extends IColumn<T, S>> columns,
+            final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
+        {
+            super(id, columns, dataProvider, rowsPerPage);
+            setOutputMarkupId(true);
+            setVersioned(false);
+            addTopToolbar(new AjaxFallbackHeadersToolbar<S>(this, dataProvider));
+            addBottomToolbar(new AjaxNavigationToolbar(this));
+            addBottomToolbar(new NoRecordsToolbar(this));
+        }
+
+        @Override
+        protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
+        {
+            return new OddEvenItem<T>(id, index, model);
+        }
+
+    }
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
         final EntityCollectionModel model = getModel();
         

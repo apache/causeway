@@ -244,15 +244,6 @@ tr.section td {
 
 /*************** Styling Entity Forms and Parameters ********************/
 
-fieldset.propertiesAndOrCollections {
-
-	/*
-	padding-top: 1em;
-	padding-bottom: 1em;
-	*/
-	/* background-color: #D7E7F5; */
-}
-
 
 .even, .odd {
 	margin-left: 1em;
@@ -261,7 +252,7 @@ fieldset.propertiesAndOrCollections {
 }
 
 
-.propertyOrCollection, .parameter {
+.property, .propertyOrCollection, .parameter {
 	clear: both;
 }
 
@@ -282,8 +273,16 @@ fieldset.propertiesAndOrCollections {
 }
 
 .scalarValue,.collectionContents  {
-	padding-left: 0.5em;
 	float: left;
+}
+
+.scalarValue  {
+	padding-left: 0.5em;
+}
+
+.collectionContents {
+	padding-left: 1em;
+	width: 99%;
 }
 
 .scalarName {
@@ -292,13 +291,6 @@ fieldset.propertiesAndOrCollections {
 .scalarValue {
 	width: 74%;
 }
-.collectionName {
-	width: 16%;
-}
-.collectionContents {
-	width: 82%;
-}
-
 
 div.odd, div.even {
 	display: block;

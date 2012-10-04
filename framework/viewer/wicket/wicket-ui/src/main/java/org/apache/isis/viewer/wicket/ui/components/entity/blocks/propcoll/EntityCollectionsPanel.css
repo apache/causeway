@@ -16,3 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.entityCollections fieldset {
+	border: 1px solid threedshadow;		
+}
+ 
+.entityCollections fieldset legend {
+	margin-left: 10px;
+}

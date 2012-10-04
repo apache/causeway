@@ -26,10 +26,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityPropertiesAndOrCollectionsPanel.Render;
 
 /**
- * {@link ComponentFactory} for {@link EntityPropertiesAndOrCollectionsPanel}.
+ * {@link ComponentFactory} for {@link EntityPropertiesPanel}.
  */
 public class EntityPropertiesPanelFactory extends EntityComponentFactoryAbstract {
 
@@ -42,6 +41,6 @@ public class EntityPropertiesPanelFactory extends EntityComponentFactoryAbstract
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityModel entityModel = (EntityModel) model;
-        return new EntityPropertiesAndOrCollectionsPanel(id, entityModel, Render.PROPERTIES_ONLY);
+        return new EntityPropertiesPanel(id, entityModel);
     }
 }

@@ -41,6 +41,6 @@ public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
         addOrReplace(ComponentType.ENTITY_PROPERTIES, model);
-        addOrReplace(ComponentType.ENTITY_COLLECTIONS_READ_ONLY_FORM, model);
+        addOrReplace(ComponentType.ENTITY_COLLECTIONS, model);
     }
 }

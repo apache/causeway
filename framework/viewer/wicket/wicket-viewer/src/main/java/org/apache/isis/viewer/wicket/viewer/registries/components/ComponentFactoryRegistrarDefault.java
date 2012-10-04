@@ -41,8 +41,6 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityCollectionsPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityCollectionsReadOnlyFormPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityPropertiesAndCollectionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityPropertiesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary.EntitySummaryPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanelFactory;
@@ -179,8 +177,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new EntitySummaryPanelFactory());
         componentFactories.add(new EntityPropertiesPanelFactory());
         componentFactories.add(new EntityCollectionsPanelFactory());
-        componentFactories.add(new EntityCollectionsReadOnlyFormPanelFactory());
-        componentFactories.add(new EntityPropertiesAndCollectionsPanelFactory());
     }
 
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {

@@ -70,20 +70,12 @@ public enum ComponentType {
      */
     ENTITY_PROPERTIES,
     /**
-     * The set of collections of a single entity, intended to be wrapped in a form alongside {@link #ENTITY_PROPERTIES}
-     */
-    ENTITY_COLLECTIONS,
-    /**
-     * The set of properties and collections for a single entity.
-     */
-    ENTITY_PROPERTIES_AND_COLLECTIONS,
-    /**
      * The set of collections of a single entity, designed to be standalone outside of a form.
      * 
      * <p>
      * compare with {@value #ENTITY_COLLECTIONS}.
      */
-    ENTITY_COLLECTIONS_READ_ONLY_FORM,
+    ENTITY_COLLECTIONS,
     /**
      * A single standalone value, as might be returned from an action.
      */
