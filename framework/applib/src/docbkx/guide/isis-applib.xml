@@ -6771,13 +6771,48 @@ public class CustomerFirstName {
         parameters.</para>
       </sect1>
 
+      <sect1 id="sec.MemberGroupsAnnotation">
+        <title>@MemberGroups</title>
+
+        <para><code>@MemberGroups</code> is designed to work in conjunction
+        with <classname>@MemberOrder</classname> (see <xref
+        linkend="sec.MemberOrderAnnotation" />), and specifies the order in
+        which groups of members should be rendered.</para>
+
+        <para>For example:</para>
+
+        <programlisting>@MemberGroups({"General", "Dates", "Other"})
+public Class Customer {
+    @MemberOrder(name="General", sequence="1.1")
+    Public String getFirstName() {...}
+    Public void setFirstName(value as String) {...}
+
+    @MemberOrder(name="General", sequence="1.2")
+    Public String getLastName() {...}
+    Public void setLastName(value as String) {...}
+
+    @MemberOrder(name="Other", sequence="1")
+    Public String getAddress() {...}
+    Public void setAddress(value as String) {...}
+
+    @MemberOrder(name="Dates", sequence="1")
+    Public Date getDateOfBirth() {...}
+    Public void setDateOfBirth(value as Date) {...}
+    ...
+}   </programlisting>
+
+        <para>If the <classname>@MemberOrder</classname>'s name is not
+        specified, then its group is assumed to be
+        "<literal>General</literal>".</para>
+      </sect1>
+
       <sect1 id="sec.MemberOrderAnnotation">
         <title>@MemberOrder</title>
 
         <para><code>@MemberOrder</code> is the recommended mechanism for
         specifying the order in which fields and/or actions are presented to
         the user. (<code>@ActionOrder</code> and <code>@FieldOrder</code>
-        provide alternative mechanisms).</para>
+        provide alternative, deprecated mechanisms).</para>
 
         <para><code>@MemberOrder</code> is specified at the individual member
         level, relative to other members, as a string. The simplest convention
@@ -6791,7 +6826,7 @@ public class CustomerFirstName {
 
         <para>For example:</para>
 
-        <programlisting>Public Class Customer {
+        <programlisting>public Class Customer {
     @MemberOrder(sequence="2.1")
     Public String getAddress() {...}
     Public void setAddress(value as String) {...}
@@ -6823,6 +6858,37 @@ public class CustomerFirstName {
           properties and collections together, and of all actions
           together.</para>
         </note>
+
+        <para>As a refinement to this, some viewers support the notion of
+        grouping members together. In this case the <varname>name</varname>
+        attribute can be specified.</para>
+
+        <para>For example:</para>
+
+        <programlisting>public Class Customer {
+    @MemberOrder(name="General", sequence="1.1")
+    Public String getFirstName() {...}
+    Public void setFirstName(value as String) {...}
+
+    @MemberOrder(name="General", sequence="1.2")
+    Public String getLastName() {...}
+    Public void setLastName(value as String) {...}
+
+    @MemberOrder(name="Other", sequence="1")
+    Public String getAddress() {...}
+    Public void setAddress(value as String) {...}
+
+    @MemberOrder(name="Dates", sequence="1")
+    Public Date getDateOfBirth() {...}
+    Public void setDateOfBirth(value as Date) {...}
+    ...
+}   </programlisting>
+
+        <para>In this case the <varname>sequence</varname> is ordered with
+        respect to the <varname>name</varname>. If using group names in this
+        way, typically the MemberGroups annotation (see <xref
+        linkend="sec.MemberGroupsAnnotation" />) should also be specified,
+        allowing the order of the groups themselves to be sorted.</para>
       </sect1>
 
       <sect1>

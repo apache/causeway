@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
+import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;

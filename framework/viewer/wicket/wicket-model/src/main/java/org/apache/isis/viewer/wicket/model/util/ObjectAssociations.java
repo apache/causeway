@@ -19,9 +19,17 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
-import com.google.common.base.Function;
+import java.util.List;
+import java.util.Map;
 
+import com.google.common.base.Function;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public final class ObjectAssociations {
@@ -37,5 +45,35 @@ public final class ObjectAssociations {
             }
         };
     }
+
+    public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(List<ObjectAssociation> associations) {
+        Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
+        for(ObjectAssociation association: associations) {
+            addAssociationIntoGroup(associationsByGroup, association);
+        }
+        return associationsByGroup;
+    }
+
+    private static void addAssociationIntoGroup(Map<String, List<ObjectAssociation>> associationsByGroup, ObjectAssociation association) {
+        final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
+        if(memberOrderFacet != null) {
+            final String name = memberOrderFacet.name();
+            if(!Strings.isNullOrEmpty(name)) {
+                getFrom(associationsByGroup, name).add(association);
+                return;
+            }
+        }
+        getFrom(associationsByGroup, "General").add(association);
+    }
+
+    private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
+        List<ObjectAssociation> list = associationsByGroup.get(groupName);
+        if(list == null) {
+            list = Lists.newArrayList();
+            associationsByGroup.put(groupName, list);
+        }
+        return list;
+    }
+
 
 }

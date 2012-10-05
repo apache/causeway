@@ -17,25 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.facets.annotation;
+package org.apache.isis.core.progmodel.facets.object.membergroups.annotation;
 
-import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupsFacet;
 
-public class FacetsAnnotationFacetFactory extends FacetFactoryAbstract {
+public class MemberGroupsAnnotationElseFallbackFacetFactory extends FacetFactoryAbstract {
 
-    public FacetsAnnotationFacetFactory() {
+    public MemberGroupsAnnotationElseFallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Facets annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Facets.class);
+        final MemberGroups annotation = Annotations.getAnnotation(processClassContaxt.getCls(), MemberGroups.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
@@ -43,12 +44,10 @@ public class FacetsAnnotationFacetFactory extends FacetFactoryAbstract {
      * Returns a {@link FacetsFacet} impl provided that at least one valid
      * {@link FacetsFacet#facetFactories() factory} was specified.
      */
-    private FacetsFacet create(final Facets annotation, final FacetHolder holder) {
+    private MemberGroupsFacet create(final MemberGroups annotation, final FacetHolder holder) {
         if (annotation == null) {
-            return null;
+            return new MemberGroupsFacetFallback(holder);
         }
-        final FacetsFacetAnnotation facetsFacetAnnotation = new FacetsFacetAnnotation(annotation, holder);
-        return facetsFacetAnnotation.facetFactories().length > 0 ? facetsFacetAnnotation : null;
+        return new MemberGroupsFacetAnnotation(annotation, holder);
     }
-
 }

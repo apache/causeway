@@ -17,8 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.facets;
+package org.apache.isis.core.metamodel.facets.object.facets;
 
+import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
@@ -27,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * Indicates that this class has additional arbitrary facets, to be processed.
  * 
  * <p>
- * Corresponds to the <tt>@Facets</tt> annotation in the applib.
+ * Corresponds to the {@link Facets} annotation in the applib.
  * 
  * <p>
  * <i>This</i> {@link Facet} allows the {@link FacetFactory}(s) that will create

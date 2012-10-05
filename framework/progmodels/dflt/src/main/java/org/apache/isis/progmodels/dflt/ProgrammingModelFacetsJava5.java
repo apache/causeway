@@ -92,6 +92,7 @@ import org.apache.isis.core.progmodel.facets.object.immutable.annotation.Immutab
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.maxlen.annotation.MaxLengthAnnotationForTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.membergroups.annotation.MemberGroupsAnnotationElseFallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLineAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethodFacetFactory;
@@ -281,7 +282,11 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(TitleAnnotationFacetFactory.class);
         addFactory(TitleMethodFacetFactory.class);
 
+        addFactory(MemberOrderAnnotationFacetFactory.class);
         addFactory(ActionOrderAnnotationFacetFactory.class);
+        addFactory(FieldOrderAnnotationFacetFactory.class);
+        addFactory(MemberGroupsAnnotationElseFallbackFacetFactory.class);
+        
         addFactory(AggregatedAnnotationFacetFactory.class);
         addFactory(BoundedAnnotationFacetFactory.class);
         addFactory(BoundedMarkerInterfaceFacetFactory.class);
@@ -302,7 +307,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(NotContributedAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuMethodFacetFactory.class);
-        addFactory(FieldOrderAnnotationFacetFactory.class);
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
@@ -322,8 +326,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(MaxLengthAnnotationForTypeFacetFactory.class);
         addFactory(MaxLengthAnnotationForPropertyFacetFactory.class);
         addFactory(MaxLengthAnnotationForParameterFacetFactory.class);
-
-        addFactory(MemberOrderAnnotationFacetFactory.class);
 
         addFactory(MustSatisfySpecificationOnTypeFacetFactory.class);
         addFactory(MustSatisfySpecificationOnPropertyFacetFactory.class);
@@ -353,12 +355,10 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(AutoCompleteAnnotationFacetFactory.class);
 
-
         // must come after any facets that install titles
         addFactory(MaskAnnotationForTypeFacetFactory.class);
         addFactory(MaskAnnotationForPropertyFacetFactory.class);
         addFactory(MaskAnnotationForParameterFacetFactory.class);
-        
 
         // must come after any facets that install titles, and after mask
         // if takes precedence over mask.

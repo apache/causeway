@@ -183,7 +183,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         if(isNotIntrospected()) {
             final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
-            updateAssociations(asAssociations(associationOrderSet));
+            updateAssociations(asFlattenedAssociations(associationOrderSet));
         }
 
         if(isNotIntrospected()) {
@@ -218,11 +218,17 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private List<ObjectAssociation> asAssociations(final OrderSet orderSet) {
+    private List<ObjectAssociation> asFlattenedAssociations(final OrderSet orderSet) {
         if (orderSet == null) {
             return null;
         }
         final List<ObjectAssociation> associations = Lists.newArrayList();
+        addAssociations(orderSet, associations);
+
+        return associations;
+    }
+
+    private void addAssociations(final OrderSet orderSet, final List<ObjectAssociation> associations) {
         for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetMethod = (FacetedMethod) element;
@@ -232,13 +238,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                     associations.add(createProperty(facetMethod));
                 }
             } else if (element instanceof OrderSet) {
-                // Not supported at present
+                // just flatten.
+                OrderSet childOrderSet = (OrderSet) element;
+                addAssociations(childOrderSet, associations);
             } else {
                 throw new UnknownTypeException(element);
             }
         }
-
-        return associations;
     }
 
     private List<ObjectAction> asObjectActions(final OrderSet orderSet) {

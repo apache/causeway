@@ -20,12 +20,14 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -52,6 +54,8 @@ import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
+import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
@@ -68,8 +72,8 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_MEMBER_GROUP = "memberGroup";
     private static final String ID_ENTITY_PROPERTIES = "entityProperties";
+    
 
     private PropCollForm form;
 
@@ -98,6 +102,9 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
     static class PropCollForm extends FormAbstract<ObjectAdapter> {
 
         private static final long serialVersionUID = 1L;
+
+        private static final String ID_MEMBER_GROUP = "memberGroup";
+        private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
         private static final String ID_PROPERTIES = "properties";
         private static final String ID_PROPERTY = "property";
@@ -137,30 +144,40 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
         private void addPropertiesAndOrCollections() {
             final EntityModel entityModel = (EntityModel) getModel();
             final ObjectAdapter adapter = entityModel.getObject();
-            final ObjectSpecification noSpec = adapter.getSpecification();
+            final ObjectSpecification objSpec = adapter.getSpecification();
 
-            final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec, Where.OBJECT_FORMS);
+            final List<ObjectAssociation> associations = visibleAssociations(adapter, objSpec, Where.OBJECT_FORMS);
 
             final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
             add(memberGroupRv);
-            final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
-            memberGroupRv.add(memberGroupRvContainer);
-            
-            final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
-            final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
-            memberGroupRvContainer.add(propertyRv);
 
-            @SuppressWarnings("unused")
-            Component component;
-            for (final ObjectAssociation association : associations) {
-                final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
-                propertyRv.add(propertyRvContainer);
-                propertyRvContainer.add(eo.nextClass());
-                addPropertyToForm(entityModel, association, propertyRvContainer);
+            Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociations.groupByMemberOrderName(associations);
+            final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet());
+            
+            for(String groupName: groupNames) {
+                final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
+
+                final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
+                memberGroupRv.add(memberGroupRvContainer);
+                memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
+
+
+                final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
+                final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
+                memberGroupRvContainer.add(propertyRv);
+
+                @SuppressWarnings("unused")
+                Component component;
+                for (final ObjectAssociation association : associationsInGroup) {
+                    final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
+                    propertyRv.add(propertyRvContainer);
+                    propertyRvContainer.add(eo.nextClass());
+                    addPropertyToForm(entityModel, association, propertyRvContainer);
+                }
             }
         }
 
-		private void addPropertyToForm(final EntityModel entityModel,
+        private void addPropertyToForm(final EntityModel entityModel,
 				final ObjectAssociation association,
 				final WebMarkupContainer container) {
 			final OneToOneAssociation otoa = (OneToOneAssociation) association;
