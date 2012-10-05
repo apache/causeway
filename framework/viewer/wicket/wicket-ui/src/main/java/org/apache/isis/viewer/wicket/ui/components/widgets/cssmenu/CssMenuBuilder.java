@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.util.Actions;
+import org.apache.isis.viewer.wicket.model.util.ObjectActions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
 
@@ -95,7 +95,7 @@ public class CssMenuBuilder {
     }
 
     private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions, final ActionType type) {
-        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Actions.ofType(type));
+        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, ObjectActions.ofType(type));
         for (final ObjectAction action : filterActionsOfType) {
             addMenuItem(parent, action);
         }

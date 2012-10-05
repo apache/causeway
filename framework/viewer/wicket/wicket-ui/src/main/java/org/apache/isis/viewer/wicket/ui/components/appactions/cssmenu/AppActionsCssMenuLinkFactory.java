@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.model.util.Actions;
+import org.apache.isis.viewer.wicket.model.util.ObjectActions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -46,7 +46,7 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
 
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
-        final String actionLabel = Actions.labelFor(action);
+        final String actionLabel = ObjectActions.labelFor(action);
 
         return new LinkAndLabel(link, actionLabel);
     }

@@ -23,3 +23,8 @@
 .entityCollections fieldset legend {
 	margin-left: 10px;
 }
+
+.entityCollections .actions {
+	float: right;
+	height: 0px;
+}

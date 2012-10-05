@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
-import org.apache.isis.viewer.wicket.model.util.Actions;
+import org.apache.isis.viewer.wicket.model.util.ObjectActions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 
 public final class FindUsingLinkFactory implements CssMenuLinkFactory {
@@ -79,7 +79,7 @@ public final class FindUsingLinkFactory implements CssMenuLinkFactory {
             public void onClick() {
                 callback.onClick(actionModel);
             }
-        }, Actions.labelFor(action));
+        }, ObjectActions.labelFor(action));
     }
 
 }

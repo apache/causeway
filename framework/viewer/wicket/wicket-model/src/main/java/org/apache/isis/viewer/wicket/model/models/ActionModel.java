@@ -50,7 +50,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.util.ActionParams;
+import org.apache.isis.viewer.wicket.model.util.ObjectActionParameters;
 
 /**
  * Models an action invocation, either the gathering of arguments for the
@@ -189,7 +189,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
         int i = 0;
         for (final ObjectActionParameter actionParam : objectAction.getParameters()) {
-            if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
+            if (ObjectActionParameters.compatibleWith(contextAdapter, actionParam)) {
                 final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
                 PageParameterNames.ACTION_PARAM_CONTEXT.addStringTo(pageParameters, oidKeyValue);
                 return;

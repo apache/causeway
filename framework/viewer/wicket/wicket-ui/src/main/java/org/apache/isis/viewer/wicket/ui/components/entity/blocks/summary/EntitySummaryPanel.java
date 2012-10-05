@@ -21,21 +21,28 @@ package org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
@@ -62,7 +69,7 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
 
     public EntitySummaryPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
-        linkFactory = new EntityActionLinkFactory(getEntityModel(), this);
+        linkFactory = new EntityActionLinkFactory(getEntityModel());
     }
 
     /**
@@ -97,7 +104,9 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
         if (adapter != null) {
             final ObjectSpecification adapterSpec = adapter.getSpecification();
             
-            final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, ObjectActionFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE));
+            @SuppressWarnings("unchecked")
+            final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, 
+                    Filters.and(memberOrderNameNotCollection(adapterSpec), dynamicallyVisibleFor(adapter)));
 
             if(!userActions.isEmpty()) {
                 final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
@@ -111,6 +120,31 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }
+    }
+    
+    private Filter<ObjectAction> memberOrderNameNotCollection(final ObjectSpecification adapterSpec) {
+
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
+        final List<String> associationNames = Lists.transform(associations, ObjectAssociations.toName());
+        final List<String> associationIds = Lists.transform(associations, ObjectAssociations.toId());
+
+        return new Filter<ObjectAction>() {
+
+            @Override
+            public boolean accept(ObjectAction t) {
+                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
+                if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                    return true;
+                }
+                String memberOrderName = memberOrderFacet.name();
+                return !associationNames.contains(memberOrderName) && !associationIds.contains(memberOrderName);
+            }
+        };
+    }
+
+
+    protected Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
+        return ObjectActionFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
     }
 
     @Override

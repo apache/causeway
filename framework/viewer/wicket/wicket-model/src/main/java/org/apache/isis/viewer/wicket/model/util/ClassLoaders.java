@@ -32,15 +32,15 @@ public final class ClassLoaders {
     private static Map<String, Class<?>> primitives = Maps.newHashMap();
 
     static {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "rawtypes" })
         final List<Class> primitiveClasses = Arrays.<Class> asList(boolean.class, byte.class, short.class, int.class, long.class, float.class, double.class, char.class);
         for (final Class<?> cls : primitiveClasses) {
             primitives.put(cls.getName(), cls);
         }
     }
 
-    public static Class<?> forName(final ObjectSpecification noSpec) {
-        final String fullName = noSpec.getFullIdentifier();
+    public static Class<?> forName(final ObjectSpecification objectSpec) {
+        final String fullName = objectSpec.getFullIdentifier();
         return forName(fullName);
     }
 

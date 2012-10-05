@@ -24,29 +24,16 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.OddEvenItem;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -55,8 +42,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
@@ -105,28 +90,6 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         add(dataTable);
     }
     
-    public static class MyAjaxFallbackDefaultDataTable<T, S> extends DataTable<T, S>
-    {
-        private static final long serialVersionUID = 1L;
-
-        public MyAjaxFallbackDefaultDataTable(final String id, final List<? extends IColumn<T, S>> columns,
-            final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
-        {
-            super(id, columns, dataProvider, rowsPerPage);
-            setOutputMarkupId(true);
-            setVersioned(false);
-            addTopToolbar(new AjaxFallbackHeadersToolbar<S>(this, dataProvider));
-            addBottomToolbar(new AjaxNavigationToolbar(this));
-            addBottomToolbar(new NoRecordsToolbar(this));
-        }
-
-        @Override
-        protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
-        {
-            return new OddEvenItem<T>(id, index, model);
-        }
-
-    }
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
         final EntityCollectionModel model = getModel();
         
@@ -145,6 +108,12 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
 
     private void buildEntityActionsGui() {
         final EntityCollectionModel model = getModel();
+        
+        if(model.isParented()) {
+            permanentlyHide(ID_ENTITY_ACTIONS);
+            return;
+        }
+        
         final ObjectSpecification typeSpec = model.getTypeOfSpecification();
         
         @SuppressWarnings("unchecked")
@@ -153,32 +122,9 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
                         ObjectActionFilters.withNoBusinessRules(), ObjectActionFilters.contributedAnd1ParamAndVoid()
                 ));
 
-        final CssMenuLinkFactory linkFactory = new CssMenuLinkFactory(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public LinkAndLabel newLink(final ObjectAdapterMemento adapter, final ObjectAction objectAction, final String linkId) {
-                final ActionMemento actionMemento = new ActionMemento(objectAction);
-                AbstractLink link = new AjaxLink<Void>(linkId) {
-
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        final ObjectAction objectAction = actionMemento.getAction();
-                        for(ObjectAdapterMemento adapterMemento: model.getToggleMementosList()) {
-                            objectAction.execute(adapter.getObjectAdapter(ConcurrencyChecking.NO_CHECK), new ObjectAdapter[]{adapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK)});
-                        }
-                        model.clearToggleMementosList();
-                        target.add(dataTable);
-                    }
-                };
-                return new LinkAndLabel(link, objectAction.getName());
-            }
-        };
-
         if(!userActions.isEmpty()) {
+            final CssMenuLinkFactory linkFactory = new BulkCollectionsLinkFactory(model, dataTable);
+
             final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), userActions, linkFactory);
             // TODO: i18n
             final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");

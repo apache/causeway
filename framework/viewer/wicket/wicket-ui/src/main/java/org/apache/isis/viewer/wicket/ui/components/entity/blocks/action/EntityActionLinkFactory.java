@@ -33,26 +33,26 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.Actions;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.util.ObjectActions;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary.EntitySummaryPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public final class EntityActionLinkFactory implements CssMenuLinkFactory {
 
     private static final long serialVersionUID = 1L;
 
-    private final EntitySummaryPanel summaryPanel;
+    private final EntityModel entityModel;
 
-    public EntityActionLinkFactory(final EntityModel entityModel, final EntitySummaryPanel summaryPanel) {
-        this.summaryPanel = summaryPanel;
+    public EntityActionLinkFactory(final EntityModel entityModel) {
+        this.entityModel = entityModel;
     }
 
     @Override
@@ -60,8 +60,8 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
         final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
-        final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
-        final String label = Actions.labelFor(action, contextAdapter);
+        final ObjectAdapter contextAdapter = entityModel.getObject();
+        final String label = ObjectActions.labelFor(action, contextAdapter);
 
         return new LinkAndLabel(link, label);
     }
@@ -77,7 +77,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
 
     private AbstractLink createLinkForPersistent(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-        final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
+        final ObjectAdapter contextAdapter = entityModel.getObject();
 
         final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, contextAdapter, ActionModel.SingleResultsMode.REDIRECT);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
@@ -96,7 +96,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
                 // let multiple setResponsePage() calls once
                 // committed to redirecting (I'm guessing)
                 final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
-                summaryPanel.onClick(actionModel);
+                setResponsePage(new ActionPage(actionModel));
             }
         };
     }

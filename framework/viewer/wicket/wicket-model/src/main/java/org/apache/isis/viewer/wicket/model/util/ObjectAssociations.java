@@ -75,5 +75,22 @@ public final class ObjectAssociations {
         return list;
     }
 
+    public static Function<ObjectAssociation, String> toName() {
+        return new Function<ObjectAssociation, String>() {
+            @Override
+            public String apply(final ObjectAssociation oa) {
+                return oa.getName();
+            }
+        };
+    }
+
+    public static Function<ObjectAssociation, String> toId() {
+        return new Function<ObjectAssociation, String>() {
+            @Override
+            public String apply(final ObjectAssociation oa) {
+                return oa.getId();
+            }
+        };
+    }
 
 }

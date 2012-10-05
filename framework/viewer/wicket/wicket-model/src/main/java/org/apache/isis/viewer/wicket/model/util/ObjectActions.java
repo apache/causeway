@@ -25,11 +25,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-public final class Actions {
+public final class ObjectActions {
 
-    private Actions() {
+    private ObjectActions() {
     }
 
     public static Predicate<ObjectAction> ofType(final ActionType type) {
@@ -42,7 +41,7 @@ public final class Actions {
     }
 
     public static String labelFor(final ObjectAction objectAction) {
-        final String actionName = Actions.nameFor(objectAction);
+        final String actionName = ObjectActions.nameFor(objectAction);
         String actionLabel = actionName;
         if (objectAction.getParameterCount() > 0) {
             actionLabel += "...";

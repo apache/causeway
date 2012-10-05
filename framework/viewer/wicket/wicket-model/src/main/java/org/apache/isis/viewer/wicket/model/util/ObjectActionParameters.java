@@ -22,9 +22,9 @@ package org.apache.isis.viewer.wicket.model.util;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-public final class ActionParams {
+public final class ObjectActionParameters {
 
-    private ActionParams() {
+    private ObjectActionParameters() {
     }
 
     public static boolean compatibleWith(final ObjectAdapter contextAdapter, final ObjectActionParameter actionParam) {
