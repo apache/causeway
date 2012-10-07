@@ -6784,20 +6784,20 @@ public class CustomerFirstName {
         <programlisting>@MemberGroups({"General", "Dates", "Other"})
 public Class Customer {
     @MemberOrder(name="General", sequence="1.1")
-    Public String getFirstName() {...}
-    Public void setFirstName(value as String) {...}
+    public String getFirstName() {...}
+    public void setFirstName(value as String) {...}
 
     @MemberOrder(name="General", sequence="1.2")
-    Public String getLastName() {...}
-    Public void setLastName(value as String) {...}
+    public String getLastName() {...}
+    public void setLastName(value as String) {...}
 
     @MemberOrder(name="Other", sequence="1")
-    Public String getAddress() {...}
-    Public void setAddress(value as String) {...}
+    public String getAddress() {...}
+    public void setAddress(value as String) {...}
 
     @MemberOrder(name="Dates", sequence="1")
-    Public Date getDateOfBirth() {...}
-    Public void setDateOfBirth(value as Date) {...}
+    public Date getDateOfBirth() {...}
+    public void setDateOfBirth(value as Date) {...}
     ...
 }   </programlisting>
 
@@ -6828,20 +6828,20 @@ public Class Customer {
 
         <programlisting>public Class Customer {
     @MemberOrder(sequence="2.1")
-    Public String getAddress() {...}
-    Public void setAddress(value as String) {...}
+    public String getAddress() {...}
+    public void setAddress(value as String) {...}
 
     @MemberOrder(sequence="1.1")
-    Public String getFirstName() {...}
-    Public void setFirstName(value as String) {...}
+    public String getFirstName() {...}
+    public void setFirstName(value as String) {...}
 
     @MemberOrder(sequence="1.2")
-    Public String getLastName() {...}
-    Public void setLastName(value as String) {...}
+    public String getLastName() {...}
+    public void setLastName(value as String) {...}
 
     @MemberOrder(sequence="3")
-    Public Date getDateOfBirth() {...}
-    Public void setDateOfBirth(value as Date) {...}
+    public Date getDateOfBirth() {...}
+    public void setDateOfBirth(value as Date) {...}
     ...
 }   </programlisting>
 
@@ -6863,24 +6863,25 @@ public Class Customer {
         grouping members together. In this case the <varname>name</varname>
         attribute can be specified.</para>
 
-        <para>For example:</para>
+        <para>For example, the following can be used to group
+        properties:</para>
 
         <programlisting>public Class Customer {
     @MemberOrder(name="General", sequence="1.1")
-    Public String getFirstName() {...}
-    Public void setFirstName(value as String) {...}
+    public String getFirstName() {...}
+    public void setFirstName(value as String) {...}
 
     @MemberOrder(name="General", sequence="1.2")
-    Public String getLastName() {...}
-    Public void setLastName(value as String) {...}
+    public String getLastName() {...}
+    public void setLastName(value as String) {...}
 
     @MemberOrder(name="Other", sequence="1")
-    Public String getAddress() {...}
-    Public void setAddress(value as String) {...}
+    public String getAddress() {...}
+    public void setAddress(value as String) {...}
 
     @MemberOrder(name="Dates", sequence="1")
-    Public Date getDateOfBirth() {...}
-    Public void setDateOfBirth(value as Date) {...}
+    public Date getDateOfBirth() {...}
+    public void setDateOfBirth(value as Date) {...}
     ...
 }   </programlisting>
 
@@ -6889,6 +6890,28 @@ public Class Customer {
         way, typically the MemberGroups annotation (see <xref
         linkend="sec.MemberGroupsAnnotation" />) should also be specified,
         allowing the order of the groups themselves to be sorted.</para>
+
+        <para>Grouping can also be performed on actions. Some viewers (for
+        example the Wicket viewer) support the idea that the group name can be
+        the name of a collection. In this case, the action is rendered "near
+        to" the collection (for example, to support add or remove of
+        elements).</para>
+
+        <para>For example:</para>
+
+        <programlisting>public Class Customer {
+
+    public List&lt;CommunicationChannel&gt; getCommunicationChannels() { ... }
+
+    ...
+    @MemberOrder(name="communicationChannels", sequence="1.1")
+    public void addCommunicationChannel(...) { ... }
+
+    @MemberOrder(name="communicationChannels", sequence="1.2")
+    public void removeCommunicationChannel(...) { ... }
+
+    ...
+}   </programlisting>
       </sect1>
 
       <sect1>
