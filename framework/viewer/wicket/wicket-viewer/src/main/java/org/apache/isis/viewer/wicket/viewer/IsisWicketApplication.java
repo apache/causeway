@@ -174,14 +174,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected void init() {
         super.init();
         
-        // 6.0.0 rather than overriding getRequestCycleSettings
-        //
-        // TODO: to reinstate for our optimistic locking strategy; 
-        // need to use REDIRECT_TO_BUFFER temporarily in order to get FeedbackMessage's to render
-        // see enquiry raised on wicket-user@a.o
-        
-        //final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_RENDER;
-        final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_BUFFER;
+        final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_RENDER;
         
         getRequestCycleSettings().setRenderStrategy(renderStrategy);
         

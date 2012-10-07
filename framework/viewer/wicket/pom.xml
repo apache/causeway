@@ -38,7 +38,7 @@
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>viewer/wicket/</relativeUrl>
 
-		<wicket.version>6.0.0</wicket.version>
+		<wicket.version>6.1.0</wicket.version>
 		<wicketstuff.version>6.0.0</wicketstuff.version>
 		<wicket-select2.version>2.0</wicket-select2.version>
 

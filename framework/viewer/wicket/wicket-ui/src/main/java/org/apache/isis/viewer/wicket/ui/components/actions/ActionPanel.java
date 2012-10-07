@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -130,7 +131,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             final ResultType resultType = ResultType.determineFor(resultAdapter);
             resultType.addResults(this, resultAdapter);
             
-            bookmarkPage(actionModel);
+            if(actionModel.hasSafeActionSemantics()) {
+                bookmarkPage(actionModel);
+            }
 
         } catch(ConcurrencyException ex) {
             

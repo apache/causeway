@@ -34,7 +34,7 @@
             <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>maven-datanucleus-plugin</artifactId>
-                <version>3.1.0-release</version>
+                <version>3.1.1</version>
                 <configuration>
                 	<fork>false</fork>
                     <verbose>true</verbose>

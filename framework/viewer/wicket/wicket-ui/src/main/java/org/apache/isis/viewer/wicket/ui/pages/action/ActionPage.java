@@ -23,6 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.Mode;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -43,7 +44,9 @@ public class ActionPage extends PageAbstract {
         super(new PageParameters(), ComponentType.ACTION);
         addChildComponents(model);
 
-        bookmarkPage(model);
+        if(model.hasSafeActionSemantics()) {
+            bookmarkPage(model);
+        }
         addBreadcrumbs();
     }
 

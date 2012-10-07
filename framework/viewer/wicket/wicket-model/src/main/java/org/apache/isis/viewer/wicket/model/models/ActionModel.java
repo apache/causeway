@@ -51,6 +51,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.util.ObjectActionParameters;
+import org.apache.isis.applib.annotation.ActionSemantics;
 
 /**
  * Models an action invocation, either the gathering of arguments for the
@@ -519,6 +520,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return IsisContext.getOidMarshaller();
     }
 
+    public boolean hasSafeActionSemantics() {
+        return getActionMemento().getAction().getSemantics() == ActionSemantics.Of.SAFE;
+    }
 
 
 }
