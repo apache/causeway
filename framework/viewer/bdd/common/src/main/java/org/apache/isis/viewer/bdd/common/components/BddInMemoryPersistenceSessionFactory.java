@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.bdd.common.components;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceSessionFactory;
@@ -34,8 +35,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
  */
 public class BddInMemoryPersistenceSessionFactory extends InMemoryPersistenceSessionFactory {
 
-    public BddInMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
-        super(deploymentType, persistenceSessionFactoryDelegate);
+    public BddInMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final IsisConfiguration configuration, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+        super(deploymentType, configuration, persistenceSessionFactoryDelegate);
     }
 
     @Override

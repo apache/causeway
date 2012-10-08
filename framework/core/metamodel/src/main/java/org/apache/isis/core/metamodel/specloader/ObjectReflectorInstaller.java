@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 /**
@@ -29,7 +30,7 @@ public interface ObjectReflectorInstaller extends Installer {
 
     static String TYPE = "reflector";
 
-    SpecificationLoaderSpi createReflector();
+    SpecificationLoaderSpi createReflector(MetaModelRefiner programmingModelAdjuster);
 
     void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller);
 

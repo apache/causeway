@@ -30,6 +30,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -200,7 +201,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType, final MetaModelRefiner programmingModelAdjuster) throws IsisSystemException {
         if (reflectorInstaller == null) {
             final String fromCmdLine = getConfiguration().getString(SystemConstants.REFLECTOR_KEY);
             reflectorInstaller = installerLookup.reflectorInstaller(fromCmdLine);
@@ -210,7 +211,8 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         // add in transaction support (if already in set then will be ignored)
         reflectorInstaller.addFacetDecoratorInstaller(installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class));
 
-        return reflectorInstaller.createReflector();
+        final SpecificationLoaderSpi reflector = reflectorInstaller.createReflector(programmingModelAdjuster);
+        return reflector;
     }
 
     // ///////////////////////////////////////////

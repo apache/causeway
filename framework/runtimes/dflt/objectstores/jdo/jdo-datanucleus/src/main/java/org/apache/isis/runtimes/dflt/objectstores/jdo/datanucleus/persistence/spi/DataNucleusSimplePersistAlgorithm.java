@@ -33,9 +33,6 @@ public class DataNucleusSimplePersistAlgorithm extends PersistAlgorithmAbstract 
     // makePersistent
     // ////////////////////////////////////////////////////////////////
 
-    /**
-     * @see NakedInsertPostEventListener#onPostInsert(org.hibernate.event.PostInsertEvent)
-     */
     public void makePersistent(final ObjectAdapter adapter,
             final ToPersistObjectSet toPersistObjectSet) {
         if (alreadyPersistedOrNotPersistable(adapter)) {

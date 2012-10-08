@@ -50,7 +50,7 @@ public class XmlPersistenceMechanismInstaller extends PersistenceMechanismInstal
     }
 
     @Override
-    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
+    public IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
         final long currentTime = new Date().getTime();
         return new IdentifierGeneratorDefault(currentTime);
     }

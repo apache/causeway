@@ -24,7 +24,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -55,12 +54,6 @@ public final class ReflectorConstants {
     public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.memberlayoutarranger";
     public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault";
 
-    /**
-     * Key used to lookup implementation of {@link ClassSubstitutor} in
-     * {@link IsisConfiguration}.
-     */
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.class-substitutor";
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor.CglibClassSubstitutor";
 
     /**
      * Key used to lookup implementation of {@link SpecificationTraverser} in

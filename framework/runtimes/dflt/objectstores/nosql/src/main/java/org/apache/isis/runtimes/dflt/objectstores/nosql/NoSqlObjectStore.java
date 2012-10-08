@@ -23,6 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -46,14 +49,10 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class NoSqlObjectStore implements ObjectStoreSpi {
     

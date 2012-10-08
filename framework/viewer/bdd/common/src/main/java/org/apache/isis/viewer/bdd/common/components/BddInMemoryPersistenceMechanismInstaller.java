@@ -42,7 +42,7 @@ public class BddInMemoryPersistenceMechanismInstaller extends InMemoryPersistenc
 
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new BddInMemoryPersistenceSessionFactory(deploymentType, this);
+        return new BddInMemoryPersistenceSessionFactory(deploymentType, getConfiguration(), this);
     }
 
 }

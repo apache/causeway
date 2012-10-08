@@ -22,44 +22,22 @@ package org.apache.isis.runtimes.dflt.runtime.persistence;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 
 public final class PersistenceConstants {
 
-    /**
-     * Key used to lookup implementation of {@link ObjectAdapterFactory} in
-     * {@link IsisConfiguration}.
-     */
-    public static final String ADAPTER_FACTORY_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.adapter-factory";
-    public static final String ADAPTER_FACTORY_CLASS_NAME_DEFAULT = PojoAdapterFactory.class.getName();
 
     /**
-     * Key used to lookup implementation of {@link IdentifierGenerator} in
-     * {@link IsisConfiguration}.
+     * Default implementation to use as {@link ObjectFactory}.
      */
-    public static final String IDENTIFIER_GENERATOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.identifier-generator";
-    public static final String IDENTIFIER_GENERATOR_CLASS_NAME_DEFAULT = IdentifierGeneratorDefault.class.getName();
-
-    /**
-     * Key used to lookup implementation of {@link ObjectFactory} in
-     * {@link IsisConfiguration}.
-     */
-    public static final String OBJECT_FACTORY_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.object-factory";
     public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory";
-
+    
     /**
-     * Key used to lookup implementation of {@link ServicesInjectorSpi} in
-     * {@link IsisConfiguration}.
+     * Default implementation to use as {@link ClassSubstitutor}.
      */
-    public static final String SERVICES_INJECTOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.services-injector";
-    public static final String SERVICES_INJECTOR_CLASS_NAME_DEFAULT = ServicesInjectorDefault.class.getName();
+    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor.CglibClassSubstitutor";
 
     /**
      * Key used to lookup implementation of {@link DomainObjectContainer} in

@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -119,7 +120,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * @see #obtainReflectorSpecificationTraverser()
      */
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, MetaModelRefiner facetFactoriesProvider) throws IsisSystemException {
         ClassSubstitutor classSubstitutor = obtainReflectorClassSubstitutor();
         CollectionTypeRegistry collectionTypeRegistry = obtainReflectorCollectionTypeRegistry();
         SpecificationTraverser specificationTraverser = obtainReflectorSpecificationTraverser();
@@ -131,7 +132,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
      * @return
      */
     protected ClassSubstitutor obtainReflectorClassSubstitutor() {
@@ -139,7 +140,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
      * @return
      */
     protected CollectionTypeRegistry obtainReflectorCollectionTypeRegistry() {
@@ -147,7 +148,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
      * @return
      */
     protected SpecificationTraverser obtainReflectorSpecificationTraverser() {
@@ -155,7 +156,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
      * @return
      */
     protected ProgrammingModel obtainReflectorProgrammingModel() {
@@ -163,7 +164,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
      * @return
      */
     protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
@@ -171,7 +172,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
      * @return
      */
     protected MetaModelValidator obtainReflectorMetaModelValidator() {

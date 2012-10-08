@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -209,7 +210,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // Reflector
     // ///////////////////////////////////////////
 
-    protected abstract SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType) throws IsisSystemException;
+    protected abstract SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, MetaModelRefiner facetFactoriesProvider) throws IsisSystemException;
 
     // ///////////////////////////////////////////
     // PersistenceSessionFactory

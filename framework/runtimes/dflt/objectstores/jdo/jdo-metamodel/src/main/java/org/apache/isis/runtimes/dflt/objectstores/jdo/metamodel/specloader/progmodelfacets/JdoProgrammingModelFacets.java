@@ -32,10 +32,10 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.prop.prim
 /**
  * As per the {@link ProgrammingModelFacetsJava5 Java 5 default programming
  * model}, but also
- * includes support for JPA.
+ * includes support for JDO.
  * <p>
  * Intended to be used by the {@link JpaJavaReflectorInstaller}, which
- * additionally sets up other required components needed for JPA support.
+ * additionally sets up other required components needed for JDO support.
  */
 public class JdoProgrammingModelFacets extends ProgrammingModelFacetsJava5 {
 

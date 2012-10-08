@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
@@ -48,6 +49,7 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 /**
  * An implementation of {@link ObjectReflectorInstaller} without support for {@link FacetDecoratorInstaller}
@@ -84,46 +86,24 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * calling this.
      */
     @Override
-    public SpecificationLoaderSpi createReflector() {
-        final ClassSubstitutor classSubstitutor = createClassSubstitutor(getConfiguration());
+    public SpecificationLoaderSpi createReflector(final MetaModelRefiner metaModelRefiner) {
+
         final CollectionTypeRegistry collectionTypeRegistry = createCollectionTypeRegistry(getConfiguration());
         final SpecificationTraverser specificationTraverser = createSpecificationTraverser(getConfiguration());
         final MemberLayoutArranger memberLayoutArranger = createMemberLayoutArranger(getConfiguration());
-        final ProgrammingModel programmingModel = createProgrammingModelFacets(getConfiguration());
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
-        final MetaModelValidator metaModelValidator = createMetaModelValidator(getConfiguration());
+
+        final ClassSubstitutor classSubstitutor = metaModelRefiner.createClassSubstitutor(getConfiguration());
+        
+        final ProgrammingModel baseProgrammingModel = createProgrammingModel(getConfiguration());
+        final ProgrammingModel programmingModel = metaModelRefiner.refineProgrammingModel(baseProgrammingModel, getConfiguration());
+        final MetaModelValidatorComposite baseMetaModelValidator = wrapped(createMetaModelValidator(getConfiguration()));
+        final MetaModelValidator metaModelValidator = metaModelRefiner.refineMetaModelValidator(baseMetaModelValidator, getConfiguration());
 
         final ObjectReflectorDefault reflector = doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
-
         return reflector;
     }
 
-    /**
-     * Hook method to allow subclasses to specify a different implementation of
-     * {@link ClassSubstitutor}.
-     * 
-     * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link ReflectorConstants#CLASS_SUBSTITUTOR_CLASS_NAME_LIST}. If not
-     * specified, then defaults to
-     * {@value ReflectorConstants#CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT}.
-     * 
-     * <p>
-     * 
-     */
-    protected ClassSubstitutor createClassSubstitutor(final IsisConfiguration configuration) {
-        final String[] configuredClassNames = configuration.getList(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_LIST);
-        if (configuredClassNames == null || configuredClassNames.length == 0) {
-            return InstanceUtil.createInstance(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT, ClassSubstitutor.class);
-        }
-        final List<ClassSubstitutor> substitutors = Lists.newArrayList();
-        for (final String className : configuredClassNames) {
-            final ClassSubstitutor substitutor = InstanceUtil.createInstance(className, ClassSubstitutor.class);
-            substitutors.add(substitutor);
-        }
-        return substitutors.size() == 1 ? substitutors.get(0) : new ClassSubstitutorComposite(substitutors);
-    }
 
     /**
      * Hook method to allow subclasses to specify a different implementation of
@@ -177,7 +157,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * {@link ReflectorConstants#FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST} to
      * exclude.
      */
-    protected ProgrammingModel createProgrammingModelFacets(final IsisConfiguration configuration) {
+    protected ProgrammingModel createProgrammingModel(final IsisConfiguration configuration) {
         final ProgrammingModel programmingModel = lookupAndCreateProgrammingModelFacets(configuration);
         includeFacetFactories(configuration, programmingModel);
         excludeFacetFactories(configuration, programmingModel);
@@ -191,7 +171,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
     }
 
     /**
-     * Factored out of {@link #createProgrammingModelFacets(IsisConfiguration)}
+     * Factored out of {@link #createProgrammingModel(IsisConfiguration)}
      * so that subclasses that choose to override can still support
      * customization of their {@link ProgrammingModel} in a similar way.
      */
@@ -206,7 +186,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
     }
 
     /**
-     * Factored out of {@link #createProgrammingModelFacets(IsisConfiguration)}
+     * Factored out of {@link #createProgrammingModel(IsisConfiguration)}
      * so that subclasses that choose to override can still support
      * customization of their {@link ProgrammingModel} in a similar way.
      */
@@ -240,8 +220,13 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      */
     protected MetaModelValidator createMetaModelValidator(final IsisConfiguration configuration) {
         final String metaModelValidatorClassName = configuration.getString(ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME, ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
-        final MetaModelValidator metaModelValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
-        return metaModelValidator;
+        return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
+    }
+
+    private MetaModelValidatorComposite wrapped(MetaModelValidator baseMetaModelValidator) {
+        final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();
+        metaModelValidatorComposite.add(baseMetaModelValidator);
+        return metaModelValidatorComposite;
     }
 
     /**

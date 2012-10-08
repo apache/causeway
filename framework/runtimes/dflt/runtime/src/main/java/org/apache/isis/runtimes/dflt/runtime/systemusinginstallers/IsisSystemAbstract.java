@@ -175,7 +175,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
         final TemplateImageLoader templateImageLoader = obtainTemplateImageLoader();
-        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType);
+        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory);
         final OidMarshaller oidMarshaller = obtainOidMarshaller();
 
         final List<Object> servicesList = obtainServices();

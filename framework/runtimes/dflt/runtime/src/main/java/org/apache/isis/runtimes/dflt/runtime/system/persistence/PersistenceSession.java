@@ -227,7 +227,6 @@ public class PersistenceSession implements
         // wire dependencies into adapterManager
         servicesInjector.injectInto(adapterManager);
 
-        servicesInjector.open();
         objectFactory.open();
         adapterManager.open();
 
@@ -267,7 +266,6 @@ public class PersistenceSession implements
         objectStore.close();
 
         adapterManager.close();
-        servicesInjector.close();
         objectFactory.close();
 
         setState(State.CLOSED);

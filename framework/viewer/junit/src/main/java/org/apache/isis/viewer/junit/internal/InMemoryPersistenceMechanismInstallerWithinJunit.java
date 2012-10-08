@@ -30,7 +30,7 @@ public class InMemoryPersistenceMechanismInstallerWithinJunit extends InMemoryPe
      * Returns a {@link DomainObjectContainerHeadlessViewer}.
      */
     @Override
-    protected DomainObjectContainer createContainer(final IsisConfiguration configuration) {
+    public DomainObjectContainer createContainer(final IsisConfiguration configuration) {
         return new DomainObjectContainerWrapperFactory();
     }
 

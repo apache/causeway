@@ -9,13 +9,30 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.AuditService;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.bytecode.DataNucleusTypesClassSubstitutor;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.specloader.progmodelfacets.DataNucleusProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusTransactionManager;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable.AuditableAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator.JdoMetaModelValidatorLeaf;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
@@ -74,6 +91,11 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         super(NAME);
     }
 
+    
+    ////////////////////////////////////////////////////////////////////////
+    // createObjectStore
+    ////////////////////////////////////////////////////////////////////////
+    
     @Override
     protected ObjectStoreSpi createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerSpi adapterManager) {
         createDataNucleusApplicationComponentsIfRequired(configuration);
@@ -90,6 +112,10 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         
         applicationComponents = new DataNucleusApplicationComponents(props, getSpecificationLoader().allSpecifications());
     }
+
+    ////////////////////////////////////////////////////////////////////////
+    // createPersistenceSession
+    ////////////////////////////////////////////////////////////////////////
 
     @Override
     public PersistenceSession createPersistenceSession(PersistenceSessionFactory persistenceSessionFactory) {
@@ -109,16 +135,10 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         }
         searchedForAuditService = true;
     }
-    
-    @Override
-    protected IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
-        return new DataNucleusIdentifierGenerator();
-    }
 
-    @Override
-    protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
-        return new DataNucleusTransactionManager(persistor, objectStore, auditService);
-    }
+    ////////////////////////////////////////////////////////////////////////
+    // PersistenceSessionFactoryDelegate impl
+    ////////////////////////////////////////////////////////////////////////
 
     @Override
     protected PersistAlgorithm createPersistAlgorithm(IsisConfiguration configuration) {
@@ -126,17 +146,77 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
     
     @Override
-    protected ObjectFactory createObjectFactory(IsisConfiguration configuration) {
+    public IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
+        return new DataNucleusIdentifierGenerator();
+    }
+
+    @Override
+    public ClassSubstitutor createClassSubstitutor(IsisConfiguration configuration) {
+        return new DataNucleusTypesClassSubstitutor();
+    }
+
+    @Override
+    public ProgrammingModel refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+
+        addJdoFacetFactories(baseProgrammingModel);
+        addDataNucleusFacetFactories(baseProgrammingModel);
+
+        return baseProgrammingModel;
+    }
+
+    private void addJdoFacetFactories(ProgrammingModel baseProgrammingModel) {
+        baseProgrammingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
+        baseProgrammingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
+        baseProgrammingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
+
+        baseProgrammingModel.addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
+        baseProgrammingModel.addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
+
+        baseProgrammingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
+        
+        baseProgrammingModel.addFactory(AuditableAnnotationFacetFactory.class);
+        baseProgrammingModel.addFactory(AuditableMarkerInterfaceFacetFactory.class);
+    }
+
+    private void addDataNucleusFacetFactories(ProgrammingModel baseProgrammingModel) {
+        baseProgrammingModel.addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
+        baseProgrammingModel.addFactory(RemoveJdoPrefixedMethodsFacetFactory.class);
+    }
+
+    @Override
+    public MetaModelValidator refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
+        return baseMetaModelValidator.add(new JdoMetaModelValidatorLeaf());
+    }
+
+
+    @Override
+    protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
+        return new DataNucleusTransactionManager(persistor, objectStore, auditService);
+    }
+
+    @Override
+    public ObjectFactory createObjectFactory(IsisConfiguration configuration) {
         return new ObjectFactoryBasic();
     }
 
     @Override
-    protected DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {
+    public DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {
         return new DataNucleusPojoRecreator();
     }
+
+
+
+
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Dependencies
+    ////////////////////////////////////////////////////////////////////////
     
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+
+
 
 }

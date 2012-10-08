@@ -72,7 +72,7 @@ public class PersistorSessionHydratorTest {
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
         .with(Initialization.NO_INIT)
         .with(new InMemoryPersistenceMechanismInstaller() {
-            protected IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
+            public IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
                 return mockIdentifierGenerator;
             };
         })

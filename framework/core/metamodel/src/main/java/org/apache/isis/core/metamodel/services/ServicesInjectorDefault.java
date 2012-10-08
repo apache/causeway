@@ -37,12 +37,12 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+/**
+ * Must be a thread-safe.
+ */
 public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static final Logger LOG = Logger.getLogger(ServicesInjectorDefault.class);
@@ -50,16 +50,20 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     private final List<Object> services = Lists.newArrayList();
     private DomainObjectContainer container;
 
-    /**
-     * Ensure that all services are wired into each other.
-     */
+
+    
+    // /////////////////////////////////////////////////////////
+    // Constructor, init, shutdown
+    // /////////////////////////////////////////////////////////
+
+
     @Override
-    public void open() {
+    public void init() {
         autowireServicesAndContainer();
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
     }
 
     // /////////////////////////////////////////////////////////
@@ -75,6 +79,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     public void setContainer(final DomainObjectContainer container) {
         ensureThatArg(container, is(not(nullValue())));
         this.container = container;
+        autowireServicesAndContainer();
     }
 
     // /////////////////////////////////////////////////////////
@@ -211,5 +216,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
         return null;
     }
+
 
 }

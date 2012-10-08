@@ -56,8 +56,8 @@ public class JdoMetaModelValidatorLeaf extends MetaModelValidatorAbstract {
                 continue;
             }
             final IdentityType identityType = jpcf.getIdentityType();
-            if(identityType != IdentityType.DATASTORE) {
-                validationFailures.add("DataNucleus object store: {0} must be annotated with @PersistenceCapable, with an identityType of either DATASTORE (has an identityType of {1})", objSpec.getFullIdentifier(), identityType);
+            if(identityType != IdentityType.DATASTORE && identityType != IdentityType.UNSPECIFIED) {
+                validationFailures.add("DataNucleus object store: {0} must be annotated with @PersistenceCapable, with an identityType of either DATASTORE or UNSPECIFIED (has an identityType of {1})", objSpec.getFullIdentifier(), identityType);
             }
             
             // TODO: ensure that DATASTORE has recognised @DatastoreIdentity attribute

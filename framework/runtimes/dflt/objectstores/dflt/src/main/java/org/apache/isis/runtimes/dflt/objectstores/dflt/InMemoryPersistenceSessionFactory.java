@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;
@@ -34,8 +35,8 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
 
     private ObjectStorePersistedObjects persistedObjects;
 
-    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
-        super(deploymentType, persistenceSessionFactoryDelegate);
+    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final IsisConfiguration configuration, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+        super(deploymentType, configuration, persistenceSessionFactoryDelegate);
     }
 
     protected ObjectStorePersistedObjects getPersistedObjects() {

@@ -37,8 +37,9 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         }
     }
 
-    public void addValidator(final MetaModelValidator validator) {
+    public MetaModelValidatorComposite add(final MetaModelValidator validator) {
         validators.add(validator);
+        return this;
     }
 
     public List<MetaModelValidator> getValidators() {

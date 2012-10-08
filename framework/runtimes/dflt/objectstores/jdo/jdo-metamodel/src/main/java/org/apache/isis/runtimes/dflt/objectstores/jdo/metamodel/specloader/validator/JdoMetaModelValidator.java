@@ -24,8 +24,8 @@ import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidator
 public class JdoMetaModelValidator extends MetaModelValidatorComposite {
 
     public JdoMetaModelValidator() {
-        addValidator(new MetaModelValidatorDefault());
-        addValidator(new JdoMetaModelValidatorLeaf());
+        add(new MetaModelValidatorDefault());
+        add(new JdoMetaModelValidatorLeaf());
     }
 
 }

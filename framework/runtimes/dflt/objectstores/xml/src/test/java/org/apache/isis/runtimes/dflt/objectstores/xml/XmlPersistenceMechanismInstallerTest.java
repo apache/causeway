@@ -21,20 +21,33 @@ package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import static org.junit.Assert.assertTrue;
 
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 public class XmlPersistenceMechanismInstallerTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+
     private DeploymentType deploymentType;
     XmlPersistenceMechanismInstaller installer;
+    
+    @Mock
+    private IsisConfiguration mockConfiguration;
 
     @Before
     public void setUpSystem() throws Exception {
         installer = new XmlPersistenceMechanismInstaller();
+        installer.setConfiguration(mockConfiguration);
     }
 
     @Test

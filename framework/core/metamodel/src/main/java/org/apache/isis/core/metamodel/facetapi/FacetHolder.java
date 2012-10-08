@@ -27,7 +27,7 @@ import org.apache.isis.applib.filter.Filter;
  * Anything in the metamodel (which also includes peers in the reflector) that
  * can be extended.
  */
-public interface FacetHolder extends FacetProvider {
+public interface FacetHolder {
 
     /**
      * Get the list of all facet <i>types</i> that are supported by objects of

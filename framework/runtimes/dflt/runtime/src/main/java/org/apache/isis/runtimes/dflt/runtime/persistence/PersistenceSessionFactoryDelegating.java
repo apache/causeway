@@ -19,17 +19,32 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -40,13 +55,24 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class PersistenceSessionFactoryDelegating implements PersistenceSessionFactory, FixturesInstalledFlag {
 
     private final DeploymentType deploymentType;
+    private final IsisConfiguration configuration;
     private final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate;
+    
     private List<Object> serviceList;
 
     private Boolean fixturesInstalled;
+    
+    private PojoRecreator pojoRecreator;
+    private ObjectAdapterFactory adapterFactory;
+    private ObjectFactory objectFactory;
+    private IdentifierGenerator identifierGenerator;
+    private ServicesInjectorSpi servicesInjector;
+    private DomainObjectContainer container;
+    private RuntimeContext runtimeContext;
 
-    public PersistenceSessionFactoryDelegating(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public PersistenceSessionFactoryDelegating(final DeploymentType deploymentType, final IsisConfiguration isisConfiguration, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         this.deploymentType = deploymentType;
+        this.configuration = isisConfiguration;
         this.persistenceSessionFactoryDelegate = persistenceSessionFactoryDelegate;
     }
 
@@ -81,19 +107,44 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
             FixtureClock.initialize();
         }
 
-        doInit();
+        pojoRecreator = persistenceSessionFactoryDelegate.createPojoRecreator(getConfiguration());
+        adapterFactory = persistenceSessionFactoryDelegate.createAdapterFactory(getConfiguration());
+        objectFactory = persistenceSessionFactoryDelegate.createObjectFactory(getConfiguration());
+        identifierGenerator = persistenceSessionFactoryDelegate.createIdentifierGenerator(getConfiguration());
+
+        ensureThatState(pojoRecreator, is(not(nullValue())));
+        ensureThatState(adapterFactory, is(not(nullValue())));
+        ensureThatState(objectFactory, is(not(nullValue())));
+        ensureThatState(identifierGenerator, is(not(nullValue())));
+
+        servicesInjector = persistenceSessionFactoryDelegate.createServicesInjector(getConfiguration());
+        container = persistenceSessionFactoryDelegate.createContainer(getConfiguration());
+
+        ensureThatState(servicesInjector, is(not(nullValue())));
+        ensureThatState(container, is(not(nullValue())));
+
+        runtimeContext = persistenceSessionFactoryDelegate.createRuntimeContext(getConfiguration());
+        ensureThatState(runtimeContext, is(not(nullValue())));
+
+        
+        // wire up components
+
+        getSpecificationLoader().injectInto(runtimeContext);
+        runtimeContext.injectInto(container);
+        runtimeContext.setContainer(container);
+        for (Object service : serviceList) {
+            runtimeContext.injectInto(service);
+        }
+
+        servicesInjector.setContainer(container);
+        servicesInjector.setServices(serviceList);
+        servicesInjector.init();
     }
 
-    /**
-     * Optional hook method for implementation-specific initialization.
-     */
-    protected void doInit() {
-    }
 
     @Override
     public final void shutdown() {
         doShutdown();
-        // other
     }
 
     /**
@@ -101,6 +152,63 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
      */
     protected void doShutdown() {
     }
+
+    
+    // //////////////////////////////////////////////////////
+    // Components (setup during init...)
+    // //////////////////////////////////////////////////////
+
+    public ObjectAdapterFactory getAdapterFactory() {
+        return adapterFactory;
+    }
+    
+    public IdentifierGenerator getIdentifierGenerator() {
+        return identifierGenerator;
+    }
+    
+    public ObjectFactory getObjectFactory() {
+        return objectFactory;
+    }
+    
+    public PojoRecreator getPojoRecreator() {
+        return pojoRecreator;
+    }
+
+    public RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
+    
+    public ServicesInjectorSpi getServicesInjector() {
+        return servicesInjector;
+    }
+    
+    public List<Object> getServiceList() {
+        return serviceList;
+    }
+
+    public DomainObjectContainer getContainer() {
+        return container;
+    }
+
+    // //////////////////////////////////////////////////////
+    // MetaModelAdjuster impl
+    // //////////////////////////////////////////////////////
+
+    @Override
+    public ClassSubstitutor createClassSubstitutor(final IsisConfiguration configuration) {
+        return persistenceSessionFactoryDelegate.createClassSubstitutor(configuration);
+    }
+
+    @Override
+    public MetaModelValidator refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        return persistenceSessionFactoryDelegate.refineMetaModelValidator(metaModelValidator, configuration);
+    }
+
+    @Override
+    public ProgrammingModel refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+        return persistenceSessionFactoryDelegate.refineProgrammingModel(baseProgrammingModel, configuration);
+    }
+
 
     // //////////////////////////////////////////////////////
     // FixturesInstalledFlag impl
@@ -117,6 +225,14 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     }
 
     // //////////////////////////////////////////////////////
+    // Dependencies (injected from constructor)
+    // //////////////////////////////////////////////////////
+
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+    
+    // //////////////////////////////////////////////////////
     // Dependencies (injected via setters)
     // //////////////////////////////////////////////////////
 
@@ -131,12 +247,15 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     }
 
 
-    
     // //////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////
 
+    
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+
+
 }

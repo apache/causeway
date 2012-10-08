@@ -59,7 +59,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends PersistenceMechan
     }
 
     @Override
-    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
+    public IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
         return getObjectStore(configuration).getIdentifierGenerator();
     }
 
@@ -68,7 +68,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends PersistenceMechan
             //final KeyCreatorDefault keyCreator = createKeyCreator();
             final VersionCreator versionCreator = createVersionCreator();
             final NoSqlDataDatabase db = createNoSqlDatabase(configuration);
-            final OidGenerator oidGenerator = createOidGenerator(db);
+            final OidGenerator oidGenerator = new OidGenerator(createIdentifierGenerator(db));
 
             final Map<String, DataEncryption> availableDataEncryption = new HashMap<String, DataEncryption>();
             try {
@@ -101,8 +101,8 @@ public abstract class NoSqlPersistorMechanismInstaller extends PersistenceMechan
         return objectStore;
     }
 
-    protected OidGenerator createOidGenerator(final NoSqlDataDatabase database) {
-        return new OidGenerator(new NoSqlIdentifierGenerator(database));
+    protected NoSqlIdentifierGenerator createIdentifierGenerator(final NoSqlDataDatabase database) {
+        return new NoSqlIdentifierGenerator(database);
     }
 
     protected abstract NoSqlDataDatabase createNoSqlDatabase(IsisConfiguration configuration);

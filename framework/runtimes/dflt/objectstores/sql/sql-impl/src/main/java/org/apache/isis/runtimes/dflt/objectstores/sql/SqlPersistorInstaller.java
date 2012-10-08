@@ -72,7 +72,7 @@ public class SqlPersistorInstaller extends PersistenceMechanismInstallerAbstract
     }
 
     @Override
-    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
+    public IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
         final DatabaseConnectorFactory connectorFactory = new JdbcConnectorFactory();
         connectionPool = new DatabaseConnectorPool(connectorFactory, 1);
 

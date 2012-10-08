@@ -22,15 +22,35 @@ package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
  * @see PersistenceSessionFactoryDelegate
  */
-public interface PersistenceSessionFactory extends ApplicationScopedComponent {
+public interface PersistenceSessionFactory extends MetaModelRefiner, ApplicationScopedComponent {
 
     DeploymentType getDeploymentType();
+
+
+    // //////////////////////////////////////////////////////
+    // Singleton threadsafe components
+    // //////////////////////////////////////////////////////
+
+    ObjectAdapterFactory getAdapterFactory();
+    ObjectFactory getObjectFactory();
+    PojoRecreator getPojoRecreator();
+    IdentifierGenerator getIdentifierGenerator();
+    ServicesInjectorSpi getServicesInjector();
+
+    
+    // //////////////////////////////////////////////////////
+    // main API
+    // //////////////////////////////////////////////////////
 
     /**
      * Creates a {@link PersistenceSession} with the implementing object as the
@@ -46,5 +66,9 @@ public interface PersistenceSessionFactory extends ApplicationScopedComponent {
     public void setServices(List<Object> servicesList);
 
     public List<Object> getServices();
+
+
+
+
 
 }

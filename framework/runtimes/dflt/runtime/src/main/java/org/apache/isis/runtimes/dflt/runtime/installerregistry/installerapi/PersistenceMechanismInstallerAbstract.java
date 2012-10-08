@@ -34,9 +34,15 @@ import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceConstants;
@@ -55,6 +61,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -75,6 +82,7 @@ import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDepe
  */
 public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements PersistenceMechanismInstaller, InstallerLookupAware {
 
+
     private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT + "persistenceSession";
     private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
 
@@ -94,51 +102,67 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
 
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new PersistenceSessionFactoryDelegating(deploymentType, this);
+        return new PersistenceSessionFactoryDelegating(deploymentType, getConfiguration(), this);
     }
 
 
     /**
-     * Will return a {@link PersistenceSessionObjectStore}; subclasses are free
-     * to downcast if required.
+     * Creates a {@link PersistenceSession} with internal (thread-safe) components obtained from the provided {@link PersistenceSessionFactory}.
+     * 
+     * <p>
+     * Typically should not be overridden.
      */
-    protected PersistenceSession createPersistenceSession(
-            final PersistenceSessionFactory persistenceSessionFactory, 
-            final ObjectAdapterFactory objectAdapterFactory, 
-            final ObjectFactory objectFactory, 
-            final PojoRecreator pojoRecreator, 
-            final IdentifierGenerator identifierGenerator,
-            final ServicesInjectorSpi servicesInjector) {
+    @Override
+    public PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("installing " + this.getClass().getName());
+        }
 
+        ObjectAdapterFactory adapterFactory = persistenceSessionFactory.getAdapterFactory();
+        ObjectFactory objectFactory = persistenceSessionFactory.getObjectFactory();
+        PojoRecreator pojoRecreator = persistenceSessionFactory.getPojoRecreator();
+        IdentifierGenerator identifierGenerator = persistenceSessionFactory.getIdentifierGenerator();
+        ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
+        
         final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
         final AdapterManagerDefault adapterManager = new AdapterManagerDefault(pojoRecreator);
         
-        ObjectStoreSpi objectStore = createObjectStore(getConfiguration(), objectAdapterFactory, adapterManager);
-
+        ObjectStoreSpi objectStore = createObjectStore(getConfiguration(), adapterFactory, adapterManager);
+        
         ensureThatArg(persistAlgorithm, is(not(nullValue())));
         ensureThatArg(objectStore, is(not(nullValue())));
-
+        
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
             final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "debug");
             objectStore = new IsisObjectStoreLogger(objectStore, level);
         }
-
+        
         final PersistenceSession persistenceSession = 
-                new PersistenceSession(persistenceSessionFactory, objectAdapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
-
+                new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
+        
         final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore);
-
+        
         ensureThatArg(persistenceSession, is(not(nullValue())));
         ensureThatArg(transactionManager, is(not(nullValue())));
-
+        
         persistenceSession.setDirtiableSupport(true);
         persistenceSession.setTransactionManager(transactionManager);
-
+        
         // ... and finally return
         return persistenceSession;
     }
 
     
+    // ///////////////////////////////////////////
+    // Mandatory hook methods
+    // ///////////////////////////////////////////
+
+    /**
+     * Hook method to return {@link ObjectStoreSpi}.
+     */
+    protected abstract ObjectStoreSpi createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerSpi adapterManager);
+    
+
     // ///////////////////////////////////////////
     // Optional hook methods
     // ///////////////////////////////////////////
@@ -163,160 +187,123 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return new IsisTransactionManager(persistor, objectStore);
     }
 
-    // ///////////////////////////////////////////
-    // Mandatory hook methods
-    // ///////////////////////////////////////////
 
-    /**
-     * Hook method to return {@link ObjectStoreSpi}.
-     */
-    protected abstract ObjectStoreSpi createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerSpi adapterManager);
-
-    
-    /**
-     * Creates a {@link PersistenceSession} that is initialized with the various
-     * hook methods.
-     * 
-     * @see #createPersistenceSession(PersistenceSessionFactory,
-     *      ObjectAdapterFactory, ObjectFactory, AdapterManagerSpi,
-     *      IdentifierGenerator, ServicesInjectorSpi)
-     * @see #createAdapterFactory(IsisConfiguration)
-     * @see #createAdapterManager(IsisConfiguration)
-     * @see #createContainer(IsisConfiguration)
-     * @see #createIdentifierGenerator(IsisConfiguration)
-     * @see #createRuntimeContext(IsisConfiguration)
-     * @see #createServicesInjector(IsisConfiguration)
-     */
     @Override
-    public PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("installing " + this.getClass().getName());
-        }
-
-        final PojoRecreator pojoRecreator = createPojoRecreator(getConfiguration());
-        final ObjectAdapterFactory adapterFactory = createAdapterFactory(getConfiguration());
-        final ObjectFactory objectFactory = createObjectFactory(getConfiguration());
-        final IdentifierGenerator identifierGenerator = createIdentifierGenerator(getConfiguration());
-
-        final RuntimeContext runtimeContext = createRuntimeContext(getConfiguration());
-        final DomainObjectContainer container = createContainer(getConfiguration());
-
-        final ServicesInjectorSpi servicesInjector = createServicesInjector(getConfiguration());
-        final List<Object> serviceList = persistenceSessionFactory.getServices();
-
-        ensureThatArg(pojoRecreator, is(not(nullValue())));
-        ensureThatArg(adapterFactory, is(not(nullValue())));
-        ensureThatArg(objectFactory, is(not(nullValue())));
-        ensureThatArg(identifierGenerator, is(not(nullValue())));
-
-        ensureThatArg(runtimeContext, is(not(nullValue())));
-        ensureThatArg(container, is(not(nullValue())));
-        ensureThatArg(serviceList, is(not(nullValue())));
-        ensureThatArg(servicesInjector, is(not(nullValue())));
-
-        // wire up components
-        runtimeContext.injectInto(container);
-        runtimeContext.setContainer(container);
-        for (Object service : serviceList) {
-            runtimeContext.injectInto(service);
-        }
-
-        servicesInjector.setContainer(container);
-        servicesInjector.setServices(serviceList);
-        getSpecificationLoader().injectInto(runtimeContext);
-
-        return createPersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, pojoRecreator, identifierGenerator, servicesInjector);
+    public ClassSubstitutor createClassSubstitutor(IsisConfiguration configuration) {
+        return InstanceUtil.createInstance(PersistenceConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT, ClassSubstitutor.class);
     }
 
+    /**
+     * Hook method to refine the {@link ProgrammingModel}.
+     * 
+     * <p>
+     * By default, just returns the provided {@link ProgrammingModel}.
+     */
+    @Override
+    public ProgrammingModel refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+        return baseProgrammingModel;
+    }
     
-
-    // ///////////////////////////////////////////
-    // Optional hook methods
-    // ///////////////////////////////////////////
-
+    /**
+     * Hook method to refine the {@link MetaModelValidator}.
+     * 
+     * <p>
+     * By default, just returns the provided {@link MetaModelValidator}.  Note that this is of type {@link MetaModelValidatorComposite} in order to
+     * allow new {@link MetaModelValidator}s to be easily {@link MetaModelValidatorComposite#add(MetaModelValidator) added}. 
+     */
+    @Override
+    public MetaModelValidator refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
+        return baseMetaModelValidator;
+    }
 
     /**
      * Hook method to allow subclasses to specify a different implementation of
      * {@link ObjectAdapterFactory}.
      * 
      * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link PersistenceConstants#ADAPTER_FACTORY_CLASS_NAME}. If no
-     * implementation is specified, then defaults to
-     * {@value PersistenceConstants#ADAPTER_FACTORY_CLASS_NAME_DEFAULT}.
+     * By default, returns {@link PojoAdapterFactory};
      */
-    protected ObjectAdapterFactory createAdapterFactory(final IsisConfiguration configuration) {
-        final String configuredClassName = configuration.getString(PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME, PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, ObjectAdapterFactory.class);
+    public ObjectAdapterFactory createAdapterFactory(final IsisConfiguration configuration) {
+        return new PojoAdapterFactory();
     }
-
+    
     /**
      * Hook method to allow subclasses to specify a different implementation of
      * {@link ObjectFactory}.
      * 
      * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link PersistenceConstants#OBJECT_FACTORY_CLASS_NAME}. If no
-     * implementation is specified, then defaults to
-     * {@value PersistenceConstants#OBJECT_FACTORY_CLASS_NAME_DEFAULT}.
+     * By default, returns <tt>org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory</tt>.  Note that this requires that
+     * the <tt>org.apache.isis.runtimes.dflt.bytecode:dflt</tt> module is added to the classpath. 
      */
-    protected ObjectFactory createObjectFactory(final IsisConfiguration configuration) {
-        final String configuredClassName = configuration.getString(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME, PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT, ObjectFactory.class);
+    public ObjectFactory createObjectFactory(final IsisConfiguration configuration) {
+        return InstanceUtil.createInstance(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT, ObjectFactory.class);
     }
-
+    
     /**
      * Hook method to allow subclasses to specify a different implementation of
      * {@link ServicesInjectorSpi}
      * 
      * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME}. If no
-     * implementation is specified, then defaults to
-     * {@value PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME_DEFAULT}.
+     * By default, returns {@link ServicesInjectorDefault};
      */
-    protected ServicesInjectorSpi createServicesInjector(final IsisConfiguration configuration) {
-        final String configuredClassName = configuration.getString(PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME, PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, ServicesInjectorSpi.class);
+    public ServicesInjectorSpi createServicesInjector(final IsisConfiguration configuration) {
+        return new ServicesInjectorDefault();
     }
 
     /**
      * Hook method to allow subclasses to specify a different implementation of
-     * {@link OidGenerator}
+     * {@link IdentifierGenerator}
      * 
      * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link PersistenceConstants#IDENTIFIER_GENERATOR_CLASS_NAME}. If no
-     * implementation is specified, then defaults to
-     * {@value PersistenceConstants#IDENTIFIER_GENERATOR_CLASS_NAME_DEFAULT}.
+     * By default, returns {@link IdentifierGeneratorDefault}.
      */
-    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
-        final String identifierGeneratorClassName = configuration.getString(PersistenceConstants.IDENTIFIER_GENERATOR_CLASS_NAME, PersistenceConstants.IDENTIFIER_GENERATOR_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(identifierGeneratorClassName, IdentifierGenerator.class);
+    public IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
+        return new IdentifierGeneratorDefault();
     }
-
 
     /**
      * Hook method to return {@link PojoRecreator}.
      * 
      * <p>
-     * By default returns an {@link PojoRecreatorDefault}.
+     * By default, returns {@link PojoRecreatorDefault}.
      */
-    protected PojoRecreator createPojoRecreator(final IsisConfiguration configuration) {
+    public PojoRecreator createPojoRecreator(final IsisConfiguration configuration) {
         return new PojoRecreatorDefault();
     }
 
     /**
-     * Hook method to return a {@link RuntimeContext}.
+     * Hook method to return a {@link DomainObjectContainer}.
      * 
      * <p>
-     * By default, returns a {@link RuntimeContextFromSession}.
+    * By default, looks up implementation from provided
+    * {@link IsisConfiguration} using
+    * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no
+    * implementation is specified, then defaults to
+    * {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
      */
-    protected RuntimeContext createRuntimeContext(final IsisConfiguration configuration) {
+    public DomainObjectContainer createContainer(final IsisConfiguration configuration) {
+        final String configuredClassName = configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
+        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
+    }
+    
+
+    
+    // ///////////////////////////////////////////
+    // Non overridable.
+    // ///////////////////////////////////////////
+
+    /**
+     * Returns a {@link RuntimeContext}, with all application-specific properties
+     * from the provided {@link IsisConfiguration} copied over.
+     */
+    public final RuntimeContext createRuntimeContext(final IsisConfiguration configuration) {
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final Properties properties = applicationPropertiesFrom(configuration);
+        runtimeContext.setProperties(properties);
+        return runtimeContext;
+    }
+
+    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
         final Properties properties = new Properties();
         final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
         for (final String key : applicationConfiguration) {
@@ -324,25 +311,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
             final String newKey = key.substring("application.".length());
             properties.setProperty(newKey, value);
         }
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
-        runtimeContext.setProperties(properties);
-        return runtimeContext;
+        return properties;
     }
 
-    /**
-     * Hook method to return a {@link DomainObjectContainer}.
-     * 
-     * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no
-     * implementation is specified, then defaults to
-     * {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
-     */
-    protected DomainObjectContainer createContainer(final IsisConfiguration configuration) {
-        final String configuredClassName = configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
-    }
 
     // /////////////////////////////////////////////////////
     // Dependencies (from setters)

@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.services;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -36,7 +37,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  * <p>
  * Can be considered a mutable SPI to the {@link ServicesInjector} immutable API.
  */
-public interface ServicesInjectorSpi extends SessionScopedComponent, Injectable, ServicesInjector {
+public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injectable, ServicesInjector {
 
     // ///////////////////////////////////////////////////////////////////////////
     // Container

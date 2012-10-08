@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetProvider;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -57,7 +57,7 @@ import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  */
-public class ScalarModel extends EntityModel implements FacetProvider {
+public class ScalarModel extends EntityModel {
 
     private static final long serialVersionUID = 1L;
 

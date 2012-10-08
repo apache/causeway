@@ -19,7 +19,16 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.PojoRecreator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -27,7 +36,31 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * Creates a {@link PersistenceSession} on behalf of a
  * {@link PersistenceSessionFactory}.
  */
-public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware {
+public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, MetaModelRefiner {
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // singleton threadsafe components created during init
+    ///////////////////////////////////////////////////////////////////////////
+    
+    PojoRecreator createPojoRecreator(IsisConfiguration configuration);
+
+    ObjectAdapterFactory createAdapterFactory(IsisConfiguration configuration);
+
+    ObjectFactory createObjectFactory(IsisConfiguration configuration);
+
+    IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration);
+
+    ServicesInjectorSpi createServicesInjector(IsisConfiguration configuration);
+
+    DomainObjectContainer createContainer(IsisConfiguration configuration);
+
+    RuntimeContext createRuntimeContext(IsisConfiguration configuration);
+
+    
+    ///////////////////////////////////////////////////////////////////////////
+    // created for each session
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * As per {@link PersistenceSessionFactory#createPersistenceSession()}, but
@@ -37,4 +70,6 @@ public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuil
      */
     PersistenceSession createPersistenceSession(PersistenceSessionFactory persistenceSessionFactory);
 
+    
+    
 }

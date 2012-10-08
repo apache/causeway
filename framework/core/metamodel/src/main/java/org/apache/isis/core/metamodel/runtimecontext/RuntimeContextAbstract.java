@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -160,7 +162,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     public List<String> getPropertyNames() {
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = Lists.newArrayList();
         for (final Object key : properties.keySet()) {
             list.add((String) key);
         }
