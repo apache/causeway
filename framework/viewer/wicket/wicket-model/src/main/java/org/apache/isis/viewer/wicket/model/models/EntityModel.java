@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -84,6 +85,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return pageParameters;
     }
 
+
+
     public enum RenderingHint {
         REGULAR,
         COMPACT
@@ -97,6 +100,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
+
 
     /**
      * Toggled by 'entityDetailsButton'.
@@ -113,6 +117,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // //////////////////////////////////////////////////////////
 
     public EntityModel() {
+        pendingModel = new PendingModel(this);
     }
 
     public EntityModel(final PageParameters pageParameters) {
@@ -126,6 +131,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public EntityModel(final ObjectAdapterMemento adapterMemento) {
         this.adapterMemento = adapterMemento;
+        pendingModel = new PendingModel(this);
     }
 
     private static String oidStr(final PageParameters pageParameters) {
@@ -342,6 +348,83 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     // //////////////////////////////////////////////////////////
+    // Pending
+    // //////////////////////////////////////////////////////////
+    
+    private static final class PendingModel extends Model<ObjectAdapterMemento> {
+        private static final long serialVersionUID = 1L;
+
+        private final EntityModel entityModel;
+
+        /**
+         * Whether pending has been set (could have been set to null)
+         */
+        private boolean hasPending;
+        /**
+         * The new value (could be set to null; hasPending is used to distinguish).
+         */
+        private ObjectAdapterMemento pending;
+        
+
+        public PendingModel(EntityModel entityModel) {
+            this.entityModel = entityModel;
+        }
+
+        @Override
+        public ObjectAdapterMemento getObject() {
+            if (hasPending) {
+                return pending;
+            }
+            final ObjectAdapter adapter = entityModel.getObject();
+            return ObjectAdapterMemento.createOrNull(adapter);
+        }
+
+        @Override
+        public void setObject(final ObjectAdapterMemento adapterMemento) {
+            pending = adapterMemento;
+            hasPending = true;
+        }
+
+        public void clearPending() {
+            this.hasPending = false;
+            this.pending = null;
+        }
+
+        private ObjectAdapter getPendingAdapter() {
+            final ObjectAdapterMemento memento = getObject();
+            return memento != null ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK) : null;
+        }
+
+        public ObjectAdapter getPendingElseCurrentAdapter() {
+            return hasPending ? getPendingAdapter() : entityModel.getObject();
+        }
+
+        public void setPending(ObjectAdapterMemento selectedAdapterMemento) {
+            this.pending = selectedAdapterMemento;
+            hasPending=true;
+        }
+    }
+    
+    private final PendingModel pendingModel;
+
+    public ObjectAdapter getPendingElseCurrentAdapter() {
+        return pendingModel.getPendingElseCurrentAdapter();
+    }
+
+    public ObjectAdapter getPendingAdapter() {
+        return pendingModel.getPendingAdapter();
+    }
+
+    public void setPending(ObjectAdapterMemento selectedAdapterMemento) {
+        pendingModel.setPending(selectedAdapterMemento);
+    }
+
+    public void clearPending() {
+        pendingModel.clearPending();
+    }
+
+
+    // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
@@ -352,6 +435,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+
 
 
 }

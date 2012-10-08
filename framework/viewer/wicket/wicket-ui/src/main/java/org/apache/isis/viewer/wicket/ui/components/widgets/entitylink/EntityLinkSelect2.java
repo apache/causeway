@@ -72,9 +72,6 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
     private static final String ID_FIND_USING = "findUsing";
     private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
-    private static final String ID_ENTITY_DETAILS_LINK = "entityDetailsLink";
-    private static final String ID_ENTITY_DETAILS_LINK_LABEL = "entityDetailsLinkLabel";
-    private static final String ID_ENTITY_DETAILS = "entityDetails";
 
     private static final String ID_FEEDBACK = "feedback";
 
@@ -89,15 +86,8 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
     
     private PanelAbstract<?> actionFindUsingComponent;
 
-    /**
-     * Whether pending has been set (could have been set to null)
-     */
-    private boolean hasPending;
-    /**
-     * The new value (could be set to null; hasPending is used to distinguish).
-     */
-    private ObjectAdapterMemento pending;
-    private TextField<ObjectAdapterMemento> pendingOid;
+    // REVIEW: can we remove, since pending info has now moved into the model.
+    // private TextField<ObjectAdapterMemento> pendingOid;
 
 
     public EntityLinkSelect2(final String id, final EntityModel entityModel) {
@@ -115,47 +105,47 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
      * Builds the parts of the GUI that are not dynamic.
      */
     private void buildGui() {
-        addOrReplaceOidField();
+        //addOrReplaceOidField();
         rebuildFindUsingMenu();
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
 
         syncWithInput();
     }
 
-    private void addOrReplaceOidField() {
-        pendingOid = new TextField<ObjectAdapterMemento>(ID_ENTITY_OID, new Model<ObjectAdapterMemento>() {
-
-            private static final long serialVersionUID = 1L;
-
-            
-            @Override
-            public ObjectAdapterMemento getObject() {
-                if (hasPending) {
-                    return pending;
-                }
-                final ObjectAdapter adapter = EntityLinkSelect2.this.getModelObject();
-                return ObjectAdapterMemento.createOrNull(adapter);
-            }
-
-            @Override
-            public void setObject(final ObjectAdapterMemento adapterMemento) {
-                pending = adapterMemento;
-                hasPending = true;
-            }
-
-        }) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onModelChanged() {
-                super.onModelChanged();
-                syncWithInput();
-            }
-        };
-        pendingOid.setType(ObjectAdapterMemento.class);
-        addOrReplace(pendingOid);
-        pendingOid.setVisible(false);
-    }
+//    private void addOrReplaceOidField() {
+//        pendingOid = new TextField<ObjectAdapterMemento>(ID_ENTITY_OID, new Model<ObjectAdapterMemento>() {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            
+//            @Override
+//            public ObjectAdapterMemento getObject() {
+//                if (hasPending) {
+//                    return pending;
+//                }
+//                final ObjectAdapter adapter = EntityLinkSelect2.this.getModelObject();
+//                return ObjectAdapterMemento.createOrNull(adapter);
+//            }
+//
+//            @Override
+//            public void setObject(final ObjectAdapterMemento adapterMemento) {
+//                pending = adapterMemento;
+//                hasPending = true;
+//            }
+//
+//        }) {
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            protected void onModelChanged() {
+//                super.onModelChanged();
+//                syncWithInput();
+//            }
+//        };
+//        pendingOid.setType(ObjectAdapterMemento.class);
+//        addOrReplace(pendingOid);
+//        pendingOid.setVisible(false);
+//    }
 
     void rebuildFindUsingMenu() {
         final EntityModel entityModel = getEntityModel();
@@ -207,13 +197,8 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
             autoCompleteField.setEnabled(mutability);
         }
         
-        if(hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+        if(isEditableWithEitherAutoCompleteOrChoices()) {
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
-            
-            if(getEntityModel().isEditMode()) {
-                // TODO: haven't figured out how to keep in sync..
-                permanentlyHide(ID_ENTITY_DETAILS_LINK);
-            }
         }
     }
 
@@ -222,13 +207,8 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
             autoCompleteField.setEnabled(mutability);
         }
 
-        if(hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+        if(isEditableWithEitherAutoCompleteOrChoices()) {
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
-            
-            if(getEntityModel().isEditMode()) {
-                // TODO: haven't figured out how to keep in sync..
-                permanentlyHide(ID_ENTITY_DETAILS_LINK);
-            }
         }
     }
 
@@ -240,26 +220,22 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
      */
     @Override
     public String getInput() {
-        return pendingOid.getInput();
+        final ObjectAdapter pendingElseCurrentAdapter = getEntityModel().getPendingElseCurrentAdapter();
+        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(): "[null]";
     }
 
     @Override
     protected void convertInput() {
 
-        if(getEntityModel().isEditMode() && hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+        if(getEntityModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
             // flush changes to pending
-            onSelected(autoCompleteField.getConvertedInput().getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+            onSelected(autoCompleteField.getConvertedInput());
         }
 
-        final ObjectAdapter pendingAdapter = getPendingAdapter();
+        final ObjectAdapter pendingAdapter = getEntityModel().getPendingAdapter();
         setConvertedInput(pendingAdapter);
     }
 
-
-    private ObjectAdapter getPendingAdapter() {
-        final ObjectAdapterMemento memento = pendingOid.getModelObject();
-        return memento != null ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK) : null;
-    }
 
     @Override
     protected void onBeforeRender() {
@@ -279,15 +255,12 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
 
         doSyncWithInputIfAutoCompleteOrChoices();
         
-        syncEntityDetailsLinksWithInput(adapter);
-        syncEntityDetailsWithInput(adapter);
-
         syncVisibilityAndUsability();
     }
 
     private void doSyncWithInputIfAutoCompleteOrChoices() {
         
-        if(!hasAutoCompleteOrChoicesAndNotCompactRendering()) {
+        if(!isEditableWithEitherAutoCompleteOrChoices()) {
             permanentlyHide(ID_AUTO_COMPLETE);
             return;
         }
@@ -413,24 +386,6 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
         }
     }
 
-    private void syncEntityDetailsLinksWithInput(final ObjectAdapter adapter) {
-        if (adapter == null) {
-            permanentlyHide(ID_ENTITY_DETAILS_LINK);
-            return;
-        } 
-        entityDetailsLink = new Link<String>(ID_ENTITY_DETAILS_LINK) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                getEntityModel().toggleDetails();
-            }
-
-        };
-        addOrReplace(entityDetailsLink);
-        entityDetailsLink.add(new Label(ID_ENTITY_DETAILS_LINK_LABEL, buildEntityDetailsModel()));
-    }
-
 
     private void syncEntityClearLinksWithInput(final ObjectAdapter adapter) {
         if (adapter == null) {
@@ -448,23 +403,6 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
         addOrReplace(entityClearLink);
     }
 
-    private Model<String> buildEntityDetailsModel() {
-        final String label = getEntityModel().isEntityDetailsVisible() ? "-" : "+";
-        return Model.of(label);
-    }
-
-    private void syncEntityDetailsWithInput(final ObjectAdapter adapter) {
-        if (adapter != null && getEntityModel().isEntityDetailsVisible()) {
-            final EntityModel entityModel = new EntityModel(adapter);
-            
-            final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_PROPERTIES, entityModel);
-            final Component entityPanel = componentFactory.createComponent(ID_ENTITY_DETAILS, entityModel);
-            
-            addOrReplace(entityPanel);
-        } else {
-            permanentlyHide(ID_ENTITY_DETAILS);
-        }
-    }
 
     private void addOrReplaceIconAndTitle(ObjectAdapter pendingOrCurrentAdapter) {
         final EntityModel entityModelForLink = new EntityModel(pendingOrCurrentAdapter);
@@ -494,13 +432,8 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
         actionFindUsingComponent.replaceWith(actionPanel);
     }
 
-    public void onSelected(final ObjectAdapter selectedAdapter) {
-        final ObjectAdapterMemento selectedAdapterMemento = ObjectAdapterMemento.createOrNull(selectedAdapter);
-        onSelected(selectedAdapterMemento);
-    }
-
-    private void onSelected(final ObjectAdapterMemento selectedAdapterMemento) {
-        pendingOid.setDefaultModelObject(selectedAdapterMemento);
+    public void onSelected(final ObjectAdapterMemento selectedAdapterMemento) {
+        getEntityModel().setPending(selectedAdapterMemento);
         rebuildFindUsingMenu();
         renderSamePage();
     }
@@ -512,22 +445,24 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
 
     @Override
     public void onCancel() {
-        pendingOid.clearInput();
-        this.hasPending = false;
-        this.pending = null;
+        getEntityModel().clearPending();
     }
 
     private ObjectAdapter getPendingElseCurrentAdapter() {
-        return hasPending ? getPendingAdapter() : getEntityModel().getObject();
+        return getEntityModel().getPendingElseCurrentAdapter();
     }
 
     private void renderSamePage() {
         setResponsePage(getPage());
     }
     
-    private boolean hasAutoCompleteOrChoicesAndNotCompactRendering() {
-        // doesn't apply in compact rendering contexts (ie tables)
+    private boolean isEditableWithEitherAutoCompleteOrChoices() {
+        // never doesn't apply in compact rendering contexts (ie tables)
         if(getEntityModel().getRenderingHint() == RenderingHint.COMPACT) {
+            return false;
+        }
+        // doesn't apply if not editable, either
+        if(getEntityModel().isViewMode()) {
             return false;
         }
         return hasChoices() || hasAutoComplete();

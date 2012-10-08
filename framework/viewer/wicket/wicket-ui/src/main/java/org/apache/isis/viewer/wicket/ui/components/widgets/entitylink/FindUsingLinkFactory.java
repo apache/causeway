@@ -36,7 +36,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFa
 public final class FindUsingLinkFactory implements CssMenuLinkFactory {
     
     public interface Callback {
-        public void onSelected(ObjectAdapter adapter);
+        public void onSelected(ObjectAdapterMemento adapterMemento);
         public void onNoResults();
         public void onClick(ActionModel actionModel);
     }
@@ -60,7 +60,8 @@ public final class FindUsingLinkFactory implements CssMenuLinkFactory {
 
             @Override
             public void onSelected(final Component context, final ObjectAdapter selectedAdapter) {
-                callback.onSelected(selectedAdapter);
+                final ObjectAdapterMemento selectedAdapterMemento = ObjectAdapterMemento.createOrNull(selectedAdapter);
+                callback.onSelected(selectedAdapterMemento);
             }
         });
         actionModel.setNoResultsHandler(new NoResultsHandler() {

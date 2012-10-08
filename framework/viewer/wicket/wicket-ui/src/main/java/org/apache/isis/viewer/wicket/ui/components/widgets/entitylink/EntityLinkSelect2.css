@@ -34,58 +34,12 @@ div.entityLink > div {
 	font-size: smaller;
 }
 
-a.entityDetailsLink {
-	text-align: left;
-	border: 1px  #00477F solid;
-	white-space:nowrap;
-	margin:0em;
-
-	margin-left: 5px;
-	font-weight: normal;
-	cursor:default;
-	font-size: smaller;
-	
-	color: #00477F;
-	background-color: #EEEEEE;
-	text-decoration:none;
-	/*
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	*/ 
-}
-
 a.entityClearLink {
 	display:inline-table;
 	margin-left: 0px;
 	padding-left: 0px;
 	padding-right: 0px;
 	font-size: smaller;
-}
-a.entityDetailsLink {
-	display:inline;
-	font-family: monospace;
-	margin-left: 20px;
-	padding-right: 3px;
-	padding-left: 3px;
-	padding-top: 1px;
-	padding-bottom: 1px;
-}
-
-a.entityDetailsLink:hover {
-	color: #D7E7F5;
-	background-color: #407098;
-}
-
-
-.entityDetails {
-	width: 400px;
-	padding-top: 20px;
-	margin-left: -30px;
-}
-
-.entityDetails a.entityDetailsLink {
-	display:none; /* don't nest forever */
 }
 
 

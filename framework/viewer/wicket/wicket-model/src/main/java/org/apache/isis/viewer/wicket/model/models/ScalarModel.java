@@ -294,7 +294,6 @@ public class ScalarModel extends EntityModel implements FacetProvider {
         public abstract String getDescribedAs(ScalarModel scalarModel);
     }
 
-
     private final Kind kind;
     private final ObjectAdapterMemento parentObjectAdapterMemento;
 
