@@ -23,6 +23,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
 
 public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
@@ -55,6 +57,16 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
             public boolean isUsableInRole(final String role, final Identifier identifier) {
                 return true;
             }
+
+            @Override
+            public boolean isVisibleInAnyRole(Identifier identifier) {
+                return true;
+            }
+
+            @Override
+            public boolean isUsableInAnyRole(Identifier identifier) {
+                return true;
+            }
         };
     }
 
@@ -81,6 +93,9 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
+        if (authorizor.isUsableInAnyRole(identifier)) {
+            return true;
+        }
         for (final String roleName : session.getRoles()) {
             if (authorizor.isUsableInRole(roleName, identifier)) {
                 return true;
@@ -92,6 +107,9 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     @Override
     public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
+            return true;
+        }
+        if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }
         for (final String roleName : session.getRoles()) {
@@ -106,6 +124,22 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         return (identifier.getClassName().equals(""));
     }
 
+
+    // //////////////////////////////////////////////////
+    // MetaModelRefiner impl
+    // //////////////////////////////////////////////////
+
+    @Override
+    public void refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
+        // no-op
+    }
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory(this);
+        baseProgrammingModel.addFactory(facetFactory);
+    }
+
     // //////////////////////////////////////////////////
     // Dependencies (injected)
     // //////////////////////////////////////////////////
@@ -113,4 +147,5 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     protected void setAuthorizor(final Authorizor authorisor) {
         this.authorizor = authorisor;
     }
+
 }

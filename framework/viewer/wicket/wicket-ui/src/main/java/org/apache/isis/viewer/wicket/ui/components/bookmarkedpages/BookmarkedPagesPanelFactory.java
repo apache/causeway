@@ -31,7 +31,7 @@ public class BookmarkedPagesPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public BookmarkedPagesPanelFactory() {
-        super(ComponentType.RECENT_PAGES);
+        super(ComponentType.BOOKMARKED_PAGES);
     }
 
     @Override

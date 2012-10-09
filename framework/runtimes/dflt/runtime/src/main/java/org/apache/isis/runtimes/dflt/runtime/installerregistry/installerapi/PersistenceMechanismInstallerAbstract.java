@@ -200,20 +200,22 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * By default, just returns the provided {@link ProgrammingModel}.
      */
     @Override
-    public ProgrammingModel refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
-        return baseProgrammingModel;
+    public void refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+        // no-op
     }
     
     /**
      * Hook method to refine the {@link MetaModelValidator}.
      * 
      * <p>
-     * By default, just returns the provided {@link MetaModelValidator}.  Note that this is of type {@link MetaModelValidatorComposite} in order to
-     * allow new {@link MetaModelValidator}s to be easily {@link MetaModelValidatorComposite#add(MetaModelValidator) added}. 
+     * By default, just returns the provided {@link MetaModelValidatorComposite}.
+     * 
+     * <p>Note that this methods deals in terms of {@link MetaModelValidatorComposite} (rather than plain {@link MetaModelValidator}}s) 
+     * in order to allow new {@link MetaModelValidator}s to be easily {@link MetaModelValidatorComposite#add(MetaModelValidator) added}.
      */
     @Override
-    public MetaModelValidator refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
-        return baseMetaModelValidator;
+    public void refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
+        // no-op
     }
 
     /**

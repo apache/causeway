@@ -19,6 +19,7 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
@@ -428,5 +429,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(FacetsAnnotationFacetFactory.class);
     }
+
 
 }

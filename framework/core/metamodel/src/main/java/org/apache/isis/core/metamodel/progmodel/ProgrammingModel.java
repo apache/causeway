@@ -32,4 +32,6 @@ public interface ProgrammingModel {
     void addFactory(Class<? extends FacetFactory> facetFactoryClass);
 
     void removeFactory(Class<? extends FacetFactory> facetFactoryClass);
+
+    void addFactory(FacetFactory facetFactory);
 }

@@ -25,11 +25,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
@@ -201,7 +203,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType, final MetaModelRefiner programmingModelAdjuster) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType, final ClassSubstitutorFactory classSubstitutorFactory, final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
         if (reflectorInstaller == null) {
             final String fromCmdLine = getConfiguration().getString(SystemConstants.REFLECTOR_KEY);
             reflectorInstaller = installerLookup.reflectorInstaller(fromCmdLine);
@@ -211,7 +213,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         // add in transaction support (if already in set then will be ignored)
         reflectorInstaller.addFacetDecoratorInstaller(installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class));
 
-        final SpecificationLoaderSpi reflector = reflectorInstaller.createReflector(programmingModelAdjuster);
+        final SpecificationLoaderSpi reflector = reflectorInstaller.createReflector(classSubstitutorFactory, metaModelRefiners);
         return reflector;
     }
 
@@ -274,8 +276,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         }
 
         ensureThatState(persistenceMechanismInstaller, is(not(nullValue())), "persistor installer has not been injected and could not be looked up");
-
         return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType);
     }
-
 }

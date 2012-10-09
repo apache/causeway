@@ -44,4 +44,14 @@ public class AuthorizorDefault implements Authorizor {
         return true;
     }
 
+    @Override
+    public boolean isVisibleInAnyRole(Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isUsableInAnyRole(Identifier identifier) {
+        return true;
+    }
+
 }

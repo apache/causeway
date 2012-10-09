@@ -24,14 +24,18 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 public interface Authorizor extends ApplicationScopedComponent {
 
+    public boolean isVisibleInAnyRole(final Identifier identifier);
+    public boolean isUsableInAnyRole(final Identifier identifier);
+
     /**
      * Checked for each of the user's roles.
      */
-    public boolean isVisibleInRole(final String user, final Identifier identifier);
+    public boolean isVisibleInRole(final String role, final Identifier identifier);
 
     /**
      * Checked for each of the user's roles.
      */
     public boolean isUsableInRole(final String role, final Identifier identifier);
+
 
 }

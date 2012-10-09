@@ -137,7 +137,7 @@ public enum ComponentType {
     /**
      * A list of {@link IsisModel}s, rendered as a list of links.
      */
-    RECENT_PAGES, 
+    BOOKMARKED_PAGES, 
     /**
      * Place holder for a component used to represent an unknown model;
      * not used for matching, since the {@link ComponentFactory} implementation

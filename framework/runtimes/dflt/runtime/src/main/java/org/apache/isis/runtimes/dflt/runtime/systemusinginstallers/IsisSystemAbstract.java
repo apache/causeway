@@ -19,7 +19,15 @@
 
 package org.apache.isis.runtimes.dflt.runtime.systemusinginstallers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import org.apache.log4j.Logger;
 
@@ -28,8 +36,11 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.lang.Types;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -175,8 +186,10 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
         final TemplateImageLoader templateImageLoader = obtainTemplateImageLoader();
-        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory);
         final OidMarshaller oidMarshaller = obtainOidMarshaller();
+        
+        final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, templateImageLoader, persistenceSessionFactory);
+        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory, metaModelRefiners);
 
         final List<Object> servicesList = obtainServices();
 
@@ -186,5 +199,10 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
 
 		return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList, oidMarshaller);
     }
+
+    private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
+        return Types.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
+    }
+
     
 }

@@ -224,11 +224,17 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
 
     @Override
     public boolean isUsableInRole(final String role, final Identifier member) {
+        if(role == null) {
+            return false;
+        }
         return isAuthorized(role, member, Arrays.asList(NONE, ACCESS_QUALIFIER_RW));
     }
 
     @Override
     public boolean isVisibleInRole(final String role, final Identifier member) {
+        if(role == null) {
+            return false;
+        }
         return isAuthorized(role, member, Arrays.asList(NONE, ACCESS_QUALIFIER_RO, ACCESS_QUALIFIER_RW));
     }
 

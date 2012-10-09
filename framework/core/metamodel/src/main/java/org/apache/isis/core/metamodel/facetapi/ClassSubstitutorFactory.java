@@ -17,15 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.authorization;
+package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
-public class AuthorizationFacetFactoryForDfltRuntime extends AuthorizationFacetFactory {
 
-    public AuthorizationFacetFactoryForDfltRuntime() {
-        super(IsisContext.getAuthorizationManager());
-    }
+/**
+ * Provides the ability for components to inform/alter/adjust/refine the metamodel.
+ */
+public interface ClassSubstitutorFactory {
 
+    ClassSubstitutor createClassSubstitutor(IsisConfiguration configuration);
 }

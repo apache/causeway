@@ -19,6 +19,7 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -86,19 +88,21 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * calling this.
      */
     @Override
-    public SpecificationLoaderSpi createReflector(final MetaModelRefiner metaModelRefiner) {
+    public SpecificationLoaderSpi createReflector(final ClassSubstitutorFactory classSubstitutorFactory, final Collection<MetaModelRefiner> metaModelRefiners) {
 
         final CollectionTypeRegistry collectionTypeRegistry = createCollectionTypeRegistry(getConfiguration());
         final SpecificationTraverser specificationTraverser = createSpecificationTraverser(getConfiguration());
         final MemberLayoutArranger memberLayoutArranger = createMemberLayoutArranger(getConfiguration());
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
 
-        final ClassSubstitutor classSubstitutor = metaModelRefiner.createClassSubstitutor(getConfiguration());
+        final ClassSubstitutor classSubstitutor = classSubstitutorFactory.createClassSubstitutor(getConfiguration());
         
-        final ProgrammingModel baseProgrammingModel = createProgrammingModel(getConfiguration());
-        final ProgrammingModel programmingModel = metaModelRefiner.refineProgrammingModel(baseProgrammingModel, getConfiguration());
-        final MetaModelValidatorComposite baseMetaModelValidator = wrapped(createMetaModelValidator(getConfiguration()));
-        final MetaModelValidator metaModelValidator = metaModelRefiner.refineMetaModelValidator(baseMetaModelValidator, getConfiguration());
+        ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
+        MetaModelValidatorComposite metaModelValidator = asComposite(createMetaModelValidator(getConfiguration()));
+        for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
+            metaModelRefiner.refineProgrammingModel(programmingModel, getConfiguration());
+            metaModelRefiner.refineMetaModelValidator(metaModelValidator, getConfiguration());
+        }
 
         final ObjectReflectorDefault reflector = doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
         return reflector;
@@ -223,7 +227,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
     }
 
-    private MetaModelValidatorComposite wrapped(MetaModelValidator baseMetaModelValidator) {
+    private MetaModelValidatorComposite asComposite(MetaModelValidator baseMetaModelValidator) {
         final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();
         metaModelValidatorComposite.add(baseMetaModelValidator);
         return metaModelValidatorComposite;

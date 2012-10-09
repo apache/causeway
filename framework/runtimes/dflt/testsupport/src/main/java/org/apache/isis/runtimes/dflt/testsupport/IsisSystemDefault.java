@@ -1,5 +1,6 @@
 package org.apache.isis.runtimes.dflt.testsupport;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,7 @@ import com.google.common.collect.Sets;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
@@ -120,19 +122,19 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * @see #obtainReflectorSpecificationTraverser()
      */
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, MetaModelRefiner facetFactoriesProvider) throws IsisSystemException {
-        ClassSubstitutor classSubstitutor = obtainReflectorClassSubstitutor();
-        CollectionTypeRegistry collectionTypeRegistry = obtainReflectorCollectionTypeRegistry();
-        SpecificationTraverser specificationTraverser = obtainReflectorSpecificationTraverser();
-        MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerDefault();
-        ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
-        Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
-        MetaModelValidator metaModelValidator = obtainReflectorMetaModelValidator();
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, ClassSubstitutorFactory classSubstitutorFactory, Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+        final ClassSubstitutor classSubstitutor = obtainReflectorClassSubstitutor();
+        final CollectionTypeRegistry collectionTypeRegistry = obtainReflectorCollectionTypeRegistry();
+        final SpecificationTraverser specificationTraverser = obtainReflectorSpecificationTraverser();
+        final MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerDefault();
+        final ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
+        final Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
+        final MetaModelValidator metaModelValidator = obtainReflectorMetaModelValidator();
         return new ObjectReflectorDefault(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
      */
     protected ClassSubstitutor obtainReflectorClassSubstitutor() {
@@ -140,7 +142,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
      */
     protected CollectionTypeRegistry obtainReflectorCollectionTypeRegistry() {
@@ -148,7 +150,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
      */
     protected SpecificationTraverser obtainReflectorSpecificationTraverser() {
@@ -156,7 +158,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
      */
     protected ProgrammingModel obtainReflectorProgrammingModel() {
@@ -164,7 +166,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
      */
     protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
@@ -172,7 +174,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, MetaModelRefiner)}.
+     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
      */
     protected MetaModelValidator obtainReflectorMetaModelValidator() {

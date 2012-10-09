@@ -20,8 +20,9 @@
 package org.apache.isis.core.runtime.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 
-public abstract class AuthorizationManagerAbstract implements AuthorizationManager {
+public abstract class AuthorizationManagerAbstract implements AuthorizationManager, MetaModelRefiner {
 
     private final IsisConfiguration configuration;
 

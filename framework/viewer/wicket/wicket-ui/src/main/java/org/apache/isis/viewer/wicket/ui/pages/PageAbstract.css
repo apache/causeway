@@ -20,7 +20,7 @@
 
 #header {
 	width: 80%;
-	height: 20px;
+	height: 40px;
 	float: left;
 }
 #secondaryMenu {
@@ -29,11 +29,13 @@
 	float: right;
 	text-align: right;
 }
+#header h1 {
+	margin: 10px 10px 10px 0px;
+	font-size: xx-large;
+}
+
 .clear {
 	clear: both; 
-}
-#header h1 {
-	display: none;
 }
 
 #footer {

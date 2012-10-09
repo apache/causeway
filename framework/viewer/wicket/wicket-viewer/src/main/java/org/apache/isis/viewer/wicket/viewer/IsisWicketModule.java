@@ -47,6 +47,7 @@ import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDe
  *              
  *         bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("application.css");
  *         bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("application.js");
+ *         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("My App");
  *         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("Hello, welcome to my app");
  *         bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("MyApp v1.0.0");
  *      }
@@ -64,6 +65,7 @@ public class IsisWicketModule extends AbstractModule {
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
         
+        bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
         bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("applicationJs")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toProvider(Providers.of((String)null));

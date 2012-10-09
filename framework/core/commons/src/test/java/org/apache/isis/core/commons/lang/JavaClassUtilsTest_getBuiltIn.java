@@ -21,27 +21,9 @@ package org.apache.isis.core.commons.lang;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMock.class)
-public class JavaClassUtilsTest {
-
-    @SuppressWarnings("unused")
-    private final Mockery context = new JUnit4Mockery();
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
+public class JavaClassUtilsTest_getBuiltIn {
 
     @Test
     public void voidBuiltIns() throws ClassNotFoundException {

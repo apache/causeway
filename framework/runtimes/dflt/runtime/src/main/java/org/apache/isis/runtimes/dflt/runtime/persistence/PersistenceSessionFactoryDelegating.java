@@ -200,13 +200,13 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     }
 
     @Override
-    public MetaModelValidator refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
-        return persistenceSessionFactoryDelegate.refineMetaModelValidator(metaModelValidator, configuration);
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        persistenceSessionFactoryDelegate.refineMetaModelValidator(metaModelValidator, configuration);
     }
 
     @Override
-    public ProgrammingModel refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
-        return persistenceSessionFactoryDelegate.refineProgrammingModel(baseProgrammingModel, configuration);
+    public void refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+        persistenceSessionFactoryDelegate.refineProgrammingModel(baseProgrammingModel, configuration);
     }
 
 

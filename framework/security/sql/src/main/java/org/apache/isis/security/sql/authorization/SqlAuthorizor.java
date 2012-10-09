@@ -60,4 +60,14 @@ public class SqlAuthorizor extends AuthorizorAbstract {
     public boolean isVisibleInRole(final String user, final Identifier identifier) {
         return true;
     }
+
+    @Override
+    public boolean isVisibleInAnyRole(Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isUsableInAnyRole(Identifier identifier) {
+        return true;
+    }
 }

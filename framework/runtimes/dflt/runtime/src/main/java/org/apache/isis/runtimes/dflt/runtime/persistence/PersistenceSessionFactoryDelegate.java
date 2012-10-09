@@ -23,6 +23,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -36,7 +37,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * Creates a {@link PersistenceSession} on behalf of a
  * {@link PersistenceSessionFactory}.
  */
-public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, MetaModelRefiner {
+public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, ClassSubstitutorFactory, MetaModelRefiner {
 
 
     ///////////////////////////////////////////////////////////////////////////

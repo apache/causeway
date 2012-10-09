@@ -47,7 +47,7 @@ public class ActionPage extends PageAbstract {
         if(model.hasSafeActionSemantics()) {
             bookmarkPage(model);
         }
-        addBreadcrumbs();
+        addBookmarkedPages();
     }
 
     public ActionPage(final PageParameters pageParameters) {
@@ -56,7 +56,7 @@ public class ActionPage extends PageAbstract {
         addChildComponents(model);
         
         // no need to bookmark because the ActionPanel will have done so for us
-        addBreadcrumbs();
+        addBookmarkedPages();
     }
 
 

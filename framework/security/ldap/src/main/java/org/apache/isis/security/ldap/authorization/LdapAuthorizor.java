@@ -84,11 +84,17 @@ public class LdapAuthorizor extends AuthorizorAbstract {
 
     @Override
     public boolean isUsableInRole(final String role, final Identifier member) {
+        if(role == null) {
+            return false;
+        }
         return isAuthorised(role, member, ACCESS_QUALIFIER_RW);
     }
 
     @Override
     public boolean isVisibleInRole(final String role, final Identifier member) {
+        if(role == null) {
+            return false;
+        }
         return isAuthorised(role, member, null);
     }
 

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public abstract class AuthorizorAbstract implements Authorizor {
@@ -31,6 +32,16 @@ public abstract class AuthorizorAbstract implements Authorizor {
 
     public IsisConfiguration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public boolean isVisibleInAnyRole(Identifier identifier) {
+        return false;
+    }
+
+    @Override
+    public boolean isUsableInAnyRole(Identifier identifier) {
+        return false;
     }
 
 }

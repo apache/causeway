@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
-    private final List<FacetFactory> facetFactories = new ArrayList<FacetFactory>();
-    private final List<Class<? extends FacetFactory>> facetFactoryClasses = new ArrayList<Class<? extends FacetFactory>>();
+    private final List<FacetFactory> facetFactories = Lists.newArrayList();
+    private final List<Object> facetFactoryInstancesOrClasses = Lists.newArrayList();
 
     @Override
     public final List<FacetFactory> getList() {
@@ -38,20 +40,35 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     @Override
     public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
-        facetFactoryClasses.add(factoryClass);
+        facetFactoryInstancesOrClasses.add(factoryClass);
     }
 
     @Override
     public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
-        facetFactoryClasses.remove(factoryClass);
+        facetFactoryInstancesOrClasses.remove(factoryClass);
     }
 
     @Override
     public void init() {
-        for (final Class<? extends FacetFactory> factoryClass : facetFactoryClasses) {
-            final FacetFactory facetFactory = (FacetFactory) InstanceUtil.createInstance(factoryClass);
+        for (final Object factoryInstanceOrClass : facetFactoryInstancesOrClasses) {
+            final FacetFactory facetFactory = asFacetFactory(factoryInstanceOrClass);
             facetFactories.add(facetFactory);
         }
+    }
+
+    private static FacetFactory asFacetFactory(final Object factoryInstanceOrClass) {
+        if(factoryInstanceOrClass instanceof FacetFactory) {
+            return (FacetFactory) factoryInstanceOrClass;
+        } else {
+            @SuppressWarnings("unchecked")
+            Class<? extends FacetFactory> factoryClass = (Class<? extends FacetFactory>) factoryInstanceOrClass;
+            return (FacetFactory) InstanceUtil.createInstance(factoryClass);
+        }
+    }
+
+    @Override
+    public void addFactory(FacetFactory facetFactory) {
+        facetFactoryInstancesOrClasses.add(facetFactory);
     }
 
 }

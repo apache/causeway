@@ -59,13 +59,14 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
  */
 public abstract class PageAbstract extends WebPage {
 
-    private static final String ID_USER_NAME = "userName";
-
-    private static final String ID_PAGE_TITLE = "pageTitle";
+    private static final String ID_BOOKMARKED_PAGES = "breadcrumbs";
 
     private static final long serialVersionUID = 1L;
     
-    private static final String DEFAULT_TITLE = "Apache Isis Wicket Viewer";
+    private static final String ID_APPLICATION_NAME = "applicationName";
+    private static final String ID_USER_NAME = "userName";
+    
+    private static final String ID_PAGE_TITLE = "pageTitle";
     
     public static final String ID_MENU_LINK = "menuLink";
     public static final String ID_LOGOUT_LINK = "logoutLink";
@@ -73,6 +74,13 @@ public abstract class PageAbstract extends WebPage {
 
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
+    
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    @Named("applicationName")
+    private String applicationName;
     
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -92,10 +100,11 @@ public abstract class PageAbstract extends WebPage {
         addApplicationActionsComponent();
         this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
         this.pageParameters = pageParameters;
+        addApplicationName();
         addUserName();
         addLogoutLink();
         addAboutLink();
-        add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, DEFAULT_TITLE)));
+        add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
     }
 
     @Override
@@ -107,25 +116,14 @@ public abstract class PageAbstract extends WebPage {
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
-
+    }
+    
+    private void addApplicationName() {
+        add(new Label(ID_APPLICATION_NAME, applicationName));
     }
     
     private void addUserName() {
         add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
-    }
-
-
-    protected void addBreadcrumbs() {
-        getComponentFactoryRegistry().addOrReplaceComponent(this, "breadcrumbs", ComponentType.RECENT_PAGES, getBookmarkedPagesModel());
-    }
-
-    protected void bookmarkPage(BookmarkableModel<?> model) {
-        getBookmarkedPagesModel().bookmarkPage(model);
-    }
-
-    private BookmarkedPagesModel getBookmarkedPagesModel() {
-        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getApplication();
-        return application.getBookmarkedPagesModel();
     }
 
     private void addLogoutLink() {
@@ -150,6 +148,7 @@ public abstract class PageAbstract extends WebPage {
             }
         });
     }
+
 
     /**
      * As provided in the {@link #PageAbstract(ComponentType) constructor}.
@@ -192,6 +191,28 @@ public abstract class PageAbstract extends WebPage {
     private void addComponent(final ComponentType componentType, final IModel<?> model) {
         getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
     }
+
+
+    ////////////////////////////////////////////////////////////////
+    // bookmarked pages
+    ////////////////////////////////////////////////////////////////
+
+    /**
+     * Convenience for subclasses
+     */
+    protected void addBookmarkedPages() {
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, getBookmarkedPagesModel());
+    }
+
+    protected void bookmarkPage(BookmarkableModel<?> model) {
+        getBookmarkedPagesModel().bookmarkPage(model);
+    }
+
+    private BookmarkedPagesModel getBookmarkedPagesModel() {
+        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getApplication();
+        return application.getBookmarkedPagesModel();
+    }
+
 
 
     // ///////////////////////////////////////////////////////////////////

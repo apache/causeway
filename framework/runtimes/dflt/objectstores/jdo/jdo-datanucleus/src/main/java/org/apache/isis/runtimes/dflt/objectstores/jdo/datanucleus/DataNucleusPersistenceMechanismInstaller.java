@@ -156,15 +156,12 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     @Override
-    public ProgrammingModel refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
-
-        addJdoFacetFactories(baseProgrammingModel);
-        addDataNucleusFacetFactories(baseProgrammingModel);
-
-        return baseProgrammingModel;
+    public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
+        addJdoFacetFactoriesTo(programmingModel);
+        addDataNucleusFacetFactoriesTo(programmingModel);
     }
 
-    private void addJdoFacetFactories(ProgrammingModel baseProgrammingModel) {
+    private void addJdoFacetFactoriesTo(ProgrammingModel baseProgrammingModel) {
         baseProgrammingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
         baseProgrammingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
         baseProgrammingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
@@ -178,14 +175,14 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         baseProgrammingModel.addFactory(AuditableMarkerInterfaceFacetFactory.class);
     }
 
-    private void addDataNucleusFacetFactories(ProgrammingModel baseProgrammingModel) {
+    private void addDataNucleusFacetFactoriesTo(ProgrammingModel baseProgrammingModel) {
         baseProgrammingModel.addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
         baseProgrammingModel.addFactory(RemoveJdoPrefixedMethodsFacetFactory.class);
     }
 
     @Override
-    public MetaModelValidator refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
-        return baseMetaModelValidator.add(new JdoMetaModelValidatorLeaf());
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        metaModelValidator.add(new JdoMetaModelValidatorLeaf());
     }
 
 

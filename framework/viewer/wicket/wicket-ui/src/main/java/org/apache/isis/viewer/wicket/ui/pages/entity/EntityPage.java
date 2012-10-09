@@ -50,7 +50,7 @@ public class EntityPage extends PageAbstract {
         addChildComponents(model);
         
         bookmarkPage(model);
-        addBreadcrumbs();
+        addBookmarkedPages();
     }
 
     public EntityPage(final ObjectAdapter adapter) {
@@ -68,7 +68,7 @@ public class EntityPage extends PageAbstract {
         addChildComponents(model);
         
         bookmarkPage(model);
-        addBreadcrumbs();
+        addBookmarkedPages();
     }
 
 
