@@ -223,7 +223,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
-    private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
+    private Map<Integer, ScalarModel> arguments = Maps.newHashMap();
     private ActionExecutor executor;
 
     private ActionModel(final PageParameters pageParameters) {
@@ -509,7 +509,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     public void clearArguments() {
-        arguments.clear();
+        for (ScalarModel argumentModel : arguments.values()) {
+            argumentModel.setObject((ObjectAdapter)null);
+        }
     }
     
     //////////////////////////////////////////////////

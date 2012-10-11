@@ -92,13 +92,17 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
         private void addParameters() {
             final ActionModel actionModel = getActionModel();
-            final ObjectAction ObjectAction = actionModel.getActionMemento().getAction();
-
-            final List<ObjectActionParameter> parameters = ObjectAction.getParameters();
-
+            final ObjectAction objectAction = actionModel.getActionMemento().getAction();
+            
+            final List<ObjectActionParameter> parameters = objectAction.getParameters();
+            
+            final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
+            for (final ActionParameterMemento apm1 : mementos) {
+                actionModel.getArgumentModel(apm1);
+            }
+            
             final RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
             add(rv);
-            final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
             for (final ActionParameterMemento apm : mementos) {
                 final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
                 rv.add(container);

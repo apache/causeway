@@ -211,9 +211,7 @@ public class ToDoItem extends AbstractDomainObject  {
     // {{ dependsOn (action)
     @MemberOrder(name="dependencies", sequence = "1")
     public ToDoItem dependsOn(final ToDoItem toDoItem) {
-        if(!getDependencies().contains(toDoItem)) {
-            getDependencies().add(toDoItem);
-        }
+        getDependencies().add(toDoItem);
         return this;
     }
     public String validateDependsOn(final ToDoItem toDoItem) {
@@ -230,9 +228,7 @@ public class ToDoItem extends AbstractDomainObject  {
     // {{ noLongerDependsOn (action)
     @MemberOrder(name="dependencies", sequence = "2")
     public ToDoItem noLongerDependsOn(final ToDoItem toDoItem) {
-        if(!getDependencies().contains(toDoItem)) {
-            getDependencies().add(toDoItem);
-        }
+        getDependencies().remove(toDoItem);
         return this;
     }
     public String validateNoLongerDependsOn(final ToDoItem toDoItem) {

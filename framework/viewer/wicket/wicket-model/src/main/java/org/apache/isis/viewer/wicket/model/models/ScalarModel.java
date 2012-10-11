@@ -319,7 +319,8 @@ public class ScalarModel extends EntityModel {
         this.parameterMemento = apm;
 
         final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-        final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
+        // REVIEW: is no checking ok here?
+        final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
         setObject(defaultAdapter);
 
         setMode(Mode.EDIT);
