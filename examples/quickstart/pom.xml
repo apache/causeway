@@ -147,14 +147,13 @@
 
     <modules>
         <module>dom</module>
-        <module>exploration</module>
         <module>fixture</module>
-        <module>objstore-dflt</module>
         <module>objstore-jdo</module>
-        <module>objstore-nosql</module>
-        <module>objstore-sql</module>
-        <module>webapp</module>
-        <module>wicket</module>
+        <module>viewer-dnd</module>
+        <module>viewer-html</module>
+        <module>viewer-restfulobjects</module>
+        <module>viewer-scimpi</module>
+        <module>viewer-wicket</module>
         <module>tests-junit</module>
         <module>tests-bdd</module>
     </modules>
@@ -177,25 +176,7 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-objstore-dflt</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart-objstore-jdo</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-objstore-nosql</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-objstore-sql</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

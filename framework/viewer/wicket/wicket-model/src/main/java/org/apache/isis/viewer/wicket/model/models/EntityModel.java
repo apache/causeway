@@ -69,7 +69,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         final Boolean persistent = adapter.representsPersistent();
 
         if (persistent) {
-            final String oidStr = adapter.getOid().enString(getOidMarshaller());
+            final String oidStr = adapter.getOid().enStringNoVersion(getOidMarshaller());
 
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {

@@ -21,26 +21,16 @@ package objstore.jdo.todo;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import dom.todo.ToDoItem;
-import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.query.QueryDefault;
 
-public class ToDoItemsJdo extends AbstractFactoryAndRepository implements ToDoItems {
-
-    // {{ Id, iconName
-    @Override
-    public String getId() {
-        return "toDoItems";
-    }
-
-    public String iconName() {
-        return "ToDoItem";
-    }
-
-    // }}
+public class ToDoItemsJdo extends ToDoItems {
 
     @Override
     public List<ToDoItem> notYetDone() {
@@ -49,38 +39,25 @@ public class ToDoItemsJdo extends AbstractFactoryAndRepository implements ToDoIt
                 new QueryDefault<ToDoItem>(ToDoItem.class, "todo_notYetDone", "ownedBy", userName));
     }
 
-    // {{ NewToDo  (action)
-    @Override
-    public ToDoItem newToDo(final String description, Category category) {
-        final String ownedBy = getContainer().getUser().getName();
-        return newToDo(description, category, ownedBy);
-    }
-    // }}
-
-    // {{ NewToDo  (hidden)
-    @Override
-    public ToDoItem newToDo(final String description, Category category, String ownedBy) {
-        final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
-        toDoItem.setDescription(description);
-        toDoItem.setCategory(category);
-        toDoItem.setOwnedBy(ownedBy);
-        persist(toDoItem);
-        return toDoItem;
-    }
-    // }}
 
     // {{ SimilarTo (action)
     @Override
-    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
-        // TODO: should also filter out the supplied toDoItem
-        return allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, "todo_similarTo", "ownedBy", toDoItem.getOwnedBy(), "category", toDoItem.getCategory()));
-//        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-//            @Override
-//            public boolean accept(ToDoItem t) {
-//                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
-//            }
-//        });
+    public List<ToDoItem> similarTo(final ToDoItem thisToDoItem) {
+        final List<ToDoItem> similarToDoItems = allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "todo_similarTo", 
+                        "ownedBy", thisToDoItem.getOwnedBy(), 
+                        "category", thisToDoItem.getCategory()));
+        return Lists.newArrayList(Iterables.filter(similarToDoItems, excluding(thisToDoItem)));
+    }
+
+    private static Predicate<ToDoItem> excluding(final ToDoItem toDoItem) {
+        return new Predicate<ToDoItem>() {
+            @Override
+            public boolean apply(ToDoItem input) {
+                return input != toDoItem;
+            }
+        };
     }
     // }}
 

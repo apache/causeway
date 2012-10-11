@@ -45,6 +45,6 @@ public class WelcomePanel extends PanelAbstract<WelcomeModel> {
     public WelcomePanel(final String id, WelcomeModel model) {
         super(id, model);
         model.setObject(welcomeMessage);
-        add(new Label(ID_MESSAGE, getModel().getObject()));
+        add(new Label(ID_MESSAGE, getModel().getObject()).setEscapeModelStrings(false));
     }
 }

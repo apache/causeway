@@ -36,9 +36,6 @@ public class ToDoItemsFixture extends AbstractFixture {
 
         // for exploration user
         createFiveFor("exploration");
-        createThreeFor("exploration");
-        createTwoFor("exploration");
-        createOneFor("exploration");
     }
 
     private void createFiveFor(String ownedBy) {
@@ -70,7 +67,7 @@ public class ToDoItemsFixture extends AbstractFixture {
 
     private ToDoItems toDoItems;
 
-    public void setToDoItemRepository(final ToDoItems toDoItems) {
+    public void setToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
 

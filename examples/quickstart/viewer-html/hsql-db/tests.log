@@ -1,0 +1,2 @@
+/*C3*/SET SCHEMA PUBLIC
+create table ISIS_ADMIN_SERVICES (PK_ID int, ID varchar(255))

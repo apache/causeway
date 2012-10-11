@@ -131,7 +131,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
 
         final RootOidDefault sqlOid = (RootOidDefault) rootOid;
         connector.addToQueryValues(sqlOid.getIdentifier());
-        connector.addToQueryValues(rootOid.getObjectSpecId());
+        connector.addToQueryValues(rootOid.getObjectSpecId().asString());
 
         connector.insert(sql.toString());
         connectionPool.release(connector);
@@ -435,7 +435,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
             sql.append(" where ");
             sql.append(Defaults.getIdColumn());
             sql.append(" = ?");
-            connector.addToQueryValues(serviceSpec.getSpecId());
+            connector.addToQueryValues(serviceSpec.getSpecId().asString());
 
             final Results results = connector.select(sql.toString());
             if (!results.next()) {

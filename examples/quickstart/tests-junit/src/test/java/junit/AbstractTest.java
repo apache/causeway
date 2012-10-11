@@ -20,7 +20,6 @@
 package junit;
 
 import dom.todo.ToDoItems;
-import objstore.dflt.todo.ToDoItemsDefault;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,8 +34,8 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@ConfigDir("../webapp/src/main/webapp/WEB-INF") // acts as default, but can be overridden by annotations
-@Services({ @Service(ToDoItemsDefault.class) })
+@ConfigDir("../exploration/config") // acts as default, but can be overridden by annotations
+@Services({ @Service(ToDoItems.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;

@@ -19,6 +19,11 @@
 
 package dom.todo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.concurrent.Immutable;
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
@@ -28,6 +33,7 @@ import javax.jdo.spi.PersistenceCapable;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -36,7 +42,7 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -52,6 +58,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditab
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("TODO")
 @Auditable
+@AutoComplete(repository=ToDoItems.class, action="autoComplete")
 public class ToDoItem extends AbstractDomainObject  {
     
     public static enum Category {
@@ -85,24 +92,10 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
-    // {{ Done
-    private boolean done;
-
-    @Disabled
-    @MemberOrder(sequence = "3")
-    public boolean getDone() {
-        return done;
-    }
-
-    public void setDone(final boolean done) {
-        this.done = done;
-    }
-    // }}
-
     // {{ DueBy (property)
     private LocalDate dueBy;
 
-    @MemberOrder(sequence = "4")
+    @MemberOrder(sequence = "3")
     @Optional
     @Persistent
     public LocalDate getDueBy() {
@@ -114,9 +107,24 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
+    // {{ Done
+    private boolean done;
+
+    @Disabled
+    @MemberOrder(sequence = "4")
+    public boolean getDone() {
+        return done;
+    }
+
+    public void setDone(final boolean done) {
+        this.done = done;
+    }
+    // }}
+
     // {{ Notes (property)
     private String notes;
 
+    @Hidden(where=Where.ALL_TABLES)
     @Optional
     @MultiLine(numberOfLines=5)
     @MemberOrder(sequence = "6")
@@ -143,6 +151,7 @@ public class ToDoItem extends AbstractDomainObject  {
     // }}
 
     // {{ Version (derived property)
+    @Hidden(where=Where.ALL_TABLES)
     @Disabled
     @MemberOrder(sequence = "99")
     @Named("Version")
@@ -182,6 +191,63 @@ public class ToDoItem extends AbstractDomainObject  {
         return !done ? "Not yet done" : null;
     }
     // }}
+
+    
+    // {{ Dependencies (Collection)
+    private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
+
+    @Disabled
+    @MemberOrder(sequence = "1")
+    public List<ToDoItem> getDependencies() {
+        return dependencies;
+    }
+
+    public void setDependencies(final List<ToDoItem> dependencies) {
+        this.dependencies = dependencies;
+    }
+    // }}
+
+
+    // {{ dependsOn (action)
+    @MemberOrder(name="dependencies", sequence = "1")
+    public ToDoItem dependsOn(final ToDoItem toDoItem) {
+        if(!getDependencies().contains(toDoItem)) {
+            getDependencies().add(toDoItem);
+        }
+        return this;
+    }
+    public String validateDependsOn(final ToDoItem toDoItem) {
+        if(getDependencies().contains(toDoItem)) {
+            return "Already a dependency";
+        }
+        if(toDoItem == this) {
+            return "Can't set up a dependency to self";
+        }
+        return null;
+    }
+    // }}
+
+    // {{ noLongerDependsOn (action)
+    @MemberOrder(name="dependencies", sequence = "2")
+    public ToDoItem noLongerDependsOn(final ToDoItem toDoItem) {
+        if(!getDependencies().contains(toDoItem)) {
+            getDependencies().add(toDoItem);
+        }
+        return this;
+    }
+    public String validateNoLongerDependsOn(final ToDoItem toDoItem) {
+        if(!getDependencies().contains(toDoItem)) {
+            return "Not a dependency";
+        }
+        return null;
+    }
+    public List<ToDoItem> choicesNoLongerDependsOn() {
+        return getDependencies();
+    }
+    // }}
+
+    
+
 
     // {{ injected: ToDoItems
     @SuppressWarnings("unused")

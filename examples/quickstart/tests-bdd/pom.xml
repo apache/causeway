@@ -54,11 +54,6 @@
             <artifactId>quickstart-dom</artifactId>
             <version>0.3.1-incubating-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-dflt</artifactId>
-            <version>0.3.1-incubating-SNAPSHOT</version>
-        </dependency>
 
         <!-- isis -->
         <dependency>

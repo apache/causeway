@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
 
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
@@ -45,7 +45,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     public AboutPanel(final String id, final AboutModel model) {
         super(id, model);
         getModel().setObject(aboutMessage);
-        add(new Label(ID_MESSAGE, model.getObject()));
+        add(new MultiLineLabel(ID_MESSAGE, model.getObject()));
     }
 
 }

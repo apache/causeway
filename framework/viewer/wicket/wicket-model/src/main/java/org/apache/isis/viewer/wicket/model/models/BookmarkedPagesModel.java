@@ -38,8 +38,8 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
     private List<PageParameters> list = Lists.newArrayList();
     private transient PageParameters current;
     
-    public void bookmarkPage(final BookmarkableModel<?> isisModel) {
-        final PageParameters pageParameters = isisModel.asPageParameters();
+    public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
+        final PageParameters pageParameters = bookmarkableModel.asPageParameters();
         
         // ignore if doesn't provide a page type for subsequent disambiguation
         PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(pageParameters, PageType.class);

@@ -50,7 +50,7 @@ public class AboutIsis {
         } catch (final MissingResourceException ex) {
             logo = "splash-logo";
             frameworkVersion = "${project.version}-r${buildNumber}";
-            frameworkCopyright = "Copyright (c) 2010~2011 Apache Software Foundation";
+            frameworkCopyright = "Copyright (c) 2010~2012 Apache Software Foundation";
             frameworkName = "${project.parent.name}";
         }
 

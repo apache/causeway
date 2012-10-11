@@ -21,33 +21,106 @@ package dom.todo;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.QueryOnly;
+import com.google.common.base.Objects;
 
 import dom.todo.ToDoItem.Category;
 
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.filter.Filter;
+
 @Named("ToDos")
-public interface ToDoItems {
+public class ToDoItems extends AbstractFactoryAndRepository {
 
-    @QueryOnly
+    // {{ Id, iconName
+    @Override
+    public String getId() {
+        return "toDoItems";
+    }
+
+    public String iconName() {
+        return "ToDoItem";
+    }
+    // }}
+
+    // {{ NotYetDone (action)
+    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
-    public List<ToDoItem> notYetDone();
+    public List<ToDoItem> notYetDone() {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem t) {
+                return ownedByCurrentUser(t) && !t.getDone();
+            }
+        });
+    }
+    // }}
 
+    // {{ NewToDo  (action)
     @MemberOrder(sequence = "2")
     public ToDoItem newToDo(
             @Named("Description") String description, 
-            Category category);
+            Category category) {
+        final String ownedBy = getContainer().getUser().getName();
+        return newToDo(description, category, ownedBy);
+    }
+    // }}
 
+    // {{ NewToDo  (hidden)
     @Hidden // for use by fixtures
     public ToDoItem newToDo(
             String description, 
             Category category, 
-            String ownedBy);
+            String ownedBy) {
+        final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
+        toDoItem.setDescription(description);
+        toDoItem.setCategory(category);
+        toDoItem.setOwnedBy(ownedBy);
+        persist(toDoItem);
+        return toDoItem;
+    }
+    // }}
 
-    @QueryOnly
+    // {{ SimilarTo (action)
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "3")
-    public List<ToDoItem> similarTo(ToDoItem toDoItem);
+    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem t) {
+                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
+            }
+        });
+    }
+    // }}
+    
+    // {{ AutoComplete (hidden)
+    @Hidden
+    @MemberOrder(sequence = "1")
+    public List<ToDoItem> autoComplete(final String description) {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem t) {
+                return ownedByCurrentUser(t) && t.getDescription().contains(description);
+            }
+
+        });
+    }
+    // }}
+
+    // {{ helpers
+    protected boolean ownedByCurrentUser(final ToDoItem t) {
+        return Objects.equal(t.getOwnedBy(), currentUserName());
+    }
+    protected String currentUserName() {
+        return getContainer().getUser().getName();
+    }
+    // }}
 
 }
