@@ -29,7 +29,7 @@ The system:
 <li>
 <p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)">
 <span concordion:assertTrue="#result">bootstrapped</span> from
-config directory <span concordion:set="#configDir">../webapp/src/main/webapp/WEB-INF</span>
+config directory <span concordion:set="#configDir">../viewer-dnd/config</span>
 and running in <span concordion:set="#deploymentType">prototype</span>
 mode,
 </p>
@@ -43,7 +43,7 @@ mode,
 		<th concordion:assertTrue="#result"/>
 	</tr>
 	<tr>
-		<td>objstore.dflt.todo.ToDoItemsDefault</td>
+		<td>dom.todo.ToDoItems</td>
 		<td>toDoItems</td>
 		<td>ok</td>
 	</tr>

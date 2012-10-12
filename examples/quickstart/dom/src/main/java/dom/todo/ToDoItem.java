@@ -20,10 +20,8 @@
 package dom.todo;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.concurrent.Immutable;
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
@@ -32,7 +30,7 @@ import javax.jdo.spi.PersistenceCapable;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
@@ -52,14 +50,20 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditab
         name="todo_notYetDone", language="JDOQL",  
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == false"),
     @javax.jdo.annotations.Query(
+            name="todo_done", language="JDOQL",  
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == true"),
+    @javax.jdo.annotations.Query(
         name="todo_similarTo", language="JDOQL",  
-        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category")
+        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category"),
+    @javax.jdo.annotations.Query(
+            name="todo_autoComplete", language="JDOQL",  
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.matches(:description)")
 })
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("TODO")
 @Auditable
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
-public class ToDoItem extends AbstractDomainObject  {
+public class ToDoItem {
     
     public static enum Category {
         Professional, Domestic, Other;
@@ -95,9 +99,9 @@ public class ToDoItem extends AbstractDomainObject  {
     // {{ DueBy (property)
     private LocalDate dueBy;
 
-    @MemberOrder(sequence = "3")
+    @javax.jdo.annotations.Persistent
+    @MemberOrder(name="Detail", sequence = "3")
     @Optional
-    @Persistent
     public LocalDate getDueBy() {
         return dueBy;
     }
@@ -127,7 +131,7 @@ public class ToDoItem extends AbstractDomainObject  {
     @Hidden(where=Where.ALL_TABLES)
     @Optional
     @MultiLine(numberOfLines=5)
-    @MemberOrder(sequence = "6")
+    @MemberOrder(name="Detail", sequence = "6")
     public String getNotes() {
         return notes;
     }
@@ -153,7 +157,7 @@ public class ToDoItem extends AbstractDomainObject  {
     // {{ Version (derived property)
     @Hidden(where=Where.ALL_TABLES)
     @Disabled
-    @MemberOrder(sequence = "99")
+    @MemberOrder(name="Detail", sequence = "99")
     @Named("Version")
     public Long getVersionSequence() {
         if(!(this instanceof PersistenceCapable)) {
@@ -191,7 +195,6 @@ public class ToDoItem extends AbstractDomainObject  {
         return !done ? "Not yet done" : null;
     }
     // }}
-
     
     // {{ Dependencies (Collection)
     private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
@@ -207,14 +210,13 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
-
-    // {{ dependsOn (action)
-    @MemberOrder(name="dependencies", sequence = "1")
-    public ToDoItem dependsOn(final ToDoItem toDoItem) {
+    // {{ add (action)
+    @MemberOrder(name="dependencies", sequence = "3")
+    public ToDoItem add(final ToDoItem toDoItem) {
         getDependencies().add(toDoItem);
         return this;
     }
-    public String validateDependsOn(final ToDoItem toDoItem) {
+    public String validateAdd(final ToDoItem toDoItem) {
         if(getDependencies().contains(toDoItem)) {
             return "Already a dependency";
         }
@@ -225,24 +227,35 @@ public class ToDoItem extends AbstractDomainObject  {
     }
     // }}
 
-    // {{ noLongerDependsOn (action)
-    @MemberOrder(name="dependencies", sequence = "2")
-    public ToDoItem noLongerDependsOn(final ToDoItem toDoItem) {
+    // {{ remove (action)
+    @MemberOrder(name="dependencies", sequence = "4")
+    public ToDoItem remove(final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
         return this;
     }
-    public String validateNoLongerDependsOn(final ToDoItem toDoItem) {
+    public String disableRemove() {
+        return getDependencies().isEmpty()? "No dependencies to remove": null;
+    }
+    public String validateRemove(final ToDoItem toDoItem) {
         if(!getDependencies().contains(toDoItem)) {
             return "Not a dependency";
         }
         return null;
     }
-    public List<ToDoItem> choicesNoLongerDependsOn() {
+    public List<ToDoItem> choices0Remove() {
         return getDependencies();
     }
     // }}
 
-    
+
+    // {{ injected: DomainObjectContainer
+    @SuppressWarnings("unused")
+    private DomainObjectContainer container;
+
+    public void setDomainObjectContainer(final DomainObjectContainer container) {
+        this.container = container;
+    }
+    // }}
 
 
     // {{ injected: ToDoItems
@@ -253,6 +266,5 @@ public class ToDoItem extends AbstractDomainObject  {
         this.toDoItems = toDoItems;
     }
     // }}
-    
-
+   
 }

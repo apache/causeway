@@ -98,4 +98,6 @@ public class ProductRepository extends AbstractFactoryAndRepository {
         return newTransientInstance(Product.class);
     }
 
+    
+
 }

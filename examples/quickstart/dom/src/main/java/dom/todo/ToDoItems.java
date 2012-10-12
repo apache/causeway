@@ -61,7 +61,21 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    // {{ NewToDo  (action)
+    // {{ Done (action)
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "2")
+    public List<ToDoItem> done() {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem t) {
+                return ownedByCurrentUser(t) && t.getDone();
+            }
+        });
+    }
+    // }}
+
+
+    // {{ newToDo  (action)
     @MemberOrder(sequence = "2")
     public ToDoItem newToDo(
             @Named("Description") String description, 
@@ -71,7 +85,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    // {{ NewToDo  (hidden)
+    // {{ newToDo  (hidden)
     @Hidden // for use by fixtures
     public ToDoItem newToDo(
             String description, 
@@ -86,7 +100,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    // {{ SimilarTo (action)
+    // {{ similarTo (action)
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "3")
@@ -100,7 +114,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
     
-    // {{ AutoComplete (hidden)
+    // {{ autoComplete (hidden)
     @Hidden
     @MemberOrder(sequence = "1")
     public List<ToDoItem> autoComplete(final String description) {

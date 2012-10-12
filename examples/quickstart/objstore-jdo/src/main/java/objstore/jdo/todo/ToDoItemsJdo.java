@@ -32,15 +32,27 @@ import org.apache.isis.applib.query.QueryDefault;
 
 public class ToDoItemsJdo extends ToDoItems {
 
+    // {{ notYetDone (action)
     @Override
     public List<ToDoItem> notYetDone() {
-        final String userName = getContainer().getUser().getName();
         return allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, "todo_notYetDone", "ownedBy", userName));
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "todo_notYetDone", 
+                        "ownedBy", currentUserName()));
     }
+    // }}
 
+    // {{ done (action)
+    @Override
+    public List<ToDoItem> done() {
+        return allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "todo_done", 
+                        "ownedBy", currentUserName()));
+    }
+    // }}
 
-    // {{ SimilarTo (action)
+    // {{ similarTo (action)
     @Override
     public List<ToDoItem> similarTo(final ToDoItem thisToDoItem) {
         final List<ToDoItem> similarToDoItems = allMatches(
@@ -61,5 +73,16 @@ public class ToDoItemsJdo extends ToDoItems {
     }
     // }}
 
+    // {{ autoComplete (action)
+    @Override
+    public List<ToDoItem> autoComplete(String description) {
+        
+        return allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "todo_autoComplete", 
+                        "ownedBy", currentUserName(), 
+                        "description", description));
+    }
+    // }}
 
 }

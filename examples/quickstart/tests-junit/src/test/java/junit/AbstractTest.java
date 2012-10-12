@@ -34,7 +34,7 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@ConfigDir("../exploration/config") // acts as default, but can be overridden by annotations
+@ConfigDir("../viewer-dnd/config") // acts as default, but can be overridden by annotations
 @Services({ @Service(ToDoItems.class) })
 public abstract class AbstractTest {
 
