@@ -34,6 +34,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
@@ -63,6 +64,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditab
 @ObjectType("TODO")
 @Auditable
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
+@MemberGroups({"General", "Detail"})
 public class ToDoItem {
     
     public static enum Category {
@@ -247,7 +249,6 @@ public class ToDoItem {
     }
     // }}
 
-
     // {{ injected: DomainObjectContainer
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
@@ -256,7 +257,6 @@ public class ToDoItem {
         this.container = container;
     }
     // }}
-
 
     // {{ injected: ToDoItems
     @SuppressWarnings("unused")
