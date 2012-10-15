@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.jdo.JDOEnhancer;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;

@@ -28,7 +28,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 

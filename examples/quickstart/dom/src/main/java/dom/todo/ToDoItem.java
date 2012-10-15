@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
@@ -40,6 +39,8 @@ import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Resolve;
+import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
@@ -58,7 +59,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditab
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category"),
     @javax.jdo.annotations.Query(
             name="todo_autoComplete", language="JDOQL",  
-            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.matches(:description)")
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.startsWith(:description)")
 })
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("TODO")
@@ -198,11 +199,12 @@ public class ToDoItem {
     }
     // }}
     
-    // {{ Dependencies (Collection)
+    // {{ dependencies (Collection)
     private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
 
     @Disabled
     @MemberOrder(sequence = "1")
+    @Resolve(Type.EAGERLY)
     public List<ToDoItem> getDependencies() {
         return dependencies;
     }

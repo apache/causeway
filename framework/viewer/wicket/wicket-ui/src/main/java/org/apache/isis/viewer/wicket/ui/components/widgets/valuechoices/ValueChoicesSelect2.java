@@ -45,6 +45,7 @@ import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Initial skeleton - trying to add support for value choices.
@@ -78,9 +79,11 @@ public class ValueChoicesSelect2 extends ScalarPanelAbstract { // ScalarPanelTex
         valueField = createDropDownChoices(choicesMementos, modelObject);
 
         addStandardSemantics();
-        // addSemantics();
 
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
+        if(getModel().isRequired()) {
+            labelIfRegular.add(new CssClassAppender("mandatory"));
+        }
         addOrReplace(labelIfRegular);
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueField));
@@ -129,7 +132,6 @@ public class ValueChoicesSelect2 extends ScalarPanelAbstract { // ScalarPanelTex
 
     protected void addStandardSemantics() {
         setRequiredIfSpecified();
-        // setSizeIfSpecified();
     }
 
     private void setRequiredIfSpecified() {

@@ -113,6 +113,9 @@ public enum PageParameterNames {
     }
 
     public String getStringFrom(PageParameters pageParameters, String defaultValue) {
+        if(pageParameters == null) {
+            return defaultValue;
+        }
         return pageParameters.get(this.toString()).toString(defaultValue);
     }
 

@@ -19,7 +19,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
-import org.datanucleus.identity.OIDImpl;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -37,11 +36,9 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.commands.DataNucleusUpdateObjectCommand;
@@ -104,13 +101,11 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     private PersistenceManager persistenceManager;
 
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
-    // private final LoadPostProcessor loadPostProcessor;
+    private final FrameworkSynchronizer frameworkSynchronizer;
 
     private State state;
     private TransactionMode transactionMode;
-
     
-    private final FrameworkSynchronizer frameworkSynchronizer;
 
     public DataNucleusObjectStore(ObjectAdapterFactory adapterFactory, DataNucleusApplicationComponents applicationComponents) {
         ensureThatArg(adapterFactory, is(notNullValue()));

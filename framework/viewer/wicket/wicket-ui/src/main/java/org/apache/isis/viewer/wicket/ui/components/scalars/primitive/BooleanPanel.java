@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
@@ -61,7 +62,10 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, checkBox);
         labelIfRegular.add(checkBox);
-        
+        if(getModel().isRequired()) {
+            labelIfRegular.add(new CssClassAppender("mandatory"));
+        }
+
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));

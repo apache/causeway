@@ -19,8 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -29,10 +35,30 @@ public final class WicketSignInPage extends SignInPage {
     
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_PAGE_TITLE = "pageTitle";
+    private static final String ID_APPLICATION_NAME = "applicationName";
+
     public WicketSignInPage() {
+        this(null);
     }
+
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    @Named("applicationName")
+    private String applicationName;
 
     public WicketSignInPage(final PageParameters parameters) {
+        addPageTitle(parameters);
+        addApplicationName();
     }
 
+    private void addPageTitle(final PageParameters parameters) {
+        add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(parameters, applicationName)));
+    }
+
+    private void addApplicationName() {
+        add(new Label(ID_APPLICATION_NAME, applicationName));
+    }
 }

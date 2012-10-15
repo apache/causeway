@@ -17,18 +17,23 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xml:lang="en"  
+      lang="en">
 	<head>
-	    <title>Sign In</title>
+		<title wicket:id="pageTitle"></title>
 		<wicket:link>
 			<link href="../PageAbstract.css" rel="stylesheet" />
+			<link href="WicketSignInPage.css" rel="stylesheet" />
+			<link href="../cssreset.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
 		<link href="application.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
-		<div id="container">
-			<div id="header" >
-				<h1>Wicket Viewer</h1>
+		<div id="container" class="signIn">
+			<div id="header">
+				<h1><span wicket:id="applicationName">[application name]</span></h1>
 			</div>
 			<div class="clear"/>
 		    <h2>Sign In</h2>

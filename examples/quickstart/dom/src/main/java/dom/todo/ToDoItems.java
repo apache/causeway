@@ -48,7 +48,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    // {{ NotYetDone (action)
+    // {{ notYetDone (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetDone() {
@@ -61,7 +61,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    // {{ Done (action)
+    // {{ done (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     public List<ToDoItem> done() {
@@ -74,12 +74,11 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-
     // {{ newToDo  (action)
     @MemberOrder(sequence = "2")
     public ToDoItem newToDo(
             @Named("Description") String description, 
-            Category category) {
+            @Named("Category") Category category) {
         final String ownedBy = getContainer().getUser().getName();
         return newToDo(description, category, ownedBy);
     }

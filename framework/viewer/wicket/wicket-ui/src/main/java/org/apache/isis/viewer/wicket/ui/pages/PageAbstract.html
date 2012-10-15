@@ -37,7 +37,10 @@
 				<h1><span wicket:id="applicationName">[application name]</span></h1>
 			</div>
 			<div id="secondaryMenu">
-				<span>logged in as: </span><span wicket:id="userName">[username]</span>
+				<div class="links">
+					<span>logged in as: </span><span wicket:id="userName">[username]</span>
+					<a href="#" wicket:id="logoutLink">logout</a>&nbsp;|&nbsp;<a href="#" wicket:id="aboutLink">about</a>
+				</div>
 			</div>
 
 			<div class="clear"/>
@@ -46,11 +49,16 @@
 
 			<div id="body">
 				<wicket:child/>
+
+				<div class="clear"/>
 			</div>
 
 			<div id="footer">
-				<a href="#" wicket:id="logoutLink">logout</a>&nbsp;|&nbsp;<a href="#" wicket:id="aboutLink">about</a>&nbsp;|&nbsp;powered by <a href="http://incubator.apache.org/isis">Apache Isis (incubating)</a>
+				<div class="links">
+					powered by: <a href="http://incubator.apache.org/isis">Apache Isis (incubating)</a>
+				</div>
 			</div>
+
 		</div>
 	</body>
 </html>

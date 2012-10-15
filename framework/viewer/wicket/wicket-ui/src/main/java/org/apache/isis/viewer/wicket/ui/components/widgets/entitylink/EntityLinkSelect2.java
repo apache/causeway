@@ -105,47 +105,12 @@ public class EntityLinkSelect2 extends EntityLinkAbstract {
      * Builds the parts of the GUI that are not dynamic.
      */
     private void buildGui() {
-        //addOrReplaceOidField();
         rebuildFindUsingMenu();
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
 
         syncWithInput();
     }
 
-//    private void addOrReplaceOidField() {
-//        pendingOid = new TextField<ObjectAdapterMemento>(ID_ENTITY_OID, new Model<ObjectAdapterMemento>() {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            
-//            @Override
-//            public ObjectAdapterMemento getObject() {
-//                if (hasPending) {
-//                    return pending;
-//                }
-//                final ObjectAdapter adapter = EntityLinkSelect2.this.getModelObject();
-//                return ObjectAdapterMemento.createOrNull(adapter);
-//            }
-//
-//            @Override
-//            public void setObject(final ObjectAdapterMemento adapterMemento) {
-//                pending = adapterMemento;
-//                hasPending = true;
-//            }
-//
-//        }) {
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void onModelChanged() {
-//                super.onModelChanged();
-//                syncWithInput();
-//            }
-//        };
-//        pendingOid.setType(ObjectAdapterMemento.class);
-//        addOrReplace(pendingOid);
-//        pendingOid.setVisible(false);
-//    }
 
     void rebuildFindUsingMenu() {
         final EntityModel entityModel = getEntityModel();

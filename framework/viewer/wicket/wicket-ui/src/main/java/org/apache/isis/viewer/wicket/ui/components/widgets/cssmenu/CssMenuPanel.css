@@ -202,4 +202,83 @@ li.cssSubMenuItem p.disabled {
 	display:inline;
 }
 
+
+
+
+
+.groupedActions li.cssMenuItem > p.top-parent {
+  display:none;
+}
+
+.groupedActions .menuh ul ul {
+  position: relative;
+  display: inline-block;
+}
+
+
+.groupedActions .menuh li,
+.groupedActions .menuh li p {
+  display: inline;
+}
+
+.groupedActions .menuh a,
+.groupedActions .menuh p {
+  display: inline-block;
+  border: none;
+}
+
+.groupedActions .menuh a:link,
+.groupedActions .menuh a:visited,
+.groupedActions .menuh a:active,
+.groupedActions .menuh p {
+	background-color: #fff;
+}
+
+.groupedActions .menuh a:hover,
+.groupedActions .menuh p:hover {
+	color: #000;
+}	
+
+.entityActions li.cssMenuItem > p.top-parent {
+  display:none;
+}
+
+.entityActions .menuh ul ul {
+  position: relative;
+  display: inline-block;
+}
+
+
+.entityActions .menuh li,
+.entityActions .menuh li p {
+  display: inline;
+}
+
+.entityActions .menuh a,
+.entityActions .menuh p {
+  display: inline-block;
+  border: none;
+}
+
+
+
+.entityActions .menuh a:link,
+.entityActions .menuh a:visited,
+.entityActions .menuh a:active,
+.entityActions .menuh p {
+	background-color: #fff;
+}
+
+.entityActions .menuh a:focus {
+	text-decoration: underline;
+}
+
+.entityActions .menuh a:hover,
+.entityActions .menuh p:hover {
+	color: #000;
+}	
+
 /* End CSS Drop Down Menu */
+
+
+
