@@ -40,11 +40,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-metamodel</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
 		</dependency>

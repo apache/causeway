@@ -51,9 +51,7 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>wicket-applib</module>
 		<module>wicket-model</module>
-		<module>wicket-metamodel</module>
 		<module>wicket-ui</module>
 		<module>wicket-viewer</module>
 		<module>wicket-tck</module>
@@ -81,30 +79,6 @@
             </dependency>
 
 			<!-- Apache Isis Wicket Viewer -->
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-applib</artifactId>
-				<version>0.3.1-incubating-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-applib</artifactId>
-				<version>0.3.1-incubating-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-metamodel</artifactId>
-				<version>0.3.1-incubating-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-metamodel</artifactId>
-				<version>0.3.1-incubating-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-model</artifactId>

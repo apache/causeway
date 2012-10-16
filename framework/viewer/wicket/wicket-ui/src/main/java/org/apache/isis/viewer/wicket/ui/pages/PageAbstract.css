@@ -76,6 +76,11 @@
 	width: 520px;
 }
 
+/**************** APPLICATION MENU **************/
+
+#applicationActions .menuh {
+	background-color: #EEEEEE;
+}
 
 /**************** ELEMENTS **************/
 

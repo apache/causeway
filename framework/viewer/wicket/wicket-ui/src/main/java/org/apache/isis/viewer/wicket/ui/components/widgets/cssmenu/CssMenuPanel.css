@@ -19,13 +19,8 @@
 .cssMenuPanel span.clear {
 	line-height: 3px;
 }
-	
-
-#applicationActions .menuh {
-	background-color: #EEEEEE;
-}
 	 
-.menuh
+.cssMenuPanel .menuh
 	{
 	font-family: arial, helvetica, sans-serif;
 	float:left;
@@ -34,12 +29,12 @@
 	width:100%;
 }
 
-.menuh .small {
+.cssMenuPanel .menuh .small {
 	float:none;
 	display: inline;
 }
 
-.menuh p .small {
+.cssMenuPanel .menuh p .small {
 	float:none;
 	display: inline;
 }
@@ -57,61 +52,54 @@
 	cursor:default;
 }
 	
-.menuh a:link, .menuh a:visited, .menuh a:active, .menuh p	/* menu at rest */
-	{
+.cssMenuPanel .menuh a:link,
+.cssMenuPanel .menuh a:visited,
+.cssMenuPanel .menuh a:active,
+.cssMenuPanel .menuh p {
 	color: #00477F;
 	background-color: #EEEEEE;
 	text-decoration:none;
-/*	-moz-border-radius: 6px; 
-	-webkit-border-radius: 6px;
-	border-radius: 6px; */
-	}
+}
 	
-.menuh a:hover, .menuh p:hover 						/* menu on mouse-over  */
-	{
+.cssMenuPanel .menuh a:hover,
+.cssMenuPanel .menuh p:hover {
 	color: #D7E7F5;
 	background-color: #407098;
-	}	
+}
 
-.menuh a:hover 						/* menu on mouse-over  */
-	{
+.cssMenuPanel .menuh a:hover {
 	text-decoration:underline;
-	}	
+}	
 
-
-.menuh a.top-parent, .menuh p.top-parent  /* attaches down-arrow to all top-parents */
-	{
+.cssMenuPanel .menuh a.top-parent,
+.cssMenuPanel .menuh p.top-parent {
 	background-image: url(navdown_secondarydark.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-/*	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px; */
 	}
 
-.menuh a.top-parent:hover, .menuh p.top-parent:hover  /* attaches down-arrow to all top-parents */
-	{
+.cssMenuPanel .menuh a.top-parent:hover,
+.cssMenuPanel .menuh p.top-parent:hover {
 	background-image: url(navdown_primarypale.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	}
+}
 
-.menuh a.parent, .menuh p.parent 	/* attaches side-arrow to all parents */
-	{
+.cssMenuPanel .menuh a.parent,
+.cssMenuPanel .menuh p.parent {
 	background-image: url(nav_secondarydark.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	}
+}
 
-.menuh a.parent:hover, .menuh p.parent:hover 	/* attaches side-arrow to all parents */
-	{
+.cssMenuPanel .menuh a.parent:hover,
+.cssMenuPanel .menuh p.parent:hover {
 	background-image: url(nav_primarypale.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	}
+}
 
-.menuh ul
-	{
+.cssMenuPanel .menuh ul {
 	list-style:none;
 	margin:0;
 	padding:0;
@@ -119,157 +107,122 @@
 	display: inline;
 }
 
-.menuh li
-	{
+.cssMenuPanel .menuh li {
 	position:relative;
 	min-height: 1px;
 	}
 
-.menuh ul ul
-	{
+.cssMenuPanel .menuh ul ul {
 	position:absolute;
 	z-index:500;
 	top:auto;
 	display:none;
 	padding: 1em;
 	margin:-1em 0 0 -1em;
-	}
+}
 
-.menuh ul ul ul
-	{
+.cssMenuPanel .menuh ul ul ul {
 	top:0;
 	left:100%;
-	}
+}
 
-span.menuh a:hover
-	{
+.cssMenuPanel span.menuh a:hover {
 	cursor:pointer;
 	z-index:100;
-	}
+}
 
-span.menuh li:hover ul ul,
-span.menuh li li:hover ul ul,
-span.menuh li li li:hover ul ul,
-span.menuh li li li li:hover ul ul
-{display:none;}
+.cssMenuPanel span.menuh li:hover ul ul,
+.cssMenuPanel span.menuh li li:hover ul ul,
+.cssMenuPanel span.menuh li li li:hover ul ul,
+.cssMenuPanel span.menuh li li li li:hover ul ul {
+	display:none;
+}
 
-span.menuh li:hover ul,
-span.menuh li li:hover ul,
-span.menuh li li li:hover ul,
-span.menuh li li li li:hover ul
-{display:block;}
+.cssMenuPanel span.menuh li:hover ul,
+.cssMenuPanel span.menuh li li:hover ul,
+.cssMenuPanel span.menuh li li li:hover ul,
+.cssMenuPanel span.menuh li li li li:hover ul {
+	display:block;
+}
 
 
-
-li.cssSubMenuItem p.disabled {
+.cssMenuPanel li.cssSubMenuItem p.disabled {
 	color: gray;
 }
 
 
-/** TODO: tidy up this gunk, was experimenting in inlining; it may not be needed */
-
-.small .menuh
-{
-	float:none;
-}
-
-.small .cssMenuItemsPanel
-{
-	float:none;
-}
-
-.small p.top-parent
-{
-	display:inline;
-	position: relative;
-}
-
-.small li.cssMenuItemPanel {
-	display:inline;
-}
-
-.small ul {
-	position: relative;
-	display:inline;
-}
 
 
+/******** overrides for grouped actions and entity actions ***************/
 
-
-
-.groupedActions li.cssMenuItemPanel > p.top-parent {
+.groupedActions .cssMenuPanel li.cssMenuItemPanel > p.top-parent {
   display:none;
 }
 
-.groupedActions .menuh ul ul {
+.groupedActions .cssMenuPanel .menuh ul ul {
   position: relative;
   display: inline-block;
 }
 
 
-.groupedActions .menuh li,
-.groupedActions .menuh li p {
+.groupedActions .cssMenuPanel .menuh li,
+.groupedActions .cssMenuPanel .menuh li p {
   display: inline;
 }
 
-.groupedActions .menuh a,
-.groupedActions .menuh p {
+.groupedActions .cssMenuPanel .menuh a,
+.groupedActions .cssMenuPanel .menuh p {
   display: inline-block;
   border: none;
 }
 
-.groupedActions .menuh a:link,
-.groupedActions .menuh a:visited,
-.groupedActions .menuh a:active,
-.groupedActions .menuh p {
+.groupedActions .cssMenuPanel .menuh a:link,
+.groupedActions .cssMenuPanel .menuh a:visited,
+.groupedActions .cssMenuPanel .menuh a:active,
+.groupedActions .cssMenuPanel .menuh p {
 	background-color: #fff;
 }
 
-.groupedActions .menuh a:hover,
-.groupedActions .menuh p:hover {
+.groupedActions .cssMenuPanel .menuh a:hover,
+.groupedActions .cssMenuPanel .menuh p:hover {
 	color: #000;
 }	
 
-.entityActions li.cssMenuItemPanel > p.top-parent {
+
+
+.entityActions .cssMenuPanel li.cssMenuItemPanel > p.top-parent {
   display:none;
 }
 
-.entityActions .menuh ul ul {
+.entityActions .cssMenuPanel .menuh ul ul {
   position: relative;
   display: inline-block;
 }
 
 
-.entityActions .menuh li,
-.entityActions .menuh li p {
+.entityActions .cssMenuPanel .menuh li,
+.entityActions .cssMenuPanel .menuh li p {
   display: inline;
 }
 
-.entityActions .menuh a,
-.entityActions .menuh p {
+.entityActions .cssMenuPanel .menuh a,
+.entityActions .cssMenuPanel .menuh p {
   display: inline-block;
   border: none;
 }
 
-
-
-.entityActions .menuh a:link,
-.entityActions .menuh a:visited,
-.entityActions .menuh a:active,
-.entityActions .menuh p {
+.entityActions .cssMenuPanel .menuh a:link,
+.entityActions .cssMenuPanel .menuh a:visited,
+.entityActions .cssMenuPanel .menuh a:active,
+.entityActions .cssMenuPanel .menuh p {
 	background-color: #fff;
 }
 
-.entityActions .menuh a:focus {
+.entityActions .cssMenuPanel .menuh a:focus {
 	text-decoration: underline;
 }
 
-.entityActions .menuh a:hover,
-.entityActions .menuh p:hover {
+.entityActions .cssMenuPanel .menuh a:hover,
+.entityActions .cssMenuPanel .menuh p:hover {
 	color: #000;
 }	
-
-/* End CSS Drop Down Menu */
-
-
-
