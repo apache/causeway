@@ -39,9 +39,9 @@ public class ToggleButtonsPanel extends PanelAbstract<EntityModel> {
     private boolean flag;
     private Toggler toggler;
 
-    private ContainedButton button1;
+    private ContainedButtonPanel button1;
 
-    private ContainedButton button2;
+    private ContainedButtonPanel button2;
 
     public ToggleButtonsPanel(final String id, final String button1Caption, final String button2Caption) {
         super(id, null);
@@ -51,7 +51,7 @@ public class ToggleButtonsPanel extends PanelAbstract<EntityModel> {
     }
 
     private void buildGui(final String button1Caption, final String button2Caption) {
-        button1 = new ContainedButton(ID_BUTTON_1, button1Caption) {
+        button1 = new ContainedButtonPanel(ID_BUTTON_1, button1Caption) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -61,7 +61,7 @@ public class ToggleButtonsPanel extends PanelAbstract<EntityModel> {
         };
         addOrReplace(button1);
 
-        button2 = new ContainedButton(ID_BUTTON_2, button2Caption) {
+        button2 = new ContainedButtonPanel(ID_BUTTON_2, button2Caption) {
             private static final long serialVersionUID = 1L;
 
             @Override

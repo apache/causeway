@@ -33,11 +33,11 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTable;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 
 /**
  * A {@link ColumnAbstract column} within a
- * {@link CollectionContentsAsAjaxTable} representing a single property of the
+ * {@link CollectionContentsAsAjaxTablePanel} representing a single property of the
  * provided {@link ObjectAdapter}.
  * 
  * <p>

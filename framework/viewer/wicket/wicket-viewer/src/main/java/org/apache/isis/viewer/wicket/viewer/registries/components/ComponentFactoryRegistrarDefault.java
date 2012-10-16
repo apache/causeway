@@ -33,19 +33,19 @@ import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActionsCssMenuFactory;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTableFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.CollectionContentsAsIconsFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsDropDownSelectorFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.CollectionContentsAsIconsPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsDropDownSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.icontitle.EntityIconAndTitlePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityCollectionsPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll.EntityPropertiesPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary.EntitySummaryPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.collections.EntityCollectionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDateTimePanelFactory;
@@ -78,8 +78,8 @@ import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFact
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2Factory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2PanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2PanelComponentFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -113,17 +113,17 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         // ... or this set (but not both)
         addLinksSelectorFactories(componentFactories);
 
-        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // to prevent eager loading
+        componentFactories.add(new CollectionContentsAsUnresolvedPanelFactory()); // to prevent eager loading
     }
 
     protected void addLinksSelectorFactories(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityLinksSelectorFactory());
-        componentFactories.add(new CollectionContentsLinksSelectorFactory());
+        componentFactories.add(new EntityLinksSelectorPanelFactory());
+        componentFactories.add(new CollectionContentsLinksSelectorPanelFactory());
     }
 
     protected void addDropDownSelectorFactories(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityDropDownSelectorFactory());
-        componentFactories.add(new CollectionContentsDropDownSelectorFactory());
+        componentFactories.add(new EntityDropDownSelectorPanelFactory());
+        componentFactories.add(new CollectionContentsDropDownSelectorPanelFactory());
     }
 
     protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {
@@ -174,16 +174,16 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
-        componentFactories.add(new EntitySummaryPanelFactory());
+        componentFactories.add(new EntityHeaderPanelFactory());
         componentFactories.add(new EntityPropertiesPanelFactory());
         componentFactories.add(new EntityCollectionsPanelFactory());
     }
 
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new CollectionContentsAsAjaxTableFactory());
+        componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
         // componentFactories.add(new CollectionContentsAsSimpleTableFactory());
         // // work-in-progress
-        componentFactories.add(new CollectionContentsAsIconsFactory());
+        componentFactories.add(new CollectionContentsAsIconsPanelFactory());
     }
 
     protected void addComponentFactoriesForEntityCollection(final ComponentFactoryList componentFactories) {
@@ -238,11 +238,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new ValuePanelFactory());
 
         // or for choices
-        componentFactories.add(new ValueChoicesSelect2ComponentFactory());
+        componentFactories.add(new ValueChoicesSelect2PanelComponentFactory());
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityLinkSelect2Factory());
+        componentFactories.add(new EntityLinkSelect2PanelFactory());
     }
 
     protected void addComponentFactoriesForVoidReturn(final ComponentFactoryList componentFactories) {

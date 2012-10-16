@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-#bookmarkedPages {
+.bookmarkedPagesPanel {
 	font-size: smaller;
 }
 
-#bookmarkedPages .bookmarkedPagesList {
+.bookmarkedPagesPanel .bookmarkedPagesList {
 	display: inline;
 }
 
-#bookmarkedPages .bookmarkedPagesList span {
+.bookmarkedPagesPanel .bookmarkedPagesList span {
 	margin-right: 10px;
 }
 
-#bookmarkedPages .bookmarkedPageItem {
+.bookmarkedPagesPanel .bookmarkedPageItem {
 	display: inline;
 }
 
-#bookmarkedPages .clearBookmarks {
+.bookmarkedPagesPanel .clearBookmarks {
 	display: inline;
 	color: rgb(128,0,0);
 }

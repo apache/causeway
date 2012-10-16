@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
-import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedTogglebox;
+import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 
 public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAdapter> {
 
@@ -40,7 +40,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
 
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
-        cellItem.add(new ContainedTogglebox(componentId) {
+        cellItem.add(new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit() {

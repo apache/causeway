@@ -16,3 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.multiLineStringPanel textarea {
+	width: 97%;
+	resize: none;
+}

@@ -19,13 +19,13 @@
 /********** ID's **********/
 
 #header {
-	width: 80%;
+	width: 73%;
 	height: 40px;
 	float: left;
 }
 #secondaryMenu {
-	width: 18%;
-	/*display: inline-block;*/
+	width: 25%;
+	display: inline-block;
 	float: right;
 	text-align: right;
 }
@@ -92,10 +92,10 @@ body {
 }
 
 .panel, fieldset {
-	/* background-color: #D7E7F5; */
 	margin: 3px 0px;
 }
-.panel {
+
+.scalarNameAndValueComponentType .panel {
 	padding: 4px;
 }
 

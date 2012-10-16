@@ -16,19 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.cssMenuHeaderContainer span.clear {
+.cssMenuPanel span.clear {
 	line-height: 3px;
 }
 	
-.cssMenuHeaderContainer
-	{
-		}
-
-/*
-.small {
-	font-size: x-small;
-}
-*/
 
 #applicationActions .menuh {
 	background-color: #EEEEEE;
@@ -182,7 +173,7 @@ li.cssSubMenuItem p.disabled {
 	float:none;
 }
 
-.small .cssMenuItems
+.small .cssMenuItemsPanel
 {
 	float:none;
 }
@@ -193,7 +184,7 @@ li.cssSubMenuItem p.disabled {
 	position: relative;
 }
 
-.small li.cssMenuItem {
+.small li.cssMenuItemPanel {
 	display:inline;
 }
 
@@ -206,7 +197,7 @@ li.cssSubMenuItem p.disabled {
 
 
 
-.groupedActions li.cssMenuItem > p.top-parent {
+.groupedActions li.cssMenuItemPanel > p.top-parent {
   display:none;
 }
 
@@ -239,7 +230,7 @@ li.cssSubMenuItem p.disabled {
 	color: #000;
 }	
 
-.entityActions li.cssMenuItem > p.top-parent {
+.entityActions li.cssMenuItemPanel > p.top-parent {
   display:none;
 }
 

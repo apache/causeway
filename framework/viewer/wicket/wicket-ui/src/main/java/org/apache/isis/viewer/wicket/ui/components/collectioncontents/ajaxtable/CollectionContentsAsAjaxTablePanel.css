@@ -1,0 +1,116 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+.collectionContentsAsAjaxTablePanel table.contents {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #407098;
+	font-size: 1em;
+	font-family: arial;
+	width: 99%
+}
+
+.collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
+.collectionContentsAsAjaxTablePanel table.contents tr { 
+	padding-top: 2px; 
+	padding-bottom: 2px; 
+	}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.even { background-color: #fff; }
+.collectionContentsAsAjaxTablePanel table.contents tr.odd { background-color: #eee; }
+
+.collectionContentsAsAjaxTablePanel table.contents tr td { 
+	padding-left: 8px; 
+	padding-right: 10px; 
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.collectionContentsAsAjaxTablePanel table.contents tr th { 
+	color: A66144; 
+	padding-top: 3px; 
+	padding-bottom: 3px; 
+	padding-left: 8px; 
+	padding-right: 10px; 
+	background-color: #EEEEEE; 
+	border-top: 1px solid #407098; 
+	text-align: left; 
+	white-space: nowrap; 
+	background-position: right; 
+	background-repeat:no-repeat;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown {
+	background-color: #87cbff; 
+	background-image: url(displaytag/img/arrow_down.png); 
+}
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp {
+	background-color: #87cbff; 
+	background-image: url(displaytag/img/arrow_up.png);
+}
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderNone {
+	background-image: url(displaytag/img/arrow_off.png);
+}
+.collectionContentsAsAjaxTablePanel table.contents tr th a {
+	font-weight: normal;
+}
+.collectionContentsAsAjaxTablePanel table.contents #message {
+	padding-left: 3px;
+}
+.collectionContentsAsAjaxTablePanel table.contents caption { 
+	padding-bottom: 2px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents input:disabled {
+	background-color: transparent;
+	border: none;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tbody td,
+.collectionContentsAsAjaxTablePanel table.contents thead th {
+	border-left: 1px #DDD solid;
+	border-right: 1px #DDD solid;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
+	display: inline;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel > div {
+	display: inline;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator {
+	display: inline;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator > div {
+	display: inline;
+	float: right;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .navigator .first,
+.collectionContentsAsAjaxTablePanel table.contents .navigator .prev,
+.collectionContentsAsAjaxTablePanel table.contents .navigator .next, 
+.collectionContentsAsAjaxTablePanel table.contents .navigator .last,
+.collectionContentsAsAjaxTablePanel table.contents .navigator .goto {
+	margin-left: 0.5em;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .navigator .goto em {
+	background-color: #DDD;
+}

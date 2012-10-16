@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-.linksSelector .viewList {
+.linksSelectorPanel .viewList {
 	font-size: smaller;
 }
 
-.linksSelector .viewList {
+.linksSelectorPanel .viewList {
 	display: inline;
 }
 
-.linksSelector .viewList span {
+.linksSelectorPanel .viewList span {
 	margin-right: 8px;
 }
 
-.linksSelector .viewItem {
+.linksSelectorPanel .viewItem {
 	display: inline;
 }
 

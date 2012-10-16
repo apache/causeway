@@ -29,14 +29,14 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTable;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 
 /**
  * Represents a {@link AbstractColumn} within a
  * {@link AjaxFallbackDefaultDataTable}.
  * 
  * <p>
- * Part of the implementation of {@link CollectionContentsAsAjaxTable}.
+ * Part of the implementation of {@link CollectionContentsAsAjaxTablePanel}.
  */
 public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
 

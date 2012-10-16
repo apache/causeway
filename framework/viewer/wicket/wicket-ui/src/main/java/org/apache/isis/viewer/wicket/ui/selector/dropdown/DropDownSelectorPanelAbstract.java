@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public abstract class DropDownSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
@@ -86,7 +86,7 @@ public abstract class DropDownSelectorPanelAbstract<T extends IModel<?>> extends
                 ? new Predicate<ComponentFactory>() {
                     @Override
                     public boolean apply(@Nullable ComponentFactory input) {
-                        return !(input instanceof CollectionContentsAsUnresolvedFactory);
+                        return !(input instanceof CollectionContentsAsUnresolvedPanelFactory);
                     }
                 }
                 : Predicates.<ComponentFactory>alwaysTrue();

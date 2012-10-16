@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
@@ -117,7 +117,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                 }
 
                 private String nameFor(final ComponentFactory componentFactory) {
-                    return componentFactory instanceof CollectionContentsAsUnresolvedFactory ? "hide" : componentFactory.getName();
+                    return componentFactory instanceof CollectionContentsAsUnresolvedPanelFactory ? "hide" : componentFactory.getName();
                 }
             };
             container.add(listView);
@@ -139,7 +139,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                 ? new Predicate<ComponentFactory>() {
                     @Override
                     public boolean apply(@Nullable ComponentFactory input) {
-                        return !(input instanceof CollectionContentsAsUnresolvedFactory);
+                        return !(input instanceof CollectionContentsAsUnresolvedPanelFactory);
                     }
                 }
                 : Predicates.<ComponentFactory>alwaysTrue();

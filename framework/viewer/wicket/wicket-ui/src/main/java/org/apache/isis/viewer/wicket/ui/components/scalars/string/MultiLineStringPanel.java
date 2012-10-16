@@ -29,7 +29,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
 public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
+    
     private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final int COLS = 35;
     
     private int numberOfLines;
     
@@ -57,7 +59,7 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
                 }
             }
         });
-        //textField.add(new SimpleAttributeModifier("rows", Integer.toString(numberOfLines)));
+        textField.add(AttributeModifier.replace("cols", Integer.toString(COLS)));
         textField.add(AttributeModifier.replace("rows", Integer.toString(numberOfLines)));
         return textField;
     }
