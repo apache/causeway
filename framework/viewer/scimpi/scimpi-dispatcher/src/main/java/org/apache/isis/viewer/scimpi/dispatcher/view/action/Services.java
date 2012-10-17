@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
@@ -34,6 +35,7 @@ public class Services extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         final boolean showForms = request.isRequested(FORMS, false);
+        final String view = request.getOptionalProperty(VIEW, "_generic_action." + Dispatcher.EXTENSION);
         final String cancelTo = request.getOptionalProperty(CANCEL_TO);
 
         final InclusionList inclusionList = new InclusionList();
@@ -47,7 +49,7 @@ public class Services extends AbstractElementProcessor {
             request.appendHtml("<h3>");
             request.appendAsHtmlEncoded(adapter.titleString());
             request.appendHtml("</h3>");
-            Methods.writeMethods(request, serviceId, adapter, showForms, inclusionList, cancelTo);
+            Methods.writeMethods(request, serviceId, adapter, showForms, inclusionList, view, cancelTo);
             request.appendHtml("</div>");
         }
         request.popBlockContent();
