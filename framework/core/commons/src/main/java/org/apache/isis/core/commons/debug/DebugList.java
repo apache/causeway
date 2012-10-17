@@ -24,14 +24,16 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 public class DebugList {
+    private final List<String[]> names = Lists.newArrayList();
     private final List<DebuggableWithTitle> debuggableList = Lists.newArrayList();
-    private final DebugBuilder summary = new DebugString();
 
     public DebugList(final String name) {
         debuggableList.add(new DebuggableWithTitle() {
             @Override
             public void debugData(final DebugBuilder debug) {
-                debug.append(summary.toString());
+                for (String[] name : names) {
+                    debug.appendln(name[0], name[1]);
+                }
             }
 
             @Override
@@ -47,7 +49,10 @@ public class DebugList {
             debuggableList.add((DebuggableWithTitle) object);
         }
         if (object != null) {
-            summary.appendln(name + (b ? "*" : ""), object.toString());
+            String[] n = new String[2];
+            n[0] = name + (b ? "*" : "");
+            n[1] = object.toString();
+            names.add(n);
         }
     }
 

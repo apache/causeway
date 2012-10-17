@@ -21,6 +21,7 @@ package org.apache.isis.core.commons.debug;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.StringTokenizer;
 
 public class DebugString implements DebugBuilder {
 
@@ -165,8 +166,17 @@ public class DebugString implements DebugBuilder {
 
     @Override
     public void appendPreformatted(final String label, final String text) {
-        appendln(label, text);
-    };
+        StringTokenizer tokenizer = new StringTokenizer(text, "\n\r\f", false);
+        if (tokenizer.hasMoreTokens()) {
+            appendln(label, tokenizer.nextToken());
+        }
+        while (tokenizer.hasMoreTokens()) {
+            string.append(spaces(indent * INDENT_WIDTH + COLUMN_SPACING + 2));
+            string.append(tokenizer.nextToken());
+            string.append('\n');
+        }
+        newLine = true;
+    }
 
     /**
      * Append the specified object with the specified label, then start a new

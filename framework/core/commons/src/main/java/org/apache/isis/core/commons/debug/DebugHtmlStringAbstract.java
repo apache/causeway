@@ -26,6 +26,8 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     private final boolean createPage;
     private int tableLevel;
     private boolean isOdd;
+    private boolean titleShown;
+    private boolean endLine;
 
     public DebugHtmlStringAbstract(final boolean createPage) {
         this.createPage = createPage;
@@ -38,22 +40,31 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
 
     @Override
     public void append(final int number, final int width) {
+        appendHtml(number + "");
     }
 
     @Override
     public void append(final Object object) {
+        if (object instanceof DebuggableWithTitle) {
+            DebuggableWithTitle d = (DebuggableWithTitle) object;
+            appendTitle(d.debugTitle());
+            d.debugData(this);
+        } else {
+            appendHtml(object.toString());
+        }
     }
 
     @Override
     public void append(final Object object, final int width) {
+        appendHtml(object.toString());
     }
 
     @Override
     public void appendln() {
         if (tableLevel > 0) {
-            appendHtml(row() + "<td class=\"error\" colspan=\"2\" >end line</td></tr>");
+            endLine = true;
         } else {
-            appendHtml("<p>end line</p>");
+            appendHtml("<p></p>");
         }
     }
 
@@ -191,7 +202,9 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     @Override
     public void appendTitle(final String title) {
         if (tableLevel > 0) {
-            appendHtml(row() + "<th class=\"title\" colspan=\"2\" >" + title + "</th></tr>");
+            String className = titleShown ? "subtitle" : "title";
+            appendHtml(row() + "<th class=\""+ className + "\" colspan=\"2\" >" + title + "</th></tr>");
+            titleShown = true;
         } else {
             appendHtml("<h2>" + title + "</h2>");
         }
@@ -203,15 +216,17 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     }
 
     private String row() {
-        final String line = isOdd ? "odd" : "even";
+        final String line = (isOdd ? "odd" : "even") + (endLine ? " end-line" : ""); 
         isOdd = !isOdd;
+        endLine = false;
         return "<tr class=\"" + line + "\">";
     }
 
     private void startTableIfNeeded(final boolean b) {
         if (tableLevel == 0 || b) {
-            appendHtml("<table class=\"debug\" width=\"100%\" summary=\"Debug details\" >");
+            appendHtml("<table class=\"debug\" summary=\"Debug details\" >");
             tableLevel++;
+            titleShown = false;
         }
     }
 
