@@ -82,7 +82,7 @@ public class DebugAction implements Action {
         } else {
 
             // TODO remove - replaced by Debug tag
-            final DebugWriter view = new DebugWriter(context.getWriter(), true);
+            final DebugHtmlWriter view = new DebugHtmlWriter(context.getWriter(), true);
             view.appendln("<div class=\"links\">");
             view.appendln("<a href=\"debug.app?action=system\">System</a>");
             view.appendln(" | <a href=\"debug.app?action=specifications\">List specifications</a>");
@@ -110,7 +110,7 @@ public class DebugAction implements Action {
         }
     }
 
-    private void object(final RequestContext context, final DebugWriter view) {
+    private void object(final RequestContext context, final DebugHtmlWriter view) {
         final ObjectAdapter object = context.getMappedObjectOrResult(context.getParameter("object"));
         final DebugString str = new DebugString();
         Dump.adapter(object, str);
@@ -119,7 +119,7 @@ public class DebugAction implements Action {
         view.appendln("<pre class=\"debug\">" + str + "</pre>");
     }
 
-    private void system(final RequestContext context, final DebugWriter view) {
+    private void system(final RequestContext context, final DebugHtmlWriter view) {
         final DebuggableWithTitle[] debug = IsisContext.debugSystem();
         view.appendTitle("System");
         for (final DebuggableWithTitle element2 : debug) {
@@ -130,7 +130,7 @@ public class DebugAction implements Action {
         }
     }
 
-    private void i18n(final RequestContext context, final DebugWriter view) {
+    private void i18n(final RequestContext context, final DebugHtmlWriter view) {
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications);
         Collections.sort(specs, new Comparator<ObjectSpecification>() {
@@ -162,7 +162,7 @@ public class DebugAction implements Action {
         }
     }
 
-    private void authorization(final RequestContext context, final DebugWriter view) {
+    private void authorization(final RequestContext context, final DebugHtmlWriter view) {
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications);
         Collections.sort(specs, new Comparator<ObjectSpecification>() {
@@ -199,7 +199,7 @@ public class DebugAction implements Action {
         }
     }
 
-    private void listSpecifications(final DebugWriter view) {
+    private void listSpecifications(final DebugHtmlWriter view) {
         final List<ObjectSpecification> fullIdentifierList = new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
         Collections.sort(fullIdentifierList, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
         view.appendTitle("Specifications");
