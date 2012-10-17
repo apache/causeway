@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.zip.CRC32;
 
-import org.apache.log4j.Logger;
-
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
@@ -36,6 +36,7 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.log4j.Logger;
 
 public class FileServerDb implements NoSqlDataDatabase {
 
@@ -251,5 +252,10 @@ public class FileServerDb implements NoSqlDataDatabase {
         }
         returnConnection(connection);
         return hasInstances;
+    }
+
+    public Iterator<StateReader> instancesOf(ObjectSpecId specId, ObjectAdapter pattern) {
+    	// TODO implement
+        throw new NotImplementedException();
     }
 }

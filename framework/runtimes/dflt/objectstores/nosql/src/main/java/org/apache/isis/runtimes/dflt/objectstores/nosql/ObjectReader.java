@@ -22,19 +22,16 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
@@ -45,11 +42,12 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryptio
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
+import org.apache.log4j.Logger;
 
 public class ObjectReader {
+
+    private static final Logger LOG = Logger.getLogger(ObjectReader.class);
     
     private final KeyCreatorDefault keyCreator = new KeyCreatorDefault();
 
@@ -69,7 +67,7 @@ public class ObjectReader {
             }
             if (version.different(adapter.getVersion())) {
                 // TODO - do we need to CHECK version and update
-                throw new UnexpectedCallException();
+                LOG.warn("while reading data into " + oidStr + " version was " + version + " when existing adapter was already " + adapter.getVersion());
             }
             
         } else {
@@ -138,8 +136,6 @@ public class ObjectReader {
     }
 
     private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final AggregatedOid aggregatedOid, final DataEncryption dataEncrypter) {
-        final ObjectSpecification specification = getSpecificationLoader().lookupBySpecId(aggregatedOid.getObjectSpecId());
-
         final ObjectAdapter fieldObject = getAdapter(aggregatedOid);
         final ResolveState resolveState = ResolveState.RESOLVING;
         fieldObject.changeState(resolveState);
@@ -173,7 +169,6 @@ public class ObjectReader {
                 throw new NoSqlStoreException("Invalid reference field (an empty string) in data for " + association.getName() + "  in " + object);
             }
             final RootOid oid = keyCreator.unmarshal(ref);
-            final ObjectSpecification specification = keyCreator.specificationFromOidStr(ref);
             fieldObject = getAdapter(oid);
         }
         try {

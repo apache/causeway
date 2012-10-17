@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
@@ -38,6 +39,7 @@ public interface NoSqlDataDatabase {
     boolean hasInstances(ObjectSpecId objectSpecId);
     StateReader getInstance(String key, ObjectSpecId objectSpecId);
     Iterator<StateReader> instancesOf(ObjectSpecId objectSpecId);
+    Iterator<StateReader> instancesOf(ObjectSpecId specId, ObjectAdapter pattern);
 
     long nextSerialNumberBatch(ObjectSpecId objectSpecId, int batchSize);
 

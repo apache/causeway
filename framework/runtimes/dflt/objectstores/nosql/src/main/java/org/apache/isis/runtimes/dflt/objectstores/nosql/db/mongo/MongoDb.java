@@ -23,19 +23,9 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DB.WriteConcern;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
-import com.mongodb.ObjectId;
-
-import org.apache.log4j.Logger;
-
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
@@ -43,6 +33,16 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.MongoException;
 
 public class MongoDb implements NoSqlDataDatabase {
 
@@ -74,11 +74,14 @@ public class MongoDb implements NoSqlDataDatabase {
     @Override
     public void open() {
         try {
-        	mongo = new Mongo(host, port);
-            db = mongo.getDB(dbName);
-            db.setWriteConcern(WriteConcern.STRICT);
-            
-            LOG.info("opened database (" + dbName + "): " + db);
+            if (mongo == null) {
+                mongo = new Mongo(host, port);
+                db = mongo.getDB(dbName);
+                db.setWriteConcern(com.mongodb.WriteConcern.SAFE);
+                LOG.info("opened database (" + dbName + "): " + mongo);
+            } else {
+                LOG.info(" using opened database " + db);
+            }
         } catch (final UnknownHostException e) {
             throw new NoSqlStoreException(e);
         } catch (final MongoException e) {
@@ -88,7 +91,6 @@ public class MongoDb implements NoSqlDataDatabase {
 
     @Override
     public void close() {
-        // TODO is there a close mechanism?
     }
 
     public NoSqlCommandContext createTransactionContext() {
@@ -153,6 +155,43 @@ public class MongoDb implements NoSqlDataDatabase {
     public Iterator<StateReader> instancesOf(final ObjectSpecId objectSpecId) {
         final DBCollection instances = db.getCollection(objectSpecId.asString());
         final DBCursor cursor = instances.find();
+        LOG.info("searching for instances of: " + objectSpecId);
+        return new Iterator<StateReader>() {
+            @Override
+            public boolean hasNext() {
+                return cursor.hasNext();
+            }
+
+            @Override
+            public StateReader next() {
+                return new MongoStateReader(cursor.next());
+            }
+
+            @Override
+            public void remove() {
+                throw new NoSqlStoreException("Can't remove elements");
+            }
+
+        };
+    }
+    
+    @Override
+    public Iterator<StateReader> instancesOf(ObjectSpecId objectSpecId, ObjectAdapter pattern) {
+        final DBCollection instances = db.getCollection(objectSpecId.asString());
+
+        // REVIEW check the right types are used in matches 
+        final BasicDBObject query = new BasicDBObject();
+        for ( ObjectAssociation association  : pattern.getSpecification().getAssociations()) {
+            ObjectAdapter field = association.get(pattern);
+            if (!association.isEmpty(pattern)) {
+                if (field.isValue()) {
+                    query.put(association.getIdentifier().getMemberName(), field.titleString());
+                } else if (association.isOneToOneAssociation()) {
+                    query.put(association.getIdentifier().getMemberName(), field.getOid());
+                }
+            }
+        }
+        final DBCursor cursor = instances.find(query);
         LOG.info("searching for instances of: " + objectSpecId);
         return new Iterator<StateReader>() {
             @Override

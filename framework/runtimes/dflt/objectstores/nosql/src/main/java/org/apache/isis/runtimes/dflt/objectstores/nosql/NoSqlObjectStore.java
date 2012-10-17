@@ -48,6 +48,9 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -122,17 +125,60 @@ public class NoSqlObjectStore implements ObjectStoreSpi {
     public void execute(final List<PersistenceCommand> commands) {
         database.write(commands);
     }
-
+    
     @Override
     public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
-        final ObjectSpecification specification = persistenceQuery.getSpecification();
+        if (persistenceQuery instanceof PersistenceQueryFindByTitle) {
+            return getAllInstances((PersistenceQueryFindByTitle) persistenceQuery);
+        } else if (persistenceQuery instanceof PersistenceQueryFindAllInstances) {
+            return getAllInstances((PersistenceQueryFindAllInstances) persistenceQuery);
+        } else if (persistenceQuery instanceof PersistenceQueryFindByPattern) {
+            return findByPattern((PersistenceQueryFindByPattern) persistenceQuery);
+        } else {
+            return findDefaultr(persistenceQuery);
+        }
+    }
+
+    private List<ObjectAdapter> findDefaultr(PersistenceQuery persistenceQuery) {
         final List<ObjectAdapter> instances = Lists.newArrayList();
-        appendInstances(persistenceQuery, specification, instances);
+        final ObjectSpecification specification = persistenceQuery.getSpecification();
+        final Iterator<StateReader> instanceData = database.instancesOf(specification.getSpecId());
+        while (instanceData.hasNext()) {
+            final StateReader reader = instanceData.next();
+            final ObjectAdapter instance = objectReader.load(reader, versionCreator, availableDataEncrypters);
+            instances.add(instance);
+        }
         return instances;
     }
 
-    private void appendInstances(final PersistenceQuery persistenceQuery, final ObjectSpecification specification, final List<ObjectAdapter> instances) {
-        
+    private List<ObjectAdapter> findByPattern(PersistenceQueryFindByPattern query) {
+        final ObjectSpecification specification = query.getSpecification();
+        final List<ObjectAdapter> instances = Lists.newArrayList();
+        appendPatternInstances(query, specification, instances);
+        return instances;
+    }
+    
+    private void appendPatternInstances(final PersistenceQueryFindByPattern persistenceQuery, final ObjectSpecification specification, final List<ObjectAdapter> instances) {      
+        final Iterator<StateReader> instanceData = database.instancesOf(specification.getSpecId(), persistenceQuery.getPattern());
+        while (instanceData.hasNext()) {
+            final StateReader reader = instanceData.next();
+            final ObjectAdapter instance = objectReader.load(reader, versionCreator, availableDataEncrypters);
+            instances.add(instance);
+        }
+        for (final ObjectSpecification spec : specification.subclasses()) {
+            appendPatternInstances(persistenceQuery, spec, instances);
+        }
+    }
+
+
+    private List<ObjectAdapter> getAllInstances(PersistenceQuery query) {
+        final ObjectSpecification specification = query.getSpecification();
+        final List<ObjectAdapter> instances = Lists.newArrayList();
+        appendInstances(query, specification, instances);
+        return instances;
+    }
+
+    private void appendInstances(final PersistenceQuery persistenceQuery, final ObjectSpecification specification, final List<ObjectAdapter> instances) {      
         final Iterator<StateReader> instanceData = database.instancesOf(specification.getSpecId());
         while (instanceData.hasNext()) {
             final StateReader reader = instanceData.next();
@@ -186,13 +232,7 @@ public class NoSqlObjectStore implements ObjectStoreSpi {
     @Override
     public void resolveImmediately(final ObjectAdapter adapter) {
         final Oid oid = adapter.getOid();
-        ;
-        if (oid instanceof AggregatedOid) {
-            // throw new
-            // UnexpectedCallException("Aggregated objects should not need to be resolved: "
-            // +
-            // object);
-        } else {
+        if (!(oid instanceof AggregatedOid)) {
             final ObjectSpecification objectSpec = adapter.getSpecification();
             final String key = keyCreator.getIdentifierForPersistentRoot(oid);
             final StateReader reader = database.getInstance(key, objectSpec.getSpecId());
