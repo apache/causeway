@@ -67,6 +67,50 @@ public class Debug extends AbstractElementProcessor {
         if (type != null) {
             if (type.equals("system")) {
                 displaySystem(request);
+            } else if (type.equals("session")) {
+                displaySession(request);
+            } else if (type.equals("test")) {
+                final DebugBuilder debug = new DebugHtmlString();
+                debug.appendTitle("Title");
+                debug.appendln("boolean", true);
+                debug.appendln("number", 213);
+                debug.startSection("Section 1");
+                debug.appendln("boolean", false);
+                debug.appendln("number", 12348);
+                debug.endSection();
+                debug.startSection("Section 2");
+                debug.appendln("boolean", false);
+                debug.appendln("number", 12348);
+                debug.appendTitle("Another title");
+                debug.appendln("boolean", false);
+                debug.appendln("number", 12348);
+                debug.endSection();
+
+                debug.startSection("Section 3");
+                debug.appendln("boolean", false);
+                debug.appendln("number", 89878);
+                debug.endSection();
+                debug.startSection("Subsection 2");
+                debug.appendln("boolean", false);
+                debug.appendln("number", 12348);
+                debug.endSection();
+
+                debug.startSection("Section 4");
+                debug.appendln("boolean", false);
+                debug.indent();
+                debug.appendln("boolean", false);
+                debug.appendln("number", 12348);
+                debug.unindent();
+                debug.appendln("number", 12348);
+                debug.appendPreformatted("code", "line 1\nline 2\nline 3");
+                debug.appendln("A lot of text etc.");
+                debug.endSection();
+
+                request.appendHtml(debug.toString());
+                //request.appendHtml("<pre>" + debug.toString() + "</pre>");
+                
+                debug.close();
+                
             } else if (type.equals("variables")) {
                 displayVariables(request);
             } else if (type.equals("dispatcher")) {
@@ -186,6 +230,7 @@ public class Debug extends AbstractElementProcessor {
         request.appendHtml("<h1>Context</h1>");
         final DebugHtmlString debugString = new DebugHtmlString();
         request.getContext().append(debugString);
+        debugString.close();
         request.appendHtml(debugString.toString());
     }
 
@@ -193,6 +238,7 @@ public class Debug extends AbstractElementProcessor {
         request.appendHtml("<h1>Dispatcher</h1>");
         final DebugHtmlString debugString = new DebugHtmlString();
         dispatcher.debug(debugString);
+        debugString.close();
         request.appendHtml(debugString.toString());
     }
 
@@ -201,17 +247,33 @@ public class Debug extends AbstractElementProcessor {
         final DebugHtmlString debug = new DebugHtmlString();
         final RequestContext context = request.getContext();
         context.append(debug, "variables");
+        debug.close();
         request.appendHtml(debug.toString());
     }
 
     protected void displaySystem(final Request request) {
         request.appendHtml("<h1>System</h1>");
-        final DebuggableWithTitle[] debug = IsisContext.debugSystem();
-        for (final DebuggableWithTitle element2 : debug) {
-            final DebugHtmlString str = new DebugHtmlString();
-            str.appendTitle(element2.debugTitle());
-            element2.debugData(str);
-            request.appendHtml(str.toString());
+        final DebuggableWithTitle[] debugItems = IsisContext.debugSystem();
+        for (final DebuggableWithTitle debug : debugItems) {
+            final DebugHtmlString debugBuffer = new DebugHtmlString();
+            debugBuffer.startSection(debug.debugTitle());
+            debug.debugData(debugBuffer);
+            debugBuffer.endSection();
+            debugBuffer.close();
+            request.appendHtml(debugBuffer.toString());
+        }
+    }
+
+    protected void displaySession(final Request request) {
+        request.appendHtml("<h1>Session</h1>");
+        final DebuggableWithTitle[] debugItems = IsisContext.debugSession();
+        for (final DebuggableWithTitle debug : debugItems) {
+            final DebugHtmlString debugBuffer = new DebugHtmlString();
+            debugBuffer.startSection(debug.debugTitle());
+            debug.debugData(debugBuffer);
+            debugBuffer.endSection();
+            debugBuffer.close();
+            request.appendHtml(debugBuffer.toString());
         }
     }
 
@@ -224,6 +286,7 @@ public class Debug extends AbstractElementProcessor {
             final String name = spec.getSingularName();
             debug.appendln(name, specificationLink(spec));
         }
+        debug.close();
         request.appendHtml(debug.toString());
     }
 
