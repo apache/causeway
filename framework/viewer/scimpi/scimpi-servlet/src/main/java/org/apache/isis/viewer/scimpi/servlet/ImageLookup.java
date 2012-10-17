@@ -31,7 +31,6 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

@@ -61,6 +61,7 @@ public class ServletRequestContext extends RequestContext {
          * view.divider("System"); Runtime.getRuntime().
          */
         view.startSection("HTTP Serviet Request");
+        view.appendTitle("General");
         view.appendln("Auth type", request.getAuthType());
         view.appendln("Character encoding", request.getCharacterEncoding());
         view.appendln("Class", request.getClass());
@@ -84,12 +85,15 @@ public class ServletRequestContext extends RequestContext {
         view.appendln("URL", request.getRequestURL());
         view.appendln("User principle", request.getUserPrincipal());
 
-        view.appendTitle("Cookies");
+        
         final Cookie[] cookies = request.getCookies();
-        for (final Cookie cookie : cookies) {
-            view.appendln(cookie.getName(), cookie.getValue());
+        if (cookies != null) {
+            view.appendTitle("Cookies");
+            for (final Cookie cookie : cookies) {
+                view.appendln(cookie.getName(), cookie.getValue());
+            }
         }
-
+        
         final Enumeration attributeNames = request.getAttributeNames();
         if (attributeNames.hasMoreElements()) {
             view.appendTitle("Attributes");
