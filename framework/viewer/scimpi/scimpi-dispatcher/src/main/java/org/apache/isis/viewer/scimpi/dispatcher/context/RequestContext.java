@@ -40,7 +40,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -321,27 +320,23 @@ public abstract class RequestContext {
         }
     }
 
-    public void append(final DebugBuilder content, final String list) {
+    public void append(final DebugBuilder debug, final String list) {
         if (list.equals("variables")) {
-            appendVariables(content, Scope.GLOBAL);
-            content.blankLine();
-            appendVariables(content, Scope.SESSION);
-            content.blankLine();
-            appendVariables(content, Scope.INTERACTION);
-            content.blankLine();
-            appendVariables(content, Scope.REQUEST);
-            content.blankLine();
-            appendVariables(content, Scope.ERROR);
+            appendVariables(debug, Scope.GLOBAL);
+            appendVariables(debug, Scope.SESSION);
+            appendVariables(debug, Scope.INTERACTION);
+            appendVariables(debug, Scope.REQUEST);
+            appendVariables(debug, Scope.ERROR);
         } else if (list.equals("mappings")) {
-            objectMapping.appendMappings(content);
+            objectMapping.appendMappings(debug);
         }
     }
 
-    private void appendVariables(final DebugBuilder content, final Scope scope) {
+    private void appendVariables(final DebugBuilder debug, final Scope scope) {
         final Map<String, Object> map = variables.get(scope);
         final Iterator<String> names = new TreeSet(map.keySet()).iterator();
         if (names.hasNext()) {
-            content.appendTitle(scope.toString());
+            debug.startSection(scope.toString());
             while (names.hasNext()) {
                 final String name = names.next();
                 try {
@@ -353,11 +348,12 @@ public abstract class RequestContext {
                             details = mappedObject.toString();
                         }
                     }
-                    content.appendln(name, object + "  " + details);
+                    debug.appendln(name, object + "  " + details);
                 } catch (final Exception e) {
-                    content.appendln(name, map.get(name));
+                    debug.appendln(name, map.get(name));
                 }
             }
+            debug.endSection();
         }
     }
 
