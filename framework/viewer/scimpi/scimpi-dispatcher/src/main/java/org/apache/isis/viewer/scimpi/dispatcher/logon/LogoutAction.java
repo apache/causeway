@@ -27,8 +27,22 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
 public class LogoutAction implements Action {
+
+    public static void logoutUser(final RequestContext context) {
+        if (context.isUserAuthenticated()) {
+            final AuthenticationSession session = context.getSession();
+            if (session != null) {
+                IsisContext.getUpdateNotifier().clear();
+                UserManager.logoffUser(session);
+            }
+            context.endHttpSession();
+            context.setUserAuthenticated(false);
+        }
+        context.clearVariables(Scope.SESSION);
+    }
 
     @Override
     public String getName() {
@@ -41,15 +55,7 @@ public class LogoutAction implements Action {
 
     @Override
     public void process(final RequestContext context) throws IOException {
-        if (context.isUserAuthenticated()) {
-            final AuthenticationSession session = context.getSession();
-            if (session != null) {
-                IsisContext.getUpdateNotifier().clear();
-                UserManager.logoffUser(session);
-            }
-            context.endHttpSession();
-            context.setUserAuthenticated(false);
-        }
+        logoutUser(context);
         
         String view = context.getParameter("view");
         if (view == null) {
