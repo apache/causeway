@@ -19,24 +19,19 @@
 
 package org.apache.isis.runtimes.dflt.runtime.services;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
-import org.apache.isis.core.commons.lang.ArrayUtils;
-import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
@@ -66,8 +61,6 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         if (serviceList.size() == 0) {
             throw new InitialisationException("No services specified");
         }
-        appendBookmarkService(serviceList);
-        
         return Collections.unmodifiableList(serviceList);
     }
 
@@ -117,11 +110,6 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             }
         }
     }
-
-    private void appendBookmarkService(List<Object> serviceList) {
-        serviceList.add(new BookmarkServiceDefault());
-    }
-
 
     /**
      * In the format <tt>xxx#aaa.bbb.ccc.DddEee</tt> where <tt>xxx</tt> is the
