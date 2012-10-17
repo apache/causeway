@@ -47,8 +47,8 @@ public final class SystemConstants {
      * <p>
      * Use {@link DeploymentType#valueOf(String)} to decode.
      */
-    public static final String DEPLOYMENT_TYPE_KEY = ConfigurationConstants.ROOT + "deploymentType";
 
+    public static final String DEPLOYMENT_TYPE_KEY = ConfigurationConstants.ROOT + "deploymentType";
     /**
      * Key used to lookup {@link SpecificationLoaderSpi specification Loader} in
      * {@link IsisConfiguration}, and root for any

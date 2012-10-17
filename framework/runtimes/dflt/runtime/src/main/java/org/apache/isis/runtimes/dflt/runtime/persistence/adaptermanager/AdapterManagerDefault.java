@@ -44,6 +44,8 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
@@ -503,21 +505,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
             }
         }
 
-        for (final ObjectAssociation association: adapter.getSpecification().getAssociations()) {
-            if (association.getSpecification().isParented()) {
-                final ObjectAdapter referencedAdapter = association.get(adapter);
-    
-                if(referencedAdapter == null) {
-                    continue;
-                }
-                final Oid oid = referencedAdapter.getOid();
-                if (oid instanceof AggregatedOid) {
-                    AggregatedOid aoid = (AggregatedOid) oid;
-                    AggregatedOid childOid = new AggregatedOid(aoid.getObjectSpecId(), persistedRootOid, aoid.getLocalId());
-                    referencedAdapter.replaceOid(childOid);
-                }
-            }
-        }
+        remapContainedAggregatedObject(adapter, persistedRootOid);
         
         // update the adapter's state
         adapter.changeState(ResolveState.RESOLVED);
@@ -525,6 +513,38 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         if (LOG.isDebugEnabled()) {
             LOG.debug("made persistent " + adapter + "; was " + transientRootOid);
         }
+    }
+
+    private void remapContainedAggregatedObject(final ObjectAdapter adapter, final RootOid persistedRootOid) {
+        for (final ObjectAssociation association: adapter.getSpecification().getAssociations()) {
+            if (association.isOneToManyAssociation() && !association.isNotPersisted()) {
+                final ObjectAdapter collection = association.get(adapter);
+                final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+                for (final ObjectAdapter element : facet.iterable(collection)) {
+                   remapAggregatedObject(element, persistedRootOid);
+                }
+                
+            } else if (association.getSpecification().isParented()) {
+                final ObjectAdapter referencedAdapter = association.get(adapter);
+    
+                if(referencedAdapter == null) {
+                    continue;
+                }
+                remapAggregatedObject(referencedAdapter, persistedRootOid);
+            }
+        }
+    }
+
+    private void remapAggregatedObject(final ObjectAdapter adapter, final RootOid persistedRootOid) {
+        final Oid oid = adapter.getOid();
+        if (!(oid instanceof AggregatedOid) || !oid.isTransient()) {
+                return;
+        }
+        AggregatedOid aoid = (AggregatedOid) oid;
+        AggregatedOid childOid = new AggregatedOid(aoid.getObjectSpecId(), persistedRootOid, aoid.getLocalId());
+        adapter.replaceOid(childOid);
+        
+        remapContainedAggregatedObject(adapter, persistedRootOid);
     }
 
 	private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
