@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebugTee;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugHtmlWriter;
 import org.apache.log4j.Logger;
 
 public class ErrorCollator {
@@ -120,7 +120,7 @@ public class ErrorCollator {
                 dir.mkdirs();
             }
             writer = new PrintWriter(new File(dir, "error_" + errorRef + ".html"));
-            final DebugWriter writer2 = new DebugWriter(writer, true);
+            final DebugHtmlWriter writer2 = new DebugHtmlWriter(writer, true);
             writer2.concat(debugHtml);
             writer2.close();
             writer.close();

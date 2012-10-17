@@ -57,7 +57,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugAction;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUserAction;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugHtmlWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.LogAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.RemoveAction;
@@ -288,7 +288,7 @@ public class Dispatcher {
         final PrintWriter writer = context.getWriter();
         writer.write(page);
         if (context.getDebug() == Debug.PAGE) {
-            final DebugWriter view = new DebugWriter(writer, false);
+            final DebugHtmlWriter view = new DebugHtmlWriter(writer, false);
             context.append(view);
         }
     }
