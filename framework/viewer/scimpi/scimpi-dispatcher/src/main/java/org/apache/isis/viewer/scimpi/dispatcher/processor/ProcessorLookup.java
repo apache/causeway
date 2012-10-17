@@ -46,6 +46,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugCollectionView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugObjectView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebuggerLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Diagnostics;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Log;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.LogLevel;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Members;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.ShowDebug;
@@ -81,6 +82,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.edit.Selector;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.ExcludeField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.IncludeField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkField;
+import org.apache.isis.viewer.scimpi.dispatcher.view.logon.Logoff;
 import org.apache.isis.viewer.scimpi.dispatcher.view.logon.Logon;
 import org.apache.isis.viewer.scimpi.dispatcher.view.logon.RestrictAccess;
 import org.apache.isis.viewer.scimpi.dispatcher.view.logon.Secure;
@@ -89,6 +91,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.simple.BlockDefine;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.BlockUse;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.Commit;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.ContentTag;
+import org.apache.isis.viewer.scimpi.dispatcher.view.simple.CookieValue;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.DefaultValue;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.EditLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.EndSession;
@@ -170,8 +173,10 @@ public class ProcessorLookup {
         addElementProcessor(new IncludeField());
         addElementProcessor(new InitializeFromCookie());
         addElementProcessor(new InitializeFromResult());
+        addElementProcessor(new Log());
         addElementProcessor(new LogLevel());
         addElementProcessor(new Logon());
+        addElementProcessor(new Logoff());
         addElementProcessor(new LongFormView());
         addElementProcessor(new LinkField());
         addElementProcessor(new ListView());
@@ -219,6 +224,7 @@ public class ProcessorLookup {
         addElementProcessor(new StartSession());
         addElementProcessor(new EndSession());
 
+        addElementProcessor(new CookieValue());
         addElementProcessor(new SetCookie());
         addElementProcessor(new GetCookie());
         addElementProcessor(new SetCookieFromField());
@@ -234,12 +240,13 @@ public class ProcessorLookup {
     }
 
     public void debug(final DebugBuilder debug) {
-        debug.appendTitle("Recognised tags");
+        debug.startSection("Recognised tags");
         final Iterator<String> it2 = new TreeSet<String>(swfElementProcessors.keySet()).iterator();
         while (it2.hasNext()) {
             final String name = it2.next();
             debug.appendln(name.toLowerCase(), swfElementProcessors.get(name));
         }
+        debug.endSection();
     }
 
     public ElementProcessor getFor(final String name) {
