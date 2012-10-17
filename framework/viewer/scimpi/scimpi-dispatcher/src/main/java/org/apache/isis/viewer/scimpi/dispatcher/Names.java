@@ -46,8 +46,7 @@ public interface Names {
     static final String HIDE_UNEDITABLE = "hide-uneditable";
     static final String HEADER_LEVEL = "header";
     static final String ID = "id";
-    @Deprecated
-    static final String LINK = "link";
+    static final String LABEL_DELIMITER = "label";
     static final String LINK_VIEW = "link-view";
     static final String LINK_NAME = "link-name";
     static final String LINK_OBJECT = "link-object";
