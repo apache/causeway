@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.action.RequiredPropertyException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class SetCookie extends AbstractElementProcessor {
@@ -27,11 +28,21 @@ public class SetCookie extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         final String name = request.getRequiredProperty("name");
-        final String value = request.getRequiredProperty("value");
+        final String value = request.getOptionalProperty("value");
+        final boolean isClear = request.getOptionalProperty("action", "set").equals("clear");
         final String expiresString = request.getOptionalProperty("expires", "-1");
 
-        if (value.length() > 0) {
-            request.getContext().addCookie(name, value, Integer.valueOf(expiresString));
+        if (!isClear && value == null) {
+            throw new RequiredPropertyException("Property not set: " + value);
+        }
+        if (isClear) {
+            request.appendDebug("cookie: " + name + " (cleared)");
+            request.getContext().addCookie(name, null, 0);
+        } else {
+            if (value.length() > 0) {
+                request.appendDebug("cookie: " + name + " set to"+ value);
+                request.getContext().addCookie(name, value, Integer.valueOf(expiresString));
+            }
         }
     }
 
