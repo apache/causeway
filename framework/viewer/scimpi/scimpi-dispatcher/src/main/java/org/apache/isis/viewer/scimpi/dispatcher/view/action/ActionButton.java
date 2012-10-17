@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
@@ -56,7 +57,7 @@ public class ActionButton extends AbstractElementProcessor {
         final String variable = request.getOptionalProperty(RESULT_NAME);
         final String scope = request.getOptionalProperty(SCOPE);
         final String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
-        final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
+        String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         final String idName = request.getOptionalProperty(ID, methodName);
         final String className = request.getOptionalProperty(CLASS);
         final boolean showMessage = request.isRequested(SHOW_MESSAGE, false);
@@ -70,25 +71,39 @@ public class ActionButton extends AbstractElementProcessor {
         request.setBlockContent(parameterBlock);
         request.processUtilCloseTag();
         final String[] parameters = parameterBlock.getParameters();
-        final ObjectAdapter[] objectParameters = new ObjectAdapter[parameters.length];
-        int i = 0;
-        for (final ObjectActionParameter spec : action.getParameters()) {
-            final ObjectSpecification typ = spec.getSpecification();
-            if (parameters[i] == null) {
-                objectParameters[i] = null;
-            } else if (typ.getFacet(ParseableFacet.class) != null) {
-                final ParseableFacet facet = typ.getFacet(ParseableFacet.class);
-                Localization localization = IsisContext.getLocalization(); 
-                objectParameters[i] = facet.parseTextEntry(null, parameters[i], localization); 
-            } else {
-                objectParameters[i] = MethodsUtils.findObject(request.getContext(), parameters[i]);
+        final ObjectAdapter[] objectParameters;
+        
+        final ObjectAdapter target;
+        if (action.isContributed()) {
+            objectParameters= null;
+            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
+            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
+            target =  action.realTarget(object);
+            if (!action.hasReturn() && resultOverride == null) {
+                resultOverride = parameters[0];
             }
-            i++;
+        } else {
+            objectParameters = new ObjectAdapter[parameters.length];
+            target = object;
+            int i = 0;
+            for (final ObjectActionParameter spec : action.getParameters()) {
+                final ObjectSpecification type = spec.getSpecification();
+                if (parameters[i] == null) {
+                    objectParameters[i] = null;
+                } else if (type.getFacet(ParseableFacet.class) != null) {
+                    final ParseableFacet facet = type.getFacet(ParseableFacet.class);
+                    Localization localization = IsisContext.getLocalization(); 
+                    objectParameters[i] = facet.parseTextEntry(null, parameters[i], localization); 
+                } else {
+                    objectParameters[i] = MethodsUtils.findObject(request.getContext(), parameters[i]);
+                }
+                i++;
+            }
         }
 
         if (MethodsUtils.isVisibleAndUsable(object, action, where) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
-            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
+            write(request, target, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
         }
 
         if (showMessage) {

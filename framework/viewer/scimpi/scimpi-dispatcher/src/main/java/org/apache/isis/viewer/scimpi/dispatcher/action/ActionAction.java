@@ -92,33 +92,9 @@ public class ActionAction implements Action {
             }
 
             object.checkLock(context.getVersion(version));
-            /*
-             * Version adapterVersion = object.getVersion(); if
-             * (adapterVersion.different(context.getVersion(version))) {
-             * 
-             * IsisContext.getMessageBroker().addMessage("The " +
-             * object.getSpecification().getSingularName() + " was edited " +
-             * "by another user (" + adapterVersion.getUser() +
-             * "). Please  make your changes based on their changes.");
-             * 
-             * entryState.setForm(objectId + ":" + methodName);
-             * context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
-             * context.addVariable(resultName, objectId, Scope.REQUEST); if
-             * (override != null) { context.addVariable(resultName, override,
-             * Scope.REQUEST); } final String error = entryState.getError(); if
-             * (error != null) { context.addVariable(RequestContext.ERROR,
-             * error, Scope.REQUEST); }
-             * 
-             * String view = context.getParameter(ERRORS);
-             * context.setRequestPath(view, Dispatcher.ACTION);
-             * 
-             * } else
-             */
             if (entryState.isValid()) {
                 final boolean hasResult = invokeMethod(context, resultName, object, action, entryState);
                 String view = context.getParameter(hasResult ? "_" + VIEW : "_" + VOID);
-
-                // context.clearVariables(Scope.REQUEST);
 
                 final int questionMark = view == null ? -1 : view.indexOf("?");
                 if (questionMark > -1) {
@@ -137,7 +113,7 @@ public class ActionAction implements Action {
                 if (override != null) {
                     context.addVariable(resultName, override, Scope.REQUEST);
                 }
-                if (context.getVariable(resultName) == null) {
+                if (!action.hasReturn() && context.getVariable(resultName) == null) {
                     context.addVariable(resultName, objectId, Scope.REQUEST);
                 }
             } else {
@@ -148,12 +124,6 @@ public class ActionAction implements Action {
                     context.addVariable(resultName, override, Scope.REQUEST);
                 }
                 final String error = entryState.getError();
-                /*
-                 * if (error != null) {
-                 * context.addVariable(RequestContext.ERROR, error,
-                 * Scope.REQUEST); }
-                 */
-
                 final String view = context.getParameter("_" + ERROR);
                 context.setRequestPath(view, Dispatcher.ACTION);
 

@@ -136,8 +136,9 @@ public class MethodsUtils {
     }
 
     public static boolean isVisibleAndUsable(final ObjectAdapter object, final ObjectAction action, Where where) {
-        final boolean isVisible = action.isVisible(getAuthenticationSession(), object, where).isAllowed();
-        final boolean isUsable = getSession() != null && action.isUsable(getAuthenticationSession(), object, where).isAllowed();
+        AuthenticationSession authenticatedSession = getAuthenticationSession();
+        final boolean isVisible = action.isVisible(authenticatedSession, object, where).isAllowed();
+        final boolean isUsable = getSession() != null && action.isUsable(authenticatedSession, object, where).isAllowed();
         final boolean isVisibleAndUsable = isVisible && isUsable;
         return isVisibleAndUsable;
     }

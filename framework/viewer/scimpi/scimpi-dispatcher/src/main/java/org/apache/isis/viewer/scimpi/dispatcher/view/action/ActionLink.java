@@ -42,10 +42,7 @@ public class ActionLink extends AbstractElementProcessor {
         final String method = request.getOptionalProperty(METHOD);
         final String forwardResultTo = request.getOptionalProperty(VIEW);
         final String forwardVoidTo = request.getOptionalProperty(VOID);
-        final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        
-        @SuppressWarnings("unused")
-        final String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
+        String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         
         final String resultName = request.getOptionalProperty(RESULT_NAME);
         final String resultNameSegment = resultName == null ? "" : "&amp;" + RESULT_NAME + "=" + resultName;
@@ -66,34 +63,62 @@ public class ActionLink extends AbstractElementProcessor {
         objectId = request.getContext().mapObject(object, Scope.REQUEST);
 
         final ActionContent parameterBlock = new ActionContent(action);
-        
         request.setBlockContent(parameterBlock);
         request.pushNewBuffer();
         request.processUtilCloseTag();
         final String text = request.popBuffer();
+        
+        final String[] parameters = parameterBlock.getParameters();
+        final String target;
+        if (action.isContributed()) {
+            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
+            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
+            target =  request.getContext().mapObject(action.realTarget(object), Scope.REQUEST);
+            if (!action.hasReturn() && resultOverride == null) {
+                resultOverride = parameters[0];
+            }
+        } else {
+            target = objectId;
+        }
 
         if (MethodsUtils.isVisibleAndUsable(object, action, where)) {
-            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, scopeSegment, confirmSegment, messageSegment, context, action, parameterBlock, text);
+            writeLink(request, target, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, resultOverride, scopeSegment,
+                    confirmSegment, messageSegment, context, action, parameters, text);
         }
         request.popBlockContent();
     }
 
-    public static void writeLink(final Request request, final String objectId, final String version, final String method, final String forwardResultTo, final String forwardVoidTo, final String resultNameSegment, final String scopeSegment, final String confirmSegment, final String messageSegment,
-            final RequestContext context, final ObjectAction action, final ActionContent parameterBlock, String text) {
+    public static void writeLink(
+            final Request request,
+            final String objectId,
+            final String version,
+            final String method,
+            final String forwardResultTo,
+            final String forwardVoidTo,
+            final String resultNameSegment,
+            final String resultOverride,
+            final String scopeSegment,
+            final String confirmSegment,
+            final String messageSegment,
+            final RequestContext context,
+            final ObjectAction action,
+            final String[] parameters,
+            String text) {
         text = text == null || text.trim().equals("") ? action.getName() : text;
 
         String parameterSegment = "";
-        final String[] parameters = parameterBlock.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             parameterSegment += "&param" + (i + 1) + "=" + parameters[i];
         }
 
         final String interactionParamters = context.encodedInteractionParameters();
         final String forwardResultSegment = forwardResultTo == null ? "" : "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
+        final String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + "_" + RESULT_OVERRIDE + "=" + resultOverride;
         final String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
         final String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
-        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version + "&amp;" + "_" + METHOD + "=" + method + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment
-                + interactionParamters + "\">");
+        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version
+                + "&amp;" + "_" + METHOD + "=" + method + resultOverrideSegment + forwardResultSegment + forwardVoidSegment + resultNameSegment
+                + parameterSegment + scopeSegment + confirmSegment + messageSegment + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");
         HelpLink.append(request, action.getDescription(), action.getHelp());

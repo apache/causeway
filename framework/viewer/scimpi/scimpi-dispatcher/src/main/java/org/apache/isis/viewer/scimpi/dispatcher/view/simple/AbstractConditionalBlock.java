@@ -72,6 +72,9 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         // addNormal(new TestCollectionSize(), "collection-size-less-than");
         // addNormal(new TestCollectionSize(), "collection-size-greater-than");
 
+        addNormal(new TestFieldValue(), "test-field");
+        addNegated(new TestFieldValue(), "test-field");
+           
         addNormal(new TestFieldExists(), "field-exists");
         addNegated(new TestFieldExists(), "field-missing");
         addNormal(new TestFieldVisible(), "field-visible");
@@ -323,12 +326,33 @@ abstract class Test {
         }
         return cls;
     }
+    
+    protected ObjectAction findMethod(final String attributeName, final ObjectAdapter object) {
+        final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
+        if (objectAction == null) {
+            throw new ScimpiException("No such method found in " + object.getSpecification().getIdentifier().getClassName() + " : " + attributeName);
+        }
+        return objectAction;
+    }
+
+    protected ObjectAssociation findProperty(final String attributeName, final ObjectAdapter object) {
+        final ObjectAssociation objectField = object.getSpecification().getAssociation(attributeName);
+        if (objectField == null) {
+            throw new ScimpiException("No such property found in " + object.getSpecification().getIdentifier().getClassName() + ": " + attributeName);
+        }
+        return objectField;
+    }
+
 }
 
 class TestVariableExists extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
-        return request.getContext().getVariable(attributeName) != null;
+        Object variable = request.getContext().getVariable(attributeName);
+        if (variable instanceof String && ((String) variable).equals("")) {
+            return false;
+        }
+        return variable != null;
     }
 }
 
@@ -401,7 +425,7 @@ class TestMethodVisible extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         // TODO needs to work irrespective of parameters
-        final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
+        final ObjectAction objectAction = findMethod(attributeName, object);
         final Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return visible.isAllowed();
     }
@@ -412,7 +436,7 @@ class TestMethodUseable extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         // TODO needs to work irrespective of parameters
-        final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
+        final ObjectAction objectAction = findMethod(attributeName, object);
         final Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return usable.isAllowed();
     }
@@ -438,7 +462,7 @@ class TestFieldVisible extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
-        final ObjectAssociation objectField = object.getSpecification().getAssociation(attributeName);
+        final ObjectAssociation objectField = findProperty(attributeName, object);
         final Consent visible = objectField.isVisible(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return visible.isAllowed();
     }
@@ -448,7 +472,7 @@ class TestFieldEditable extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
-        final ObjectAssociation objectField = object.getSpecification().getAssociation(attributeName);
+        final ObjectAssociation objectField = findProperty(attributeName, object);
         final Consent usable = objectField.isUsable(IsisContext.getAuthenticationSession(), object, Where.ANYWHERE);
         return usable.isAllowed();
     }
@@ -468,7 +492,7 @@ class TestFieldSet extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
-        final ObjectAssociation objectField = object.getSpecification().getAssociation(attributeName);
+        final ObjectAssociation objectField = findProperty(attributeName, object);
         IsisContext.getPersistenceSession().resolveField(object, objectField);
         final ObjectAdapter fld = objectField.get(object);
         if (fld != null) {
@@ -485,6 +509,31 @@ class TestFieldSet extends Test {
         }
         return false;
     }
+}
+
+class TestFieldValue extends Test {
+    @Override
+    boolean test(Request request, String attributeName, String targetId) {
+        int pos = attributeName.indexOf("==");
+        // TODO test for other comparators
+        // TODO fail properly if none found
+        String fieldName = attributeName.substring(0, pos);
+        String fieldValue = attributeName.substring(pos + 2);
+        
+        final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
+        final ObjectAssociation objectField = findProperty(fieldName, object);
+        IsisContext.getPersistenceSession().resolveField(object, objectField);
+        final ObjectAdapter fld = objectField.get(object);
+        
+        // TODO test for reference or value
+        final ObjectAdapter object2 = MethodsUtils.findObject(request.getContext(), fieldValue);
+        
+        if (fld == object2) {
+            return true;
+        }
+        return false;
+    }
+    
 }
 
 class TestHasRole extends Test {

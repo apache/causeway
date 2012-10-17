@@ -94,7 +94,7 @@ public abstract class RequestContext {
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
     private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
     
-    private final OidMarshaller oidMarshaller = getOidMarshaller();
+    private final OidMarshaller oidMarshaller = new OidMarshaller();
 
 
     private final ObjectMapping objectMapping;
