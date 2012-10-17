@@ -163,7 +163,6 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 
     public void debugData(final DebugBuilder str) {
         str.appendTitle("Facet decorators");
-        str.indent();
         final Set<Class<? extends Facet>> facetTypes = facetDecoratorByFacetType.keySet();
         if (facetTypes.size() == 0) {
             str.append("none");
@@ -172,7 +171,6 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
                 str.appendln(cls.getName(), facetDecoratorByFacetType.get(cls));
             }
         }
-        str.unindent();
     }
 
 }

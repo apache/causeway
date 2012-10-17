@@ -209,8 +209,8 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
         debug.appendln("Store", store.toString());
         debug.appendln("Mode", mode);
 
-        debug.append(store);
-        debug.append(userProfile);
+        debug.appendln("Store", store);
+        debug.appendln("User Profile", userProfile);
     }
 
     @Override

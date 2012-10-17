@@ -520,14 +520,15 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void debugData(final DebugBuilder str) {
-        facetDecoratorSet.debugData(str);
-        str.appendln();
+    public void debugData(final DebugBuilder debug) {
+        facetDecoratorSet.debugData(debug);
+        debug.appendln();
 
-        str.appendTitle("Specifications");
+        debug.appendTitle("Specifications");
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications());
         Collections.sort(specs, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
         for (final ObjectSpecification spec : specs) {
+            StringBuffer str = new StringBuffer();
             str.append(spec.isAbstract() ? "A" : ".");
             str.append(spec.isService() ? "S" : ".");
             str.append(BoundedFacetUtils.isBoundedSet(spec) ? "B" : ".");
@@ -540,15 +541,12 @@ public class ObjectReflectorDefault implements SpecificationLoaderSpi, Applicati
             final boolean hasIdentity = !(spec.isParentedOrFreeCollection() || spec.isParented() || spec.isValue());
             str.append( hasIdentity ? "I" : ".");
             str.append("  ");
-            str.append(spec.getShortIdentifier());
-            str.append("  [fqc=");
             str.append(spec.getFullIdentifier());
-            str.append(",type=");
-            str.append(spec.getClass().getName());
-            str.appendln("]");
+            
+            debug.appendPreformatted(spec.getShortIdentifier(), str.toString());
         }
     }
-
+    
     @Override
     public String debugTitle() {
         return "Reflector";

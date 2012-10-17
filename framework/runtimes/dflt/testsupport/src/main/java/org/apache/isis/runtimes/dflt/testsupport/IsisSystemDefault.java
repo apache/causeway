@@ -2,12 +2,8 @@ package org.apache.isis.runtimes.dflt.testsupport;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -47,6 +43,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemAbstract;
 import org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.security.dflt.authentication.AuthenticatorDefault;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class IsisSystemDefault extends IsisSystemAbstract {
 

@@ -513,6 +513,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debugList.add("Context", getInstance());
         debugList.add("Apache Isis session factory", getSessionFactory());
         debugList.add("  Authentication manager", getSessionFactory().getAuthenticationManager());
+        debugList.add("  Authorization manager", getSessionFactory().getAuthorizationManager());
         debugList.add("  Persistence session factory", getSessionFactory().getPersistenceSessionFactory());
         debugList.add("User profile loader", getUserProfileLoader());
 

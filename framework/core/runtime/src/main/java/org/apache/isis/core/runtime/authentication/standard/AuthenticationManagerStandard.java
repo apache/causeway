@@ -250,18 +250,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Authenticators");
-        debug.indent();
         for (final Authenticator authenticator : authenticators) {
             debug.appendln(authenticator.toString());
         }
-        debug.unindent();
 
         debug.appendTitle("Users");
-        debug.indent();
         for (final String userName : userByValidationCode.values()) {
             debug.appendln(userName);
         }
-        debug.unindent();
     }
 
     @Override

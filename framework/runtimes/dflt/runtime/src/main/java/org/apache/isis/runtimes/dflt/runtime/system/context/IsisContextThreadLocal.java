@@ -99,7 +99,6 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     @Override
     public void debugData(final DebugBuilder debug) {
         super.debugData(debug);
-        debug.appendln();
         debug.appendTitle("Threads based Contexts");
         for (final Thread thread : sessionsByThread.keySet()) {
             final IsisSession data = sessionsByThread.get(thread);

@@ -25,10 +25,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-public class UserProfile {
+public class UserProfile implements DebuggableWithTitle {
 
     public UserProfile() {
     }
@@ -154,4 +156,13 @@ public class UserProfile {
         entry.save(objects);
     }
 
+    public String debugTitle() {
+        return "User Profle";
+    }
+    
+    public void debugData(DebugBuilder debug) {
+        debug.appendln("Localization", localization);
+        debug.appendln("Options", options);
+        debug.appendln("Entry", entry);
+    }
 }

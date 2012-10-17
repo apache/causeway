@@ -22,16 +22,6 @@ package org.apache.isis.runtimes.dflt.testsupport;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -48,24 +38,31 @@ import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.Pers
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
-import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.security.dflt.authentication.AuthenticationRequestDefault;
 import org.apache.isis.tck.dom.refs.AggregatedEntity;
-import org.apache.isis.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.tck.dom.refs.ReferencingEntity;
 import org.apache.isis.tck.dom.refs.SimpleEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+
+import com.google.common.collect.Lists;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
