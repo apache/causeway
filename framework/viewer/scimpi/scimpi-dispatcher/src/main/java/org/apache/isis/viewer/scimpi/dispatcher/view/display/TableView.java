@@ -126,7 +126,7 @@ public class TableView extends AbstractTableView {
                     writer.appendHtml("</th>");
                 }
             }
-            writer.appendHtml("<th></th>");
+            writer.appendHtml("<th class=\"controls\"></th>");
             writer.appendHtml("</tr>");
         }
 
