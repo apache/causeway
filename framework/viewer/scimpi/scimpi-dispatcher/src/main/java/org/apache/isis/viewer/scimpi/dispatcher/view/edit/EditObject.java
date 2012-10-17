@@ -59,6 +59,7 @@ public class EditObject extends AbstractElementProcessor {
         final String cancelTo = request.getOptionalProperty(CANCEL_TO); 
         final boolean hideNonEditableFields = request.isRequested(HIDE_UNEDITABLE, false);
         final boolean showIcon = request.isRequested(SHOW_ICON, showIconByDefault());
+        final String labelDelimiter = request.getOptionalProperty(LABEL_DELIMITER, ":");
         String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String formTitle = request.getOptionalProperty(FORM_TITLE);
         final String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
@@ -163,7 +164,7 @@ public class EditObject extends AbstractElementProcessor {
 
         final HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
         HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id, formTitle,
-                null, null, buttonTitle, errors, cancelTo);
+                labelDelimiter, null, null, buttonTitle, errors, cancelTo);
      request.popBlockContent();
     }
 

@@ -39,4 +39,5 @@ public class CreateFormParameter {
     public boolean showIcon;
     public String completionMessage;
     public String cancelTo;
+    public String labelDelimiter;
 }

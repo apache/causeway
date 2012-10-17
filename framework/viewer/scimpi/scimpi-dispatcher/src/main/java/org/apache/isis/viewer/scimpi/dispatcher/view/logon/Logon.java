@@ -51,12 +51,13 @@ public class Logon extends AbstractElementProcessor {
     }
 
     public static void loginForm(final Request request, final String view) {
-        String object = request.getOptionalProperty(OBJECT);
-        String method = request.getOptionalProperty(METHOD, "logon");
-        String result = request.getOptionalProperty(RESULT_NAME, "_user");
-        String resultScope = request.getOptionalProperty(SCOPE, Scope.SESSION.name());
-        String isisUser = request.getOptionalProperty("isis-user", "_web_default");
-        String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
+        final String object = request.getOptionalProperty(OBJECT);
+        final String method = request.getOptionalProperty(METHOD, "logon");
+        final String result = request.getOptionalProperty(RESULT_NAME, "_user");
+        final String resultScope = request.getOptionalProperty(SCOPE, Scope.SESSION.name());
+        final String isisUser = request.getOptionalProperty("isis-user", "_web_default");
+        final String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
+        final String labelDelimiter = request.getOptionalProperty(LABEL_DELIMITER, ":");
 
         // TODO error if all values are not set (not if use type is not set and all others are still defaults);
 
@@ -97,7 +98,7 @@ public class Logon extends AbstractElementProcessor {
         final String id = request.getOptionalProperty(ID, "logon");
 
         HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields,
-                className, id, formTitle, null, null, loginButtonTitle,
+                className, id, formTitle, labelDelimiter, null, null, loginButtonTitle,
                 isforThisForm && entryState != null ? entryState.getError() : null , null);        
     }
 

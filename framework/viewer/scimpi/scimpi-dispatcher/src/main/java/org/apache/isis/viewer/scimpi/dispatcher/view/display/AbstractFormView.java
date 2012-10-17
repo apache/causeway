@@ -52,6 +52,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             String title = request.getOptionalProperty(FORM_TITLE);
             final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
             final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
+            final String labelDelimiter = request.getOptionalProperty(LABEL_DELIMITER, ":");
             final boolean showIcons = request.isRequested(SHOW_ICON, showIconByDefault()); 
 
             request.setBlockContent(tag);
@@ -78,13 +79,23 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
                 title = null;
             }
 
-            write(request, object, fields, linkFields, classString, title, oddRowClass, evenRowClass, showIcons);
+            write(request, object, fields, linkFields, classString, title, labelDelimiter, oddRowClass, evenRowClass, showIcons);
         } else {
             request.skipUntilClose(); 
         }
     }
 
-    private void write(final Request request, final ObjectAdapter object, final List<ObjectAssociation> fields, final LinkedObject[] linkFields, final String classString, final String title, final String oddRowClass, final String evenRowClass, final boolean showIcons) {
+    private void write(
+            final Request request,
+            final ObjectAdapter object,
+            final List<ObjectAssociation> fields,
+            final LinkedObject[] linkFields,
+            final String classString,
+            final String title,
+            final String labelDelimiter,
+            final String oddRowClass,
+            final String evenRowClass,
+            final boolean showIcons) {
         request.appendHtml("<div" + classString + ">");
         if (title != null) {
             request.appendHtml("<div class=\"title\">");
@@ -111,7 +122,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             }
             request.appendHtml("<div " + cls + description + "><span class=\"label\">");
             request.appendAsHtmlEncoded(field.getName());
-            request.appendHtml(":</span>");
+            request.appendHtml(labelDelimiter + "</span>");
             final LinkedObject linkedObject = linkFields[i];
             addField(request, object, field, linkedObject, showIcons);
             HelpLink.append(request, field.getDescription(), field.getHelp());

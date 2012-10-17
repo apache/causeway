@@ -33,6 +33,7 @@ public class HtmlFormBuilder {
             final String className,
             final String id,
             final String formTitle,
+            final String labelDelimiter,
             final String description,
             final String helpReference,
             final String buttonTitle,
@@ -76,9 +77,9 @@ public class HtmlFormBuilder {
                 final String fieldSegment = createField(fld);
                 final String helpSegment = HelpLink.createHelpSegment(fld.getDescription(), fld.getHelpReference());
                 final String title = fld.getDescription().equals("") ? "" : " title=\"" + fld.getDescription() + "\"";
-                request.appendHtml("  <div class=\"field\"><label class=\"label\" " + title + ">");
+                request.appendHtml("  <div class=\"field " + fld.getName() + "\"><label class=\"label\" " + title + ">");
                 request.appendAsHtmlEncoded(fld.getLabel());
-                request.appendHtml(":</label>" + fieldSegment + errorSegment + helpSegment + "</div>\n");
+                request.appendHtml(labelDelimiter + "</label>" + fieldSegment + errorSegment + helpSegment + "</div>\n");
             }
         }
 
@@ -138,10 +139,11 @@ public class HtmlFormBuilder {
         final String columnsSegment = field.getWidth() == 0 ? "" : " cols=\"" + field.getWidth() / field.getHeight() + "\"";
         final String rowsSegment = field.getHeight() == 0 ? "" : " rows=\"" + field.getHeight() + "\"";
         final String wrapSegment = !field.isWrapped() ? "" : " wrap=\"off\"";
-        final String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
+        final String requiredSegment = !field.isRequired() ? "" : " class=\"required\"";
         final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        final String maxLength = field.getMaxLength() == 0 ? "" : " rows=\"" + field.getMaxLength() + "\"";
-        return "<textarea name=\"" + field.getName() + "\"" + columnsSegment + rowsSegment + wrapSegment + maxLength + disabled + ">" + Request.getEncoder().encoder(field.getValue()) + "</textarea>" + requiredSegment;
+        final String maxLength = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
+        return "<textarea" + requiredSegment + " name=\"" + field.getName() + "\"" + columnsSegment + rowsSegment + wrapSegment
+                + maxLength + disabled + ">" + Request.getEncoder().encoder(field.getValue()) + "</textarea>";
     }
 
     private static String createPasswordField(final InputField field) {
@@ -158,10 +160,10 @@ public class HtmlFormBuilder {
         final String valueSegment = value == null ? "" : " value=\"" + Request.getEncoder().encoder(value) + "\"";
         final String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
         final String maxLengthSegment = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
-        final String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
+        final String requiredSegment = !field.isRequired() ? "" : " required";
         final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        return "<input class=\"" + field.getDataType() + "\" + type=\"" + type + "\" name=\"" + field.getName() + "\"" + 
-                valueSegment + lengthSegment + maxLengthSegment + disabled + additionalAttributes + " />" + requiredSegment;
+        return "<input class=\"" + field.getDataType() + requiredSegment + "\" type=\"" + type + "\" name=\"" + field.getName() + "\"" + 
+                valueSegment + lengthSegment + maxLengthSegment + disabled + additionalAttributes + " />";
     }
 
     private static String createCheckbox(final InputField field) {
@@ -172,12 +174,13 @@ public class HtmlFormBuilder {
     }
 
     private static String createOptions(final InputField field) {
-        final StringBuffer str = new StringBuffer();
-        final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        str.append("\n  <select name=\"" + field.getName() + "\"" + disabled + ">\n");
         final String[] options = field.getOptionsText();
         final String[] ids = field.getOptionValues();
         final int length = options.length;
+        final String classSegment = field.isRequired() && length == 0 ? " class=\"required\"" : "";
+        final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
+        final StringBuffer str = new StringBuffer();
+        str.append("\n  <select name=\"" + field.getName() + "\"" + disabled  + classSegment + ">\n");
         boolean offerOther = false;
         for (int i = 0; i < length; i++) {
             final String selectedSegment = field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
@@ -203,9 +206,6 @@ public class HtmlFormBuilder {
                                                                      // when JS
                                                                      // enabled
             str.append("  <input type=\"text\" name=\"" + field.getName() + "-other\"" + hideSegment + lengthSegment + disabled + " />");
-        }
-        if (field.isRequired() && length == 0) {
-            str.append(" <span class=\"required\">*</span>");
         }
         str.append("\n");
         return str.toString();

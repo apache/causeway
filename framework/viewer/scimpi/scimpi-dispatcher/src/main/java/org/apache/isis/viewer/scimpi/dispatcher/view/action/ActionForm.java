@@ -58,6 +58,7 @@ public class ActionForm extends AbstractElementProcessor {
         parameters.showIcon = request.isRequested(SHOW_ICON, showIconByDefault());
         parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
+        parameters.labelDelimiter = request.getOptionalProperty(LABEL_DELIMITER, ":");
         parameters.formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
         parameters.resultName = request.getOptionalProperty(RESULT_NAME);
         parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
@@ -156,10 +157,8 @@ public class ActionForm extends AbstractElementProcessor {
             buttonTitle = "Ok";
         }
 
-        final String cancelTo = parameterObject.cancelTo == null ? "_generic.shtml?_result=" + objectId : parameterObject.cancelTo;
-
         HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className,
-                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle, errors, cancelTo);
+                parameterObject.id, formTitle, parameterObject.labelDelimiter, action.getDescription(), action.getHelp(), buttonTitle, errors, parameterObject.cancelTo);
 
         request.popBlockContent();
     }
