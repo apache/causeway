@@ -98,19 +98,6 @@ public class MongoIntegrationTest {
     }
 
     @Test
-    public void destroyInstance() throws Exception {
-        db.close();
-
-        final DBCollection instances = testDb.getCollection(specification.getSpecId().asString());
-        final BasicDBObject dbObject = new BasicDBObject().append("test", "test");
-        instances.insert(dbObject);
-
-        db.open();
-        db.delete(specification.getSpecId(), dbObject.getString("_id"));
-        assertFalse(db.hasInstances(specification.getSpecId()));
-    }
-
-    @Test
     public void serviceIds() throws Exception {
         final ObjectSpecId osi = ObjectSpecId.of("one");
         db.addService(osi, "123");

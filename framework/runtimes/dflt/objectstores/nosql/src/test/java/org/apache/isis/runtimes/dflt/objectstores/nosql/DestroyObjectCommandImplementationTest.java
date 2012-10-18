@@ -19,22 +19,20 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreatorDefault;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class DestroyObjectCommandImplementationTest {
 
@@ -95,13 +93,10 @@ public class DestroyObjectCommandImplementationTest {
 
         context.checking(new Expectations() {
             {
-//                one(keyCreator).getIdentifierForPersistentRoot(oid);
-//                will(returnValue(keyStr));
-
                 one(versionCreator).versionString(version);
                 will(returnValue(versionStr));
 
-                one(commandContext).delete(specification.getSpecId(), keyStr, versionStr);
+                one(commandContext).delete(specification.getSpecId(), keyStr, versionStr, rootOid);
             }
         });
 

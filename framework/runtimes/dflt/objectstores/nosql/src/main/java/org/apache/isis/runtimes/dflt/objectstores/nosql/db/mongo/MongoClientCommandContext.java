@@ -19,15 +19,21 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
-import com.mongodb.DB;
-
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
+import org.apache.log4j.Logger;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 
 public class MongoClientCommandContext implements NoSqlCommandContext {
 
+    private static final Logger LOG = Logger.getLogger(MongoClientCommandContext.class);
     private final DB db;
 
     public MongoClientCommandContext(DB db) {
@@ -41,22 +47,28 @@ public class MongoClientCommandContext implements NoSqlCommandContext {
     public void end() {}
 
     @Override
-    public StateWriter createStateWriter(ObjectSpecId objectSpecId) {
+    public StateWriter createStateWriter(final ObjectSpecId objectSpecId) {
         return new MongoStateWriter(db, objectSpecId);
     }
 
     @Override
-    public void delete(ObjectSpecId objectSpecId, String key, String version) {
-        // TODO
+    public void delete(final ObjectSpecId objectSpecId, final String mongoId, final String version, final Oid oid) {
+        final DBCollection instances = db.getCollection(objectSpecId.asString());
+        final DBObject object = instances.findOne(mongoId);
+        if (!object.get(PropertyNames.VERSION).equals(version)) {
+            throw new ConcurrencyException("Could not delete object of different version", oid);
+        }
+        instances.remove(object);
+        LOG.info("removed " + oid);
     }
 
     @Override
-    public void insert(StateWriter writer) {
+    public void insert(final StateWriter writer) {
         ((MongoStateWriter) writer).flush();
     }
 
     @Override
-    public void update(StateWriter writer) {
+    public void update(final StateWriter writer) {
         ((MongoStateWriter) writer).flush();
     }
 

@@ -44,10 +44,9 @@ final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
         final String key = keyCreator.getIdentifierForPersistentRoot(adapter.getOid());
         final String version = versionCreator.versionString(adapter.getVersion());
         final ObjectSpecification objectSpec = adapter.getSpecification();
-        //final String specificationName = objectSpec.getFullIdentifier();
 
         final NoSqlCommandContext noSqlCommandContext = (NoSqlCommandContext) context;
-        noSqlCommandContext.delete(objectSpec.getSpecId(), key, version);
+        noSqlCommandContext.delete(objectSpec.getSpecId(), key, version, adapter.getOid());
     }
 
     @Override

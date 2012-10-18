@@ -34,7 +34,6 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -232,14 +231,6 @@ public class MongoDb implements NoSqlDataDatabase {
         for (final PersistenceCommand command : commands) {
             command.execute(context);
         }
-    }
-
-    public void delete(final ObjectSpecId objectSpecId, final String key) {
-        final DBCollection instances = db.getCollection(objectSpecId.asString());
-        final ObjectId id = new ObjectId(key);
-        final DBObject object = instances.findOne(id);
-        instances.remove(object);
-        LOG.info("removed " + key);
     }
 
 

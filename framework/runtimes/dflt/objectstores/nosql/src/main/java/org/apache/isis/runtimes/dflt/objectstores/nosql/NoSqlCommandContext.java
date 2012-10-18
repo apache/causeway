@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
@@ -30,5 +31,5 @@ public interface NoSqlCommandContext extends PersistenceCommandContext {
     void insert(StateWriter writer);
     void update(StateWriter writer);
 
-    void delete(ObjectSpecId objectSpecId, String key, String version);
+    void delete(ObjectSpecId objectSpecId, String key, String version, Oid oid);
 }
