@@ -106,14 +106,14 @@
         <mailingList>
             <name>developers</name>
             <archive>http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/</archive>
-            <post>isis-dev@incubator.apache.org</post>
+            <post>dev@isis.apache.org</post>
             <subscribe>isis-dev-subscribe@incubator.apache.org</subscribe>
             <unsubscribe>isis-dev-unsubscribe@incubator.apache.org</unsubscribe>
         </mailingList>
         <mailingList>
             <name>users</name>
             <archive>http://mail-archives.apache.org/mod_mbox/incubator-isis-users/</archive>
-            <post>isis-users@incubator.apache.org</post>
+            <post>users@isis.apache.org</post>
             <subscribe>isis-users-subscribe@incubator.apache.org</subscribe>
             <unsubscribe>isis-users-unsubscribe@incubator.apache.org</unsubscribe>
         </mailingList>
