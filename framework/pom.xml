@@ -121,55 +121,85 @@
 
     <developers>
         <developer>
-            <id>rcmatthews</id>
-            <name>Robert Matthews</name>
-            <email>rmatthews@apache.org</email>
-            <organization>Naked Objects Group Ltd.</organization>
-            <organizationUrl>http://nakedobjects.net</organizationUrl>
+            <id>danhaywood</id>
+            <name>Dan Haywood</name>
+            <email>danhaywood@apache.org</email>
             <roles>
-                <role>architect</role>
-                <role>developer</role>
+                <role>pmc chair</role>
+                <role>pmc</role>
+                <role>committer</role>
             </roles>
             <timezone>+0</timezone>
         </developer>
         <developer>
-            <id>danhaywood</id>
-            <name>Dan Haywood</name>
-            <email>dan@haywood-associates.co.uk</email>
-            <organization>Haywood Associates Ltd.</organization>
-            <organizationUrl>http://www.haywood-associates.co.uk</organizationUrl>
+            <id>rcmatthews</id>
+            <name>Robert Matthews</name>
+            <email>rmatthews@apache.org</email>
             <roles>
-                <role>architect</role>
-                <role>developer</role>
+                <role>pmc</role>
+                <role>committer</role>
             </roles>
             <timezone>+0</timezone>
         </developer>
         <developer>
             <id>kevin</id>
             <name>Kevin Meyer</name>
-            <email>kevin@kmz.co.za</email>
+            <email>kevin@apache.org</email>
             <roles>
-                <role>developer</role>
+                <role>pmc</role>
+                <role>committer</role>
             </roles>
             <timezone>+2</timezone>
         </developer>
         <developer>
+            <id>themalkolm</id>
+            <name>Alexander Krasnuhkin</name>
+            <email>themalkolm@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+        <developer>
             <id>dslaughter</id>
             <name>Dave Slaughter</name>
-            <email>dslaughter@digis.net</email>
+            <email>dslaughter@apache.org</email>
             <roles>
-                <role>developer</role>
+                <role>pmc</role>
+                <role>committer</role>
             </roles>
             <timezone>-6</timezone>
         </developer>
         <developer>
-            <id>themalkolm</id>
-            <name>Alexander Krasnuhkin</name>
-            <email>the.malkolm@gmail.com</email>
+            <id>jcvanderwal</id>
+            <name>Jeroen van der Wal</name>
+            <email>jeroen@stromboli.it</email>
             <roles>
-                <role>developer</role>
+                <role>pmc</role>
+                <role>committer</role>
             </roles>
             <timezone>+3</timezone>
+        </developer>
+        <developer>
+            <id>mnour</id>
+            <name>Mohammad Nour El-Din</name>
+            <email>mnour@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>struberg</id>
+            <name>Mark Struberg</name>
+            <email>struberg@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
+            </roles>
+            <timezone>+1</timezone>
         </developer>
     </developers>
 
