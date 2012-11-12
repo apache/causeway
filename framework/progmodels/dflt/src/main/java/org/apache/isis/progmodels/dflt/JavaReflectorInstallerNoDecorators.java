@@ -50,8 +50,10 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 
 /**
  * An implementation of {@link ObjectReflectorInstaller} without support for {@link FacetDecoratorInstaller}
@@ -90,58 +92,13 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
     @Override
     public SpecificationLoaderSpi createReflector(final ClassSubstitutorFactory classSubstitutorFactory, final Collection<MetaModelRefiner> metaModelRefiners) {
 
-        final CollectionTypeRegistry collectionTypeRegistry = createCollectionTypeRegistry(getConfiguration());
-        final SpecificationTraverser specificationTraverser = createSpecificationTraverser(getConfiguration());
-        final MemberLayoutArranger memberLayoutArranger = createMemberLayoutArranger(getConfiguration());
+        final ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
-
-        final ClassSubstitutor classSubstitutor = classSubstitutorFactory.createClassSubstitutor(getConfiguration());
+        final MetaModelValidator mmv = createMetaModelValidator(getConfiguration());
         
-        ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
-        MetaModelValidatorComposite metaModelValidator = asComposite(createMetaModelValidator(getConfiguration()));
-        for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
-            metaModelRefiner.refineProgrammingModel(programmingModel, getConfiguration());
-            metaModelRefiner.refineMetaModelValidator(metaModelValidator, getConfiguration());
-        }
-
-        final ObjectReflectorDefault reflector = doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
-        return reflector;
+        return JavaReflectorHelper.createObjectReflector(programmingModel, classSubstitutorFactory, metaModelRefiners, facetDecorators, mmv, getConfiguration());
     }
 
-
-    /**
-     * Hook method to allow subclasses to specify a different implementation of
-     * {@link SpecificationTraverser}.
-     * 
-     * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link ReflectorConstants#SPECIFICATION_TRAVERSER_CLASS_NAME}. If not
-     * specified, then defaults to
-     * {@value ReflectorConstants#SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT}.
-     */
-    protected SpecificationTraverser createSpecificationTraverser(final IsisConfiguration configuration) {
-        final String specificationTraverserClassName = configuration.getString(ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME, ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT);
-        final SpecificationTraverser specificationTraverser = InstanceUtil.createInstance(specificationTraverserClassName, SpecificationTraverser.class);
-        return specificationTraverser;
-    }
-
-    /**
-     * Hook method to allow subclasses to specify a different implementation of
-     * {@link MemberLayoutArranger}.
-     * 
-     * <p>
-     * By default, looks up implementation from provided
-     * {@link IsisConfiguration} using
-     * {@link ReflectorConstants#MEMBER_LAYOUT_ARRANGER_CLASS_NAME}. If not
-     * specified, then defaults to
-     * {@value ReflectorConstants#MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT}.
-     */
-    protected MemberLayoutArranger createMemberLayoutArranger(final IsisConfiguration configuration) {
-        final String memberLayoutArrangerClassName = configuration.getString(ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME, ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT);
-        final MemberLayoutArranger memberLayoutArranger = InstanceUtil.createInstance(memberLayoutArrangerClassName, MemberLayoutArranger.class);
-        return memberLayoutArranger;
-    }
 
     /**
      * Hook method to allow subclasses to specify a different implementations
@@ -227,37 +184,6 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
     }
 
-    private MetaModelValidatorComposite asComposite(MetaModelValidator baseMetaModelValidator) {
-        final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();
-        metaModelValidatorComposite.add(baseMetaModelValidator);
-        return metaModelValidatorComposite;
-    }
-
-    /**
-     * Creates the {@link CollectionTypeRegistry}, hardcoded to be the
-     * {@link CollectionTypeRegistryDefault}.
-     * 
-     * <p>
-     * Note: the intention is to remove this interface and instead to use a
-     * mechanism similar to the <tt>@Value</tt> annotation to specify which
-     * types represent collections. For now, have factored out this method
-     * similar to be similar to the creation methods of other subcomponents such
-     * as the {@link #createClassSubstitutor(IsisConfiguration)
-     * ClassSubstitutor}. Note however that this method is <tt>final</tt> so
-     * that it cannot be overridden.
-     */
-    protected final CollectionTypeRegistry createCollectionTypeRegistry(final IsisConfiguration configuration) {
-        return new CollectionTypeRegistryDefault();
-    }
-
-    /**
-     * Hook method to allow for other implementations (still based on
-     * {@link ObjectReflectorDefault}).
-     */
-    protected ObjectReflectorDefault doCreateReflector(final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
-            final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
-        return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
-    }
 
 
     // /////////////////////////////////////////////////////

@@ -20,9 +20,21 @@
 package org.apache.isis.runtimes.dflt.testsupport;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,6 +46,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -43,34 +56,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.security.dflt.authentication.AuthenticationRequestDefault;
-import org.apache.isis.tck.dom.refs.AggregatedEntity;
-import org.apache.isis.tck.dom.refs.ParentEntity;
-import org.apache.isis.tck.dom.refs.ParentEntityRepository;
-import org.apache.isis.tck.dom.refs.ReferencingEntity;
-import org.apache.isis.tck.dom.refs.SimpleEntity;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
-import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-
-import com.google.common.collect.Lists;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
- *
- * <p>
- * TODO: need to make inherit from the {@link IsisSystemForTest}.
  */
-public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
+public class IsisSystemForTest implements org.junit.rules.TestRule {
 
     public interface Listener {
 
@@ -127,82 +118,20 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
 
 
-    /**
-     * A precanned set of fixtures for use by tests if desired.
-     */
-    public static class Fixtures {
-
-        public enum Initialization {
-            INIT,
-            NO_INIT
-        }
-
-        public ParentEntityRepository associatedEntitiesRepository = new ParentEntityRepository();
-
-        public ApplibValuedEntity ave1, ave2; 
-        public JdkValuedEntity jve1, jve2;
-        public PrimitiveValuedEntity pve1, pve2;
-        public WrapperValuedEntity wve1, wve2;
-        
-        public SimpleEntity smpl1, smpl2, smpl3, smpl4, smpl5, smpl6;
-        public ReferencingEntity rfcg1, rfcg2, rfcg3, rfcg4, rfcg5, rfcg6;
-        public ParentEntity prnt1, prnt2, prnt3, prnt4, prnt5, prnt6;
-        public AggregatedEntity rfcg1_a1, rfcg1_a2, rfcg1_a3, prnt1_a1, prnt1_a2, prnt1_a3;
-
-        private void init(DomainObjectContainer container) {
-            ave1 = container.newTransientInstance(ApplibValuedEntity.class);
-            ave2 = container.newTransientInstance(ApplibValuedEntity.class);
-            
-            jve1 = container.newTransientInstance(JdkValuedEntity.class);
-            jve2 = container.newTransientInstance(JdkValuedEntity.class);
-            
-            pve1 = container.newTransientInstance(PrimitiveValuedEntity.class);
-            pve2 = container.newTransientInstance(PrimitiveValuedEntity.class);
-
-            wve1 = container.newTransientInstance(WrapperValuedEntity.class);
-            wve2 = container.newTransientInstance(WrapperValuedEntity.class);
-            
-            smpl1 = container.newTransientInstance(SimpleEntity.class);
-            smpl2 = container.newTransientInstance(SimpleEntity.class);
-            smpl3 = container.newTransientInstance(SimpleEntity.class);
-            smpl4 = container.newTransientInstance(SimpleEntity.class);
-            smpl5 = container.newTransientInstance(SimpleEntity.class);
-            smpl6 = container.newTransientInstance(SimpleEntity.class);
-            rfcg1 = container.newTransientInstance(ReferencingEntity.class);
-            rfcg2 = container.newTransientInstance(ReferencingEntity.class);
-            rfcg3 = container.newTransientInstance(ReferencingEntity.class);
-            rfcg4 = container.newTransientInstance(ReferencingEntity.class);
-            rfcg5 = container.newTransientInstance(ReferencingEntity.class);
-            rfcg6 = container.newTransientInstance(ReferencingEntity.class);
-            prnt1 = container.newTransientInstance(ParentEntity.class);
-            prnt2 = container.newTransientInstance(ParentEntity.class);
-            prnt3 = container.newTransientInstance(ParentEntity.class);
-            prnt4 = container.newTransientInstance(ParentEntity.class);
-            prnt5 = container.newTransientInstance(ParentEntity.class);
-            prnt6 = container.newTransientInstance(ParentEntity.class);
-            rfcg1_a1 = container.newAggregatedInstance(rfcg1, AggregatedEntity.class);
-            rfcg1_a2 = container.newAggregatedInstance(rfcg1, AggregatedEntity.class);
-            rfcg1_a3 = container.newAggregatedInstance(rfcg1, AggregatedEntity.class);
-            prnt1_a1 = container.newAggregatedInstance(prnt1, AggregatedEntity.class);
-            prnt1_a2 = container.newAggregatedInstance(prnt1, AggregatedEntity.class);
-            prnt1_a3 = container.newAggregatedInstance(prnt1, AggregatedEntity.class);
-        }
-    }
 
     private IsisSystemDefault isisSystem;
     private AuthenticationSession authenticationSession;
 
     // public visibility just to reduce noise in tests
     public DomainObjectContainer container;
-    // public visibility just to reduce noise in tests
-    public final Fixtures fixtures;
     
-    private Initialization fixturesInitialization;
     private final IsisConfiguration configuration;
     private final PersistenceMechanismInstaller persistenceMechanismInstaller;
     private final AuthenticationRequest authenticationRequest;
     private final List<Object> services;
+    private final List<InstallableFixture> fixtures;
     private List <Listener> listeners;
+    
     private final MetaModelValidator metaModelValidator;
     private final ProgrammingModel programmingModel;
 
@@ -215,23 +144,18 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestDefault("tester");
         
-        private Initialization fixturesInitialization = Initialization.INIT;
         private IsisConfiguration configuration;
         private PersistenceMechanismInstaller persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         private MetaModelValidator metaModelValidator;
         private ProgrammingModel programmingModel;
 
-        private final List <Listener> listeners = Lists.newArrayList();
         private Object[] services;
-
+        private InstallableFixture[] fixtures;
+        
+        private final List <Listener> listeners = Lists.newArrayList();
 
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
-            return this;
-        }
-        
-        public Builder with(Initialization initialization) {
-            this.fixturesInitialization = initialization;
             return this;
         }
         
@@ -249,10 +173,21 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
             this.services = services;
             return this;
         }
+
+        public Builder withFixtures(InstallableFixture... fixtures) {
+            this.fixtures = fixtures;
+            return this;
+        }
         
-        public IsisSystemWithFixtures build() {
-            final List<Object> servicesIfAny = services != null? Arrays.asList(services): null;
-            return new IsisSystemWithFixtures(fixturesInitialization, configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, listeners);
+
+        public IsisSystemForTest build() {
+            final List<Object> servicesIfAny = asList(services);
+            final List<InstallableFixture> fixturesIfAny = asList(fixtures);
+            return new IsisSystemForTest(configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, fixturesIfAny, listeners);
+        }
+
+        private static <T> List<T> asList(T[] objects) {
+            return objects != null? Arrays.asList(objects): Collections.<T>emptyList();
         }
 
         public Builder with(Listener listener) {
@@ -277,18 +212,14 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         return new Builder();
     }
 
-    private IsisSystemWithFixtures(Initialization fixturesInitialization, IsisConfiguration configuration, ProgrammingModel programmingModel, MetaModelValidator metaModelValidator, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services, List<Listener> listeners) {
-        this.fixturesInitialization = fixturesInitialization;
+    private IsisSystemForTest(IsisConfiguration configuration, ProgrammingModel programmingModel, MetaModelValidator metaModelValidator, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services, List<InstallableFixture> fixtures, List<Listener> listeners) {
         this.configuration = configuration;
         this.programmingModel = programmingModel;
         this.metaModelValidator = metaModelValidator;
         this.persistenceMechanismInstaller = persistenceMechanismInstaller;
         this.authenticationRequest = authenticationRequest;
-        this.fixtures = new Fixtures();
-        if(services == null) {
-            services = Arrays.asList((Object)fixtures.associatedEntitiesRepository);
-        }
         this.services = services;
+        this.fixtures = fixtures;
         this.listeners = listeners;
     }
 
@@ -324,12 +255,17 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
         IsisContext.openSession(authenticationSession);
         container = getContainer();
-        if(firstTime && fixturesInitialization == Fixtures.Initialization.INIT) {
-            fixtures.init(container);
-        }
+        
+        wireAndInstallFixtures();
         if(fireListeners.shouldFire()) {
             firePostSetupSystem(firstTime);
         }
+    }
+
+    private void wireAndInstallFixtures() {
+        FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
+        fid.addFixture(fixtures);
+        fid.installFixtures();
     }
 
     private enum FireListeners {
@@ -373,31 +309,31 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         final IsisSystemDefault system = new IsisSystemDefault(DeploymentType.UNIT_TESTING, services) {
             @Override
             public IsisConfiguration getConfiguration() {
-                if(IsisSystemWithFixtures.this.configuration != null) {
-                    return IsisSystemWithFixtures.this.configuration;
+                if(IsisSystemForTest.this.configuration != null) {
+                    return IsisSystemForTest.this.configuration;
                 } else {
                     return super.getConfiguration();
                 }
             }
             @Override
             protected ProgrammingModel obtainReflectorProgrammingModel() {
-                if(IsisSystemWithFixtures.this.programmingModel != null) {
-                    return IsisSystemWithFixtures.this.programmingModel;
+                if(IsisSystemForTest.this.programmingModel != null) {
+                    return IsisSystemForTest.this.programmingModel;
                 } else {
                     return super.obtainReflectorProgrammingModel();
                 }
             }
             @Override
             protected MetaModelValidator obtainReflectorMetaModelValidator() {
-                if(IsisSystemWithFixtures.this.metaModelValidator != null) {
-                    return IsisSystemWithFixtures.this.metaModelValidator;
+                if(IsisSystemForTest.this.metaModelValidator != null) {
+                    return IsisSystemForTest.this.metaModelValidator;
                 } else {
                     return super.obtainReflectorMetaModelValidator();
                 }
             }
             @Override
             protected PersistenceMechanismInstaller obtainPersistenceMechanismInstaller(IsisConfiguration configuration) {
-                final PersistenceMechanismInstaller installer = IsisSystemWithFixtures.this.persistenceMechanismInstaller;
+                final PersistenceMechanismInstaller installer = IsisSystemForTest.this.persistenceMechanismInstaller;
                 configuration.injectInto(installer);
                 return installer;
             }
@@ -648,6 +584,23 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         }
     }
 
+    
+    
+
+    @SuppressWarnings("unchecked")
+    public <T> T getService(Class<T> serviceClass) {
+        List<ObjectAdapter> servicesAdapters = getPersistenceSession().getServices();
+        for(ObjectAdapter serviceAdapter: servicesAdapters) {
+            Object servicePojo = serviceAdapter.getObject();
+            if(serviceClass.isAssignableFrom(servicePojo.getClass())) {
+                return (T) servicePojo;
+            }
+        }
+        throw new RuntimeException("Could not find a service of type: " + serviceClass.getName());
+    }
+    
+    
+    
     protected IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }

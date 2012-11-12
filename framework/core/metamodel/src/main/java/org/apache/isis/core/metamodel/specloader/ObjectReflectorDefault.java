@@ -116,7 +116,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
  * to its <tt>IsisContext</tt>.
  */
 
-public class ObjectReflectorDefault implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware, DebuggableWithTitle {
+public final class ObjectReflectorDefault implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware, DebuggableWithTitle {
 
     private final static Logger LOG = Logger.getLogger(ObjectReflectorDefault.class);
 

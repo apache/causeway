@@ -54,4 +54,10 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         }
 
     }
+
+    public static MetaModelValidatorComposite asComposite(MetaModelValidator baseMetaModelValidator) {
+        final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();
+        metaModelValidatorComposite.add(baseMetaModelValidator);
+        return metaModelValidatorComposite;
+    }
 }

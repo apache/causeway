@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -46,4 +47,5 @@ public abstract class VisibilityContext<T extends VisibilityEvent> extends Inter
     public Where getWhere() {
         return where;
     }
+
 }

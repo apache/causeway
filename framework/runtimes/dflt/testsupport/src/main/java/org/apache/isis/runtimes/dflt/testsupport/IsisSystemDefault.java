@@ -11,17 +11,11 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
@@ -29,8 +23,8 @@ import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor.CglibClassSubstitutor;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
@@ -113,33 +107,21 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * <p>
      * Each of the subcomponents can be overridden if required.
      * 
-     * @see #obtainReflectorClassSubstitutor()
-     * @see #obtainReflectorCollectionTypeRegistry()
      * @see #obtainReflectorFacetDecoratorSet()
      * @see #obtainReflectorMetaModelValidator()
      * @see #obtainReflectorProgrammingModel()
-     * @see #obtainReflectorSpecificationTraverser()
      */
     @Override
     protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, ClassSubstitutorFactory classSubstitutorFactory, Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
-        final ClassSubstitutor classSubstitutor = obtainReflectorClassSubstitutor();
-        final CollectionTypeRegistry collectionTypeRegistry = obtainReflectorCollectionTypeRegistry();
-        final SpecificationTraverser specificationTraverser = obtainReflectorSpecificationTraverser();
-        final MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerDefault();
+        
         final ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
         final Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
-        final MetaModelValidator metaModelValidator = obtainReflectorMetaModelValidator();
-        return new ObjectReflectorDefault(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+        final MetaModelValidator mmv = obtainReflectorMetaModelValidator();
+        
+        return JavaReflectorHelper.createObjectReflector(programmingModel, classSubstitutorFactory, metaModelRefiners, facetDecorators, mmv, getConfiguration());
     }
 
-    /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
-     * @return
-     */
-    protected ClassSubstitutor obtainReflectorClassSubstitutor() {
-        return new CglibClassSubstitutor();
-    }
-
+ 
     /**
      * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
      * @return
@@ -148,13 +130,6 @@ public class IsisSystemDefault extends IsisSystemAbstract {
         return new CollectionTypeRegistryDefault();
     }
 
-    /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
-     * @return
-     */
-    protected SpecificationTraverser obtainReflectorSpecificationTraverser() {
-        return new SpecificationTraverserDefault();
-    }
 
     /**
      * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.

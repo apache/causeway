@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**

@@ -17,26 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.examples.facets.namefile;
+package org.apache.isis.core.metamodel.deployment;
 
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+public enum DeploymentCategory {
+    EXPLORING, PROTOTYPING, PRODUCTION;
 
-/**
- * Implementation of {@link ProgrammingModel} that additionally just installs
- * support for {@link NameFileFacet name files}.
- * 
- * <p>
- * This implementation is really provided only as an example. Typically you
- * would provide your own {@link ProgrammingModel} implementation that installs
- * other additional {@link FacetFactory facet factories} ass required for your
- * programming model.
- */
-public class NameFileProgModelFacets extends ProgrammingModelFacetsJava5 {
-
-    public NameFileProgModelFacets() {
-        addFactory(NameFileFacetFactory.class);
+    public boolean isExploring() {
+        return this == DeploymentCategory.EXPLORING;
     }
 
+    public boolean isPrototyping() {
+        return this == DeploymentCategory.PROTOTYPING;
+    }
+
+    public boolean isProduction() {
+        return this == DeploymentCategory.PRODUCTION;
+    }
 }

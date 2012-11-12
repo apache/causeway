@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.actions.prototype;
 
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract implements PrototypeFacet {
 
@@ -32,6 +34,12 @@ public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract impleme
 
     public PrototypeFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
+    }
+
+    @Override
+    public String hides(
+        VisibilityContext<? extends VisibilityEvent> ic) {
+        return ic.getDeploymentCategory().isPrototyping()? null: "Not visible";
     }
 
 }

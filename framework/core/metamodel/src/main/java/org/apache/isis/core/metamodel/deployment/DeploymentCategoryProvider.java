@@ -16,16 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator;
 
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
+package org.apache.isis.core.metamodel.deployment;
 
-public class JdoMetaModelValidator extends MetaModelValidatorComposite {
-
-    public JdoMetaModelValidator() {
-        add(new MetaModelValidatorDefault());
-        add(new JdoMetaModelValidatorLeaf());
-    }
-
+public interface DeploymentCategoryProvider {
+    public DeploymentCategory getDeploymentCategory();
 }

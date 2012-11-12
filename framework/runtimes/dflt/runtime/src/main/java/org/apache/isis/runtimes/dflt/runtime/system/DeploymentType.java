@@ -25,6 +25,8 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 /**
@@ -57,7 +59,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
  * {@link DeploymentType}, eg using the <tt>--type</tt> command line arg</li>
  * </ul>
  */
-public class DeploymentType {
+public class DeploymentType implements DeploymentCategoryProvider {
 
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 
@@ -183,16 +185,21 @@ public class DeploymentType {
         return (this == SERVER) && isProduction();
     }
 
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
     public boolean isExploring() {
-        return deploymentCategory == DeploymentCategory.EXPLORING;
+        return deploymentCategory.isExploring();
     }
 
     public boolean isPrototyping() {
-        return deploymentCategory == DeploymentCategory.PROTOTYPING;
+        return deploymentCategory.isPrototyping();
     }
 
     public boolean isProduction() {
-        return deploymentCategory == DeploymentCategory.PRODUCTION;
+        return deploymentCategory.isProduction();
     }
 
     public void addDefaultViewer(final List<String> requestedViewers) {
@@ -217,5 +224,6 @@ public class DeploymentType {
     public String toString() {
         return name();
     }
+
 
 }

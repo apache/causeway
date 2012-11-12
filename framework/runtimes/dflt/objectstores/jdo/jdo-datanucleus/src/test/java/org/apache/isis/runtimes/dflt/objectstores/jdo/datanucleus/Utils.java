@@ -27,8 +27,6 @@ import org.joda.time.LocalDateTime;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.specloader.progmodelfacets.DataNucleusProgrammingModelFacets;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 
@@ -39,8 +37,6 @@ public class Utils {
     public static IsisSystemWithFixtures.Builder systemBuilder() {
         return IsisSystemWithFixtures.builder()
         .with(configurationForDataNucleusDb())
-        .with(new DataNucleusProgrammingModelFacets())
-        .with(new JdoMetaModelValidator())
         .with(new DataNucleusPersistenceMechanismInstaller());
     }
 

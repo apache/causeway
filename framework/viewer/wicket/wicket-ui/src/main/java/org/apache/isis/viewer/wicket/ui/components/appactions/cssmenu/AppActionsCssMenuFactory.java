@@ -100,9 +100,16 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
     private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento, final CssMenuItem serviceMenuItem) {
 
-        final ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification();
+        addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem, ActionType.USER);
+        addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem, ActionType.PROTOTYPE);
+    }
 
-        for (final ObjectAction noAction : serviceSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED)) {
+    private void addActionSubMenuItems(
+        final ObjectAdapterMemento serviceAdapterMemento,
+        final CssMenuItem serviceMenuItem,
+        ActionType actionType) {
+        final ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification();
+        for (final ObjectAction noAction : serviceSpec.getObjectActions(actionType, Contributed.INCLUDED)) {
 
             // skip if annotated to not be included in repository menu
             if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {

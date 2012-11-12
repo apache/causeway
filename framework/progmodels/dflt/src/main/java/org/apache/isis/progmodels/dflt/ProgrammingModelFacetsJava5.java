@@ -191,7 +191,7 @@ import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueTypeF
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.timestampsql.JavaSqlTimeStampValueTypeFacetFactory;
 
-public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
+public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
     public ProgrammingModelFacetsJava5() {
 

@@ -72,6 +72,13 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     /**
      * Most subclasses will override this method, but composite fixtures should
      * instead call {@link #addFixture(Object)} in their constructor.
+     * 
+     * <p>
+     * The iteration over the child fixtures is then performed by the
+     * <tt>FixturesInstallerDelegate</tt> (or equivalent).
+     * 
+     * <p>
+     * A slightly strange implementation?  Oh well, it works.
      */
     @Override
     public void install() {

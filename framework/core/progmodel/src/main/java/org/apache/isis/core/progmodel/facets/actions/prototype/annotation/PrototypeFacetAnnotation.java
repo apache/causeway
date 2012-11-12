@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.actions.prototype.annotation;
 
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.progmodel.facets.actions.prototype.PrototypeFacetAbstract;
 
 public class PrototypeFacetAnnotation extends PrototypeFacetAbstract {
@@ -27,5 +29,6 @@ public class PrototypeFacetAnnotation extends PrototypeFacetAbstract {
     public PrototypeFacetAnnotation(final FacetHolder holder) {
         super(holder);
     }
+
 
 }

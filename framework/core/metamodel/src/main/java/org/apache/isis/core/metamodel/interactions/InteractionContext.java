@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -61,6 +62,8 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     private final InteractionInvocationMethod invocation;
     private final AuthenticationSession session;
     private final ObjectAdapter target;
+    // TODO: need to pass this in, obtain from DeploymentCategoryProvider (as implemented by the runtime's DeploymentType)
+    private final DeploymentCategory deploymentCategory;
 
     public InteractionContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
         this.interactionType = interactionType;
@@ -68,6 +71,13 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         this.identifier = identifier;
         this.session = session;
         this.target = target;
+        // TODO: remove this hardcoding
+        //this.deploymentCategory = DeploymentCategory.PRODUCTION;
+        this.deploymentCategory = DeploymentCategory.PROTOTYPING;
+    }
+
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
     }
 
     /**

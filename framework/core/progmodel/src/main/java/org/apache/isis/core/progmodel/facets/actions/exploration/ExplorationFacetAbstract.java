@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.actions.exploration;
 
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public abstract class ExplorationFacetAbstract extends MarkerFacetAbstract implements ExplorationFacet {
 
@@ -33,5 +35,12 @@ public abstract class ExplorationFacetAbstract extends MarkerFacetAbstract imple
     public ExplorationFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
+
+    @Override
+    public String hides(
+        VisibilityContext<? extends VisibilityEvent> ic) {
+        return ic.getDeploymentCategory().isExploring()? null: "Not visible";
+    }
+
 
 }

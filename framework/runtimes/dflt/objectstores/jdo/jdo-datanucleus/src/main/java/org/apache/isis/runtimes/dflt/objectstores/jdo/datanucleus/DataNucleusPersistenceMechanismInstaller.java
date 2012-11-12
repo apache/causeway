@@ -1,10 +1,13 @@
 package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus;
 
-
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -12,14 +15,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.AuditService;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.bytecode.DataNucleusTypesClassSubstitutor;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.metamodel.specloader.progmodelfacets.DataNucleusProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
@@ -45,10 +46,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 /**
  * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
@@ -109,8 +106,34 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         
         final IsisConfiguration dataNucleusConfig = configuration.createSubset(ISIS_CONFIG_PREFIX);
         final Map<String, String> props = dataNucleusConfig.asMap();
+        addDataNucleusPropertiesIfRequired(props);
         
         applicationComponents = new DataNucleusApplicationComponents(props, getSpecificationLoader().allSpecifications());
+    }
+
+
+    private static void addDataNucleusPropertiesIfRequired(
+            final Map<String, String> props) {
+        putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
+        
+        putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+        putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+        putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
+        putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
+        
+        putIfNotPresent(props, "datanucleus.autoCreateSchema", "true");
+        putIfNotPresent(props, "datanucleus.validateSchema", "true");
+        putIfNotPresent(props, "datanucleus.cache.level2.type", "none");
+    }
+
+
+    private static void putIfNotPresent(
+        final Map<String, String> props,
+        String key,
+        String value) {
+        if(!props.containsKey(key)) {
+            props.put(key, value);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////

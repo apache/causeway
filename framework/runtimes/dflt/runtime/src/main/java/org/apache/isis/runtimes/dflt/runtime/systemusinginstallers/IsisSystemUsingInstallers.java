@@ -213,8 +213,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         // add in transaction support (if already in set then will be ignored)
         reflectorInstaller.addFacetDecoratorInstaller(installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class));
 
-        final SpecificationLoaderSpi reflector = reflectorInstaller.createReflector(classSubstitutorFactory, metaModelRefiners);
-        return reflector;
+        return reflectorInstaller.createReflector(classSubstitutorFactory, metaModelRefiners);
     }
 
     // ///////////////////////////////////////////

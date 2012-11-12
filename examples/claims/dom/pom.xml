@@ -113,12 +113,6 @@
 			<artifactId>jdo-applib</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-applib</artifactId>
-		</dependency>
-
-
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
         <dependency>
             <groupId>javax.jdo</groupId>
