@@ -155,8 +155,17 @@ public class IsisContextForWicket extends IsisContext {
                             LOG.debug(String.format("wicketSession: %s CLOSE %d -> %d %s %s %s", wicketSessionId, before, after, logMsg, (authSession != null? authSession.getUserName(): "[null]"), (isisSession != null? isisSession.getId(): "[null]")));
                         }
                     }
-
                 }
+            }
+
+            @Override
+            public boolean equals(SessionKey sessionKey, SessionKey other) {
+                return sessionKey.wicketSession == other.wicketSession;
+            }
+
+            @Override
+            public int hashCode(SessionKey sessionKey) {
+                return sessionKey.wicketSession.hashCode();
             }
         },
         THREAD {
@@ -202,6 +211,16 @@ public class IsisContextForWicket extends IsisContext {
                     }
                 }
             }
+
+            @Override
+            public boolean equals(SessionKey sessionKey, SessionKey other) {
+                return sessionKey.thread == other.thread;
+            }
+
+            @Override
+            public int hashCode(SessionKey sessionKey) {
+                return sessionKey.thread.hashCode();
+            }
         };
 
         public abstract String getId(SessionKey sessionKey);
@@ -209,6 +228,9 @@ public class IsisContextForWicket extends IsisContext {
         public abstract IsisSession beginInteraction(final SessionKey sessionKey, final AuthenticationSession authSession, final IsisSessionFactory sessionFactory, final Map<SessionKey, IsisSession> sessionMap);
 
         public abstract void endInteraction(SessionKey sessionKey, final Map<SessionKey, IsisSession> sessionMap);
+
+        public abstract boolean equals(SessionKey sessionKey, SessionKey other);
+        public abstract int hashCode(SessionKey sessionKey);
     }
     
     private static class SessionKey {
@@ -236,6 +258,28 @@ public class IsisContextForWicket extends IsisContext {
                 type.endInteraction(this, sessionMap);
             }
         }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            SessionKey other = (SessionKey) obj;
+            if (type != other.type)
+                return false;
+            return type.equals(this, other);
+        }
+        @Override
+        public int hashCode() {
+            return type.hashCode(this);
+        }
+        @Override
+        public String toString() {
+            return "SessionKey[" + type + "]:id=" + getId();
+        }
+        
     }
 
     
@@ -276,7 +320,8 @@ public class IsisContextForWicket extends IsisContext {
         if (bootstrapSession != null) {
             return bootstrapSession;
         }
-        return sessionMap.get(SessionKey.get());
+        SessionKey sessionKey = SessionKey.get();
+        return sessionMap.get(sessionKey);
     }
 
     @Override
