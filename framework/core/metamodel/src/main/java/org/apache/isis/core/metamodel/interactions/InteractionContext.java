@@ -71,9 +71,7 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         this.identifier = identifier;
         this.session = session;
         this.target = target;
-        // TODO: remove this hardcoding
-        //this.deploymentCategory = DeploymentCategory.PRODUCTION;
-        this.deploymentCategory = DeploymentCategory.PROTOTYPING;
+        this.deploymentCategory = deploymentCategory;
     }
 
     public DeploymentCategory getDeploymentCategory() {
