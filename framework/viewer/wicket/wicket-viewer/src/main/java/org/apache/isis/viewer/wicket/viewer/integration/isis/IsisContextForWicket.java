@@ -65,13 +65,180 @@ public class IsisContextForWicket extends IsisContext {
         }
     }
 
-    private static final class GetSessionIdFunction implements Function<Session, String> {
+    private static final class GetSessionIdFunction implements Function<SessionKey, String> {
         @Override
-        public String apply(final Session from) {
+        public String apply(final SessionKey from) {
             return from.getId();
         }
     }
 
+    private enum SessionType {
+        WICKET {
+            @Override
+            public String getId(SessionKey sessionKey) {
+                return sessionKey.wicketSession.getId();
+            }
+
+            @Override
+            public IsisSession beginInteraction(final SessionKey sessionKey, final AuthenticationSession authSession, final IsisSessionFactory sessionFactory, final Map<SessionKey, IsisSession> sessionMap) {
+                final AuthenticatedWebSessionForIsis wicketSession = sessionKey.wicketSession;
+                synchronized (wicketSession) {
+                    // we don't apply any session close policy here;
+                    // there could be multiple threads using a session.
+
+                    final String wicketSessionId = wicketSession.getId();
+                
+                    final int before = wicketSession.getThreadUsage();
+                    wicketSession.registerUseByThread();
+                    final int after = wicketSession.getThreadUsage();
+            
+                    String logMsg = ""; 
+                    IsisSession isisSession = sessionMap.get(sessionKey);
+                    try {
+                        if (isisSession != null) {
+                            logMsg = "BUMP_UP";
+                        } else {
+                            isisSession = sessionFactory.openSession(authSession);
+                            // put into map prior to opening, so that subsequent calls to
+                            // getSessionInstance() will find this new session.
+                            sessionMap.put(sessionKey, isisSession);
+                            isisSession.open();
+                            
+                            logMsg = "NEW    ";
+                        }
+                
+                        return isisSession;
+                    } finally {
+                        if(LOG.isDebugEnabled()) {
+                            LOG.debug(String.format("wicketSession: %s OPEN  %d -> %d %s %s %s", wicketSessionId, before, after, logMsg, authSession.getUserName(), isisSession.getId()));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void endInteraction(SessionKey sessionKey, final Map<SessionKey, IsisSession> sessionMap) {
+                final AuthenticatedWebSessionForIsis wicketSession = sessionKey.wicketSession;
+                synchronized (wicketSession) {
+                    final String wicketSessionId = wicketSession.getId();
+                    
+                    final int before = wicketSession.getThreadUsage();
+                    final boolean shouldClose = wicketSession.deregisterUseByThread();
+                    final int after = wicketSession.getThreadUsage();
+
+                    final IsisSession isisSession = sessionMap.get(sessionKey);
+                    AuthenticationSession authSession = null;
+                    String logMsg = ""; 
+                    try {
+                        if (isisSession == null) {
+                            // nothing to be done !?!?
+                            logMsg = "NO_SESSION";
+                            return; 
+                        }
+                        authSession = isisSession.getAuthenticationSession();
+                        
+                        if (!shouldClose) {
+                            logMsg = "BUMP_DOWN ";
+                            // don't remove from map    
+                            return;
+                        } 
+                        
+                        isisSession.close();
+                        logMsg = "DISCARDING";
+                        
+                        // the remove happens after closing, any calls to getSessionInstance()
+                        // made while closing will still find this session
+                        sessionMap.remove(sessionKey);
+                        
+                    } finally {
+                        if(LOG.isDebugEnabled()) {
+                            LOG.debug(String.format("wicketSession: %s CLOSE %d -> %d %s %s %s", wicketSessionId, before, after, logMsg, (authSession != null? authSession.getUserName(): "[null]"), (isisSession != null? isisSession.getId(): "[null]")));
+                        }
+                    }
+
+                }
+            }
+        },
+        THREAD {
+            @Override
+            public String getId(SessionKey sessionKey) {
+                return ""+sessionKey.thread.getId();
+            }
+
+            @Override
+            public IsisSession beginInteraction(final SessionKey sessionKey, final AuthenticationSession authSession, final IsisSessionFactory sessionFactory, final Map<SessionKey, IsisSession> sessionMap) {
+                // auto-close if required
+                endInteraction(sessionKey, sessionMap);
+                
+                final String threadName = sessionKey.thread.getName();
+                final IsisSession isisSession = sessionFactory.openSession(authSession);
+                try {
+                    sessionMap.put(sessionKey, isisSession);
+                    isisSession.open();
+                    return isisSession;
+                } finally {
+                    if(LOG.isDebugEnabled()) {
+                        LOG.debug(String.format("threadSession: %s OPEN  %s %s", threadName, authSession.getUserName(), isisSession.getId()));
+                    }
+                }
+            }
+            
+
+            @Override
+            public void endInteraction(SessionKey sessionKey, Map<SessionKey, IsisSession> sessionMap) {
+                final IsisSession isisSession = sessionMap.get(sessionKey);
+                if(isisSession == null) {
+                    return; // nothing to do
+                }
+                final String threadName = sessionKey.thread.getName();
+                final AuthenticationSession authSession = isisSession.getAuthenticationSession();
+                try {
+                    
+                    isisSession.close();
+                    sessionMap.remove(sessionKey);
+                } finally {
+                    if(LOG.isDebugEnabled()) {
+                        LOG.debug(String.format("threadSession: %s CLOSE %s %s", threadName, authSession.getUserName(), isisSession.getId()));
+                    }
+                }
+            }
+        };
+
+        public abstract String getId(SessionKey sessionKey);
+
+        public abstract IsisSession beginInteraction(final SessionKey sessionKey, final AuthenticationSession authSession, final IsisSessionFactory sessionFactory, final Map<SessionKey, IsisSession> sessionMap);
+
+        public abstract void endInteraction(SessionKey sessionKey, final Map<SessionKey, IsisSession> sessionMap);
+    }
+    
+    private static class SessionKey {
+        private final SessionType type;
+        private final AuthenticatedWebSessionForIsis wicketSession;
+        private final Thread thread;
+        private SessionKey(SessionType type, Session wicketSession, Thread thread) {
+            this.type = type;
+            this.wicketSession = (AuthenticatedWebSessionForIsis) wicketSession;
+            this.thread = thread;
+        }
+        public String getId() {
+            return type.getId(this);
+        }
+        static SessionKey get() {
+            return Session.exists()? new SessionKey(SessionType.WICKET, Session.get(), null): new SessionKey(SessionType.THREAD, null, Thread.currentThread());
+        }
+        public IsisSession beginInteraction(final AuthenticationSession authSession, final IsisSessionFactory sessionFactory, final Map<SessionKey, IsisSession> sessionMap) {
+            synchronized (sessionMap) {
+                return type.beginInteraction(this, authSession, sessionFactory, sessionMap);
+            }
+        }
+        public void endInteraction(final Map<SessionKey, IsisSession> sessionMap) {
+            synchronized (sessionMap) {
+                type.endInteraction(this, sessionMap);
+            }
+        }
+    }
+
+    
     /**
      * Only used while bootstrapping, corresponding to the
      * {@link InitialisationSession}.
@@ -81,7 +248,7 @@ public class IsisContextForWicket extends IsisContext {
      * Maps (our custom) {@link AuthenticatedWebSessionForIsis Wicket session}s
      * to vanilla {@link IsisSession}s.
      */
-    private final Map<AuthenticatedWebSessionForIsis, IsisSession> sessionMap = Maps.newHashMap();
+    private final Map<SessionKey, IsisSession> sessionMap = Maps.newHashMap();
 
     protected IsisContextForWicket(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
         super(replacePolicy, sessionClosePolicy, sessionFactory);
@@ -109,10 +276,7 @@ public class IsisContextForWicket extends IsisContext {
         if (bootstrapSession != null) {
             return bootstrapSession;
         }
-
-        final Session session = Session.get();
-        final IsisSession isisSession = sessionMap.get(session);
-        return isisSession;
+        return sessionMap.get(SessionKey.get());
     }
 
     @Override
@@ -130,34 +294,8 @@ public class IsisContextForWicket extends IsisContext {
     }
 
     private synchronized IsisSession openSessionOrRegisterUsageOnExisting(final AuthenticationSession authSession) {
-        // we don't apply any session close policy here;
-        // there could be multiple threads using a session.
-
-        final AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
-        synchronized (webSession) {
-            final String webSessionId = webSession.getId();
-        
-            final int before = webSession.getThreadUsage();
-            webSession.registerUseByThread();
-            final int after = webSession.getThreadUsage();
-    
-            final String logMsg; 
-            IsisSession isisSession = sessionMap.get(webSession);
-            if (isisSession == null) {
-                isisSession = getSessionFactoryInstance().openSession(authSession);
-                // put into map prior to opening, so that subsequent calls to
-                // getSessionInstance() will find this new session.
-                sessionMap.put(webSession, isisSession);
-                isisSession.open();
-                
-                logMsg = "NEW    ";
-            } else {
-                logMsg = "BUMP_UP";
-            }
-            LOG.debug(String.format("webSession: %s OPEN  %d -> %d %s %s", webSessionId, before, after, logMsg, isisSession.getId()));
-    
-            return isisSession;
-        }
+        SessionKey sessionKey = SessionKey.get();
+        return sessionKey.beginInteraction(authSession, getSessionFactoryInstance(), sessionMap);
     }
 
     @Override
@@ -175,34 +313,8 @@ public class IsisContextForWicket extends IsisContext {
     }
 
     private synchronized void closeSessionOrDeregisterUsageOnExisting() {
-        final AuthenticatedWebSessionForIsis webSession = (AuthenticatedWebSessionForIsis) Session.get();
-        synchronized (webSession) {
-            final String webSessionId = webSession.getId();
-            
-            final int before = webSession.getThreadUsage();
-            final boolean shouldClose = webSession.deregisterUseByThread();
-            final int after = webSession.getThreadUsage();
-
-            final IsisSession isisSession = sessionMap.get(webSession);
-            
-            final String logMsg; 
-            if (isisSession == null) {
-                // nothing to be done !?!?
-                logMsg = "NO_SESSION";
-            } else {
-                if (shouldClose) {
-                    isisSession.close();
-                    // remove after closing, so that any calls to getSessionInstance()
-                    // made while closing will still find this session
-                    sessionMap.remove(webSession);
-                    logMsg = "DISCARDING";
-                } else {
-                    logMsg = "BUMP_DOWN ";
-                }
-            }
-
-            LOG.debug(String.format("webSession: %s CLOSE %d -> %d %s %s", webSessionId, before, after, logMsg, (isisSession != null? isisSession.getId(): "[null]")));
-        }
+        SessionKey sessionKey = SessionKey.get();
+        sessionKey.endInteraction(sessionMap);
     }
 
     @Override
