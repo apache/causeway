@@ -46,6 +46,7 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
@@ -179,11 +180,14 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
 
+
     // /////////////////////////////////////////////////////////////
     // Constructor
     // /////////////////////////////////////////////////////////////
 
-    public ObjectReflectorDefault(final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
+    public ObjectReflectorDefault(
+            final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, 
+            final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
             final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
 
         ensureThatArg(configuration, is(notNullValue()));
@@ -416,20 +420,27 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
-        final SpecificationContext specContext = new SpecificationContext(authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup);
+        final SpecificationContext specContext = new SpecificationContext(getDeploymentCategory(), authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup);
 
         if (FreeStandingList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationForFreeStandingList(specContext);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
             final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
-            final ObjectMemberContext objectMemberContext = new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
+            final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
             final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
             final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser, facetProcessor);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, introspectionContext, specContext, objectMemberContext, createObjectContext);
         }
+    }
+
+    private DeploymentCategory getDeploymentCategory() {
+        if(runtimeContext == null) {
+            throw new IllegalStateException("Runtime context has not been injected.");
+        }
+        return runtimeContext.getDeploymentCategory();
     }
 
     private Class<?> loadBuiltIn(final String className) throws ClassNotFoundException {

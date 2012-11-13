@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -35,8 +36,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
  */
 public class PropertyUsabilityContext extends UsabilityContext<PropertyUsabilityEvent> {
 
-    public PropertyUsabilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
-        super(InteractionContextType.PROPERTY_USABLE, session, invocationMethod, identifier, target, where);
+    public PropertyUsabilityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
+        super(InteractionContextType.PROPERTY_USABLE, deploymentCategory, session, invocationMethod, identifier, target, where);
     }
 
     @Override

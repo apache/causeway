@@ -337,7 +337,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
-        return new ActionVisibilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
+        return new ActionVisibilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
     @Override
@@ -351,7 +351,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
-        return new ActionUsabilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
+        return new ActionUsabilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
     @Override
@@ -397,7 +397,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments) {
-        return new ActionInvocationContext(getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments);
+        return new ActionInvocationContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -406,7 +406,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public ObjectAdapter execute(final ObjectAdapter object, final ObjectAdapter[] parameters) {
-        LOG.debug("execute action " + object + "." + getId());
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("execute action " + object + "." + getId());
+        }
         final ObjectAdapter[] params = realParameters(object, parameters);
         final ObjectAdapter target = realTarget(object);
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);

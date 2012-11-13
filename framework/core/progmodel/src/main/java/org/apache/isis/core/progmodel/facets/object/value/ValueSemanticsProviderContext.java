@@ -18,22 +18,31 @@ package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class ValueSemanticsProviderContext {
+    
+    private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
     private final ServicesInjector dependencyInjector;
 
-    public ValueSemanticsProviderContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
+    public ValueSemanticsProviderContext(
+            final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
+        this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
         this.dependencyInjector = dependencyInjector;
     }
 
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+    
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider;
     }

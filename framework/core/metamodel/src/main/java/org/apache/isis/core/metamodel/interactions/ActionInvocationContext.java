@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,8 +37,8 @@ public class ActionInvocationContext extends ValidityContext<ActionInvocationEve
 
     private final ObjectAdapter[] args;
 
-    public ActionInvocationContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args) {
-        super(InteractionContextType.ACTION_INVOKE, session, invocationMethod, id, target);
+    public ActionInvocationContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args) {
+        super(InteractionContextType.ACTION_INVOKE, deploymentCategory, session, invocationMethod, id, target);
         this.args = args;
     }
 

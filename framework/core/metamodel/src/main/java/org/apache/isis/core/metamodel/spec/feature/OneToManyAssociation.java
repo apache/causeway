@@ -53,7 +53,6 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * <p>
      * If allowed the {@link #addElement(ObjectAdapter, ObjectAdapter) add}
      * method can be called with the same parameters, .
-     * 
      * @see #isValidToAddResult(ObjectAdapter, ObjectAdapter)
      */
     Consent isValidToAdd(ObjectAdapter owningObjectAdapter, ObjectAdapter proposedObjectToAdd);

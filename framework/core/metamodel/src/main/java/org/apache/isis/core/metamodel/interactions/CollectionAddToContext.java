@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,8 +37,8 @@ public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent
 
     private final ObjectAdapter proposed;
 
-    public CollectionAddToContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
-        super(InteractionContextType.COLLECTION_ADD_TO, session, invocationMethod, id, target);
+    public CollectionAddToContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
+        super(InteractionContextType.COLLECTION_ADD_TO, deploymentCategory, session, invocationMethod, id, target);
 
         this.proposed = proposed;
     }

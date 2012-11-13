@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
@@ -206,7 +207,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(null, null, null, null, null));
+        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null));
     }
 
     @Override
@@ -225,12 +226,12 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, Where where) {
-        return new PropertyUsabilityContext(session, invocationMethod, target, getIdentifier(), where);
+        return new PropertyUsabilityContext(DeploymentCategory.PRODUCTION, session, invocationMethod, target, getIdentifier(), where);
     }
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
-        return new PropertyVisibilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
+        return new PropertyVisibilityContext(DeploymentCategory.PRODUCTION, session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////

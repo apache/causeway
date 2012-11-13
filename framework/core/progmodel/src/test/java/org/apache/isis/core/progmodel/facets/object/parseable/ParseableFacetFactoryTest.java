@@ -23,8 +23,10 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -39,6 +41,7 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = new ParseableFacetFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
         facetFactory.setConfiguration(isisConfigurationDefault);
+        facetFactory.setRuntimeContext(new RuntimeContextNoRuntime(DeploymentCategory.PRODUCTION));
     }
 
     @Override

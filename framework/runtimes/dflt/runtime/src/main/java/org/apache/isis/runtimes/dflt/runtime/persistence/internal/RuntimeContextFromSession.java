@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -354,6 +355,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     // Dependencies (from context)
     // ///////////////////////////////////////////
 
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
+    }
+
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
@@ -373,6 +379,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private static MessageBroker getMessageBroker() {
         return IsisContext.getMessageBroker();
     }
+
 
 
 }

@@ -73,18 +73,15 @@ public interface ObjectMember extends ObjectFeature {
      * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
-     * @param where TODO
      */
     VisibilityContext<?> createVisibleInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter, Where where);
 
     /**
      * Determines if this member is visible, represented as a {@link Consent}.
-     * 
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
      * @param where 
      *            the member is being rendered in the UI
-     * 
      * @see #isVisibleResult(AuthenticationSession, ObjectAdapter)
      */
     Consent isVisible(AuthenticationSession session, ObjectAdapter target, Where where);
@@ -104,7 +101,6 @@ public interface ObjectMember extends ObjectFeature {
      * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
-     * @param where TODO
      */
     UsabilityContext<?> createUsableInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter target, Where where);
 

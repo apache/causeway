@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -39,6 +40,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
  * 
  */
 public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
+
+    public DeploymentCategory getDeploymentCategory();
 
     /**
      * A mechanism for returning the <tt>current</tt>
@@ -79,6 +82,7 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
     // ///////////////////////////////////////////
 
     public void setContainer(DomainObjectContainer container);
+
 
 
 

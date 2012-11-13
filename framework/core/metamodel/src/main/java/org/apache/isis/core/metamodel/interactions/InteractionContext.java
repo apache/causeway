@@ -65,7 +65,7 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     // TODO: need to pass this in, obtain from DeploymentCategoryProvider (as implemented by the runtime's DeploymentType)
     private final DeploymentCategory deploymentCategory;
 
-    public InteractionContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
+    public InteractionContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
         this.interactionType = interactionType;
         this.invocation = invocationMethod;
         this.identifier = identifier;

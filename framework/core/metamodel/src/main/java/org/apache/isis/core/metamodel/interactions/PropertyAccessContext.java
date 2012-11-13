@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,8 +37,8 @@ public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
 
     private final ObjectAdapter value;
 
-    public PropertyAccessContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter value) {
-        super(InteractionContextType.PROPERTY_READ, session, invocationMethod, id, target);
+    public PropertyAccessContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter value) {
+        super(InteractionContextType.PROPERTY_READ, deploymentCategory, session, invocationMethod, id, target);
 
         this.value = value;
     }

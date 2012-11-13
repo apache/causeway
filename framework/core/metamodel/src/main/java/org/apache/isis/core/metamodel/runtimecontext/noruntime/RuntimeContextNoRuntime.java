@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAbstract;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -56,6 +57,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
+    private final DeploymentCategory deploymentCategory;
     private final ServicesInjector dependencyInjector;
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
@@ -67,6 +69,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final QuerySubmitterAbstract querySubmitter;
 
     public RuntimeContextNoRuntime() {
+        this(DeploymentCategory.PRODUCTION);
+    }
+    
+    public RuntimeContextNoRuntime(DeploymentCategory deploymentCategory) {
+        this.deploymentCategory = deploymentCategory;
         // Unlike most of the methods in this implementation, does nothing
         // (because this will always be called, even in a no-runtime context).
         dependencyInjector = new ServicesInjector() {
@@ -257,6 +264,12 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     // ///////////////////////////////////////////
     // Components
     // ///////////////////////////////////////////
+
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
 
     @Override
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {

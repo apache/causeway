@@ -66,7 +66,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new CollectionVisibilityContext(session, invocationMethod, ownerAdapter, getIdentifier(), where);
+        return new CollectionVisibilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new CollectionUsabilityContext(session, invocationMethod, ownerAdapter, getIdentifier(), where);
+        return new CollectionUsabilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
 
     @Override
     public ValidityContext<?> createValidateAddInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToAddAdapter) {
-        return new CollectionAddToContext(session, invocationMethod, ownerAdapter, getIdentifier(), proposedToAddAdapter);
+        return new CollectionAddToContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), proposedToAddAdapter);
     }
 
     /**
@@ -107,7 +107,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
 
     @Override
     public ValidityContext<?> createValidateRemoveInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToRemoveAdapter) {
-        return new CollectionRemoveFromContext(session, invocationMethod, ownerAdapter, getIdentifier(), proposedToRemoveAdapter);
+        return new CollectionRemoveFromContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), proposedToRemoveAdapter);
     }
 
     /**

@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -34,8 +35,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
  */
 public class CollectionAccessContext extends AccessContext<CollectionAccessEvent> {
 
-    public CollectionAccessContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
-        super(InteractionContextType.COLLECTION_READ, session, invocationMethod, identifier, target);
+    public CollectionAccessContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+        super(InteractionContextType.COLLECTION_READ, deploymentCategory, session, invocationMethod, identifier, target);
     }
 
     @Override

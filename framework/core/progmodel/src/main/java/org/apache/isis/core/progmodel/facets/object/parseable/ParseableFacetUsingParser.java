@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -45,13 +46,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
     private final Parser<?> parser;
+    private final DeploymentCategory deploymentCategory;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesInjector dependencyInjector;
     private final AdapterManager adapterManager;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
 
-    public ParseableFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
+    public ParseableFacetUsingParser(
+            final Parser<?> parser, final FacetHolder holder, 
+            final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
         super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
+        this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.dependencyInjector = dependencyInjector;
         this.adapterManager = adapterManager;
@@ -73,7 +78,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         // (eg pick up any @RegEx on value type)
         if (getFacetHolder().containsFacet(ValueFacet.class)) {
             final ObjectAdapter entryAdapter = getAdapterManager().adapterFor(entry);
-            final ParseValueContext parseValueContext = new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
+            final ParseValueContext parseValueContext = new ParseValueContext(deploymentCategory, getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
             validate(parseValueContext);
         }
 
@@ -91,7 +96,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             // (eg pick up any validate() methods on it)
             final ObjectAdapter adapter = getAdapterManager().adapterFor(parsed);
             final ObjectSpecification specification = adapter.getSpecification();
-            final ObjectValidityContext validateContext = specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
+            final ObjectValidityContext validateContext = specification.createValidityInteractionContext(deploymentCategory, getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
             validate(validateContext);
 
             return adapter;

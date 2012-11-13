@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -127,7 +128,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             // Parser
             final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
-                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getAuthenticationSessionProvider(), getDependencyInjector(), getAdapterMap()));
+                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getDeploymentCategory(context), getAuthenticationSessionProvider(), getDependencyInjector(), getAdapterMap()));
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, getDependencyInjector()));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, getDependencyInjector()));
             }
@@ -160,6 +161,10 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // /////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////
+
+    protected DeploymentCategory getDeploymentCategory(final ValueSemanticsProviderContext context) {
+        return context.getDeploymentCategory();
+    }
 
     public AdapterManager getAdapterMap() {
         return context.getAdapterManager();

@@ -18,21 +18,28 @@ package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 public class SpecificationContext {
 
+    private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLookup;
 
-    public SpecificationContext(final AuthenticationSessionProvider authenticationSessionProvider, final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator, final SpecificationLoader specificationLookup) {
+    public SpecificationContext(final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator, final SpecificationLoader specificationLookup) {
+        this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;
         this.specificationLookup = specificationLookup;
     }
 
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+    
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider;
     }

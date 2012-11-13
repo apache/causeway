@@ -36,8 +36,8 @@ public abstract class VisibilityContext<T extends VisibilityEvent> extends Inter
 
     private Where where;
 
-    public VisibilityContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target, Where where) {
-        super(interactionType, session, invocationMethod, identifier, target);
+    public VisibilityContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target, Where where) {
+        super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
         this.where = where;
     }
 

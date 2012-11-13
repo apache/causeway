@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -236,7 +237,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments, final int position) {
-        return new ActionArgumentContext(getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
+        return new ActionArgumentContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
     }
 
     @Override
@@ -302,6 +303,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // /////////////////////////////////////////////////////////////
     // Dependencies (from parent)
     // /////////////////////////////////////////////////////////////
+
+    private DeploymentCategory getDeploymentCategory() {
+        return parentAction.getDeploymentCategory();
+    }
 
     protected SpecificationLoader getSpecificationLookup() {
         return parentAction.getSpecificationLookup();

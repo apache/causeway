@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
@@ -68,6 +69,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
+    private final DeploymentCategory deploymentCategory;
 
     protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType, final ObjectMemberContext objectMemberContext) {
         final String id = facetedMethod.getIdentifier().getMemberName();
@@ -79,6 +81,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.id = id;
         this.defaultName = NameUtils.naturalName(this.id);
 
+        this.deploymentCategory = objectMemberContext.getDeploymentCategory();
         this.authenticationSessionProvider = objectMemberContext.getAuthenticationSessionProvider();
         this.specificationLookup = objectMemberContext.getSpecificationLookup();
         this.adapterManager = objectMemberContext.getAdapterManager();
@@ -86,6 +89,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.collectionTypeRegistry = objectMemberContext.getCollectionTypeRegistry();
     }
 
+    // /////////////////////////////////////////////////////////////
+    // from context
+    // /////////////////////////////////////////////////////////////
+
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+    
     // /////////////////////////////////////////////////////////////
     // Identifiers
     // /////////////////////////////////////////////////////////////
@@ -210,10 +221,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        return isVisibleResult(session, target, where).createConsent();
+        return isVisibleResult(deploymentCategory, session, target, where).createConsent();
     }
 
-    private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+    private InteractionResult isVisibleResult(DeploymentCategory deploymentCategory, final AuthenticationSession session, final ObjectAdapter target, Where where) {
         final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }

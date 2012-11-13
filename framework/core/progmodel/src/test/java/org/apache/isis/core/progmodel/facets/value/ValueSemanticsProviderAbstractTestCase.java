@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -118,7 +119,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected void setValue(final ValueSemanticsProviderAndFacetAbstract<?> value) {
         this.valueSemanticsProvider = value;
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(value, mockFacetHolder, mockAdapterManager, mockDependencyInjector);
-        this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder, mockAuthenticationSessionProvider, mockDependencyInjector, mockAdapterManager);
+        this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder, DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockDependencyInjector, mockAdapterManager);
     }
 
     protected ValueSemanticsProviderAndFacetAbstract<?> getValue() {

@@ -66,7 +66,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new PropertyVisibilityContext(session, invocationMethod, ownerAdapter, getIdentifier(), where);
+        return new PropertyVisibilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new PropertyUsabilityContext(session, invocationMethod, ownerAdapter, getIdentifier(), where);
+        return new PropertyUsabilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
     @Override
     public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToReferenceAdapter) {
-        return new PropertyModifyContext(session, interactionMethod, ownerAdapter, getIdentifier(), proposedToReferenceAdapter);
+        return new PropertyModifyContext(getDeploymentCategory(), session, interactionMethod, ownerAdapter, getIdentifier(), proposedToReferenceAdapter);
     }
 
     /**
@@ -135,7 +135,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
      */
     @Override
     public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter ownerAdapter) {
-        return new PropertyAccessContext(session, InteractionInvocationMethod.BY_USER, ownerAdapter, getIdentifier(), get(ownerAdapter));
+        return new PropertyAccessContext(getDeploymentCategory(), session, InteractionInvocationMethod.BY_USER, ownerAdapter, getIdentifier(), get(ownerAdapter));
     }
 
     @Override

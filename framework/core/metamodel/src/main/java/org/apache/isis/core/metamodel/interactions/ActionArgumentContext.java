@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -38,8 +39,8 @@ public class ActionArgumentContext extends ValidityContext<ActionArgumentEvent> 
     private final int position;
     private final ObjectAdapter proposed;
 
-    public ActionArgumentContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args, final int position) {
-        super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, session, invocationMethod, id, target);
+    public ActionArgumentContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args, final int position) {
+        super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, deploymentCategory, session, invocationMethod, id, target);
 
         this.args = args;
         this.position = position;

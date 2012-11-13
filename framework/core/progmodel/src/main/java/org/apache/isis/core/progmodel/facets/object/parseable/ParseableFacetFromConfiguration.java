@@ -21,12 +21,13 @@ package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class ParseableFacetFromConfiguration extends ParseableFacetAbstract {
 
-    public ParseableFacetFromConfiguration(final String candidateParserName, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
-        super(candidateParserName, null, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
+    public ParseableFacetFromConfiguration(final String candidateParserName, final FacetHolder holder, DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
+        super(candidateParserName, null, holder, deploymentCategory, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 }

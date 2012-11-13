@@ -27,21 +27,26 @@ import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
+public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware, RuntimeContextAware {
 
     private IsisConfiguration configuration;
 
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
+
+    private RuntimeContext runtimeContext;
 
     public ParseableFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -57,7 +62,7 @@ public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisC
 
         // create from annotation, if present
         if (annotation != null) {
-            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider, adapterManager, servicesInjector);
+            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, getDeploymentCategory(), authenticationSessionProvider, adapterManager, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -66,7 +71,7 @@ public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisC
         // otherwise, try to create from configuration, if present
         final String parserName = ParserUtil.parserNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(parserName)) {
-            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider, servicesInjector, adapterManager);
+            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, getDeploymentCategory(), authenticationSessionProvider, servicesInjector, adapterManager);
             if (facet.isValid()) {
                 return facet;
             }
@@ -78,6 +83,13 @@ public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisC
     // ////////////////////////////////////////////////////////////////////
     // Dependencies (injected via setters since *Aware)
     // ////////////////////////////////////////////////////////////////////
+
+    /**
+     * Derived from {@link #setRuntimeContext(RuntimeContext)} (since {@link RuntimeContextAware}).
+     */
+    private DeploymentCategory getDeploymentCategory() {
+        return runtimeContext.getDeploymentCategory();
+    }
 
     public IsisConfiguration getIsisConfiguration() {
         return configuration;
@@ -104,6 +116,11 @@ public class ParseableFacetFactory extends FacetFactoryAbstract implements IsisC
     @Override
     public void setServicesInjector(final ServicesInjector dependencyInjector) {
         this.servicesInjector = dependencyInjector;
+    }
+
+    @Override
+    public void setRuntimeContext(RuntimeContext runtimeContext) {
+        this.runtimeContext = runtimeContext;
     }
 
 }

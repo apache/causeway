@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -110,6 +111,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
+    private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
@@ -158,11 +160,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.isAbstract = JavaClassUtils.isAbstract(introspectedClass);
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
-        // dependencies
+        this.deploymentCategory = specificationContext.getDeploymentCategory();
         this.authenticationSessionProvider = specificationContext.getAuthenticationSessionProvider();
         this.servicesProvider = specificationContext.getServicesProvider();
         this.objectInstantiator = specificationContext.getObjectInstantiator();
         this.specificationLookup = specificationContext.getSpecificationLookup();
+    }
+
+    
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -577,7 +584,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ObjectTitleContext(session, interactionMethod, targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString());
+        return new ObjectTitleContext(getDeploymentCategory(), session, interactionMethod, targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString());
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -885,7 +892,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     @Override
     public InteractionResult isValidResult(final ObjectAdapter targetObjectAdapter) {
-        final ObjectValidityContext validityContext = createValidityInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, targetObjectAdapter);
+        final ObjectValidityContext validityContext = createValidityInteractionContext(deploymentCategory, getAuthenticationSession(), InteractionInvocationMethod.BY_USER, targetObjectAdapter);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -894,8 +901,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * object.
      */
     @Override
-    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ObjectValidityContext(session, interactionMethod, targetObjectAdapter, getIdentifier());
+    public ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+        return new ObjectValidityContext(deploymentCategory, session, interactionMethod, targetObjectAdapter, getIdentifier());
     }
 
     // //////////////////////////////////////////////////////////////////////
