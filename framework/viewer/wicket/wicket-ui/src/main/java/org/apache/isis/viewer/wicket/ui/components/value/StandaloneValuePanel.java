@@ -19,32 +19,29 @@
 
 package org.apache.isis.viewer.wicket.ui.components.value;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.markup.html.basic.Label;
 
 /**
- * {@link ComponentFactory} for rendering standalone values..
+ * Panel for rendering any value types that do not have their own custom
+ * {@link ScalarPanelAbstract panel} to render them.
  */
-public class StandaloneValuePanelFactory extends ComponentFactoryAbstract {
+public class StandaloneValuePanel extends PanelAbstract<ValueModel> {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_STANDALONE_VALUE = "standaloneValue";
+
+    public StandaloneValuePanel(final String id, final ValueModel valueModel) {
+        super(id, valueModel);
+        buildGui();
+    }
     
-    public StandaloneValuePanelFactory() {
-        super(ComponentType.VALUE);
+    private void buildGui() {
+        ObjectAdapter objectAdapter = getModel().getObject();
+        add(new Label(ID_STANDALONE_VALUE, objectAdapter.titleString()));
     }
 
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return ApplicationAdvice.appliesIf(model instanceof ValueModel && ((ValueModel)model).getObject() != null);
-    }
-
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        ValueModel valueModel = (ValueModel) model;
-        return new StandaloneValuePanel(id, valueModel);
-    }
 }
