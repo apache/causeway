@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 
@@ -35,7 +36,6 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
  * <ul>
  * <li>change the date/time within the course of fixture installation, using
  * {@link #setDate(int, int, int)} and {@link #setTime(int, int)}.
- * <li>change the current user using {@link #switchUser(String, String...)}.
  * <li>create composite fixtures using {@link #addFixture(Object)}.
  * <li>search for existing objects using
  * {@link #firstMatch(Class, org.apache.isis.applib.Filter)} or
@@ -44,9 +44,14 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
  * </ul>
  * 
  * <p>
+ * This class has been designed so that it can also be used as a regular
+ * domain object.  This may be useful to allow users to setup demo data in a
+ * running application.
+ *  
+ * <p>
  * To automatically logon for the demo/test, use {@link LogonFixture}.
  */
-public abstract class AbstractFixture extends BaseFixture implements CompositeFixture, SwitchUserServiceAware {
+public abstract class AbstractFixture extends BaseFixture implements CompositeFixture {
 
     private final List<Object> fixtures = new ArrayList<Object>();
 
@@ -99,6 +104,7 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
      * Returns an array of any fixtures that have been
      * {@link #addFixture(Object) added}.
      */
+    @Programmatic // to allow this class to be used as a domain object
     @Override
     public List<Object> getFixtures() {
         return Collections.unmodifiableList(fixtures);
@@ -112,6 +118,7 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
      */
+    @Programmatic // to allow this class to be used as a domain object
     public void earlierDate(final int years, final int months, final int days) {
         if (shouldIgnoreCallBecauseNoClockSetup("earlierDate()")) {
             return;
@@ -123,6 +130,7 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
      */
+    @Programmatic // to allow this class to be used as a domain object
     public void earlierTime(final int hours, final int minutes) {
         if (shouldIgnoreCallBecauseNoClockSetup("earlierTime()")) {
             return;
@@ -134,6 +142,7 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
      */
+    @Programmatic // to allow this class to be used as a domain object
     public void laterDate(final int years, final int months, final int days) {
         if (shouldIgnoreCallBecauseNoClockSetup("laterDate()")) {
             return;
@@ -145,27 +154,12 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
      */
+    @Programmatic // to allow this class to be used as a domain object
     public void laterTime(final int hours, final int minutes) {
         if (shouldIgnoreCallBecauseNoClockSetup("laterTime()")) {
             return;
         }
         clock.addTime(hours, minutes);
     }
-
-    // {{ User
-    protected void switchUser(final String username, final String... roles) {
-        switchUserService.switchUser(username, roles);
-    }
-
-    // }}
-
-    // {{ Injected: SwitchUserService
-    private SwitchUserService switchUserService;
-
-    @Override
-    public void setService(final SwitchUserService fixtureService) {
-        this.switchUserService = fixtureService;
-    }
-    // }}
 
 }

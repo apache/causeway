@@ -21,9 +21,11 @@ package org.apache.isis.examples.onlinedemo.dom.demo;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 
 /**
@@ -40,8 +42,8 @@ import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 // name to use in the UI
 public interface DemoFixtures {
 
-    @Idempotent
-    // post-conditions are always same
+    
+    @ActionSemantics(Of.IDEMPOTENT) // post-conditions are always same
     @MemberOrder(sequence = "1")
     public List<ToDoItem> resetFixtures();
 
