@@ -81,7 +81,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     // only search once
     private boolean searchedForAuditService;
-    @Nullable
     private AuditService auditService;
     
     public DataNucleusPersistenceMechanismInstaller() {

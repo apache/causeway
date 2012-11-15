@@ -3,8 +3,6 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.persistence.s
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -20,7 +18,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
 public class DataNucleusTransaction extends IsisTransaction {
 
-    @Nullable
     private final AuditService auditService;
     
     public DataNucleusTransaction(
@@ -28,7 +25,7 @@ public class DataNucleusTransaction extends IsisTransaction {
                 final MessageBroker messageBroker, 
                 final UpdateNotifier updateNotifier, 
                 final TransactionalResource objectStore, 
-                @Nullable final AuditService auditService) {
+                final AuditService auditService) {
         super(transactionManager, messageBroker, updateNotifier, objectStore);
         this.auditService = auditService;
     }

@@ -138,7 +138,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         return hasResolveEagerlyFacet(model) 
                 ? new Predicate<ComponentFactory>() {
                     @Override
-                    public boolean apply(@Nullable ComponentFactory input) {
+                    public boolean apply(ComponentFactory input) {
                         return !(input instanceof CollectionContentsAsUnresolvedPanelFactory);
                     }
                 }

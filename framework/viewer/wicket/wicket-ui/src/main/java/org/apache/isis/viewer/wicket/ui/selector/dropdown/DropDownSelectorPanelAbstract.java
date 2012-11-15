@@ -85,7 +85,7 @@ public abstract class DropDownSelectorPanelAbstract<T extends IModel<?>> extends
         return hasResolveEagerlyFacet(model) 
                 ? new Predicate<ComponentFactory>() {
                     @Override
-                    public boolean apply(@Nullable ComponentFactory input) {
+                    public boolean apply(ComponentFactory input) {
                         return !(input instanceof CollectionContentsAsUnresolvedPanelFactory);
                     }
                 }

@@ -36,8 +36,7 @@ if(options.x) {
 //
 //
 def replacements = [
-"0.3.0-incubating-SNAPSHOT": "0.3.1-incubating-SNAPSHOT"
-
+"0.3.1-incubating-SNAPSHOT": "0.3.1-SNAPSHOT"
 ]
 
 
