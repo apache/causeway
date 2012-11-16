@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -94,7 +95,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(getActionModel().getTargetAdapter()));
 
-        final String actionName = actionModel.getActionMemento().getAction().getName();
+        final String actionName = getActionModel().getActionMemento().getAction().getName();
         addOrReplace(new Label(ID_ACTION_NAME, Model.of(actionName)));
     }
 
@@ -111,7 +112,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     public void executeActionAndProcessResults() {
 
         permanentlyHide(ComponentType.ENTITY_ICON_AND_TITLE);
-        permanentlyHide(ID_ACTION_NAME);
+        
 
         ObjectAdapter targetAdapter = null;
         try {
@@ -157,7 +158,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         OBJECT {
             @Override
             public void addResults(final ActionPanel actionPanel, final ObjectAdapter resultAdapter) {
-
                 final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, actionPanel);
 
                 //actionPanel.set
@@ -183,6 +183,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
 
             private void addResultsAccordingToSingleResultsMode(final ActionPanel panel, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
+                panel.permanentlyHide(ID_ACTION_NAME);
                 final ActionModel actionModel = panel.getActionModel();
                 final ActionModel.SingleResultsMode singleResultsMode = actionModel.getSingleResultsMode();
 
@@ -221,11 +222,16 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         COLLECTION {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                ObjectAction action = panel.getActionModel().getActionMemento().getAction();
+                panel.addOrReplace(new Label(ActionPanel.ID_ACTION_NAME, Model.of(action.getName())));
+                
                 panel.hideAllBut(ComponentType.COLLECTION_CONTENTS);
                 addOrReplaceCollectionResultsPanel(panel, resultAdapter);
             }
 
             private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                
+                
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
                 final SelectionHandler selectionHandler = panel.getModel().getSelectionHandler();
                 if (selectionHandler != null) {
@@ -233,11 +239,13 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 }
                 final ComponentFactoryRegistry componentFactoryRegistry = panel.getComponentFactoryRegistry();
                 componentFactoryRegistry.addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
+
             }
         },
         EMPTY {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.permanentlyHide(ID_ACTION_NAME);
                 panel.hideAllBut(ComponentType.EMPTY_COLLECTION);
                 final ActionModel actionModel = panel.getActionModel();
                 panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.EMPTY_COLLECTION, actionModel);
@@ -246,6 +254,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         VALUE {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.permanentlyHide(ID_ACTION_NAME);
                 panel.hideAllBut(ComponentType.VALUE);
                 panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VALUE, new ValueModel(resultAdapter));
             }
@@ -253,6 +262,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         VOID {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                panel.permanentlyHide(ID_ACTION_NAME);
                 panel.hideAllBut(ComponentType.VOID_RETURN);
                 panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VOID_RETURN, null);
             }
