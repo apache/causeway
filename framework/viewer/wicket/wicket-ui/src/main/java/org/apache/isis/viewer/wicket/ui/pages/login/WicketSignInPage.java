@@ -23,6 +23,9 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -49,6 +52,21 @@ public final class WicketSignInPage extends SignInPage {
     @Named("applicationName")
     private String applicationName;
 
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    @Named("applicationCss")
+    private String applicationCss;
+    
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    @Named("applicationJs")
+    private String applicationJs;
+
+
     public WicketSignInPage(final PageParameters parameters) {
         addPageTitle(parameters);
         addApplicationName();
@@ -61,4 +79,17 @@ public final class WicketSignInPage extends SignInPage {
     private void addApplicationName() {
         add(new Label(ID_APPLICATION_NAME, applicationName));
     }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if(applicationCss != null) {
+            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
+        }
+        if(applicationJs != null) {
+            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
+        }
+    }
+    
+
 }
