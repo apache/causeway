@@ -75,7 +75,6 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_COLLECTIONS = "collections";
     private static final String ID_COLLECTION = "collection";
 
-    private static final String ID_GROUPED_ACTIONS = "groupedActions";
 
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -128,65 +127,14 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final String name = association.getName();
         fieldset.add(new Label(ID_COLLECTION_NAME, name));
 
-        buildEntityActionsGui(fieldset, association);
-
 		final OneToManyAssociation otma = (OneToManyAssociation) association;
 
-		final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModel, otma);
-		final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
+		final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
+
 		fieldset.addOrReplace(collectionPanel);
 
-		getComponentFactoryRegistry().addOrReplaceComponent(fieldset, ID_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
+		getComponentFactoryRegistry().addOrReplaceComponent(fieldset, ID_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, collectionPanel.getModel());
 	}
-
-    private void buildEntityActionsGui(WebMarkupContainer collectionRvContainer, ObjectAssociation association) {
-        
-        final EntityModel model = getModel();
-        final ObjectSpecification adapterSpec = model.getTypeOfSpecification();
-        final ObjectAdapter adapter = model.getObject();
-        final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
-        
-        @SuppressWarnings("unchecked")
-        final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED,
-                Filters.and(memberOrderOf(association), dynamicallyVisibleFor(adapter)));
-
-        final CssMenuLinkFactory linkFactory = new EntityActionLinkFactory(getEntityModel());
-
-        if(!userActions.isEmpty()) {
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
-            // TODO: i18n
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_GROUPED_ACTIONS, "Actions");
-
-            collectionRvContainer.addOrReplace(cssMenuPanel);
-        } else {
-            Components.permanentlyHide(collectionRvContainer, ID_GROUPED_ACTIONS);
-        }
-    }
-
-    private Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
-        return ObjectActionFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
-    }
-
-    private Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
-        final String collectionName = association.getName();
-        final String collectionId = association.getId();
-        return new Filter<ObjectAction>() {
-
-            @Override
-            public boolean accept(ObjectAction t) {
-                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                if(memberOrderFacet == null) {
-                    return false; 
-                }
-                final String memberOrderName = memberOrderFacet.name();
-                if(Strings.isNullOrEmpty(memberOrderName)) {
-                    return false;
-                }
-                return memberOrderName.equals(collectionName) || memberOrderName.equals(collectionId);
-            }
-        };
-    }
-
 
     private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
         return noSpec.getAssociations(visibleAssociationFilter(adapter));
