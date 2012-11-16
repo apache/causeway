@@ -120,6 +120,10 @@ public final class StringUtils {
         return b.toString();
     }
 
+    public static String toLowerDashed(String name) {
+        return name.toLowerCase().replaceAll("\\s+", "-");
+    }
+
     public static String pascal(final String name) {
         return capitalize(camel(name));
     }

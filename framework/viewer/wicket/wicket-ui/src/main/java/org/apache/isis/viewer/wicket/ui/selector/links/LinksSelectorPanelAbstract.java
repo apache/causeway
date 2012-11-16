@@ -31,6 +31,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -41,13 +42,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Resolve.Type;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.util.Strings;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 
@@ -110,7 +114,10 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                                 }
                             };
                             
-                    link.add(new Label(ID_VIEW_TITLE, nameFor(componentFactory)));
+                    String name = nameFor(componentFactory);
+                    Label viewTitleLabel = new Label(ID_VIEW_TITLE, name);
+                    viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(name)));
+                    link.add(viewTitleLabel);
                     item.add(link);
                     LinksSelectorPanelAbstract<T> selectorPanel = LinksSelectorPanelAbstract.this;
                     link.setEnabled(selectorPanel.selectedComponentFactory != componentFactory);
