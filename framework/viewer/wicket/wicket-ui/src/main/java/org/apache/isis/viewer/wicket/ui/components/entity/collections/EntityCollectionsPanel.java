@@ -132,8 +132,6 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 		final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
 
 		fieldset.addOrReplace(collectionPanel);
-
-		getComponentFactoryRegistry().addOrReplaceComponent(fieldset, ID_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, collectionPanel.getModel());
 	}
 
     private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
