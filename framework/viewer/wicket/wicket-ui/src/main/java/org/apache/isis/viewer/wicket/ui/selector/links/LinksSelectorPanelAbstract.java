@@ -109,11 +109,11 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                         
                 Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
                 viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
-                link.add(viewTitleLabel);
-                item.add(link);
+                link.addOrReplace(viewTitleLabel);
+                item.addOrReplace(link);
             }
         };
-        container.add(listView);
+        container.addOrReplace(listView);
         
         addOrReplace(views);
         

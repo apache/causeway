@@ -63,7 +63,7 @@
 }
 
 .bookmarkedPagesPanel .clearBookmarks {
-	background: url('/images/icon_clear.png') no-repeat center center transparent !important;
+	background: url('images/icon_clear.png') no-repeat center center transparent !important;
 	border-radius: 4px 4px 4px 4px;
 	color: #46413B;
 	display: block;

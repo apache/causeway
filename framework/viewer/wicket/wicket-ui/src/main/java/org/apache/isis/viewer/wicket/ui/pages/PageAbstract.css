@@ -27,7 +27,7 @@
 
 
 .headerContainer {
-	background: url("/images/bg_header_brown.png") left top repeat;
+	background: url("images/bg_header_brown.png") left top repeat;
 }
 
 .headerContainer .links>span:first-child {
