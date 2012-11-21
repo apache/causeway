@@ -22,9 +22,6 @@
 
 div.actionPanel .iconAndTitle {
 	float: left;
-    position:absolute;
-    left:20px;
-    top:0px;
 }
 
 .actionPanel .iconAndTitle .entityImage {
@@ -37,7 +34,8 @@ div.actionPanel .iconAndTitle {
 }
 
 .actionPanel .iconAndTitle .actionName {
-	padding-top: 1em;
 	font-size: large;
+	line-height:150%;
+	clear:both;
 }
  

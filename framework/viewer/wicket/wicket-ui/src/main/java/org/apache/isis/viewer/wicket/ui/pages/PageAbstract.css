@@ -20,13 +20,30 @@
 
 #header {
 	width: 73%;
-	height: 40px;
 	float: left;
+	height: 60px;
+	background: transparent url("/images/logo.png") left center no-repeat;
 }
 
 
 .headerContainer {
 	background: url("/images/bg_header_brown.png") left top repeat;
+}
+
+.headerContainer .links>span:first-child {
+	background: url("/images/icon_appuser.png") no-repeat scroll left
+		center transparent;
+	line-height: 30px;
+	padding: 5px 0 5px 20px;
+	margin-left: 10px;
+}
+
+.headerContainer .links {
+	font-size: 0.9em;
+}
+
+.headerContainer .links a {
+	margin-left: 10px;
 }
 
 #secondaryMenu {
@@ -340,17 +357,6 @@ h1,h2 {
 	margin: 5px;	
 }
 
-.feedbackPanelERROR {
-	color: red;
-	list-style: circle;
-	font-weight: bold;
-}
-
-.feedbackPanelINFO {
-	color: green;
-	list-style: circle;
-	font-weight: bold;
-}
 .nospam {
 	display : none;
 }
@@ -491,10 +497,9 @@ tr.section td {
 }
 
 .scalarName {
-	width: 24%;
+	width: 160px;
 }
 .scalarValue {
-	width: 74%;
 }
 
 div.odd, div.even {
@@ -589,7 +594,6 @@ div.scalarPanel {
 	font-weight: normal;
 }
 
-
 /******** FORM STYLES ********/
 
 form input[type=text][disabled] {
@@ -611,3 +615,72 @@ form input[type=text] {
 	border:1px solid #F0EFEA;
 	border-top:1px solid #CCCBC7;
 }
+
+
+
+.inputForm {
+	clear:both;
+}
+
+.actionPanelHeaderNew {
+	clear:both;
+	display:block;
+}
+
+.actionPanelHeaderNew .entityIconAndTitlePanel {
+	padding-bottom:10px;
+	line-height:150%;
+	float:left;
+}
+
+div.actionPanelHeaderNew .iconAndTitle {
+	float: left;
+    padding:0em;
+}
+
+div.actionPanelHeaderNew .actions {
+	float: right;
+    padding:0em 0em;
+}
+
+.actionPanelHeaderNew .entityImage {
+	width: 32px;
+	height: 32px;
+	vertical-align:text-bottom;
+	padding-right:5px;
+}
+
+.actionPanelHeaderNew .entityTitle  {
+	font-size: 1.8em;
+	font-weight:normal;
+	color:#413D37;
+	text-decoration:none;
+}
+
+/* Feedback Error Styling */
+
+.feedbackPanel {
+	clear:both;
+	display:block;
+	padding-bottom:10px;
+	color:#990000;
+	font-weight:normal;
+	font-size:12px;
+	line-height:150%;
+}
+
+
+.feedbackPanelERROR {
+	color:#CC0000;
+	list-style: none;
+	font-weight: normal;
+}
+
+.feedbackPanelINFO {
+	color: green;
+	list-style: none;
+	font-weight: normal;
+}
+
+
+

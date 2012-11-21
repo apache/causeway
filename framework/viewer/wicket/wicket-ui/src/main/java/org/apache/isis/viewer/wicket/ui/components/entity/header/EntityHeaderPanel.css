@@ -22,7 +22,7 @@
 	display:block;
 }
 
-div.entityHeaderPanel .iconAndTitle {
+div.entityHeaderPanel .iconAndTitle{
 	float: left;
     padding:0em;
 }
@@ -45,4 +45,5 @@ div.entityHeaderPanel .actions {
 	color:#413D37;
 	text-decoration:none;
 }
+
 
