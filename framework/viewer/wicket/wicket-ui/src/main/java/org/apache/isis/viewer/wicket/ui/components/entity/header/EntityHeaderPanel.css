@@ -18,19 +18,18 @@
  */
 .entityHeaderPanel {
 	clear:both;
+	padding-top:10px;
+	display:block;
 }
 
 div.entityHeaderPanel .iconAndTitle {
 	float: left;
-    padding:1em;
+    padding:0em;
 }
 
 div.entityHeaderPanel .actions {
-	float: left;
-    padding:1em;
-    
-	padding-top: 2.0em; 
-	padding-left: 50px;
+	float: right;
+    padding:0em 0em;
 }
 
 .entityHeaderPanel .entityImage {
@@ -41,5 +40,9 @@ div.entityHeaderPanel .actions {
 }
 
 .entityHeaderPanel .entityTitle {
-	font-size: x-large;
+	font-size: 1.8em;
+	font-weight:normal;
+	color:#413D37;
+	text-decoration:none;
 }
+

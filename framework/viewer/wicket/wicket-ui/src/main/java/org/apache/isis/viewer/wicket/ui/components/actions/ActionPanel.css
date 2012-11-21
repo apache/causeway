@@ -22,7 +22,9 @@
 
 div.actionPanel .iconAndTitle {
 	float: left;
-    padding:1em;
+    position:absolute;
+    left:20px;
+    top:0px;
 }
 
 .actionPanel .iconAndTitle .entityImage {

@@ -21,7 +21,9 @@
 }
  
 .entityCollectionsPanel fieldset legend {
-	margin-left: 10px;
+	position:absolute;
+	left:20px;
+	top:20px;
 }
 
 .entityCollectionsPanel .actions {
