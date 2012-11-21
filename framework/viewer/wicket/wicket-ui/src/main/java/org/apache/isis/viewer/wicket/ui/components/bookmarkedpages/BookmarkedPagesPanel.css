@@ -61,3 +61,16 @@
 	display: inline;
 	color: rgb(128,0,0);
 }
+
+.bookmarkedPagesPanel .clearBookmarks {
+	background: url('/images/icon_clear.png') no-repeat center center transparent !important;
+	border-radius: 4px 4px 4px 4px;
+	color: #46413B;
+	display: block;
+	float: left;
+	font-style: normal !important;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	padding: 8px;
+	text-indent: -999em;
+}
