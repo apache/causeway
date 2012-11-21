@@ -18,21 +18,22 @@
  */
 
 .collectionContentsAsAjaxTablePanel table.contents {
-	margin-bottom: 10px;
-	border-bottom: 1px solid #407098;
-	font-size: 1em;
-	font-family: arial;
-	width: 99%
+	font-size: 0.9em;
+	width: 100%;
+	border-collapse:collapse;
+	margin-top:10px;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
 .collectionContentsAsAjaxTablePanel table.contents tr { 
-	padding-top: 2px; 
-	padding-bottom: 2px; 
 	}
 
-.collectionContentsAsAjaxTablePanel table.contents tr.even { background-color: #fff; }
-.collectionContentsAsAjaxTablePanel table.contents tr.odd { background-color: #eee; }
+.collectionContentsAsAjaxTablePanel table.contents tr.even { background-color: #FFFFFF; }
+.collectionContentsAsAjaxTablePanel table.contents tr.odd { background-color: #F0EFEA; }
+
+.collectionContentsAsAjaxTablePanel table.contents tr:hover td {
+	background-color:#D2F0F3;
+}
 
 .collectionContentsAsAjaxTablePanel table.contents tr td { 
 	padding-left: 8px; 
@@ -41,17 +42,12 @@
 	padding-right: 4px;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th { 
-	color: A66144; 
-	padding-top: 3px; 
-	padding-bottom: 3px; 
-	padding-left: 8px; 
-	padding-right: 10px; 
-	background-color: #EEEEEE; 
-	border-top: 1px solid #407098; 
+	color: #FFFFFF;
+	background-color: #46423C;
 	text-align: left; 
 	white-space: nowrap; 
-	background-position: right; 
-	background-repeat:no-repeat;
+	text-transform:uppercase;
+	font-weight:bold;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown {
@@ -82,8 +78,8 @@
 
 .collectionContentsAsAjaxTablePanel table.contents tbody td,
 .collectionContentsAsAjaxTablePanel table.contents thead th {
-	border-left: 1px #DDD solid;
-	border-right: 1px #DDD solid;
+	padding:5px;
+	text-transform:uppercase;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
@@ -113,4 +109,18 @@
 
 .collectionContentsAsAjaxTablePanel table.contents .navigator .goto em {
 	background-color: #DDD;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents a {
+	color:#46423C;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents a:hover {
+	text-decoration:underline;
+	color:#20B5C2;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .entityLinkSelect2Panel .entityImage {
+	vertical-align:text-bottom;
+	padding-right:5px;
 }

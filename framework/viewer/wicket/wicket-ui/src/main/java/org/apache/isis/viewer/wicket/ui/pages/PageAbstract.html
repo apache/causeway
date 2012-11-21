@@ -32,23 +32,23 @@
 	<body>
 		
 		<div id="container" class="page">
-
-			<div id="header">
-				<h1><span wicket:id="applicationName">[application name]</span></h1>
-			</div>
-			<div id="secondaryMenu">
-				<div class="links">
-					<span>logged in as: </span><span wicket:id="userName">[username]</span>
-					&nbsp;|&nbsp;
-					<a href="#" wicket:id="logoutLink">logout</a>
-					&nbsp;|&nbsp;
-					<a href="#" wicket:id="aboutLink">about</a>
+			<div class="headerContainer">
+				<div id="header">
+					<h1><span wicket:id="applicationName">[application name]</span></h1>
 				</div>
-			</div>
+				<div id="secondaryMenu">
+					<div class="links">
+						<span wicket:id="userName">[username]</span>
+						<a href="#" wicket:id="logoutLink">logout</a>
+						<a href="#" wicket:id="aboutLink">about</a>
+					</div>
+				</div>
 
 			<div class="clear"/>
 
 			<div wicket:id="applicationActions" id="applicationActions"></div>
+			
+			</div>
 
 			<div id="body">
 				<wicket:child/>
