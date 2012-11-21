@@ -17,7 +17,77 @@
  *  under the License.
  */
 
- .wicketSignInPanel h2 {
- 	margin-top: 50px;
- 	margin-bottom: 20px;
+ 
+ .loginPanel {
+	width:310px;
+	background-color:#FFFFFF;
+	padding:20px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	margin-bottom:1%;
+	position:absolute;
+	clear:both;
+	height:200px;
+	left:50%;
+	top:50%;
+	margin-left:-175px;
+	margin-top:-100px;
  }
+ 
+ .loginPanel h2 {
+ 	color:#423D37;
+ 	font-size:1.6em;
+ 	letter-spacing:0px;
+ 	line-height:150%;
+ 	margin-bottom:10px;
+ }
+ 
+ .loginPanel table {
+ 	width:100%;
+}
+
+.loginPanel table tr td {
+	padding:5px 0px;
+	text-align:left !important;
+}
+
+.loginPanel form input[type=text],
+.loginPanel form input[type=password] {
+	border-radius:4px;
+	-moz-borer-radius:4px;
+	-webkit-border-radius:4px;
+	padding:6px;
+	background-color:#F0EFEA;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
+}
+
+
+.loginPanel form input[type=submit] {
+    background-color: #20B5C2;
+    border: 0 none;
+    border-radius: 4px 4px 4px 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.9em;
+    padding: 5px 10px;
+    text-transform: uppercase;
+}
+
+.loginPanel form input[type=reset] {
+    background-color: #E4E4DB;
+    border: 0 none;
+    border-radius: 4px 4px 4px 4px;
+    color: #46423C;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.9em;
+    padding: 5px 10px;
+    text-transform: uppercase;
+}
+
+.loginPanel table tr td {
+	color:#46423C;
+}

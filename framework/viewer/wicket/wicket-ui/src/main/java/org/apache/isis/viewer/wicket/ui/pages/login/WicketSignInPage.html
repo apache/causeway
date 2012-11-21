@@ -24,9 +24,9 @@
 	<head>
 		<title wicket:id="pageTitle"></title>
 		<wicket:link>
-			<link href="../PageAbstract.css" rel="stylesheet" />
-			<link href="WicketSignInPage.css" rel="stylesheet" />
 			<link href="../cssreset.css" rel="stylesheet" type="text/css"/>
+			<link href="WicketSignInPage.css" rel="stylesheet" />
+			<link href="../PageAbstract.css" rel="stylesheet" />
 		</wicket:link>
 	</head>
 	<body>
@@ -37,9 +37,10 @@
 				</div>
 				<div class="clear"/>
 			</div>
-		    <h2>Member Login</h2>
-		    <p>
-		    <span wicket:id="signInPanel"/>
+			<div class="loginPanel">
+		    	<h2>Member Login</h2>
+		    	<span wicket:id="signInPanel"/>
+		    </div>
 	    </div>
 	</body>
 </html>
