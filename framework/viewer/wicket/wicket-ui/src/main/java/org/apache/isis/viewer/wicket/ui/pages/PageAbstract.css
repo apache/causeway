@@ -25,7 +25,9 @@
 	background: transparent url("/images/logo.png") left center no-repeat;
 }
 
-
+#header h1 {
+	display:none;
+}
 .headerContainer {
 	background: url("images/bg_header_brown.png") left top repeat;
 }
