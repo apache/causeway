@@ -20,17 +20,14 @@
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.util.List;
-import org.apache.wicket.util.string.StringValue;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.viewer.wicket.model.util.Strings;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public enum PageParameterNames {
 
@@ -127,7 +124,7 @@ public enum PageParameterNames {
     public List<String> getListFrom(PageParameters pageParameters) {
         return Lists.transform(pageParameters.getValues(this.toString()), new Function<StringValue, String>() {
             @Override
-            public String apply(@Nullable StringValue input) {
+            public String apply(StringValue input) {
                 return input.toString();
             }
         });
