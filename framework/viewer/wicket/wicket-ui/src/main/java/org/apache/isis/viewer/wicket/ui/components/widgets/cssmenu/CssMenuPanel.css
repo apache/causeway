@@ -19,210 +19,246 @@
 .cssMenuPanel span.clear {
 	line-height: 3px;
 }
-	 
-.cssMenuPanel .menuh
-	{
+
+.cssMenuPanel .menuh {
 	font-family: arial, helvetica, sans-serif;
-	float:left;
+	float: left;
 	margin-top: 0.1em;
 	background: repeat-x scroll center center;
-	width:100%;
+	width: 100%;
 }
 
 .cssMenuPanel .menuh .small {
-	float:none;
+	float: none;
 	display: inline;
 }
 
 .cssMenuPanel .menuh p .small {
-	float:none;
+	float: none;
 	display: inline;
 }
 
-.menuh a, .menuh p {
+.menuh a,.menuh p {
 	text-align: left;
-	display:block;
-	border: 1px  #00477F solid;
-	white-space:nowrap;
-	margin:0em;
+	display: block;
+	border: 1px #00477F solid;
+	white-space: nowrap;
+	margin: 0em;
 	padding: 1px;
 	padding-right: 1.6em;
 	padding-left: 0.4em;
 	font-weight: normal;
-	cursor:default;
+	cursor: default;
 }
-	
-.cssMenuPanel .menuh a:link,
-.cssMenuPanel .menuh a:visited,
-.cssMenuPanel .menuh a:active,
-.cssMenuPanel .menuh p {
+
+.cssMenuPanel .menuh a:link,.cssMenuPanel .menuh a:visited,.cssMenuPanel .menuh a:active,.cssMenuPanel .menuh p
+	{
 	color: #00477F;
 	background-color: #EEEEEE;
-	text-decoration:none;
+	text-decoration: none;
 }
-	
-.cssMenuPanel .menuh a:hover,
-.cssMenuPanel .menuh p:hover {
+
+.cssMenuPanel .menuh a:hover,.cssMenuPanel .menuh p:hover {
 	color: #D7E7F5;
 	background-color: #407098;
 }
 
 .cssMenuPanel .menuh a:hover {
-	text-decoration:underline;
-}	
+	text-decoration: underline;
+}
 
-.cssMenuPanel .menuh a.top-parent,
-.cssMenuPanel .menuh p.top-parent {
+.cssMenuPanel .menuh a.top-parent,.cssMenuPanel .menuh p.top-parent {
 	background-image: url(navdown_secondarydark.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	}
+}
 
-.cssMenuPanel .menuh a.top-parent:hover,
-.cssMenuPanel .menuh p.top-parent:hover {
+.cssMenuPanel .menuh a.top-parent:hover,.cssMenuPanel .menuh p.top-parent:hover
+	{
 	background-image: url(navdown_primarypale.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
 }
 
-.cssMenuPanel .menuh a.parent,
-.cssMenuPanel .menuh p.parent {
+.cssMenuPanel .menuh a.parent,.cssMenuPanel .menuh p.parent {
 	background-image: url(nav_secondarydark.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
 }
 
-.cssMenuPanel .menuh a.parent:hover,
-.cssMenuPanel .menuh p.parent:hover {
+.cssMenuPanel .menuh a.parent:hover,.cssMenuPanel .menuh p.parent:hover
+	{
 	background-image: url(nav_primarypale.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
 }
 
 .cssMenuPanel .menuh ul {
-	list-style:none;
-	margin:0;
-	padding:0;
-	float:left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	float: left;
 	display: inline;
 }
 
 .cssMenuPanel .menuh li {
-	position:relative;
+	position: relative;
 	min-height: 1px;
-	}
+}
 
 .cssMenuPanel .menuh ul ul {
-	position:absolute;
-	z-index:500;
-	top:auto;
-	display:none;
+	position: absolute;
+	z-index: 500;
+	top: auto;
+	display: none;
 	padding: 1em;
-	margin:-1em 0 0 -1em;
+	margin: -1em 0 0 -1em;
 }
 
 .cssMenuPanel .menuh ul ul ul {
-	top:0;
-	left:100%;
+	top: 0;
+	left: 100%;
 }
 
 .cssMenuPanel span.menuh a:hover {
-	cursor:pointer;
-	z-index:100;
+	cursor: pointer;
+	z-index: 100;
 }
 
-.cssMenuPanel span.menuh li:hover ul ul,
-.cssMenuPanel span.menuh li li:hover ul ul,
-.cssMenuPanel span.menuh li li li:hover ul ul,
-.cssMenuPanel span.menuh li li li li:hover ul ul {
-	display:none;
+.cssMenuPanel span.menuh li:hover ul ul,.cssMenuPanel span.menuh li li:hover ul ul,.cssMenuPanel span.menuh li li li:hover ul ul,.cssMenuPanel span.menuh li li li li:hover ul ul
+	{
+	display: none;
 }
 
-.cssMenuPanel span.menuh li:hover ul,
-.cssMenuPanel span.menuh li li:hover ul,
-.cssMenuPanel span.menuh li li li:hover ul,
-.cssMenuPanel span.menuh li li li li:hover ul {
-	display:block;
+.cssMenuPanel span.menuh li:hover ul,.cssMenuPanel span.menuh li li:hover ul,.cssMenuPanel span.menuh li li li:hover ul,.cssMenuPanel span.menuh li li li li:hover ul
+	{
+	display: block;
 }
-
 
 .cssMenuPanel li.cssSubMenuItem p.disabled {
 	color: gray;
 }
 
-
-
-
 /******** overrides for grouped actions and entity actions ***************/
+.groupedActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
+	display: none;
+}
 
-.groupedActions .cssMenuPanel li.cssMenuItemPanel > p.top-parent {
-  display:none;
+.groupedActions .cssMenuPanel .menuh ul {
+	position: relative;
+	display: block;
+	float: right;
+	margin: 0px;
+	padding: 0px;
 }
 
 .groupedActions .cssMenuPanel .menuh ul ul {
-  position: relative;
-  display: inline-block;
+	position: relative;
+	display: block;
+	float: right;
+	margin: 0px;
+	padding: 0px;
 }
-
 
 .groupedActions .cssMenuPanel .menuh li,
-.groupedActions .cssMenuPanel .menuh li p {
-  display: inline;
+.groupedActions .cssMenuPanel .menuh li p	{
+	float:left;
+	display:block;
+	margin-left:10px;
 }
 
-.groupedActions .cssMenuPanel .menuh a,
-.groupedActions .cssMenuPanel .menuh p {
-  display: inline-block;
-  border: none;
+.groupedActions .cssMenuPanel .menuh a,.groupedActions .cssMenuPanel .menuh p
+	{
+	display: inline-block;
+	border: none;
 }
 
 .groupedActions .cssMenuPanel .menuh a:link,
 .groupedActions .cssMenuPanel .menuh a:visited,
 .groupedActions .cssMenuPanel .menuh a:active,
-.groupedActions .cssMenuPanel .menuh p {
-	background-color: #fff;
+.groupedActions .cssMenuPanel .menuh p
+	{
+    background-color: #F0EFEA;
+    color: #46423C;
+    display: block;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+	padding:0px 10px;
+	font-weight:bold;
+	text-transform:uppercase;
+	font-size:0.85em;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	text-decoration:none;
 }
 
-.groupedActions .cssMenuPanel .menuh a:hover,
-.groupedActions .cssMenuPanel .menuh p:hover {
+.groupedActions .cssMenuPanel .menuh a:hover,.groupedActions .cssMenuPanel .menuh p:hover
+	{
 	color: #000;
-}	
+	background-color:#FFFFFF;
+}
 
+.entityActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
+	display: none;
+}
 
-
-.entityActions .cssMenuPanel li.cssMenuItemPanel > p.top-parent {
-  display:none;
+.entityActions .cssMenuPanel .menuh ul {
+	position: relative;
+	display: block;
+	float: right;
+	margin: 0px 0px 10px;
+	padding: 0px;
 }
 
 .entityActions .cssMenuPanel .menuh ul ul {
-  position: relative;
-  display: inline-block;
+	position: relative;
+	display: block;
+	float: right;
+	margin: 0px;
+	padding: 0px;
 }
-
 
 .entityActions .cssMenuPanel .menuh li,
 .entityActions .cssMenuPanel .menuh li p {
-  display: inline;
+	float:left;
+	display:block;
+	margin-left:10px;
 }
 
 .entityActions .cssMenuPanel .menuh a,
 .entityActions .cssMenuPanel .menuh p {
-  display: inline-block;
-  border: none;
+	display: inline-block;
+	border: none;
 }
 
 .entityActions .cssMenuPanel .menuh a:link,
 .entityActions .cssMenuPanel .menuh a:visited,
 .entityActions .cssMenuPanel .menuh a:active,
 .entityActions .cssMenuPanel .menuh p {
-	background-color: #fff;
+    background-color: #F0EFEA;
+    color: #46423C;
+    display: block;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+	padding:0px 10px;
+	font-weight:bold;
+	text-transform:uppercase;
+	font-size:0.85em;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	text-decoration:none;
 }
 
 .entityActions .cssMenuPanel .menuh a:focus {
 	text-decoration: underline;
 }
 
-.entityActions .cssMenuPanel .menuh a:hover,
-.entityActions .cssMenuPanel .menuh p:hover {
+.entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover
+	{
 	color: #000;
-}	
+	background-color:#FFFFFF;
+}

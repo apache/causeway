@@ -39,19 +39,53 @@
 }
 
 .links {
-	padding-top: 4px;
-	padding-bottom: 4px;
 	clear: both;
-	width: 100%;
-	height: 30px;
+	height: 60px;
+	line-height:60px;
+	color:#20B5C2;
+	text-transform: uppercase;
+	font-size:1.0em;
+    font-weight:bold;
+    padding:0px 20px 0px 0px;
 }
 
+	.links a {
+		color:#FFFFFF;
+    	font-weight:bold;
+	}
+	
+		
 #container {
-	margin-left: auto;
-	margin-right: auto;
-	background-color: white;
-	padding: 4px 4px 4px 4px;
 	/*width: 800px;*/
+}
+
+
+/* Buttons */
+
+.edit,
+.ok,
+.okButton {
+	display:inline-block;
+	background-color:#20B5C2;
+	color:#FFFFFF;
+	text-transform:uppercase;
+	font-size:0.9em;
+	border:0px;
+	padding:5px 10px;
+	border-radius:4px;
+	cursor:pointer;
+}
+
+.cancel {
+	display:inline-block;
+	background-color:#E4E4DB;
+	color:#46423C;
+	text-transform:uppercase;
+	font-size:0.9em;
+	border:0px;
+	padding:5px 10px;
+	border-radius:4px;
+	cursor:pointer;	
 }
 
 
@@ -78,22 +112,124 @@
 
 /**************** APPLICATION MENU **************/
 
-#applicationActions .menuh {
-	background-color: #EEEEEE;
+#applicationActions {
+    padding-left: 10px;
+    height:40px;
 }
+
+#applicationActions .menuh {
+	background-color: transparent;
+	position:relative;
+	z-index:501;
+}
+
+	#applicationActions .menuh ul.cssMenuItems {
+		line-height:30px;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh a:link, 
+	#applicationActions .cssMenuPanel .menuh a:visited, 
+	#applicationActions .cssMenuPanel .menuh a:active, 
+	#applicationActions .cssMenuPanel .menuh p {
+		background-color: transparent;
+    	color: #FFFFFF;
+    	text-decoration: none;
+    	text-transform:uppercase;
+    	font-size:0.9em;
+    	font-weight:bold;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li a:link, 
+	#applicationActions .cssMenuPanel .menuh li a:visited, 
+	#applicationActions .cssMenuPanel .menuh li a:active, 
+	#applicationActions .cssMenuPanel .menuh li p {
+		border-radius:4px 4px 0px 0px;
+    	-moz-border-radius:4px 4px 0px 0px;
+    	-webkit-border-radius:4px 4px 0px 0px;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li a:link, 
+	#applicationActions .cssMenuPanel .menuh li li a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li a:active, 
+	#applicationActions .cssMenuPanel .menuh li li p {
+		border-radius:0px;
+    	-moz-border-radius:0px;
+    	-webkit-border-radius:0px;
+		background-color: #20B5C2;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li:last-child a:link, 
+	#applicationActions .cssMenuPanel .menuh li li:last-child a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li:last-child a:active, 
+	#applicationActions .cssMenuPanel .menuh li li:last-child p {
+		border-radius:0px 0px 4px 4px;
+		-webkit-border-radius:0px 0px 4px 4px;
+		-moz-border-radius:0px 0px 4px 4px;
+		background-color: #20B5C2;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li:first-child a:link, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child a:active, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child p {
+		border-radius:0px 4px 0px 0px;
+		-webkit-border-radius:0px 4px 0px 0px;
+		-moz-border-radius:0px 4px 0px 0px;
+		background-color: #20B5C2;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:link, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:active, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child p {
+		border-radius:0px 4px 4px 4px;
+		-webkit-border-radius:0px 4px 4px 4px;
+		-moz-border-radius:0px 4px 4px 4px;
+		background-color: #20B5C2;
+	}
+	
+	
+	#applicationActions .menuh a, 
+	#applicationActions .menuh p {
+	    border: 0px solid #00477F;
+	    padding: 0px 1em 0px 1em;
+	    background-image:none !important;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li:hover a, 
+	#applicationActions .cssMenuPanel .menuh li:hover p {
+		color: #FFFFFF;
+		background-color: #20B5C2;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh a:hover, 
+	#applicationActions .cssMenuPanel .menuh p:hover {
+		color: #FFFFFF;
+		background-color: #20B5C2;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li a:hover, 
+	#applicationActions .cssMenuPanel .menuh li li p:hover {
+		color: #FFFFFF;
+		background-color: #40C0CB !important;
+	}
+	
+	#applicationActions ul.cssSubMenuItemsPanel {
+		min-width:220px;
+	}
+	
+	
 
 /**************** ELEMENTS **************/
 
 body {
-	background-color: #EEEEEE;
-	background-image: url('wicket-bg.png');
-	background-repeat: repeat-x;
-	color: #00477F;
-	font-family: 'Tahoma', 'Lucida Sans', 'Arial', 'Helvetica', 'Sans-serif', 'sans';
-	font-size: 10pt;
+	background-color: #E3E3D9;
+	color: #454545;
+	font-family: Arial,'Sans-serif',  'Helvetica', 'Sans-serif', 'sans';
+	font-size: 0.8em;
 	line-height: 1.4em;
-	padding: 0px 10px 10px 10px;
-	margin: 10px 10px 10px 10px;
+	padding: 0px;
+	margin:0px;
 }
 
 .panel, fieldset {
@@ -112,11 +248,24 @@ div {
 
 #body {
 	min-height: 400px;
+	margin:20px;
 }
 
 #footer {
-    background-color: #EEEEEE;
 }
+
+	#footer .links {
+		height:auto;
+		padding:0px 20px;
+		line-height:20px;
+		height:20px;
+		color:#46423C;
+	}
+	
+	#footer .links a {
+		color:#20B5C2;
+		text-decoration:none;
+	}
 
 h3 {
 	margin-top: 9px;
@@ -132,6 +281,32 @@ form fieldset .okButton {
 	margin-top: 2em;
 }
 
+.myBlockContainer {
+	background-color:#FFFFFF;
+	padding:20px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	margin-bottom:1%;
+	position:relative;
+}
+
+.myBlockContainer fieldset {
+	border:0px;
+	margin:0px;
+	padding:0px;
+}
+
+.myBlockContainer legend {
+	color:#423D37;
+	font-size:1.6em;
+	margin-bottom:10px;
+	line-height:120%;
+	padding:0px;
+	float:left;
+	display:block;
+}
+
 
 /************************************************************ *********/
 
@@ -144,13 +319,12 @@ h1,h2,h3,h4,h5,h6,h7,h8 {
 
 h1,h2 {
 	letter-spacing: -1px;
-	font-family: 'Trebuchet MS';
 }
 
 #extitle {
 	font-size: 12pt;
 	font-weight: bold;
-	color: #00477F;
+	color: #454545;
 	padding: 10px 10px 10px 10px;
 }
 
@@ -252,9 +426,8 @@ tr.section td {
 /*************** Styling Entity Forms and Parameters ********************/
 
 
+
 .even, .odd {
-	margin-left: 1em;
-	margin-right: 1em;
 	background-color: #ffffff; 
 }
 
@@ -263,15 +436,33 @@ tr.section td {
 	clear: both;
 }
 
-.scalarName, .collectionName, .scalarValue, .collectionContents {
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
+.scalarNameAndValueComponentType {
+}
+
+.scalarName {
+	padding:6px 0px;
+	margin-bottom:5px;
+}
+
+
+
+.scalarValue {
+	margin-bottom:10px;
+}
+
+.collectionName, 
+.collectionContents {
+
 }
 
 .scalarName, .collectionName {
 	float: left;
-	font-style: italic;
-	text-align: right;
+	font-style: normal;
+	text-align: left;
+	text-transform:uppercase;
+	font-weight:bold !important;
+	font-size:0.9em;
+	color:#46413B;
 }
 
 .scalarName:after, .collectionName:after {
@@ -284,12 +475,10 @@ tr.section td {
 }
 
 .scalarValue  {
-	padding-left: 0.5em;
 }
 
 .collectionContents {
-	padding-left: 1em;
-	width: 99%;
+	width: 100%;
 }
 
 .scalarName {
@@ -308,7 +497,7 @@ div.scalarPanel {
 }
 	
 .buttons {
-	padding: 1em;
+	padding: 1em 0em 0em;
 	clear: both;
 	display: block;
 }	
@@ -332,19 +521,22 @@ div.scalarPanel {
 
 .actionPage .select2-container .select2-choice,
 .entityPage .select2-container .select2-choice {
-    padding: 0 0 0 0px;
+    padding: 4px;
 }
 
 
 .actionPage .select2-container .select2-choice,
 .entityPage .select2-container .select2-choice {
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
-	
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 	height: 20px;
     line-height: 20px;
-	
+    font-size:11px;
+	color:#7F7F7F;
+	background:#FFFFFF none;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
 }
 
 .actionPage .select2-container.select2-drop-above .select2-choice,
@@ -378,11 +570,35 @@ div.scalarPanel {
 
 .actionPage .select2-container.select2-container-disabled .select2-choice,
 .entityPage .select2-container.select2-container-disabled .select2-choice {
-	background-color: #EBEBE4;
-	border: 1px solid #AAA;
+	background-color:#F0EFEA;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
 }
 
 .actionPage .select2-container a,
 .entityPage .select2-container a {
 	font-weight: normal;
+}
+
+
+/******** FORM STYLES ********/
+
+form input[type=text][disabled] {
+	border-radius:4px;
+	-moz-borer-radius:4px;
+	-webkit-border-radius:4px;
+	padding:6px;
+	background-color:#F0EFEA;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
+}
+
+form input[type=text] {
+	border-radius:4px;
+	-moz-borer-radius:4px;
+	-webkit-border-radius:4px;
+	padding:6px;
+	background-color:#FFFFFF;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
 }

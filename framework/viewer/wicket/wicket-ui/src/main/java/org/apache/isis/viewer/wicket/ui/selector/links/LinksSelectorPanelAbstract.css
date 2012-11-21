@@ -17,19 +17,56 @@
  *  under the License.
  */
 
-.linksSelectorPanel .viewList {
-	font-size: smaller;
+.linksSelectorPanel ul.viewList {
+	float:right;
+	display:block;
 }
 
-.linksSelectorPanel .viewList {
-	display: inline;
+.linksSelectorPanel ul.viewList span {
 }
 
-.linksSelectorPanel .viewList span {
-	margin-right: 8px;
+.linksSelectorPanel ul.viewList li.viewItem {
+	float:left;
+	display:block;
+	height:30px;
+	line-height:30px;
+	position:relative;
 }
 
-.linksSelectorPanel .viewItem {
-	display: inline;
+.linksSelectorPanel ul.viewList li.viewItem:first-child span {
+	border-radius:4px 0px 0px 4px;
+	-moz-border-radius:4px 0px 0px 4px;
+	-webkit-border-radius:4px 0px 0px 4px;
 }
 
+.linksSelectorPanel ul.viewList li.viewItem:last-child span {
+	border-radius:0px 4px 4px 0px;
+	-moz-border-radius:0px 4px 4px 0px;
+	-webkit-border-radius:0px 4px 4px 0px;
+}
+
+a span.ViewLinkItem {
+	color:#46423C;
+	background-color:#F0EFEA;
+	float:left;
+	display:block;
+	height:30px;
+	line-height:30px;
+}
+
+span.ViewLinkItem {
+	color:#FFFFFF;
+	background-color:#20B5C2;
+	float:left;
+	display:block;
+	height:30px;
+	line-height:30px;
+	font-style:normal;
+}
+
+.ViewLinkItem {
+	padding:0px 10px;
+	font-weight:bold;
+	text-transform:uppercase;
+	font-size:0.85em;
+}

@@ -17,9 +17,9 @@
  *  under the License.
  */
 .entityPropertiesPanel fieldset {
-	border: 1px solid threedshadow;		
+	margin:0px;
+	padding:0px;
 }
 
 .entityPropertiesPanel fieldset legend {
-	margin-left: 10px;
 }

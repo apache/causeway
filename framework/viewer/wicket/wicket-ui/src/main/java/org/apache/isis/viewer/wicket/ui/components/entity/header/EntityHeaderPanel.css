@@ -17,6 +17,7 @@
  *  under the License.
  */
 .entityHeaderPanel {
+	clear:both;
 }
 
 div.entityHeaderPanel .iconAndTitle {
@@ -35,9 +36,10 @@ div.entityHeaderPanel .actions {
 .entityHeaderPanel .entityImage {
 	width: 32px;
 	height: 32px;
+	vertical-align:text-bottom;
+	padding-right:5px;
 }
 
 .entityHeaderPanel .entityTitle {
 	font-size: x-large;
 }
-

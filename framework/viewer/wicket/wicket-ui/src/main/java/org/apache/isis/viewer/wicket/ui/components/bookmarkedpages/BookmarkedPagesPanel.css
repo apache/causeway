@@ -18,15 +18,39 @@
  */
 
 .bookmarkedPagesPanel {
-	font-size: smaller;
+	font-size: 0.9em;
+	text-transform:uppercase;
+	font-weight:bold;
+	float:left;
+	width:100%;
+	margin-bottom:10px;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList {
 	display: inline;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesList span {
+.bookmarkedPagesPanel .bookmarkedPagesList span.bookmarkedPageTitle {
 	margin-right: 10px;
+	margin-bottom:10px;
+	float:left;
+	display:block;
+	padding:8px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	background-color:#FFFFFF;
+	color:#46413B;
+	font-style:normal !important;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList a span.bookmarkedPageTitle {
+	background-color:#F0EFEA;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
+	background-color:#FFFFFF;
+	text-decoration:none;
 }
 
 .bookmarkedPagesPanel .bookmarkedPageItem {
