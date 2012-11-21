@@ -23,6 +23,12 @@
 	height: 40px;
 	float: left;
 }
+
+
+.headerContainer {
+	background: url("/images/bg_header_brown.png") left top repeat;
+}
+
 #secondaryMenu {
 	width: 25%;
 	display: inline-block;
