@@ -25,6 +25,8 @@ import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -52,8 +54,14 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_VIEWS = "views";
 
+    private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
+    private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
+    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+    private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
+    private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
+
+    private static final String ID_VIEWS = "views";
     private static final String ID_VIEW_LIST = "viewList";
     private static final String ID_VIEW_LINK = "viewLink";
     private static final String ID_VIEW_ITEM = "viewItem";
@@ -68,14 +76,57 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
 
         componentType = factory.getComponentType();
 
+        addAdditionalLinks(model);
         addUnderlyingViews(underlyingId, model, factory);
+    }
+
+    protected void addAdditionalLinks(final T model) {
+        if(!(model instanceof LinksProvider)) {
+            permanentlyHide(ID_ADDITIONAL_LINKS);
+            return;
+        }
+        LinksProvider linksProvider = (LinksProvider) model;
+        List<LinkAndLabel> links = linksProvider.getLinks();
+        
+        final WebMarkupContainer views = new WebMarkupContainer(ID_ADDITIONAL_LINKS);
+        
+        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
+        
+        views.addOrReplace(container);
+        views.setOutputMarkupId(true);
+        
+        this.setOutputMarkupId(true);
+        
+        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, links) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<LinkAndLabel> item) {
+                final LinkAndLabel linkAndLabel = item.getModelObject();
+                
+                final AbstractLink link = linkAndLabel.getLink();
+                        
+                Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
+                viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
+                link.add(viewTitleLabel);
+                item.add(link);
+            }
+        };
+        container.add(listView);
+        
+        addOrReplace(views);
+        
+        
     }
 
     private void addUnderlyingViews(final String underlyingId, final T model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
 
         final ComponentFactory selectedComponentFactory = Iterables.find(componentFactories, determineInitialFactory(model));
-        if (componentFactories.size() > 1) {
+        if (componentFactories.size() <= 1) {
+            permanentlyHide(ID_VIEWS);
+        } else {
             final Model<ComponentFactory> componentFactoryModel = new Model<ComponentFactory>();
             
             componentFactoryModel.setObject(selectedComponentFactory);
@@ -88,7 +139,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
             views.setOutputMarkupId(true);
             
             this.setOutputMarkupId(true);
-
+            
             final ListView<ComponentFactory> listView = new ListView<ComponentFactory>(ID_VIEW_ITEM, componentFactories) {
 
                 private static final long serialVersionUID = 1L;
@@ -125,8 +176,6 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
             container.add(listView);
             
             addOrReplace(views);
-        } else {
-            permanentlyHide(ID_VIEWS);
         }
         select(underlyingId, model, selectedComponentFactory);
     }

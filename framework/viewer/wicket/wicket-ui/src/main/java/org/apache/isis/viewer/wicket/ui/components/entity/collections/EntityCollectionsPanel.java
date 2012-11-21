@@ -56,7 +56,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactor
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;

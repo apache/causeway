@@ -23,11 +23,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.Component;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
@@ -35,11 +30,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.model.util.ObjectAdapters;
+import org.apache.wicket.Component;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -50,7 +51,7 @@ import org.apache.isis.viewer.wicket.model.util.ObjectAdapters;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
  * the collection are stored as {@link ObjectAdapterMemento}s.
  */
-public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
+public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> implements LinksProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -155,6 +156,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
     private SelectionHandler selectionHandler;
 
     private final int pageSize;
+
+    /**
+     * Additional links to render (if any)
+     */
+    private List<LinkAndLabel> entityActions = Lists.newArrayList();
 
     private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList, final int pageSize) {
         this.type = Type.STANDALONE;
@@ -275,5 +281,14 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
     public void clearToggleMementosList() {
         this.toggledMementosList.clear();
     }
-    
+
+    public void addEntityActions(List<LinkAndLabel> entityActions) {
+        this.entityActions.addAll(entityActions);
+    }
+
+    @Override
+    public List<LinkAndLabel> getLinks() {
+        return Collections.unmodifiableList(entityActions);
+    }
+
 }
