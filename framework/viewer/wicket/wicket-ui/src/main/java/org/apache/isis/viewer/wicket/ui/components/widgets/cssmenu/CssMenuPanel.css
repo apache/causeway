@@ -266,4 +266,32 @@
 
 .additionalLinkList {
 	float:right;
-} 
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+	.additionalLinkList li {
+		float:left;
+		margin-right:10px;
+	}
+	
+	.additionalLinkList li a {
+	    background-color: #F0EFEA;
+	    border-radius: 4px 4px 4px 4px;
+	    color: #46423C;
+	    display: block;
+	    float: left;
+	    font-size: 0.85em;
+	    font-weight: bold;
+	    height: 30px;
+	    line-height: 30px;
+	    padding: 0 10px;
+	    text-decoration: none;
+	    text-transform: uppercase;
+	}
+	
+	.additionalLinkList li a:hover {
+		background-color:#20B5C2;
+		color:#FFFFFF;
+	}

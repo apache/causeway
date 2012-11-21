@@ -62,6 +62,44 @@ span.ViewLinkItem {
 	height:30px;
 	line-height:30px;
 	font-style:normal;
+	width:12px;
+	text-indent:-999em;
+}
+
+span.ViewLinkItem.hide {
+	background-image:url('images/icon_hide_on.png');
+	background-position: center center;
+	background-repeat:no-repeat;
+}
+
+a span.ViewLinkItem.calendar {
+	background-image:url('images/icon_calendar_off.png');
+	background-position: center center;
+	background-repeat:no-repeat;
+}
+
+span.ViewLinkItem.table {
+	background-image:url('images/icon_table_on.png');
+	background-position: center center;
+	background-repeat:no-repeat;
+}
+
+a span.ViewLinkItem.hide {
+	background-image:url('images/icon_hide_off.png');
+	background-position: center center;
+	background-repeat:no-repeat;
+}
+
+span.ViewLinkItem.calendar {
+	background-image:url('images/icon_calendar_on.png');
+	background-position: center center;
+	background-repeat:no-repeat;
+}
+
+a span.ViewLinkItem.table {
+	background-image:url('images/icon_table_off.png');
+	background-position: center center;
+	background-repeat:no-repeat;
 }
 
 .ViewLinkItem {

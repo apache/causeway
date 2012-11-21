@@ -472,9 +472,11 @@ tr.section td {
 	color:#46413B;
 }
 
-.scalarName:after, .collectionName:after {
-	content: ":";
-	font-style: normal;
+.mandatory .scalarName:after, 
+.mandatory  .collectionName:after {
+	content: " *";
+	font-weight:bold;
+	color:#20B5C2;
 }
 
 .scalarValue,.collectionContents  {

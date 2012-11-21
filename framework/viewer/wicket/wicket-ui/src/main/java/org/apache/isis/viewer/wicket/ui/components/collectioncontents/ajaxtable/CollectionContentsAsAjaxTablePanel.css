@@ -99,16 +99,31 @@
 	float: right;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents .navigator .first,
-.collectionContentsAsAjaxTablePanel table.contents .navigator .prev,
-.collectionContentsAsAjaxTablePanel table.contents .navigator .next, 
-.collectionContentsAsAjaxTablePanel table.contents .navigator .last,
-.collectionContentsAsAjaxTablePanel table.contents .navigator .goto {
-	margin-left: 0.5em;
+.collectionContentsAsAjaxTablePanel table.contents .navigator  a.first,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  a.prev,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  a.next, 
+.collectionContentsAsAjaxTablePanel table.contents .navigator  a.last,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  .goto a,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  .goto em,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  .first em,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  .prev em,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  .next em,
+.collectionContentsAsAjaxTablePanel table.contents .navigator  .last em {
+	margin-left: 5px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	background-color:#F0EFEA;
+	width:20px;
+	height:20px;
+	line-height:20px;
+	float:left;
+	text-align:center;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents .navigator .goto em {
-	background-color: #DDD;
+	background-color: #20B5C2;
+	color:#FFFFFF;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents a {
@@ -123,4 +138,13 @@
 .collectionContentsAsAjaxTablePanel table.contents .entityLinkSelect2Panel .entityImage {
 	vertical-align:text-bottom;
 	padding-right:6px;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot {	
+	margin-top:20px;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot tr td {
+	padding:20px 4px 0px;
+	background-color:#FFFFFF !important;
 }
