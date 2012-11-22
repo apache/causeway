@@ -224,36 +224,10 @@
         </notifiers>
     </ciManagement>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>Codehaus Repository</id>
-            <url>http://repository.codehaus.org/</url>
-	      <snapshots>
-		<enabled>false</enabled>
-	      </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <repositories>
-<!--
-        <repository>
-            <id>Maven Repository</id>
-            <url>http://repo1.maven.org/maven2/</url>
-            <snapshots>
-              <enabled>false</enabled>
-            </snapshots>
-        </repository>
--->
         <repository>
             <id>Apache Repository</id>
             <url>https://repository.apache.org/</url>
-            <snapshots>
-              <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>Maven Central Repository (UK Mirror)</id>
-            <url>http://uk.maven.org/maven2</url>
             <snapshots>
               <enabled>false</enabled>
             </snapshots>
