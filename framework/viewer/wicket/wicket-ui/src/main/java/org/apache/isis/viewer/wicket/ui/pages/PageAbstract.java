@@ -44,6 +44,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -57,10 +58,11 @@ import com.google.inject.name.Named;
  */
 public abstract class PageAbstract extends WebPage {
 
-    private static final String ID_BOOKMARKED_PAGES = "breadcrumbs";
 
     private static final long serialVersionUID = 1L;
     
+    private static final String ID_BOOKMARKED_PAGES = "breadcrumbs";
+    private static final String ID_HOME_PAGE_LINK = "homePageLink";
     private static final String ID_APPLICATION_NAME = "applicationName";
     private static final String ID_USER_NAME = "userName";
     
@@ -99,7 +101,7 @@ public abstract class PageAbstract extends WebPage {
             addApplicationActionsComponent();
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
-            addApplicationName();
+            addHomePageLinkAndApplicationName();
             addUserName();
             addLogoutLink();
             addAboutLink();
@@ -122,8 +124,11 @@ public abstract class PageAbstract extends WebPage {
         }
     }
     
-    private void addApplicationName() {
-        add(new Label(ID_APPLICATION_NAME, applicationName));
+    private void addHomePageLinkAndApplicationName() {
+        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/");
+        homePageLink.setContextRelative(true);
+        add(homePageLink);
+        homePageLink.add(new Label(ID_APPLICATION_NAME, applicationName));
     }
     
     private void addUserName() {

@@ -33,9 +33,14 @@
 		
 		<div id="container" class="page">
 			<div class="headerContainer">
-				<div id="header">
-					<h1><span wicket:id="applicationName">[application name]</span></h1>
+				<div>
+					<h1>
+						<a wicket:id="homePageLink" id="header" href="#">
+							<span wicket:id="applicationName" class="applicationName">[application name]</span>
+						</a>
+					</h1>
 				</div>
+				
 				<div id="secondaryMenu">
 					<div class="links">
 						<span wicket:id="userName">[username]</span>
