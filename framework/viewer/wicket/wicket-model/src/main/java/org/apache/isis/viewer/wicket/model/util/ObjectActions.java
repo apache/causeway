@@ -40,20 +40,11 @@ public final class ObjectActions {
         };
     }
 
-    public static String labelFor(final ObjectAction objectAction) {
-        final String actionName = ObjectActions.nameFor(objectAction);
-        String actionLabel = actionName;
-        if (objectAction.getParameterCount() > 0) {
-            actionLabel += "...";
-        }
-        return actionLabel;
-    }
-
     public static String labelFor(final ObjectAction action, final ObjectAdapter contextAdapter) {
-        return action.promptForParameters(contextAdapter) ? labelFor(action) : nameFor(action);
+        return action.promptForParameters(contextAdapter) ? ObjectActions.nameFor(action) : nameFor(action);
     }
 
-    private static String nameFor(final ObjectAction noAction) {
+    public static String nameFor(final ObjectAction noAction) {
         final String actionName = noAction.getName();
         if (actionName != null) {
             return actionName;

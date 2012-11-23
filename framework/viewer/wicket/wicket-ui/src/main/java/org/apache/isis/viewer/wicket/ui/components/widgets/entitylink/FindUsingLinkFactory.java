@@ -81,7 +81,7 @@ public final class FindUsingLinkFactory implements CssMenuLinkFactory {
             public void onClick() {
                 callback.onClick(actionModel);
             }
-        }, ObjectActions.labelFor(action));
+        }, ObjectActions.nameFor(action));
     }
 
 }

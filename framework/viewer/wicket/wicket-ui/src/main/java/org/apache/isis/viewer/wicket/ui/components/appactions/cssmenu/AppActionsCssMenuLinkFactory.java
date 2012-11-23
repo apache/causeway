@@ -47,7 +47,7 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
 
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
-        final String actionLabel = ObjectActions.labelFor(action);
+        final String actionLabel = ObjectActions.nameFor(action);
 
         return new LinkAndLabel(link, actionLabel);
     }
