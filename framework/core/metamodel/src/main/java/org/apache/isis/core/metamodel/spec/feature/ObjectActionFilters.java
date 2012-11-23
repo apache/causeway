@@ -12,6 +12,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ObjectActionFilters {
@@ -54,6 +55,15 @@ public class ObjectActionFilters {
                 boolean has1Param = objectAction.getParameterCount() == 1;
                 boolean hasReturn = objectAction.hasReturn();
                 return contributed && has1Param && !hasReturn;
+            }
+        };
+    }
+
+    public static Filter<ObjectAction> filterOfType(final ActionType type) {
+        return new Filter<ObjectAction>(){
+            @Override
+            public boolean accept(ObjectAction oa) {
+                return oa.getType() == type;
             }
         };
     }

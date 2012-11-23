@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.filter;
 
+import com.google.common.base.Predicate;
+
 public final class Filters {
 
     private Filters() {
@@ -85,6 +87,15 @@ public final class Filters {
 
     public static <T> Filter<T> noneOfType(final Class<T> clazz) {
         return none();
+    }
+
+    public static <T> Predicate<T> asPredicate(final Filter<T> filter) {
+        return new Predicate<T>() {
+            @Override
+            public boolean apply(T candidate) {
+                return filter.accept(candidate);
+            }
+        };
     }
 
 }

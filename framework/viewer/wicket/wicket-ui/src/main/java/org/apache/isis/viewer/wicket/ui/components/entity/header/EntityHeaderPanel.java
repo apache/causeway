@@ -37,7 +37,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -102,14 +104,10 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
         final ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            final ObjectSpecification adapterSpec = adapter.getSpecification();
-            
-            @SuppressWarnings("unchecked")
-            final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, 
-                    Filters.and(memberOrderNameNotCollection(adapterSpec), dynamicallyVisibleFor(adapter)));
+            final List<ObjectAction> topLevelActions = getTopLevelActions(adapter);
 
-            if(!userActions.isEmpty()) {
-                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
+            if(!topLevelActions.isEmpty()) {
+                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), topLevelActions, linkFactory);
                 // TODO: i18n
                 final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
@@ -120,6 +118,25 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }
+    }
+
+    private List<ObjectAction> getTopLevelActions(final ObjectAdapter adapter) {
+        final List<ObjectAction> topLevelActions = Lists.newArrayList();
+        
+        addTopLevelActions(adapter, ActionType.USER, topLevelActions);
+        if(IsisContext.getDeploymentType().isPrototyping()) {
+            addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions);
+            addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
+        }
+        return topLevelActions;
+    }
+
+    private void addTopLevelActions(final ObjectAdapter adapter, ActionType actionType, final List<ObjectAction> topLevelActions) {
+        final ObjectSpecification adapterSpec = adapter.getSpecification();
+        @SuppressWarnings("unchecked")
+        final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, 
+                Filters.and(memberOrderNameNotCollection(adapterSpec), dynamicallyVisibleFor(adapter)));
+        topLevelActions.addAll(ObjectActions.flattenedActions(userActions));
     }
     
     private Filter<ObjectAction> memberOrderNameNotCollection(final ObjectSpecification adapterSpec) {

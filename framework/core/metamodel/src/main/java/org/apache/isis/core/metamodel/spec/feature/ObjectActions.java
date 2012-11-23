@@ -17,31 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.metamodel.spec.feature;
 
-import com.google.common.base.Predicate;
+import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.ObjectActionSet;
+
+import com.google.common.collect.Lists;
 
 public final class ObjectActions {
 
     private ObjectActions() {
-    }
-
-    public static Predicate<ObjectAction> ofType(final ActionType type) {
-        return new Predicate<ObjectAction>() {
-            @Override
-            public boolean apply(final ObjectAction input) {
-                return input.getType() == type;
-            }
-        };
-    }
-
-    public static String labelFor(final ObjectAction action, final ObjectAdapter contextAdapter) {
-        return action.promptForParameters(contextAdapter) ? ObjectActions.nameFor(action) : nameFor(action);
     }
 
     public static String nameFor(final ObjectAction noAction) {
@@ -54,6 +41,22 @@ public final class ObjectActions {
             return namedFacet.value();
         }
         return "(no name)";
+    }
+
+    public static List<ObjectAction> flattenedActions(final List<ObjectAction> objectActions) {
+        final List<ObjectAction> actions = Lists.newArrayList();
+        for (final ObjectAction action : objectActions) {
+            if (action.getType().isSet()) {
+                final ObjectActionSet actionSet = (ObjectActionSet) action;
+                final List<ObjectAction> subActions = actionSet.getActions();
+                for (final ObjectAction subAction : subActions) {
+                    actions.add(subAction);
+                }
+            } else {
+                actions.add(action);
+            }
+        }
+        return actions;
     }
 
 }

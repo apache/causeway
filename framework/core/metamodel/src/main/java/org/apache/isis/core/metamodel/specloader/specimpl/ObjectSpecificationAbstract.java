@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -81,7 +82,9 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -730,27 +733,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return actionListToAppendTo;
     }
 
-    private List<ObjectAction> getFlattenedActions(final List<ObjectAction> objectActions, final ActionType type, final Filter<ObjectAction> filter) {
-        final List<ObjectAction> actions = Lists.newArrayList();
-        for (final ObjectAction action : objectActions) {
-            if (action.getType().isSet()) {
-                final ObjectActionSet actionSet = (ObjectActionSet) action;
-                final List<ObjectAction> subActions = actionSet.getActions();
-                for (final ObjectAction subAction : subActions) {
-                    addAction(type, actions, subAction, filter);
-                }
-            } else {
-                addAction(type, actions, action, filter);
-            }
-        }
-
-        return actions;
-    }
-
-    private void addAction(final ActionType type, final List<ObjectAction> actions, final ObjectAction subAction, Filter<ObjectAction> filter) {
-        if (type.matchesTypeOf(subAction) && filter.accept(subAction)) {
-            actions.add(subAction);
-        }
+    @SuppressWarnings("unchecked")
+    private static List<ObjectAction> getFlattenedActions(final List<ObjectAction> objectActions, final ActionType type, final Filter<ObjectAction> filter) {
+        final List<ObjectAction> actions = ObjectActions.flattenedActions(objectActions);
+        return Lists.newArrayList(Iterables.filter(actions, Filters.asPredicate(Filters.and(ObjectActionFilters.filterOfType(type), filter))));
     }
 
     @Override
@@ -821,6 +807,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * 
      */
     protected List<ObjectAction> getContributedActions(final ActionType actionType, Filter<ObjectAction> filter) {
+        List<ObjectAction> contributedActionSets = getContributedActions(actionType);
+        return Lists.newArrayList(Iterables.filter(contributedActionSets, Filters.asPredicate(filter)));
+    }
+
+    private List<ObjectAction> getContributedActions(final ActionType actionType) {
         if (isService()) {
             return Collections.emptyList();
         }
@@ -831,19 +822,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             contributedActionSets = Lists.newArrayList();
             final List<ObjectAdapter> services = getServicesProvider().getServices();
             for (final ObjectAdapter serviceAdapter : services) {
-                addContributedActionsIfAny(serviceAdapter, actionType, filter, contributedActionSets);
+                addContributedActionsIfAny(serviceAdapter, actionType, contributedActionSets);
             }
             contributedActionSetsByType.put(actionType, contributedActionSets);
         }
         return contributedActionSets;
     }
 
-    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, Filter<ObjectAction> filter, final List<ObjectAction> contributedActionSetsToAppendTo) {
+    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, final List<ObjectAction> contributedActionSetsToAppendTo) {
         final ObjectSpecification specification = serviceAdapter.getSpecification();
         if (specification == this) {
             return;
         }
-        final List<ObjectAction> contributedActions = findContributedActions(specification, actionType, filter);
+        final List<ObjectAction> contributedActions = findContributedActions(specification, actionType);
         // only add if there are matching subactions.
         if (contributedActions.size() == 0) {
             return;
@@ -852,9 +843,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         contributedActionSetsToAppendTo.add(contributedActionSet);
     }
 
-    private List<ObjectAction> findContributedActions(final ObjectSpecification specification, final ActionType actionType, Filter<ObjectAction> filter) {
+    private List<ObjectAction> findContributedActions(final ObjectSpecification specification, final ActionType actionType) {
         final List<ObjectAction> contributedActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED, filter);
+        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED, Filters.<ObjectAction>any());
         for (final ObjectAction serviceAction : serviceActions) {
             if (serviceAction.isAlwaysHidden()) {
                 continue;

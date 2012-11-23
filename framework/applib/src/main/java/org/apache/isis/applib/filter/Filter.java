@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.filter;
 
+import com.google.common.base.Predicate;
+
 /**
  * For use by repository implementations to allow a set of objects returned by a
  * back-end objectstore to be filtered before being returned to the caller.
@@ -41,4 +43,5 @@ public interface Filter<T> {
      *         otherwise.
      */
     public boolean accept(T t);
+
 }

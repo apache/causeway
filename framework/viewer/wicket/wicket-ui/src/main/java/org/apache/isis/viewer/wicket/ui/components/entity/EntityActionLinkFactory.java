@@ -28,6 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -37,7 +38,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.model.util.ObjectActions;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
@@ -62,7 +62,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
 
         final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
         final ObjectAdapter contextAdapter = entityModel.getObject();
-        final String label = ObjectActions.labelFor(action, contextAdapter);
+        final String label = ObjectActions.nameFor(action);
 
         return new LinkAndLabel(link, label);
     }

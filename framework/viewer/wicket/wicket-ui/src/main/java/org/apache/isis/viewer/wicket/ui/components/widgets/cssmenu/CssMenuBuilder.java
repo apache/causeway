@@ -28,13 +28,16 @@ import com.google.common.collect.Collections2;
 
 import org.apache.wicket.Application;
 
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.util.ObjectActions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
 
@@ -66,22 +69,18 @@ public class CssMenuBuilder {
     }
 
     private void addMenuItems(final CssMenuItem parent, final List<ObjectAction> actions) {
-        addMenuItemsForActionsOfType(parent, actions, ActionType.SET);
         addMenuItemsForActionsOfType(parent, actions, ActionType.USER);
-        if (isExplorationMode()) {
+        if (isPrototyping()) {
             addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE);
         }
         if (isDebugMode()) {
             addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG);
         }
     }
 
-    /**
-     * Protected so can be overridden in testing if required.
-     */
-    protected boolean isExplorationMode() {
-        //return Application.get().getConfigurationType().equalsIgnoreCase(Application.DEVELOPMENT);
-        return Application.get().usesDeploymentConfig();
+    public boolean isPrototyping() {
+        return IsisContext.getDeploymentType().isPrototyping();
     }
 
     /**
@@ -95,7 +94,7 @@ public class CssMenuBuilder {
     }
 
     private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions, final ActionType type) {
-        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, ObjectActions.ofType(type));
+        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectActionFilters.filterOfType(type)));
         for (final ObjectAction action : filterActionsOfType) {
             addMenuItem(parent, action);
         }

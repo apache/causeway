@@ -80,7 +80,6 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 final AbstractLink link = Links.newBookmarkablePageLink(BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
                 link.add(new Label(BOOKMARKED_PAGE_TITLE, BookmarkedPagesModel.titleFrom(pageParameters)));
                 item.add(link);
-                link.setEnabled(!bookmarkedPagesModel.isCurrent(pageParameters));
             }
         };
         container.add(listView);
