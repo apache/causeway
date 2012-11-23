@@ -95,14 +95,20 @@ public abstract class PageAbstract extends WebPage {
     private String applicationJs;
 
     public PageAbstract(final PageParameters pageParameters, final ComponentType... childComponentIds) {
-        addApplicationActionsComponent();
-        this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
-        this.pageParameters = pageParameters;
-        addApplicationName();
-        addUserName();
-        addLogoutLink();
-        addAboutLink();
-        add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
+        try {
+            addApplicationActionsComponent();
+            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+            this.pageParameters = pageParameters;
+            addApplicationName();
+            addUserName();
+            addLogoutLink();
+            addAboutLink();
+            add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
+        } catch(RuntimeException ex) {
+            // hack for IE
+            getSession().invalidate();
+            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+        }
     }
 
     @Override
