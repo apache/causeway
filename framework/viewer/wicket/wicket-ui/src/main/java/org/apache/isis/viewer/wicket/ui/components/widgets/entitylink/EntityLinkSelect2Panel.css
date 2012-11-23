@@ -29,11 +29,6 @@ div.entityLinkSelect2Panel > div {
 	height: 16px;
 }
 
-.entityLinkSelect2Panel table.findUsing {
-	display: inline-table;
-	font-size: smaller;
-}
-
 .entityLinkSelect2Panel a.entityClearLink {
 	display:inline-table;
 	margin-left: 0px;

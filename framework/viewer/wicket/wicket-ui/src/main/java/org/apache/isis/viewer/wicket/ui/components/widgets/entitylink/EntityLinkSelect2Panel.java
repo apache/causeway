@@ -22,22 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2Choice;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.extensions.yui.calendar.DateField;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -57,43 +41,45 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.yui.calendar.DateField;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
-public class EntityLinkSelect2Panel extends EntityLinkAbstract {
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.vaynberg.wicket.select2.ChoiceProvider;
+import com.vaynberg.wicket.select2.Select2Choice;
+import com.vaynberg.wicket.select2.TextChoiceProvider;
+
+/**
+ * {@link FormComponentPanel} representing a reference to an entity: a link and
+ * (optionally) an autocomplete field.
+ */
+public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler  {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_AUTO_COMPLETE = "autoComplete";
 
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
-    private static final String ID_ENTITY_OID = "entityOid";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
-    private static final String ID_FIND_USING = "findUsing";
-    private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
 
+    private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
     private static final String ID_FEEDBACK = "feedback";
 
-    private final FindUsingLinkFactory linkFactory;
-
     private Select2Choice<ObjectAdapterMemento> autoCompleteField;
-
-
-    private WebMarkupContainer findUsing;
     private Link<String> entityDetailsLink;
     private Link<String> entityClearLink;
-    
-    private PanelAbstract<?> actionFindUsingComponent;
-
-    // REVIEW: can we remove, since pending info has now moved into the model.
-    // private TextField<ObjectAdapterMemento> pendingOid;
-
 
     public EntityLinkSelect2Panel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         setType(ObjectAdapter.class);
-        linkFactory = new FindUsingLinkFactory(this);
         buildGui();
     }
 
@@ -105,33 +91,10 @@ public class EntityLinkSelect2Panel extends EntityLinkAbstract {
      * Builds the parts of the GUI that are not dynamic.
      */
     private void buildGui() {
-        rebuildFindUsingMenu();
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
-
         syncWithInput();
     }
 
-
-    void rebuildFindUsingMenu() {
-        final EntityModel entityModel = getEntityModel();
-        final List<ObjectAction> actions = findServiceActionsFor(entityModel.getTypeOfSpecification());
-        findUsing = new WebMarkupContainer(ID_FIND_USING);
-        switch (actions.size()) {
-        case 0:
-            permanentlyHide(findUsing, ComponentType.ACTION);
-            break;
-        default:
-            // TODO: i18n
-
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), actions, linkFactory);
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ComponentType.ACTION.getWicketId(), "find using...");
-
-            findUsing.addOrReplace(cssMenuPanel);
-            actionFindUsingComponent = cssMenuPanel;
-            break;
-        }
-        addOrReplace(findUsing);
-    }
 
     /**
      * Must be called after {@link #setEnabled(boolean)} to ensure that the
@@ -147,8 +110,6 @@ public class EntityLinkSelect2Panel extends EntityLinkAbstract {
     public void syncVisibilityAndUsability() {
         
         final boolean mutability = isEnableAllowed() && !getEntityModel().isViewMode();
-        findUsing.setVisible(mutability);
-        
 
         if(entityClearLink != null) {
             entityClearLink.setVisible(mutability);
@@ -253,9 +214,6 @@ public class EntityLinkSelect2Panel extends EntityLinkAbstract {
         // no need for the 'null' title, since if there is no object yet
         // can represent this fact in the drop-down
         permanentlyHide(ID_ENTITY_TITLE_NULL);
-        
-        // hide links
-        permanentlyHide(ID_FIND_USING);
     }
 
     abstract static class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
@@ -393,18 +351,14 @@ public class EntityLinkSelect2Panel extends EntityLinkAbstract {
 
     @Override
     public void onClick(final ActionModel actionModel) {
-        final ActionPanel actionPanel = new ActionPanel(actionFindUsingComponent.getComponentType().toString(), actionModel);
-        actionFindUsingComponent.replaceWith(actionPanel);
     }
 
     public void onSelected(final ObjectAdapterMemento selectedAdapterMemento) {
         getEntityModel().setPending(selectedAdapterMemento);
-        rebuildFindUsingMenu();
         renderSamePage();
     }
 
     public void onNoResults() {
-        rebuildFindUsingMenu();
         renderSamePage();
     }
 

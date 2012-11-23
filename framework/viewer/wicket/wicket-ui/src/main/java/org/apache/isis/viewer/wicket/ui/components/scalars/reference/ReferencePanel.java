@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -51,7 +51,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-    private EntityLinkAbstract entityLink;
+    private EntityLinkSelect2Panel entityLink;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -85,7 +85,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = (EntityLinkAbstract) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entityLink = (EntityLinkSelect2Panel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
         
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
@@ -163,7 +163,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = (EntityLinkAbstract) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entityLink = (EntityLinkSelect2Panel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
         
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
