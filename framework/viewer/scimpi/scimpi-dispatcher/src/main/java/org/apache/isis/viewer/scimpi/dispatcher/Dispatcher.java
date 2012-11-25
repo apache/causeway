@@ -135,8 +135,10 @@ public class Dispatcher {
 
             final Throwable ex = e instanceof TagProcessingException ? e.getCause() : e;
             if (ex instanceof ForbiddenException) {
+                LOG.error("invalid access to " + servletPath, e);
                 show403ErrorPage(context, error, e, ex);
             } else {
+                LOG.error("error procesing " + servletPath, e);
                 if (context.getErrorMessage() != null) {
                     fallbackToSimpleErrorPage(context, e);
                 } else {
