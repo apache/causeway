@@ -73,7 +73,9 @@
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+        
+        <!-- number of unapproved licenses -->
+		<rat.num>0</rat.num>
         <!-- override in each module (used by locate global resources) -->
         <siteBaseDir>.</siteBaseDir>
 
@@ -870,7 +872,7 @@ archetype includes this explicit dependency.
                 <configuration>
                     <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                     <excludeSubProjects>true</excludeSubProjects>
-                    <numUnapprovedLicenses>0</numUnapprovedLicenses>
+                    <numUnapprovedLicenses>${rat.num}</numUnapprovedLicenses>
                     <excludes>
                         <exclude>**/*.project</exclude>
                         <exclude>**/.classpath</exclude>
