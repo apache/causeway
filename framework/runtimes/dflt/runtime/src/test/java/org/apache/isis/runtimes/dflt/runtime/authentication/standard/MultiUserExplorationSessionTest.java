@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.authentication.standard;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -120,7 +121,7 @@ public class MultiUserExplorationSessionTest {
         authenticator = new ExplorationAuthenticator(mockConfiguration);
         final AuthenticationSession authSession = authenticator.authenticate(new AuthenticationRequestExploration(), "");
 
-        assertThat(authSession, is(MultiUserExplorationSession.class));
+        assertThat(authSession, is(instanceOf(MultiUserExplorationSession.class)));
 
         assertThat(authSession.getUserName(), is(equalTo("fred")));
     }
@@ -135,7 +136,7 @@ public class MultiUserExplorationSessionTest {
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
         final AuthenticationSession authSession = authenticator.authenticate(new AuthenticationRequestExploration(), "");
-        assertThat(authSession, is(SimpleSession.class));
+        assertThat(authSession, is(instanceOf(SimpleSession.class)));
 
         assertThat(authSession.getUserName(), is(equalTo("sven")));
     }
@@ -151,7 +152,7 @@ public class MultiUserExplorationSessionTest {
         authenticator = new ExplorationAuthenticator(mockConfiguration);
 
         final AuthenticationSession authSession = authenticator.authenticate(new AuthenticationRequestExploration(), "");
-        assertThat(authSession, is(ExplorationSession.class));
+        assertThat(authSession, is(instanceOf(ExplorationSession.class)));
     }
 
     @Test

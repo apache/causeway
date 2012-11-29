@@ -73,7 +73,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
 
-        assertThat(repr.getValues().arrayGet(0), isLink().value(is(not(Matchers.<JsonRepresentation> nullValue()))));
+        assertThat(repr.getValues().arrayGet(0), isLink().value(is(not(Matchers.nullValue(JsonRepresentation.class)))));
         assertThat(repr.getValues().arrayGet(0).getRepresentation("value"), isMap());
     }
 

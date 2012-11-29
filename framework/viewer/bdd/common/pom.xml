@@ -37,19 +37,6 @@
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- TODO: remove this dependency -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>

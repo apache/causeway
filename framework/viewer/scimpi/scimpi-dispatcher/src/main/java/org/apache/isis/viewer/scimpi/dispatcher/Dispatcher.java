@@ -452,8 +452,6 @@ public class Dispatcher {
                 }
 
             }
-        } catch (final MalformedURLException e) {
-            throw new IsisException(e);
         } catch (final DocumentException e) {
             throw new IsisException(e);
         }

@@ -57,6 +57,9 @@
 
     <dependencyManagement>
         <dependencies>
+        
+        	<!-- for some reason, it seems to be necessary to specify the
+        	versions, ie not being inherited from parent.  Dunno why. -->
 
             <!-- BDD Viewer -->
             <dependency>
@@ -89,7 +92,7 @@
             <dependency>
               <groupId>junit</groupId>
               <artifactId>junit</artifactId>
-              <version>4.10</version>
+              <version>4.11</version>
             </dependency>
         
             <dependency>
@@ -101,26 +104,32 @@
             <dependency>
               <groupId>org.hamcrest</groupId>
               <artifactId>hamcrest-library</artifactId>
-              <version>1.1</version>
+              <version>1.3</version>
             </dependency>
 
 		    <dependency>
 			    <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>11.0</version>
+                <version>13.0.1</version>
 		    </dependency>
-         </dependencies>
+
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <artifactId>runtime</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>progmodels</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
 
 
     <modules>

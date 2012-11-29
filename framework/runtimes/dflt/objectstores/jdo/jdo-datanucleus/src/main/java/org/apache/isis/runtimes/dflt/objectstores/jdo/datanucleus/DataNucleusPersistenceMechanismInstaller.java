@@ -3,8 +3,6 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.fixtures;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -37,7 +38,7 @@ public class FixtureClockInstantiationTest {
     @Test
     public void shouldSetupClockSingletonWithFixtureClockWhenInitialize() {
         FixtureClock.initialize();
-        assertThat(Clock.getInstance(), is(FixtureClock.class));
+        assertThat(Clock.getInstance(), is(instanceOf(FixtureClock.class)));
     }
 
     @Test

@@ -26,18 +26,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsEqual;
-import org.hamcrest.number.IsGreaterThan;
-import org.hamcrest.text.StringContains;
-import org.hamcrest.text.StringEndsWith;
-import org.hamcrest.text.StringStartsWith;
-
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.hamcrest.core.StringContains;
+import org.hamcrest.core.StringEndsWith;
+import org.hamcrest.core.StringStartsWith;
 
 /**
  * Hamcrest {@link Matcher} implementations.
@@ -82,7 +81,7 @@ public final class IsisMatchers {
     }
 
     @Factory
-    public static Matcher<String> startsWithStripNewLines(final String expected) {
+    public static StringStartsWith startsWithStripNewLines(final String expected) {
         final String strippedExpected = StringUtils.stripNewLines(expected);
         return new StringStartsWith(strippedExpected) {
             @Override
@@ -172,7 +171,7 @@ public final class IsisMatchers {
 
     @Factory
     public static <T extends Comparable<T>> Matcher<T> greaterThan(final T c) {
-        return new IsGreaterThan<T>(c);
+        return Matchers.greaterThan(c);
     }
 
     @Factory

@@ -33,7 +33,7 @@
 		<siteBaseDir>../../..</siteBaseDir>
 		<relativeUrl>viewer/bdd/concordion/</relativeUrl>
 
-		<concordion.version>1.4.1</concordion.version>
+		<concordion.version>1.4.2</concordion.version>
 	</properties>
 	
     <!-- used in Site generation for relative references. -->

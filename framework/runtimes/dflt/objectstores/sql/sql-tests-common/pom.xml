@@ -36,7 +36,7 @@
 		<relativeUrl>runtimes/dflt/objecstores/sql/sql-tests-common/</relativeUrl>
 
         <xml-objectstore.version>0.3.1-SNAPSHOT</xml-objectstore.version>
-        <hsqldb.version>1.8.0.10</hsqldb.version>
+        <hsqldb.version>2.2.9</hsqldb.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->

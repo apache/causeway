@@ -83,7 +83,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-            <!-- TODO: remove this dependency -->
+
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>security</artifactId>
@@ -91,7 +91,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- TODO: remove this dependency -->
+
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
