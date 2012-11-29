@@ -150,6 +150,13 @@
 	            <groupId>javax.jdo</groupId>
 	            <artifactId>jdo-api</artifactId>
 	            <version>3.0.1</version>
+	            <exclusions>
+	            	<!-- use geronimo-jta_1.1_spec instead -->
+	            	<exclusion>
+	            		<groupId>javax.transaction</groupId>
+	            		<artifactId>jta</artifactId>
+	            	</exclusion>
+	            </exclusions>
 	        </dependency>
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
@@ -159,7 +166,7 @@
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
 	            <artifactId>datanucleus-jodatime</artifactId>
-	            <version>3.1.0-release</version>
+	            <version>3.1.1</version>
 	        </dependency>
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
@@ -176,6 +183,11 @@
 	            <artifactId>datanucleus-rdbms</artifactId>
 	            <version>3.1.2</version>
 	        </dependency>
+          <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jta_1.1_spec</artifactId>
+            <version>1.1.1</version>
+          </dependency>
 	    
 	        <dependency>
 	            <groupId>org.hsqldb</groupId>

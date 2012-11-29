@@ -59,19 +59,19 @@
 	
         <dependency>
             <groupId>org.concordion</groupId>
-	        <artifactId>concordion</artifactId>
-	        <exclusions>
-	           <exclusion>
-	               <!--  excluded because of LGPL; end-developer must include in POM file directly -->
-		           <groupId>xom</groupId>
-		           <artifactId>xom</artifactId>
-	           </exclusion>
-				<exclusion>
-					<!-- for dependency convergence -->
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-	        </exclusions>
+            <artifactId>concordion</artifactId>
+            <exclusions>
+               <exclusion>
+                   <!--  excluded because of LGPL; end-developer must include in POM file directly -->
+                   <groupId>xom</groupId>
+                   <artifactId>xom</artifactId>
+               </exclusion>
+                <exclusion>
+                    <!-- for dependency convergence -->
+                    <groupId>junit</groupId>
+                    <artifactId>junit-dep</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 		<dependency>

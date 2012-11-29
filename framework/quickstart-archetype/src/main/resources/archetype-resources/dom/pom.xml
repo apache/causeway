@@ -117,6 +117,13 @@
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
+            <exclusions>
+              <exclusion>
+                <!-- use geronimo-jta_1.1_spec instead -->
+                <groupId>javax.transaction</groupId>
+                <artifactId>jta</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
@@ -127,10 +134,10 @@
             <artifactId>datanucleus-enhancer</artifactId>
             <!-- 
             <exclusions>
-				<exclusion>
-					<groupId>org.ow2.asm</groupId>
-					<artifactId>asm</artifactId>
-				</exclusion>
+              <exclusion>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+              </exclusion>
             </exclusions>
              -->
         </dependency>
@@ -138,6 +145,11 @@
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
+        <dependency>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-jta_1.1_spec</artifactId>
+        </dependency>
+        
 
 	</dependencies>
     

@@ -61,6 +61,13 @@
        <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
+            <exclusions>
+              <exclusion>
+                <!-- use geronimo-jta_1.1_spec instead -->
+                <groupId>javax.transaction</groupId>
+                <artifactId>jta</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
@@ -78,17 +85,15 @@
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-rdbms</artifactId>
         </dependency>
-		<!-- 
         <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jdo-query</artifactId>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-jta_1.1_spec</artifactId>
         </dependency>
-		-->
 
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-		    <artifactId>identity</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>identity</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
