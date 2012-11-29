@@ -890,16 +890,16 @@ archetype includes this explicit dependency.
                         <exclude>**/*.json</exclude>
                         <exclude>**/rat.txt</exclude>
                         <exclude>**/isis.log</exclude>
+                        <exclude>**/datanucleus.log</exclude>
 
                         <exclude>**/fixture-data</exclude>
                         <exclude>**/test.data</exclude>
-                        <exclude>**/xml/**/*.xml</exclude>
-                        <exclude>tmp/tests/*.xml</exclude>
+                        <exclude>**/hsql-db/**</exclude>
 
-                        <exclude>**/hsql-db/**/*.script</exclude>
-                        <exclude>**/hsql-db/**/*.properties</exclude>
-                        <exclude>**/hsql-db/**/*.log</exclude>
-                        
+                        <exclude>**/xml/tmp/**</exclude>
+                        <exclude>**/xml/objects/**</exclude>
+                        <exclude>tmp/tests/**/.xml</exclude>
+
                         <exclude>**/ldap-conf/**</exclude>
 
                         <exclude>**/src/main/resources/resources.txt</exclude>
