@@ -22,7 +22,7 @@
 
 	<groupId>org.apache.isis</groupId>
 	<artifactId>examples</artifactId>
-    <version>0.3.1-incubating-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
     
     <name>Isis Examples</name>
     
@@ -59,7 +59,6 @@
         <module>quickstart</module>
         <module>claims</module>
         <module>onlinedemo</module>
-        <module>embeddedinspring</module>
         <module>metamodel-examples/namefile</module>
     </modules>
 

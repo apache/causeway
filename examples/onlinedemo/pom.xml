@@ -21,14 +21,14 @@
 
     <groupId>org.apache.isis.examples</groupId>
     <artifactId>onlinedemo</artifactId>
-    <version>0.3.1-incubating-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
 
     <name>Online Demo</name>
 
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.3.1-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.3.1-SNAPSHOT</isis.version>
     </properties>
 
     <repositories>
@@ -149,25 +149,25 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>onlinedemo-dom</artifactId>
-                <version>0.3.1-incubating-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>onlinedemo-fixture</artifactId>
-                <version>0.3.1-incubating-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>onlinedemo-objstore-dflt</artifactId>
-                <version>0.3.1-incubating-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>onlinedemo-webapp</artifactId>
-                <version>0.3.1-incubating-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
 

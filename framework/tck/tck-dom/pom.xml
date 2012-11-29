@@ -22,7 +22,7 @@
 	<parent>
     	<groupId>org.apache.isis.tck</groupId>
     	<artifactId>tck</artifactId>
-		<version>0.3.1-incubating-SNAPSHOT</version>
+		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>tck-dom</artifactId>
@@ -94,7 +94,7 @@
 			<dependency>
 	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 				<artifactId>jdo</artifactId>
-				<version>0.3.1-incubating-SNAPSHOT</version>
+				<version>0.3.1-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>						
 			</dependency>
@@ -112,10 +112,6 @@
 			<artifactId>jdo-applib</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-applib</artifactId>
-		</dependency>
 
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
        <dependency>

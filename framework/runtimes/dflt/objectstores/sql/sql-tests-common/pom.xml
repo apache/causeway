@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
         <artifactId>sql</artifactId>
-        <version>0.3.1-incubating-SNAPSHOT</version>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>sql-tests-common</artifactId>
@@ -35,7 +35,7 @@
 	    <siteBaseDir>../../../../..</siteBaseDir>
 		<relativeUrl>runtimes/dflt/objecstores/sql/sql-tests-common/</relativeUrl>
 
-        <xml-objectstore.version>0.3.1-incubating-SNAPSHOT</xml-objectstore.version>
+        <xml-objectstore.version>0.3.1-SNAPSHOT</xml-objectstore.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
     </properties>
 
@@ -142,12 +142,12 @@
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
-            <version>0.3.1-incubating-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>tck-dom</artifactId>
-            <version>0.3.1-incubating-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
 

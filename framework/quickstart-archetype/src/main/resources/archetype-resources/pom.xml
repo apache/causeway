@@ -28,7 +28,7 @@
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.3.1-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.3.1-SNAPSHOT</isis.version>
     </properties>
 
     <repositories>

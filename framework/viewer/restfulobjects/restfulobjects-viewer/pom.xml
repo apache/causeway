@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
 		<artifactId>restfulobjects</artifactId>
-		<version>0.3.1-incubating-SNAPSHOT</version>
+		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>restfulobjects-viewer</artifactId>

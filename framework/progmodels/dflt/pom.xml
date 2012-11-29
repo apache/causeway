@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>progmodels</artifactId>
-		<version>0.3.1-incubating-SNAPSHOT</version>
+		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.progmodels</groupId>
@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>core</artifactId>
-                <version>0.3.1-incubating-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -78,7 +78,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.3.1-incubating-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

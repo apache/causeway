@@ -20,8 +20,12 @@
 //
 
 def cli = new CliBuilder( usage: 'groovy searchandreplace [-xv]')
-cli.x(argName: 'exec', longOpt: 'exec', 'execute (perform changes if any found)')
-cli.v(argName: 'verbose', longOpt: 'verbose', 'verbose')
+cli.x(argName: 'exec', 
+      longOpt: 'exec', 
+      'execute (perform changes if any found)')
+cli.v(argName: 'verbose', 
+      longOpt: 'verbose', 
+      'verbose')
 
 def options=cli.parse(args)
 
