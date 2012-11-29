@@ -105,7 +105,7 @@ REM  under the License.
 """
 
 
-def fileEndings = [".java", ".htm"]
+def fileEndings = [".java"]
 //def fileEndings = [".xml", ".html", ".htm", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords", ".bat"]
 
 def licenseTextByFileEnding = [
@@ -130,6 +130,7 @@ def currentDir = new File(".");
 currentDir.eachFileRecurse { file ->
   fileEndings.each { fileEnding ->
     if (! (file.canonicalPath =~ /[\\\/]target[\\\/]/)     && 
+        ! (file.canonicalPath =~ /[\\\/]target-ide[\\\/]/)     &&  
         ! (file.canonicalPath =~ /[\\\/]docbkx[\\\/]/)     &&  
         ! (file.canonicalPath =~ /[\\\/]\.settings[\\\/]/)    ) {
       if (file.name.endsWith(fileEnding)) {
