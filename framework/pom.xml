@@ -301,9 +301,7 @@
                                 <banLatest>true</banLatest>
                                 <banRelease>true</banRelease>
                             </requirePluginVersions>
-                            <!-- 
                             <DependencyConvergence/>
-                             -->
                         </rules>
                     </configuration>
                     <!-- goal:enforce supposedly binds to phase:validate, 
@@ -1347,6 +1345,7 @@ archetype includes this explicit dependency.
                 <version>2.5.1</version>
                 <exclusions>
                     <exclusion>
+		        <!-- for dependency convergence -->
                         <groupId>junit</groupId>
                         <artifactId>junit-dep</artifactId>
                     </exclusion>

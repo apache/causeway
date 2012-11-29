@@ -66,6 +66,11 @@
 		           <groupId>xom</groupId>
 		           <artifactId>xom</artifactId>
 	           </exclusion>
+				<exclusion>
+					<!-- for dependency convergence -->
+					<groupId>junit</groupId>
+					<artifactId>junit-dep</artifactId>
+				</exclusion>
 	        </exclusions>
         </dependency>
 

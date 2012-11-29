@@ -153,42 +153,91 @@
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-guice</artifactId>
 				<version>${wicket.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 
@@ -197,6 +246,13 @@
 			    <groupId>com.vaynberg.wicket.select2</groupId>
 			    <artifactId>wicket-select2</artifactId>
 			    <version>${wicket-select2.version}</version>
+				<exclusions>
+					<exclusion>
+		        			<!-- for dependency convergence -->
+						<groupId>org.apache.wicket</groupId>
+						<artifactId>wicket-core</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<!-- Other -->
