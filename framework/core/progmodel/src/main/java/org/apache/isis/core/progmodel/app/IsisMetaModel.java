@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 
@@ -86,6 +87,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private MetaModelValidator metaModelValidator;
 
     private DomainObjectContainer container;
+
+    private ValidationFailures validationFailures;
 
     
     public static class Builder {
@@ -173,7 +176,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         runtimeContext.injectInto(reflector);
         reflector.injectInto(runtimeContext);
 
-        reflector.init();
+        validationFailures = reflector.initAndValidate();
         runtimeContext.init();
 
         for (final Object service : services) {
@@ -181,6 +184,10 @@ public class IsisMetaModel implements ApplicationScopedComponent {
             serviceSpec.markAsService();
         }
         state = State.INITIALIZED;
+    }
+    
+    public ValidationFailures getValidationFailures() {
+        return validationFailures;
     }
 
     @Override

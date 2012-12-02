@@ -231,6 +231,17 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     @Override
     public void init() {
+        ValidationFailures validationFailures = initAndValidate();
+        
+        validationFailures.assertNone();
+        
+        cacheBySpecId();
+    }
+
+    /**
+     * For benefit of <tt>IsisMetaModel</tt>.
+     */
+    public ValidationFailures initAndValidate() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("initialising " + this);
         }
@@ -261,10 +272,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         
         ValidationFailures validationFailures = new ValidationFailures();
         metaModelValidator.validate(validationFailures);
-        
-        validationFailures.assertNone();
-        
-        cacheBySpecId();
+        return validationFailures;
     }
 
 	private void cacheBySpecId() {

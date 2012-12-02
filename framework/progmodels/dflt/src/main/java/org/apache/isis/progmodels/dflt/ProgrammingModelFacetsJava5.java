@@ -194,7 +194,7 @@ import org.apache.isis.core.progmodel.facets.value.timestampsql.JavaSqlTimeStamp
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
     public ProgrammingModelFacetsJava5() {
-
+        
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FallbackFacetFactory.class);

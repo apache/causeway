@@ -1,0 +1,168 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.maven</groupId>
+		<artifactId>maven-parent</artifactId>
+		<version>22</version>
+	</parent>
+
+	<groupId>org.apache.isis.tools</groupId>
+	<artifactId>isis-maven-plugin</artifactId>
+	<packaging>maven-plugin</packaging>
+	<version>0.3.1-incubating-SNAPSHOT</version>
+
+	<name>isis-maven-plugin Maven Mojo</name>
+	<url>http://maven.apache.org</url>
+
+	<prerequisites>
+		<maven>2.0.9</maven>
+	</prerequisites>
+
+	<properties>
+		<mavenVersion>2.0.9</mavenVersion>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+				      <goalPrefix>configurator</goalPrefix>
+				    </configuration>
+				    <executions>
+				      <execution>
+				        <id>default-descriptor</id>
+				        <goals>
+				          <goal>descriptor</goal>
+				        </goals>
+				        <phase>process-classes</phase>
+				      </execution>
+				      <execution>
+				        <id>help-descriptor</id>
+				        <goals>
+				          <goal>helpmojo</goal>
+				        </goals>
+				        <phase>process-classes</phase>
+				      </execution>
+				    </executions>
+    			</plugin>
+			<!-- 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>toolchain</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<toolchains>
+						<jdk>
+							<version>1.5</version>
+						</jdk>
+					</toolchains>
+				</configuration>
+			</plugin>
+			 -->
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>runtime</artifactId>
+	        <version>0.3.1-incubating-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.apache.isis.progmodels</groupId>
+		    <artifactId>dflt</artifactId>
+	        <version>0.3.1-incubating-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+		      <groupId>org.apache.maven</groupId>
+		      <artifactId>maven-plugin-api</artifactId>
+		      <version>3.0</version>
+	    </dependency>
+
+<!-- 
+	    <dependency>
+		      <groupId>org.sonatype.aether</groupId>
+		      <artifactId>aether-api</artifactId>
+		      <version>1.8</version>
+	    </dependency>
+	    <dependency>
+		      <groupId>org.sonatype.aether</groupId>
+		      <artifactId>aether-util</artifactId>
+		      <version>1.8</version>
+	    </dependency>
+ -->	    
+
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+			<version>3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-artifact</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-project</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-toolchain</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>m2e</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<directory>target-ide</directory>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

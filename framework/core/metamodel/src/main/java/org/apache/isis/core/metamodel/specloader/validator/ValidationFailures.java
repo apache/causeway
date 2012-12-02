@@ -19,11 +19,13 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public final class ValidationFailures {
+public final class ValidationFailures implements Iterable<String> {
 
     private final List<String> messages = Lists.newArrayList();
     
@@ -33,17 +35,33 @@ public final class ValidationFailures {
     }
 
     public void assertNone() {
-        if (messages.isEmpty()) {
+        if (!occurred()) {
             return;
         }
-        
+        throw new MetaModelInvalidException(getMessages());
+    }
+
+    public boolean occurred() {
+        return !messages.isEmpty();
+    }
+
+    private String getMessages() {
         final StringBuilder buf = new StringBuilder();
         int i=0;
         for (String message : messages) {
             buf.append(++i).append(": ").append(message).append("\n");
         }
-        
-        throw new MetaModelInvalidException(buf.toString());
+        String messages = buf.toString();
+        return messages;
+    }
+
+    public int getNumberOfMessages() {
+        return messages.size();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return Collections.unmodifiableList(messages).iterator();
     }
 
 }
