@@ -27,7 +27,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigInteger> {
 
     public BigIntegerValueTypeFacetFactory() {
-        super(BigIntegerValueFacet.class);
+        super();
     }
 
     @Override

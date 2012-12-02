@@ -155,12 +155,14 @@ import org.apache.isis.core.progmodel.facets.properties.validate.perspec.MustSat
 import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.biginteger.BigIntegerValueTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.value.blobs.BlobValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanPrimitiveValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanWrapperValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.bytes.BytePrimitiveValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.bytes.ByteWrapperValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.chars.CharPrimitiveValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.chars.CharWrapperValueTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.value.clobs.ClobValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.color.ColorValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.datejodalocal.JodaLocalDateValueTypeFacetFactory;
@@ -401,7 +403,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(JavaSqlTimeStampValueTypeFacetFactory.class);
         addFactory(StringValueTypeFacetFactory.class);
 
+        addFactory(JavaAwtImageValueTypeFacetFactory.class);
+        
         // applib values
+        addFactory(BlobValueTypeFacetFactory.class);
+        addFactory(ClobValueTypeFacetFactory.class);
         addFactory(DateValueTypeFacetFactory.class);
         addFactory(DateTimeValueTypeFacetFactory.class);
         addFactory(ColorValueTypeFacetFactory.class);
@@ -411,7 +417,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(TimeStampValueTypeFacetFactory.class);
         addFactory(TimeValueTypeFacetFactory.class);
         addFactory(ImageValueTypeFacetFactory.class);
-        addFactory(JavaAwtImageValueTypeFacetFactory.class);
 
         // jodatime values
         addFactory(JodaLocalDateValueTypeFacetFactory.class);

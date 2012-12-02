@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class MoneyValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Money> {
 
     public MoneyValueTypeFacetFactory() {
-        super(MoneyValueFacet.class);
+        super();
     }
 
     @Override

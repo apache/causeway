@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class ShortPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Short> {
 
     public ShortPrimitiveValueTypeFacetFactory() {
-        super(ShortValueFacet.class);
+        super();
     }
 
     @Override

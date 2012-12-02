@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class StringValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<String> {
 
     public StringValueTypeFacetFactory() {
-        super(StringValueFacet.class);
+        super();
     }
 
     @Override

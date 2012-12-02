@@ -49,7 +49,6 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         });
 
         TestClock.initialize();
-        setupSpecification(Time.class);
         time = new Time(8, 13);
         holder = new FacetHolderImpl();
         setValue(adapter = new TimeValueSemanticsProvider(holder, mockConfiguration, mockContext));

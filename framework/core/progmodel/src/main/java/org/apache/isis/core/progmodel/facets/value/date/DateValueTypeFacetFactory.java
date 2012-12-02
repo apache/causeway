@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class DateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Date> {
 
     public DateValueTypeFacetFactory() {
-        super(DateValueFacet.class); // as per inherited
+        super(); // as per inherited
                                      // DateTimeValueSemanticsProvider#facetType
         // (inherited)
     }

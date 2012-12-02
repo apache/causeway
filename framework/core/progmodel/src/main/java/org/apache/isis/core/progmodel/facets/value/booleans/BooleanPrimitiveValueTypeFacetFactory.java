@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class BooleanPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Boolean> {
 
     public BooleanPrimitiveValueTypeFacetFactory() {
-        super(BooleanValueFacet.class);
+        super();
     }
 
     @Override

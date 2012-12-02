@@ -26,7 +26,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Color> {
 
     public ColorValueTypeFacetFactory() {
-        super(ColorValueFacet.class);
+        super();
     }
 
     @Override

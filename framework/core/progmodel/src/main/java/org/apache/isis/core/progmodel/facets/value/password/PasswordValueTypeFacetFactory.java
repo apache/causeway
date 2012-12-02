@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class PasswordValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Password> {
 
     public PasswordValueTypeFacetFactory() {
-        super(PasswordValueFacet.class);
+        super();
     }
 
     @Override

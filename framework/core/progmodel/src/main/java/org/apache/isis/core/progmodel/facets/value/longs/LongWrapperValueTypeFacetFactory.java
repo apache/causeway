@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class LongWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Long> {
 
     public LongWrapperValueTypeFacetFactory() {
-        super(LongValueFacet.class);
+        super();
     }
 
     @Override

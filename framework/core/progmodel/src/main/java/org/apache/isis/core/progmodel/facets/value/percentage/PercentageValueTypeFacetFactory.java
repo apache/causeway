@@ -21,12 +21,11 @@ package org.apache.isis.core.progmodel.facets.value.percentage;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
-import org.apache.isis.core.progmodel.facets.value.floats.FloatingPointValueFacet;
 
 public class PercentageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Percentage> {
 
     public PercentageValueTypeFacetFactory() {
-        super(FloatingPointValueFacet.class);
+        super();
     }
 
     @Override

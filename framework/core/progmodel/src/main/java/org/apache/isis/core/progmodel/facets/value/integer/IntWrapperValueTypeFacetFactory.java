@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class IntWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Integer> {
 
     public IntWrapperValueTypeFacetFactory() {
-        super(IntegerValueFacet.class);
+        super();
     }
 
     @Override

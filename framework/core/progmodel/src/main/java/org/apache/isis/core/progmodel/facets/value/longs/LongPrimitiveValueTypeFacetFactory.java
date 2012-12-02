@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class LongPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Long> {
 
     public LongPrimitiveValueTypeFacetFactory() {
-        super(LongValueFacet.class);
+        super();
     }
 
     @Override

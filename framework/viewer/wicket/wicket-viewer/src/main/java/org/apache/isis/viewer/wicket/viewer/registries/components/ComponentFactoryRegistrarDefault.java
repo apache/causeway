@@ -46,6 +46,7 @@ import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAn
 import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDateTimePanelFactory;
@@ -220,6 +221,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new IsisPercentagePanelFactory());
         componentFactories.add(new IsisPasswordPanelFactory());
 
+        componentFactories.add(new IsisBlobPanelFactory()); 
+        
         componentFactories.add(new JavaMathBigIntegerPanelFactory());
         componentFactories.add(new JavaMathBigDecimalPanelFactory());
 

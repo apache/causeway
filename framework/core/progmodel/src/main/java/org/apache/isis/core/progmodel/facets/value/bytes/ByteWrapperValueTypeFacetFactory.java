@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class ByteWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Byte> {
 
     public ByteWrapperValueTypeFacetFactory() {
-        super(ByteValueFacet.class);
+        super();
     }
 
     @Override

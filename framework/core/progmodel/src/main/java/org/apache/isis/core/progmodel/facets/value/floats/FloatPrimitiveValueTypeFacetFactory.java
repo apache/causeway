@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class FloatPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Float> {
 
     public FloatPrimitiveValueTypeFacetFactory() {
-        super(FloatingPointValueFacet.class);
+        super();
     }
 
     @Override

@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class CharWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Character> {
 
     public CharWrapperValueTypeFacetFactory() {
-        super(CharValueFacet.class);
+        super();
     }
 
     @Override

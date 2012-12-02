@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class DoublePrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Double> {
 
     public DoublePrimitiveValueTypeFacetFactory() {
-        super(DoubleFloatingPointValueFacet.class);
+        super();
     }
 
     @Override

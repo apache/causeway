@@ -89,7 +89,7 @@ public class Memento implements Serializable {
     ////////////////////////////////////////////////
 
     private Data createData(final ObjectAdapter adapter) {
-        if (adapter.getSpecification().isParentedOrFreeCollection()) {
+        if (adapter.getSpecification().isParentedOrFreeCollection() && !adapter.getSpecification().isEncodeable()) {
             return createCollectionData(adapter);
         } else {
             return createObjectData(adapter);

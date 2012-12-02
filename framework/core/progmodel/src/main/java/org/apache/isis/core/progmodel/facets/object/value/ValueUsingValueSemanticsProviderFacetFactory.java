@@ -26,7 +26,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -48,7 +47,7 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
      */
     private ValueSemanticsProviderContext context;
 
-    protected ValueUsingValueSemanticsProviderFacetFactory(final Class<? extends Facet> adapterFacetType) {
+    protected ValueUsingValueSemanticsProviderFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 

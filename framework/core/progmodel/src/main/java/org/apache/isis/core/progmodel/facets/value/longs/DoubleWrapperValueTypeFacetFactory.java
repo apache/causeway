@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class DoubleWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Double> {
 
     public DoubleWrapperValueTypeFacetFactory() {
-        super(DoubleFloatingPointValueFacet.class);
+        super();
     }
 
     @Override

@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class FloatWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Float> {
 
     public FloatWrapperValueTypeFacetFactory() {
-        super(FloatingPointValueFacet.class);
+        super();
     }
 
     @Override

@@ -22,13 +22,12 @@ package org.apache.isis.core.progmodel.facets.object.choices.enums;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemanticsProviderFacetFactory<T> {
 
     public EnumFacetFactory() {
-        super(ChoicesFacet.class);
+        super();
     }
 
     @Override

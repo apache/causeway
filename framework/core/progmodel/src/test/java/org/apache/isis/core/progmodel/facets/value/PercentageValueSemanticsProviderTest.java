@@ -45,8 +45,6 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
             }
         });
 
-        setupSpecification(Percentage.class);
-
         percentage = new Percentage(0.105f);
         allowMockAdapterToReturn(percentage);
 

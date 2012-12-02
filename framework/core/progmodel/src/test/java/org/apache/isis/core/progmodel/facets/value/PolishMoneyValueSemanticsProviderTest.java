@@ -53,7 +53,6 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
     @Before
     public void setUpObjects() throws Exception {
         Locale.setDefault(new Locale("pl", "PL"));
-        setupSpecification(Money.class);
         originalMoney = new Money(10.50, "pln");
         holder = new FacetHolderImpl();
         setValue(adapter = new MoneyValueSemanticsProvider(holder, mockConfiguration, mockContext));

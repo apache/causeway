@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class ImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Image> {
 
     public ImageValueTypeFacetFactory() {
-        super(ImageValueFacet.class);
+        super();
     }
 
     @Override

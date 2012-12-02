@@ -20,8 +20,10 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.apache.isis.core.testsupport.jmock.ReturnArgumentJMockAction.returnArgument;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Locale;
@@ -29,6 +31,7 @@ import java.util.Locale;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,7 +58,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
 
     private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
@@ -134,19 +136,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         return parseableFacet;
     }
 
-    protected void setupSpecification(final Class<?> type) {
-        // final TestProxySpecification specification =
-        // system.getSpecification(cls);
-        // specification.setupHasNoIdentity(true);
-    }
-
     protected ObjectAdapter createAdapter(final Object object) {
-        // return system.createAdapterForTransient(object);
         return mockAdapter;
     }
 
     @Test
     public void testParseNull() throws Exception {
+        Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
         try {
             valueSemanticsProvider.parseTextEntry(null, null, null);
             fail();
@@ -156,18 +152,24 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testParseEmptyString() throws Exception {
+        Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
+
         final Object newValue = valueSemanticsProvider.parseTextEntry(null, "", null);
         assertNull(newValue);
     }
 
     @Test
     public void testDecodeNULL() throws Exception {
+        Assume.assumeThat(valueSemanticsProvider.getEncoderDecoder(), is(not(nullValue())));
+        
         final Object newValue = encodeableFacet.fromEncodedString(EncodableFacetUsingEncoderDecoder.ENCODED_NULL);
         assertNull(newValue);
     }
 
     @Test
     public void testEmptyEncoding() {
+        Assume.assumeThat(valueSemanticsProvider.getEncoderDecoder(), is(not(nullValue())));
+
         assertEquals(EncodableFacetUsingEncoderDecoder.ENCODED_NULL, encodeableFacet.toEncodedString(null));
     }
 
@@ -175,5 +177,4 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testTitleOfForNullObject() {
         assertEquals("", valueSemanticsProvider.displayTitleOf(null, (Localization) null));
     }
-
 }

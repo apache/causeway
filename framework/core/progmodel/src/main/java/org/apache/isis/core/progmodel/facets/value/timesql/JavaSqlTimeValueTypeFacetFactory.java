@@ -21,12 +21,11 @@ package org.apache.isis.core.progmodel.facets.value.timesql;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
-import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
 public class JavaSqlTimeValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.sql.Time> {
 
     public JavaSqlTimeValueTypeFacetFactory() {
-        super(DateValueFacet.class); // as per inherited
+        super(); // as per inherited
                                      // TimeValueSemanticsProvider#facetType
                                      // (inherited)
     }

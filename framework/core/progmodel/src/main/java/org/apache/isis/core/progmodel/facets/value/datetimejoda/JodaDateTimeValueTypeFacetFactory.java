@@ -28,7 +28,7 @@ public class JodaDateTimeValueTypeFacetFactory extends ValueUsingValueSemanticsP
 
     public JodaDateTimeValueTypeFacetFactory() {
      // as per inherited DateTimeValueSemanticsProvider#facetType
-        super(JodaDateTimeValueFacet.class); 
+        super(); 
     }
 
     @Override

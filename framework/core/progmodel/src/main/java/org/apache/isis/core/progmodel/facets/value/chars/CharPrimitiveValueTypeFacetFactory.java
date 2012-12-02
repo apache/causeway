@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class CharPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Character> {
 
     public CharPrimitiveValueTypeFacetFactory() {
-        super(CharValueFacet.class);
+        super();
     }
 
     @Override

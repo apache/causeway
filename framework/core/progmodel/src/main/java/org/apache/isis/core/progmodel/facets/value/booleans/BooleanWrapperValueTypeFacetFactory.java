@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanti
 public class BooleanWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Boolean> {
 
     public BooleanWrapperValueTypeFacetFactory() {
-        super(BooleanValueFacet.class);
+        super();
     }
 
     @Override
