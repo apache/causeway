@@ -52,7 +52,6 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         for (final MetaModelValidator validator : validators) {
             validator.setSpecificationLoaderSpi(specificationLoader);
         }
-
     }
 
     public static MetaModelValidatorComposite asComposite(MetaModelValidator baseMetaModelValidator) {

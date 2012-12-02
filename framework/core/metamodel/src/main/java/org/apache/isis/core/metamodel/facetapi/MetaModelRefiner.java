@@ -21,15 +21,18 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 
 /**
- * Provides the ability for components to inform/alter/adjust/refine the metamodel.
+ * Provides the ability for components to inform/alter/adjust/refine the metamodel
+ * (the {@link MetaModelValidator}) and also the {@link ProgrammingModel}).
+ * 
+ * @see MetaModelValidatorRefiner
  */
-public interface MetaModelRefiner {
+public interface MetaModelRefiner extends MetaModelValidatorRefiner {
     
-    void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration);
     void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration);
     
 }

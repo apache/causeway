@@ -43,6 +43,7 @@ import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 
 public final class JavaReflectorHelper  {
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(JavaReflectorHelper.class);
 
     private JavaReflectorHelper(){}
@@ -63,6 +64,11 @@ public final class JavaReflectorHelper  {
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel, configuration);
             metaModelRefiner.refineMetaModelValidator(metaModelValidator, configuration);
+        }
+        
+        // the programming model is itself also a MetaModelValidatorRefiner
+        if(!metaModelRefiners.contains(programmingModel)) {
+            programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
         }
         
         return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);

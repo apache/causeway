@@ -49,7 +49,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.em
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
-import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator.JdoMetaModelValidatorLeaf;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
@@ -220,7 +220,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
-        metaModelValidator.add(new JdoMetaModelValidatorLeaf());
+        metaModelValidator.add(new JdoMetaModelValidator());
     }
 
 

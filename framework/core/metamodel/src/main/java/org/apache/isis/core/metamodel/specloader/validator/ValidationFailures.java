@@ -38,21 +38,24 @@ public final class ValidationFailures implements Iterable<String> {
         if (!occurred()) {
             return;
         }
-        throw new MetaModelInvalidException(getMessages());
+        throw new MetaModelInvalidException(getMessagesBuf());
     }
 
     public boolean occurred() {
         return !messages.isEmpty();
     }
 
-    private String getMessages() {
+    public List<String> getMessages() {
+        return Collections.unmodifiableList(messages);
+    }
+
+    private String getMessagesBuf() {
         final StringBuilder buf = new StringBuilder();
         int i=0;
         for (String message : messages) {
             buf.append(++i).append(": ").append(message).append("\n");
         }
-        String messages = buf.toString();
-        return messages;
+        return buf.toString();
     }
 
     public int getNumberOfMessages() {
@@ -61,7 +64,8 @@ public final class ValidationFailures implements Iterable<String> {
 
     @Override
     public Iterator<String> iterator() {
-        return Collections.unmodifiableList(messages).iterator();
+        return getMessages().iterator();
     }
+
 
 }

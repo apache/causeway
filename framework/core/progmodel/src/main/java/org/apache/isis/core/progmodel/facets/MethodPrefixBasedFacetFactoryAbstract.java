@@ -23,9 +23,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements MethodPrefixBasedFacetFactory {
 
@@ -44,4 +51,22 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
         return prefixes;
     }
 
+    @Override
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+
+            @Override
+            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+                List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
+                for (ObjectAction objectAction : objectActions) {
+                    for (String prefix : prefixes) {
+                        if (objectAction.getName().startsWith(prefix)) {
+                            validationFailures.add("%s#$s has prefix %s, has probably been orphaned.  If required, rename and use @Named annotation", objectSpec.getIdentifier().getClassName(), objectAction.getName());
+                        }
+                    }
+                }
+                return true;
+            }
+        }));
+    }
 }

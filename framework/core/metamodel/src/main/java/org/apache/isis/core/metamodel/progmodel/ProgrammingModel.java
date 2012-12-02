@@ -21,9 +21,11 @@ package org.apache.isis.core.metamodel.progmodel;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
-public interface ProgrammingModel {
+public interface ProgrammingModel extends MetaModelValidatorRefiner {
 
     void init();
 

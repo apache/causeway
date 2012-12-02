@@ -128,6 +128,10 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public static Builder builder(RuntimeContext runtimeContext, ProgrammingModel programmingModel) {
         return new Builder(runtimeContext, programmingModel);
     }
+
+    public IsisMetaModel(final RuntimeContext runtimeContext, ProgrammingModel programmingModel, final List<Object> services) {
+        this(runtimeContext, programmingModel, services.toArray());
+    }
     
     public IsisMetaModel(final RuntimeContext runtimeContext, ProgrammingModel programmingModel, final Object... services) {
         this.runtimeContext = runtimeContext;

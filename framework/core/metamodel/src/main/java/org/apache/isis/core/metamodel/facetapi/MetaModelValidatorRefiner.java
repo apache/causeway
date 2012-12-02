@@ -17,14 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
-public interface MetaModelValidator extends SpecificationLoaderSpiAware, ApplicationScopedComponent {
 
-    public void validate(ValidationFailures validationFailures);
-
+/**
+ * Provides the ability for components to inform/alter/adjust/refine the metamodel;
+ * specifically, the {@link MetaModelValidator}.
+ * 
+ * @see MetaModelRefiner
+ */
+public interface MetaModelValidatorRefiner {
+    
+    void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration);
+    
 }

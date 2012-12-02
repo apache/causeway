@@ -19,37 +19,44 @@
 
 package org.apache.isis.core.metamodel.progmodel;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+
+import com.google.common.collect.Lists;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     private final List<FacetFactory> facetFactories = Lists.newArrayList();
     private final List<Object> facetFactoryInstancesOrClasses = Lists.newArrayList();
 
-    @Override
-    public final List<FacetFactory> getList() {
-        return Collections.unmodifiableList(facetFactories);
-    }
-
-    @Override
-    public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
-        facetFactoryInstancesOrClasses.add(factoryClass);
-    }
-
-    @Override
-    public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
-        facetFactoryInstancesOrClasses.remove(factoryClass);
-    }
+    private boolean initialized;
 
     @Override
     public void init() {
+        initializeIfRequired();
+    }
+
+    private synchronized void initializeIfRequired() {
+        if(!initialized) {
+            initialize();
+            initialized = true;
+        }
+    }
+
+    private synchronized void assertNotInitialized() {
+        if(initialized) {
+            throw new IllegalStateException("Already initialized");
+        }
+    }
+
+    private void initialize() {
         for (final Object factoryInstanceOrClass : facetFactoryInstancesOrClasses) {
             final FacetFactory facetFactory = asFacetFactory(factoryInstanceOrClass);
             facetFactories.add(facetFactory);
@@ -67,8 +74,36 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     }
 
     @Override
+    public final List<FacetFactory> getList() {
+        initializeIfRequired();
+        return Collections.unmodifiableList(facetFactories);
+    }
+
+    @Override
+    public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
+        assertNotInitialized();
+        facetFactoryInstancesOrClasses.add(factoryClass);
+    }
+
+    @Override
+    public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
+        assertNotInitialized();
+        facetFactoryInstancesOrClasses.remove(factoryClass);
+    }
+
+    @Override
     public void addFactory(FacetFactory facetFactory) {
         facetFactoryInstancesOrClasses.add(facetFactory);
+    }
+
+    @Override
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        for (FacetFactory facetFactory : getList()) {
+            if(facetFactory instanceof MetaModelValidatorRefiner) {
+                MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
+                metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator, configuration);
+            }
+        }
     }
 
 }
