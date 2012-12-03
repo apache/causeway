@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.isis.examples</groupId>
-    <artifactId>quickstart</artifactId>
+    <artifactId>quickstart_wicket_restful_jdo</artifactId>
     <version>0.3.1-SNAPSHOT</version>
 
     <name>Quickstart App</name>
@@ -148,9 +148,9 @@
     <modules>
         <module>dom</module>
         <module>fixture</module>
-        <module>viewer-dnd</module>
-        <module>viewer-html</module>
-        <module>viewer-scimpi</module>
+        <module>objstore-jdo</module>
+        <module>viewer-restfulobjects</module>
+        <module>viewer-wicket</module>
     </modules>
 
     <dependencyManagement>
@@ -159,37 +159,25 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-dom</artifactId>
+                <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-fixture</artifactId>
+                <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-objstore-jdo</artifactId>
+                <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-webapp</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-tests-bdd</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>tests-junit</artifactId>
+                <artifactId>quickstart_wicket_restful_jdo-webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

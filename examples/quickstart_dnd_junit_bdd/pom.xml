@@ -22,10 +22,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.isis.examples</groupId>
-    <artifactId>quickstart</artifactId>
+    <artifactId>quickstart_dnd_junit_bdd</artifactId>
     <version>0.3.1-SNAPSHOT</version>
 
-    <name>Quickstart App</name>
+    <name>Quickstart (JUnit/BDD) App</name>
 
     <packaging>pom</packaging>
     
@@ -149,8 +149,8 @@
         <module>dom</module>
         <module>fixture</module>
         <module>viewer-dnd</module>
-        <module>viewer-html</module>
-        <module>viewer-scimpi</module>
+        <module>tests-junit</module>
+        <module>tests-bdd</module>
     </modules>
 
     <dependencyManagement>
@@ -159,37 +159,31 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-dom</artifactId>
+                <artifactId>quickstart_dnd_junit_bdd-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-fixture</artifactId>
+                <artifactId>quickstart_dnd_junit_bdd-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-objstore-jdo</artifactId>
+                <artifactId>quickstart_dnd_junit_bdd-viewer-dnd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-webapp</artifactId>
+                <artifactId>quickstart_dnd_junit_bdd-tests-bdd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-tests-bdd</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>tests-junit</artifactId>
+                <artifactId>quickstart_dnd_junit_bdd-tests-junit</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

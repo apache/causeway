@@ -22,16 +22,15 @@
 
     <parent>
         <groupId>org.apache.isis.examples</groupId>
-        <artifactId>quickstart</artifactId>
+        <artifactId>quickstart_wicket_restful_jdo</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-viewer-scimpi</artifactId>
-	<name>Quickstart Scimpi Viewer</name>
-	
-	<description>This module runs Isis' Scimpi webapp viewer.  By default it is configured to
-	run using the in-memory object store, but it can be easily switched to, for example, the
-	mongo or fileserver object store by updating isis.properties.  
+	<artifactId>quickstart_wicket_restful_jdo-viewer-restfulobjects</artifactId>
+	<name>Quickstart Restful Objects Viewer</name>
+
+	<description>This module runs Isis' Restful Objects viewer, configured to run using the
+	datanucleus object store.  It also includes a demonstrator single-page JQueryMobile app.
 	See other viewer modules for more persistence options.</description>
 	
 	<packaging>war</packaging>
@@ -83,12 +82,12 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-dom</artifactId>
+            <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
         </dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-fixture</artifactId>
+            <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
         </dependency>
 
 
@@ -99,18 +98,30 @@
          - uncomment in order to use default object store
          - (also edit isis.properties)
          - 
-        -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 			<artifactId>dflt</artifactId>
 		</dependency>
+        -->
+        
+        <!--
+         - uncomment in order to use jdo object store
+         - (also edit isis.properties)
+         -
+         - (also uncomment in order to install facet factories used to
+         -  filter out any JDO enhancement to pojos) 
+        -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
+        </dependency>
         
 
 
         <!-- isis viewer -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>scimpi-servlet</artifactId>
+            <artifactId>restfulobjects-viewer</artifactId>
         </dependency>
 
 

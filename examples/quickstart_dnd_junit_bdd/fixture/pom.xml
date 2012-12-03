@@ -20,21 +20,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
+    <parent>
     	<groupId>org.apache.isis.examples</groupId>
-    	<artifactId>quickstart</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
-	</parent>
+        <artifactId>quickstart_dnd_junit_bdd</artifactId>
+        <version>0.3.1-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>quickstart-dom</artifactId>
-	<name>Quickstart DOM</name>
-
+	<artifactId>quickstart_dnd_junit_bdd-fixture</artifactId>
+	<name>Quickstart Fixtures</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>quickstart_dnd_junit_bdd-dom</artifactId>
 		</dependency>
 	</dependencies>
-    
+
 </project>

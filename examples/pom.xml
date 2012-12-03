@@ -57,6 +57,8 @@
 
     <modules>
         <module>quickstart</module>
+        <module>quickstart_dnd_junit_bdd</module>
+        <module>quickstart_wicket_restful_jdo</module>
         <module>claims</module>
         <module>onlinedemo</module>
         <module>metamodel-examples/namefile</module>

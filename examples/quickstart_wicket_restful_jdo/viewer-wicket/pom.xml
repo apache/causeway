@@ -16,26 +16,27 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis.examples</groupId>
-        <artifactId>quickstart</artifactId>
+        <artifactId>quickstart_wicket_restful_jdo</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-viewer-scimpi</artifactId>
-	<name>Quickstart Scimpi Viewer</name>
-	
-	<description>This module runs Isis' Scimpi webapp viewer.  By default it is configured to
-	run using the in-memory object store, but it can be easily switched to, for example, the
-	mongo or fileserver object store by updating isis.properties.  
-	See other viewer modules for more persistence options.</description>
-	
+	<artifactId>quickstart_wicket_restful_jdo-viewer-wicket</artifactId>
+	<name>QuickStart Wicket Viewer</name>
+
+	<description>This module runs Isis' Wicket webapp viewer, configured to run using the
+	datanucleus object store.  See other viewer modules for more persistence options.</description>
+
 	<packaging>war</packaging>
 
+	<properties>
+        <siteBaseDir>..</siteBaseDir>
+	</properties>
+    
 	<build>
 		<plugins>
             <plugin>
@@ -68,8 +69,8 @@
                 <configuration>
                     <tasks>
                         <exec executable="java" failonerror="true">
-                            <arg value="-jar"/>
-                            <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war"/>
+                            <arg value="-jar" />
+                            <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war" />
                         </exec>
                     </tasks>
                 </configuration>
@@ -83,35 +84,46 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-dom</artifactId>
+            <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
         </dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-fixture</artifactId>
+            <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
         </dependency>
 
 
-
         <!-- objectstore/domain service/repository implementations -->
-
+        
         <!--
          - uncomment in order to use default object store
          - (also edit isis.properties)
          - 
-        -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 			<artifactId>dflt</artifactId>
 		</dependency>
+        -->
+        
+        
+        <!--
+         - uncomment in order to use jdo object store
+         - (also edit isis.properties)
+         - 
+        -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
+        </dependency>
+        
+        
         
 
-
         <!-- isis viewer -->
-        <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>scimpi-servlet</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>wicket-viewer</artifactId>
+		</dependency>
 
 
         <!-- isis runtime -->
@@ -157,6 +169,7 @@
 
 
 
+
 		<!-- 
 		  JDBC drivers 
 		  (if using jdo or sql object store)
@@ -178,7 +191,7 @@
 			<systemPath>${basedir}/lib/sqljdbc4.jar</systemPath>
 		</dependency>
 		-->	
-			
+
 		<dependency>
 		  <groupId>org.lazyluke</groupId>
 		  <artifactId>log4jdbc-remix</artifactId>

@@ -108,19 +108,6 @@
 			<artifactId>sql-impl</artifactId>
 		</dependency>
         
-        <!--
-         - uncomment in order to use jdo object store
-         - (also edit isis.properties)
-         -
-         - (also uncomment in order to install facet factories used to
-         -  filter out any JDO enhancement to pojos) 
-        -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-jdo</artifactId>
-        </dependency>
-        
-
 
         <!-- isis viewer -->
 		<dependency>

@@ -22,21 +22,49 @@ package dom.todo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.JDOHelper;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.VersionStrategy;
+import javax.jdo.spi.PersistenceCapable;
+
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
-import org.joda.time.LocalDate;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.applib.annotations.Auditable;
 
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
+@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+        name="todo_notYetDone", language="JDOQL",  
+        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == false"),
+    @javax.jdo.annotations.Query(
+            name="todo_done", language="JDOQL",  
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == true"),
+    @javax.jdo.annotations.Query(
+        name="todo_similarTo", language="JDOQL",  
+        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category"),
+    @javax.jdo.annotations.Query(
+            name="todo_autoComplete", language="JDOQL",  
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.startsWith(:description)")
+})
+@javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("TODO")
+@Auditable
+@AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
 public class ToDoItem {
     
@@ -74,6 +102,7 @@ public class ToDoItem {
     // {{ DueBy (property)
     private LocalDate dueBy;
 
+    @javax.jdo.annotations.Persistent
     @MemberOrder(name="Detail", sequence = "3")
     @Optional
     public LocalDate getDueBy() {
@@ -125,6 +154,24 @@ public class ToDoItem {
 
     public void setOwnedBy(final String ownedBy) {
         this.ownedBy = ownedBy;
+    }
+    // }}
+
+    // {{ Version (derived property)
+    @Hidden(where=Where.ALL_TABLES)
+    @Disabled
+    @MemberOrder(name="Detail", sequence = "99")
+    @Named("Version")
+    public Long getVersionSequence() {
+        if(!(this instanceof PersistenceCapable)) {
+            return null;
+        } 
+        PersistenceCapable persistenceCapable = (PersistenceCapable) this;
+        final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
+        return version;
+    }
+    public boolean hideVersionSequence() {
+        return !(this instanceof PersistenceCapable);
     }
     // }}
 
