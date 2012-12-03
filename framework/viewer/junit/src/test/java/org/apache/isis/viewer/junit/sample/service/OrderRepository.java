@@ -59,8 +59,8 @@ public class OrderRepository extends AbstractFactoryAndRepository {
         }
     }
 
-    public Object[] defaultFindRecentOrders(final Customer customer, final Integer numberOfOrders) {
-        return new Object[] { null, new Integer(3) };
+    public Integer default1FindRecentOrders() {
+        return 3;
     }
     // }}
 

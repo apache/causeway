@@ -45,7 +45,7 @@ public class Role {
     public void modifyPerson(final Person person) {
         setPerson(person);
     }
-    public void clearPerson(final Person person) {
+    public void clearPerson() {
         setPerson(null);
     }
     // }}
