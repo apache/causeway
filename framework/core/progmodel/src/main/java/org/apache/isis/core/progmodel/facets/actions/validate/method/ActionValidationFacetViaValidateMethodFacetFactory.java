@@ -44,7 +44,7 @@ public class ActionValidationFacetViaValidateMethodFacetFactory extends MethodPr
      * noa-architecture (where they exist)
      */
     public ActionValidationFacetViaValidateMethodFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

@@ -47,7 +47,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
      * noa-architecture (where they exist)
      */
     public ActionParameterOptionalViaMethodFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

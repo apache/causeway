@@ -45,7 +45,7 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
      * noa-architecture (where they exist)
      */
     public ActionChoicesFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

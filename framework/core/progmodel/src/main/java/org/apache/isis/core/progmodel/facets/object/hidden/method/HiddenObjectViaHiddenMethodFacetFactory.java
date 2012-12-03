@@ -50,7 +50,7 @@ public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFa
     private static final String[] PREFIXES = { HIDDEN_PREFIX, };
 
     public HiddenObjectViaHiddenMethodFacetFactory() {
-        super(FeatureType.EVERYTHING_BUT_PARAMETERS, PREFIXES);
+        super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

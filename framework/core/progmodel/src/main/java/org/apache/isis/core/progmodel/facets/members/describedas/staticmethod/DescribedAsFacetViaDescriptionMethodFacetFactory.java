@@ -47,7 +47,7 @@ public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPref
      * noa-architecture (where they exist)
      */
     public DescribedAsFacetViaDescriptionMethodFacetFactory() {
-        super(FeatureType.MEMBERS, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

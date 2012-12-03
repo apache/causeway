@@ -50,7 +50,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
     private ObjectDirtier objectDirtier;
 
     public CollectionAddRemoveAndValidateFacetFactory() {
-        super(FeatureType.COLLECTIONS_ONLY, PREFIXES);
+        super(FeatureType.COLLECTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

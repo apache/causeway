@@ -35,7 +35,7 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private static final String[] PREFIXES = { MethodPrefixConstants.MODIFY_PREFIX };
 
     public PropertyModifyFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY, PREFIXES);
+        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

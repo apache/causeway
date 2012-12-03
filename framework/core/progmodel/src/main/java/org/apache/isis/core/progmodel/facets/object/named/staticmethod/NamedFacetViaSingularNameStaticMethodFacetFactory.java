@@ -35,7 +35,7 @@ public class NamedFacetViaSingularNameStaticMethodFacetFactory extends MethodPre
     private static final String[] PREFIXES = { MethodPrefixConstants.SINGULAR_NAME, };
 
     public NamedFacetViaSingularNameStaticMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

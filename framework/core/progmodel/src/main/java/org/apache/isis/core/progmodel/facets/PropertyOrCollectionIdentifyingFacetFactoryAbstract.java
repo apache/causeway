@@ -32,7 +32,7 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
     private CollectionTypeRegistry collectionTypeRegistry;
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
-        super(featureTypes, prefixes);
+        super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 
     protected boolean isCollectionOrArray(final Class<?> cls) {

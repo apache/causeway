@@ -37,7 +37,7 @@ public class UpdateCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private static final String[] PREFIXES = { MethodPrefixConstants.UPDATED_PREFIX, MethodPrefixConstants.UPDATING_PREFIX, };
 
     public UpdateCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

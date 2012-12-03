@@ -60,7 +60,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
      * noa-architecture (where they exist)
      */
     public ActionInvocationFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

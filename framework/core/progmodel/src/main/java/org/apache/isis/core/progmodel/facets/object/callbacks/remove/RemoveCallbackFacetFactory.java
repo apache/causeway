@@ -39,7 +39,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private static final String[] PREFIXES = { MethodPrefixConstants.REMOVED_PREFIX, MethodPrefixConstants.REMOVING_PREFIX, };
 
     public RemoveCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

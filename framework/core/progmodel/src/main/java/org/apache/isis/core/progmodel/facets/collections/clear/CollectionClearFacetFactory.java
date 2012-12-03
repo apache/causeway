@@ -43,7 +43,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     private ObjectDirtier objectDirtier;
 
     public CollectionClearFacetFactory() {
-        super(FeatureType.COLLECTIONS_ONLY, PREFIXES);
+        super(FeatureType.COLLECTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

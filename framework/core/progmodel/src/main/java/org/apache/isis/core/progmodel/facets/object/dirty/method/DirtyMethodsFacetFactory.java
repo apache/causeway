@@ -40,7 +40,7 @@ public class DirtyMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     private static final String[] PREFIXES = { MARK_DIRTY_PREFIX, CLEAR_DIRTY_PREFIX, IS_DIRTY_PREFIX, };
 
     public DirtyMethodsFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
 
     }
 

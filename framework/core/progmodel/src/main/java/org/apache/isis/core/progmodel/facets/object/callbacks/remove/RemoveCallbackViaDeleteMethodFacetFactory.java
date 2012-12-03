@@ -39,7 +39,7 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
     private static final String[] PREFIXES = { MethodPrefixConstants.DELETED_PREFIX, MethodPrefixConstants.DELETING_PREFIX, };
 
     public RemoveCallbackViaDeleteMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

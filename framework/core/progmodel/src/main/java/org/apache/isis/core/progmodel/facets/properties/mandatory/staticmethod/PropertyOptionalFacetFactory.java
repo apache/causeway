@@ -37,7 +37,7 @@ public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryA
     private static final String[] PREFIXES = { MethodPrefixConstants.OPTIONAL_PREFIX };
 
     public PropertyOptionalFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY, PREFIXES);
+        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

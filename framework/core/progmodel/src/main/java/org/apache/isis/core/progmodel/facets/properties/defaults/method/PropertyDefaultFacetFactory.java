@@ -39,7 +39,7 @@ public class PropertyDefaultFacetFactory extends MethodPrefixBasedFacetFactoryAb
     private AdapterManager adapterManager;
 
     public PropertyDefaultFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY, PREFIXES);
+        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

@@ -32,7 +32,7 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 public class NotInServiceMenuMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     public NotInServiceMenuMethodFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE);
     }
 
     @Override

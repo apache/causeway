@@ -42,7 +42,7 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
      * noa-architecture (where they exist)
      */
     public HiddenFacetViaAlwaysHideMethodFacetFactory() {
-        super(FeatureType.MEMBERS, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

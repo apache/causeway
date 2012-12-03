@@ -51,7 +51,7 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
     private static final String[] PREFIXES = { DISABLED_PREFIX, };
 
     public DisabledObjectViaDisabledMethodFacetFactory() {
-        super(FeatureType.EVERYTHING_BUT_PARAMETERS, PREFIXES);
+        super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

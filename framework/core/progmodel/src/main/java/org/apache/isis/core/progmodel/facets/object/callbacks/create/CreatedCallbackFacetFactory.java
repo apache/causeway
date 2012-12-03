@@ -37,7 +37,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
     private static final String[] PREFIXES = { MethodPrefixConstants.CREATED_PREFIX, };
 
     public CreatedCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

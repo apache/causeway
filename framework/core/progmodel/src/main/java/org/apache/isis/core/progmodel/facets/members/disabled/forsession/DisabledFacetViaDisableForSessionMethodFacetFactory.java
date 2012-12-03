@@ -41,7 +41,7 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
      * noa-architecture (where they exist)
      */
     public DisabledFacetViaDisableForSessionMethodFacetFactory() {
-        super(FeatureType.MEMBERS, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

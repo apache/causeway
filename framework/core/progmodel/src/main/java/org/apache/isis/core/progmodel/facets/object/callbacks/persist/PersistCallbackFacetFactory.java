@@ -39,7 +39,7 @@ public class PersistCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
     private static final String[] PREFIXES = { MethodPrefixConstants.PERSISTED_PREFIX, MethodPrefixConstants.PERSISTING_PREFIX, };
 
     public PersistCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

@@ -18,19 +18,18 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public final class ValidationFailures implements Iterable<String> {
 
-    private final List<String> messages = Lists.newArrayList();
+    private final Set<String> messages = Sets.newLinkedHashSet();
     
     public void add(String pattern, Object... arguments) {
-        final String message = MessageFormat.format(pattern, arguments);
+        final String message = String.format(pattern, arguments);
         messages.add(message);
     }
 
@@ -45,8 +44,8 @@ public final class ValidationFailures implements Iterable<String> {
         return !messages.isEmpty();
     }
 
-    public List<String> getMessages() {
-        return Collections.unmodifiableList(messages);
+    public Set<String> getMessages() {
+        return Collections.unmodifiableSet(messages);
     }
 
     private String getMessagesBuf() {

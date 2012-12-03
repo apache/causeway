@@ -35,7 +35,7 @@ public class IconMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstrac
     private static final String[] PREFIXES = { ICON_NAME_PREFIX, };
 
     public IconMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

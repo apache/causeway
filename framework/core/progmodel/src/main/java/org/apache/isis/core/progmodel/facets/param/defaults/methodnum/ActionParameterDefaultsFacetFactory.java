@@ -47,7 +47,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
      * noa-architecture (where they exist)
      */
     public ActionParameterDefaultsFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

@@ -666,7 +666,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             if (existingSpec == null) {
                 continue;
             }
-            validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
+            validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both %s and %s are annotated with value of ''%s''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
         }
     }
 

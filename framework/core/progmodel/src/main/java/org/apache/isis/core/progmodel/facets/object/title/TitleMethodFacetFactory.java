@@ -39,7 +39,7 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
     private static final String[] PREFIXES = { TO_STRING, TITLE, };
 
     public TitleMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     /**

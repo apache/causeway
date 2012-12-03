@@ -35,7 +35,7 @@ public class ValidateObjectViaValidateMethodFacetFactory extends MethodPrefixBas
     private static final String[] PREFIXES = { VALIDATE_PREFIX, };
 
     public ValidateObjectViaValidateMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

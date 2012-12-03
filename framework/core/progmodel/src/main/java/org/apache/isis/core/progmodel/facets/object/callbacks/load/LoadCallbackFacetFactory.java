@@ -37,7 +37,7 @@ public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     private static final String[] PREFIXES = { MethodPrefixConstants.LOADED_PREFIX, MethodPrefixConstants.LOADING_PREFIX, };
 
     public LoadCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

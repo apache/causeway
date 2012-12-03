@@ -39,7 +39,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
     private static final String[] PREFIXES = { MethodPrefixConstants.SET_PREFIX, MethodPrefixConstants.CLEAR_PREFIX };
 
     public PropertySetAndClearFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY, PREFIXES);
+        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

@@ -38,6 +38,17 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     @Override
     public void init() {
+        initializeIfRequired();
+    }
+
+    private void initializeIfRequired() {
+        if(!facetFactories.isEmpty()) {
+            return;
+        }
+        initialize();
+    }
+
+    private void initialize() {
         for (final Object factoryInstanceOrClass : facetFactoryInstancesOrClasses) {
             final FacetFactory facetFactory = asFacetFactory(factoryInstanceOrClass);
             facetFactories.add(facetFactory);
@@ -54,23 +65,34 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         }
     }
 
+    private void assertNotInitialized() {
+        if(!facetFactories.isEmpty()) {
+            throw new IllegalStateException("Programming model already initialized");
+        }
+    }
+
+
     @Override
     public final List<FacetFactory> getList() {
+        initializeIfRequired();
         return Collections.unmodifiableList(facetFactories);
     }
 
     @Override
     public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
+        assertNotInitialized();
         facetFactoryInstancesOrClasses.add(factoryClass);
     }
 
     @Override
     public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
+        assertNotInitialized();
         facetFactoryInstancesOrClasses.remove(factoryClass);
     }
 
     @Override
     public void addFactory(FacetFactory facetFactory) {
+        assertNotInitialized();
         facetFactoryInstancesOrClasses.add(facetFactory);
     }
 
@@ -78,7 +100,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
         for (FacetFactory facetFactory : getList()) {
             if(facetFactory instanceof MetaModelValidatorRefiner) {
-                MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
+                MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
                 metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator, configuration);
             }
         }

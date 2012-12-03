@@ -47,7 +47,7 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
      * noa-architecture (where they exist)
      */
     public NamedFacetViaNameMethodFacetFactory() {
-        super(FeatureType.MEMBERS, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

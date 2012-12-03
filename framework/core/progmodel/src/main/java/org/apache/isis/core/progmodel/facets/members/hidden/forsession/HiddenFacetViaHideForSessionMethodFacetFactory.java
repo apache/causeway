@@ -41,7 +41,7 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
      * noa-architecture (where they exist)
      */
     public HiddenFacetViaHideForSessionMethodFacetFactory() {
-        super(FeatureType.MEMBERS, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

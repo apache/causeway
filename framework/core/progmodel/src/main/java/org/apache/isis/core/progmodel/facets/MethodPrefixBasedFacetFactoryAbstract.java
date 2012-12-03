@@ -41,8 +41,16 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
     protected static final Object[] NO_PARAMETERS = new Object[0];
     protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
 
-    public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
+    private final OrphanValidation orphanValidation;
+
+    protected enum OrphanValidation {
+        VALIDATE,
+        DONT_VALIDATE
+    }
+    
+    public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, OrphanValidation orphanValidation, final String... prefixes) {
         super(featureTypes);
+        this.orphanValidation = orphanValidation;
         this.prefixes = Collections.unmodifiableList(Arrays.asList(prefixes));
     }
 
@@ -53,6 +61,9 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
 
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
+            return;
+        }
         metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 
             @Override
@@ -60,8 +71,8 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
                 List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
                 for (ObjectAction objectAction : objectActions) {
                     for (String prefix : prefixes) {
-                        if (objectAction.getName().startsWith(prefix)) {
-                            validationFailures.add("%s#$s has prefix %s, has probably been orphaned.  If required, rename and use @Named annotation", objectSpec.getIdentifier().getClassName(), objectAction.getName());
+                        if (objectAction.getId().startsWith(prefix)) {
+                            validationFailures.add("%s#%s has prefix %s, has probably been orphaned.  If not an orphan, then rename and use @Named annotation", objectSpec.getIdentifier().getClassName(), objectAction.getId(), prefix);
                         }
                     }
                 }

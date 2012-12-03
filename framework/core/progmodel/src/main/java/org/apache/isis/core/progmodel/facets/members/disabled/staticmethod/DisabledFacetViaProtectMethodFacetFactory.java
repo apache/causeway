@@ -42,7 +42,7 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
      * noa-architecture (where they exist)
      */
     public DisabledFacetViaProtectMethodFacetFactory() {
-        super(FeatureType.MEMBERS, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////
