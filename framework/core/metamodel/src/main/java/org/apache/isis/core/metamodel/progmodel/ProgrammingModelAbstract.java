@@ -36,27 +36,8 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     private final List<FacetFactory> facetFactories = Lists.newArrayList();
     private final List<Object> facetFactoryInstancesOrClasses = Lists.newArrayList();
 
-    private boolean initialized;
-
     @Override
     public void init() {
-        initializeIfRequired();
-    }
-
-    private synchronized void initializeIfRequired() {
-        if(!initialized) {
-            initialize();
-            initialized = true;
-        }
-    }
-
-    private synchronized void assertNotInitialized() {
-        if(initialized) {
-            throw new IllegalStateException("Already initialized");
-        }
-    }
-
-    private void initialize() {
         for (final Object factoryInstanceOrClass : facetFactoryInstancesOrClasses) {
             final FacetFactory facetFactory = asFacetFactory(factoryInstanceOrClass);
             facetFactories.add(facetFactory);
@@ -75,19 +56,16 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     @Override
     public final List<FacetFactory> getList() {
-        initializeIfRequired();
         return Collections.unmodifiableList(facetFactories);
     }
 
     @Override
     public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
-        assertNotInitialized();
         facetFactoryInstancesOrClasses.add(factoryClass);
     }
 
     @Override
     public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
-        assertNotInitialized();
         facetFactoryInstancesOrClasses.remove(factoryClass);
     }
 
@@ -105,5 +83,4 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             }
         }
     }
-
 }

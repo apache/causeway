@@ -29,12 +29,23 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.pe
 public class JdoMetaModelValidator extends MetaModelValidatorComposite {
 
     public JdoMetaModelValidator() {
+        addValidatorToEnsurePersistenceCapables();
+
+        addValidatorToEnsureIdentityType();
+    }
+
+    private void addValidatorToEnsurePersistenceCapables() {
         final MetaModelValidatorVisiting.SummarizingVisitor ensurePersistenceCapables = new MetaModelValidatorVisiting.SummarizingVisitor(){
 
             private boolean found = false;
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                return !(found = objectSpec.containsFacet(JdoPersistenceCapableFacet.class));
+                boolean containsFacet = objectSpec.containsFacet(JdoPersistenceCapableFacet.class);
+                if(containsFacet) {
+                    found = true;
+                    return false; // no need to keep searching
+                }
+                return true; // keep searching
             }
 
             @Override
@@ -48,7 +59,9 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
             }
         };
         add(new MetaModelValidatorVisiting(ensurePersistenceCapables));
+    }
 
+    private void addValidatorToEnsureIdentityType() {
         MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
             @Override
             public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
@@ -67,5 +80,6 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
             
         add(new MetaModelValidatorVisiting(ensureIdentityType));
     }
+
 
 }
