@@ -17,10 +17,6 @@
 
 
 
-Runtime
-
- The <core runtime> module defines a set of APIs common across
- all runtime implementations.
  
 Documentation
 

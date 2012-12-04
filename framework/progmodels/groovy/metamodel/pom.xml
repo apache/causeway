@@ -46,7 +46,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>metamodel</artifactId>
+			<artifactId>isis-metamodel</artifactId>
 		</dependency>
 
 		<!-- is marked as optional in parent, so not exported as a transitive dependency -->

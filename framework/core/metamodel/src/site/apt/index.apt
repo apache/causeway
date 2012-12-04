@@ -16,6 +16,29 @@
 ~~  under the License.
 
 
+Commons
+
+ The <core commons> module provides a set of common utilities and language 
+ extensions for use across the rest of the framework.
+ 
+ It also defines a number of small APIs that are used throughout:
+ 
+ * a set of interfaces for defining <<<Component>>>s and their scope
+ 
+ * a debug framework
+ 
+ * an <<<Ensure>>> API
+ 
+ * a set of {{{http://code.google.com/p/hamcrest}Hamcrest}} <<<Matcher>>>s
+ 
+ * a <<<ResourceStream>>> API  
+ 
+ * a <<<Filter>>> API
+ 
+ * a <<<Future>>> API
+
+ []
+
 
 MetaModel
 
@@ -42,6 +65,32 @@ MetaModel
  The <metamodel> module does not itself define the programming model 
  conventions; that is the responsibility of the 
  {{{../progmodel/index.html}core progmodel}}.
+
+
+ProgModel
+
+ The <core progmodel> provides a set of reusable elements (implementations of
+ the <<<FacetFactory>>> API) that can be reused to make up a programming model.
+ 
+ Most of those within <this> module are in fact used in the
+ default programming model, defined by the 
+ {{{../../progmodels/dflt/index.html}default progmodel}} module.  They are
+ defined within core, however, to allow custom programming models (perhaps
+ extending or trimming back the default programming model) to be defined.
+
+
+Runtime
+
+ The <core runtime> module defines a set of APIs common across
+ all runtime implementations.
+
+
+Webapp
+
+ The <core webapp> module provides a set of reusable servlets and filters 
+ that can be reused in any deployment irrespective of runtime implementation.
+
+
 
 Documentation
 

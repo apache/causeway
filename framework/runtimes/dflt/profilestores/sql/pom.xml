@@ -78,7 +78,7 @@
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>metamodel</artifactId>
+            <artifactId>isis-metamodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

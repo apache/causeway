@@ -204,7 +204,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>metamodel</artifactId>
+                <artifactId>isis-metamodel</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>

@@ -123,12 +123,12 @@
             <!-- metamodel -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>metamodel</artifactId>
+                <artifactId>isis-metamodel</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>metamodel</artifactId>
+                <artifactId>isis-metamodel</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>

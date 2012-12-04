@@ -56,39 +56,6 @@
     </reporting>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>applib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>applib</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>commons</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>metamodel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>metamodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>testsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

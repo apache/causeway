@@ -17,28 +17,6 @@
 
 
 
-Commons
-
- The <core commons> module provides a set of common utilities and language 
- extensions for use across the rest of the framework.
- 
- It also defines a number of small APIs that are used throughout:
- 
- * a set of interfaces for defining <<<Component>>>s and their scope
- 
- * a debug framework
- 
- * an <<<Ensure>>> API
- 
- * a set of {{{http://code.google.com/p/hamcrest}Hamcrest}} <<<Matcher>>>s
- 
- * a <<<ResourceStream>>> API  
- 
- * a <<<Filter>>> API
- 
- * a <<<Future>>> API
-
- []
  
 Documentation
 

@@ -17,10 +17,6 @@
 
 
 
-Webapp
-
- The <core webapp> module provides a set of reusable servlets and filters 
- that can be reused in any deployment irrespective of runtime implementation.
  
 Documentation
 
