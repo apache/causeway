@@ -27,7 +27,7 @@
 	</parent>
 
 	<groupId>org.apache.isis.core</groupId>
-	<artifactId>testsupport</artifactId>
+	<artifactId>isis-unittestsupport</artifactId>
 	<name>Core Test Support</name>
 
 	<description>

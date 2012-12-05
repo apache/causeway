@@ -97,13 +97,13 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>testsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>testsupport</artifactId>
+            <artifactId>isis-integtestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         
