@@ -40,7 +40,7 @@
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>progmodel</artifactId>
+		    <artifactId>isis-metamodel</artifactId>
 		</dependency>
 		
 		<!--  TODO: remove this dependency -->

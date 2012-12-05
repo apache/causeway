@@ -115,19 +115,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>commons</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>commons</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>progmodel</artifactId>
+				<artifactId>isis-metamodel</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
@@ -137,12 +125,6 @@
 				<artifactId>isis-unittestsupport</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.progmodels</groupId>
-				<artifactId>dflt</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 
 			<!-- DataNucleus -->

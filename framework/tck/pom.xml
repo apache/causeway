@@ -202,13 +202,6 @@
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
-            <!-- isis: progmodels: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
             <!-- isis: progmodel: wrapper -->
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
@@ -282,7 +275,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>webserver</artifactId>
+                <artifactId>isis-webserver</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>

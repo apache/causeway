@@ -105,12 +105,6 @@
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- isis progmodel -->
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-
         <!-- isis security implementations -->        
         <dependency>
             <groupId>org.apache.isis.security</groupId>
@@ -124,7 +118,7 @@
         <!-- to run using WebServer -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webserver</artifactId>
+            <artifactId>isis-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

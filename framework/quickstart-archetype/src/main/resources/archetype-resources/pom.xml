@@ -303,7 +303,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>webserver</artifactId>
+                <artifactId>isis-webserver</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>

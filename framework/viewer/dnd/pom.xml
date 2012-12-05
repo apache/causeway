@@ -94,11 +94,7 @@
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>progmodel</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>runtime</artifactId>
+		    <artifactId>isis-metamodel</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>

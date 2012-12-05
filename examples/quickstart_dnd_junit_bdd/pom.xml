@@ -204,34 +204,7 @@
             <!-- isis: core -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>commons</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>metamodel</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>progmodel</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>runtime</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>webapp</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <!-- isis: progmodels: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>dflt</artifactId>
+                <artifactId>isis-metamodel</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -308,7 +281,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>webserver</artifactId>
+                <artifactId>isis-webserver</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>

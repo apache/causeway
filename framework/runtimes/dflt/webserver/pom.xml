@@ -27,7 +27,7 @@
     </parent>
 
 	<groupId>org.apache.isis.runtimes.dflt</groupId>
-	<artifactId>webserver</artifactId>
+	<artifactId>isis-webserver</artifactId>
 	<name>Default Runtime WebServer (Jetty)</name>
 
 	<properties>

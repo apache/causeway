@@ -93,6 +93,10 @@
 
 
 	<dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-metamodel</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-metamodel</artifactId>
@@ -106,20 +110,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>progmodel</artifactId>
-        </dependency>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>runtime</artifactId>
-		</dependency>
-        
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>webapp</artifactId>
-		</dependency>
-        
         <!-- TODO: remove these dependencies (they prevent the viewer using different runtimes) -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>

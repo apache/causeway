@@ -59,7 +59,6 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>dflt</module>
         <module>wrapper</module>
         <module>groovy</module>
 	</modules>
@@ -95,18 +94,6 @@
                 <version>0.3.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
             </dependency>
 
             <dependency>

@@ -99,7 +99,7 @@
         <!-- isis core -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>runtime</artifactId>
+            <artifactId>isis-metamodel</artifactId>
         </dependency>
 
         <!-- isis default runtime -->
@@ -124,11 +124,6 @@
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- isis defaults (other) -->
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>

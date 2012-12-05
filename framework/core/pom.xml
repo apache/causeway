@@ -47,11 +47,7 @@
 
     <modules>
         <module>testsupport</module>
-        <module>commons</module>
         <module>metamodel</module>
-        <module>progmodel</module>
-        <module>runtime</module>
-        <module>webapp</module>
     </modules>
 
     <build>
@@ -107,19 +103,6 @@
                 <type>test-jar</type>
             </dependency>
 
-            <!-- commons -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>commons</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>commons</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
-            </dependency>
-
             <!-- metamodel -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -129,45 +112,6 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-metamodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
-            </dependency>
-
-            <!-- progmodel -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>progmodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>progmodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
-            </dependency>
-
-            <!-- runtime -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>runtime</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>runtime</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
-            </dependency>
-
-            <!-- webapp -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>webapp</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>webapp</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>

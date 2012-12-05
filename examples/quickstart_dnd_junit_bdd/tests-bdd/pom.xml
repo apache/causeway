@@ -58,7 +58,7 @@
         <!-- isis -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>runtime</artifactId>
+            <artifactId>isis-metamodel</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
@@ -70,10 +70,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>

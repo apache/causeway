@@ -73,13 +73,13 @@
 		<!-- isis core -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>runtime</artifactId>
+            <artifactId>isis-metamodel</artifactId>
         </dependency>
 
 		<!-- isis default runtime -->
         <dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webserver</artifactId>
+            <artifactId>isis-webserver</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
@@ -102,10 +102,6 @@
             <artifactId>xml</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
@@ -323,7 +319,7 @@
 				</dependency>
 				<dependency>
 				    <groupId>org.apache.isis.runtimes.dflt</groupId>
-				    <artifactId>webserver</artifactId>
+				    <artifactId>isis-webserver</artifactId>
 				</dependency>
 				<!--  JETTY DEPENDENCIES FOR RUNNING webapp viewers in packaged JAR -->
 				<dependency>

@@ -39,6 +39,35 @@ Runtime
  bootstrapper, making it easy to bootstrap <Apache Isis> from a main() or a 
  JUnit test case.
 
+
+WebApp Support
+ 
+ The <webapp> module is a small module that provides reusable servlet context 
+ listeners and filters to webapp viewers.  They include:
+ 
+ * <<<IsisWebAppBootstrapper>>> which is a servlet context listener to bootstrap
+   an Isis runtime and bind to the servlet context
+
+ * <<<IsisSessionFilter>>> which is a filter used to
+   creating an <<<IsisSession>>> for each request (the 
+   {{{http://community.jboss.org/wiki/OpenSessioninView}Open session in View}}
+    pattern)
+
+ []
+ 
+ Not every webapp-based viewer is required to use these classes; refer to their
+ documentation for exact details of what should reside in the <<<web.xml>>>.
+ 
+
+
+Identity Bytecode
+ 
+ The <identity> bytecode module is a no-op implementation of the bytecode
+ APIs.  It is provided for those object stores that do not need the use of 
+ bytecode enhancement, typically because they hook into the lazy loading 
+ of the underlying ORM.
+
+
 Documentation
 
  See the {{{../index.html}core}} documentation 

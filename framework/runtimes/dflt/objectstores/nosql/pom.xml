@@ -195,7 +195,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- TODO: remove this dependency when can -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
@@ -203,18 +202,9 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- TODO: remove this dependency when can -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>isis-integtestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- TODO: remove this dependency when can -->
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

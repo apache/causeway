@@ -140,11 +140,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>tck-dom</artifactId>
             <version>0.3.1-SNAPSHOT</version>

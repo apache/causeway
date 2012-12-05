@@ -159,7 +159,7 @@
         <!-- to run using WebServer (optional) -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webserver</artifactId>
+            <artifactId>isis-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

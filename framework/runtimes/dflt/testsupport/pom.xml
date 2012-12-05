@@ -102,12 +102,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
         </dependency>

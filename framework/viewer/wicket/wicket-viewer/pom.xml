@@ -69,13 +69,11 @@
 			<scope>test</scope>
 		</dependency>
         
-        <!-- TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
 
-        <!-- TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>webapp</artifactId>

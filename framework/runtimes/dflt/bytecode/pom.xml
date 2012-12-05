@@ -44,7 +44,6 @@
 	<modules>
 		<module>dflt</module>
 		<module>javassist</module>
-		<module>identity</module>
 	</modules>
 	
 	<reporting>

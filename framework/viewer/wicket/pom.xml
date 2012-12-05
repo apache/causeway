@@ -129,12 +129,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>commons</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>commons</artifactId>
+				<artifactId>isis-metamodel</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>

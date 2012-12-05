@@ -71,6 +71,11 @@
 			<artifactId>wrapper-applib</artifactId>
         </dependency>
 
+        <dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+        </dependency>
+
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>isis-metamodel</artifactId>
@@ -89,11 +94,6 @@
             <artifactId>tck-dom</artifactId>
             <scope>test</scope>
             <version>0.3.1-SNAPSHOT</version>
-        </dependency>
-
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-			<artifactId>dflt</artifactId>
         </dependency>
 
 		<dependency>

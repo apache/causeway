@@ -79,16 +79,6 @@
         </plugins>
     </reporting>
 
-    <dependencyManagement>
-        <dependencies>
-	        <dependency>
-	            <groupId>org.apache.isis.progmodels</groupId>
-	            <artifactId>dflt</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-	        </dependency>
-        </dependencies>
-    </dependencyManagement>
-    
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis</groupId>
@@ -103,40 +93,16 @@
             <scope>test</scope>
         </dependency>
 
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>commons</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
+            <artifactId>isis-metamodel</artifactId>
 		</dependency>
-
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>progmodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>progmodel</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>runtime</artifactId>
-		</dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
         </dependency>
 
 		<dependency>
@@ -149,6 +115,13 @@
 			<artifactId>jmock-legacy</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+	    <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+		    <scope>provided</scope>
+        </dependency>
+
 
 	</dependencies>
 </project>
