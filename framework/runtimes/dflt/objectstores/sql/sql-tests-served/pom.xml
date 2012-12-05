@@ -133,11 +133,9 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-        <!-- TODO: remove this dependency -->
         <dependency>
         	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
         	<artifactId>dflt</artifactId>
-        	<version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

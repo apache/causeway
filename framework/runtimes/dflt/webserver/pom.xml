@@ -21,9 +21,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.runtimes</groupId>
-        <artifactId>dflt</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>core</artifactId>
         <version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../core/pom.xml</relativePath>
     </parent>
 
 	<groupId>org.apache.isis.runtimes.dflt</groupId>
@@ -64,10 +65,12 @@
     </reporting>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>webapp</artifactId>
+			<artifactId>runtime</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>jetty</artifactId>

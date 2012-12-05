@@ -42,11 +42,6 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>dflt</module>
-		<module>xml</module>
-		<module>sql</module>
-		<module>nosql</module>
-		<module>jdo</module>
 	</modules>
 	
 	<reporting>

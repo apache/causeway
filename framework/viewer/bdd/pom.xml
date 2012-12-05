@@ -22,8 +22,9 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>viewer</artifactId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
@@ -58,8 +59,16 @@
     <dependencyManagement>
         <dependencies>
         
-        	<!-- for some reason, it seems to be necessary to specify the
-        	versions, ie not being inherited from parent.  Dunno why. -->
+			<dependency>
+			    <groupId>org.apache.isis.core</groupId>
+			    <artifactId>isis-metamodel</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+	        <dependency>
+	            <groupId>org.apache.isis.security</groupId>
+	            <artifactId>dflt</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
 
             <!-- BDD Viewer -->
             <dependency>

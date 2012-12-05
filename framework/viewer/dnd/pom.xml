@@ -22,8 +22,9 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>viewer</artifactId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
@@ -78,59 +79,49 @@
         </plugins>
     </reporting>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- TODO: remove this dependency -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 	<dependencies>
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-metamodel</artifactId>
-		</dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- TODO: remove this dependency -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <version>0.3.1-SNAPSHOT</version>
             <artifactId>runtime</artifactId>
         </dependency>
 
-        <!-- TODO: remove this dependency -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>isis-integtestsupport</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- TODO: remove this dependency -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
-        <!-- TODO: remove this dependency -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>dflt</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.easymock</groupId>

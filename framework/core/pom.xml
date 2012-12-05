@@ -46,8 +46,20 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <modules>
+
         <module>testsupport</module>
+        <module>../applib</module>
         <module>metamodel</module>
+        <module>../runtimes/dflt/runtime</module>
+        <module>../runtimes/dflt/webserver</module>
+
+        <module>../runtimes/dflt/testsupport</module>
+        <module>../runtimes/dflt/bytecode/dflt</module>
+        <module>../runtimes/dflt/bytecode/javassist</module>
+        
+        <module>../runtimes/dflt/objectstores/dflt</module>
+        <module>../runtimes/dflt/profilestores/dflt</module>
+        <module>../security/dflt</module>
     </modules>
 
     <build>
@@ -90,7 +102,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- testsupport -->
+            <!-- isis-unittestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-unittestsupport</artifactId>
@@ -99,6 +111,19 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-unittestsupport</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
+            <!-- applib -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>applib</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>applib</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
@@ -115,6 +140,72 @@
                 <version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
+
+			<!-- runtime -->
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt</groupId>
+			    <artifactId>runtime</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt</groupId>
+			    <artifactId>runtime</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			    <type>test-jar</type>
+			    <scope>test</scope>
+			</dependency>
+
+			<!-- bytecode-cglib -->
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+			    <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+	        <dependency>
+	            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+	            <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+	            <scope>test</scope>
+	        </dependency>
+
+			<!-- bytecode-javassist -->
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+			    <artifactId>javassist</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- isis-webserver -->
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt</groupId>
+			    <artifactId>isis-webserver</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- isis-integtestsupport -->
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt</groupId>
+			    <artifactId>isis-integtestsupport</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- default implementations -->
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+			    <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+			    <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.isis.security</groupId>
+			    <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+
 
         </dependencies>
     </dependencyManagement>

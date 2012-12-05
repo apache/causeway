@@ -37,12 +37,6 @@
 			<artifactId>runtime</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
 		</dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>dflt</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-        </dependency>
 	</dependencies>
 	
 </project>

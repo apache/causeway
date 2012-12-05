@@ -21,9 +21,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.runtimes.dflt</groupId>
-		<artifactId>profilestores</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
@@ -73,12 +74,14 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -86,10 +89,12 @@
 		<dependency>
 		    <groupId>org.apache.isis.runtimes.dflt</groupId>
 		    <artifactId>runtime</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.isis.runtimes.dflt</groupId>
 		    <artifactId>runtime</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
 		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>

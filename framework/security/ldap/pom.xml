@@ -22,8 +22,9 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>security</artifactId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.security</groupId>
@@ -64,29 +65,16 @@
         </plugins>
     </reporting>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- TODO: remove this dependency -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 	<dependencies>
-        <!-- TODO: move this dependency to core -->
 		<dependency>
 		    <groupId>org.apache.isis.runtimes.dflt</groupId>
 		    <artifactId>runtime</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
 		</dependency>
-        <!-- TODO: move this dependency to core -->
 		<dependency>
 		    <groupId>org.apache.isis.runtimes.dflt</groupId>
 		    <artifactId>runtime</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
 		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>

@@ -22,8 +22,9 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>progmodels</artifactId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 
@@ -72,14 +73,38 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- TODO: remove this dependency -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	        <dependency>
+			    <groupId>org.apache.isis.runtimes.dflt</groupId>
+			    <artifactId>runtime</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	
+			<dependency>
+			    <groupId>org.apache.isis.core</groupId>
+			    <artifactId>isis-metamodel</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+			    <type>test-jar</type>
+			    <scope>test</scope>
+	        </dependency>
+			<dependency>
+			    <groupId>org.apache.isis.runtimes.dflt</groupId>
+			    <artifactId>runtime</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+			    <type>test-jar</type>
+			    <scope>test</scope>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-unittestsupport</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	            <scope>test</scope>
+	        </dependency>
 
 			<!-- wrapper applib -->
 			<dependency>

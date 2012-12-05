@@ -315,10 +315,6 @@
 				<!-- to run using WebServer -->
 				<dependency>
 				    <groupId>org.apache.isis.runtimes.dflt</groupId>
-				    <artifactId>webapp</artifactId>
-				</dependency>
-				<dependency>
-				    <groupId>org.apache.isis.runtimes.dflt</groupId>
 				    <artifactId>isis-webserver</artifactId>
 				</dependency>
 				<!--  JETTY DEPENDENCIES FOR RUNNING webapp viewers in packaged JAR -->

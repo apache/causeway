@@ -21,9 +21,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.runtimes</groupId>
-		<artifactId>dflt</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt</groupId>
@@ -70,6 +71,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
@@ -98,12 +105,6 @@
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
         </dependency>
 
         <dependency>
@@ -115,6 +116,13 @@
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+
+<!-- 
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+-->
 
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>

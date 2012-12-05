@@ -22,8 +22,9 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>isis</artifactId>
+		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>applib</artifactId>

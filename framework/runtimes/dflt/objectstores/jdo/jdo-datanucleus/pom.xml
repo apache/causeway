@@ -91,16 +91,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>identity</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>runtime</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>isis-integtestsupport</artifactId>

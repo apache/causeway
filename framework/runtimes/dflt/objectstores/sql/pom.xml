@@ -13,9 +13,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.runtimes.dflt</groupId>
-        <artifactId>objectstores</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis</artifactId>
         <version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
@@ -82,6 +83,46 @@
 
     <dependencyManagement>
         <dependencies>
+
+	        <dependency>
+	            <groupId>org.apache.isis.runtimes.dflt</groupId>
+	            <artifactId>runtime</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+
+	        <dependency>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-unittestsupport</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	
+	        <dependency>
+	            <groupId>org.apache.isis.runtimes.dflt</groupId>
+	            <artifactId>isis-integtestsupport</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	        
+	        <!--  Required for TestProxy -->
+			<!-- Isis defaults -->
+	        <dependency>
+	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+	            <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+	            <artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+	            <type>test-jar</type>
+	            <scope>test</scope>
+	        </dependency>
+	        <dependency>
+	        	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+	        	<artifactId>dflt</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+	            <scope>test</scope>
+	        </dependency>
+
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-impl</artifactId>
@@ -104,6 +145,14 @@
                 <artifactId>sql-tests-served</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
+
+	        <dependency>
+	            <groupId>org.apache.isis.tck</groupId>
+	            <artifactId>tck-dom</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+
+
 
 			<!-- Test environment -->            
 		    <dependency>

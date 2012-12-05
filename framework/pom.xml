@@ -245,14 +245,40 @@
 
     <modules>
         <module>site-skin</module>
-        <module>applib</module>
+
         <module>core</module>
-        <module>runtimes</module>
+
+        <module>runtimes/dflt/objectstores/xml</module>
+        <module>runtimes/dflt/objectstores/sql</module>
+        <module>runtimes/dflt/objectstores/nosql</module>
+        <module>runtimes/dflt/objectstores/jdo</module>
+        
+        <module>runtimes/dflt/profilestores/xml</module>
+        <module>runtimes/dflt/profilestores/sql</module>
+
         <module>tck</module>
-        <module>progmodels</module>
-        <module>security</module>
-        <module>viewer</module>
+
+        <module>security/file</module>
+        <module>security/ldap</module>
+        <module>security/sql</module>
+
+        <module>progmodels/wrapper</module>
+        <module>progmodels/groovy</module>
+        
+  		<module>viewer/dnd</module>
+		<module>viewer/dnd-tck</module>
+		<module>viewer/html</module>
+		<module>viewer/html-tck</module>
+		<module>viewer/scimpi</module>
+		<module>viewer/wicket</module>
+		<module>viewer/restfulobjects</module>
+		<module>viewer/bdd</module>
+		<module>viewer/junit</module>
+		<module>viewer/junit-tck</module>
+
         <module>quickstart-archetype</module>
+        
+        <module>runtimes/dflt/monitoring</module>
     </modules>
 
     <build>
@@ -1064,62 +1090,6 @@ archetype includes this explicit dependency.
 
     <dependencyManagement>
         <dependencies>
-
-            <!-- isis: applib -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>applib</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>applib</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
-            </dependency>
-
-            <!-- isis: core -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>core</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: progmodels -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>progmodels</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: security -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>security</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtime -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>runtimes</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: viewer -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>viewer</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: tck -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>tck</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
 
             <!-- Logging -->
 	        <dependency>

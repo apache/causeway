@@ -271,27 +271,12 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>monitoring</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>webapp</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
                 <artifactId>isis-webserver</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
                 <artifactId>dflt</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>identity</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>

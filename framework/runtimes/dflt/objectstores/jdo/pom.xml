@@ -15,9 +15,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.runtimes.dflt</groupId>
-		<artifactId>objectstores</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
@@ -28,8 +29,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>viewer/jdo/</relativeUrl>
+		<siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>runtimes/dflt/objectstores/jdo/</relativeUrl>
 
 		<docbkxGuideTitle>Apache Isis JDO ObjectStore</docbkxGuideTitle>
 		<docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -67,16 +68,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- TODO: remove this dependency -->
-			<dependency>
-				<groupId>org.apache.isis.runtimes</groupId>
-				<artifactId>dflt</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<!-- Apache Isis JDO ObjectStore -->
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 				<artifactId>jdo-applib</artifactId>
@@ -102,7 +93,7 @@
 				<type>test-jar</type>
 			</dependency>
 
-			<!-- Apache Isis -->
+			<!-- isis core -->
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>applib</artifactId>
@@ -126,6 +117,17 @@
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 			</dependency>
+        	<dependency>
+        	    <groupId>org.apache.isis.runtimes.dflt</groupId>
+    	        <artifactId>runtime</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.isis.runtimes.dflt</groupId>
+	            <artifactId>isis-integtestsupport</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+	            <scope>test</scope>
+	        </dependency>
 
 			<!-- DataNucleus -->
 	       <dependency>

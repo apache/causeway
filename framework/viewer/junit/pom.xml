@@ -21,9 +21,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>viewer</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis</artifactId>
         <version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
@@ -36,7 +37,6 @@
         <relativeUrl>viewer/junit/</relativeUrl>
 
         <wrapper-progmodel.version>0.3.1-SNAPSHOT</wrapper-progmodel.version>
-        <identity-bytecode.version>0.3.1-SNAPSHOT</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
@@ -81,67 +81,45 @@
         </plugins>
     </reporting>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- TODO: remove this dependency -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- TODO: remove this dependency -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>identity</artifactId>
-                <version>${identity-bytecode.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>wrapper-metamodel</artifactId>
-                <version>${wrapper-progmodel.version}</version>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>wrapper-metamodel</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>identity</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -149,6 +127,7 @@
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

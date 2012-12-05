@@ -39,20 +39,6 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>restfulobjects-applib</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-metamodel</artifactId>
-		</dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -60,10 +46,24 @@
             <scope>test</scope>
         </dependency>
 
+		<dependency>
+			<groupId>org.apache.isis</groupId>
+			<artifactId>applib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webapp</artifactId>
+            <artifactId>runtime</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>restfulobjects-applib</artifactId>
+		</dependency>
+
 
         <!-- the javax:* equivalents of these are excluded in 
              dependencyManagement of resteasy-jaxrs, so  

@@ -23,8 +23,9 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>progmodels</artifactId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.progmodels</groupId>
