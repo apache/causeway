@@ -24,20 +24,35 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt</groupId>
-	<artifactId>isis-integtestsupport</artifactId>
-	<name>Default Runtime Test Support</name>
+	<artifactId>runtime</artifactId>
+	<name>Default Runtime Runtime</name>
 
 	<properties>
-        <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/testsupport/</relativeUrl>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>runtime/</relativeUrl>
     </properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>isis-version.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+	</build>
 
     <reporting>
         <plugins>
@@ -65,69 +80,47 @@
     </reporting>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis</groupId>
+			<artifactId>applib</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-junit4</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-legacy</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-dom</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-        </dependency>
-	
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-
-<!-- 
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
--->
 
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-metamodel</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-metamodel</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	    <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+		    <scope>provided</scope>
+        </dependency>
 
 
 	</dependencies>

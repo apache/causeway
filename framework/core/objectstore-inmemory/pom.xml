@@ -24,24 +24,16 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-	<artifactId>javassist</artifactId>
-
-	<name>Default Runtime Javassist Bytecode Implementation</name>
+	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+	<artifactId>dflt</artifactId>
+	<name>Default Runtime Default ObjectStore (In-Memory)</name>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/bytecode/javassist/</relativeUrl>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>objectstore-inmemory/</relativeUrl>
 	</properties>
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</url>
-    </scm>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
@@ -71,21 +63,29 @@
         </plugins>
     </reporting>
 
-	<dependencies>
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
-		</dependency>
+    <dependencies>
 
         <dependency>
-            <groupId>javassist</groupId>
-            <artifactId>javassist</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-unittestsupport</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-metamodel</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
+
 </project>

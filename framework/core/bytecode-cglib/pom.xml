@@ -26,19 +26,14 @@
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>isis-unittestsupport</artifactId>
-	<name>Core Test Support</name>
-
-	<description>
-		Support for writing unit tests; should be added as a dependency
-		with scope=test only
-	</description>
+	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+	<artifactId>dflt</artifactId>
+	<name>Default Runtime Default Bytecode (CgLib)</name>
 
 	<properties>
-        <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>core/testsupport/</relativeUrl>
-    </properties>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>bytecode-cglib/</relativeUrl>
+	</properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
@@ -69,26 +64,31 @@
     </reporting>
 
 	<dependencies>
-           <dependency>
-               <groupId>junit</groupId>
-               <artifactId>junit</artifactId>
-           </dependency>
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+		    <type>test-jar</type>
+		    <scope>test</scope>
+		</dependency>
 
-           <dependency>
-               <groupId>org.jmock</groupId>
-               <artifactId>jmock</artifactId>
-           </dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+		</dependency>
 
-           <dependency>
-               <groupId>org.jmock</groupId>
-               <artifactId>jmock-junit4</artifactId>
-           </dependency>
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+		</dependency>
 
-           <dependency>
-               <groupId>org.jmock</groupId>
-               <artifactId>jmock-legacy</artifactId>
-           </dependency>
-
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

@@ -47,19 +47,19 @@
 
     <modules>
 
-        <module>testsupport</module>
-        <module>../applib</module>
+        <module>unittestsupport</module>
+        <module>applib</module>
         <module>metamodel</module>
-        <module>../runtimes/dflt/runtime</module>
-        <module>../runtimes/dflt/webserver</module>
+        <module>runtime</module>
+        <module>webserver</module>
 
-        <module>../runtimes/dflt/testsupport</module>
-        <module>../runtimes/dflt/bytecode/dflt</module>
-        <module>../runtimes/dflt/bytecode/javassist</module>
+        <module>integtestsupport</module>
+        <module>bytecode-cglib</module>
+        <module>bytecode-javassist</module>
         
-        <module>../runtimes/dflt/objectstores/dflt</module>
-        <module>../runtimes/dflt/profilestores/dflt</module>
-        <module>../security/dflt</module>
+        <module>objectstore-inmemory</module>
+        <module>profilestore-inmemory</module>
+        <module>security-noop</module>
     </modules>
 
     <build>

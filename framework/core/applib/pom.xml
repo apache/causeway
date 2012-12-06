@@ -24,7 +24,6 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>applib</artifactId>

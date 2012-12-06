@@ -23,8 +23,8 @@
     <name>Core MetaModel</name>
 
     <properties>
-        <siteBaseDir>../..</siteBaseDir>
-        <relativeUrl>core/metamodel/</relativeUrl>
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>metamodel/</relativeUrl>
     </properties>
 
     <!-- used in Site generation for relative references. -->

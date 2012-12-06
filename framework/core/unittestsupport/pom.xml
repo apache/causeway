@@ -24,17 +24,21 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-	<artifactId>dflt</artifactId>
-	<name>Default ProfileStore (In-Memory)</name>
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-unittestsupport</artifactId>
+	<name>Core Test Support</name>
+
+	<description>
+		Support for writing unit tests; should be added as a dependency
+		with scope=test only
+	</description>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/profilestores/dflt/</relativeUrl>
-	</properties>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>unittestsupport/</relativeUrl>
+    </properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
@@ -64,31 +68,27 @@
         </plugins>
     </reporting>
 
-    <dependencies>
+	<dependencies>
+           <dependency>
+               <groupId>junit</groupId>
+               <artifactId>junit</artifactId>
+           </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-metamodel</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
+           <dependency>
+               <groupId>org.jmock</groupId>
+               <artifactId>jmock</artifactId>
+           </dependency>
 
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
-		</dependency>
+           <dependency>
+               <groupId>org.jmock</groupId>
+               <artifactId>jmock-junit4</artifactId>
+           </dependency>
+
+           <dependency>
+               <groupId>org.jmock</groupId>
+               <artifactId>jmock-legacy</artifactId>
+           </dependency>
+
 	</dependencies>
 
 </project>

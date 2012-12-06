@@ -24,17 +24,23 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.security</groupId>
-	<artifactId>dflt</artifactId>
-	<name>Default Security (No-op)</name>
+	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+	<artifactId>javassist</artifactId>
+
+	<name>Default Runtime Javassist Bytecode Implementation</name>
 
 	<properties>
-        <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>security/dflt/</relativeUrl>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>bytecode-javassist/</relativeUrl>
 	</properties>
+
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</url>
+    </scm>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
@@ -53,7 +59,6 @@
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
-                            <report>dependency-management</report>
                             <report>dependencies</report>
                             <report>dependency-convergence</report>
                             <report>plugins</report>
@@ -76,5 +81,10 @@
 		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
 	</dependencies>
 </project>

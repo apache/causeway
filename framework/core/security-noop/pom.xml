@@ -24,16 +24,15 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+	<groupId>org.apache.isis.security</groupId>
 	<artifactId>dflt</artifactId>
-	<name>Default Runtime Default Bytecode (CgLib)</name>
+	<name>Default Security (No-op)</name>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/bytecode/dflt/</relativeUrl>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>security-noop/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
@@ -53,6 +52,7 @@
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
+                            <report>dependency-management</report>
                             <report>dependencies</report>
                             <report>dependency-convergence</report>
                             <report>plugins</report>
@@ -75,21 +75,5 @@
 		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-		</dependency>
 	</dependencies>
-
 </project>
