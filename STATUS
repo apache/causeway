@@ -1,4 +1,4 @@
-Web site: http://incubator.apache.org/isis/
+Web site: http://isis.apache.org/
 
 Project Status
 
@@ -12,9 +12,11 @@ Project Status
 
   Isis was accepted into the Incubator in 2010, September 7th.
 
+  Isis graduated from the Incubator in 2012, October 17th.
+
   To participate in Isis, please join the mailing lists.  Send an empty 
-  message to isis-users-subscribe@incubator.apache.org (for users)
-  or to isis-dev-subscribe@incubator.apache.org (for contributors).
+  message to users-subscribe@isis.apache.org (for users)
+  or to dev-subscribe@isis.apache.org (for developers).
 
 Project info
 
@@ -33,11 +35,12 @@ Resources:
  
   item           type   URL
   -------------  -----  -----------------------------------------------------
-  Source code    SVN    http://svn.apache.org/repos/asf/incubator/isis/trunk/framework
-  Status file    www    http://svn.apache.org/repos/asf/incubator/isis/trunk/framework/STATUS
-  Website        www    http://incubator.apache.org/isis/
-  Mailing list   dev    isis-dev@incubator.apache.org
-  Mailing list   users  isis-users@incubator.apache.org
+  Source code    git    https://git.apache.org/repos/asf/isis.git
+  Source code    gitrw  https://git-wip-us.apache.org/repos/asf/isis.git
+  Status file    www    https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=blob_plain;f=STATUS;hb=HEAD
+  Website        www    http://isis.apache.org
+  Mailing list   dev    dev@isis.apache.org
+  Mailing list   users  users@isis.apache.org
   JIRA           www    http://issues.apache.org/jira/browse/ISIS
   Wiki           www    http://cwiki.apache.org/confluence/display/ISIS/Index
   CI             www    http://builds.apache.org/hudson/job/isis-trunk-windows
@@ -57,4 +60,5 @@ Team:
   Committer          kevin        Kevin Meyer (CLA on file)
   Committer          themalkolm   Alexander Krasnukhin (CLA on file)
   Committer          dslaughter   David Slaughter (CLA on file)
+  Committer          jvanderwal   Jeroen van der Wal (CLA on file)
   Committer          uli          Ulrich Stärk (CLA on file)

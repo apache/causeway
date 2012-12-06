@@ -8,15 +8,14 @@ logs/
 .project
 .classpath
 
-framework/component/objectstore/sql/sql-tests-common/hsql-db/
-framework/component/objectstore/sql/sql-tests-common/xml/
+component/objectstore/sql/sql-tests-common/hsql-db/
+component/objectstore/sql/sql-tests-common/xml/
 
-framework/component/objectstore/xml/tmp/objects/
-framework/component/objectstore/xml/xml/objects/
-framework/component/objectstore/xml/tmp/tests/
+component/objectstore/xml/tmp/objects/
+component/objectstore/xml/xml/objects/
+component/objectstore/xml/tmp/tests/
 
-framework/component/security/sql/hsql-db/
-framework/component/runtimes/dflt/objectstores/jdo/jdo-datanucleus/hsql-db/
+component/security/sql/hsql-db/
 
 # log files
 datanucleus.log
