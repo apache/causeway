@@ -40,36 +40,47 @@
 
         <module>core</module>
 
-        <module>progmodel/wrapper</module>
-        <module>progmodel/groovy</module>
+        <module>component/progmodel/wrapper</module>
+        <module>component/progmodel/groovy</module>
 
-        <module>profilestore/xml</module>
-        <module>profilestore/sql</module>
+        <module>component/profilestore/xml</module>
+        <module>component/profilestore/sql</module>
 
-        <module>security/file</module>
-        <module>security/ldap</module>
-        <module>security/sql</module>
+        <module>component/security/file</module>
+        <module>component/security/ldap</module>
+        <module>component/security/sql</module>
 
-
-        <module>objectstore/xml</module>
-        <module>objectstore/sql</module>
-        <module>objectstore/nosql</module>
-        <module>objectstore/jdo</module>
+        <module>component/objectstore/xml</module>
+        <module>component/objectstore/sql</module>
+        <module>component/objectstore/nosql</module>
+        <module>component/objectstore/jdo</module>
         
-        <module>viewer/dnd</module>
-        <module>viewer/dnd-tck</module>
-        <module>viewer/html</module>
-        <module>runtimes/dflt/monitoring</module>
-        <module>viewer/html-tck</module>
-        <module>viewer/scimpi</module>
-        <module>viewer/wicket</module>
-        <module>viewer/restfulobjects</module>
-        <module>viewer/bdd</module>
-        <module>viewer/junit</module>
-        <module>viewer/junit-tck</module>
+        <module>component/viewer/dnd</module>
+        <module>component/viewer/dnd-tck</module>
+        <module>component/viewer/html</module>
+        <module>component/viewer/html-monitoring</module>
+        <module>component/viewer/html-tck</module>
+        <module>component/viewer/scimpi</module>
+        <module>component/viewer/wicket</module>
+        <module>component/viewer/restfulobjects</module>
+        <module>component/viewer/bdd</module>
+        <module>component/viewer/junit</module>
+        <module>component/viewer/junit-tck</module>
+
+        <module>example/application/claims</module>
+        <module>example/application/onlinedemo</module>
+        <module>example/application/quickstart</module>
+        <module>example/application/quickstart_dnd_junit_bdd</module>
+        <module>example/application/quickstart_wicket_restful_jdo</module>
 
         <module>example/archetype/quickstart</module>
-        
+
+        <module>example/misc/metamodel/namefile</module>
+<!--
+        <module>example/misc/metamodel/jsr303</module>
+-->
+
+        <module>example/domain-service/email-service</module>
 
     </modules>
 
