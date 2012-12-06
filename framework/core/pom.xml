@@ -14,8 +14,9 @@
 
     <parent>
         <groupId>org.apache.isis</groupId>
-        <artifactId>isis</artifactId>
+        <artifactId>isis-parent</artifactId>
         <version>0.3.1-SNAPSHOT</version>
+	<relativePath>../isis-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core</artifactId>
@@ -46,20 +47,22 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <modules>
-
-        <module>unittestsupport</module>
         <module>applib</module>
         <module>metamodel</module>
         <module>runtime</module>
         <module>webserver</module>
 
-        <module>integtestsupport</module>
         <module>bytecode-cglib</module>
         <module>bytecode-javassist</module>
         
         <module>objectstore-inmemory</module>
         <module>profilestore-inmemory</module>
         <module>security-noop</module>
+
+        <module>unittestsupport</module>
+        <module>integtestsupport</module>
+
+        <module>tck</module>
     </modules>
 
     <build>
@@ -161,12 +164,6 @@
 			    <artifactId>dflt</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
 			</dependency>
-	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-	            <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-	            <scope>test</scope>
-	        </dependency>
 
 			<!-- bytecode-javassist -->
 			<dependency>

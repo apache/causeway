@@ -3,15 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.maven</groupId>
-		<artifactId>maven-parent</artifactId>
-		<version>22</version>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis-parent</artifactId>
+		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.tools</groupId>
+	<groupId>org.apache.isis.tool</groupId>
 	<artifactId>isis-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.3.1-incubating-SNAPSHOT</version>
+	<version>0.3.1-SNAPSHOT</version>
 
 	<name>isis-maven-plugin Maven Mojo</name>
 	<url>http://maven.apache.org</url>

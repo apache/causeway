@@ -23,7 +23,7 @@
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../tck/pom.xml</relativePath>
+        <relativePath>../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
@@ -94,6 +94,7 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
             <artifactId>bdd-concordion</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

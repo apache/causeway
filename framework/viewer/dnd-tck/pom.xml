@@ -28,7 +28,7 @@
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../tck/pom.xml</relativePath>
+        <relativePath>../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
@@ -68,7 +68,6 @@
     </build>
 
     <dependencies>
-        <!-- other modules in this project -->
         <dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>tck-fixture</artifactId>
@@ -81,7 +80,6 @@
             <artifactId>isis-metamodel</artifactId>
         </dependency>
 
-        <!-- isis default runtime -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
@@ -91,15 +89,10 @@
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- isis defaults (other) -->
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
@@ -109,6 +102,13 @@
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>dnd</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

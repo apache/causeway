@@ -24,7 +24,7 @@
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../tck/pom.xml</relativePath>
+        <relativePath>../../../core/tck/pom.xml</relativePath>
     </parent>
 
         <groupId>org.apache.isis.viewer</groupId>
@@ -83,6 +83,7 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-viewer</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 
         <!-- isis runtime -->
@@ -95,19 +96,10 @@
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- isis security implementations -->        
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
@@ -119,6 +111,17 @@
             <artifactId>isis-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>file</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
         
 	</dependencies>
