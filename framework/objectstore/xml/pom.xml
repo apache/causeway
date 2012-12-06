@@ -20,24 +20,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
+    <parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-	<artifactId>sql</artifactId>
-	<name>Default Runtime SQL ProfileStore (jdbc)</name>
+	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+	<artifactId>xml</artifactId>
+
+	<name>Default Runtime XML ObjectStore</name>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/profilestores/sql/</relativeUrl>
-	</properties>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>objectstore/xml/</relativeUrl>
+
+        <docbkxGuideTitle>Apache Isis Default Runtime XML ObjectStore</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-xml-objectstore</docbkxGuideName>
+    </properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+            </plugin>
+		</plugins>
+	</build>
 
     <reporting>
         <plugins>
@@ -64,40 +79,45 @@
         </plugins>
     </reporting>
 
-    <dependencies>
+	<dependencies>
 		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
+			<type>test-jar</type>
 			<scope>test</scope>
-		</dependency>
-
+        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-metamodel</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-            <type>test-jar</type>
+			<version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
 		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+			<groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>runtime</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>isis-integtestsupport</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.tck</groupId>
+            <artifactId>tck-dom</artifactId>
             <version>0.3.1-SNAPSHOT</version>
-		    <type>test-jar</type>
-		    <scope>test</scope>
-		</dependency>
+        </dependency>
+
 	</dependencies>
 
 </project>

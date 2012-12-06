@@ -24,7 +24,7 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
@@ -33,8 +33,8 @@
 	<name>Default Runtime XML ProfileStore</name>
 
 	<properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/profilestores/xml/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>profilestore/xml/</relativeUrl>
 
         <docbkxGuideTitle>Default Runtime XML ProfileStore</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>

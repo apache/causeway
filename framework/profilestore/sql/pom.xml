@@ -27,26 +27,17 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-
-	<groupId>org.apache.isis.progmodels</groupId>
-	<artifactId>wrapper</artifactId>
-
-	<name>Wrapper ProgModel</name>
-
-	<packaging>pom</packaging>
+	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+	<artifactId>sql</artifactId>
+	<name>Default Runtime SQL ProfileStore (jdbc)</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>progmodels/wrapper/</relativeUrl>
-    </properties>
+		<relativeUrl>profilestore/sql/</relativeUrl>
+	</properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
-
-	<modules>
-		<module>wrapper-applib</module>
-		<module>wrapper-metamodel</module>
-	</modules>
 
     <reporting>
         <plugins>
@@ -55,13 +46,16 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>${maven-project-info-reports-plugin}</version>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
-                            <report>dependency-management</report>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
                             <report>plugins</report>
-                            <report>modules</report>
                             <report>summary</report>
                         </reports>
                     </reportSet>
@@ -70,61 +64,40 @@
         </plugins>
     </reporting>
 
+    <dependencies>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-    <dependencyManagement>
-        <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-unittestsupport</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-metamodel</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>applib</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-	        </dependency>
-	        <dependency>
-			    <groupId>org.apache.isis.runtimes.dflt</groupId>
-			    <artifactId>runtime</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-	        </dependency>
-	
-			<dependency>
-			    <groupId>org.apache.isis.core</groupId>
-			    <artifactId>isis-metamodel</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-			    <type>test-jar</type>
-			    <scope>test</scope>
-	        </dependency>
-			<dependency>
-			    <groupId>org.apache.isis.runtimes.dflt</groupId>
-			    <artifactId>runtime</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-			    <type>test-jar</type>
-			    <scope>test</scope>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-unittestsupport</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-	            <scope>test</scope>
-	        </dependency>
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.isis.runtimes.dflt</groupId>
+		    <artifactId>runtime</artifactId>
+            <version>0.3.1-SNAPSHOT</version>
+		    <type>test-jar</type>
+		    <scope>test</scope>
+		</dependency>
+	</dependencies>
 
-			<!-- wrapper applib -->
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>wrapper-applib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>wrapper-applib</artifactId>
-				<version>${project.version}</version>
-				<type>test-jar</type>
-			</dependency>
-
-			<!-- wrapper impl -->
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>wrapper-impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>

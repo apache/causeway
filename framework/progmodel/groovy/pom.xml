@@ -37,7 +37,7 @@
 
 	<properties>
 		<siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>progmodels/groovy/</relativeUrl>
+		<relativeUrl>progmodel/groovy/</relativeUrl>
 
 		<groovy.version>2.0.5</groovy.version>
 	</properties>

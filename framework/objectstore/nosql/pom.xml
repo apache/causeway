@@ -24,7 +24,7 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
@@ -37,8 +37,8 @@
     </description>
 
     <properties>
-        <siteBaseDir>../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/objectstores/nosql/</relativeUrl>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>objectstore/nosql/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Default Runtime NOSQL ObjectStore</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>

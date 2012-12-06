@@ -248,13 +248,13 @@
 
         <module>core</module>
 
-        <module>runtimes/dflt/objectstores/xml</module>
-        <module>runtimes/dflt/objectstores/sql</module>
-        <module>runtimes/dflt/objectstores/nosql</module>
-        <module>runtimes/dflt/objectstores/jdo</module>
+        <module>objectstore/xml</module>
+        <module>objectstore/sql</module>
+        <module>objectstore/nosql</module>
+        <module>objectstore/jdo</module>
         
-        <module>runtimes/dflt/profilestores/xml</module>
-        <module>runtimes/dflt/profilestores/sql</module>
+        <module>profilestore/xml</module>
+        <module>profilestore/sql</module>
 
         <module>tck</module>
 
@@ -262,8 +262,8 @@
         <module>security/ldap</module>
         <module>security/sql</module>
 
-        <module>progmodels/wrapper</module>
-        <module>progmodels/groovy</module>
+        <module>progmodel/wrapper</module>
+        <module>progmodel/groovy</module>
         
   		<module>viewer/dnd</module>
 		<module>viewer/dnd-tck</module>
@@ -276,7 +276,7 @@
 		<module>viewer/junit</module>
 		<module>viewer/junit-tck</module>
 
-        <module>quickstart-archetype</module>
+        <module>archetype/quickstart</module>
         
         <module>runtimes/dflt/monitoring</module>
     </modules>
