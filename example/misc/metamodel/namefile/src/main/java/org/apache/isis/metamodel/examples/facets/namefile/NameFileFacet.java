@@ -37,9 +37,8 @@ public class NameFileFacet extends FacetAbstract implements NamedFacet {
         this.name = name;
     }
 
-    @Override
-    public String value() {
-        return name;
-    }
+	public String value() {
+		return name;
+	}
 
 }

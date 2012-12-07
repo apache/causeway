@@ -93,8 +93,8 @@
 		<dependencies>
 			<!-- for DataNucleus, see below -->
 			<dependency>
-	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo</artifactId>
+	            <groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>						
@@ -104,13 +104,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
 
 		<dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-			<artifactId>jdo-applib</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+			<artifactId>isis-jdo-objectstore-applib</artifactId>
 		</dependency>
 
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->

@@ -33,7 +33,7 @@
 
     <groupId>org.apache.isis.viewer</groupId>
     <artifactId>isis-dnd-viewer-tck</artifactId>
-    <name>Viewer DnD for TCK</name>
+    <name>Isis Drag-n-Drop Viewer TCK</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -69,8 +69,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-fixture</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 

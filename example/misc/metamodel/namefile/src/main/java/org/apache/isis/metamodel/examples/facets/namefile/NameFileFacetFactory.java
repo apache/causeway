@@ -41,7 +41,6 @@ public class NameFileFacetFactory implements FacetFactory {
         }
     }
 
-    @Override
     public List<FeatureType> getFeatureTypes() {
         return FeatureType.EVERYTHING_BUT_PARAMETERS;
     }
@@ -49,7 +48,6 @@ public class NameFileFacetFactory implements FacetFactory {
     /**
      * Simply attaches a {@link NameFileFacet}.
      */
-    @Override
     public void process(final ProcessClassContext processClassContaxt) {
         FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
@@ -62,7 +60,6 @@ public class NameFileFacetFactory implements FacetFactory {
     /**
      * Simply attaches a {@link NameFileFacet}.
      */
-    @Override
     public void process(final ProcessMethodContext processMethodContext) {
         if (!(processMethodContext.getFacetHolder() instanceof IdentifiedHolder)) {
             return;
@@ -78,7 +75,6 @@ public class NameFileFacetFactory implements FacetFactory {
         return memberNameInFile != null ? new NameFileFacet(holder, memberNameInFile) : null;
     }
 
-    @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
         // nothing to do
     }

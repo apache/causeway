@@ -61,30 +61,30 @@
             <artifactId>isis-metamodel</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
+            <artifactId>isis-file-security</artifactId>
         </dependency>
 
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>bdd-concordion</artifactId>
+            <artifactId>isis-bdd-viewer-concordion</artifactId>
             <scope>test</scope>
         </dependency>
 

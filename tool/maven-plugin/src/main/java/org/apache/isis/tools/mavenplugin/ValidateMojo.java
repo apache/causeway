@@ -36,7 +36,6 @@ import org.apache.isis.tools.mavenplugin.util.IsisMetaModels;
 import org.apache.isis.tools.mavenplugin.util.Log4j;
 import org.apache.isis.tools.mavenplugin.util.MavenProjects;
 import org.apache.isis.tools.mavenplugin.util.Xpp3Doms;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -53,6 +52,7 @@ import org.codehaus.classworlds.DuplicateRealmException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * 
@@ -164,7 +164,7 @@ public class ValidateMojo extends AbstractMojo {
 
     private List<Object> createServiceInstances(final ClassRealm isisRealm, final List<String> serviceClassNames) throws MojoFailureException {
         final List<Object> serviceList = Lists.newArrayList();
-        final List<String> logMessages = Lists.newArrayList();
+        final Set<String> logMessages = Sets.newLinkedHashSet();
         for (String serviceClassName : serviceClassNames) {
             try {
                 serviceList.add(isisRealm.loadClass(serviceClassName).newInstance());
@@ -191,7 +191,7 @@ public class ValidateMojo extends AbstractMojo {
         return isisMetaModel;
     }
 
-    private void throwFailureException(String errorMessage, List<String> logMessages) throws MojoFailureException {
+    private void throwFailureException(String errorMessage, Set<String> logMessages) throws MojoFailureException {
         logErrors(logMessages);
         throw new MojoFailureException(errorMessage);
     }
@@ -214,7 +214,7 @@ public class ValidateMojo extends AbstractMojo {
         getLog().error("");
     }
 
-    private void logErrors(List<String> logMessages) {
+    private void logErrors(Set<String> logMessages) {
         logErrors(logMessages.toArray(new String[] {}));
     }
 
