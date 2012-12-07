@@ -28,10 +28,10 @@
 	</parent>
 
 
-	<groupId>org.apache.isis.progmodels</groupId>
-	<artifactId>wrapper</artifactId>
+	<groupId>org.apache.isis.progmodel</groupId>
+	<artifactId>isis-wrapper-progmodel</artifactId>
 
-	<name>Wrapper ProgModel</name>
+	<name>Isis Wrapper ProgModel</name>
 
 	<packaging>pom</packaging>
 
@@ -75,13 +75,13 @@
         <dependencies>
 
 			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>applib</artifactId>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-applib</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 	        <dependency>
-			    <groupId>org.apache.isis.runtimes.dflt</groupId>
-			    <artifactId>runtime</artifactId>
+			    <groupId>org.apache.isis.core</groupId>
+			    <artifactId>isis-runtime</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 	
@@ -93,8 +93,8 @@
 			    <scope>test</scope>
 	        </dependency>
 			<dependency>
-			    <groupId>org.apache.isis.runtimes.dflt</groupId>
-			    <artifactId>runtime</artifactId>
+			    <groupId>org.apache.isis.core</groupId>
+			    <artifactId>isis-runtime</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 			    <type>test-jar</type>
 			    <scope>test</scope>
@@ -109,12 +109,12 @@
 			<!-- wrapper applib -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wrapper-applib</artifactId>
+				<artifactId>isis-wrapper-progmodel-applib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wrapper-applib</artifactId>
+				<artifactId>isis-wrapper-progmodel-applib</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
 			</dependency>
@@ -122,7 +122,7 @@
 			<!-- wrapper impl -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wrapper-impl</artifactId>
+				<artifactId>isis-wrapper-progmodel-impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

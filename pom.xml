@@ -38,7 +38,6 @@
         
 <!--
         <module>site-skin</module>
--->
 
         <module>core</module>
 
@@ -46,10 +45,11 @@
         <module>component/objectstore/sql</module>
         <module>component/objectstore/nosql</module>
         <module>component/objectstore/jdo</module>
-<!--
+-->
         <module>component/progmodel/wrapper</module>
         <module>component/progmodel/groovy</module>
 
+<!--
         <module>component/profilestore/xml</module>
         <module>component/profilestore/sql</module>
 

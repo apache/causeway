@@ -22,13 +22,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.progmodels</groupId>
-		<artifactId>groovy</artifactId>
+		<groupId>org.apache.isis.progmodel</groupId>
+		<artifactId>isis-groovy-progmodel</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>groovy-metamodel</artifactId>
-	<name>Groovy ProgModel MetaModel</name>
+	<artifactId>isis-groovy-progmodel-metamodel</artifactId>
+	<name>Isis Groovy ProgModel MetaModel</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -40,8 +40,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.progmodels</groupId>
-			<artifactId>groovy-applib</artifactId>
+			<groupId>org.apache.isis.progmodel</groupId>
+			<artifactId>isis-groovy-progmodel-applib</artifactId>
 		</dependency>
 
 		<dependency>
