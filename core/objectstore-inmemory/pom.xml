@@ -21,14 +21,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>core</artifactId>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-	<artifactId>dflt</artifactId>
-	<name>Default Runtime Default ObjectStore (In-Memory)</name>
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-inmemory-objectstore</artifactId>
+	<name>Isis Core In-Memory ObjectStore</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>
@@ -68,22 +68,19 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
 		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>isis-runtime</artifactId>
 		</dependency>
 
 	</dependencies>

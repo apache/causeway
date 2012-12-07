@@ -20,13 +20,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-    	<groupId>org.apache.isis.tck</groupId>
-    	<artifactId>tck</artifactId>
+    	<groupId>org.apache.isis.core</groupId>
+    	<artifactId>isis-tck</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>tck-dom</artifactId>
-	<name>TCK DOM</name>
+	<artifactId>isis-tck-dom</artifactId>
+	<name>Isis Core TCK DOM</name>
 
     <profiles>
         <profile>
@@ -103,13 +103,31 @@
                     </plugins>
                 </pluginManagement>
             </build>
+			<dependencies>
+		        <dependency>
+		            <groupId>org.datanucleus</groupId>
+		            <artifactId>datanucleus-core</artifactId>
+		            <version>3.1.2</version>
+		            <scope>runtime</scope>
+		        </dependency>
+		        <dependency>
+		            <groupId>org.datanucleus</groupId>
+		            <artifactId>datanucleus-enhancer</artifactId>
+		            <version>3.1.1</version>
+		        </dependency>
+		        <dependency>
+		            <groupId>org.datanucleus</groupId>
+		            <artifactId>datanucleus-api-jdo</artifactId>
+		            <version>3.1.2</version>
+		        </dependency>
+			</dependencies>
         </profile>
     </profiles>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
         
         <!-- necessary, since we have JDO annotations in the code -->
@@ -126,25 +144,8 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <version>3.1.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-enhancer</artifactId>
-            <version>3.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-api-jdo</artifactId>
-            <version>3.1.2</version>
-        </dependency>
-        <dependency>
           <groupId>org.apache.geronimo.specs</groupId>
           <artifactId>geronimo-jta_1.1_spec</artifactId>
-          <version>1.1.1</version>
         </dependency>
     </dependencies>
     

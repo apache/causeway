@@ -21,13 +21,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-		<artifactId>jdo</artifactId>
+		<groupId>org.apache.isis.objectstore</groupId>
+		<artifactId>isis-jdo-objectstore</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jdo-datanucleus</artifactId>
-	<name>JDO DataNucleus ObjectStore</name>
+	<artifactId>isis-jdo-objectstore-datanucleus</artifactId>
+	<name>Isis JDO ObjectStore DataNucleus impl</name>
 
     <properties>
 	    <siteBaseDir>..</siteBaseDir>
@@ -54,8 +54,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-			<artifactId>jdo-metamodel</artifactId>
+			<groupId>org.apache.isis.objectstore</groupId>
+			<artifactId>isis-jdo-objectstore-metamodel</artifactId>
 		</dependency>
 		
        <dependency>
@@ -97,11 +97,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
             <scope>test</scope>
         </dependency>

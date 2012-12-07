@@ -22,14 +22,15 @@
 
     <parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>isis</artifactId>
+		<artifactId>isis-parent</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../isis-parent/pom.xml</relativePath>
 	</parent>  
 
-    <groupId>org.apache.isis.skins</groupId>
-    <artifactId>classic-skin</artifactId>
+    <groupId>org.apache.isis.skin</groupId>
+    <artifactId>isis-site-skin</artifactId>
 
-    <name>Isis Skin</name>
+    <name>Isis Classic Skin</name>
 
     <properties>
         <siteBaseDir>..</siteBaseDir>

@@ -13,13 +13,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-        <artifactId>sql</artifactId>
+        <groupId>org.apache.isis.objectstore</groupId>
+        <artifactId>isis-sql-objectstore</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>sql-impl</artifactId>
-    <name>Default Runtime SQL ObjectStore Implementation</name>
+    <artifactId>isis-sql-objectstore-impl</artifactId>
+    <name>Isis SQL ObjectStore Implementation</name>
     <description>SQL Objectstire Implementation. Uses jdbc for maximum compatibility.</description>
 
     <properties>
@@ -57,8 +57,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
         
 	 <!-- Test dependencies -->

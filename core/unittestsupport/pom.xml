@@ -21,14 +21,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>core</artifactId>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-unittestsupport</artifactId>
-	<name>Core Test Support</name>
+	<name>Isis Core Unit Test Support</name>
 
 	<description>
 		Support for writing unit tests; should be added as a dependency

@@ -213,7 +213,7 @@
 
     <ciManagement>
         <system>Hudson</system>
-        <url>https://hudson.apache.org/hudson/job/Isis-trunk-windows</url>
+        <url>https://hudson.apache.org/hudson/job/Isis-trunk-ubuntu</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -1055,6 +1055,13 @@ archetype includes this explicit dependency.
     <dependencyManagement>
         <dependencies>
 
+            <!-- JodaTime -->
+            <dependency>
+	    		<groupId>joda-time</groupId>
+	    		<artifactId>joda-time</artifactId>
+	            <version>2.1</version>
+            </dependency>
+
             <!-- Logging -->
 	        <dependency>
 	            <groupId>org.slf4j</groupId>
@@ -1316,13 +1323,6 @@ archetype includes this explicit dependency.
                 <artifactId>easymock</artifactId>
                 <version>2.5.2</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- JodaTime -->
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.1</version>
             </dependency>
 
             <!-- Specs -->

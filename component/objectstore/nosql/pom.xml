@@ -27,20 +27,20 @@
 		<relativePath>../../../isis-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-    <artifactId>nosql</artifactId>
+    <groupId>org.apache.isis.objectstore</groupId>
+    <artifactId>isis-nosql-objectstore</artifactId>
 
-    <name>Default Runtime NOSQL ObjectStore</name>
+    <name>Isis NOSQL ObjectStore</name>
 
     <description>
-    	Provides file based persistence for a standalone application using a NOSQL database.
+    	Provides file-based or MongoDB-based persistence for a standalone application using a NOSQL database.
     </description>
 
     <properties>
         <siteBaseDir>.</siteBaseDir>
 		<relativeUrl/>
 
-        <docbkxGuideTitle>Apache Isis Default Runtime NOSQL ObjectStore</docbkxGuideTitle>
+        <docbkxGuideTitle>Apache Isis NOSQL ObjectStore</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-nosql-objectstore</docbkxGuideName>
     </properties>
@@ -101,7 +101,6 @@
         </plugins>
     </build>
 
-
     <reporting>
         <plugins>
             <plugin>
@@ -128,17 +127,6 @@
         </plugins>
     </reporting>
 
-	<repositories>
-        <repository>
-            <id>Maven Central Repository (UK Mirror)</id>
-            <url>http://uk.maven.org/maven2</url>
-            <snapshots>
-              <enabled>false</enabled>
-            </snapshots>
-        </repository>
- 
-	</repositories>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -162,10 +150,9 @@
     <dependencies>
     
         <!--  compile dependencies -->
-        
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
@@ -199,37 +186,37 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>

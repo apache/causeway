@@ -27,10 +27,10 @@
 		<relativePath>../../../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-	<artifactId>xml</artifactId>
+	<groupId>org.apache.isis.objectstore</groupId>
+	<artifactId>isis-xml-objectstore</artifactId>
 
-	<name>Default Runtime XML ObjectStore</name>
+	<name>Isis XML ObjectStore</name>
 
 	<properties>
         <siteBaseDir>.</siteBaseDir>
@@ -95,26 +95,26 @@
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
 		</dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-dom</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-dom</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 

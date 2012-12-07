@@ -20,19 +20,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<groupId>org.apache.isis.tck</groupId>
-        <artifactId>tck</artifactId>
+    	<groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-	<artifactId>tck-fixture</artifactId>
-	<name>TCK Fixtures</name>
+	<artifactId>isis-tck-fixture</artifactId>
+	<name>Isis Core TCK Fixtures</name>
 
 	<dependencies>
 		<dependency>
-            <groupId>org.apache.isis.tck</groupId>
-			<artifactId>tck-dom</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-tck-dom</artifactId>
 		</dependency>
 	</dependencies>
 
