@@ -45,11 +45,10 @@
         <module>component/objectstore/sql</module>
         <module>component/objectstore/nosql</module>
         <module>component/objectstore/jdo</module>
--->
         <module>component/progmodel/wrapper</module>
         <module>component/progmodel/groovy</module>
 
-<!--
+-->
         <module>component/profilestore/xml</module>
         <module>component/profilestore/sql</module>
 
@@ -57,6 +56,7 @@
         <module>component/security/ldap</module>
         <module>component/security/sql</module>
 
+<!--
         
         <module>component/viewer/dnd</module>
         <module>component/viewer/dnd-tck</module>
@@ -81,6 +81,7 @@
         <module>example/domain-service/email-service</module>
         <module>example/misc/metamodel/namefile</module>
 
+        <module>tool/maven-plugin</module>
 -->
 
 <!--
