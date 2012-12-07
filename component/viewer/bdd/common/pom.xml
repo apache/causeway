@@ -22,11 +22,11 @@
 
 	<parent>
 	    <groupId>org.apache.isis.viewer</groupId>
-	    <artifactId>bdd</artifactId>
+	    <artifactId>isis-bdd-viewer</artifactId>
 	    <version>0.3.1-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>bdd-common</artifactId>
+	<artifactId>isis-bdd-viewer-common</artifactId>
 	<name>BDD Viewers: Common</name>
 
     <properties>
@@ -45,20 +45,20 @@
 		
 		<!--  TODO: remove this dependency -->
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
 		</dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
 	    <dependency>
 		    <groupId>com.google.guava</groupId>

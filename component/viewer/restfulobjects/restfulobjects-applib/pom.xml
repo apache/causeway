@@ -22,11 +22,11 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>restfulobjects</artifactId>
+		<artifactId>isis-restfulobjects-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>restfulobjects-applib</artifactId>
+	<artifactId>isis-restfulobjects-viewer-applib</artifactId>
 	<name>RestfulObjects AppLib</name>
 
 	<properties>
@@ -68,8 +68,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>applib</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
 
         <dependency>

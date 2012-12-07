@@ -28,9 +28,9 @@
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>scimpi</artifactId>
+	<artifactId>isis-scimpi-viewer</artifactId>
 	
-	<name>Scimpi Viewer</name>
+	<name>Isis Scimpi Viewer</name>
 	
 	<packaging>pom</packaging>
 
@@ -88,20 +88,20 @@
 			</dependency>
 	
 			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt</groupId>
-				<artifactId>runtime</artifactId>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-runtime</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 			</dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
-	            <artifactId>scimpi-dispatcher</artifactId>
+	            <artifactId>isis-scimpi-viewer-dispatcher</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
-	            <artifactId>scimpi-servlet</artifactId>
+	            <artifactId>isis-scimpi-viewer-servlet</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 

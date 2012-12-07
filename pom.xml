@@ -48,7 +48,6 @@
         <module>component/progmodel/wrapper</module>
         <module>component/progmodel/groovy</module>
 
--->
         <module>component/profilestore/xml</module>
         <module>component/profilestore/sql</module>
 
@@ -56,7 +55,7 @@
         <module>component/security/ldap</module>
         <module>component/security/sql</module>
 
-<!--
+-->
         
         <module>component/viewer/dnd</module>
         <module>component/viewer/dnd-tck</module>
@@ -70,6 +69,7 @@
         <module>component/viewer/junit</module>
         <module>component/viewer/junit-tck</module>
 
+<!--
         <module>example/application/claims</module>
         <module>example/application/onlinedemo</module>
         <module>example/application/quickstart</module>

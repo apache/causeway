@@ -29,7 +29,7 @@
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>restfulobjects</artifactId>
+	<artifactId>isis-restfulobjects-viewer</artifactId>
 
 	<name>RestfulObjects Viewer</name>
 
@@ -89,8 +89,8 @@
         <dependencies>
 
 	        <dependency>
-	            <groupId>org.apache.isis</groupId>
-	            <artifactId>applib</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-applib</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 
@@ -101,8 +101,8 @@
 	        </dependency>
 	        
 	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt</groupId>
-	            <artifactId>runtime</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-runtime</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 	        
@@ -117,23 +117,23 @@
 			<!-- RestfulObjects Viewer -->
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>restfulobjects-applib</artifactId>
+				<artifactId>isis-restfulobjects-viewer-applib</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>restfulobjects-applib</artifactId>
+				<artifactId>isis-restfulobjects-viewer-applib</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>restfulobjects-viewer</artifactId>
+				<artifactId>isis-restfulobjects-viewer-impl</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>restfulobjects-viewer</artifactId>
+				<artifactId>isis-restfulobjects-viewer-impl</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
 			</dependency>
@@ -143,7 +143,6 @@
 	</dependencyManagement>
 
 
-    <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
 	    <module>restfulobjects-applib</module>
 	    <module>restfulobjects-viewer</module>

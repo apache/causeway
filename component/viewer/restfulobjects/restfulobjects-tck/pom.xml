@@ -20,14 +20,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.tck</groupId>
-        <artifactId>tck</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>restfulobjects-tck</artifactId>
+	<artifactId>isis-restfulobjects-viewer-tck</artifactId>
 	<name>RestfulObjects TCK</name>
 	
 	<packaging>war</packaging>
@@ -64,14 +64,14 @@
 	
         <!-- other modules in this project -->
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-dom</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-dom</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-fixture</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
@@ -84,32 +84,32 @@
         <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>restfulobjects-viewer</artifactId>
+			<artifactId>isis-restfulobjects-viewer-impl</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 
         <!-- isis runtime -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
         
         <!-- to run using WebServer -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
@@ -118,18 +118,17 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
+            <artifactId>isis-file-security</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-xml-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 

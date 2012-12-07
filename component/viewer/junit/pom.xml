@@ -28,7 +28,7 @@
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-    <artifactId>junit</artifactId>
+    <artifactId>isis-junit-viewer</artifactId>
 
     <name>JUnit Viewer</name>
 
@@ -83,31 +83,31 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.progmodels</groupId>
-            <artifactId>wrapper-metamodel</artifactId>
+            <groupId>org.apache.isis.progmodel</groupId>
+            <artifactId>isis-wrapper-progmodel-metamodel</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
@@ -125,8 +125,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>

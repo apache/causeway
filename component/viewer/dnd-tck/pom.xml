@@ -25,14 +25,14 @@
     <!-- mvn antrun:run -D exec=dnd     : runs JAR using DnD viewer -->
     
     <parent>
-        <groupId>org.apache.isis.tck</groupId>
-        <artifactId>tck</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
         <relativePath>../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-    <artifactId>dnd-tck</artifactId>
+    <artifactId>isis-dnd-viewer-tck</artifactId>
     <name>Viewer DnD for TCK</name>
 
 	<properties>
@@ -81,33 +81,33 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
         
         <!-- isis viewers -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>dnd</artifactId>
+            <artifactId>isis-dnd-viewer</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-xml-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 

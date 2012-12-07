@@ -22,14 +22,13 @@
 
 	<parent>
         <groupId>org.apache.isis.viewer</groupId>
-	    <artifactId>scimpi</artifactId>
+	    <artifactId>isis-scimpi-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>scimpi-servlet</artifactId>
+	<artifactId>isis-scimpi-viewer-servlet</artifactId>
 
-	<name>Scimpi Viewer Servlet</name>
+	<name>Isis Scimpi Viewer Servlet</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>
@@ -67,7 +66,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>scimpi-dispatcher</artifactId>
+			<artifactId>isis-scimpi-viewer-dispatcher</artifactId>
         </dependency>
 
         <dependency>
