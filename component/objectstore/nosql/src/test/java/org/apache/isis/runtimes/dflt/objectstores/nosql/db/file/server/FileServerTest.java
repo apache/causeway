@@ -64,9 +64,11 @@ public class FileServerTest {
         logFile1 = recreateFile("target/test/logs", "recovery0.log");
         logFile2 = recreateFile("target/test/logs", "recovery1.log");
 
-        final File dir = new File("target/test/org.domain.Class2");
+        final File dir = new File("target/test/org.domain.Class");
         dir.mkdirs();
-        
+        final File dir2 = new File("target/test/org.domain.Class2");
+        dir2.mkdirs();
+
         server = new FileServerProcessor();
         server.startup();
 
