@@ -28,12 +28,12 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../core/tck/pom.xml</relativePath>
+        <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
     <artifactId>isis-dnd-viewer-tck</artifactId>
-    <name>Isis Drag-n-Drop Viewer TCK</name>
+    <name>Isis Drag-n-Drop Viewer TCK tests</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -101,7 +101,7 @@
         <!-- isis viewers -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-dnd-viewer</artifactId>
+            <artifactId>isis-dnd-viewer-impl</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 

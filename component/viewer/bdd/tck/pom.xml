@@ -29,7 +29,7 @@
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-bdd-viewer-concordion-tck</artifactId>
 
-	<name>Isis BDD (Concordion) Tests against TCK</name>
+	<name>Isis BDD Viewer (Concordion) TCK tests</name>
 
     <properties>
         <maven.test.skip>true</maven.test.skip>
@@ -59,8 +59,8 @@
 
 		<!-- this project's dependencies -->
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-fixture</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 

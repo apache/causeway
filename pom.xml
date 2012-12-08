@@ -34,7 +34,6 @@
     </description>
 
     <modules>
-<!--
         <module>isis-parent</module>
 
         <module>site-skin</module>
@@ -54,7 +53,7 @@
         <module>component/security/file</module>
         <module>component/security/ldap</module>
         <module>component/security/sql</module>
--->
+
         <module>component/viewer/dnd</module>
         <module>component/viewer/html</module>
         <module>component/viewer/scimpi</module>
@@ -75,132 +74,12 @@
         <module>example/domain-service/email-service</module>
         <module>example/misc/metamodel/namefile</module>
 		<module>tool/maven-plugin</module>
+
 <!-- 
         <module>example/misc/metamodel/jsr303</module>
  -->        
 
-
     </modules>
 
-    <profiles>
-        <profile>
-            <id>modules-site</id>
-            <!-- modules that make up the site -->
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>site</value>
-                </property>
-            </activation>
-            <modules>
-                <module>applib</module>
-                <module>core</module>
-                <module>runtimes</module>
-                <module>progmodels</module>
-                <module>security</module>
-                <module>viewer</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>modules-skin</id>
-            <!-- prereq for running site-deploy -->
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>skin</value>
-                </property>
-            </activation>
-            <modules>
-                <module>site-skin</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>modules-applib</id>
-            <!-- To quickly build -->
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>applib</value>
-                </property>
-            </activation>
-            <modules>
-                <module>applib</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-core</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>core</value>
-                </property>
-            </activation>
-            <modules>
-                <module>core</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-runtimes</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>runtimes</value>
-                </property>
-            </activation>
-            <modules>
-                <module>runtimes</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-progmodels</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>progmodels</value>
-                </property>
-            </activation>
-            <modules>
-                <module>progmodels</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-security</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>security</value>
-                </property>
-            </activation>
-            <modules>
-                <module>security</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-viewers</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>viewers</value>
-                </property>
-            </activation>
-            <modules>
-                <module>viewer</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>modules-quickstart-archetype</id>
-            <activation>
-                <property>
-                    <name>modules</name>
-                    <value>quickstart-archetype</value>
-                </property>
-            </activation>
-            <modules>
-                <module>quickstart-archetype</module>
-            </modules>
-        </profile>
-    </profiles>
 
 </project>

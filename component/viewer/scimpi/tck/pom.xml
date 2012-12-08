@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-scimpi-viewer-tck</artifactId>
-	<name>Isis Scimpi Viewer for TCK</name>
+	<name>Isis Scimpi Viewer TCK tests</name>
 	
 	<properties>
 		<siteBaseDir>..</siteBaseDir>

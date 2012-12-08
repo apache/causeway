@@ -110,12 +110,12 @@
         <!-- isis viewers -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-dnd-viewer</artifactId>
+			<artifactId>isis-dnd-viewer-impl</artifactId>
 		</dependency>
         
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-html-viewer</artifactId>
+			<artifactId>isis-html-viewer-impl</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
@@ -125,7 +125,7 @@
         <!-- JUnit Viewer dependencies -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-junit-viewer</artifactId>
+            <artifactId>isis-junit-viewer-impl</artifactId>
             <scope>test</scope>
         </dependency>
         
@@ -304,7 +304,7 @@
 				<dependency>
 					<groupId>${project.groupId}</groupId>
 					<artifactId>claims-viewer-wicket</artifactId>
-		            <version>${parent.version}</version>
+		            <version>${project.version}</version>
 				</dependency>
 				
 				<!-- Wicket Viewer -->

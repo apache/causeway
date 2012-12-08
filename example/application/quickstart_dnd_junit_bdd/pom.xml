@@ -25,7 +25,7 @@
     <artifactId>quickstart_dnd_junit_bdd</artifactId>
     <version>0.3.1-SNAPSHOT</version>
 
-    <name>Quickstart (JUnit/BDD) App</name>
+    <name>Quickstart DnD/Junit/BDD (JUnit/BDD) App</name>
 
     <packaging>pom</packaging>
     
@@ -314,14 +314,14 @@
             <!-- isis: viewer: dnd -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-dnd-viewer</artifactId>
+                <artifactId>isis-dnd-viewer-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: viewer: html -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-html-viewer</artifactId>
+                <artifactId>isis-html-viewer-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -345,7 +345,7 @@
             <!-- isis: viewer: junit -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-junit-viewer</artifactId>
+                <artifactId>isis-junit-viewer-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 

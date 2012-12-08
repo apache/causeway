@@ -27,7 +27,7 @@
 	</parent>
 	
 	<artifactId>isis-restfulobjects-viewer-applib</artifactId>
-	<name>RestfulObjects AppLib</name>
+	<name>Isis RestfulObjects Viewer AppLib</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>

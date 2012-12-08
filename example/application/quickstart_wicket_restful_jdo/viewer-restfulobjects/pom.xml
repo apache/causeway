@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>quickstart_wicket_restful_jdo-viewer-restfulobjects</artifactId>
-	<name>Quickstart Restful Objects Viewer</name>
+	<name>Quickstart Wicket/Restful/JDO Restful Objects Viewer</name>
 
 	<description>This module runs Isis' Restful Objects viewer, configured to run using the
 	datanucleus object store.  It also includes a demonstrator single-page JQueryMobile app.

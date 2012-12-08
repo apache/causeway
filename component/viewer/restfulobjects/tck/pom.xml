@@ -28,7 +28,7 @@
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-restfulobjects-viewer-tck</artifactId>
-	<name>RestfulObjects TCK</name>
+	<name>Isis RestfulObjects Viewer TCK tests</name>
 	
 	<packaging>war</packaging>
 	

@@ -23,12 +23,12 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../core/tck/pom.xml</relativePath>
+        <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-html-viewer-tck</artifactId>
-	<name>HTML Viewer for TCK</name>
+	<name>Isis Html Viewer TCK tests</name>
 
     <properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -89,7 +89,7 @@
         <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-html-viewer</artifactId>
+			<artifactId>isis-html-viewer-impl</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 

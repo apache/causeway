@@ -27,7 +27,7 @@
 	</parent>
 	
 	<artifactId>isis-bdd-viewer-concordion</artifactId>
-	<name>Isis BDD Viewers (Concordion)</name>
+	<name>Isis BDD Viewer (Concordion)</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>

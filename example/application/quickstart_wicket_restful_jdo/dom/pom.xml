@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
-	<name>Quickstart DOM</name>
+	<name>Quickstart Wicket/Restful/JDO DOM</name>
 
 	<build>
 		<plugins>

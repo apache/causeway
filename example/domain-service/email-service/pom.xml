@@ -21,6 +21,12 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+	<parent>
+        <groupId>org.apache.isis</groupId>
+        <artifactId>isis-parent</artifactId>
+        <version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../isis-parent/pom.xml</relativePath>
+	</parent>
 
     <name>Email service</name>
     <groupId>org.apache.isis.example.domainservice</groupId>

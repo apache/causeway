@@ -21,13 +21,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
+		<groupId>org.apache.isis.viewer</groupId>
+		<artifactId>isis-html-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-html-viewer-monitoring</artifactId>
 	<name>Isis HTML Viewer Monitoring</name>
 
@@ -41,7 +39,6 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 
 	    <dependency>

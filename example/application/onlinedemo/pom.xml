@@ -278,7 +278,7 @@
             <!-- isis: viewer: html -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-html-viewer</artifactId>
+                <artifactId>isis-html-viewer-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 

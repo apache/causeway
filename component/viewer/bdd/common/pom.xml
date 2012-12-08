@@ -27,7 +27,7 @@
 	</parent>
 	
 	<artifactId>isis-bdd-viewer-common</artifactId>
-	<name>BDD Viewers: Common</name>
+	<name>Isis BDD Viewer (Common)</name>
 
     <properties>
 		<siteBaseDir>..</siteBaseDir>

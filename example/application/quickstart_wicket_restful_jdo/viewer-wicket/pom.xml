@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>quickstart_wicket_restful_jdo-viewer-wicket</artifactId>
-	<name>QuickStart Wicket Viewer</name>
+	<name>Quickstart Wicket/Restful/JDO Wicket Viewer</name>
 
 	<description>This module runs Isis' Wicket webapp viewer, configured to run using the
 	datanucleus object store.  See other viewer modules for more persistence options.</description>

@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
-	<name>Quickstart Fixtures</name>
+	<name>Quickstart Wicket/Restful/JDO Fixtures</name>
 
 	<dependencies>
 		<dependency>

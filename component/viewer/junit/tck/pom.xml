@@ -23,12 +23,12 @@
     	<groupId>org.apache.isis.core</groupId>
     	<artifactId>isis-tck</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../core/tck/pom.xml</relativePath>
+        <relativePath>../../../../core/tck/pom.xml</relativePath>
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-junit-viewer-tck</artifactId>
-	<name>JUnit Tests for TCK</name>
+	<name>Isis JUnit Tests TCK tests</name>
 
     <properties>
         <maven.test.skip>true</maven.test.skip>
@@ -74,7 +74,7 @@
         <!-- isis viewers -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-junit-viewer</artifactId>
+            <artifactId>isis-junit-viewer-impl</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

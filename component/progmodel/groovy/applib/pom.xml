@@ -28,7 +28,7 @@
 	</parent>
 
     <artifactId>isis-groovy-progmodel-applib</artifactId>
-    <name>Groovy ProgModel AppLib</name>
+    <name>Isis Groovy ProgModel AppLib</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>

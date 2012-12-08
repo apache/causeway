@@ -24,7 +24,7 @@
 	<groupId>org.apache.isis.objectstore</groupId>
 	<artifactId>isis-jdo-objectstore</artifactId>
 
-	<name>Default Runtime JDO ObjectStore</name>
+	<name>Isis JDO ObjectStore</name>
 
 	<packaging>pom</packaging>
 

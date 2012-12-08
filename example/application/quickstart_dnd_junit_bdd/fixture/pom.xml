@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>quickstart_dnd_junit_bdd-fixture</artifactId>
-	<name>Quickstart Fixtures</name>
+	<name>Quickstart DnD/Junit/BDD Fixtures</name>
 
 	<dependencies>
 		<dependency>

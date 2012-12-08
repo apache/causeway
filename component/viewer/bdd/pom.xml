@@ -30,7 +30,7 @@
     <groupId>org.apache.isis.viewer</groupId>
     <artifactId>isis-bdd-viewer</artifactId>
     
-    <name>Isis BDD Viewers</name>
+    <name>Isis BDD Viewer</name>
 
     <packaging>pom</packaging>
 

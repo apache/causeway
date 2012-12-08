@@ -20,7 +20,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis-metamodel</artifactId>
-    <name>Core MetaModel</name>
+    <name>Isis Core MetaModel</name>
 
     <properties>
         <siteBaseDir>..</siteBaseDir>

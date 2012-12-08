@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
-	<name>Quickstart Repositories (for JDO)</name>
+	<name>Quickstart Wicket/Restful/JDO Repositories (for JDO)</name>
 
 	<dependencies>
 	

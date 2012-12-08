@@ -27,7 +27,7 @@
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Wicket Viewer Implementation</name>
+	<name>Isis Wicket Viewer Implementation</name>
 	<artifactId>isis-wicket-viewer-impl</artifactId>
 
 	<properties>
