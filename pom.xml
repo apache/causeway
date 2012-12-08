@@ -34,6 +34,7 @@
     </description>
 
     <modules>
+<!--
         <module>isis-parent</module>
 
         <module>site-skin</module>
@@ -53,18 +54,14 @@
         <module>component/security/file</module>
         <module>component/security/ldap</module>
         <module>component/security/sql</module>
-
+-->
         <module>component/viewer/dnd</module>
-        <module>component/viewer/dnd-tck</module>
         <module>component/viewer/html</module>
-        <module>component/viewer/html-monitoring</module>
-        <module>component/viewer/html-tck</module>
         <module>component/viewer/scimpi</module>
         <module>component/viewer/wicket</module>
         <module>component/viewer/restfulobjects</module>
         <module>component/viewer/bdd</module>
         <module>component/viewer/junit</module>
-        <module>component/viewer/junit-tck</module>
 
         
         <module>example/application/claims</module>

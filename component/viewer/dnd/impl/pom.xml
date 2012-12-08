@@ -21,38 +21,21 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
+		<groupId>org.apache.isis.viewer</groupId>
+		<artifactId>isis-dnd-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../isis-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-html-viewer</artifactId>
+	<artifactId>isis-dnd-viewer-impl</artifactId>
 
-	<name>Isis Html Viewer</name>
+	<name>Isis Drag-n-Drop Viewer Implementation</name>
 
 	<properties>
-        <siteBaseDir>.</siteBaseDir>
-		<relativeUrl/>
+        <siteBaseDir>..</siteBaseDir>
+	<relativeUrl>dnd</relativeUrl>
 
-		<docbkxGuideTitle>Apache Isis HTML Viewer</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Configuration, Customization and Deployment Guide</docbkxGuideSubTitle>
-		<docbkxGuideName>isis-html-viewer</docbkxGuideName>
     </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
-
-	<build>
-		<plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
-            </plugin>
-		</plugins>
-	</build>
 
     <reporting>
         <plugins>
@@ -68,8 +51,8 @@
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
-                            <report>dependency-convergence</report>
                             <report>dependencies</report>
+                            <report>dependency-convergence</report>
                             <report>plugins</report>
                             <report>summary</report>
                         </reports>
@@ -79,56 +62,62 @@
         </plugins>
     </reporting>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-metamodel</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-			<type>test-jar</type>
-            <scope>test</scope>
-		</dependency>
-
+    <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-unittestsupport</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-			<type>test-jar</type>
-            <scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
             <scope>test</scope>
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-html-viewer-monitoring</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<scope>test</scope>
 		</dependency>
-		<dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_2.5_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
+
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 	</dependencies>
+
 </project>

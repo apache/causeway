@@ -21,40 +21,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
+		<groupId>org.apache.isis.viewer</groupId>
+		<artifactId>isis-junit-viewer</artifactId>
         <version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../isis-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
-    <artifactId>isis-junit-viewer</artifactId>
+    <artifactId>isis-junit-viewer-impl</artifactId>
 
-    <name>JUnit Viewer</name>
+    <name>Isis JUnit Viewer Implementation</name>
 
     <properties>
-        <siteBaseDir>.</siteBaseDir>
-        <relativeUrl/>
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>impl</relativeUrl>
 
         <wrapper-progmodel.version>0.3.1-SNAPSHOT</wrapper-progmodel.version>
-
-        <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-junit-support</docbkxGuideName>
     </properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
-            </plugin>
-        </plugins>
-    </build>
 
     <reporting>
         <plugins>
@@ -85,41 +69,34 @@
         <dependency>
             <groupId>org.apache.isis.progmodel</groupId>
             <artifactId>isis-wrapper-progmodel-metamodel</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-cglib-bytecode</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-inmemory-objectstore</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-inmemory-profilestore</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-noop-security</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-metamodel</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -127,11 +104,9 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-
 
 
         <dependency>

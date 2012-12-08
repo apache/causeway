@@ -21,23 +21,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
+		<groupId>org.apache.isis.viewer</groupId>
+		<artifactId>isis-html-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
-        <relativePath>../../../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-html-viewer-monitoring</artifactId>
-	<name>Isis HTML Viewer Monitoring</name>
+	<artifactId>isis-html-viewer-impl</artifactId>
+
+	<name>Isis Html Viewer Implementation</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>html-monitoring/</relativeUrl>
+		<relativeUrl>html</relativeUrl>
     </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <reporting>
         <plugins>
@@ -53,8 +49,8 @@
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
-                            <report>dependencies</report>
                             <report>dependency-convergence</report>
+                            <report>dependencies</report>
                             <report>plugins</report>
                             <report>summary</report>
                         </reports>
@@ -64,19 +60,51 @@
         </plugins>
     </reporting>
 
+
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-metamodel</artifactId>
+			<type>test-jar</type>
+            <scope>test</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+			<type>test-jar</type>
+            <scope>test</scope>
 		</dependency>
 
-	    <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_2.5_spec</artifactId>
-		    <scope>provided</scope>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-integtestsupport</artifactId>
+            <scope>test</scope>
         </dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-html-viewer-monitoring</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

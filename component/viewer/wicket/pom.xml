@@ -52,10 +52,10 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>wicket-model</module>
-		<module>wicket-ui</module>
-		<module>wicket-viewer</module>
-		<module>wicket-tck</module>
+		<module>model</module>
+		<module>ui</module>
+		<module>impl</module>
+		<module>tck</module>
 	</modules>
 
 	<build>

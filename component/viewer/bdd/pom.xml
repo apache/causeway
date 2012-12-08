@@ -30,7 +30,7 @@
     <groupId>org.apache.isis.viewer</groupId>
     <artifactId>isis-bdd-viewer</artifactId>
     
-    <name>BDD Viewers</name>
+    <name>Isis BDD Viewers</name>
 
     <packaging>pom</packaging>
 
@@ -144,7 +144,7 @@
     <modules>
 	    <module>common</module>
 	    <module>concordion</module>
-	    <module>concordion-tck</module>
+	    <module>tck</module>
 	</modules>
     
     <profiles>

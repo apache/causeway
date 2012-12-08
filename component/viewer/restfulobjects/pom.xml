@@ -144,9 +144,9 @@
 
 
     <modules>
-	    <module>restfulobjects-applib</module>
-	    <module>restfulobjects-viewer</module>
-	    <module>restfulobjects-tck</module>
+	    <module>applib</module>
+	    <module>impl</module>
+	    <module>tck</module>
     </modules>
 
 </project>

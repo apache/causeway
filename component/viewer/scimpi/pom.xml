@@ -109,8 +109,8 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>scimpi-dispatcher</module>
-		<module>scimpi-servlet</module>
-		<module>scimpi-tck</module>
+		<module>dispatcher</module>
+		<module>servlet</module>
+		<module>tck</module>
 	</modules>
 </project>
