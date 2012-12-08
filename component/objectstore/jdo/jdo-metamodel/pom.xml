@@ -21,13 +21,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-		<artifactId>jdo</artifactId>
+		<groupId>org.apache.isis.objectstore</groupId>
+		<artifactId>isis-jdo-objectstore</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jdo-metamodel</artifactId>
-	<name>JDO ObjectStore MetaModel Support</name>
+	<artifactId>isis-jdo-objectstore-metamodel</artifactId>
+	<name>Isis JDO ObjectStore MetaModel Support</name>
 
     <properties>
 	    <siteBaseDir>..</siteBaseDir>
@@ -39,8 +39,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-			<artifactId>jdo-applib</artifactId>
+			<groupId>org.apache.isis.objectstore</groupId>
+			<artifactId>isis-jdo-objectstore-applib</artifactId>
 		</dependency>
 
 		<dependency>

@@ -59,44 +59,44 @@
 		<!-- Isis -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>scimpi-servlet</artifactId>
+			<artifactId>isis-scimpi-viewer-servlet</artifactId>
 		</dependency>
 
         <!-- isis runtime -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-xml-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.profilestore</groupId>
+            <artifactId>isis-xml-profilestore</artifactId>
         </dependency>
         
         <!-- isis security implementations -->        
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
+            <artifactId>isis-file-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
         
         <!-- to run using WebServer -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>

@@ -29,9 +29,9 @@
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>wicket</artifactId>
+	<artifactId>isis-wicket-viewer</artifactId>
 
-	<name>Wicket Viewer</name>
+	<name>Isis Wicket Viewer</name>
 
 	<packaging>pom</packaging>
 
@@ -79,44 +79,44 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt</groupId>
-				<artifactId>runtime</artifactId>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-runtime</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 
 			<!-- Apache Isis Wicket Viewer -->
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-model</artifactId>
+				<artifactId>isis-wicket-viewer-model</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-model</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-ui</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-ui</artifactId>
+				<artifactId>isis-wicket-viewer-model</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-viewer</artifactId>
+				<artifactId>isis-wicket-viewer-ui</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-viewer</artifactId>
+				<artifactId>isis-wicket-viewer-ui</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-impl</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-impl</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>

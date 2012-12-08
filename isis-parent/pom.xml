@@ -32,7 +32,7 @@
 
     <packaging>pom</packaging>
 
-    <name>Apache Isis</name>
+    <name>Apache Isis (Parent)</name>
     <description>
         Parent POM for all releasable componenets
         (core framework, components, archetype, tools).
@@ -74,6 +74,8 @@
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<isis-parent.enforcer.validate>true</isis-parent.enforcer.validate>
         
         <!-- number of unapproved licenses -->
 		<rat.num>0</rat.num>
@@ -213,7 +215,7 @@
 
     <ciManagement>
         <system>Hudson</system>
-        <url>https://hudson.apache.org/hudson/job/Isis-trunk-windows</url>
+        <url>https://hudson.apache.org/hudson/job/Isis-trunk-ubuntu</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -274,40 +276,6 @@
                 non-reporting goals. Configuration of any reporting goals (aka reports) will 
                 be found in the reporting section. -->
             <plugins>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.0.1</version>
-                    <configuration>
-                        <rules>
-                            <requireMavenVersion>
-                                <version>[2.2.1,)</version>
-                            </requireMavenVersion>
-                            <requireJavaVersion>
-                                <version>[1.6.0-11,)</version>
-                            </requireJavaVersion>
-                            <requirePluginVersions>
-                                <message>All plugin versions must be
-                                    defined!</message>
-                                <banLatest>true</banLatest>
-                                <banRelease>true</banRelease>
-                            </requirePluginVersions>
-                            <DependencyConvergence/>
-                        </rules>
-                    </configuration>
-                    <!-- goal:enforce supposedly binds to phase:validate, 
-                        but explicit binding seems to be required -->
-                    <executions>
-                        <execution>
-                            <id>validate-enforce</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
 
                 <!-- Apache Release Audit Tool -->
                 <plugin>
@@ -790,10 +758,6 @@
             and deploy plugins are automatically included because they provide the default 
             bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
 
             <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
@@ -1054,6 +1018,13 @@ archetype includes this explicit dependency.
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- JodaTime -->
+            <dependency>
+	    		<groupId>joda-time</groupId>
+	    		<artifactId>joda-time</artifactId>
+	            <version>2.1</version>
+            </dependency>
 
             <!-- Logging -->
 	        <dependency>
@@ -1316,13 +1287,6 @@ archetype includes this explicit dependency.
                 <artifactId>easymock</artifactId>
                 <version>2.5.2</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- JodaTime -->
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.1</version>
             </dependency>
 
             <!-- Specs -->
@@ -1666,5 +1630,65 @@ archetype includes this explicit dependency.
                 </plugins>
             </build>
         </profile>
+        
+        <!--  provide ability to switch off enforcer plugin -->
+  		<profile>
+  			<id>enforcer-validate</id>
+  			<activation>
+  				<property>
+  					<!-- set by default -->
+  					<name>isis-parent.enforcer.validate</name>
+  					<value>true</value>
+  				</property>
+  			</activation>
+  			<build>
+  				<pluginManagement>
+  					<plugins>
+		                <plugin>
+		                    <groupId>org.apache.maven.plugins</groupId>
+		                    <artifactId>maven-enforcer-plugin</artifactId>
+		                    <version>1.0.1</version>
+		                    <configuration>
+		                        <rules>
+		                            <requireMavenVersion>
+		                                <version>[2.2.1,)</version>
+		                            </requireMavenVersion>
+		                            <requireJavaVersion>
+		                                <version>[1.6.0-11,)</version>
+		                            </requireJavaVersion>
+		                            <requirePluginVersions>
+		                                <message>All plugin versions must be
+		                                    defined!</message>
+		                                <banLatest>true</banLatest>
+		                                <banRelease>true</banRelease>
+		                            </requirePluginVersions>
+		                            <DependencyConvergence/>
+		                        </rules>
+		                    </configuration>
+		                    <!-- goal:enforce supposedly binds to phase:validate, 
+		                        but explicit binding seems to be required -->
+		                    <executions>
+		                        <execution>
+		                            <id>validate-enforce</id>
+		                            <phase>validate</phase>
+		                            <goals>
+		                                <goal>enforce</goal>
+		                            </goals>
+		                        </execution>
+		                    </executions>
+        		        </plugin>
+					</plugins>
+  				
+  				</pluginManagement>
+  				<plugins>
+		            <plugin>
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-enforcer-plugin</artifactId>
+		            </plugin>
+  				</plugins>
+  			</build>
+			
+		</profile>
+        
     </profiles>
 </project>

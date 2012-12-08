@@ -20,14 +20,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.tck</groupId>
-        <artifactId>tck</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
         <relativePath>../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>html-tck</artifactId>
+	<artifactId>isis-html-viewer-tck</artifactId>
 	<name>HTML Viewer for TCK</name>
 
     <properties>
@@ -74,14 +74,14 @@
 	
         <!-- other modules in this project -->
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-dom</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-dom</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-fixture</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
@@ -89,30 +89,29 @@
         <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>html</artifactId>
+			<artifactId>isis-html-viewer</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
         
-        <!-- to run using WebServer (optional) -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
@@ -121,17 +120,17 @@
         
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
+            <artifactId>isis-file-security</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-xml-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.profilestore</groupId>
+            <artifactId>isis-xml-profilestore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
         

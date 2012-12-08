@@ -23,12 +23,12 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>wicket</artifactId>
+		<artifactId>isis-wicket-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>wicket-ui</artifactId>
-	<name>Wicket Viewer UI Components</name>
+	<artifactId>isis-wicket-viewer-ui</artifactId>
+	<name>Isis Wicket Viewer UI Components</name>
 
     <properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -65,7 +65,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-model</artifactId>
+			<artifactId>isis-wicket-viewer-model</artifactId>
 		</dependency>
 
 		<dependency>

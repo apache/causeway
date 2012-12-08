@@ -32,8 +32,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
 	</dependencies>
     

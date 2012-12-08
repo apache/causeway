@@ -20,14 +20,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-    	<groupId>org.apache.isis.tck</groupId>
-    	<artifactId>tck</artifactId>
+    	<groupId>org.apache.isis.core</groupId>
+    	<artifactId>isis-tck</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
         <relativePath>../../../core/tck/pom.xml</relativePath>
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>junit-tck</artifactId>
+	<artifactId>isis-junit-viewer-tck</artifactId>
 	<name>JUnit Tests for TCK</name>
 
     <properties>
@@ -42,8 +42,8 @@
 
 		<!-- this project's dependencies -->
 		<dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-fixture</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
             <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
@@ -54,28 +54,27 @@
 
         <!-- isis default runtime -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         
-        <!-- isis defaults (other) -->
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
 
         <!-- isis viewers -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>junit</artifactId>
+            <artifactId>isis-junit-viewer</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

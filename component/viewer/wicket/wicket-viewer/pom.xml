@@ -23,12 +23,12 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>wicket</artifactId>
+		<artifactId>isis-wicket-viewer</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
 	<name>Wicket Viewer Implementation</name>
-	<artifactId>wicket-viewer</artifactId>
+	<artifactId>isis-wicket-viewer-impl</artifactId>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -60,7 +60,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-ui</artifactId>
+			<artifactId>isis-wicket-viewer-ui</artifactId>
 		</dependency>
 
 		<dependency>
@@ -70,8 +70,8 @@
 		</dependency>
         
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
 		</dependency>
 
 		<dependency>
@@ -84,13 +84,6 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
 		</dependency>
-
-<!-- 
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>scriptaculous</artifactId>
-		</dependency>
--->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>

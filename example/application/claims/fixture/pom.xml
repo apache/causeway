@@ -32,7 +32,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>claims-objstore-dflt</artifactId>
+			<artifactId>claims-dom</artifactId>
 		</dependency>
 	</dependencies>
 

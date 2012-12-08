@@ -22,14 +22,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-        <artifactId>sql</artifactId>
+        <groupId>org.apache.isis.objectstore</groupId>
+        <artifactId>isis-sql-objectstore</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>sql-tests-served</artifactId>
+    <artifactId>isis-sql-objectstore-tests-served</artifactId>
 
-    <name>Default Runtime SQL ObjectStore Integration Tests - Served</name>
+    <name>Isis SQL ObjectStore Integration Tests - Served</name>
 
     <properties>
 	    <siteBaseDir>..</siteBaseDir>
@@ -88,18 +88,9 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
 			<!-- SQL integration tests common -->
             <dependency>
 				<groupId>${project.groupId}</groupId>
-                <artifactId>sql-tests-common</artifactId>
+                <artifactId>isis-sql-objectstore-tests-common</artifactId>
 				<version>${project.version}</version>
             </dependency>
-
-            <!-- Required to support the XML cross-test -->
-			<!--
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>xml</artifactId>
-                <version>${xml-objectstore.version}</version>
-            </dependency>
-			-->
 
             <!-- JDBC drivers -->
             <dependency>
@@ -118,24 +109,24 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
-        	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-        	<artifactId>dflt</artifactId>
+        	<groupId>org.apache.isis.core</groupId>
+        	<artifactId>isis-cglib-bytecode</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -143,17 +134,17 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
 		<!-- Isis Object store -->
         <dependency>
 		<groupId>${project.groupId}</groupId>
-            <artifactId>sql-impl</artifactId>
+            <artifactId>isis-sql-objectstore-impl</artifactId>
         </dependency>
 
 		<!-- Test common -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>sql-tests-common</artifactId>
+            <artifactId>isis-sql-objectstore-tests-common</artifactId>
         </dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>sql-tests-common</artifactId>
+			<artifactId>isis-sql-objectstore-tests-common</artifactId>
             <type>test-jar</type>
         	<scope>test</scope>
 		</dependency>

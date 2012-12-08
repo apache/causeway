@@ -21,18 +21,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>core</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.isis.tck</groupId>
-    <artifactId>tck</artifactId>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis-tck</artifactId>
 
-    <name>TCK App</name>
+    <name>Isis Core TCK App</name>
 
     <packaging>pom</packaging>
-    
 
     <repositories>
         <repository>
@@ -145,34 +144,27 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>tck-dom</artifactId>
+                <artifactId>isis-tck-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>tck-fixture</artifactId>
+                <artifactId>isis-tck-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
-            <!-- isis: applib -->
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>applib</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>applib</artifactId>
-                <classifier>javadoc</classifier>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            
-            <!-- isis: core -->
+            <!-- isis -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>commons</artifactId>
+                <artifactId>isis-applib</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-applib</artifactId>
+                <classifier>javadoc</classifier>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -180,57 +172,43 @@
                 <artifactId>isis-metamodel</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>progmodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>runtime</artifactId>
+                <artifactId>isis-noop-security</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
-            <!-- isis: security: dflt -->
             <dependency>
-                <groupId>org.apache.isis.security</groupId>
-                <artifactId>dflt</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtimes: dflt -->            
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>runtime</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-runtime</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-webserver</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-cglib-bytecode</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>javassist</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtimes-dflt: objectstores: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-javassist-bytecode</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: profilestores: dflt -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-inmemory-objectstore</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-inmemory-profilestore</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 

@@ -38,8 +38,8 @@
 		</dependency>
 		
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>jdo-datanucleus</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-jdo-objectstore-datanucleus</artifactId>
         </dependency>
 		
         <dependency>

@@ -21,14 +21,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.progmodels</groupId>
-        <artifactId>wrapper</artifactId>
+        <groupId>org.apache.isis.progmodel</groupId>
+        <artifactId>isis-wrapper-progmodel</artifactId>
         <version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>wrapper-applib</artifactId>
-	<name>Wrapper ProgModel Applib</name>
-	<description>Wrapper Applib</description>
+	<artifactId>isis-wrapper-progmodel-applib</artifactId>
+	<name>Isis Wrapper ProgModel Applib</name>
+	<description>Isis Wrapper ProgModel Applib</description>
 
 
     <!-- shouldn't be needed, but was being built as a pom for some reason -->
@@ -69,8 +69,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
         </dependency>
 	</dependencies>
 

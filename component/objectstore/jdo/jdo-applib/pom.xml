@@ -21,13 +21,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-		<artifactId>jdo</artifactId>
+		<groupId>org.apache.isis.objectstore</groupId>
+		<artifactId>isis-jdo-objectstore</artifactId>
 		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jdo-applib</artifactId>
-	<name>JDO ObjectStore AppLib</name>
+	<artifactId>isis-jdo-objectstore-applib</artifactId>
+	<name>Isis JDO ObjectStore AppLib</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -103,8 +103,8 @@
 		<dependencies>
 			<!-- for DataNucleus, see below -->
 			<dependency>
-	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo</artifactId>
+	            <groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>						
@@ -115,8 +115,8 @@
 	<dependencies>
 
         <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>applib</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
 
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
@@ -152,7 +152,6 @@
           <groupId>org.apache.geronimo.specs</groupId>
           <artifactId>geronimo-jta_1.1_spec</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>

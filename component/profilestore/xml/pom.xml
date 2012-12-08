@@ -27,10 +27,10 @@
 		<relativePath>../../../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-	<artifactId>xml</artifactId>
+	<groupId>org.apache.isis.profilestore</groupId>
+	<artifactId>isis-xml-profilestore</artifactId>
 
-	<name>Default Runtime XML ProfileStore</name>
+	<name>Isis XML ProfileStore</name>
 
 	<properties>
         <siteBaseDir>.</siteBaseDir>
@@ -95,13 +95,13 @@
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 			<type>test-jar</type>
 			<scope>test</scope>

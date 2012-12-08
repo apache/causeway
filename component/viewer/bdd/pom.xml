@@ -28,7 +28,7 @@
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-    <artifactId>bdd</artifactId>
+    <artifactId>isis-bdd-viewer</artifactId>
     
     <name>BDD Viewers</name>
 
@@ -65,20 +65,20 @@
                 <version>0.3.1-SNAPSHOT</version>
 			</dependency>
 	        <dependency>
-	            <groupId>org.apache.isis.security</groupId>
-	            <artifactId>dflt</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-noop-security</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 
             <!-- BDD Viewer -->
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-common</artifactId>
+                <artifactId>isis-bdd-viewer-common</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-common</artifactId>
+                <artifactId>isis-bdd-viewer-common</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
@@ -86,12 +86,12 @@
 
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-concordion</artifactId>
+                <artifactId>isis-bdd-viewer-concordion</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-concordion</artifactId>
+                <artifactId>isis-bdd-viewer-concordion</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
@@ -123,18 +123,18 @@
 		    </dependency>
 
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>runtime</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-runtime</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-inmemory-objectstore</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-inmemory-profilestore</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
         </dependencies>

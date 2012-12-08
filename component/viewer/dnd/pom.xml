@@ -28,7 +28,7 @@
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>dnd</artifactId>
+	<artifactId>isis-dnd-viewer</artifactId>
 
 	<name>Drag-n-Drop Viewer</name>
 
@@ -88,37 +88,37 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
-            <artifactId>runtime</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>runtime</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-runtime</artifactId>
+	        <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

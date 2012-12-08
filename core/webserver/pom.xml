@@ -21,14 +21,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>core</artifactId>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-	<groupId>org.apache.isis.runtimes.dflt</groupId>
+	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-webserver</artifactId>
-	<name>Default Runtime WebServer (Jetty)</name>
+	<name>Isis Core WebServer</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>
@@ -66,8 +66,8 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
 		</dependency>
 
 		<dependency>

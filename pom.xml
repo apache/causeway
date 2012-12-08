@@ -25,7 +25,7 @@
 
     <packaging>pom</packaging>
 
-    <name>Apache Isis</name>
+    <name>Apache Isis (Aggregator)</name>
     <description>
         Convenience aggregator POM that references all
     modules.
@@ -35,11 +35,15 @@
 
     <modules>
         <module>isis-parent</module>
-        
+
         <module>site-skin</module>
 
         <module>core</module>
 
+        <module>component/objectstore/xml</module>
+        <module>component/objectstore/sql</module>
+        <module>component/objectstore/nosql</module>
+        <module>component/objectstore/jdo</module>
         <module>component/progmodel/wrapper</module>
         <module>component/progmodel/groovy</module>
 
@@ -50,11 +54,6 @@
         <module>component/security/ldap</module>
         <module>component/security/sql</module>
 
-        <module>component/objectstore/xml</module>
-        <module>component/objectstore/sql</module>
-        <module>component/objectstore/nosql</module>
-        <module>component/objectstore/jdo</module>
-        
         <module>component/viewer/dnd</module>
         <module>component/viewer/dnd-tck</module>
         <module>component/viewer/html</module>
@@ -67,6 +66,7 @@
         <module>component/viewer/junit</module>
         <module>component/viewer/junit-tck</module>
 
+        
         <module>example/application/claims</module>
         <module>example/application/onlinedemo</module>
         <module>example/application/quickstart</module>
@@ -75,12 +75,13 @@
 
         <module>example/archetype/quickstart</module>
 
-        <module>example/misc/metamodel/namefile</module>
-<!--
-        <module>example/misc/metamodel/jsr303</module>
--->
-
         <module>example/domain-service/email-service</module>
+        <module>example/misc/metamodel/namefile</module>
+		<module>tool/maven-plugin</module>
+<!-- 
+        <module>example/misc/metamodel/jsr303</module>
+ -->        
+
 
     </modules>
 

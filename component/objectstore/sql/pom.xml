@@ -19,10 +19,10 @@
 		<relativePath>../../../isis-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-    <artifactId>sql</artifactId>
+    <groupId>org.apache.isis.objectstore</groupId>
+    <artifactId>isis-sql-objectstore</artifactId>
 
-    <name>Default Runtime SQL ObjectStore</name>
+    <name>Isis SQL ObjectStore</name>
 
     <description>
     	Provides JDBC-based persistence.
@@ -85,8 +85,8 @@
         <dependencies>
 
 	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt</groupId>
-	            <artifactId>runtime</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-runtime</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 
@@ -97,7 +97,7 @@
 	        </dependency>
 	
 	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt</groupId>
+	            <groupId>org.apache.isis.core</groupId>
 	            <artifactId>isis-integtestsupport</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
@@ -105,53 +105,60 @@
 	        <!--  Required for TestProxy -->
 			<!-- Isis defaults -->
 	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-	            <artifactId>dflt</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-inmemory-objectstore</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-	            <artifactId>dflt</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-inmemory-objectstore</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
 	            <type>test-jar</type>
 	            <scope>test</scope>
 	        </dependency>
 	        <dependency>
-	        	<groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-	        	<artifactId>dflt</artifactId>
+	        	<groupId>org.apache.isis.core</groupId>
+	        	<artifactId>isis-cglib-bytecode</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
 	            <scope>test</scope>
 	        </dependency>
 
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>sql-impl</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-impl</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>sql-tests-common</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-tests-common</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>sql-tests-common</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-tests-common</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>sql-tests-served</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-tests-served</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
 	        <dependency>
-	            <groupId>org.apache.isis.tck</groupId>
-	            <artifactId>tck-dom</artifactId>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-tck-dom</artifactId>
 	            <version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 
+	        <!-- Required to support the XML cross-test -->
+	        <dependency>
+	            <groupId>org.apache.isis.objectstore</groupId>
+	            <artifactId>isis-xml-objectstore</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
+	
 
 
 			<!-- Test environment -->            

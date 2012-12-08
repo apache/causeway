@@ -29,25 +29,10 @@
 	<artifactId>quickstart_dnd_junit_bdd-dom</artifactId>
 	<name>Quickstart DOM</name>
 
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- for DataNucleus, see below -->
-			<dependency>
-	            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>						
-			</dependency>
-		</dependencies>
-	</dependencyManagement>	
-
-	
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
 	</dependencies>
     

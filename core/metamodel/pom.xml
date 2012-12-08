@@ -13,8 +13,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>core</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
@@ -63,15 +63,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>applib</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis</groupId>
-            <artifactId>applib</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-applib</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
 
         <dependency>
             <groupId>commons-collections</groupId>

@@ -22,12 +22,12 @@
 
 	<parent>
 	    <groupId>org.apache.isis.viewer</groupId>
-	    <artifactId>bdd</artifactId>
+	    <artifactId>isis-bdd-viewer</artifactId>
 	    <version>0.3.1-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>bdd-concordion</artifactId>
-	<name>BDD Viewers: Concordion</name>
+	<artifactId>isis-bdd-viewer-concordion</artifactId>
+	<name>Isis BDD Viewers (Concordion)</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
@@ -54,7 +54,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>bdd-common</artifactId>
+			<artifactId>isis-bdd-viewer-common</artifactId>
 		</dependency>
 	
         <dependency>

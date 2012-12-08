@@ -29,6 +29,16 @@
 	<artifactId>claims-objstore-jdo</artifactId>
 	<name>Example Claims App Repositories (for JDO ObjectStore)</name>
 
+	<dependencyManagement>
+		<dependencies>
+	        <dependency>
+	            <groupId>org.slf4j</groupId>
+	            <artifactId>slf4j-log4j12</artifactId>
+	            <version>1.6.4</version>
+	        </dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
 	
 		<!-- other modules in this project -->
@@ -38,14 +48,8 @@
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>jdo-datanucleus</artifactId>
-        </dependency>
-		
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.4</version>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-jdo-objectstore-datanucleus</artifactId>
         </dependency>
 		
 	</dependencies>

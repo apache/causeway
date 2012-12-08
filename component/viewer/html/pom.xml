@@ -28,9 +28,9 @@
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>html</artifactId>
+	<artifactId>isis-html-viewer</artifactId>
 
-	<name>Html Viewer</name>
+	<name>Isis Html Viewer</name>
 
 	<properties>
         <siteBaseDir>.</siteBaseDir>
@@ -96,28 +96,28 @@
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 			<type>test-jar</type>
             <scope>test</scope>
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-runtime</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>monitoring</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-html-viewer-monitoring</artifactId>
             <version>0.3.1-SNAPSHOT</version>
 		</dependency>
 

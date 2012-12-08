@@ -20,22 +20,22 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.tck</groupId>
-        <artifactId>tck</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>0.3.1-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>bdd-concordion-tck</artifactId>
+	<artifactId>isis-bdd-viewer-concordion-tck</artifactId>
 
-	<name>BDD (Concordion) Tests against TCK</name>
+	<name>Isis BDD (Concordion) Tests against TCK</name>
 
     <properties>
         <maven.test.skip>true</maven.test.skip>
 
 		<!-- until someone comes up with a better solution -->
-                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/bdd</distMgmtSiteUrl>
+        <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/bdd</distMgmtSiteUrl>
 
     </properties>
     
@@ -69,31 +69,29 @@
             <artifactId>isis-metamodel</artifactId>
         </dependency>
 
-        <!-- isis default runtime -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         
-        <!-- isis defaults (other) -->
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
 
 
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>bdd-concordion</artifactId>
+            <artifactId>isis-bdd-viewer-concordion</artifactId>
             <version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

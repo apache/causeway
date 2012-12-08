@@ -189,20 +189,20 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>tests-junit</artifactId>
+                <artifactId>quickstart-tests-junit</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <!-- isis: applib -->
             <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>applib</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis</groupId>
-                <artifactId>applib</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-applib</artifactId>
                 <classifier>javadoc</classifier>
                 <version>${isis.version}</version>
             </dependency>
@@ -214,141 +214,105 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: progmodel: wrapper -->
             <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>wrapper</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>wrapper-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>wrapper-metamodel</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <!-- isis: progmodel: groovy -->
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>groovy</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>groovy-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.progmodels</groupId>
-                <artifactId>groovy-metamodel</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <!-- isis: security: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.security</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-noop-security</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: security: ldap -->
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
-                <artifactId>ldap</artifactId>
+                <artifactId>isis-ldap-security</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: security: file -->
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
-                <artifactId>file</artifactId>
+                <artifactId>isis-file-security</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes: dflt -->            
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
-                <artifactId>runtime</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-runtime</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt</groupId>
+                <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-webserver</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-cglib-bytecode</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>javassist</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-javassist-bytecode</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
 
             <!-- isis: runtimes-dflt: objectstores: dflt -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-inmemory-objectstore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes-dflt: objectstores: jdo -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>jdo</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-jdo-objectstore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>jdo-applib</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-jdo-objectstore-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>jdo-datanucleus</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-jdo-objectstore-datanucleus</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: objectstores: mongodb and fileserver -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>nosql</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-nosql-objectstore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes-dflt: objectstore: sql -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>sql-impl</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: runtimes-dflt: objectstores: xml -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>xml</artifactId>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-xml-objectstore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
 
             <!-- isis: runtimes-dflt: profilestores: dflt -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-                <artifactId>dflt</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-inmemory-profilestore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             
             <!-- isis: runtimes-dflt: profilestores: xml -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-                <artifactId>xml</artifactId>
+                <groupId>org.apache.isis.profilestore</groupId>
+                <artifactId>isis-xml-profilestore</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -356,55 +320,55 @@
             <!-- isis: viewer: dnd -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>dnd</artifactId>
+                <artifactId>isis-dnd-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: viewer: html -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>html</artifactId>
+                <artifactId>isis-html-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: viewer: restfulobjects -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restfulobjects</artifactId>
+                <artifactId>isis-restfulobjects-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restfulobjects-applib</artifactId>
+                <artifactId>isis-restfulobjects-viewer-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restfulobjects-viewer</artifactId>
+                <artifactId>isis-restfulobjects-viewer-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: viewer: junit -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>junit</artifactId>
+                <artifactId>isis-junit-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
             <!-- isis: viewer: bdd -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd</artifactId>
+                <artifactId>isis-bdd-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-common</artifactId>
+                <artifactId>isis-bdd-viewer-common</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-concordion</artifactId>
+                <artifactId>isis-bdd-viewer-concordion</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -418,17 +382,17 @@
             <!-- isis: viewer: scimpi -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>scimpi</artifactId>
+                <artifactId>isis-scimpi-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>scimpi-dispatcher</artifactId>
+                <artifactId>isis-scimpi-viewer-dispatcher</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>scimpi-servlet</artifactId>
+                <artifactId>isis-scimpi-viewer-servlet</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
@@ -436,32 +400,22 @@
             <!-- isis: viewer: wicket -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket</artifactId>
+                <artifactId>isis-wicket-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-applib</artifactId>
+                <artifactId>isis-wicket-viewer-model</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-facets</artifactId>
+                <artifactId>isis-wicket-viewer-ui</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-model</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-ui</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-viewer</artifactId>
+                <artifactId>isis-wicket-viewer-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 

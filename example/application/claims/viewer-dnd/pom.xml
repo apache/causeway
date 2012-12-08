@@ -78,54 +78,54 @@
 
 		<!-- isis default runtime -->
         <dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
+			<groupId>org.apache.isis.core</groupId>
             <artifactId>isis-webserver</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-cglib-bytecode</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-xml-objectstore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-inmemory-profilestore</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>xml</artifactId>
+            <groupId>org.apache.isis.profilestore</groupId>
+            <artifactId>isis-xml-profilestore</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>dflt</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-noop-security</artifactId>
         </dependency>
         
         <!-- isis viewers -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>dnd</artifactId>
+			<artifactId>isis-dnd-viewer</artifactId>
 		</dependency>
         
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>html</artifactId>
+			<artifactId>isis-html-viewer</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>restfulobjects-viewer</artifactId>
+            <artifactId>isis-restfulobjects-viewer-impl</artifactId>
         </dependency>
 
         <!-- JUnit Viewer dependencies -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>junit</artifactId>
+            <artifactId>isis-junit-viewer</artifactId>
             <scope>test</scope>
         </dependency>
         
@@ -310,11 +310,11 @@
 				<!-- Wicket Viewer -->
 				<dependency>
 					<groupId>org.apache.isis.viewer</groupId>
-					<artifactId>wicket-viewer</artifactId>
+					<artifactId>isis-wicket-viewer-impl</artifactId>
 				</dependency>
 				<!-- to run using WebServer -->
 				<dependency>
-				    <groupId>org.apache.isis.runtimes.dflt</groupId>
+				    <groupId>org.apache.isis.core</groupId>
 				    <artifactId>isis-webserver</artifactId>
 				</dependency>
 				<!--  JETTY DEPENDENCIES FOR RUNNING webapp viewers in packaged JAR -->

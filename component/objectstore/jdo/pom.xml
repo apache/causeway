@@ -21,8 +21,8 @@
 		<relativePath>../../../isis-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-	<artifactId>jdo</artifactId>
+	<groupId>org.apache.isis.objectstore</groupId>
+	<artifactId>isis-jdo-objectstore</artifactId>
 
 	<name>Default Runtime JDO ObjectStore</name>
 
@@ -69,25 +69,25 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo-applib</artifactId>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore-applib</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo-applib</artifactId>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore-applib</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo-metamodel</artifactId>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore-metamodel</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-				<artifactId>jdo-metamodel</artifactId>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore-metamodel</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
@@ -95,8 +95,8 @@
 
 			<!-- isis core -->
 			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>applib</artifactId>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-applib</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -118,12 +118,12 @@
 				<scope>test</scope>
 			</dependency>
         	<dependency>
-        	    <groupId>org.apache.isis.runtimes.dflt</groupId>
-    	        <artifactId>runtime</artifactId>
+        	    <groupId>org.apache.isis.core</groupId>
+    	        <artifactId>isis-runtime</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 	        </dependency>
 	        <dependency>
-	            <groupId>org.apache.isis.runtimes.dflt</groupId>
+	            <groupId>org.apache.isis.core</groupId>
 	            <artifactId>isis-integtestsupport</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 	            <scope>test</scope>

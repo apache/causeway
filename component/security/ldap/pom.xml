@@ -28,9 +28,9 @@
 	</parent>
 
 	<groupId>org.apache.isis.security</groupId>
-	<artifactId>ldap</artifactId>
+	<artifactId>isis-ldap-security</artifactId>
 
-	<name>LDAP Security Implementation</name>
+	<name>Isis LDAP Security</name>
 
 	<properties>
         <siteBaseDir>.</siteBaseDir>
@@ -67,13 +67,13 @@
 
 	<dependencies>
 		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>isis-runtime</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>isis-runtime</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
 		    <type>test-jar</type>
 		    <scope>test</scope>
