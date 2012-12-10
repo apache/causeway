@@ -683,6 +683,8 @@
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagBase>https://svn.apache.org/repos/asf/incubator/isis/tags/</tagBase>
+                        <localCheckout>true</localCheckout>
+                        <pushChanges>false</pushChanges>
                         <waitBeforeTagging>120</waitBeforeTagging>
                     </configuration>
                     <!-- goal:clean (for aggregator modules) has no bindings; 
