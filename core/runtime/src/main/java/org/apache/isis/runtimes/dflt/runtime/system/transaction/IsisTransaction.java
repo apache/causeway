@@ -301,6 +301,10 @@ public class IsisTransaction implements TransactionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public synchronized final void flush() {
+        if(commands.isEmpty()) {
+            // nothing to do
+            return;
+        }
         ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
         if (LOG.isDebugEnabled()) {
             LOG.debug("flush transaction " + this);

@@ -348,6 +348,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
+        flush(); // auto-flush any pending changes
         final List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
         return AdapterUtils.unwrap(allMatching);
     }
@@ -382,6 +383,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     @SuppressWarnings("unchecked")
     public <T> T firstMatch(final Query<T> query) {
+        flush(); // auto-flush any pending changes
         final ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
         return (T) AdapterUtils.unwrap(firstMatching);
     }
