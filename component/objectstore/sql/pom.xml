@@ -84,6 +84,32 @@
     <dependencyManagement>
         <dependencies>
 
+	    	<!-- for benefit of application developers, using scope=import -->
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-impl</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-tests-common</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-tests-common</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-sql-objectstore-tests-served</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+
+
+
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
 	            <artifactId>isis-runtime</artifactId>
@@ -122,29 +148,6 @@
                 <version>0.3.1-SNAPSHOT</version>
 	            <scope>test</scope>
 	        </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-impl</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-tests-common</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-tests-common</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-tests-served</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>

@@ -74,6 +74,28 @@
     <dependencyManagement>
         <dependencies>
 
+	    	<!-- for benefit of application developers, using scope=import -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>isis-wrapper-progmodel-applib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>isis-wrapper-progmodel-applib</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>isis-wrapper-progmodel-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+
+			<!-- isis core -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-applib</artifactId>
@@ -106,25 +128,6 @@
 	            <scope>test</scope>
 	        </dependency>
 
-			<!-- wrapper applib -->
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>isis-wrapper-progmodel-applib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>isis-wrapper-progmodel-applib</artifactId>
-				<version>${project.version}</version>
-				<type>test-jar</type>
-			</dependency>
-
-			<!-- wrapper impl -->
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>isis-wrapper-progmodel-impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>

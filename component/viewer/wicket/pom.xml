@@ -71,6 +71,47 @@
     <dependencyManagement>
         <dependencies>
 
+	    	<!-- also for benefit of application developers, using scope=import -->
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-model</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-model</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-ui</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-ui</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-impl</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-wicket-viewer-impl</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+
+
+
+			<!-- isis core -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-unittestsupport</artifactId>
@@ -82,44 +123,6 @@
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-runtime</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-
-			<!-- Apache Isis Wicket Viewer -->
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-wicket-viewer-model</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-wicket-viewer-model</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-wicket-viewer-ui</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-wicket-viewer-ui</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-wicket-viewer-impl</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-wicket-viewer-impl</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
 			</dependency>
 
 			<!-- Apache Isis -->

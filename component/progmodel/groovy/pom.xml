@@ -53,6 +53,8 @@
 	<dependencyManagement>
 		<dependencies>
 
+	    	<!-- also for benefit of application developers, using scope=import -->
+
 			<!-- Groovy Support -->
 			<dependency>
 				<groupId>org.apache.isis.progmodel</groupId>
@@ -64,6 +66,8 @@
 				<artifactId>isis-groovy-progmodel-metamodel</artifactId>
 				<version>0.3.1-SNAPSHOT</version>
 			</dependency>
+
+
 
 			<!-- Apache Isis -->
 			<dependency>

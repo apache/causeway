@@ -65,6 +65,17 @@
         </plugins>
     </reporting>
 
+    <dependencyManagement>
+    	<!-- for benefit of application developers, using scope=import -->
+    	<dependencies>
+			<dependency>
+			    <groupId>org.apache.isis.security</groupId>
+			    <artifactId>isis-ldap-security</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+    	</dependencies>
+    </dependencyManagement>
+
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>

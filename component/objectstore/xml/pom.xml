@@ -79,6 +79,19 @@
         </plugins>
     </reporting>
 
+
+    <dependencyManagement>
+    	<!-- for benefit of application developers, using scope=import -->
+    	<dependencies>
+			<dependency>
+			    <groupId>org.apache.isis.objectstore</groupId>
+			    <artifactId>isis-xml-objectstore</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+    	</dependencies>
+    </dependencyManagement>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
@@ -95,19 +108,19 @@
         </dependency>
 
 		<dependency>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>isis-cglib-bytecode</artifactId>
+			<version>0.3.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>isis-runtime</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
 		</dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-integtestsupport</artifactId>
-			<version>0.3.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
 			<version>0.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

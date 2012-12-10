@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.isis</groupId>
-    <artifactId>isis</artifactId>
+    <artifactId>isis-all</artifactId>
     <version>0.3.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>

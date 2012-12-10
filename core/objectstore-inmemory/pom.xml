@@ -82,6 +82,11 @@
 		    <artifactId>isis-runtime</artifactId>
 		</dependency>
 
+		<dependency>
+		    <groupId>org.apache.isis.core</groupId>
+		    <artifactId>isis-cglib-bytecode</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>

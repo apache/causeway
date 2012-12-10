@@ -68,6 +68,9 @@
 
 	<dependencyManagement>
 		<dependencies>
+		
+	    	<!-- also for benefit of application developers, using scope=import -->
+		
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-jdo-objectstore-applib</artifactId>
@@ -92,6 +95,20 @@
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore-datanucleus</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-jdo-objectstore-datanucleus</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+
+
 
 			<!-- isis core -->
 			<dependency>

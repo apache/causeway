@@ -57,18 +57,9 @@
     </build>
 
     <dependencyManagement>
-        <dependencies>
-        
-			<dependency>
-			    <groupId>org.apache.isis.core</groupId>
-			    <artifactId>isis-metamodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-			</dependency>
-	        <dependency>
-	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-noop-security</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
-	        </dependency>
+    	<dependencies>
+
+	    	<!-- for benefit of application developers, using scope=import -->
 
             <!-- BDD Viewer -->
             <dependency>
@@ -96,6 +87,25 @@
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
+
+
+
+			<dependency>
+			    <groupId>org.apache.isis.security</groupId>
+			    <artifactId>isis-file-security</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+        
+			<dependency>
+			    <groupId>org.apache.isis.core</groupId>
+			    <artifactId>isis-metamodel</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+			</dependency>
+	        <dependency>
+	            <groupId>org.apache.isis.core</groupId>
+	            <artifactId>isis-noop-security</artifactId>
+	            <version>0.3.1-SNAPSHOT</version>
+	        </dependency>
 
             <!-- 3rd party dependencies -->
             <dependency>

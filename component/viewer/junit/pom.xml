@@ -59,6 +59,22 @@
 
 	<dependencyManagement>
     	<dependencies>
+
+	    	<!-- for benefit of application developers, using scope=import -->
+			<dependency>
+			    <groupId>org.apache.isis.viewer</groupId>
+			    <artifactId>isis-junit-viewer-impl</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.isis.viewer</groupId>
+			    <artifactId>isis-junit-viewer-tck</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+
+
+
+
         	<dependency>
             	<groupId>org.apache.isis.progmodel</groupId>
             	<artifactId>isis-wrapper-progmodel-metamodel</artifactId>

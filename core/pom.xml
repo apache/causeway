@@ -944,7 +944,9 @@ archetype includes this explicit dependency.
     </reporting>
 
     <dependencyManagement>
-        <dependencies>
+    	<!-- is also for benefit of application developers, using scope=import -->
+    	<dependencies>
+    	
             <!-- isis-unittestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>

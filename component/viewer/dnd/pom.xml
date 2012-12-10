@@ -57,7 +57,8 @@
 
 	<dependencyManagement>
 	    <dependencies>
-			<!-- this monitoring -->
+
+	    	<!-- for benefit of application developers, using scope=import -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-dnd-viewer-impl</artifactId>
@@ -69,6 +70,7 @@
                 <artifactId>isis-dnd-viewer-tck</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
+
 
 			<!-- isis core -->
             <dependency>
@@ -87,7 +89,7 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-integtestsupport</artifactId>
-	                <version>0.3.1-SNAPSHOT</version>
+                <version>0.3.1-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
     

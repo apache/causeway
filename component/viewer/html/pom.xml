@@ -57,6 +57,10 @@
 
 	<dependencyManagement>
 	    <dependencies>
+	    
+
+	    	<!-- also for benefit of application developers, using scope=import -->
+	    
 			<!-- for this module -->
 		    <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
@@ -69,6 +73,8 @@
 			    <artifactId>isis-html-viewer-monitoring</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
 		    </dependency>
+
+
 
 			<!-- isis core -->
 		    <dependency>

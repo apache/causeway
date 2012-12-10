@@ -128,7 +128,16 @@
     </reporting>
 
     <dependencyManagement>
-        <dependencies>
+    	<!-- for benefit of application developers, using scope=import -->
+    	<dependencies>
+			<dependency>
+			    <groupId>org.apache.isis.objectstore</groupId>
+			    <artifactId>isis-nosql-objectstore</artifactId>
+				<version>0.3.1-SNAPSHOT</version>
+			</dependency>
+
+
+
             <dependency>
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongo-java-driver</artifactId>
