@@ -132,6 +132,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
     private final List<InstallableFixture> fixtures;
     private List <Listener> listeners;
     
+    private Level level = Level.INFO;
+    
     private final MetaModelValidator metaModelValidator;
     private final ProgrammingModel programmingModel;
 
@@ -154,6 +156,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         
         private final List <Listener> listeners = Lists.newArrayList();
 
+        private Level level = null;
+        
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
             return this;
@@ -179,6 +183,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
             return this;
         }
         
+        public Builder withLoggingAt(Level level) {
+            this.level = level;
+            return this;
+        }
 
         public IsisSystemForTest build() {
             final List<Object> servicesIfAny = asList(services);
@@ -223,6 +231,17 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         this.listeners = listeners;
     }
 
+    ////////////////////////////////////////////////////////////
+    // logging
+    ////////////////////////////////////////////////////////////
+
+    public Level getLevel() {
+        return level;
+    }
+    
+    public void setLevel(Level level) {
+        this.level = level;
+    }
 
     ////////////////////////////////////////////////////////////
     // setup, teardown
@@ -232,12 +251,17 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
     /**
      * Intended to be called from a test's {@link Before} method.
      */
-    public void setUpSystem() throws Exception {
-        setUpSystem(FireListeners.FIRE);
+    public IsisSystemForTest setUpSystem() throws RuntimeException {
+        try {
+            setUpSystem(FireListeners.FIRE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return this;
     }
 
     private void setUpSystem(FireListeners fireListeners) throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        Logger.getRootLogger().setLevel(getLevel());
 
         boolean firstTime = isisSystem == null;
         if(fireListeners.shouldFire()) {
