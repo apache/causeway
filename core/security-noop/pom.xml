@@ -28,7 +28,7 @@
 
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-noop-security</artifactId>
-	<name>Isis No-op Security</name>
+	<name>Isis Core No-op Security</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

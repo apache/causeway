@@ -77,8 +77,6 @@
 
 		<isis-parent.enforcer.validate>true</isis-parent.enforcer.validate>
         
-        <!-- number of unapproved licenses -->
-		<rat.num>0</rat.num>
         <!-- override in each module (used by locate global resources) -->
         <siteBaseDir>.</siteBaseDir>
 
@@ -826,7 +824,6 @@ archetype includes this explicit dependency.
                 <configuration>
                     <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                     <excludeSubProjects>true</excludeSubProjects>
-                    <numUnapprovedLicenses>${rat.num}</numUnapprovedLicenses>
                     <excludes>
                         <exclude>**/*.project</exclude>
                         <exclude>**/.classpath</exclude>
