@@ -32,7 +32,7 @@
 	<properties>
     </properties>
 
-    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+    <url>http://isis.apache.org/${relativeUrl}</url>
 
 	<dependencies>
 

@@ -36,7 +36,7 @@
     </properties>
 
     <!-- used in Site generation for relative references. -->
-    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+    <url>http://isis.apache.org/${relativeUrl}</url>
 
 	<build>
 		<resources>
