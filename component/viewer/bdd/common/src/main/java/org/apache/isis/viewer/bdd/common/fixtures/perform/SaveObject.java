@@ -20,8 +20,8 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 

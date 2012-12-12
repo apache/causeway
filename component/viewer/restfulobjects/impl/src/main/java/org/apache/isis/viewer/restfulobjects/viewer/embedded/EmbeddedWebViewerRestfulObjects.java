@@ -22,12 +22,12 @@ import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
 import org.apache.isis.core.commons.lang.MapUtils;
+import org.apache.isis.core.runtime.viewer.web.WebAppSpecification;
+import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
+import org.apache.isis.core.webapp.IsisSessionFilter;
+import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.core.webapp.content.ResourceServlet;
-import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
-import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
-import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
-import org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted;
 

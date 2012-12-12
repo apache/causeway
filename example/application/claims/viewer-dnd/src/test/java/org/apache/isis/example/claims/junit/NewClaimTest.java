@@ -24,8 +24,8 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.apache.isis.example.claims.dom.claim.Claim;
-import org.apache.isis.example.claims.fixture.ClaimsFixture;
+import org.apache.isis.example.application.claims.dom.claim.Claim;
+import org.apache.isis.example.application.claims.fixture.ClaimsFixture;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 

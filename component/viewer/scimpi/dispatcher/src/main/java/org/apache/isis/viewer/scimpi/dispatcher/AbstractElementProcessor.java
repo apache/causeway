@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public abstract class AbstractElementProcessor implements ElementProcessor, Names {

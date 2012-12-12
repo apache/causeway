@@ -22,9 +22,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault;
+import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault;
 
 public class AuthenticationSessionStrategyTrusted extends AuthenticationSessionStrategyDefault {
 

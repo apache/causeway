@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableView.SimpleTableBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;

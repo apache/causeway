@@ -40,10 +40,10 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.tck.dom.refs.BidirWithSetChildEntity;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
+import org.apache.isis.core.tck.dom.refs.BidirWithSetChildEntity;
+import org.apache.isis.core.tck.dom.scalars.ApplibValuedEntity;
+import org.apache.isis.core.tck.dom.scalars.ApplibValuedEntityRepository;
+import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
@@ -380,7 +380,7 @@ public class DomainObjectResourceTest {
 
         final LinkRepresentation domainObjectTypeLink = domainObjectRefRepr.getLink("type");
         assertThat(domainObjectTypeLink.getRel(), is("type"));
-        assertThat(domainObjectTypeLink.getHref(), matches("http://localhost:\\d+/types/application/vnd." + org.apache.isis.tck.dom.scalars.ApplibValuedEntity.class.getName() + "\\+json"));
+        assertThat(domainObjectTypeLink.getHref(), matches("http://localhost:\\d+/types/application/vnd." + org.apache.isis.core.tck.dom.scalars.ApplibValuedEntity.class.getName() + "\\+json"));
 
         final LinkRepresentation domainObjectIconLink = domainObjectRefRepr.getLink("icon");
         assertThat(domainObjectIconLink.getRel(), is("icon"));

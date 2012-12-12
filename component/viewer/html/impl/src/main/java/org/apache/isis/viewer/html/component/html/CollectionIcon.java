@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;

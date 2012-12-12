@@ -33,9 +33,9 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.fixture.LogonFixtureAuthenticator;
-import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.authentication.fixture.LogonFixtureAuthenticator;
+import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 @RunWith(JMock.class)
 public class LogonFixtureAuthenticatorTest {

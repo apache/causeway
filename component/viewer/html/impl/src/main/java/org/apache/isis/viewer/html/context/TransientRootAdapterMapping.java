@@ -22,7 +22,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
+import org.apache.isis.core.runtime.memento.Memento;
 
 public class TransientRootAdapterMapping extends RootAdapterMappingAbstract {
     

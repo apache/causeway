@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
+import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 
 public class DefaultPersistAlgorithmTest {
 

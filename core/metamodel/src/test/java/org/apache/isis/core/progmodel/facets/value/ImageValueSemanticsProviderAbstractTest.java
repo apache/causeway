@@ -23,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Image;
 
-import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,8 +30,9 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ImageValueSemanticsProviderAbstractTest {
 

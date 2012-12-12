@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"file:src/test/resources/dtd/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+
+  <body>
+    <h1>New Claim Defaults OK</h1>
+
+    <div class="example">
+      <h2>Given</h2>
+
+      <p>Given <a href="Fixtures.html" concordion:run="concordion"
+      xmlns:concordion="http://www.concordion.org/2007/concordion">this
+      fixture</a></p>
+
+      <p>Locate and alias Tom and his approver:</p>
+
+      <ul>
+        <li>
+          <p
+          isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"
+          xmlns:isis="http://isis.apache.org/2010/concordion">With the <span
+          concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">employees</span>
+          service, <span concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">invoke
+          action</span> <span concordion:set="#usingMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">All
+          Employees</span> and alias the resulting list as <span
+          concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">list1</span>;
+          <span concordion:assertEquals="#result"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">ok</span></p>
+        </li>
+
+        <li>
+          <p
+          concordion:execute="#result=aliasItemsInList(#listAlias, #title, #aliasAs)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Alias
+          <span concordion:set="#title">Tom Brown</span> in <span
+          concordion:set="#listAlias">list1</span> as <span
+          concordion:set="#aliasAs">tomEmployee</span>; <span
+          concordion:assertEquals="#result">ok</span>.</p>
+        </li>
+      </ul>
+
+      <p>Note the approver for Tom.</p>
+
+      <table isis:execute="#result=usingIsisViewerThatArgs(#onObject, #aliasResultAs, #perform, #onMember, #thatIt, #value)"
+             xmlns:isis="http://isis.apache.org/2010/concordion">
+        <tr>
+          <th concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          object</th>
+
+          <th concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">alias
+          result as</th>
+
+          <th concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">perform</th>
+
+          <th concordion:set="#onMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          member</th>
+
+          <th concordion:set="#thatIt"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">that
+          it</th>
+
+          <th concordion:set="#value"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">value</th>
+
+          <th concordion:assertEquals="#result"
+              xmlns:concordion="http://www.concordion.org/2007/concordion" />
+        </tr>
+
+        <tr>
+          <td>tomEmployee</td>
+
+          <td>tomsApprover</td>
+
+          <td>check property</td>
+
+          <td>DefaultApprover</td>
+
+          <td>is</td>
+
+          <td>Employee:Fred Smith</td>
+
+          <td>ok</td>
+        </tr>
+      </table>
+
+      <h2>When</h2>
+
+      <p>Create new claim, but don't save:</p>
+
+      <table isis:execute="#result=usingIsisViewer(#onObject, #aliasResultAs, #perform, #onMember)"
+             xmlns:isis="http://isis.apache.org/2010/concordion">
+        <tr>
+          <th concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          object</th>
+
+          <th concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">alias
+          result as</th>
+
+          <th concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">perform</th>
+
+          <th concordion:set="#onMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          member</th>
+
+          <th concordion:assertEquals="#result"
+              xmlns:concordion="http://www.concordion.org/2007/concordion" />
+        </tr>
+
+        <tr>
+          <td>tomEmployee</td>
+
+          <td>tomsClaim1</td>
+
+          <td>invoke action</td>
+
+          <td>New Claim</td>
+
+          <td>ok</td>
+        </tr>
+      </table>
+
+      <h2>Then</h2>
+
+      <table isis:execute="#result=usingIsisViewerThatArgs(#onObject, #aliasResultAs, #perform, #onMember, #that, #args)"
+             xmlns:isis="http://isis.apache.org/2010/concordion">
+        <tr>
+          <th concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          object</th>
+
+          <th concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">alias
+          result as</th>
+
+          <th concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">perform</th>
+
+          <th concordion:set="#onMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          member</th>
+
+          <th concordion:set="#that"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">that
+          it</th>
+
+          <th concordion:set="#args"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">value</th>
+
+          <th concordion:assertEquals="#result"
+              xmlns:concordion="http://www.concordion.org/2007/concordion" />
+        </tr>
+
+        <tr>
+          <td>tomsClaim1</td>
+
+          <td />
+
+          <td>check object</td>
+
+          <td />
+
+          <td>is not saved</td>
+
+          <td />
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td />
+
+          <td />
+
+          <td>check property</td>
+
+          <td>Date</td>
+
+          <td>is</td>
+
+          <td>02-03-2007</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td />
+
+          <td />
+
+          <td />
+
+          <td>Description</td>
+
+          <td>is</td>
+
+          <td>enter a description here</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td />
+
+          <td />
+
+          <td />
+
+          <td>Status</td>
+
+          <td>is</td>
+
+          <td>New</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td />
+
+          <td />
+
+          <td />
+
+          <td>Claimant</td>
+
+          <td>is</td>
+
+          <td>tomEmployee</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td />
+
+          <td />
+
+          <td />
+
+          <td>Approver</td>
+
+          <td>is</td>
+
+          <td>tomsApprover</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td />
+
+          <td />
+
+          <td>check collection</td>
+
+          <td>Items</td>
+
+          <td>is empty</td>
+
+          <td />
+
+          <td>ok</td>
+        </tr>
+      </table>
+
+      <!-- 
+<p concordion:execute="runViewer()">run viewer</p>
+-->
+    </div>
+  </body>
+</html>

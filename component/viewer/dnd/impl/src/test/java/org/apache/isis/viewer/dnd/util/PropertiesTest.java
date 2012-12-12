@@ -24,8 +24,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.runtime.userprofile.Options;
-import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 
 public class PropertiesTest {
     

@@ -21,7 +21,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transactio
 
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public class ObjectStoreTransactionManager_InstantiationTest extends ObjectStoreTransactionManagerAbstractTestCase {
 

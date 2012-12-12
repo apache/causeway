@@ -32,11 +32,11 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationAuthenticator;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationAuthenticatorConstants;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
+import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthenticator;
+import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthenticatorConstants;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 @RunWith(JMock.class)
 public class ExplorationAuthenticatorTest {

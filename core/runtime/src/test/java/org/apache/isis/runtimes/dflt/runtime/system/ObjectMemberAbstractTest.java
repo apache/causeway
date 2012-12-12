@@ -55,8 +55,8 @@ import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetNever;
 import org.apache.isis.core.progmodel.facets.members.hidden.HideForContextFacetNone;
 import org.apache.isis.core.progmodel.facets.members.hidden.HideForSessionFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenFacetAlwaysEverywhere;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 

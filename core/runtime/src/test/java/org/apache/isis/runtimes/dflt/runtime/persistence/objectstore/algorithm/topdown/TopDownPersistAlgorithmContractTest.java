@@ -22,10 +22,10 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.core.runtime.persistence.NotPersistableException;
+import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmTopDown;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmContractTest;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmTopDown;
 
 public class TopDownPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 

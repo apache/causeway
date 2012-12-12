@@ -26,8 +26,8 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
 public class SqlAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 

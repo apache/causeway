@@ -31,8 +31,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyAbstract;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the

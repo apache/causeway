@@ -21,7 +21,6 @@ package org.apache.isis.core.progmodel.facets.object.parseable;
 import java.util.IllegalFormatWidthException;
 
 import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -37,8 +36,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ParseableFacetUsingParserTest {
 

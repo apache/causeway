@@ -22,10 +22,10 @@ package org.apache.isis.viewer.junit.internal;
 import org.junit.internal.runners.TestClass;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemUsingInstallers;
+import org.apache.isis.core.profilestore.InMemoryUserProfileStoreInstaller;
+import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemUsingInstallers;
 
 public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstallers {
 

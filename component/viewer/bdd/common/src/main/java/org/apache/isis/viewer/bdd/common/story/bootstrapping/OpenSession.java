@@ -23,8 +23,8 @@ import java.util.List;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.bdd.common.Scenario;
 
 public class OpenSession {

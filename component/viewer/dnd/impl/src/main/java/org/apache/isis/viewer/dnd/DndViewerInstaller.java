@@ -19,8 +19,8 @@
 
 package org.apache.isis.viewer.dnd;
 
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
+import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
+import org.apache.isis.core.runtime.viewer.IsisViewer;
 
 public class DndViewerInstaller extends IsisViewerInstallerAbstract {
 

@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.viewer.dnd.DummyContent;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;

@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.testsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class RootOidDefaultTest_valueSemantics_whenTransient extends ValueTypeContractTestAbstract<RootOidDefault> {
 

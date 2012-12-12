@@ -19,16 +19,16 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.drawing.Location;

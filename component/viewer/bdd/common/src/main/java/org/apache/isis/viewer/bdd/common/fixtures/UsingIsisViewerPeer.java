@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;

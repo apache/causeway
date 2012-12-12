@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.bdd.common.components;
 
-import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 public class BddInMemoryPersistenceMechanismInstaller extends InMemoryPersistenceMechanismInstaller {
 

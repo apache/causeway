@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"file:src/test/resources/dtd/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+
+  <body>
+    <h1>New Claim once created shows up for claimant</h1>
+
+    <div class="example">
+      <h2>Given</h2>
+
+      <p>Given <a href="Fixtures.html" concordion:run="concordion"
+      xmlns:concordion="http://www.concordion.org/2007/concordion">this
+      fixture</a>:</p>
+
+      <p>Locate and alias <span>Tom</span>:</p>
+
+      <ul>
+        <li>
+          <p
+          isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"
+          xmlns:isis="http://isis.apache.org/2010/concordion">With the <span
+          concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">employees</span>
+          service, <span concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">invoke
+          action</span> <span concordion:set="#usingMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">All
+          Employees</span> and alias the resulting list as <span
+          concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">list1</span>;
+          <span concordion:assertEquals="#result"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">ok</span></p>
+        </li>
+
+        <li>
+          <p
+          concordion:execute="#result=aliasItemsInList(#listAlias, #title, #aliasAs)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Alias
+          <span concordion:set="#title">Tom Brown</span> in <span
+          concordion:set="#listAlias">list1</span> as <span
+          concordion:set="#aliasAs">tomEmployee</span>; <span
+          concordion:assertEquals="#result">ok</span>.</p>
+        </li>
+      </ul>
+
+      <p>Initially Tom has no claims:</p>
+
+      <ul>
+        <li>
+          <p
+          isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"
+          xmlns:isis="http://isis.apache.org/2010/concordion">Using <span
+          concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">tomEmployee</span>,
+          <span concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">invoke
+          action</span> <span concordion:set="#usingMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Claims
+          For</span> and alias the resulting list as <span
+          concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">tomsClaimsInitially</span>;
+          <span concordion:assertEquals="#result"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">ok</span>.</p>
+        </li>
+
+        <li>
+          <p>Confirm that <span
+          concordion:execute="#result=checkCollectionIsEmpty(#TEXT)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">tomsClaimsInitially</span>
+          has no claims; <span concordion:assertEquals="#result"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">ok</span>.</p>
+        </li>
+      </ul>
+
+      <h2>When</h2>
+
+      <p>Create new claims, and save:</p>
+
+      <table isis:execute="#result=usingIsisViewerArgs(#onObject, #aliasResultAs, #perform, #onMember, #value)"
+             xmlns:isis="http://isis.apache.org/2010/concordion">
+        <tr>
+          <th concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          object</th>
+
+          <th concordion:set="#aliasResultAs"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">alias
+          result as</th>
+
+          <th concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">perform</th>
+
+          <th concordion:set="#onMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">on
+          member</th>
+
+          <th concordion:set="#value"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">value</th>
+
+          <th concordion:assertEquals="#result"
+              xmlns:concordion="http://www.concordion.org/2007/concordion" />
+        </tr>
+
+        <tr>
+          <td>tomEmployee</td>
+
+          <td>tomsClaim1</td>
+
+          <td>invoke action</td>
+
+          <td>New Claim</td>
+
+          <td />
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomsClaim1</td>
+
+          <td />
+
+          <td>set property</td>
+
+          <td>Description</td>
+
+          <td>claim 1</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomsClaim1</td>
+
+          <td />
+
+          <td>set property</td>
+
+          <td>Date</td>
+
+          <td>14-02-2007</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomsClaim1</td>
+
+          <td />
+
+          <td>save</td>
+
+          <td />
+
+          <td />
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomEmployee</td>
+
+          <td>tomsClaim2</td>
+
+          <td>invoke action</td>
+
+          <td>New Claim</td>
+
+          <td />
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomsClaim2</td>
+
+          <td />
+
+          <td>set property</td>
+
+          <td>Description</td>
+
+          <td>claim 2</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomsClaim2</td>
+
+          <td />
+
+          <td>set property</td>
+
+          <td>Date</td>
+
+          <td>18-02-2007</td>
+
+          <td>ok</td>
+        </tr>
+
+        <tr>
+          <td>tomsClaim2</td>
+
+          <td />
+
+          <td>save</td>
+
+          <td />
+
+          <td />
+
+          <td>ok</td>
+        </tr>
+      </table>
+
+      <p>run viewer</p>
+
+      <h2>Then</h2>
+
+      <p>Tom now has claims:</p>
+
+      <ul>
+        <li>
+          <p
+          isis:execute="#result=usingIsisViewer(#onObject,#tomsClaimsAfterwards, #perform, #usingMember)"
+          xmlns:isis="http://isis.apache.org/2010/concordion">Using <span
+          concordion:set="#onObject"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">tomEmployee</span>,
+          <span concordion:set="#perform"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">invoke
+          action</span> <span concordion:set="#usingMember"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Claims
+          For</span> and alias the resulting list as <span
+          concordion:set="#tomsClaimsAfterwards"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">tomsClaimsAfterwards</span>;
+          <span concordion:assertEquals="#result"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">ok</span>.</p>
+        </li>
+
+        <li>
+          <p
+          concordion:execute="#result=checkCollectionIsNotEmpty(#tomsClaimsAfterwards)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
+          that the tom's claims afterwards is not empty; <span
+          concordion:assertEquals="#result">ok</span>.</p>
+        </li>
+
+        <li>
+          <p
+          concordion:execute="#result=checkCollectionSize(#tomsClaimsAfterwards,#expectedSize)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
+          that tom has <span concordion:set="#expectedSize">2</span> claims;
+          <span concordion:assertEquals="#result">ok</span>.</p>
+        </li>
+
+        <li>
+          <p
+          concordion:execute="#result=checkCollectionContains(#tomsClaimsAfterwards,#tomsClaim1)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
+          that tom's set of claims contains <span
+          concordion:set="#tomsClaim1">tomsClaim1</span>; <span
+          concordion:assertEquals="#result">ok</span>.</p>
+        </li>
+
+        <li>
+          <p
+          concordion:execute="#result=checkCollectionDoesNotContain(#tomsClaimsAfterwards,#tomEmployee)"
+          xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
+          that tom's set of claims does NOT contain <span
+          concordion:set="#tomEmployee">tomEmployee</span>; himself (duh!);
+          <span concordion:assertEquals="#result">ok</span>.</p>
+        </li>
+
+        <li>
+          <p>Tom has these claims (checking using Isis' checkList):</p>
+
+          <table isis:execute="#result=checkList(#tomsClaimsAfterwards, #title)"
+                 xmlns:isis="http://isis.apache.org/2010/concordion">
+            <tr>
+              <th concordion:set="#title"
+              xmlns:concordion="http://www.concordion.org/2007/concordion">title</th>
+
+              <th concordion:assertEquals="#result"
+                  xmlns:concordion="http://www.concordion.org/2007/concordion" />
+            </tr>
+
+            <tr>
+              <td>New - 2007-02-18</td>
+
+              <td>ok</td>
+            </tr>
+
+            <tr>
+              <td>New - 2007-02-14</td>
+
+              <td>ok</td>
+            </tr>
+          </table>
+        </li>
+
+        <li>
+          <p>Tom has these claims (checking using Concordion's
+          verifyRows):</p>
+
+          <table concordion:verifyRows="#claimPojo: getListContents(#tomsClaimsAfterwards)"
+                 xmlns:concordion="http://www.concordion.org/2007/concordion">
+            <tr>
+              <th
+              concordion:assertEquals="#claimPojo.description">Description</th>
+
+              <th concordion:assertEquals="#claimPojo.date">Date</th>
+            </tr>
+
+            <tr>
+              <td>claim 2</td>
+
+              <td>2007-02-18</td>
+            </tr>
+
+            <tr>
+              <td>claim 1</td>
+
+              <td>2007-02-14</td>
+            </tr>
+          </table>
+        </li>
+      </ul>
+
+      <!-- 
+<p concordion:execute="runViewer()">run viewer</p>
+ -->
+    </div>
+  </body>
+</html>

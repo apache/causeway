@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.dnd.view;
 
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.util.Properties;
 
 public final class ViewConstants {

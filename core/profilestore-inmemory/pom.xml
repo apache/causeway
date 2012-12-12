@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-profilestore</artifactId>
-	<name>Isis Core In-memory ProfileStore</name>
+	<name>Isis Core (In-memory) ProfileStore</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

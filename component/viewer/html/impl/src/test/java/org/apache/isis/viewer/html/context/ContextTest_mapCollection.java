@@ -36,14 +36,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManagerSpi;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.refs.SimpleEntity;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.tck.dom.refs.SimpleEntity;
 import org.apache.isis.viewer.html.action.ActionException;
 
 public class ContextTest_mapCollection {

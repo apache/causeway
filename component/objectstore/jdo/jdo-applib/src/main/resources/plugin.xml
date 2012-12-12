@@ -25,42 +25,42 @@
         	persistent="true" 
         	dfg="true" 
         	embedded="true"
-            long-converter="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisDateConverter"/>
+            long-converter="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisDateConverter"/>
         <java-type 
             name="org.apache.isis.applib.value.DateTime" 
             persistent="true" 
             dfg="true" 
             embedded="true"
-            long-converter="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisDateTimeConverter"/>
+            long-converter="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisDateTimeConverter"/>
 
         <java-type 
             name="org.apache.isis.applib.value.Blob" 
             persistent="true" 
             dfg="false" 
             embedded="true"
-            string-converter="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisBlobConverter"/>
+            string-converter="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisBlobConverter"/>
         <java-type 
             name="org.apache.isis.applib.value.Clob" 
             persistent="true" 
             dfg="false" 
             embedded="true"
-            string-converter="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisClobConverter"/>
+            string-converter="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisClobConverter"/>
     </extension>
 
     <extension point="org.datanucleus.store_mapping">
         <mapping 
             java-type="org.apache.isis.applib.value.Date" 
-            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisDateMapping"/>
+            mapping-class="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisDateMapping"/>
         <mapping 
             java-type="org.apache.isis.applib.value.DateTime" 
-            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisDateTimeMapping"/>
+            mapping-class="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisDateTimeMapping"/>
 
         <mapping 
             java-type="org.apache.isis.applib.value.Blob" 
-            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisBlobMapping"/>
+            mapping-class="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisBlobMapping"/>
         <mapping 
             java-type="org.apache.isis.applib.value.Clob" 
-            mapping-class="org.apache.isis.runtimes.dflt.objectstores.jdo.datanucleus.valuetypes.IsisClobMapping"/>
+            mapping-class="org.apache.isis.core.objectstore.jdo.datanucleus.valuetypes.IsisClobMapping"/>
 
     </extension>
 </plugin>

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer;
 
-import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 public final class Constants {
 

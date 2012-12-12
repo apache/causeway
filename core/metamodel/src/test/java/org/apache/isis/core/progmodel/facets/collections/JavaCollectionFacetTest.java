@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,8 +36,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.collections.collection.JavaCollectionFacet;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class JavaCollectionFacetTest {
 

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.Form;

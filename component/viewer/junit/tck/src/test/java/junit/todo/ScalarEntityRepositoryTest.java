@@ -31,8 +31,8 @@ import junit.AbstractTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
-import org.apache.isis.tck.fixture.scalars.PrimitiveValuedEntityFixture;
+import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.core.tck.fixture.scalars.PrimitiveValuedEntityFixture;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 

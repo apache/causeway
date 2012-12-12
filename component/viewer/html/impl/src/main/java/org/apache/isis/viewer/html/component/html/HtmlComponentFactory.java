@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;

@@ -28,16 +28,16 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.tck.dom.claimapp.employees.Employee;
+import org.apache.isis.core.tck.dom.claimapp.employees.EmployeeRepository;
+import org.apache.isis.core.tck.dom.claimapp.employees.EmployeeRepositoryImpl;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
-import org.apache.isis.tck.dom.claimapp.employees.Employee;
-import org.apache.isis.tck.dom.claimapp.employees.EmployeeRepository;
-import org.apache.isis.tck.dom.claimapp.employees.EmployeeRepositoryImpl;
 
 public class WrappedFactoryDefaultTest_wrappedObject {
 

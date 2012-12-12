@@ -30,7 +30,8 @@ import org.jmock.Sequence;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStoreTransactionManagerAbstractTestCase {
 

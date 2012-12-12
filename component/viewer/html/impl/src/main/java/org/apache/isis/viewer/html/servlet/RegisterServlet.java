@@ -30,9 +30,9 @@ import com.google.common.base.Objects;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsPassword;
-import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.RegisterFormPage;
+import org.apache.isis.viewer.html.monitoring.servermonitor.Monitor;
 
 public class RegisterServlet extends AbstractHtmlViewerServlet {
 

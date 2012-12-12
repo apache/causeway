@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyAbstract;
+import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 /**
  * Implements a home-grown protocol, whereby the user id and roles are passed

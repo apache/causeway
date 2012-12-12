@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
-import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil;
+import org.apache.isis.core.runtime.userprofile.UserProfilesDebugUtil;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.service.PerspectiveContent;
 import org.apache.isis.viewer.dnd.view.Content;

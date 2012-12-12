@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.ScenarioCell;

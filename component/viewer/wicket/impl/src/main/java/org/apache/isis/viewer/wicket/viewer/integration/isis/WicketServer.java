@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
  * {@link DeploymentType} for production usage.

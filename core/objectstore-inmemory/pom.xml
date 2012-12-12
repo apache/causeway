@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-objectstore</artifactId>
-	<name>Isis Core In-Memory ObjectStore</name>
+	<name>Isis Core (In-Memory) ObjectStore</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

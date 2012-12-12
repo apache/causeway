@@ -29,8 +29,8 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectStoreTransactionManagerAbstractTestCase {
 

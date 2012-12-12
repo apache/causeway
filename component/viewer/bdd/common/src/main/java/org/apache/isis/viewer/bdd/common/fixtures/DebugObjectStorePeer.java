@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.bdd.common.fixtures;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 

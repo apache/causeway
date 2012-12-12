@@ -25,8 +25,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.Persistor;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the

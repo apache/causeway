@@ -39,7 +39,7 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which

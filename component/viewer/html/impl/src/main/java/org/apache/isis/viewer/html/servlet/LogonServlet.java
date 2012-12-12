@@ -30,15 +30,15 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsPassword;
-import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategy;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.webapp.IsisSessionFilter;
+import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.context.Context;
+import org.apache.isis.viewer.html.monitoring.servermonitor.Monitor;
 
 public class LogonServlet extends AbstractHtmlViewerServlet {
 

@@ -24,7 +24,6 @@ import java.util.HashSet;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,9 +46,10 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
-import org.apache.isis.core.testsupport.jmock.InjectIntoJMockAction;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.InjectIntoJMockAction;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public abstract class ObjectReflectorDefaultTestAbstract {
 

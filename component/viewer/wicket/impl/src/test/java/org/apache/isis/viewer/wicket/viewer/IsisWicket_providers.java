@@ -31,8 +31,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
 
 public class IsisWicket_providers {
 

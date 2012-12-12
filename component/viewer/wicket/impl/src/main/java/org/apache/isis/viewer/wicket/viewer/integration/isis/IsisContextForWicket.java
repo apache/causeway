@@ -32,11 +32,11 @@ import org.apache.wicket.Session;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.runtimes.dflt.runtime.system.ContextCategory;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession;
-import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
-import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.ContextCategory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 
 /**

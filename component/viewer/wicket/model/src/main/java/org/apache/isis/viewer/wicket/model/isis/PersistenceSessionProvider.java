@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.isis;
 
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.Persistor;
 
 public interface PersistenceSessionProvider {
 

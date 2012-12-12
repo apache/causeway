@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 
 public class PojoAdapterBuilder {
 

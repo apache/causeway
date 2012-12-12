@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.sysout.SystemPrinter;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.MenuOptions;
 import org.apache.isis.viewer.dnd.view.Toolkit;

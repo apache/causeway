@@ -19,24 +19,21 @@
 
 package org.apache.isis.example.claims.junit;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.example.claims.dom.claim.ClaimRepository;
-import org.apache.isis.example.claims.dom.claim.ClaimRepositoryDefault;
-import org.apache.isis.example.claims.dom.employee.Employee;
-import org.apache.isis.example.claims.dom.employee.EmployeeRepository;
-import org.apache.isis.example.claims.dom.employee.EmployeeRepositoryDefault;
+import org.apache.isis.example.application.claims.dom.claim.ClaimRepository;
+import org.apache.isis.example.application.claims.dom.employee.Employee;
+import org.apache.isis.example.application.claims.dom.employee.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
-@Services({ @Service(ClaimRepositoryDefault.class), @Service(EmployeeRepositoryDefault.class) })
+@Services({ @Service(ClaimRepository.class), @Service(EmployeeRepository.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;

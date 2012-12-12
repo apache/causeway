@@ -22,7 +22,6 @@ package org.apache.isis.core.progmodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,8 +38,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest.Customer;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public abstract class AbstractFacetFactoryJUnit4TestCase {
 

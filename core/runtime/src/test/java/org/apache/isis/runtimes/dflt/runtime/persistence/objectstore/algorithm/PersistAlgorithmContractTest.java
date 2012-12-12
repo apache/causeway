@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
 import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,10 +28,13 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.NotPersistableException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.persistence.NotPersistableException;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Type;
