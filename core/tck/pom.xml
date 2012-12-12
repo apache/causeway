@@ -26,7 +26,6 @@
         <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.isis.core</groupId>
     <artifactId>isis-tck</artifactId>
 
     <name>Isis Core TCK App</name>

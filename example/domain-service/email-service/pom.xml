@@ -22,16 +22,17 @@
     <modelVersion>4.0.0</modelVersion>
 
 	<parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>isis-parent</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../isis-parent/pom.xml</relativePath>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
+		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
-    <name>Email service</name>
     <groupId>org.apache.isis.example.domainservice</groupId>
     <artifactId>email-domainservice</artifactId>
     <version>0.3.1-SNAPSHOT</version>
+
+    <name>Email service</name>
     
     <!-- used in Site generation for relative references. -->
     <url>http://isis.apache.org/${relativeUrl}</url>

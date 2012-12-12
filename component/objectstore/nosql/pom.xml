@@ -21,14 +21,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
-		<relativePath>../../../isis-parent/pom.xml</relativePath>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
+		<version>0.3.1-SNAPSHOT</version>
+		<relativePath>../../../core/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.objectstore</groupId>
     <artifactId>isis-nosql-objectstore</artifactId>
+    <version>0.3.1-SNAPSHOT</version>
 
     <name>Isis NOSQL ObjectStore</name>
 
