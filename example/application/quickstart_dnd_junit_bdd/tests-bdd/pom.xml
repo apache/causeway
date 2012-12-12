@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>quickstart_dnd_junit_bdd</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>quickstart_dnd_junit_bdd-tests-bdd</artifactId>
@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
             <artifactId>quickstart_dnd_junit_bdd-dom</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <!-- isis -->
@@ -62,29 +62,29 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-file-security</artifactId>
+            <artifactId>isis-security-file</artifactId>
         </dependency>
 
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-bdd-viewer-concordion</artifactId>
+            <artifactId>isis-viewer-bdd-concordion</artifactId>
             <scope>test</scope>
         </dependency>
 

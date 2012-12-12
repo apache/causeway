@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>claims</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>claims-viewer-bdd</artifactId>
@@ -67,32 +67,32 @@
         <!-- isis default runtime -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-xml-objectstore</artifactId>
+            <artifactId>isis-objectstore-xml</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
 
 
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-bdd-viewer-concordion</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-viewer-bdd-concordion</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

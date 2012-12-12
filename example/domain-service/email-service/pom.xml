@@ -24,13 +24,13 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
     <groupId>org.apache.isis.example.domainservice</groupId>
     <artifactId>email-domainservice</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Email service</name>
     
@@ -59,8 +59,8 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-core-applib</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         
         <dependency>

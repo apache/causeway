@@ -23,11 +23,11 @@
     <parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 	<groupId>org.apache.isis.core</groupId>
-	<artifactId>isis-webserver</artifactId>
+	<artifactId>isis-core-webserver</artifactId>
 	<name>Isis Core WebServer</name>
 
 	<properties>
@@ -67,7 +67,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
+			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
 		<dependency>

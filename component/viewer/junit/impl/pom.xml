@@ -22,11 +22,11 @@
 
     <parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>isis-junit-viewer</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+		<artifactId>isis-viewer-junit</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-junit-viewer-impl</artifactId>
+    <artifactId>isis-viewer-junit-impl</artifactId>
 
     <name>Isis JUnit Viewer Implementation</name>
 
@@ -34,7 +34,7 @@
         <siteBaseDir>..</siteBaseDir>
         <relativeUrl>impl</relativeUrl>
 
-        <wrapper-progmodel.version>0.3.1-SNAPSHOT</wrapper-progmodel.version>
+        <wrapper-progmodel.version>1.0.0-SNAPSHOT</wrapper-progmodel.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -68,26 +68,26 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.progmodel</groupId>
-            <artifactId>isis-wrapper-progmodel-metamodel</artifactId>
+            <artifactId>isis-progmodel-wrapper-metamodel</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
 
         <dependency>
@@ -103,7 +103,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

@@ -23,13 +23,13 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-    <artifactId>isis-bdd-viewer</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <artifactId>isis-viewer-bdd</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     
     <name>Isis BDD Viewer</name>
 
@@ -115,26 +115,26 @@ archetype includes this explicit dependency.
             <!-- BDD Viewer -->
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-bdd-viewer-common</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-viewer-bdd-common</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-bdd-viewer-common</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-viewer-bdd-common</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
 
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-bdd-viewer-concordion</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-viewer-bdd-concordion</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-bdd-viewer-concordion</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-viewer-bdd-concordion</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -143,19 +143,19 @@ archetype includes this explicit dependency.
 
 			<dependency>
 			    <groupId>org.apache.isis.security</groupId>
-			    <artifactId>isis-file-security</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
+			    <artifactId>isis-security-file</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
         
 			<dependency>
 			    <groupId>org.apache.isis.core</groupId>
 			    <artifactId>isis-metamodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <version>1.0.0-SNAPSHOT</version>
 			</dependency>
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-noop-security</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-security</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 
             <!-- 3rd party dependencies -->
@@ -185,18 +185,18 @@ archetype includes this explicit dependency.
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-runtime</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-runtime</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-inmemory-objectstore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-objectstore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-inmemory-profilestore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-profilestore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

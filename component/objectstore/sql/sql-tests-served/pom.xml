@@ -23,11 +23,11 @@
 
     <parent>
         <groupId>org.apache.isis.objectstore</groupId>
-        <artifactId>isis-sql-objectstore</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <artifactId>isis-objectstore-sql</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-sql-objectstore-tests-served</artifactId>
+    <artifactId>isis-objectstore-sql-tests-served</artifactId>
 
     <name>Isis SQL ObjectStore Integration Tests - Served</name>
 
@@ -88,7 +88,7 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
 			<!-- SQL integration tests common -->
             <dependency>
 				<groupId>${project.groupId}</groupId>
-                <artifactId>isis-sql-objectstore-tests-common</artifactId>
+                <artifactId>isis-objectstore-sql-tests-common</artifactId>
 				<version>${project.version}</version>
             </dependency>
 
@@ -110,23 +110,23 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-cglib-bytecode</artifactId>
+        	<artifactId>isis-core-bytecode-cglib</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -134,17 +134,17 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
 		<!-- Isis Object store -->
         <dependency>
 		<groupId>${project.groupId}</groupId>
-            <artifactId>isis-sql-objectstore-impl</artifactId>
+            <artifactId>isis-objectstore-sql-impl</artifactId>
         </dependency>
 
 		<!-- Test common -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>isis-sql-objectstore-tests-common</artifactId>
+            <artifactId>isis-objectstore-sql-tests-common</artifactId>
         </dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>isis-sql-objectstore-tests-common</artifactId>
+			<artifactId>isis-objectstore-sql-tests-common</artifactId>
             <type>test-jar</type>
         	<scope>test</scope>
 		</dependency>

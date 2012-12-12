@@ -22,11 +22,11 @@
 
 	<parent>
         <groupId>org.apache.isis.viewer</groupId>
-	    <artifactId>isis-scimpi-viewer</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+	    <artifactId>isis-viewer-scimpi</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-scimpi-viewer-dispatcher</artifactId>
+	<artifactId>isis-viewer-scimpi-dispatcher</artifactId>
 
 	<name>Isis Scimpi Viewer Dispatcher</name>
 
@@ -67,7 +67,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
+			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
         <dependency>

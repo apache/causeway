@@ -27,7 +27,7 @@
 	<parent>
     	<groupId>org.apache.isis.example.application</groupId>
     	<artifactId>claims</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>claims-viewer-dnd</artifactId>
@@ -79,53 +79,53 @@
 		<!-- isis default runtime -->
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-webserver</artifactId>
+            <artifactId>isis-core-webserver</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-xml-objectstore</artifactId>
+            <artifactId>isis-objectstore-xml</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.profilestore</groupId>
-            <artifactId>isis-xml-profilestore</artifactId>
+            <artifactId>isis-profilestore-xml</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
         
         <!-- isis viewers -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-dnd-viewer-impl</artifactId>
+			<artifactId>isis-viewer-dnd-impl</artifactId>
 		</dependency>
         
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-html-viewer-impl</artifactId>
+			<artifactId>isis-viewer-html-impl</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-restfulobjects-viewer-impl</artifactId>
+            <artifactId>isis-viewer-restfulobjects-impl</artifactId>
         </dependency>
 
         <!-- JUnit Viewer dependencies -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-junit-viewer-impl</artifactId>
+            <artifactId>isis-viewer-junit-impl</artifactId>
             <scope>test</scope>
         </dependency>
         
@@ -310,12 +310,12 @@
 				<!-- Wicket Viewer -->
 				<dependency>
 					<groupId>org.apache.isis.viewer</groupId>
-					<artifactId>isis-wicket-viewer-impl</artifactId>
+					<artifactId>isis-viewer-wicket-impl</artifactId>
 				</dependency>
 				<!-- to run using WebServer -->
 				<dependency>
 				    <groupId>org.apache.isis.core</groupId>
-				    <artifactId>isis-webserver</artifactId>
+				    <artifactId>isis-core-webserver</artifactId>
 				</dependency>
 				<!--  JETTY DEPENDENCIES FOR RUNNING webapp viewers in packaged JAR -->
 				<dependency>

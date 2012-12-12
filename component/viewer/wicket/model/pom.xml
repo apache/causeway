@@ -23,11 +23,11 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>isis-wicket-viewer</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<artifactId>isis-viewer-wicket</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-wicket-viewer-model</artifactId>
+	<artifactId>isis-viewer-wicket-model</artifactId>
 	<name>Isis Wicket Viewer Model</name>
 
 	<properties>
@@ -57,7 +57,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-runtime</artifactId>
+			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
 		<!-- LOGGING DEPENDENCIES - LOG4J -->

@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>claims</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>claims-objstore-jdo</artifactId>
@@ -49,7 +49,7 @@
 
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-jdo-objectstore-datanucleus</artifactId>
+            <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
         </dependency>
 		
 	</dependencies>

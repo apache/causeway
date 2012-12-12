@@ -15,13 +15,13 @@
     <parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
    </parent>
 
     <groupId>org.apache.isis.objectstore</groupId>
-    <artifactId>isis-sql-objectstore</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <artifactId>isis-objectstore-sql</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Isis SQL ObjectStore</name>
 
@@ -88,79 +88,79 @@
 	    	<!-- for benefit of application developers, using scope=import -->
             <dependency>
                 <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-impl</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-objectstore-sql-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-tests-common</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-objectstore-sql-tests-common</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-tests-common</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-objectstore-sql-tests-common</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-sql-objectstore-tests-served</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-objectstore-sql-tests-served</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
 
 
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-runtime</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-runtime</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-unittestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-unittestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 	
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-integtestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-integtestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 	        
 	        <!--  Required for TestProxy -->
 			<!-- Isis defaults -->
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-inmemory-objectstore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-objectstore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-inmemory-objectstore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-objectstore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
 	            <type>test-jar</type>
 	            <scope>test</scope>
 	        </dependency>
 	        <dependency>
 	        	<groupId>org.apache.isis.core</groupId>
-	        	<artifactId>isis-cglib-bytecode</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+	        	<artifactId>isis-core-bytecode-cglib</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
 	            <scope>test</scope>
 	        </dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
-	            <artifactId>isis-tck-dom</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-core-tck-dom</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 
 	        <!-- Required to support the XML cross-test -->
 	        <dependency>
 	            <groupId>org.apache.isis.objectstore</groupId>
-	            <artifactId>isis-xml-objectstore</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-objectstore-xml</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 	
 

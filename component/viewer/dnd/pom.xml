@@ -23,13 +23,13 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-dnd-viewer</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+	<artifactId>isis-viewer-dnd</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
 	<name>Isis Drag-n-Drop Viewer</name>
 	<packaging>pom</packaging>
@@ -62,58 +62,58 @@
 	    	<!-- for benefit of application developers, using scope=import -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-dnd-viewer-impl</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-viewer-dnd-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-dnd-viewer-tck</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-viewer-dnd-tck</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
 
 			<!-- isis core -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-unittestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-unittestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-runtime</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-runtime</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-integtestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-integtestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
     
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-runtime</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-runtime</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
     
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-inmemory-objectstore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-objectstore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
     
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-cglib-bytecode</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-bytecode-cglib</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
     

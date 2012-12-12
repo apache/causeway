@@ -23,7 +23,7 @@
 	<parent>
     	<groupId>org.apache.isis.example.application</groupId>
     	<artifactId>quickstart</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>quickstart-dom</artifactId>
@@ -33,7 +33,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
+			<artifactId>isis-core-applib</artifactId>
 		</dependency>
 	</dependencies>
     

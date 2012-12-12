@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>quickstart</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>quickstart-viewer-scimpi</artifactId>
@@ -99,7 +99,7 @@
         <!-- isis viewer -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-scimpi-viewer-servlet</artifactId>
+            <artifactId>isis-viewer-scimpi-servlet</artifactId>
         </dependency>
 
 
@@ -112,31 +112,31 @@
         <!-- isis default runtime -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-xml-objectstore</artifactId>
+            <artifactId>isis-objectstore-xml</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         
         <!-- isis defaults (other) -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
         
         <!-- to run using WebServer (optional) -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-webserver</artifactId>
+            <artifactId>isis-core-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

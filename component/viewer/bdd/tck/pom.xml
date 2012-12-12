@@ -21,13 +21,13 @@
 
     <parent>
         <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-tck</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <artifactId>isis-core-tck</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-bdd-viewer-concordion-tck</artifactId>
+	<artifactId>isis-viewer-bdd-concordion-tck</artifactId>
 
 	<name>Isis BDD Viewer (Concordion) TCK tests</name>
 
@@ -60,8 +60,8 @@
 		<!-- this project's dependencies -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-tck-fixture</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-core-tck-fixture</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -71,28 +71,28 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
 
 
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-bdd-viewer-concordion</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-viewer-bdd-concordion</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

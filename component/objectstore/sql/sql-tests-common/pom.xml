@@ -23,11 +23,11 @@
 
     <parent>
         <groupId>org.apache.isis.objectstore</groupId>
-        <artifactId>isis-sql-objectstore</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <artifactId>isis-objectstore-sql</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-sql-objectstore-tests-common</artifactId>
+    <artifactId>isis-objectstore-sql-tests-common</artifactId>
 
     <name>Isis SQL ObjectStore Integration Tests - Common</name>
 
@@ -35,7 +35,7 @@
 	    <siteBaseDir>..</siteBaseDir>
 		<relativeUrl>sql-tests-common/</relativeUrl>
 
-        <xml-objectstore.version>0.3.1-SNAPSHOT</xml-objectstore.version>
+        <xml-objectstore.version>1.0.0-SNAPSHOT</xml-objectstore.version>
         <hsqldb.version>2.2.9</hsqldb.version>
     </properties>
 
@@ -102,46 +102,46 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
+            <artifactId>isis-core-unittestsupport</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-integtestsupport</artifactId>
+            <artifactId>isis-core-integtestsupport</artifactId>
         </dependency>
         
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-cglib-bytecode</artifactId>
+        	<artifactId>isis-core-bytecode-cglib</artifactId>
             <scope>test</scope>
         </dependency>
 
 		<!-- Isis Object store -->
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-sql-objectstore-impl</artifactId>
+            <artifactId>isis-objectstore-sql-impl</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-tck-dom</artifactId>
+            <artifactId>isis-core-tck-dom</artifactId>
         </dependency>
 
 
@@ -153,7 +153,7 @@
         <!-- Required to support the XML cross-test -->
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-xml-objectstore</artifactId>
+            <artifactId>isis-objectstore-xml</artifactId>
         </dependency>
 		<!-- others -->
         <dependency>

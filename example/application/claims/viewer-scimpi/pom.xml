@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>claims</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>claims-viewer-scimpi</artifactId>
@@ -59,45 +59,45 @@
 		<!-- Isis -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-scimpi-viewer-servlet</artifactId>
+			<artifactId>isis-viewer-scimpi-servlet</artifactId>
 		</dependency>
 
         <!-- isis runtime -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-xml-objectstore</artifactId>
+            <artifactId>isis-objectstore-xml</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.profilestore</groupId>
-            <artifactId>isis-xml-profilestore</artifactId>
+            <artifactId>isis-profilestore-xml</artifactId>
         </dependency>
         
         <!-- isis security implementations -->        
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-file-security</artifactId>
+            <artifactId>isis-security-file</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
         
         <!-- to run using WebServer -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-webserver</artifactId>
+            <artifactId>isis-core-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>

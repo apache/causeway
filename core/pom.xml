@@ -20,7 +20,7 @@
     </parent>
 
     <groupId>org.apache.isis.core</groupId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     
     <artifactId>isis</artifactId>
     <packaging>pom</packaging>
@@ -928,26 +928,26 @@ the MIT license [1].
             <!-- isis-unittestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-unittestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-unittestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-unittestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-unittestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
             <!-- applib -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-applib</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-applib</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-applib</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-applib</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -955,25 +955,25 @@ the MIT license [1].
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-metamodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-metamodel</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
             <!-- runtime -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-runtime</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-runtime</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-runtime</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-runtime</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -981,46 +981,46 @@ the MIT license [1].
             <!-- bytecode-cglib -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-cglib-bytecode</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-bytecode-cglib</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <!-- bytecode-javassist -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-javassist-bytecode</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-bytecode-javassist</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <!-- isis-webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-webserver</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-webserver</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <!-- isis-integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-integtestsupport</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-integtestsupport</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <!-- default implementations -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-inmemory-objectstore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-objectstore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-inmemory-profilestore</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-profilestore</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-noop-security</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
+                <artifactId>isis-core-security</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
 

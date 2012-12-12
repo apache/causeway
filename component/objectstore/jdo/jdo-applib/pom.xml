@@ -22,11 +22,11 @@
 
 	<parent>
 		<groupId>org.apache.isis.objectstore</groupId>
-		<artifactId>isis-jdo-objectstore</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<artifactId>isis-objectstore-jdo</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-jdo-objectstore-applib</artifactId>
+	<artifactId>isis-objectstore-jdo-applib</artifactId>
 	<name>Isis JDO ObjectStore AppLib</name>
 
 	<properties>
@@ -104,8 +104,8 @@
 			<!-- for DataNucleus, see below -->
 			<dependency>
 	            <groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-jdo-objectstore</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
+				<artifactId>isis-objectstore-jdo</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>						
 			</dependency>
@@ -116,7 +116,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <artifactId>isis-core-applib</artifactId>
         </dependency>
 
 		<!-- DataNucleus (horrid, but needed to run the enhancer)-->

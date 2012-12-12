@@ -23,13 +23,13 @@
     <parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-    <artifactId>isis-junit-viewer</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <artifactId>isis-viewer-junit</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Isis JUnit Viewer</name>
     <packaging>pom</packaging>
@@ -38,7 +38,7 @@
         <siteBaseDir>.</siteBaseDir>
         <relativeUrl/>
 
-        <wrapper-progmodel.version>0.3.1-SNAPSHOT</wrapper-progmodel.version>
+        <wrapper-progmodel.version>1.0.0-SNAPSHOT</wrapper-progmodel.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
@@ -64,13 +64,13 @@
 	    	<!-- for benefit of application developers, using scope=import -->
 			<dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-			    <artifactId>isis-junit-viewer-impl</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
+			    <artifactId>isis-viewer-junit-impl</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.isis.viewer</groupId>
-			    <artifactId>isis-junit-viewer-tck</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
+			    <artifactId>isis-viewer-junit-tck</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 
 
@@ -78,50 +78,50 @@
 
         	<dependency>
             	<groupId>org.apache.isis.progmodel</groupId>
-            	<artifactId>isis-wrapper-progmodel-metamodel</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<artifactId>isis-progmodel-wrapper-metamodel</artifactId>
+            	<version>1.0.0-SNAPSHOT</version>
         	</dependency>
 	
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
-            	<artifactId>isis-cglib-bytecode</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<artifactId>isis-core-bytecode-cglib</artifactId>
+            	<version>1.0.0-SNAPSHOT</version>
         	</dependency>
 	
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
-            	<artifactId>isis-inmemory-objectstore</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<artifactId>isis-core-objectstore</artifactId>
+            	<version>1.0.0-SNAPSHOT</version>
         	</dependency>
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
-            	<artifactId>isis-inmemory-profilestore</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<artifactId>isis-core-profilestore</artifactId>
+            	<version>1.0.0-SNAPSHOT</version>
         	</dependency>
 	
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
-            	<artifactId>isis-noop-security</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<artifactId>isis-core-security</artifactId>
+            	<version>1.0.0-SNAPSHOT</version>
         	</dependency>
 	
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
             	<artifactId>isis-metamodel</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<version>1.0.0-SNAPSHOT</version>
         	</dependency>
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
             	<artifactId>isis-metamodel</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<version>1.0.0-SNAPSHOT</version>
             	<type>test-jar</type>
             	<scope>test</scope>
         	</dependency>
 	
         	<dependency>
             	<groupId>org.apache.isis.core</groupId>
-            	<artifactId>isis-runtime</artifactId>
-            	<version>0.3.1-SNAPSHOT</version>
+            	<artifactId>isis-core-runtime</artifactId>
+            	<version>1.0.0-SNAPSHOT</version>
             	<type>test-jar</type>
             	<scope>test</scope>
         	</dependency>

@@ -22,11 +22,11 @@
 
 	<parent>
 		<groupId>org.apache.isis.objectstore</groupId>
-		<artifactId>isis-jdo-objectstore</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<artifactId>isis-objectstore-jdo</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-jdo-objectstore-metamodel</artifactId>
+	<artifactId>isis-objectstore-jdo-metamodel</artifactId>
 	<name>Isis JDO ObjectStore MetaModel Support</name>
 
     <properties>
@@ -40,7 +40,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.objectstore</groupId>
-			<artifactId>isis-jdo-objectstore-applib</artifactId>
+			<artifactId>isis-objectstore-jdo-applib</artifactId>
 		</dependency>
 
 		<dependency>
@@ -56,7 +56,7 @@
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
+            <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

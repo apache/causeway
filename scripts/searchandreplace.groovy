@@ -40,7 +40,38 @@ if(options.x) {
 //
 //
 def replacements = [
-"0.3.1-incubating-SNAPSHOT": "0.3.1-SNAPSHOT"
+ "integteestsupport": "integtestsupport"
+,"unitteestsupport": "unittestsupport"
+,"0.3.1-SNAPSHOT": "1.0.0-SNAPSHOT",
+//,"<artifactId>isis-applib": "<artifactId>isis-core-applib"
+//,"<artifactId>isis-cglib-bytecode": "<artifactId>isis-core-bytecode-cglib"
+//,"<artifactId>isis-javassist-bytecode": "<artifactId>isis-core-bytecode-javassist"
+//,"<artifactId>isis-inmemory-objectstore": "<artifactId>isis-core-objectstore"
+//,"<artifactId>isis-inmemory-profilestore": "<artifactId>isis-core-profilestore"
+//,"<artifactId>isis-noop-security": "<artifactId>isis-core-security"
+//,"<artifactId>isis-integtestsupport": "<artifactId>isis-core-integteestsupport"
+//,"<artifactId>isis-runtime": "<artifactId>isis-core-runtime"
+//,"<artifactId>isis-tck": "<artifactId>isis-core-tck"
+//,"<artifactId>isis-unittestsupport": "<artifactId>isis-core-unitteestsupport"
+//,"<artifactId>isis-webserver": "<artifactId>isis-core-webserver"
+//,"<artifactId>isis-jdo-objectstore": "<artifactId>isis-objectstore-jdo"
+//,"<artifactId>isis-nosql-objectstore": "<artifactId>isis-objectstore-nosql"
+//,"<artifactId>isis-sql-objectstore": "<artifactId>isis-objectstore-sql"
+//,"<artifactId>isis-xml-objectstore": "<artifactId>isis-objectstore-xml"
+//,"<artifactId>isis-sql-profilestore": "<artifactId>isis-profilestore-sql"
+//,"<artifactId>isis-xml-profilestore": "<artifactId>isis-profilestore-xml"
+//,"<artifactId>isis-groovy-progmodel": "<artifactId>isis-progmodel-groovy"
+//,"<artifactId>isis-wrapper-progmodel": "<artifactId>isis-progmodel-wrapper"
+//,"<artifactId>isis-file-security": "<artifactId>isis-security-file"
+//,"<artifactId>isis-ldap-security": "<artifactId>isis-security-ldap"
+//,"<artifactId>isis-sql-security": "<artifactId>isis-security-sql"
+//,"<artifactId>isis-bdd-viewer": "<artifactId>isis-viewer-bdd"
+//,"<artifactId>isis-dnd-viewer": "<artifactId>isis-viewer-dnd"
+//,"<artifactId>isis-junit-viewer": "<artifactId>isis-viewer-junit"
+//,"<artifactId>isis-html-viewer": "<artifactId>isis-viewer-html"
+//,"<artifactId>isis-restfulobjects-viewer": "<artifactId>isis-viewer-restfulobjects"
+//,"<artifactId>isis-scimpi-viewer": "<artifactId>isis-viewer-scimpi"
+//,"<artifactId>isis-wicket-viewer": "<artifactId>isis-viewer-wicket"
 ]
 
 
@@ -70,6 +101,7 @@ currentDir.eachFileRecurse { file ->
         }
         if(options.x) {
             file.write(newFileText);
+            fileText = newFileText;
         }
       }
     }    

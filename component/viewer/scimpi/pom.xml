@@ -23,13 +23,13 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-scimpi-viewer</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+	<artifactId>isis-viewer-scimpi</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 	
 	<name>Isis Scimpi Viewer</name>
 	
@@ -86,14 +86,14 @@
 
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
-	            <artifactId>isis-scimpi-viewer-dispatcher</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-viewer-scimpi-dispatcher</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
-	            <artifactId>isis-scimpi-viewer-servlet</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+	            <artifactId>isis-viewer-scimpi-servlet</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 	        </dependency>
 
 
@@ -101,8 +101,8 @@
 			<!-- isis core -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-runtime</artifactId>
-	            <version>0.3.1-SNAPSHOT</version>
+				<artifactId>isis-core-runtime</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
 			</dependency>
 
 

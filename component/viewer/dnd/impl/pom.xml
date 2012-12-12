@@ -22,12 +22,12 @@
 
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>isis-dnd-viewer</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<artifactId>isis-viewer-dnd</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-dnd-viewer-impl</artifactId>
+	<artifactId>isis-viewer-dnd-impl</artifactId>
 
 	<name>Isis Drag-n-Drop Viewer Implementation</name>
 
@@ -65,38 +65,38 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
+            <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-integtestsupport</artifactId>
+            <artifactId>isis-core-integtestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-runtime</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
             <scope>test</scope>
         </dependency>
 

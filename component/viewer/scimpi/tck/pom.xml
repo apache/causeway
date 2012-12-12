@@ -22,13 +22,13 @@
 
     <parent>
         <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-tck</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <artifactId>isis-core-tck</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-scimpi-viewer-tck</artifactId>
+	<artifactId>isis-viewer-scimpi-tck</artifactId>
 	<name>Isis Scimpi Viewer TCK tests</name>
 	
 	<properties>
@@ -54,64 +54,64 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-tck-dom</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-core-tck-dom</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-tck-fixture</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-core-tck-fixture</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
 		<!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-scimpi-viewer-servlet</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+			<artifactId>isis-viewer-scimpi-servlet</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
         <!-- isis runtime -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
         
         <!-- to run using WebServer -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-webserver</artifactId>
+            <artifactId>isis-core-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-xml-objectstore</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-objectstore-xml</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.profilestore</groupId>
-            <artifactId>isis-xml-profilestore</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-profilestore-xml</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-file-security</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-security-file</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

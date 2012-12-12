@@ -21,13 +21,13 @@
 
 	<parent>
     	<groupId>org.apache.isis.core</groupId>
-    	<artifactId>isis-tck</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+    	<artifactId>isis-core-tck</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
 	</parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-junit-viewer-tck</artifactId>
+	<artifactId>isis-viewer-junit-tck</artifactId>
 	<name>Isis JUnit Tests TCK tests</name>
 
     <properties>
@@ -43,8 +43,8 @@
 		<!-- this project's dependencies -->
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-tck-fixture</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-core-tck-fixture</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -55,27 +55,27 @@
         <!-- isis default runtime -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-cglib-bytecode</artifactId>
+            <artifactId>isis-core-bytecode-cglib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-objectstore</artifactId>
+            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-inmemory-profilestore</artifactId>
+            <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-noop-security</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
 
         <!-- isis viewers -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-junit-viewer-impl</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <artifactId>isis-viewer-junit-impl</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

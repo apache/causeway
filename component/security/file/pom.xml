@@ -23,13 +23,13 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.security</groupId>
-	<artifactId>isis-file-security</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+	<artifactId>isis-security-file</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
 	<name>Isis File Security</name>
 
@@ -71,8 +71,8 @@
     	<dependencies>
 			<dependency>
 			    <groupId>org.apache.isis.security</groupId>
-			    <artifactId>isis-file-security</artifactId>
-				<version>0.3.1-SNAPSHOT</version>
+			    <artifactId>isis-security-file</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
     	</dependencies>
     </dependencyManagement>
@@ -80,13 +80,13 @@
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-runtime</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		    <artifactId>isis-core-runtime</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-runtime</artifactId>
-			<version>0.3.1-SNAPSHOT</version>
+		    <artifactId>isis-core-runtime</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>
