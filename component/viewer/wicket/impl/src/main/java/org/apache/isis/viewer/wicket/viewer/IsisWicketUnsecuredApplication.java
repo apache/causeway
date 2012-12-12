@@ -48,7 +48,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.core.runtime.runner.IsisModule;
+import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -121,17 +121,17 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         // 6.0.0 rather than overriding getRequestCycleSettings
         // TODO: reinstate REDIRECT_TO_RENDER once WICKET-4773 implemented (Wicket 6.1.0)
         getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_BUFFER);
-        // 6.0.0 instead of subclassing newRequestCycle 
+        // 6.0.0 instead of subclassing newRequestCycle
         getRequestCycleListeners().add(new WebRequestCycleForIsis());
 
-        
-        
+
+
         getResourceSettings().setParentFolderPlaceholder("$up$");
         final DeploymentType deploymentType = determineDeploymentType();
 
         final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
 
-        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder);
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
 
@@ -211,7 +211,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
 //     * Wicket's own {@link RequestCycle}, hooking in to provide session and
 //     * transaction management across potentially multiple concurrent requests
 //     * for the same Wicket session.
-//     * 
+//     *
 //     * <p>
 //     * In general, it shouldn't be necessary to override this method.
 //     */
@@ -223,7 +223,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     /**
      * Installs a {@link ConverterLocator} preconfigured with a number of
      * implementations to support Isis specific objects.
-     * 
+     *
      * <p>
      * In general, it shouldn't be necessary to override this method.
      */
@@ -254,7 +254,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
 
     /**
      * Access to other page types.
-     * 
+     *
      * <p>
      * Non-final only for testing purposes; should not typically be overridden.
      */
@@ -281,11 +281,11 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         return IsisContext.getAuthenticationSession();
     }
 
-    
+
     // /////////////////////////////////////////////////
     // *Provider impl.
     // /////////////////////////////////////////////////
-    
+
     @Override
     public void injectInto(final Object candidate) {
         if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {

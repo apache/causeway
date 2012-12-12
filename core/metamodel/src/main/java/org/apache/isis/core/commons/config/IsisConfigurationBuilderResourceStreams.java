@@ -21,20 +21,17 @@ package org.apache.isis.core.commons.config;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.log4j.Logger;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 /**
  * Adapter for {@link IsisConfigurationBuilder}, loading the specified
@@ -47,9 +44,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 public class IsisConfigurationBuilderResourceStreams implements IsisConfigurationBuilder {
 
     private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderResourceStreams.class);
-
-    private final Set<String> configurationResourcesFound = Sets.newLinkedHashSet();
-    private final Set<String> configurationResourcesNotFound = Sets.newLinkedHashSet();
     
     static class ConfigurationResourceAndPolicy {
         private final String configurationResource;
@@ -74,20 +68,12 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         }
     }
 
+    private final Set<String> configurationResourcesFound = Sets.newLinkedHashSet();
+    private final Set<String> configurationResourcesNotFound = Sets.newLinkedHashSet();
     private final ResourceStreamSource resourceStreamSource;
-
+    private final IsisConfigurationDefault configuration;
     private final List<ConfigurationResourceAndPolicy> configurationResources = new ArrayList<ConfigurationResourceAndPolicy>();
-    private final Properties additionalProperties = new Properties();
-    private boolean includeSystemProperties = false;
-
-    /**
-     * Most recent snapshot of {@link IsisConfiguration} obtained from
-     * {@link #configurationLoader}.
-     * 
-     * <p>
-     * Whenever further configuration is merged in, this cache is invalidated.
-     */
-    private IsisConfiguration cachedConfiguration;
+    private boolean locked;
 
     // ////////////////////////////////////////////////////////////
     // Constructor, initialization
@@ -114,13 +100,13 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
 
     public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource resourceStreamSource) {
         this.resourceStreamSource = resourceStreamSource;
-        addDefaultConfigurationResources();
+        configuration = new IsisConfigurationDefault(resourceStreamSource);
     }
 
     /**
      * May be overridden by subclasses if required.
      */
-    protected void addDefaultConfigurationResources() {
+    public void addDefaultConfigurationResources() {
         addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, NotFoundPolicy.FAIL_FAST);
         addConfigurationResource(ConfigurationConstants.WEB_CONFIG_FILE, NotFoundPolicy.CONTINUE);
     }
@@ -152,13 +138,9 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
      */
     @Override
     public synchronized void addConfigurationResource(final String configurationResource, final NotFoundPolicy notFoundPolicy) {
+        LOG.debug("looking for properties file " + configurationResource);
+        loadConfigurationResource(configuration, new ConfigurationResourceAndPolicy(configurationResource, notFoundPolicy));
         configurationResources.add(new ConfigurationResourceAndPolicy(configurationResource, notFoundPolicy));
-        invalidateCache();
-    }
-
-    public synchronized void setIncludeSystemProperties(final boolean includeSystemProperties) {
-        this.includeSystemProperties = includeSystemProperties;
-        invalidateCache();
     }
 
     /**
@@ -166,29 +148,16 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
      */
     @Override
     public synchronized void add(final String key, final String value) {
-        if (key == null || value == null) {
-            return;
+        if (locked) {
+            throw new IsisException("Configuration has been locked and cannot be changed");
         }
-        additionalProperties.setProperty(key, value);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("added " + key + "=" + value);
-        }
-        invalidateCache();
+        configuration.add(key, value);
     }
 
-    /**
-     * Adds additional properties.
-     */
-    @Override
-    public synchronized void add(final Properties properties) {
-        final Enumeration<?> keys = properties.propertyNames();
-        while (keys.hasMoreElements()) {
-            final String key = (String) keys.nextElement();
-            add(key, properties.getProperty(key));
-        }
-        invalidateCache();
+    public void lockConiguration() {
+        locked = true;
     }
-
+    
     // ////////////////////////////////////////////////////////////
     // getConfiguration
     // ////////////////////////////////////////////////////////////
@@ -198,32 +167,13 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
      */
     @Override
     public synchronized IsisConfiguration getConfiguration() {
-        if (cachedConfiguration != null) {
-            return cachedConfiguration;
-        }
-
-        final IsisConfigurationDefault configuration = new IsisConfigurationDefault(getResourceStreamSource());
-        loadConfigurationResources(configuration);
-        // TODO: this hack should move elsewhere, where the DeploymentType is
-        // known.
-        addShowExplorationOptionsIfNotSpecified(configuration);
-        addSystemPropertiesIfRequested(configuration);
-        addAdditionalProperties(configuration);
-        return cachedConfiguration = configuration;
-    }
-
-    private void loadConfigurationResources(final IsisConfigurationDefault configuration) {
-        for (final ConfigurationResourceAndPolicy configResourceAndPolicy : configurationResources) {
-            loadConfigurationResource(configuration, configResourceAndPolicy);
-        }
-    }
+        return configuration;
+     }
 
     private void loadConfigurationResource(final IsisConfigurationDefault configuration, final ConfigurationResourceAndPolicy configResourceAndPolicy) {
         final String configurationResource = configResourceAndPolicy.getConfigurationResource();
         final NotFoundPolicy notFoundPolicy = configResourceAndPolicy.getNotFoundPolicy();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("loading configuration resource: " + configurationResource + ", notFoundPolicy: " + notFoundPolicy);
-        }
+        LOG.debug("checking availability of configuration resource: " + configurationResource + ", notFoundPolicy: " + notFoundPolicy);
         loadConfigurationResource(configuration, configurationResource, notFoundPolicy);
     }
 
@@ -238,22 +188,16 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     protected void loadConfigurationResource(final IsisConfigurationDefault configuration, final String configurationResource, final NotFoundPolicy notFoundPolicy) {
         try {
             final PropertiesReader propertiesReader = loadConfigurationResource(resourceStreamSource, configurationResource);
-            addProperties(configuration, propertiesReader.getProperties());
+            LOG.info("loading properies from " + configurationResource);
+            configuration.add(propertiesReader.getProperties());
             configurationResourcesFound.add(configurationResource);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("'" + configurationResource + "' FOUND");
-            }
             return;
-        } catch (final IOException ex) {
-            // keep going
-        }
+        } catch (final IOException ignore) { }
         if (notFoundPolicy == NotFoundPolicy.FAIL_FAST) {
             throw new IsisException("failed to load '" + configurationResource + "'; tried using: " + resourceStreamSource.getName());
         } else {
             configurationResourcesNotFound.add(configurationResource);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("'" + configurationResource + "' not found, but not needed");
-            }
+            LOG.debug("'" + configurationResource + "' not found, but not needed");
         }
     }
 
@@ -261,31 +205,13 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         return new PropertiesReader(resourceStreamSource, configurationResource);
     }
 
+    
+    // TODO review this, should this option default to yes?
     private void addShowExplorationOptionsIfNotSpecified(final IsisConfigurationDefault configuration) {
         if (configuration.getString(ConfigurationConstants.SHOW_EXPLORATION_OPTIONS) == null) {
             configuration.add(ConfigurationConstants.SHOW_EXPLORATION_OPTIONS, "yes");
         }
     }
-
-    private void addSystemPropertiesIfRequested(final IsisConfigurationDefault configuration) {
-        if (includeSystemProperties) {
-            addProperties(configuration, System.getProperties());
-        }
-    }
-
-    private void addAdditionalProperties(final IsisConfigurationDefault configuration) {
-        addProperties(configuration, additionalProperties);
-    }
-
-    protected void addProperties(final IsisConfigurationDefault configuration, final Properties properties) {
-        configuration.add(properties);
-    }
-
-    private void invalidateCache() {
-        cachedConfiguration = null;
-    }
-
-
     
     // ////////////////////////////////////////////////////////////
     // Logging
@@ -298,8 +224,6 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
             for (String resource : configurationResourcesFound) {
                 LOG.info("*  " + resource);
             }
-        }
-        if (LOG.isInfoEnabled()) {
             LOG.info("Configuration resources NOT FOUND (but not needed):");
             for (String resource : configurationResourcesNotFound) {
                 LOG.info("*  " + resource);

@@ -31,6 +31,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
@@ -55,6 +56,7 @@ import org.apache.isis.core.runtime.runner.opts.OptionValidator;
 import org.apache.isis.core.runtime.runner.opts.OptionValidatorForPersistor;
 import org.apache.isis.core.runtime.runner.opts.OptionValidatorForViewers;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.log4j.Logger;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -62,6 +64,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 public class IsisRunner {
+
+    private static final Logger LOG = Logger.getLogger(IsisRunner.class);
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
@@ -73,7 +77,7 @@ public class IsisRunner {
 
     private final List<OptionHandler> optionHandlers = Lists.newArrayList();
     private final List<OptionValidator> validators = Lists.newArrayList();
-    private IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault();
+    private IsisConfigurationBuilder isisConfigurationBuilder;
 
     private Injector globalInjector;;
 
@@ -82,19 +86,17 @@ public class IsisRunner {
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     public IsisRunner(final String[] args, final OptionHandlerDeploymentType optionHandlerDeploymentType) {
-
         this.args = args;
         this.optionHandlerDeploymentType = optionHandlerDeploymentType;
 
         // setup logging immediately
         loggingConfigurer.configureLogging(determineConfigDirectory(), args);
-
         this.installerLookup = new InstallerLookupDefault();
 
-        addOptionHandler(optionHandlerDeploymentType);
         this.optionHandlerViewer = addStandardOptionHandlersAndValidators(this.installerLookup);
     }
 
+    // REVIEW is this something that IsisConfigBuilder should know about?
     private String determineConfigDirectory() {
         if (new File(ConfigurationConstants.WEBINF_FULL_DIRECTORY).exists()) {
             return ConfigurationConstants.WEBINF_FULL_DIRECTORY;
@@ -197,9 +199,27 @@ public class IsisRunner {
         return true;
     }
 
+    public IsisConfigurationBuilder getStartupConfiguration() {
+        return isisConfigurationBuilder;
+    }
+
+    public void primeConfigurationWithCommandLineOptions() {
+        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : optionHandlers) {
+            LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
+            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
+        }
+    }
+
+    public void loadInitialProperties() {
+        isisConfigurationBuilder.addDefaultConfigurationResources();
+    }
+
+
     // ///////////////////////////////////////////////////////////////////////////////////////
     // Bootstrapping
     // ///////////////////////////////////////////////////////////////////////////////////////
+
+    // TODO remove and use is desktop runner
 
     public final void bootstrap(final IsisBootstrapper bootstrapper) {
 
@@ -208,11 +228,12 @@ public class IsisRunner {
         this.globalInjector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
 
         bootstrapper.bootstrap(globalInjector);
+        isisConfigurationBuilder.lockConiguration();
+        isisConfigurationBuilder.dumpResourcesToLog();
     }
 
     private Injector createGuiceInjector(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup, final List<OptionHandler> optionHandlers) {
-        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
-        isisModule.addConfigurationPrimers(optionHandlers);
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
         isisModule.addViewerNames(optionHandlerViewer.getViewerNames());
         return Guice.createInjector(isisModule);
     }
@@ -226,7 +247,7 @@ public class IsisRunner {
     }
 
     private OptionHandlerViewer addStandardOptionHandlersAndValidators(final InstallerLookup installerLookup) {
-
+        addOptionHandler(optionHandlerDeploymentType);
         addOptionHandler(new OptionHandlerConfiguration());
 
         OptionHandlerPersistor optionHandlerPersistor;

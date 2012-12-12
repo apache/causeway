@@ -26,6 +26,7 @@ import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.runner.Constants;
@@ -80,20 +81,25 @@ public class WebServer {
 
     public void run(final String[] args) {
         final IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeWebServer());
+        addOptionHandlersAndValidators(runner);
+        if (!runner.parseAndValidate()) {
+            return;
+        }
+        runner.setConfigurationBuilder(new IsisConfigurationBuilderDefault());
+        runner.primeConfigurationWithCommandLineOptions();
+        runner.loadInitialProperties();
+        
+        final WebServerBootstrapper bootstrapper = new WebServerBootstrapper(runner);
+        bootstrapper.bootstrap(null);
+        jettyServer = bootstrapper.getJettyServer();
+    }
 
+    private void addOptionHandlersAndValidators(IsisRunner runner) {
         // adjustments
         runner.addOptionHandler(new OptionHandlerPort());
         runner.addOptionHandler(new OptionHandlerAddress());
         runner.addOptionHandler(new OptionHandlerResourceBase());
         runner.addOptionHandler(new OptionHandlerStartupMode());
-
-        if (!runner.parseAndValidate()) {
-            return;
-        }
-
-        final WebServerBootstrapper bootstrapper = new WebServerBootstrapper(runner);
-        runner.bootstrap(bootstrapper);
-        jettyServer = bootstrapper.getJettyServer();
     }
 
     public void stop() {

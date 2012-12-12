@@ -31,8 +31,6 @@ import java.util.Map;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import org.apache.log4j.FileAppender;
-
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -45,6 +43,7 @@ import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstrac
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerNoop;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.runner.IsisModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -67,11 +66,11 @@ import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryHolder;
 /**
  * Holds the bootstrapped {@link IsisSystem} and provides access to the
  * {@link AliasRegistry aliases}.
- * 
+ *
  * <p>
  * Typically held in a thread-local by the test framework, acting as a context
  * to the story.
- * 
+ *
  * <p>
  * Implementation note: this class directly implements {@link AliasRegistrySpi},
  * though delegates to an underlying {@link AliasRegistryDefault}. This is
@@ -149,6 +148,7 @@ public class Scenario implements AliasRegistryHolder {
     }
 
     private void defaultStoryComponentsInto(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.addDefaultConfigurationResources();
         isisConfigurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY, BddAuthenticationManagerInstaller.class.getName());
         isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY, BddInMemoryPersistenceMechanismInstaller.class.getName());
         isisConfigurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY, InMemoryUserProfileStoreInstaller.class.getName());
@@ -157,7 +157,7 @@ public class Scenario implements AliasRegistryHolder {
     }
 
     private Injector createGuiceInjector(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
-        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
 

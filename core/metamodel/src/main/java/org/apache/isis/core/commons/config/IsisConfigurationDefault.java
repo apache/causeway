@@ -21,21 +21,18 @@ package org.apache.isis.core.commons.config;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import com.google.common.collect.Maps;
-
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Maps;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
     
@@ -53,7 +50,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
 
     public IsisConfigurationDefault(final ResourceStreamSource resourceStreamSource) {
         this.resourceStreamSource = resourceStreamSource;
-        LOG.debug("from :" + nameOf(resourceStreamSource));
+        LOG.debug("configuration intialised with streams: " + nameOf(resourceStreamSource));
     }
 
     private String nameOf(final ResourceStreamSource resourceStreamSource) {
@@ -82,18 +79,24 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         	add((String)key, (String)value);
         }
     }
-
+    
     /**
      * Adds a key-value pair to this set of properties
      */
     public void add(final String key, final String value) {
+        if (value == null) {
+            LOG.debug("ignoring " + key + " as value is null");
+            return;
+        }
         if (key == null) {
             return;
         }
     	if (properties.containsKey(key)) {
-    		LOG.info("replacing " + key + "=" + properties.get(key) + " with " + value);
+    		LOG.info("skipping " + key + "=" + value + " as value already set (with " + properties.get(key) + ")" );
+    	} else {
+            LOG.info("adding " + key + "=" + value);
+            properties.put(key, value);
     	}
-    	properties.put(key, value);
     }
 
     @Override
@@ -199,9 +202,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         final Enumeration<?> names = properties.propertyNames();
         while (names.hasMoreElements()) {
             final String name = (String) names.nextElement();
-            str.append(name, 55);
-            str.append(" = ");
-            str.appendln(properties.getProperty(name));
+            str.appendln(name, properties.getProperty(name));
         }
     }
 
@@ -319,7 +320,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         }
         String property = properties.getProperty(key, defaultValue);
         property = property != null ? property.trim() : null;
-        LOG.debug("property: '" + key + "' =  '" + property + "'");
+        LOG.debug("get property: '" + key + "' =  '" + property + "'");
         return property;
     }
 

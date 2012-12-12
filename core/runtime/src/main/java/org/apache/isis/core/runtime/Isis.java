@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime;
 
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerDeploymentTypeIsis;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerPassword;
@@ -36,12 +37,13 @@ public class Isis {
 
     private void run(final String[] args) {
         final IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeIsis());
-
         addOptionHandlersAndValidators(runner);
-
         if (!runner.parseAndValidate()) {
             return;
         }
+        runner.setConfigurationBuilder(new IsisConfigurationBuilderDefault());
+        runner.primeConfigurationWithCommandLineOptions();
+        runner.loadInitialProperties();
         runner.bootstrap(new RuntimeBootstrapper());
     }
 

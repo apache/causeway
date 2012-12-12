@@ -28,7 +28,6 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.name.Named;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
@@ -53,7 +52,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.runner.IsisModule;
+import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -81,14 +80,14 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
 /**
  * Main application, subclassing the Wicket {@link Application} and
  * bootstrapping Isis.
- * 
+ *
  * <p>
  * Its main responsibility is to allow the set of {@link ComponentFactory}s used
  * to render the domain objects to be registered. This type of customisation is
  * commonplace. At a more fundamental level, also allows the {@link Page}
  * implementation for each {@link PageType page type} to be overridden. This is
  * probably less common, because CSS can also be used for this purpose.
- * 
+ *
  * <p>
  * New {@link ComponentFactory}s can be specified in two ways. The preferred
  * approach is to use the {@link ServiceLoader} mechanism, whereby the
@@ -96,12 +95,12 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
  * <tt>META-INF/services</tt>. See <tt>views-gmaps2</tt> for an example of this.
  * Including a jar that uses this mechanism on the classpath will automatically
  * make the {@link ComponentFactory} defined within it available.
- * 
+ *
  * <p>
  * Alternatively, {@link ComponentFactory}s can be specified by overridding
  * {@link #newComponentFactoryList()}. This offers more fine-grained control for
  * the ordering, but is more fiddly.
- * 
+ *
  * <p>
  * There are also a number of other pluggable hooks (similar way to other Wicket
  * customizations)
@@ -173,12 +172,12 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Override
     protected void init() {
         super.init();
-        
+
         final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_RENDER;
-        
+
         getRequestCycleSettings().setRenderStrategy(renderStrategy);
-        
-        // 6.0.0 instead of subclassing newRequestCycle 
+
+        // 6.0.0 instead of subclassing newRequestCycle
         getRequestCycleListeners().add(new WebRequestCycleForIsis());
 
         getResourceSettings().setParentFolderPlaceholder("$up$");
@@ -187,17 +186,17 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
         final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
 
-        final IsisModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
+        final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
-        
+
         this.bookmarkedPagesModel = new BookmarkedPagesModel();
 
         initWicketComponentInjection(injector);
     }
 
-    protected IsisModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
-        return new IsisModule(deploymentType, isisConfigurationBuilder);
+    protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
+        return new IsisInjectModule(deploymentType, isisConfigurationBuilder);
     }
 
     private DeploymentType determineDeploymentType() {
@@ -247,7 +246,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
      * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
      * the Wicket session with the Isis's equivalent session object.
-     * 
+     *
      * <p>
      * In general, it shouldn't be necessary to override this method.
      */
@@ -287,7 +286,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     /**
      * Access to other page types.
-     * 
+     *
      * <p>
      * Non-final only for testing purposes; should not typically be overridden.
      */
@@ -332,12 +331,12 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     public BookmarkedPagesModel getBookmarkedPagesModel() {
         return bookmarkedPagesModel;
     }
-    
+
 
     // /////////////////////////////////////////////////
     // *Provider impl.
     // /////////////////////////////////////////////////
-    
+
     @Override
     public void injectInto(final Object candidate) {
         if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {

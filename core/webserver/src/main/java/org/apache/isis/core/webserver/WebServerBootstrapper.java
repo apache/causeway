@@ -44,9 +44,11 @@ import org.apache.isis.core.runtime.runner.IsisBootstrapper;
 import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webserver.WebServer.StartupMode;
+import org.apache.log4j.Logger;
 
 final class WebServerBootstrapper implements IsisBootstrapper {
 
+    private static final Logger LOG = Logger.getLogger(WebServerBootstrapper.class);
     private static final String SRC_MAIN_WEBAPP = "src/main/webapp";
 
     private final IsisRunner runner;
@@ -63,7 +65,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
     @Override
     public void bootstrap(final Injector injector) {
 
-        final IsisConfigurationBuilder isisConfigurationBuilder = injector.getInstance(IsisConfigurationBuilder.class);
+        final IsisConfigurationBuilder isisConfigurationBuilder = runner.getStartupConfiguration();
 
         // we don't actually bootstrap the system here; instead we expect it to
         // be bootstrapped
@@ -72,6 +74,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         final int port = configuration.getInteger(EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
         final String webappContextPath = configuration.getString(EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT);
         final StartupMode startupMode = StartupMode.lookup(configuration.getString(EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT));
+        // TODO get and use the address
 
         jettyServer = new Server(port);
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
@@ -80,6 +83,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
 
         jettyServer.setHandler(context);
 
+        LOG.info("starting Jetty on port " + port + " to serve webapp");
         try {
             jettyServer.start();
             if (startupMode.isForeground()) {
@@ -97,7 +101,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
     /**
      * Bound to the {@link WebAppContext} so that they can be used when
      * bootstrapping.
-     * 
+     *
      * @param context
      */
     @SuppressWarnings("unchecked")

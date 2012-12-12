@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.runner.IsisModule;
+import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -97,6 +97,8 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
             primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
 
+            isisConfigurationBuilder.addDefaultConfigurationResources();
+
             final DeploymentType deploymentType = determineDeploymentType(isisConfigurationBuilder, servletContext);
 
             addConfigurationResourcesForWebApps(isisConfigurationBuilder);
@@ -111,7 +113,8 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             injector = createGuiceInjector(isisConfigurationBuilder, deploymentType, installerLookup);
 
             final IsisSystem system = injector.getInstance(IsisSystem.class);
-            
+
+            isisConfigurationBuilder.lockConiguration();
             isisConfigurationBuilder.dumpResourcesToLog();
 
             servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);
@@ -123,17 +126,20 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     private Injector createGuiceInjector(final IsisConfigurationBuilder isisConfigurationBuilder, final DeploymentType deploymentType, final InstallerLookup installerLookup) {
-        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
 
     @SuppressWarnings("unchecked")
     private void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
+        LOG.info("loading properties from option handlers");
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers =
+                (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
         if (isisConfigurationBuilderPrimers == null) {
             return;
         }
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+            LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
         }
     }
@@ -150,9 +156,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      */
     private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
         String deploymentTypeStr = null;
-        if (deploymentTypeStr == null) {
-            deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
-        }
+        deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
         }

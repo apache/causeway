@@ -775,7 +775,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public String disableSomeAction() {
+            public String disableSomeAction(final int x, final long y) {
                 return null;
             }
         }
@@ -783,7 +783,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
         final Method choices0Method = findMethod(CustomerEx.class, "choices0SomeAction", new Class[] {});
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
+        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
 

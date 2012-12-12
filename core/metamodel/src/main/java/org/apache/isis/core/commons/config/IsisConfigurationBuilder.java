@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.commons.config;
 
-import java.util.Properties;
-
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
@@ -42,11 +40,11 @@ public interface IsisConfigurationBuilder extends Injectable {
      */
     IsisConfiguration getConfiguration();
 
-    public abstract void addConfigurationResource(final String installerName, final NotFoundPolicy notFoundPolicy);
+    void addDefaultConfigurationResources();
+    
+    void addConfigurationResource(final String installerName, final NotFoundPolicy notFoundPolicy);
 
-    public abstract void add(final Properties properties);
-
-    public abstract void add(final String key, final String value);
+    void add(final String key, final String value);
 
     /**
      * The underlying {@link ResourceStreamSource} from which the configuration
@@ -55,10 +53,12 @@ public interface IsisConfigurationBuilder extends Injectable {
      * <p>
      * Note that this may be a {@link ResourceStreamSourceChainOfResponsibility composite}.
      */
-    public ResourceStreamSource getResourceStreamSource();
+    ResourceStreamSource getResourceStreamSource();
     
     /**
      * Log a summary of resources found or not found.
      */
-    public void dumpResourcesToLog();
+    void dumpResourcesToLog();
+
+    void lockConiguration();
 }

@@ -112,7 +112,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
     }
 
     /**
-     * Valid providing running in {@link DeploymentType#isExploring()
+     * Valid providing running in {@link DeploymentType#isExploring() 
      * exploration} mode.
      */
     @Override

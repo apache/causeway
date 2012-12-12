@@ -72,10 +72,10 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     @Override
     public List<String> getConfigurationResources() {
         final List<String> resourceList = Lists.newArrayList();
-        final String componentFile = getType() + ".properties";
-        resourceList.add(componentFile);
         final String componentImplementationFile = getType() + "_" + getName() + ".properties";
         resourceList.add(componentImplementationFile);
+        final String componentFile = getType() + ".properties";
+        resourceList.add(componentFile);
         addConfigurationResources(resourceList);
         return Collections.unmodifiableList(resourceList);
     }

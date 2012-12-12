@@ -31,6 +31,6 @@ public class OptionHandlerDeploymentTypeWebServer extends OptionHandlerDeploymen
     private static final String TYPES = TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + " (default); " + TYPE_SERVER;
 
     public OptionHandlerDeploymentTypeWebServer() {
-        super(DeploymentType.SERVER, TYPES);
+        super(DeploymentType.SERVER_PROTOTYPE, TYPES);
     }
 }

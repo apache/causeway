@@ -33,6 +33,7 @@ public class ConfigurationBuilderFileSystemTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
         loader = new IsisConfigurationBuilderFileSystem("src/test/config");
+        loader.addDefaultConfigurationResources();
     }
 
     public void testDefaultConfiguration() {
@@ -51,10 +52,10 @@ public class ConfigurationBuilderFileSystemTest extends TestCase {
         assertEquals("added", configuration.getString("additional.example"));
     }
 
-    public void testAddedConfigurationOveridesEarlierProperties() {
+    public void testAddedConfigurationIsIgnoredWhenEarlierPropertyExists() {
         loader.addConfigurationResource("another.properties", NotFoundPolicy.FAIL_FAST);
         final IsisConfiguration configuration = loader.getConfiguration();
-        assertEquals("two", configuration.getString("properties.example"));
+        assertEquals("one", configuration.getString("properties.example"));
     }
 
     public void testAddedConfigurationFailsWhenFileNotFound() {
@@ -75,11 +76,5 @@ public class ConfigurationBuilderFileSystemTest extends TestCase {
         loader.add("added.property", "added by code");
         final IsisConfiguration configuration = loader.getConfiguration();
         assertEquals("added by code", configuration.getString("added.property"));
-    }
-
-    public void testIncludeSystemProperty() throws Exception {
-        loader.setIncludeSystemProperties(true);
-        final IsisConfiguration configuration = loader.getConfiguration();
-        assertEquals(System.getProperty("os.name"), configuration.getString("os.name"));
     }
 }

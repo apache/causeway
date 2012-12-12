@@ -30,7 +30,6 @@ import com.google.inject.Singleton;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
@@ -40,13 +39,12 @@ import org.apache.isis.core.runtime.system.IsisSystemFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
 
-public class IsisModule extends AbstractModule {
+public class IsisInjectModule extends AbstractModule {
 
     private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
     private final IsisConfigurationBuilder isisConfigurationBuilder;
 
-    private final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = Lists.newArrayList();
     private final List<String> viewerNames = Lists.newArrayList();
 
     private static InstallerLookupDefault defaultInstallerLookup() {
@@ -57,19 +55,19 @@ public class IsisModule extends AbstractModule {
         return new IsisConfigurationBuilderDefault();
     }
 
-    public IsisModule(final DeploymentType deploymentType) {
+    public IsisInjectModule(final DeploymentType deploymentType) {
         this(deploymentType, defaultConfigurationBuider(), defaultInstallerLookup());
     }
 
-    public IsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public IsisInjectModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         this(deploymentType, isisConfigurationBuilder, defaultInstallerLookup());
     }
 
-    public IsisModule(final DeploymentType deploymentType, final InstallerLookup installerLookup) {
+    public IsisInjectModule(final DeploymentType deploymentType, final InstallerLookup installerLookup) {
         this(deploymentType, defaultConfigurationBuider(), installerLookup);
     }
 
-    public IsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
+    public IsisInjectModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
         this.installerLookup = installerLookup;
         this.isisConfigurationBuilder = isisConfigurationBuilder;
         this.deploymentType = deploymentType;
@@ -92,14 +90,7 @@ public class IsisModule extends AbstractModule {
     @Provides
     @Singleton
     private IsisConfigurationBuilder providesConfigurationBuilder() {
-        return primeConfiguration(isisConfigurationBuilder);
-    }
-
-    private IsisConfigurationBuilder primeConfiguration(final IsisConfigurationBuilder configBuilder) {
-        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            isisConfigurationBuilderPrimer.primeConfigurationBuilder(configBuilder);
-        }
-        return configBuilder;
+        return isisConfigurationBuilder;
     }
 
     /**
@@ -114,13 +105,6 @@ public class IsisModule extends AbstractModule {
         configBuilder.injectInto(installerLookup);
         installerLookup.init();
         return installerLookup;
-    }
-
-    /**
-     * Adjustment (as per GOOS book)
-     */
-    public void addConfigurationPrimers(final List<? extends IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers) {
-        this.isisConfigurationBuilderPrimers.addAll(isisConfigurationBuilderPrimers);
     }
 
     /**

@@ -44,7 +44,7 @@ public class IsisConfigurationDefault_PropertNamesTest extends TestCase {
 
         final Properties p = new Properties();
         p.put("isis.bool", "on");
-        p.put("isis.str", "string");
+        p.put("isis.str", "original");
         configuration.add(p);
 
         final Properties p1 = new Properties();
@@ -53,8 +53,8 @@ public class IsisConfigurationDefault_PropertNamesTest extends TestCase {
         configuration.add(p1);
     }
 
-    public void testDuplicatedPropertyName() {
-        assertEquals("replacement", configuration.getString("isis.str"));
+    public void testDuplicatedPropertyIsNotReplaced() {
+        assertEquals("original", configuration.getString("isis.str"));
     }
 
     public void testUniqueEntries() {
