@@ -149,7 +149,7 @@ archetype includes this explicit dependency.
         
 			<dependency>
 			    <groupId>org.apache.isis.core</groupId>
-			    <artifactId>isis-metamodel</artifactId>
+			    <artifactId>isis-core-metamodel</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
 			</dependency>
 	        <dependency>

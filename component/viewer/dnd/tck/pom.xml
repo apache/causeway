@@ -77,7 +77,7 @@
         <!-- isis core -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-metamodel</artifactId>
+            <artifactId>isis-core-metamodel</artifactId>
         </dependency>
 
         <dependency>

@@ -40,9 +40,11 @@ if(options.x) {
 //
 //
 def replacements = [
- "integteestsupport": "integtestsupport"
-,"unitteestsupport": "unittestsupport"
-,"0.3.1-SNAPSHOT": "1.0.0-SNAPSHOT",
+"<artifactId>isis-metamodel": "<artifactId>isis-core-metamodel"
+
+ //"integteestsupport": "integtestsupport"
+//,"unitteestsupport": "unittestsupport"
+//,"0.3.1-SNAPSHOT": "1.0.0-SNAPSHOT"
 //,"<artifactId>isis-applib": "<artifactId>isis-core-applib"
 //,"<artifactId>isis-cglib-bytecode": "<artifactId>isis-core-bytecode-cglib"
 //,"<artifactId>isis-javassist-bytecode": "<artifactId>isis-core-bytecode-javassist"
