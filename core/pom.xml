@@ -781,7 +781,7 @@ the MIT license [1].
                         <tagBase>https://svn.apache.org/repos/asf/incubator/isis/tags/</tagBase>
                         <localCheckout>true</localCheckout>
                         <pushChanges>false</pushChanges>
-                        <waitBeforeTagging>120</waitBeforeTagging>
+                        <waitBeforeTagging>2</waitBeforeTagging>
                     </configuration>
                     <!-- goal:clean (for aggregator modules) has no bindings; 
                         cleans up release.properties and any backup POM files -->
