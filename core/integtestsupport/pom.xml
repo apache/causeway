@@ -97,7 +97,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-dom</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 	
         <dependency>

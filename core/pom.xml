@@ -1023,6 +1023,24 @@ the MIT license [1].
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
+            <!-- TCK -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>isis-core-tck</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>isis-core-tck-dom</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>isis-core-tck-fixture</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
 
             <!-- JodaTime -->
