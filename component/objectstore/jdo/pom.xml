@@ -58,6 +58,30 @@
 	</modules>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+                <!-- Apache Release Audit Tool -->
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.8</version>
+	                <configuration>
+	                    <excludes>
+	                    	<!-- 
+	                    	overriding inherited excludes from oia.core:isis 
+	                    	with a more specific set for this component
+	                    	 -->
+	                        <exclude>**/target/**</exclude>
+	                        <exclude>**/target-ide/**</exclude>
+
+	                        <exclude>**/*.project</exclude>
+	                        <exclude>**/.classpath</exclude>
+	                        <exclude>**/.settings/**</exclude>
+	                    </excludes>
+                    </configuration>
+	            </plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>com.agilejava.docbkx</groupId>
@@ -163,7 +187,7 @@
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
 	            <artifactId>datanucleus-core</artifactId>
-	            <version>3.1.2</version>
+	            <version>3.1.3</version>
 	        </dependency>
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
@@ -178,12 +202,12 @@
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
 	            <artifactId>datanucleus-api-jdo</artifactId>
-	            <version>3.1.2</version>
+	            <version>3.1.3</version>
 	        </dependency>
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
 	            <artifactId>datanucleus-rdbms</artifactId>
-	            <version>3.1.2</version>
+	            <version>3.1.3</version>
 	        </dependency>
           <dependency>
             <groupId>org.apache.geronimo.specs</groupId>

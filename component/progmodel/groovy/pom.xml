@@ -46,6 +46,33 @@
     <!-- used in Site generation for relative references. -->
     <url>http://isis.apache.org/${relativeUrl}</url>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+                <!-- Apache Release Audit Tool -->
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.8</version>
+	                <configuration>
+	                    <excludes>
+	                    	<!-- 
+	                    	overriding inherited excludes from oia.core:isis 
+	                    	with a more specific set for this component
+	                    	 -->
+	                        <exclude>**/target/**</exclude>
+	                        <exclude>**/target-ide/**</exclude>
+
+	                        <exclude>**/*.project</exclude>
+	                        <exclude>**/.classpath</exclude>
+	                        <exclude>**/.settings/**</exclude>
+	                    </excludes>
+                    </configuration>
+	            </plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	
 	<modules>
 		<module>applib</module>
 		<module>metamodel</module>
