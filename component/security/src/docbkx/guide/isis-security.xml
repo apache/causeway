@@ -586,7 +586,7 @@ isis.authorization.file.blacklist=security_file.disallow  </programlisting>
         settings</para>
 
         <programlisting format="linespecific">isis.reflector.facets.include=\
-    org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryForDfltRuntime
+    org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetFactory
 </programlisting>
 
         <para></para>

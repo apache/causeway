@@ -1007,15 +1007,15 @@ done</programlisting>
 
               <itemizedlist>
                 <listitem>
-                  <para><code>org.apache.isis.runtimes.dflt:objectstores</code>
+                  <para><code>org.apache.isis.objectstore</code>
                   is the aggregator for the "objectstores" group.</para>
                 </listitem>
 
                 <listitem>
-                  <para>Child modules within this group would include
-                  <code>org.apache.isis.runtimes.dflt.objectstores:sql</code>
+                  <para>Artifact modules within this group would include
+                  <code>org.apache.isis.objectstor:isis-objectstore-sql</code>
                   and
-                  <code>org.apache.isis.runtimes.dflt.objectstores:xml</code>.</para>
+                  <code>org.apache.isis.objectstore:isis-objectstore-xml</code>.</para>
                 </listitem>
               </itemizedlist>
             </listitem>
@@ -4411,7 +4411,7 @@ svn switch https://svn.apache.org/repos/asf/incubator/isis/branches/x.x.x-incuba
           <note>
             <para>The <code>-P integration-tests</code> flag is required in
             order to include the
-            <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+            <package>[oai.objectstore:isis-objectstore-sql-tests-served]</package>.</para>
           </note>
 
           <para>This should generate the following prompt:</para>
@@ -4472,7 +4472,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <note>
             <para>The <code>-P integration-tests</code> flag is required in
             order to include the
-            <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+            <package>[oai.objectstore:isis-objectstore-sql-tests-served]</package>.</para>
           </note>
 
           <para>Then, run the prepare step (skipping tests will reduce the
@@ -4483,7 +4483,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <note>
             <para>Again, the <code>-P integration-tests</code> flag is
             required in order to include the
-            <package>[oai.runtimes.dflt.objectstores:sql-tests-served]</package>.</para>
+            <package>[oai.objectstore:isis-objectstore-sql-tests-served]</package>.</para>
           </note>
 
           <note>

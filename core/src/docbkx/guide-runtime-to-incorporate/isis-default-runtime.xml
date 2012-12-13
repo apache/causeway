@@ -266,7 +266,7 @@
             found on the classpath from the
             <filename>installer-registry.properties</filename> file.
             (Physically this is packaged within the
-            [oai.runtimes.dflt:runtime] module's
+            [oai.core:isis-core-runtime] module's
             <acronym>JAR</acronym>).</para>
 
             <para>This allow the runner class to be aware of all the
@@ -1229,20 +1229,20 @@ $ mvn clean package</screen>
       runtime works. If you just want to use the</para>
 
       <sect1>
-        <title>Components of the Default Runtime</title>
+        <title>Components of the Core Runtime</title>
 
         <para>As will be clear if you've explored the codebase, the
-        <emphasis>default runtime</emphasis> implementation consists of a main
+        <emphasis>core runtime</emphasis> implementation consists of a main
         <emphasis>runtime</emphasis>
-        module<package>[oai.runtimes.dflt:runtime]</package> along with a
-        fairly large number of submodules.</para>
+        module<package>[oai.core:runtime]</package> along with a
+        fairly large number of components.</para>
 
         <para>The main <emphasis>runtime</emphasis> module provides the
         following functionality:</para>
 
         <itemizedlist>
           <listitem>
-            <para>classes to bootstrap the default runtime</para>
+            <para>classes to bootstrap the core runtime</para>
           </listitem>
 
           <listitem>
@@ -1383,7 +1383,7 @@ $ mvn clean package</screen>
 
         <itemizedlist>
           <listitem>
-            <para>a module <package>[oai.runtimes.dflt:webapp]</package> with
+            <para>a module <package>[oai.core:isis-core-runtime]</package> with
             <classname>ServletContextListener</classname> and
             <classname>javax.servlet.Filter</classname> implementations to
             allow <emphasis>Isis</emphasis> to be bootstrapped from a
@@ -1392,7 +1392,7 @@ $ mvn clean package</screen>
 
           <listitem>
             <para>provides a convenience module
-            <package>[oai.runtimes.dflt:webserver]</package> that provides a
+            <package>[oai.core:isis-core-webserver]</package> that provides a
             command-line utility to allow any Maven webapp-structured project
             to be hosted within Jetty.</para>
           </listitem>
@@ -2048,7 +2048,7 @@ isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault
         runtime module.</para>
       </abstract>
 
-      <para>The runtime module <package>[oai.runtimes.dflt:runtime]</package>
+      <para>The runtime module <package>[oai.core:isis-core-runtime]</package>
       is the "engine-room" of the default runtime, taking responsibility to
       manage domain object (pojo) instances at runtime:</para>
 

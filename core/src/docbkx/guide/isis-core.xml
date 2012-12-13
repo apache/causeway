@@ -361,8 +361,8 @@
               the above (lifecycle, persistence, remoting and
               profiles).</para>
 
-              <para>A key part of the design of the default runtime is the
-              <package>oai.runtimes.dflt.runtime.context.IsisContext</package>
+              <para>A key part of the design of the core runtime is the
+              <package>oai.core.runtime.system.context.IsisContext</package>
               interface, which is used to obtain the current session<footnote>
                   <para>This interface is somewhat akin to <ulink
                   url="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/tutorial.html">HibernateUtil</ulink>

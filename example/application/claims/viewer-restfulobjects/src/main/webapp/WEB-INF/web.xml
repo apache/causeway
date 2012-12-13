@@ -24,7 +24,7 @@
 	<display-name>JSON Claims</display-name>
 
 	<listener>
-		<listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
+		<listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
 	</listener>
 
     <listener>
@@ -72,7 +72,7 @@
 
 	<filter>
 		<filter-name>IsisSessionFilter</filter-name>
-		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
+		<filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
         <init-param>
             <!-- look for basic auth headers -->
             <param-name>authenticationSessionStrategy</param-name>

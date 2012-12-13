@@ -91,7 +91,7 @@
             </dependency>
             <!-- Required to support the XML cross-test -->
             <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <groupId>org.apache.isis.core.objectstore</groupId>
                 <artifactId>xml</artifactId>
                 <version>${xml-objectstore.version}</version>
             </dependency>

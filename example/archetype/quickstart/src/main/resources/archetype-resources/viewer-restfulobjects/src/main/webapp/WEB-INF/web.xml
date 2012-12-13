@@ -51,7 +51,7 @@
     
     <!-- bootstrap the Isis metamodel and runtime -->
     <listener>
-        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
     <!-- which (optional) configuration file(s) to load -->
@@ -172,7 +172,7 @@
     <!-- authenticate user, set up an Isis session -->
     <filter>
         <filter-name>IsisSessionFilterForRestfulObjects</filter-name>
-        <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
+        <filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
         <!-- authentication required for REST -->
         <init-param>
             <param-name>authenticationSessionStrategy</param-name>

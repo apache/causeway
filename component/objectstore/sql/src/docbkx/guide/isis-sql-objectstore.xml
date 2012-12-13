@@ -632,7 +632,7 @@
       ..</para>
 
       <para>Default automapper is
-      <code>org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller</code></para>
+      <code>org.apache.isis.objectstore.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller</code></para>
 
       <para></para>
     </sect1>
@@ -645,7 +645,7 @@
     either in configuration or at runtime.</para>
 
     <para>The class
-    <code>org.apache.isis.runtimes.dflt.objectstores.sql.Defaults</code>
+    <code>org.apache.isis.objectstore.sql.Defaults</code>
     contains the following:</para>
 
     <para>Programmatic, at runtime:</para>

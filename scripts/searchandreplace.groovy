@@ -40,7 +40,16 @@ if(options.x) {
 //
 //
 def replacements = [
-"<artifactId>isis-metamodel": "<artifactId>isis-core-metamodel"
+
+"org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper":"org.apache.isis.core.webapp.IsisWebAppBootstrapper"
+,"org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter":"org.apache.isis.core.webapp.IsisSessionFilter"
+,"org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault":"org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault"
+,
+,"oai.runtimes.dflt:runtime":"oai.core:isis-core-runtime"
+,"oai.runtimes.dflt:webapp":"oai.core:isis-core-runtime"
+,"oai.runtimes.dflt:webserver":"oai.core:isis-core-webserver"
+
+//"<artifactId>isis-metamodel": "<artifactId>isis-core-metamodel"
 
  //"integteestsupport": "integtestsupport"
 //,"unitteestsupport": "unittestsupport"

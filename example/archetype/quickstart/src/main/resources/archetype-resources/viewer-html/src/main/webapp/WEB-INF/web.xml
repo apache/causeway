@@ -52,7 +52,7 @@
     
     <!-- bootstrap the Isis metamodel and runtime -->
     <listener>
-        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
     <!-- which (optional) configuration file(s) to load -->
@@ -181,11 +181,11 @@
     <!-- authenticate user, and set up an Isis Session -->
     <filter>
         <filter-name>IsisSessionFilterForHtml</filter-name>
-        <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
+        <filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
         <init-param>
             <!-- lookup from cache, or if a logon filter was provided -->
             <param-name>authenticationSessionStrategy</param-name>
-            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault</param-value>
+            <param-value>org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault</param-value>
         </init-param>
         <init-param>
             <!-- what to do if no session was found; we indicate access only to a restricted list of paths -->
@@ -212,7 +212,7 @@
         <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
         <init-param>
             <param-name>authenticationSessionStrategy</param-name>
-            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault</param-value>
+            <param-value>org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault</param-value>
         </init-param>
         <init-param>
             <param-name>startPage</param-name>

@@ -28,7 +28,7 @@
     </welcome-file-list>
 
     <listener>
-        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
     <context-param>

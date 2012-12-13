@@ -95,22 +95,6 @@
 
         <!-- objectstore/domain service/repository implementations -->
         
-        <!--
-         - uncomment in order to use default object store
-         - (also edit isis.properties)
-         - 
-		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-			<artifactId>dflt</artifactId>
-		</dependency>
-        -->
-        
-        
-        <!--
-         - uncomment in order to use jdo object store
-         - (also edit isis.properties)
-         - 
-        -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>

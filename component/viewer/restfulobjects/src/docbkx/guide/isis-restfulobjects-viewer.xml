@@ -507,10 +507,10 @@
           that are used to create a session for each subsequent request. This
           is done using a context listener (defined in the <emphasis>default
           runtime</emphasis>,
-          <package>[oai.runtimes.dflt:webapp]</package>):</para>
+          <package>[oai.core:isis-core-runtime]</package>):</para>
 
           <programlisting>&lt;listener&gt;
-  &lt;listener-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper&lt;/listener-class&gt;
+  &lt;listener-class&gt;org.apache.isis.core.webapp.IsisWebAppBootstrapper&lt;/listener-class&gt;
 &lt;/listener&gt;</programlisting>
 
           <para>The session is created for each request using the
@@ -518,7 +518,7 @@
 
           <programlisting>&lt;filter&gt;
   &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
-  &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
+  &lt;filter-class&gt;org.apache.isis.core.webapp.IsisSessionFilter&lt;/filter-class&gt;
   &lt;init-param&gt;
     &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
     &lt;param-value&gt;org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
@@ -1017,7 +1017,7 @@ mvn jetty:run</programlisting>
 
           <programlisting>&lt;filter&gt;
   &lt;filter-name&gt;IsisSessionFilter&lt;/filter-name&gt;
-  &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
+  &lt;filter-class&gt;org.apache.isis.core.webapp.IsisSessionFilter&lt;/filter-class&gt;
   &lt;init-param&gt;
     &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
     &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
