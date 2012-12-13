@@ -40,14 +40,15 @@ if(options.x) {
 //
 //
 def replacements = [
+"2010-2011":"2010-2012"
 
-"org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper":"org.apache.isis.core.webapp.IsisWebAppBootstrapper"
-,"org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter":"org.apache.isis.core.webapp.IsisSessionFilter"
-,"org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault":"org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault"
+//"org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper":"org.apache.isis.core.webapp.IsisWebAppBootstrapper"
+//,"org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter":"org.apache.isis.core.webapp.IsisSessionFilter"
+//,"org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault":"org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault"
 ,
-,"oai.runtimes.dflt:runtime":"oai.core:isis-core-runtime"
-,"oai.runtimes.dflt:webapp":"oai.core:isis-core-runtime"
-,"oai.runtimes.dflt:webserver":"oai.core:isis-core-webserver"
+//,"oai.runtimes.dflt:runtime":"oai.core:isis-core-runtime"
+//,"oai.runtimes.dflt:webapp":"oai.core:isis-core-runtime"
+//,"oai.runtimes.dflt:webserver":"oai.core:isis-core-webserver"
 
 //"<artifactId>isis-metamodel": "<artifactId>isis-core-metamodel"
 
@@ -91,7 +92,7 @@ def replacements = [
 //
 //
 //def fileEndings = [".xml", ".java", ".launch", ".properties"]
-def fileEndings = [".xml"]
+def fileEndings = ["NOTICE"]
 
 
 
