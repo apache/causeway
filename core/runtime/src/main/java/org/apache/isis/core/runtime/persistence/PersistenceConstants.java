@@ -32,12 +32,12 @@ public final class PersistenceConstants {
     /**
      * Default implementation to use as {@link ObjectFactory}.
      */
-    public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory";
+    public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT = "org.apache.isis.core.bytecode.cglib.CglibObjectFactory";
     
     /**
      * Default implementation to use as {@link ClassSubstitutor}.
      */
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor.CglibClassSubstitutor";
+    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.bytecode.cglib.CglibClassSubstitutor";
 
     /**
      * Key used to lookup implementation of {@link DomainObjectContainer} in
