@@ -96,6 +96,7 @@
 	                        <exclude>**/*.project</exclude>
 	                        <exclude>**/.classpath</exclude>
 	                        <exclude>**/.settings/**</exclude>
+	                        <exclude>**/*.json</exclude>
 	                    </excludes>
                     </configuration>
 	            </plugin>
