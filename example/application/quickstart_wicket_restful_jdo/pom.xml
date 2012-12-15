@@ -28,6 +28,13 @@
     <name>Quickstart Wicket/Restful/JDO App</name>
 
     <packaging>pom</packaging>
+
+	<properties>
+		<isis.version>1.0.0-SNAPSHOT</isis.version>
+		<isis-objectstore-jdo.version>1.0.0-SNAPSHOT</isis-objectstore-jdo.version>
+		<isis-viewer-wicket.version>1.0.0-SNAPSHOT</isis-viewer-wicket.version>
+		<isis-viewer-restfulobjects.version>1.0.0-SNAPSHOT</isis-viewer-restfulobjects.version>
+	</properties>
     
     <repositories>
         <repository>
@@ -148,13 +155,6 @@
         <module>viewer-restfulobjects</module>
         <module>viewer-wicket</module>
     </modules>
-
-	<properties>
-		<isis.version>1.0.0</isis.version>
-		<isis-objectstore-jdo.version>1.0.0</isis-objectstore-jdo.version>
-		<isis-viewer-wicket.version>1.0.0</isis-viewer-wicket.version>
-		<isis-viewer-restfulobjects.version>1.0.0</isis-viewer-restfulobjects.version>
-	</properties>
 	
     <dependencyManagement>
         <dependencies>

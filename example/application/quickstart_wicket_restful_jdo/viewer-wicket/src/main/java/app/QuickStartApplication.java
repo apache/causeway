@@ -50,7 +50,7 @@ public class QuickStartApplication extends IsisWicketApplication {
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
                 bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines("welcome.html"));
-                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("QuickStart v0.1.0");
+                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("QuickStart v1.0.0");
             }
 
         };

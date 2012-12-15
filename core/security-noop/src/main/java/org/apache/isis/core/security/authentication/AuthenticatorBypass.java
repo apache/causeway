@@ -24,8 +24,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
 /**
- * Implementation that bypasses authentication (at least, so long as the
- * {@link AuthenticationRequest} is an implementation of {@link AuthenticationRequestNameOnly}).
+ * Implementation that bypasses authentication.
  * 
  * <p>
  * Intended for testing use only.
@@ -38,15 +37,12 @@ public class AuthenticatorBypass extends AuthenticatorAbstract {
 
     @Override
     public boolean isValid(final AuthenticationRequest request) {
-        if(!(request instanceof AuthenticationRequestNameOnly)) {
-            return false;
-        } 
         return true;
     }
 
     @Override
     public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
-        return AuthenticationRequestNameOnly.class.isAssignableFrom(authenticationRequestClass);
+        return true;
     }
 
 }

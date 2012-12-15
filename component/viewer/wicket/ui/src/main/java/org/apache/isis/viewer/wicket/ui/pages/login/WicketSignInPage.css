@@ -17,6 +17,10 @@
  *  under the License.
  */
 
+
+#header .applicationName {
+	display:none;
+}
  
  .loginPanel {
 	width:310px;

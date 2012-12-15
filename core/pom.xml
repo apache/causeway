@@ -931,12 +931,14 @@ ${license.additional-notes}
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
 
             <!-- applib -->
@@ -950,6 +952,7 @@ ${license.additional-notes}
                 <artifactId>isis-core-applib</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
 
             <!-- metamodel -->
@@ -963,6 +966,7 @@ ${license.additional-notes}
                 <artifactId>isis-core-metamodel</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
 
             <!-- runtime -->
@@ -979,14 +983,12 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
-            <!-- bytecode-cglib -->
+            <!-- bytecode components -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-cglib</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
-
-            <!-- bytecode-javassist -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-javassist</artifactId>
@@ -1005,9 +1007,10 @@ ${license.additional-notes}
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
+                <scope>test</scope>
             </dependency>
 
-            <!-- default implementations -->
+            <!-- default implementations of components -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
@@ -1030,18 +1033,17 @@ ${license.additional-notes}
                 <artifactId>isis-core-tck</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-dom</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-fixture</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
+
 
 
             <!-- JodaTime -->
@@ -1188,7 +1190,6 @@ ${license.additional-notes}
               <groupId>org.hsqldb</groupId>
               <artifactId>hsqldb</artifactId>
               <version>2.2.9</version>
-              <scope>test</scope>
             </dependency>
 
 			<dependency>
@@ -1269,7 +1270,7 @@ ${license.additional-notes}
                 </exclusions>
             </dependency>
 
-            <!-- Testing libraries (not scope=test because used by viewer/junit) -->
+            <!-- Testing libraries (not scope=test because used by isis-viewer-junit) -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
