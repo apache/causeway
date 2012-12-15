@@ -29,6 +29,16 @@
 	<artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
 	<name>Quickstart Wicket/Restful/JDO Repositories (for JDO)</name>
 
+	<dependencyManagement>
+		<dependencies>
+	        <dependency>
+	            <groupId>org.slf4j</groupId>
+	            <artifactId>slf4j-log4j12</artifactId>
+	            <version>1.6.4</version>
+	        </dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 	
 		<!-- other modules in this project -->
@@ -40,12 +50,6 @@
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
             <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
-        </dependency>
-		
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.4</version>
         </dependency>
 
 	</dependencies>

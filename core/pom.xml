@@ -1190,6 +1190,12 @@ ${license.additional-notes}
               <version>2.2.9</version>
               <scope>test</scope>
             </dependency>
+
+			<dependency>
+			  <groupId>org.lazyluke</groupId>
+			  <artifactId>log4jdbc-remix</artifactId>
+			  <version>0.2.7</version>
+			</dependency>
             
 
             <!-- RestEasy -->
