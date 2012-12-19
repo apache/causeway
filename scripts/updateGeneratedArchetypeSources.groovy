@@ -21,6 +21,13 @@ import groovy.xml.XmlUtil
 import javax.xml.transform.*
 import javax.xml.transform.stream.*
 
+
+def cli = new CliBuilder(usage: 'updateGeneratedArchetypeSources.groovy -v [version]')
+cli.with {
+    v longOpt: 'version', args: 1, required: true, argName: 'version', 'Isis core version to use as parent POM'
+}
+
+
 /////////////////////////////////////////////////////
 //
 // constants
@@ -50,6 +57,20 @@ def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
   under the License.
 -->
 """
+
+/////////////////////////////////////////////////////
+//
+// Parse command line
+//
+/////////////////////////////////////////////////////
+
+def options = cli.parse(args)
+if (!options) {
+    return
+}
+
+isis_version=options.v
+
 /////////////////////////////////////////////////////
 //
 // update pom.xml's groupId
@@ -64,6 +85,13 @@ println "updating ${pomFile.path}"
 def pomFileText = stripXmlPragma(pomFile)
 
 def pomXml = new XmlSlurper(false,true).parseText(pomFileText)
+pomXml.appendNode {
+  parent {
+    groupId("org.apache.isis.core")
+    artifactId("isis")
+    version(isis_version)
+  }
+}
 pomXml.groupId='org.apache.isis.archetype'
 
 def pomSmb = new groovy.xml.StreamingMarkupBuilder().bind {

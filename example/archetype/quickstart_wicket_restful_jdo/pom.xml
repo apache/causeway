@@ -41,4 +41,9 @@
       </plugins>
     </pluginManagement>
   </build>
+  <parent>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis</artifactId>
+    <version>1.0.0</version>
+  </parent>
 </project>
