@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
@@ -187,7 +188,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // }}
 
     // {{ isDue (programmatic)
-    @Ignore
+    @Programmatic
     // excluded from the framework's metamodel
     public boolean isDue() {
         if (getDueBy() == null) {
@@ -210,7 +211,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     /**
      * by complete flag, then due by date, then description
      */
-    @Ignore
+    @Programmatic
     // exclude from the framework's metamodel
     @Override
     public int compareTo(final ToDoItem other) {
@@ -226,7 +227,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         if (getDueBy() != null && other.getDueBy() == null) {
             return -1;
         }
-        if (getDueBy() == null && other.getDueBy() == null || getDueBy().equals(this.getDescription())) {
+        if (getDueBy() == null && other.getDueBy() == null || getDueBy().equals(this.getDueBy())) {
             return getDescription().compareTo(other.getDescription());
         }
         return (int) (getDueBy().getMillisSinceEpoch() - other.getDueBy().getMillisSinceEpoch());

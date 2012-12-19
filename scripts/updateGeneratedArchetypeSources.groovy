@@ -21,13 +21,14 @@ import groovy.xml.XmlUtil
 import javax.xml.transform.*
 import javax.xml.transform.stream.*
 
-def ROOT="quickstart/target/generated-sources/archetype/src/main/resources/"
+/////////////////////////////////////////////////////
+//
+// constants
+//
+/////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////
-//
-// update archetype-metadata.xml
-//
-/////////////////////////////////////////////////////
+def BASE="target/generated-sources/archetype/"
+def ROOT=BASE + "src/main/resources/"
 
 def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -49,6 +50,44 @@ def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
   under the License.
 -->
 """
+/////////////////////////////////////////////////////
+//
+// update pom.xml's groupId
+//
+/////////////////////////////////////////////////////
+
+def pomFile=new File(BASE+"pom.xml")
+
+println "updating ${pomFile.path}"
+
+// read file, ignoring XML pragma
+def pomFileText = stripXmlPragma(pomFile)
+
+def pomXml = new XmlSlurper(false,true).parseText(pomFileText)
+pomXml.groupId='org.apache.isis.archetype'
+
+def pomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
+    mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
+    mkp.yield(pomXml)
+}
+
+def pomTempFile = File.createTempFile("temp",".xml")
+pomTempFile.text = indentXml(pomSmb.toString())
+def pomXmlText = stripXmlPragma(pomTempFile)
+
+
+pomFile.text = 
+    license_using_xml_comments + 
+    pomXmlText
+
+
+
+/////////////////////////////////////////////////////
+//
+// update archetype-metadata.xml
+//
+/////////////////////////////////////////////////////
+
 
 def metaDataFile=new File(ROOT+"META-INF/maven/archetype-metadata.xml")
 
@@ -71,31 +110,14 @@ def metaDataSmb = new groovy.xml.StreamingMarkupBuilder().bind {
     mkp.yield(metaDataXml)
 }
 
-String indentXml(xml) {
-    def factory = TransformerFactory.newInstance()
-    factory.setAttribute("indent-number", 2);
-
-    Transformer transformer = factory.newTransformer()
-    transformer.setOutputProperty(OutputKeys.INDENT, 'yes')
-    StreamResult result = new StreamResult(new StringWriter())
-    transformer.transform(new StreamSource(new ByteArrayInputStream(xml.toString().bytes)), result)
-    return result.writer.toString()
-}
-
-String stripXmlPragma(File file) {
-    def sw = new StringWriter()
-    file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
-    return sw.toString()
-}
-
 def tempFile = File.createTempFile("temp",".xml")
 tempFile.text = indentXml(metaDataSmb.toString())
-def xmlText = stripXmlPragma(tempFile)
+def metaDataXmlText = stripXmlPragma(tempFile)
 
 
 metaDataFile.text = 
     license_using_xml_comments + 
-    xmlText
+    metaDataXmlText
 
 
 /////////////////////////////////////////////////////
@@ -125,4 +147,26 @@ new File(ROOT+"archetype-resources/").eachDirRecurse() { dir ->
 }
 
 
+///////////////////////////////////////////////////
+//
+// helper methods
+//
+///////////////////////////////////////////////////
+
+String indentXml(xml) {
+    def factory = TransformerFactory.newInstance()
+    factory.setAttribute("indent-number", 2);
+
+    Transformer transformer = factory.newTransformer()
+    transformer.setOutputProperty(OutputKeys.INDENT, 'yes')
+    StreamResult result = new StreamResult(new StringWriter())
+    transformer.transform(new StreamSource(new ByteArrayInputStream(xml.toString().bytes)), result)
+    return result.writer.toString()
+}
+
+String stripXmlPragma(File file) {
+    def sw = new StringWriter()
+    file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
+    return sw.toString()
+}
 

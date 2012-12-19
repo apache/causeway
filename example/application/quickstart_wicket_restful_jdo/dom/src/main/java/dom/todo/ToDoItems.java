@@ -19,11 +19,8 @@
 
 package dom.todo;
 
+import java.util.Collections;
 import java.util.List;
-
-import com.google.common.base.Objects;
-
-import dom.todo.ToDoItem.Category;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -33,6 +30,11 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.filter.Filter;
+import org.joda.time.LocalDate;
+
+import com.google.common.base.Objects;
+
+import dom.todo.ToDoItem.Category;
 
 @Named("ToDos")
 public class ToDoItems extends AbstractFactoryAndRepository {
@@ -48,61 +50,78 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    // {{ notYetDone (action)
+    // {{ notYetComplete (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
-    public List<ToDoItem> notYetDone() {
+    public List<ToDoItem> notYetComplete() {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && !t.getDone();
+                return ownedByCurrentUser(t) && !t.isComplete();
             }
         });
     }
     // }}
 
-    // {{ done (action)
+    // {{ complete (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
-    public List<ToDoItem> done() {
+    public List<ToDoItem> complete() {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && t.getDone();
+                return ownedByCurrentUser(t) && t.isComplete();
             }
         });
     }
     // }}
 
     // {{ newToDo  (action)
-    @MemberOrder(sequence = "2")
+    @MemberOrder(sequence = "3")
     public ToDoItem newToDo(
             @Named("Description") String description, 
-            @Named("Category") Category category) {
-        final String ownedBy = getContainer().getUser().getName();
-        return newToDo(description, category, ownedBy);
+            @Named("Category") Category category,
+            @Named("Due by") LocalDate dueBy) {
+        final String ownedBy = currentUserName();
+        return newToDo(description, category, ownedBy, dueBy);
     }
     // }}
+
+    
+    // {{ AllToDos (action)
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "4")
+    public List<ToDoItem> allToDos() {
+        final String currentUser = currentUserName();
+        final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
+        Collections.sort(items);
+        return items;
+    }
+    // }}
+
 
     // {{ newToDo  (hidden)
     @Hidden // for use by fixtures
     public ToDoItem newToDo(
             String description, 
             Category category, 
-            String ownedBy) {
+            String userName,
+            LocalDate dueBy) {
         final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
-        toDoItem.setOwnedBy(ownedBy);
+        toDoItem.setOwnedBy(userName);
+        toDoItem.setDueBy(dueBy);
         persist(toDoItem);
         return toDoItem;
     }
     // }}
 
+    
     // {{ similarTo (action)
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "5")
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
@@ -113,9 +132,10 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
     
+
+    
     // {{ autoComplete (hidden)
     @Hidden
-    @MemberOrder(sequence = "1")
     public List<ToDoItem> autoComplete(final String description) {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override

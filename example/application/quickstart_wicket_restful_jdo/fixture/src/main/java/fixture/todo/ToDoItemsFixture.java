@@ -19,56 +19,58 @@
 
 package fixture.todo;
 
+import java.util.List;
+
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.joda.time.LocalDate;
+
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
-
-import org.apache.isis.applib.fixtures.AbstractFixture;
 
 public class ToDoItemsFixture extends AbstractFixture {
 
     @Override
     public void install() {
-        createFiveFor("sven");
-        createThreeFor("dick");
-        createTwoFor("bob");
-        createOneFor("joe");
 
-        // for exploration user
-        createFiveFor("exploration");
+        removeAllToDosForCurrentUser();
+
+        createToDoItemForCurrentUser("Buy milk", Category.Domestic, daysFromToday(0));
+        createToDoItemForCurrentUser("Buy stamps", Category.Domestic, daysFromToday(0));
+        createToDoItemForCurrentUser("Pick up laundry", Category.Other, daysFromToday(6));
+        createToDoItemForCurrentUser("Write blog post", Category.Professional, null);
+        createToDoItemForCurrentUser("Organize brown bag", Category.Professional, daysFromToday(14));
+
+        getContainer().flush();
     }
 
-    private void createFiveFor(String ownedBy) {
-        createToDoItem("Buy milk", Category.Domestic, ownedBy);
-        createToDoItem("Pick up laundry", Category.Domestic, ownedBy);
-        createToDoItem("Buy stamps", Category.Domestic, ownedBy);
-        createToDoItem("Write blog post", Category.Professional, ownedBy);
-        createToDoItem("Organize brown bag", Category.Professional, ownedBy);
+    // {{ helpers
+    private void removeAllToDosForCurrentUser() {
+        final List<ToDoItem> allToDos = toDoItems.allToDos();
+        for (final ToDoItem toDoItem : allToDos) {
+            getContainer().remove(toDoItem);
+        }
     }
 
-    private void createThreeFor(String ownedBy) {
-        createToDoItem("Book car in for service", Category.Domestic, ownedBy);
-        createToDoItem("Buy birthday present for sven", Category.Domestic, ownedBy);
-        createToDoItem("Write presentation for conference", Category.Professional, ownedBy);
+    private ToDoItem createToDoItemForCurrentUser(final String description, final Category category, final LocalDate dueBy) {
+        return toDoItems.newToDo(description, category, dueBy);
     }
 
-    private void createTwoFor(String ownedBy) {
-        createToDoItem("Write thank you notes", Category.Domestic, ownedBy);
-        createToDoItem("Look into solar panels", Category.Domestic, ownedBy);
+    private static LocalDate daysFromToday(final int i) {
+        final LocalDate date = new LocalDate(Clock.getTimeAsDateTime());
+        return date.plusDays(i);
     }
 
-    private void createOneFor(String ownedBy) {
-        createToDoItem("Pitch book idea to publisher", Category.Professional, ownedBy);
-    }
+    // }}
 
-    private ToDoItem createToDoItem(final String description, Category category, String ownedBy) {
-        return toDoItems.newToDo(description, category, ownedBy);
-    }
-
+    // {{ injected: ToDoItems
     private ToDoItems toDoItems;
 
     public void setToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
+    // }}
+    
 
 }

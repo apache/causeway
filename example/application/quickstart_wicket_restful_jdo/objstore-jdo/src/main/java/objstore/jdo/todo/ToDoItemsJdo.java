@@ -32,22 +32,22 @@ import org.apache.isis.applib.query.QueryDefault;
 
 public class ToDoItemsJdo extends ToDoItems {
 
-    // {{ notYetDone (action)
+    // {{ notYetComplete (action)
     @Override
-    public List<ToDoItem> notYetDone() {
+    public List<ToDoItem> notYetComplete() {
         return allMatches(
                 new QueryDefault<ToDoItem>(ToDoItem.class, 
-                        "todo_notYetDone", 
+                        "todo_notYetComplete", 
                         "ownedBy", currentUserName()));
     }
     // }}
 
     // {{ done (action)
     @Override
-    public List<ToDoItem> done() {
+    public List<ToDoItem> complete() {
         return allMatches(
                 new QueryDefault<ToDoItem>(ToDoItem.class, 
-                        "todo_done", 
+                        "todo_complete", 
                         "ownedBy", currentUserName()));
     }
     // }}
@@ -58,7 +58,7 @@ public class ToDoItemsJdo extends ToDoItems {
         final List<ToDoItem> similarToDoItems = allMatches(
                 new QueryDefault<ToDoItem>(ToDoItem.class, 
                         "todo_similarTo", 
-                        "ownedBy", thisToDoItem.getOwnedBy(), 
+                        "ownedBy", currentUserName(), 
                         "category", thisToDoItem.getCategory()));
         return Lists.newArrayList(Iterables.filter(similarToDoItems, excluding(thisToDoItem)));
     }

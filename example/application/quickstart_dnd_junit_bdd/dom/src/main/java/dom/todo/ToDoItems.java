@@ -115,7 +115,6 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     
     // {{ autoComplete (hidden)
     @Hidden
-    @MemberOrder(sequence = "1")
     public List<ToDoItem> autoComplete(final String description) {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override

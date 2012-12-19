@@ -27,8 +27,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
-import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
@@ -37,23 +35,36 @@ import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
+import org.joda.time.LocalDate;
+
+import com.google.common.base.Objects;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-        name="todo_notYetDone", language="JDOQL",  
-        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == false"),
+            name="todo_all", language="JDOQL",  
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy"),
     @javax.jdo.annotations.Query(
-            name="todo_done", language="JDOQL",  
-            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && done == true"),
+        name="todo_notYetComplete", language="JDOQL",  
+        value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && complete == false"),
+    @javax.jdo.annotations.Query(
+            name="todo_complete", language="JDOQL",  
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && complete == true"),
     @javax.jdo.annotations.Query(
         name="todo_similarTo", language="JDOQL",  
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category"),
@@ -66,16 +77,35 @@ import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 @Auditable
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
-public class ToDoItem {
-    
+public class ToDoItem implements Comparable<ToDoItem> {
+
+	private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
+
     public static enum Category {
         Professional, Domestic, Other;
     }
 
+    // {{ Identification on the UI
+    public String title() {
+        final TitleBuffer buf = new TitleBuffer();
+        buf.append(getDescription());
+        if (isComplete()) {
+            buf.append(" - Completed!");
+        } else {
+            if (getDueBy() != null) {
+                buf.append(" due by ", getDueBy());
+            }
+        }
+        return buf.toString();
+    }
+
+    // }}
+
     // {{ Description
     private String description;
 
-    @Title
+    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+    // words, spaces and selected punctuation
     @MemberOrder(sequence = "1")
     public String getDescription() {
         return description;
@@ -83,19 +113,6 @@ public class ToDoItem {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-    // }}
-
-    // {{ Category
-    private Category category;
-
-    @MemberOrder(sequence = "2")
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(final Category category) {
-        this.category = category;
     }
     // }}
 
@@ -112,21 +129,56 @@ public class ToDoItem {
     public void setDueBy(final LocalDate dueBy) {
         this.dueBy = dueBy;
     }
+    // proposed new value is validated before setting
+    public String validateDueBy(final LocalDate dueBy) {
+        if (dueBy == null) {
+            return null;
+        }
+        return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
+    }
     // }}
 
-    // {{ Done
-    private boolean done;
+    // {{ Category
+    private Category category;
+
+    @MemberOrder(sequence = "2")
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(final Category category) {
+        this.category = category;
+    }
+    // }}
+
+    // {{ OwnedBy (property)
+    private String ownedBy;
+
+    @Hidden
+    // not shown in the UI
+    public String getOwnedBy() {
+        return ownedBy;
+    }
+
+    public void setOwnedBy(final String ownedBy) {
+        this.ownedBy = ownedBy;
+    }
+
+    // }}
+
+    // {{ Complete (property)
+    private boolean complete;
 
     @Disabled
+    // cannot be edited as a property
     @MemberOrder(sequence = "4")
-    public boolean getDone() {
-        return done;
+    public boolean isComplete() {
+        return complete;
     }
 
-    public void setDone(final boolean done) {
-        this.done = done;
+    public void setComplete(final boolean complete) {
+        this.complete = complete;
     }
-    // }}
 
     // {{ Notes (property)
     private String notes;
@@ -144,18 +196,6 @@ public class ToDoItem {
     }
     // }}
 
-    // {{ OwnedBy (property, hidden)
-    private String ownedBy;
-
-    @Hidden
-    public String getOwnedBy() {
-        return ownedBy;
-    }
-
-    public void setOwnedBy(final String ownedBy) {
-        this.ownedBy = ownedBy;
-    }
-    // }}
 
     // {{ Version (derived property)
     @Hidden(where=Where.ALL_TABLES)
@@ -175,27 +215,31 @@ public class ToDoItem {
     }
     // }}
 
-    // {{ markAsDone (action)
+    // {{ completed (action)
     @MemberOrder(sequence = "1")
-    public ToDoItem markAsDone() {
-        setDone(true);
+    public ToDoItem completed() {
+        setComplete(true);
         return this;
     }
 
-    public String disableMarkAsDone() {
-        return done ? "Already done" : null;
+    // disable action dependent on state of object
+    public String disableCompleted() {
+        return complete ? "Already completed" : null;
     }
+
     // }}
 
-    // {{ markAsNotDone (action)
+    // {{ notYetCompleted (action)
     @MemberOrder(sequence = "2")
-    public ToDoItem markAsNotDone() {
-        setDone(false);
+    public ToDoItem notYetCompleted() {
+        setComplete(false);
         return this;
     }
 
-    public String disableMarkAsNotDone() {
-        return !done ? "Not yet done" : null;
+
+    // disable action dependent on state of object
+    public String disableNotYetCompleted() {
+        return !complete ? "Not yet completed" : null;
     }
     // }}
     
@@ -251,6 +295,124 @@ public class ToDoItem {
     }
     // }}
 
+
+    // {{ clone (action)
+    @Named("Clone")
+    // the name of the action in the UI
+    @MemberOrder(sequence = "3")
+    // nb: method is not called "clone()" is inherited by java.lang.Object and
+    // (a) has different semantics and (b) is in any case automatically ignored
+    // by the framework
+    public ToDoItem duplicate() {
+        return toDoItems.newToDo(getDescription() + " - Copy", getCategory(), getDueBy());
+    }
+    // }}
+
+    // {{ isDue (programmatic)
+    @Programmatic
+    // excluded from the framework's metamodel
+    public boolean isDue() {
+        if (getDueBy() == null) {
+            return false;
+        }
+        return !isMoreThanOneWeekInPast(getDueBy());
+    }
+
+    // }}
+
+
+    // {{ SimilarItems (derived collection)
+    @MemberOrder(sequence = "5")
+    @NotPersisted
+    @Resolve(Type.EAGERLY)
+    public List<ToDoItem> getSimilarItems() {
+        return toDoItems.similarTo(this);
+    }
+
+    // }}
+
+
+
+    // {{ compareTo (programmatic)
+    /**
+     * by complete flag, then due by date, then description
+     */
+    @Programmatic
+    // exclude from the framework's metamodel
+    @Override
+    public int compareTo(final ToDoItem other) {
+        if (isComplete() && !other.isComplete()) {
+            return +1;
+        }
+        if (!isComplete() && other.isComplete()) {
+            return -1;
+        }
+        if (getDueBy() == null && other.getDueBy() != null) {
+            return +1;
+        }
+        if (getDueBy() != null && other.getDueBy() == null) {
+            return -1;
+        }
+        if (getDueBy() == null && other.getDueBy() == null || getDueBy().equals(this.getDueBy())) {
+            return getDescription().compareTo(other.getDescription());
+        }
+        return getDueBy().compareTo(getDueBy());
+    }
+
+    // }}
+
+    // {{ helpers
+    private static boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
+        return dueBy.toDateTimeAtStartOfDay().getMillis() < Clock.getTime() - ONE_WEEK_IN_MILLIS;
+    }
+
+    // }}
+
+    // {{ filters (programmatic)
+    @SuppressWarnings("unchecked")
+    public static Filter<ToDoItem> thoseDue() {
+        return Filters.and(Filters.not(thoseComplete()), new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem t) {
+                return t.isDue();
+            }
+        });
+    }
+
+    public static Filter<ToDoItem> thoseComplete() {
+        return new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem t) {
+                return t.isComplete();
+            }
+        };
+    }
+
+    public static Filter<ToDoItem> thoseOwnedBy(final String currentUser) {
+        return new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem toDoItem) {
+                return Objects.equal(toDoItem.getOwnedBy(), currentUser);
+            }
+
+        };
+    }
+
+    public static Filter<ToDoItem> thoseSimilarTo(final ToDoItem toDoItem) {
+        return new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem eachToDoItem) {
+                return Objects.equal(toDoItem.getCategory(), eachToDoItem.getCategory()) && 
+                       Objects.equal(toDoItem.getOwnedBy(), eachToDoItem.getOwnedBy()) &&
+                       eachToDoItem != toDoItem;
+            }
+
+        };
+    }
+
+
+    // }}
+
     // {{ injected: DomainObjectContainer
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
@@ -261,12 +423,13 @@ public class ToDoItem {
     // }}
 
     // {{ injected: ToDoItems
-    @SuppressWarnings("unused")
     private ToDoItems toDoItems;
 
     public void setToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
     // }}
-   
+
+
+    
 }
