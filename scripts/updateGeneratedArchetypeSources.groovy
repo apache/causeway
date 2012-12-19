@@ -58,6 +58,34 @@ def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
 -->
 """
 
+def supplemental_models_text="""<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<supplementalDataModels 
+  xmlns="http://maven.apache.org/supplemental-model/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/supplemental-model/1.0.0 
+            http://maven.apache.org/xsd/supplemental-model-1.0.0.xsd">
+
+</supplementalDataModels>
+"""
+
 /////////////////////////////////////////////////////
 //
 // Parse command line
@@ -174,6 +202,18 @@ new File(ROOT+"archetype-resources/").eachDirRecurse() { dir ->
      }  
 }
 
+
+///////////////////////////////////////////////////
+//
+// add empty supplemental-models.xml
+//
+///////////////////////////////////////////////////
+
+def appendedResourcesDir = new File(BASE + "src/main/appended-resources")
+appendedResourcesDir.mkdir()
+//def supplementalModelsFileName=BASE + "src/main/appended-resources/supplemental-models.xml"
+def supplementalModelsFile=new File(appendedResourcesDir, "supplemental-models.xml")
+supplementalModelsFile.text = supplemental_models_text
 
 ///////////////////////////////////////////////////
 //
