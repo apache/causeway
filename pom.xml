@@ -65,6 +65,12 @@
 
         <module>example/archetype/quickstart</module>
 
+<!--
+commenting out since currently references v1.0.0
+        <module>example/archetype/quickstart_wicket_restful_jdo</module>
+-->
+
+
         <module>example/domain-service/email-service</module>
         <module>example/misc/metamodel/namefile</module>
 
