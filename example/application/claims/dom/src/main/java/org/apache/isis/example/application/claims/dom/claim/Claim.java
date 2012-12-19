@@ -235,7 +235,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
         setApprover(approver);
     }
 
-    public String disableSubmit() {
+    public String disableSubmit(final Approver approver) {
         return !ClaimStatus.SUBMITTED.equals(getStatus()) ? null : "Claim has already been submitted";
     }
 
@@ -258,7 +258,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
         addToItems(claimItem);
     }
 
-    public String disableAddItem() {
+    public String disableAddItem(final int days, final double amount, final String description) {
         return Reasons.coalesce(ifAlreadySubmitted());
     }
 
@@ -270,7 +270,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
         removeFromItems(claimItem);
     }
 
-    public String disableRemoveItem() {
+    public String disableRemoveItem(final ClaimItem claimItem) {
         return Reasons.coalesce(ifAlreadySubmitted());
     }
 

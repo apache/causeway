@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Resolve;
@@ -42,7 +41,7 @@ import org.joda.time.LocalDate;
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
 public class ToDoItem {
-    
+
     public static enum Category {
         Professional, Domestic, Other;
     }
@@ -154,7 +153,7 @@ public class ToDoItem {
         return !done ? "Not yet done" : null;
     }
     // }}
-    
+
     // {{ dependencies (Collection)
     private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
 
@@ -193,7 +192,7 @@ public class ToDoItem {
         getDependencies().remove(toDoItem);
         return this;
     }
-    public String disableRemove() {
+    public String disableRemove(final ToDoItem toDoItem) {
         return getDependencies().isEmpty()? "No dependencies to remove": null;
     }
     public String validateRemove(final ToDoItem toDoItem) {
@@ -224,5 +223,5 @@ public class ToDoItem {
         this.toDoItems = toDoItems;
     }
     // }}
-   
+
 }

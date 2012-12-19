@@ -675,7 +675,7 @@ public class Customer extends AbstractDomainObject {
 
     public String disablePlaceOrder;
 
-    public String disablePlaceOrder() {
+    public String disablePlaceOrder(final Product p, final Integer quantity) {
         return disablePlaceOrder;
     }
 
