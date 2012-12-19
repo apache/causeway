@@ -211,7 +211,6 @@ new File(ROOT+"archetype-resources/").eachDirRecurse() { dir ->
 
 def appendedResourcesDir = new File(BASE + "src/main/appended-resources")
 appendedResourcesDir.mkdir()
-//def supplementalModelsFileName=BASE + "src/main/appended-resources/supplemental-models.xml"
 def supplementalModelsFile=new File(appendedResourcesDir, "supplemental-models.xml")
 supplementalModelsFile.text = supplemental_models_text
 
