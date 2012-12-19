@@ -58,7 +58,7 @@ public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBased
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method disableMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] {});
+        final Method disableMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, method.getParameterTypes());
         if (disableMethod == null) {
             return;
         }

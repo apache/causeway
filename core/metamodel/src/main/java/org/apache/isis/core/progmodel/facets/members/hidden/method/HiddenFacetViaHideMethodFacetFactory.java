@@ -58,9 +58,12 @@ public class HiddenFacetViaHideMethodFacetFactory extends MethodPrefixBasedFacet
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
+        Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
         if (hideMethod == null) {
-            return;
+            hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
+            if (hideMethod == null) {
+                return;
+            }
         }
 
         processMethodContext.removeMethod(hideMethod);
