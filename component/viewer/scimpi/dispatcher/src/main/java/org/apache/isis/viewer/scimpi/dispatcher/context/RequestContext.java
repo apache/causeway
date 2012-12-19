@@ -57,6 +57,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 
 public abstract class RequestContext {
     private static final Logger LOG = Logger.getLogger(RequestContext.class);
+    static final String TRANSIENT_OBJECT_OID_MARKER = "~";
 
     public enum Scope {
         GLOBAL, SESSION, INTERACTION, REQUEST, ERROR
@@ -77,7 +78,7 @@ public abstract class RequestContext {
         } else if (name.equals(Scope.REQUEST.toString())) {
             return Scope.REQUEST;
         }
-        throw new IllegalArgumentException("Invalid scope name: " + scopeName); 
+        throw new IllegalArgumentException("Invalid scope name: " + scopeName);
     }
 
     public static Scope scope(final String scopeName, final Scope defaultScope) {
@@ -93,7 +94,7 @@ public abstract class RequestContext {
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
     private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
-    
+
     private final OidMarshaller oidMarshaller = new OidMarshaller();
 
 
@@ -184,9 +185,9 @@ public abstract class RequestContext {
         if (dataOrOid == null) {
             dataOrOid = RESULT;
         }
-        
-        if (dataOrOid.startsWith("D")) {
-            return objectMapping.mappedTransientObject(StringEscapeUtils.unescapeHtml(dataOrOid.substring(1)));
+
+        if (dataOrOid.startsWith(TRANSIENT_OBJECT_OID_MARKER + "{")) {
+            return objectMapping.mappedTransientObject(StringEscapeUtils.unescapeHtml(dataOrOid.substring(TRANSIENT_OBJECT_OID_MARKER.length())));
         }
 
         final String oidStr = dataOrOid;
@@ -206,12 +207,12 @@ public abstract class RequestContext {
         //
         AggregatedOid aggregatedOid = (AggregatedOid) typedOid;
         final TypedOid parentOid = aggregatedOid.getParentOid();
-        
+
         //final ObjectAdapter parentAdapter = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
         final ObjectAdapter parentAdapter = objectMapping.mappedObject(parentOid.enString(getOidMarshaller()));
         getPersistenceSession().resolveImmediately(parentAdapter);
-        
-        //ObjectSpecId objectType = null; 
+
+        //ObjectSpecId objectType = null;
         //final AggregatedOid aggregatedOid = new AggregatedOid(objectType, (TypedOid) parentAdapter.getOid(), idParts[2]);
 
         ObjectAdapter aggregatedAdapter = null;
@@ -268,7 +269,7 @@ public abstract class RequestContext {
     public Version getVersion(final String id) {
         if (id.equals("")) {
             return null;
-        } 
+        }
         return versionMapping.getVersion(id);
     }
 
@@ -277,7 +278,7 @@ public abstract class RequestContext {
     // ////////////////////////////
     public void append(final DebugBuilder debug) {
         debug.startSection("Scimpi Request");
-        
+
         debug.appendTitle("User");
         final AuthenticationSession session = getSession();
         debug.appendln("Authentication Session", session);
@@ -529,12 +530,12 @@ public abstract class RequestContext {
 
     public abstract String getCookie(String name);
 
-    
-    
+
+
     // /////////////////////////////////////////////////
     // Start/end request
     // /////////////////////////////////////////////////
-    
+
     public void endRequest() throws IOException {
         getWriter().close();
         objectMapping.clear();
@@ -773,11 +774,11 @@ public abstract class RequestContext {
     public abstract String clearSession();
 
     public abstract boolean isAborted();
-    
+
     public abstract String getErrorReference();
 
     public abstract String getErrorMessage();
-    
+
     public abstract String getErrorDetails();
 
     public void setSession(final AuthenticationSession session) {
@@ -843,13 +844,13 @@ public abstract class RequestContext {
     public boolean isUserAuthenticated() {
         return isUserAuthenticated;
     }
-    
+
     public void setUserAuthenticated(boolean isUserAuthenticated) {
         this.isUserAuthenticated = isUserAuthenticated;
         addVariable("_authenticated", isUserAuthenticated, Scope.SESSION);
     }
-    
-    
+
+
     protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }

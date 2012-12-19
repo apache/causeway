@@ -54,6 +54,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
             final String labelDelimiter = request.getOptionalProperty(LABEL_DELIMITER, ":");
             final boolean showIcons = request.isRequested(SHOW_ICON, showIconByDefault()); 
+            String linkAllView = request.getOptionalProperty(LINK_VIEW);
 
             request.setBlockContent(tag);
             request.processUtilCloseTag();
@@ -63,7 +64,6 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             final List<ObjectAssociation> fields = tag.includedFields(associations);
             final LinkedObject[] linkFields = tag.linkedFields(fields);
 
-            String linkAllView = request.getOptionalProperty(LINK_VIEW);
             if (linkAllView != null) {
                 linkAllView = request.getContext().fullUriPath(linkAllView);
                 for (int i = 0; i < linkFields.length; i++) {
