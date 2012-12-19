@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.lang.Threads;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.core.runtime.runner.IsisBootstrapper;
-import org.apache.isis.core.runtime.runner.IsisModule.ViewerList;
+import org.apache.isis.core.runtime.runner.IsisInjectModule.ViewerList;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.viewer.IsisViewer;

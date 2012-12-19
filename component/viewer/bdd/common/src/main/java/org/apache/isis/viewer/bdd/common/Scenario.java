@@ -44,7 +44,6 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstallerNoop;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
-import org.apache.isis.core.runtime.runner.IsisModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
