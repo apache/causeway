@@ -30,7 +30,7 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-restfulobjects</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
 	<name>Isis RestfulObjects Viewer</name>
 
@@ -38,7 +38,7 @@
 
     <properties>
         <siteBaseDir>.</siteBaseDir>
-		<relativeUrl/>
+		<relativeUrl />
 
         <docbkxGuideTitle>Apache Isis RestfulObjects Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -119,24 +119,24 @@
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-impl</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-impl</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
 			</dependency>
@@ -151,4 +151,8 @@
 	    <module>tck</module>
     </modules>
 
+
+  <scm>
+    <tag>isis-viewer-restfulobjects-1.0.0</tag>
+  </scm>
 </project>

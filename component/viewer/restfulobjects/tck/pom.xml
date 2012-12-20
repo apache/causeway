@@ -28,7 +28,7 @@
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-restfulobjects-tck</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
 	<name>Isis RestfulObjects Viewer TCK tests</name>
 	
@@ -85,7 +85,7 @@
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-restfulobjects-impl</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
 		</dependency>
 
         <!-- isis runtime -->
@@ -123,4 +123,8 @@
 
 	</dependencies>
 
+
+  <scm>
+    <tag>isis-viewer-restfulobjects-1.0.0</tag>
+  </scm>
 </project>
