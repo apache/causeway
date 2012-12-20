@@ -228,7 +228,7 @@ public class IsisRunner {
         this.globalInjector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
 
         bootstrapper.bootstrap(globalInjector);
-        isisConfigurationBuilder.lockConiguration();
+        isisConfigurationBuilder.lockConfiguration();
         isisConfigurationBuilder.dumpResourcesToLog();
     }
 

@@ -114,7 +114,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
             final IsisSystem system = injector.getInstance(IsisSystem.class);
 
-            isisConfigurationBuilder.lockConiguration();
+            isisConfigurationBuilder.lockConfiguration();
             isisConfigurationBuilder.dumpResourcesToLog();
 
             servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);

@@ -213,6 +213,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
         final IsisConfigurationBuilderResourceStreams configurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
         primeConfigurationBuilder(configurationBuilder, servletContext);
+        configurationBuilder.addDefaultConfigurationResources();
         return configurationBuilder;
     }
 

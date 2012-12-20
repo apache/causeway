@@ -19,6 +19,10 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import java.util.List;
+
+import javax.servlet.ServletContext;
+
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -39,6 +43,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -52,6 +57,7 @@ import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -129,7 +135,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         getResourceSettings().setParentFolderPlaceholder("$up$");
         final DeploymentType deploymentType = determineDeploymentType();
 
-        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder(getServletContext());
 
         final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
@@ -140,19 +146,31 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
 
     private DeploymentType determineDeploymentType() {
         if(usesDevelopmentConfig()) {
-        //if (getConfigurationType().equalsIgnoreCase(WICKET_CONFIGURATION_TYPE_DEVELOPMENT)) {
             return new WicketServerPrototype();
         } else {
             return new WicketServer();
         }
     }
 
-    private IsisConfigurationBuilder createConfigBuilder() {
+    private IsisConfigurationBuilder createConfigBuilder(ServletContext servletContext) {
         final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(getServletContext());
         final ResourceStreamSource rssTcl = ResourceStreamSourceContextLoaderClassPath.create();
         final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
         final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
+        primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
+        isisConfigurationBuilder.addDefaultConfigurationResources();
         return isisConfigurationBuilder;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
+        if (isisConfigurationBuilderPrimers == null) {
+            return;
+        }
+        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
+        }
     }
 
     protected void initWicketComponentInjection(final Injector injector) {

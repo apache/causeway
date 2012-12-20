@@ -154,7 +154,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         configuration.add(key, value);
     }
 
-    public void lockConiguration() {
+    public void lockConfiguration() {
         locked = true;
     }
     

@@ -50,7 +50,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
 
     public IsisConfigurationDefault(final ResourceStreamSource resourceStreamSource) {
         this.resourceStreamSource = resourceStreamSource;
-        LOG.debug("configuration intialised with streams: " + nameOf(resourceStreamSource));
+        LOG.debug("configuration initialised with stream: " + nameOf(resourceStreamSource));
     }
 
     private String nameOf(final ResourceStreamSource resourceStreamSource) {

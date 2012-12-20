@@ -60,5 +60,5 @@ public interface IsisConfigurationBuilder extends Injectable {
      */
     void dumpResourcesToLog();
 
-    void lockConiguration();
+    void lockConfiguration();
 }
