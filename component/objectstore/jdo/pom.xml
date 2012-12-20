@@ -22,7 +22,7 @@
 
 	<groupId>org.apache.isis.objectstore</groupId>
 	<artifactId>isis-objectstore-jdo</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
 	<name>Isis JDO ObjectStore</name>
 
@@ -98,36 +98,36 @@
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-applib</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-applib</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -187,9 +187,4 @@
 
 		</dependencies>
 	</dependencyManagement>
-
-
-  <scm>
-    <tag>isis-objectstore-jdo-1.0.0</tag>
-  </scm>
 </project>
