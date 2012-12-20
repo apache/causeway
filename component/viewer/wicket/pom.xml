@@ -30,7 +30,7 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
 	<name>Isis Wicket Viewer</name>
 
@@ -38,7 +38,7 @@
 
     <properties>
         <siteBaseDir>.</siteBaseDir>
-        <relativeUrl/>
+        <relativeUrl />
 
         <wicket.version>6.3.0</wicket.version>
         <wicketstuff.version>6.0.0</wicketstuff.version>
@@ -100,36 +100,36 @@
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -281,4 +281,8 @@
 		</dependencies>
 	</dependencyManagement>
 
+
+  <scm>
+    <tag>isis-viewer-wicket-1.0.0</tag>
+  </scm>
 </project>

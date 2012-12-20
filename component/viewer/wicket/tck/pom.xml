@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket-tck</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
 	<name>Isis Wicket Viewer TCK tests</name>
 
@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-wicket-impl</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
 		</dependency>
 
         <!-- isis runtime -->
@@ -115,4 +115,8 @@
 
 	</dependencies>
 
+
+  <scm>
+    <tag>isis-viewer-wicket-1.0.0</tag>
+  </scm>
 </project>
