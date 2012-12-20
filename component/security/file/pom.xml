@@ -29,7 +29,7 @@
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>isis-security-file</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
 	<name>Isis File Security</name>
 
@@ -99,7 +99,7 @@
 			<dependency>
 			    <groupId>org.apache.isis.security</groupId>
 			    <artifactId>isis-security-file</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 			</dependency>
     	</dependencies>
     </dependencyManagement>
@@ -116,8 +116,4 @@
 		    <scope>test</scope>
 		</dependency>
 	</dependencies>
-
-  <scm>
-    <tag>isis-security-file-1.0.0</tag>
-  </scm>
 </project>
