@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.isis.archetype</groupId>
   <artifactId>quickstart_wicket_restful_jdo-archetype</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>maven-archetype</packaging>
   <name>quickstart_wicket_restful_jdo-archetype</name>
   <build>
@@ -46,8 +46,4 @@
     <artifactId>isis</artifactId>
     <version>1.0.0</version>
   </parent>
-
-  <scm>
-    <tag>quickstart_wicket_restful_jdo-archetype-1.0.0</tag>
-  </scm>
 </project>
