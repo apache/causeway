@@ -9,8 +9,7 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -23,7 +22,7 @@
 
 	<groupId>org.apache.isis.objectstore</groupId>
 	<artifactId>isis-objectstore-jdo</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
 	<name>Isis JDO ObjectStore</name>
 
@@ -31,7 +30,7 @@
 
 	<properties>
 		<siteBaseDir>.</siteBaseDir>
-		<relativeUrl/>
+		<relativeUrl />
 
 		<docbkxGuideTitle>Apache Isis JDO ObjectStore</docbkxGuideTitle>
 		<docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -99,36 +98,36 @@
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-applib</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-applib</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -189,4 +188,8 @@
 		</dependencies>
 	</dependencyManagement>
 
+
+  <scm>
+    <tag>isis-objectstore-jdo-1.0.0</tag>
+  </scm>
 </project>
