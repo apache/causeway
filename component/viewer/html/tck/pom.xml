@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
@@ -76,13 +76,13 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-dom</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-fixture</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
 
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>isis-security-file</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>

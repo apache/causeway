@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>quickstart_wicket_restful_jdo</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
 	<artifactId>quickstart_wicket_restful_jdo-viewer-restfulobjects</artifactId>

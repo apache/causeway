@@ -22,7 +22,7 @@
 
     <groupId>org.apache.isis.example.misc</groupId>
 	<artifactId>metamodel-namefile</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     
 	<name>Example ProgModel: Namefile Facet</name>
 
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
