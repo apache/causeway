@@ -152,8 +152,7 @@
         <module>dom</module>
         <module>fixture</module>
         <module>objstore-jdo</module>
-        <module>viewer-restfulobjects</module>
-        <module>viewer-wicket</module>
+        <module>viewer-webapp</module>
     </modules>
 	
     <dependencyManagement>
