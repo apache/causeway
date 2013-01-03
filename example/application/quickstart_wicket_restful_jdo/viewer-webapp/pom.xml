@@ -85,52 +85,36 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
         </dependency>
-
-
-        <!-- objectstore/domain service/repository implementations -->
-        
+        <!-- objectstore/domain service/repository implementations (brings in dependency to objectstore-jdo)-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
         </dependency>
         
         
-        
-
-        <!-- isis viewers -->
+        <!-- other isis components -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-wicket-impl</artifactId>
 		</dependency>
-
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-restfulobjects-impl</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.apache.isis.security</groupId>
+			<artifactId>isis-security-shiro</artifactId>
+		</dependency>
 
 
-
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
-        </dependency>
+		<!-- isis core -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-bytecode-cglib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-objectstore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -140,12 +124,6 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
-        <!-- 
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-security-file</artifactId>
-        </dependency>
-         -->
         
         <!-- to run using WebServer (optional) -->
         <dependency>
@@ -155,17 +133,12 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_2.5_spec</artifactId>
-        </dependency>
 
 
 		<!-- 
 		  JDBC drivers 
-		  (if using jdo or sql object store)
+		  (for jdo objectstore)
 		  -->
-
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>

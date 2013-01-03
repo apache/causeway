@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.Identifier.Depth;
+import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -50,9 +52,11 @@ import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 /**
@@ -61,7 +65,8 @@ import com.google.common.collect.Lists;
  * instantiated twice, once in the role of {@link Authenticator} and once in the role of the {@link Authorizor}.
  * 
  * <p>
- * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}.
+ * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
+ * (bound to a thread-local).
  */
 public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor {
 
@@ -103,11 +108,31 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         try {
             return (DefaultSecurityManager) SecurityUtils.getSecurityManager();
         } catch(UnavailableSecurityManagerException ex) {
-            Factory<SecurityManager> factory = new IniSecurityManagerFactory(configuration.getString("isis.security.shiro.iniLocation", "classpath:shiro.ini"));
+            String shiroIniLocation = lookupIniLocationFrom(configuration);
+
+            Factory<SecurityManager> factory = new IniSecurityManagerFactory(shiroIniLocation);
             SecurityManager securityManager = factory.getInstance();
             SecurityUtils.setSecurityManager(securityManager);
             return securityManager;
         }
+    }
+
+    private static String lookupIniLocationFrom(final IsisConfiguration configuration) {
+        String configuredValue;
+        
+        configuredValue = configuration.getString("isis.security.shiro.iniLocation");
+        if(configuredValue != null) {
+            return configuredValue;
+        }
+        configuredValue = configuration.getString("isis.authentication.shiro.iniLocation");
+        if(configuredValue != null) {
+            return configuredValue;
+        }
+        configuredValue = configuration.getString("isis.authorization.shiro.iniLocation");
+        if(configuredValue != null) {
+            return configuredValue;
+        }
+        return "classpath:shiro.ini";
     }
 
     @Override
@@ -193,35 +218,72 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     }
 
 
+    /**
+     * UNUSED (see [ISIS-292]).
+     */
+    @Override
+    public boolean isValid(AuthenticationRequest request) {
+        return false;
+    }
+
     // //////////////////////////////////////////////////////
     // Authorizor API
     // //////////////////////////////////////////////////////
 
     @Override
     public boolean isVisibleInAnyRole(Identifier identifier) {
-        return false;
+        return isPermitted(identifier, "r");
     }
 
     @Override
     public boolean isUsableInAnyRole(Identifier identifier) {
-        return false;
+        return isPermitted(identifier, "w");
     }
 
+    private boolean isPermitted(Identifier identifier, String qualifier) {
+        if(realmSecurityManager == null) {
+            // cannot do permission checking if the security manager is not a RealmSecurityManager
+            return false;
+        }
+
+        String permission = asPermissionsString(identifier) + ":" + qualifier;
+
+        PrincipalCollection principals = SecurityUtils.getSubject().getPrincipals();
+        return realmSecurityManager.isPermitted(principals, permission);
+    }
+
+    private String asPermissionsString(Identifier identifier) {
+        String packageName;
+        String className;
+        String fullyQualifiedClassName = identifier.getClassName();
+        int lastDot = fullyQualifiedClassName.lastIndexOf('.');
+        if(lastDot > 0) {
+            packageName =fullyQualifiedClassName.substring(0, lastDot);
+            className = fullyQualifiedClassName.substring(lastDot+1);
+        } else {
+            packageName = "";
+            className = fullyQualifiedClassName;
+        }
+        return packageName + ":" + className + ":" + identifier.getMemberName();
+    }
+
+    /**
+     * Returns <tt>false</tt> because the checking across all roles is done in
+     * {@link #isVisibleInAnyRole(Identifier)}, which is always called prior to this.
+     */
     @Override
     public boolean isVisibleInRole(String role, Identifier identifier) {
-        if(shiroSecurityManager instanceof RealmSecurityManager) {
-            
-        }
-        // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Returns <tt>false</tt> because the checking across all roles is done in
+     * {@link #isUsableInAnyRole(Identifier)}, which is always called prior to this.
+     */
     @Override
     public boolean isUsableInRole(String role, Identifier identifier) {
-        // TODO Auto-generated method stub
         return false;
     }
-
     
     // //////////////////////////////////////////////////////
     // Injected (via constructor)
@@ -230,5 +292,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
+
+
 
 }

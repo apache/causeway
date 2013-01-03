@@ -21,13 +21,12 @@ package org.apache.isis.security.shiro.authentication;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor;
+
+import com.google.common.collect.Lists;
 
 public class ShiroAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 

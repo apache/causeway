@@ -26,7 +26,6 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-core-runtime</artifactId>
 	<name>Isis Core Runtime</name>
 

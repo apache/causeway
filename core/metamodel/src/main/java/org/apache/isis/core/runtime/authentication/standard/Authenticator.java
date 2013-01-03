@@ -32,14 +32,16 @@ public interface Authenticator extends ApplicationScopedComponent {
     boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass);
 
     /**
-     * Whether this {@link Authenticator} is valid in the running context (and
-     * optionally with respect to the provided {@link AuthenticationRequest}).
+     * UNUSED ... IMPLEMENTATIONS SHOULD PROVIDE A STUB METHOD ONLY.
      * 
      * <p>
-     * For example, the <tt>ExplorationAuthenticator</tt> (in the default
-     * runtime) is only available for authentication if running in
-     * <i>exploration mode</i>.
+     * This method is only ever called from {@link AuthenticatorAbstract}, and as such should
+     * not be defined as part of the API.
+     * 
+     * <p>
+     * TODO: remove in 2.0.0 [ISIS-292]
      */
+    @Deprecated
     boolean isValid(AuthenticationRequest request);
 
     /**
