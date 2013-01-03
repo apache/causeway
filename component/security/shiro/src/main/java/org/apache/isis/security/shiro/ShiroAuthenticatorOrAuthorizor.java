@@ -74,11 +74,6 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     private final IsisConfiguration configuration;
 
-    private SecurityManager shiroSecurityManager;
-    /**
-     * Downcast of {@link #shiroSecurityManager} (if of this type).
-     */
-    private RealmSecurityManager realmSecurityManager;
 
     // //////////////////////////////////////////////////////
     // constructor
@@ -94,50 +89,28 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     @Override
     public void init() {
-        this.shiroSecurityManager = getSecurityManager(configuration);
-        if(shiroSecurityManager instanceof RealmSecurityManager) {
-            this.realmSecurityManager = (RealmSecurityManager) shiroSecurityManager;
-        }
     }
 
     /**
      * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
      * (if shiro is configured for both components).
      */
-    private static synchronized SecurityManager getSecurityManager(final IsisConfiguration configuration) {
+    private static synchronized RealmSecurityManager getSecurityManager() {
+        SecurityManager securityManager;
         try {
-            return (DefaultSecurityManager) SecurityUtils.getSecurityManager();
+            securityManager = SecurityUtils.getSecurityManager();
         } catch(UnavailableSecurityManagerException ex) {
-            String shiroIniLocation = lookupIniLocationFrom(configuration);
-
-            Factory<SecurityManager> factory = new IniSecurityManagerFactory(shiroIniLocation);
-            SecurityManager securityManager = factory.getInstance();
-            SecurityUtils.setSecurityManager(securityManager);
-            return securityManager;
+            return null;
         }
+        if(!(securityManager instanceof RealmSecurityManager)) {
+            return null;
+        }
+        return (RealmSecurityManager) securityManager;
     }
 
-    private static String lookupIniLocationFrom(final IsisConfiguration configuration) {
-        String configuredValue;
-        
-        configuredValue = configuration.getString("isis.security.shiro.iniLocation");
-        if(configuredValue != null) {
-            return configuredValue;
-        }
-        configuredValue = configuration.getString("isis.authentication.shiro.iniLocation");
-        if(configuredValue != null) {
-            return configuredValue;
-        }
-        configuredValue = configuration.getString("isis.authorization.shiro.iniLocation");
-        if(configuredValue != null) {
-            return configuredValue;
-        }
-        return "classpath:shiro.ini";
-    }
 
     @Override
     public void shutdown() {
-        //
     }
 
     // //////////////////////////////////////////////////////
@@ -146,11 +119,18 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        if(getSecurityManager() == null) {
+            return false;
+        }
         return AuthenticationRequestPassword.class.isAssignableFrom(authenticationRequestClass);
     }
 
     @Override
     public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
+        RealmSecurityManager securityManager = getSecurityManager();
+        if(securityManager == null) {
+            return null;
+        }
         final AuthenticationToken token = asAuthenticationToken(request);
         
         Subject currentUser = SecurityUtils.getSubject();
@@ -183,16 +163,22 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         }
         
         List<String> roles = getRoles(token);
+        // copy over any roles passed in
+        // (this is used by the Wicket viewer, for example).s
+        roles.addAll(request.getRoles());
         
         return new SimpleSession(request.getName(), roles, code);
     }
 
     private List<String> getRoles(final AuthenticationToken token) {
-        if(realmSecurityManager == null) {
-            return Collections.emptyList();
-        }
         final List<String> roles = Lists.newArrayList();
-        final Collection<Realm> realms = realmSecurityManager.getRealms();
+
+        RealmSecurityManager securityManager = getSecurityManager();
+        if(securityManager == null) {
+            return roles;
+        }
+        
+        final Collection<Realm> realms = securityManager.getRealms();
         for (final Realm realm : realms) {
             if(realm.supports(token)) {
                 continue;
@@ -241,22 +227,23 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     }
 
     private boolean isPermitted(Identifier identifier, String qualifier) {
-        if(realmSecurityManager == null) {
-            // cannot do permission checking if the security manager is not a RealmSecurityManager
+        RealmSecurityManager securityManager = getSecurityManager();
+        if(securityManager == null) {
+            // cannot do permission checking if no security manager
             return false;
         }
 
         String permission = asPermissionsString(identifier) + ":" + qualifier;
 
-        PrincipalCollection principals = SecurityUtils.getSubject().getPrincipals();
-        return realmSecurityManager.isPermitted(principals, permission);
+        Subject subject = SecurityUtils.getSubject();
+        return subject.isPermitted(permission);
     }
 
-    private String asPermissionsString(Identifier identifier) {
-        String packageName;
-        String className;
+    private static String asPermissionsString(Identifier identifier) {
         String fullyQualifiedClassName = identifier.getClassName();
         int lastDot = fullyQualifiedClassName.lastIndexOf('.');
+        String packageName;
+        String className;
         if(lastDot > 0) {
             packageName =fullyQualifiedClassName.substring(0, lastDot);
             className = fullyQualifiedClassName.substring(lastDot+1);

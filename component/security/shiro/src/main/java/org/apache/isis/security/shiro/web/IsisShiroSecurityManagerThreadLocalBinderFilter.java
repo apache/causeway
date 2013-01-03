@@ -31,7 +31,7 @@ public class IsisShiroSecurityManagerThreadLocalBinderFilter implements Filter {
         SecurityManager securityManager = webEnvironment.getSecurityManager();
         ThreadContext.bind(securityManager);
         try {
-            doFilter(request, response, chain);
+            chain.doFilter(request, response);
         } finally {
             ThreadContext.unbindSecurityManager();
         }
