@@ -23,6 +23,7 @@
 
     <display-name>Quickstart Wicket app</display-name>
 
+	
 
 
     <!-- which configuration directory to read overloaded property files from -->
@@ -48,6 +49,16 @@
     -->
     
     
+	<filter>
+		<filter-name>AboutPageFilter</filter-name>
+		<filter-class>app.AboutPageFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AboutPageFilter</filter-name>
+		<url-pattern>/</url-pattern>
+	</filter-mapping>
+
+
 
     <!-- cache static resources for 1 day -->
     <filter>
@@ -120,7 +131,7 @@
     -
     -->
 	<filter>
-		<filter-name>wicket</filter-name>
+		<filter-name>WicketFilter</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
 		<init-param>
 			<param-name>applicationClassName</param-name>
@@ -129,7 +140,7 @@
 	</filter>
 
 	<filter-mapping>
-		<filter-name>wicket</filter-name>
+		<filter-name>WicketFilter</filter-name>
 		<url-pattern>/wicket/*</url-pattern>
 	</filter-mapping>
 
@@ -141,6 +152,25 @@
     - config specific to the restfulobjects-viewer
     -
     -->
+
+	<!--
+	THE FOLLOWING CONFIGURATION IS NOT REQUIRED IF THE WICKET VIEWER IS IN USE.
+	IF THE WICKET VIEWER CONFIGURATION IS REMOVED, THEN UNCOMMENT
+    
+	<listener>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>deploymentType</param-name>
+        <param-value>SERVER_EXPLORATION</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>restfulobjects</param-value>
+    </context-param>    
+    -->    
     
     <!-- bootstrap the RestEasy framework -->
     <listener>
@@ -184,6 +214,7 @@
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-	
+
+
 	
 </web-app>
