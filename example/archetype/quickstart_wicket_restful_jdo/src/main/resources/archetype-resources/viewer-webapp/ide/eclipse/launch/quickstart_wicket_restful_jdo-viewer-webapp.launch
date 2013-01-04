@@ -17,6 +17,6 @@
   <booleanAttribute value="true" key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS"/>
   <stringAttribute value="org.eclipse.m2e.launchconfig.classpathProvider" key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER"/>
   <stringAttribute value="org.apache.isis.WebServer" key="org.eclipse.jdt.launching.MAIN_TYPE"/>
-  <stringAttribute value="quickstart_wicket_restful_jdo-viewer-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
+  <stringAttribute value="${rootArtifactId}-viewer-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
   <stringAttribute value="org.eclipse.m2e.launchconfig.sourcepathProvider" key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"/>
 </launchConfiguration>

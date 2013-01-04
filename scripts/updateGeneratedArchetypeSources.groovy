@@ -191,7 +191,7 @@ new File(ROOT+"archetype-resources/").eachDirRecurse() { dir ->
         def launchXml = new XmlSlurper().parseText(launchFile.text)
         def projectAttr = launchXml.stringAttribute.find { it.@key=="org.eclipse.jdt.launching.PROJECT_ATTR" }
         String oldValue=projectAttr.@value
-        def newValue = oldValue.replaceAll("quickstart-","\\\${rootArtifactId}-")
+        def newValue = oldValue.replaceAll("quickstart[^-]*-","\\\${rootArtifactId}-")
         projectAttr.@value=newValue
 
         launchFile.text = """#set( \$symbol_pound = '#' )
