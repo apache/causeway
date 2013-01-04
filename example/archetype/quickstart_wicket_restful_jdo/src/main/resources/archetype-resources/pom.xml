@@ -32,6 +32,7 @@
 		<isis-objectstore-jdo.version>1.0.0</isis-objectstore-jdo.version>
 		<isis-viewer-wicket.version>1.0.0</isis-viewer-wicket.version>
 		<isis-viewer-restfulobjects.version>1.0.0</isis-viewer-restfulobjects.version>
+		<isis-security-shiro.version>1.0.0-SNAPSHOT</isis-security-shiro.version>
 	</properties>
     
     <repositories>
@@ -180,6 +181,13 @@
 				<scope>import</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.isis.security</groupId>
+				<artifactId>isis-security-shiro</artifactId>
+				<version>${isis-security-shiro.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
             <!-- this project's own modules -->
             <dependency>

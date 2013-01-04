@@ -105,13 +105,8 @@
             <include>**/*.allow</include>
             <include>**/*.png</include>
             <include>**/*.js</include>
+            <include>**/*.ini</include>
             <include>**/*.css</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>src/main/resources</directory>
-          <includes>
-            <include>**/*.png</include>
           </includes>
         </fileSet>
         <fileSet encoding="UTF-8">

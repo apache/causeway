@@ -24,6 +24,7 @@ package fixture.todo;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.joda.time.LocalDate;
@@ -48,16 +49,41 @@ public class ToDoItemsFixture extends AbstractFixture {
         getContainer().flush();
     }
 
+    public void installFor(String user) {
+
+        removeAllToDosFor(user);
+
+        createToDoItemForUser("Buy milk", Category.Domestic, user, daysFromToday(0));
+        createToDoItemForUser("Buy stamps", Category.Domestic, user, daysFromToday(0));
+        createToDoItemForUser("Pick up laundry", Category.Other, user, daysFromToday(6));
+        createToDoItemForUser("Write blog post", Category.Professional, user, null);
+        createToDoItemForUser("Organize brown bag", Category.Professional, user, daysFromToday(14));
+
+        getContainer().flush();
+    }
+
     // {{ helpers
     private void removeAllToDosForCurrentUser() {
+        
         final List<ToDoItem> allToDos = toDoItems.allToDos();
         for (final ToDoItem toDoItem : allToDos) {
             getContainer().remove(toDoItem);
         }
     }
 
+    private void removeAllToDosFor(String user) {
+        final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(user));
+        for (final ToDoItem toDoItem : items) {
+            getContainer().remove(toDoItem);
+        }
+    }
+
     private ToDoItem createToDoItemForCurrentUser(final String description, final Category category, final LocalDate dueBy) {
         return toDoItems.newToDo(description, category, dueBy);
+    }
+
+    private ToDoItem createToDoItemForUser(final String description, final Category category, String user, final LocalDate dueBy) {
+        return toDoItems.newToDo(description, category, user, dueBy);
     }
 
     private static LocalDate daysFromToday(final int i) {

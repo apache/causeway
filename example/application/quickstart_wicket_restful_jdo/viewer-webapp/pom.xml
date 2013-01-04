@@ -17,7 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
@@ -25,19 +25,19 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart_wicket_restful_jdo-viewer-webapp</artifactId>
-	<name>Quickstart Wicket/Restful/JDO Webapp</name>
+    <artifactId>quickstart_wicket_restful_jdo-viewer-webapp</artifactId>
+    <name>Quickstart Wicket/Restful/JDO Webapp</name>
 
-	<description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
+    <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
-	<packaging>war</packaging>
+    <packaging>war</packaging>
 
-	<properties>
+    <properties>
         <siteBaseDir>..</siteBaseDir>
-	</properties>
+    </properties>
     
-	<build>
-		<plugins>
+    <build>
+        <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
@@ -75,11 +75,11 @@
                 </configuration>
             </plugin>
 
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
-	<dependencies>
-	
+    <dependencies>
+    
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -97,21 +97,21 @@
         
         
         <!-- other isis components -->
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-impl</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-wicket-impl</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-restfulobjects-impl</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-shiro</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>isis-security-shiro</artifactId>
+        </dependency>
 
 
-		<!-- isis core -->
+        <!-- isis core -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
@@ -134,33 +134,37 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- 
-		  JDBC drivers 
-		  (for jdo objectstore)
-		  -->
+        <!-- 
+          JDBC drivers 
+          (for jdo objectstore)
+          -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
         </dependency>
 
-		<!-- 
-		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>jdbc</artifactId>
-			<version>4.0</version>
-			<scope>system</scope>
-			<optional>true</optional>
-			<systemPath>${basedir}/lib/sqljdbc4.jar</systemPath>
-		</dependency>
-		-->	
+        <!-- 
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>jdbc</artifactId>
+            <version>4.0</version>
+            <scope>system</scope>
+            <optional>true</optional>
+            <systemPath>${basedir}/lib/sqljdbc4.jar</systemPath>
+        </dependency>
+        -->    
 
-		<dependency>
-		  <groupId>org.lazyluke</groupId>
-		  <artifactId>log4jdbc-remix</artifactId>
-		  <version>0.2.7</version>
-		</dependency>
+        <dependency>
+          <groupId>org.lazyluke</groupId>
+          <artifactId>log4jdbc-remix</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

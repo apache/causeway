@@ -24,7 +24,33 @@
     xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-    <display-name>Quickstart Wicket app</display-name>
+    <display-name>Quickstart Wicket/RestfulObjects app</display-name>
+
+
+    <listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>ShiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ShiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>IsisShiroFilter</filter-name>
+        <filter-class>org.apache.isis.security.shiro.web.IsisShiroSecurityManagerThreadLocalBinderFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>IsisShiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
 	
 
@@ -51,7 +77,6 @@
     </context-param>
     -->
 
-
     <filter>
         <filter-name>AboutPageFilter</filter-name>
         <filter-class>app.AboutPageFilter</filter-class>
@@ -60,7 +85,6 @@
         <filter-name>AboutPageFilter</filter-name>
         <url-pattern>/</url-pattern>
     </filter-mapping>
-
 
 
     <!-- cache static resources for 1 day -->
@@ -145,6 +169,9 @@
     <filter-mapping>
         <filter-name>WicketFilter</filter-name>
         <url-pattern>/wicket/*</url-pattern>
+        <!-- 
+        <url-pattern>/*</url-pattern>
+         -->
     </filter-mapping>
 
 
@@ -185,6 +212,12 @@
         <param-name>javax.ws.rs.Application</param-name>
         <param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
     </context-param>
+    
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/restful/</param-value>
+    </context-param>
+    
 
     <!-- authenticate user, set up an Isis session -->
     <filter>
@@ -208,16 +241,15 @@
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
     </filter-mapping>
 
-
     <servlet>
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/restful/*</url-pattern>
     </servlet-mapping>
 
 
-	
+
 </web-app>
