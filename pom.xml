@@ -47,6 +47,7 @@
         <module>component/security/file</module>
         <module>component/security/ldap</module>
         <module>component/security/sql</module>
+        <module>component/security/shiro</module>
 
         <module>component/viewer/dnd</module>
         <module>component/viewer/html</module>
