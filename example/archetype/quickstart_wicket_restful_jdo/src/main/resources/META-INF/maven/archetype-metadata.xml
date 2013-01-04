@@ -69,54 +69,7 @@
         </fileSet>
       </fileSets>
     </module>
-    <module id="${rootArtifactId}-viewer-restfulobjects" dir="viewer-restfulobjects" name="${rootArtifactId}-viewer-restfulobjects">
-      <fileSets>
-        <fileSet filtered="true" encoding="UTF-8">
-          <directory>src/main/webapp</directory>
-          <includes>
-            <include>**/*.xml</include>
-            <include>**/*.html</include>
-            <include>**/*.properties</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>src/main/jettyconsole</directory>
-          <includes>
-            <include>**/*.png</include>
-            <include>**/*.pdn</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>src/main/webapp</directory>
-          <includes>
-            <include>**/*.passwords</include>
-            <include>**/*.allow</include>
-            <include>**/*.png</include>
-            <include>**/*.js</include>
-            <include>**/*.css</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>src/main/resources</directory>
-          <includes>
-            <include>**/*.png</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>lib</directory>
-          <includes>
-            <include>**/*.gitignore</include>
-          </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-          <directory>ide/eclipse</directory>
-          <includes>
-            <include>**/*.launch</include>
-          </includes>
-        </fileSet>
-      </fileSets>
-    </module>
-    <module id="${rootArtifactId}-viewer-wicket" dir="viewer-wicket" name="${rootArtifactId}-viewer-wicket">
+    <module id="${rootArtifactId}-viewer-webapp" dir="viewer-webapp" name="${rootArtifactId}-viewer-webapp">
       <fileSets>
         <fileSet filtered="true" encoding="UTF-8">
           <directory>src/main/java</directory>
@@ -128,6 +81,7 @@
           <directory>src/main/webapp</directory>
           <includes>
             <include>**/*.xml</include>
+            <include>**/*.html</include>
             <include>**/*.properties</include>
           </includes>
         </fileSet>
@@ -149,6 +103,7 @@
           <includes>
             <include>**/*.passwords</include>
             <include>**/*.allow</include>
+            <include>**/*.png</include>
             <include>**/*.js</include>
             <include>**/*.css</include>
           </includes>

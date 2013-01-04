@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -34,7 +37,7 @@
     
     For instance to configure this in Tomcat outside the application WAR add
     the following line to your application context ( For more detail see:
-    http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters )
+    http://tomcat.apache.org/tomcat-7.0-doc/config/context.html${symbol_pound}Context_Parameters )
      
     <Parameter name="isis.config.dir" value="/usr/local/tomcat/conf/"
          override="true"/>
