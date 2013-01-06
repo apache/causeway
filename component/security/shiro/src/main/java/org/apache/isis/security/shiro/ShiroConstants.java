@@ -21,14 +21,11 @@ package org.apache.isis.security.shiro;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.security.shiro.authentication.ShiroAuthenticationManagerInstaller;
-import org.apache.isis.security.shiro.authorization.ShiroAuthorizationManagerInstaller;
 
 public final class ShiroConstants {
 
     public static final String ROOT_AUTHENTICATION = ConfigurationConstants.ROOT + AuthenticationManagerInstaller.TYPE + "." + ShiroAuthenticationManagerInstaller.NAME + ".";
-    private static final String ROOT_AUTHORIZATION = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "." + ShiroAuthorizationManagerInstaller.NAME + ".";
 
     private ShiroConstants() {
     }

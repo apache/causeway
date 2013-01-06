@@ -153,8 +153,6 @@ th, td {
             <ul>
               <li>Enable <tt>shiro</tt> authentication and authorization (in <tt>isis.properties</tt>) and experiment with users, roles and permissions (in <tt>shiro.ini</tt>)
               </li>
-              <li>Remove the <tt>AboutPageFilter</tt> from <tt>web.xml</tt>; this filter redirects to this page, which you are unlikely to want to keep
-              </li>
               <li>Refactor the <tt>ToDoItem</tt>, <tt>ToDoItems</tt> and <tt>ToDoItemsJdo</tt> towards your own application's functionality; obviously you are likely to introduce many more classes and services
               </li>
               <li>Reconfigure <tt>persistor_datanucleus.properties</tt> to specify the JDBC URL to the database you wish to work with; if necessary also update the <tt>pom.xml</tt> in the <tt>viewer-webapp</tt> module to add the JDBC driver to the classpath
@@ -166,6 +164,8 @@ th, td {
               <li>If you want the wicket viewer but NOT the restful objects viewer, then remove/comment out the <tt>ResteasyBootstrap</tt>, <tt>IsisSessionFilterForRestfulObjects</tt>, <tt>RestfulObjectsRestEasyDispatcher</tt> from <tt>web.xml</tt>
               </li>
               <li>If you want the restful objects viewer but NOT the wicket viewer, then remove/comment out the <tt>WicketFilter</tt> filter and uncomment the <tt>IsisWebAppBootstrapper</tt> listener in <tt>web.xml</tt>
+              </li>
+              <li>Update this page (<tt>about/index.html</tt>) as required for your application, and/or remove the <tt>welcome-file-list</tt> from <tt>web.xml</tt>
               </li>
             </ul>
         </div>

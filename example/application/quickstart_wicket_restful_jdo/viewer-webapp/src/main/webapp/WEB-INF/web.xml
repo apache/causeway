@@ -23,7 +23,12 @@
 
     <display-name>Quickstart Wicket/RestfulObjects app</display-name>
 
+    <welcome-file-list>
+        <welcome-file>about/index.html</welcome-file>
+    </welcome-file-list>
 
+
+    <!-- shiro security configuration -->
     <listener>
         <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
     </listener>
@@ -38,18 +43,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <filter>
-        <filter-name>IsisShiroFilter</filter-name>
-        <filter-class>org.apache.isis.security.shiro.web.IsisShiroSecurityManagerThreadLocalBinderFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>IsisShiroFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-
-	
 
 
     <!-- which configuration directory to read overloaded property files from -->
@@ -74,14 +67,6 @@
     </context-param>
     -->
 
-    <filter>
-        <filter-name>AboutPageFilter</filter-name>
-        <filter-class>app.AboutPageFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AboutPageFilter</filter-name>
-        <url-pattern>/</url-pattern>
-    </filter-mapping>
 
 
     <!-- cache static resources for 1 day -->

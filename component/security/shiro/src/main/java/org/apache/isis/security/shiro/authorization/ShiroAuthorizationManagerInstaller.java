@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.security.shiro.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;

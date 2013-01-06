@@ -21,7 +21,6 @@ package fixture.todo;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.joda.time.LocalDate;

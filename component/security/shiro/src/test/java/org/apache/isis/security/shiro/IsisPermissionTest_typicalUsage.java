@@ -16,38 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.security.shiro;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.isis.security.shiro.authorization.IsisPermission;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
-import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Factory;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.jmock.Expectations;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-public class WildcardPermissionTest {
+public class IsisPermissionTest_typicalUsage {
+
+
+    @Before
+    public void setUp() throws Exception {
+        IsisPermission.resetVetoedPermissions();
+    }
+    
+    @After
+    public void tearDown() throws Exception {
+        IsisPermission.resetVetoedPermissions();
+    }
+
 
 
     @Test
@@ -82,8 +78,33 @@ public class WildcardPermissionTest {
         assertThat(viewCustomerChangeAddress, not(permittedBy("*:*:xxx")));
         assertThat(viewCustomerChangeAddress, not(permittedBy("*:xxx")));
         assertThat(viewCustomerChangeAddress, not(permittedBy("xxx")));
+        
+        assertThat(viewCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:r")));
+        assertThat(useCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:w")));
+        
+        // and check that two wrongs don't make a right (ie the ! means veto, rather than "not") 
+        assertThat(useCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:r")));
     }
 
+
+    @Test
+    public void vetoableDomains() throws Exception {
+        
+        // these are the permissions that Isis will check
+        WildcardPermission viewCustomerChangeAddress = new WildcardPermission("com.mycompany.myapp:Customer:changeAddress:r");
+
+        // normally this would be permitted...
+        assertThat(viewCustomerChangeAddress, permittedBy("foo/com.mycompany.myapp:Customer:*"));
+        
+        // but if there's a veto
+        assertThat(viewCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:r")));
+        // then no longer permitted if in the same vetoable domain
+        assertThat(viewCustomerChangeAddress, not(permittedBy("foo/com.mycompany.myapp:Customer:*")));
+        // though the same permission in another vetoable domain will permit
+        assertThat(viewCustomerChangeAddress, permittedBy("bar/com.mycompany.myapp:Customer:*"));
+    }
+
+    
     
     @Test
     public void defaultPackage() throws Exception {
@@ -102,16 +123,17 @@ public class WildcardPermissionTest {
         assertThat(viewCustomerChangeAddress, permittedBy("*"));
     }
     
+    
     private static Matcher<? super Permission> permittedBy(final String permissionString) {
-        return implies(new WildcardPermission(permissionString));
+        return permittedBy(new IsisPermission(permissionString));
     }
 
-    private static Matcher<? super Permission> implies(final WildcardPermission wp) {
+    private static Matcher<? super Permission> permittedBy(final IsisPermission wp) {
         return new TypeSafeMatcher<Permission>() {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("implies " + wp.toString());
+                description.appendText("permitted by " + wp.toString());
             }
 
             @Override

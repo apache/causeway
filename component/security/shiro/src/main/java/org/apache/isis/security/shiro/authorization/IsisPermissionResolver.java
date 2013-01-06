@@ -16,18 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app;
+package org.apache.isis.security.shiro.authorization;
 
-import com.google.inject.Singleton;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.PermissionResolver;
 
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
+public class IsisPermissionResolver implements PermissionResolver {
 
-@Singleton
-public class ComponentFactoryRegistrarForQuickStart extends ComponentFactoryRegistrarDefault {
-
-    @Override
-    public void addComponentFactories(ComponentFactoryList componentFactories) {
-        super.addComponentFactories(componentFactories);
-        // currently no replacements
+    public Permission resolvePermission(String permissionString) {
+        return new IsisPermission(permissionString);
     }
+    
 }

@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.security.shiro;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
@@ -31,17 +32,10 @@ import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
-import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -65,6 +59,10 @@ public class ShiroAuthenticatorOrAuthorizorTest {
 
     @After
     public void tearDown() throws Exception {
+        Subject subject = SecurityUtils.getSubject();
+        if(subject != null) {
+            subject.logout();
+        }
         SecurityUtils.setSecurityManager(null);
     }
 
@@ -103,86 +101,37 @@ public class ShiroAuthenticatorOrAuthorizorTest {
 
         Identifier cancelOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "cancel");
         assertThat(authOrAuth.isVisibleInAnyRole(cancelOrderIdentifier), is(false));
-
-        // // Use the shiro.ini file at the root of the classpath
-        // // (file: and url: prefixes load from files and urls respectively):
-        // Factory<SecurityManager> factory = new
-        // IniSecurityManagerFactory("classpath:shiro.ini");
-        // SecurityManager securityManager = factory.getInstance();
-        //
-        // // for this simple example quickstart, make the SecurityManager
-        // // accessible as a JVM singleton. Most applications wouldn't do this
-        // // and instead rely on their container configuration or web.xml for
-        // // webapps. That is outside the scope of this simple quickstart, so
-        // // we'll just do the bare minimum so you can continue to get a feel
-        // // for things.
-        // SecurityUtils.setSecurityManager(securityManager);
-        //
-        // // Now that a simple Shiro environment is set up, let's see what you
-        // can do:
-        //
-        // // get the currently executing user:
-        // Subject currentUser = SecurityUtils.getSubject();
-        //
-        // // Do some stuff with a Session (no need for a web or EJB
-        // container!!!)
-        // Session session = currentUser.getSession();
-        // session.setAttribute("someKey", "aValue");
-        // String value = (String) session.getAttribute("someKey");
-        // if (value.equals("aValue")) {
-        // System.out.println("Retrieved the correct value! [" + value + "]");
-        // }
-        //
-        // // let's login the current user so we can check against roles and
-        // permissions:
-        // if (!currentUser.isAuthenticated()) {
-        // UsernamePasswordToken token = new UsernamePasswordToken("lonestarr",
-        // "vespa");
-        // token.setRememberMe(true);
-        // try {
-        // currentUser.login(token);
-        // } catch (UnknownAccountException uae) {
-        // System.out.println("There is no user with username of " +
-        // token.getPrincipal());
-        // } catch (IncorrectCredentialsException ice) {
-        // System.out.println("Password for account " + token.getPrincipal() +
-        // " was incorrect!");
-        // } catch (LockedAccountException lae) {
-        // System.out.println("The account for username " + token.getPrincipal()
-        // + " is locked.  " +
-        // "Please contact your administrator to unlock it.");
-        // }
-        // // ... catch more exceptions here (maybe custom ones specific to your
-        // application?
-        // catch (AuthenticationException ae) {
-        // //unexpected condition? error?
-        // }
-        // }
-        //
-        // //say who they are:
-        // //print their identifying principal (in this case, a username):
-        // System.out.println("User [" + currentUser.getPrincipal() +
-        // "] logged in successfully.");
-        //
-        // //test a role:
-        // if (currentUser.hasRole("schwartz")) {
-        // System.out.println("May the Schwartz be with you!");
-        // } else {
-        // System.out.println("Hello, mere mortal.");
-        // }
-        //
-        // //test a typed permission (not instance-level)
-        // if
-        // (currentUser.isPermitted("com.mycompany.myapp:Customer:changeAddress:w"))
-        // {
-        // System.out.println("You may invoke the customer's changeAddress action.");
-        // } else {
-        // System.out.println("Sorry, changing address is only allowed for schwartz masters only.");
-        // }
-        //
-        // //all done - log out!
-        // currentUser.logout();
-
     }
+
+    @Test
+    public void vetoing() throws Exception {
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        SecurityManager securityManager = factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
+
+        AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
+        authOrAuth.authenticate(ar, null);
+
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
+        assertThat(authOrAuth.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+
+        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
+        assertThat(authOrAuth.isVisibleInAnyRole(removeCustomerIdentifier), is(false));
+    }
+
+    
+    @Test
+    public void vetoingOverridden() throws Exception {
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        SecurityManager securityManager = factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
+
+        AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
+        authOrAuth.authenticate(ar, null);
+        
+        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
+        assertThat(authOrAuth.isVisibleInAnyRole(removeCustomerIdentifier), is(true));
+    }
+
 
 }

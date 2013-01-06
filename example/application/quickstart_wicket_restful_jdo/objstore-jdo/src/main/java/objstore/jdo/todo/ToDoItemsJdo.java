@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package objstore.jdo.todo;
 
 import java.util.List;

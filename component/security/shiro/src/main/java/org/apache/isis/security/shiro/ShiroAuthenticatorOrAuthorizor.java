@@ -16,16 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.security.shiro;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.Identifier.Depth;
-import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -35,6 +31,7 @@ import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+import org.apache.isis.security.shiro.authorization.IsisPermission;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
@@ -47,16 +44,11 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Factory;
 
-import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 /**
@@ -236,7 +228,12 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         String permission = asPermissionsString(identifier) + ":" + qualifier;
 
         Subject subject = SecurityUtils.getSubject();
-        return subject.isPermitted(permission);
+        
+        try {
+            return subject.isPermitted(permission);
+        } finally {
+            IsisPermission.resetVetoedPermissions();
+        }
     }
 
     private static String asPermissionsString(Identifier identifier) {
