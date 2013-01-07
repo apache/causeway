@@ -34,7 +34,7 @@
 		<isis-objectstore-jdo.version>1.0.0</isis-objectstore-jdo.version>
 		<isis-viewer-wicket.version>1.0.0</isis-viewer-wicket.version>
 		<isis-viewer-restfulobjects.version>1.0.0</isis-viewer-restfulobjects.version>
-		<isis-security-shiro.version>1.0.0-SNAPSHOT</isis-security-shiro.version>
+		<isis-security-shiro.version>1.0.0</isis-security-shiro.version>
 	</properties>
     
     <repositories>

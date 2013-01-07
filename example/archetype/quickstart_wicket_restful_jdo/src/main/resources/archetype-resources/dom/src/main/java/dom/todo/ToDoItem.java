@@ -19,7 +19,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package dom.todo;
 
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.applib.annotation.Resolve.Type;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
@@ -434,5 +432,5 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // }}
 
 
-    
+
 }
