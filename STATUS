@@ -25,6 +25,9 @@ Project info
   period of time can earn a contributor commit access to the codebase.
 
 TLP releases:
+ * isis-security-shiro-1.0.0                      : Released Jan 2013
+ * quickstart-wicket-restful_jdo-archetype-1.0.1  : Released Jan 2013
+
  * isis-1.0.0                                     : Released Dec 2012
  * isis-objectstore-jdo-1.0.0                     : Released Dec 2012
  * isis-security-file-1.0.0                       : Released Dec 2012
@@ -33,11 +36,9 @@ TLP releases:
  * quickstart-wicket-restful_jdo-archetype-1.0.0  : Released Dec 2012
 
 Incubating releases:
- * 0.1.2-incubating    : Released July 2011
  * 0.2.0-incubating    : Released January 2012
+ * 0.1.2-incubating    : Released July 2011
 
-Other releases:
- * snapshot releases to repository.apache.org (snapshots repo)
 
 Resources:
  
