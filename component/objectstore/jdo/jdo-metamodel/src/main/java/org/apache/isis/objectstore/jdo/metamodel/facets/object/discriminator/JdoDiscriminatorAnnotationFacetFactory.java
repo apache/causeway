@@ -21,12 +21,21 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 
 import javax.jdo.annotations.Discriminator;
 
+import com.google.common.base.Strings;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
+import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectSpecIdFacetDerivedFromClassName;
 
-public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract {
+public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract implements ClassSubstitutorAware  {
+
+    private ClassSubstitutor classSubstitutor;
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -39,10 +48,22 @@ public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract
         if (annotation == null) {
             return;
         }
-        final String annotationValueAttribute = annotation.value();
+        String annotationValueAttribute = annotation.value();
+        if(!Strings.isNullOrEmpty(annotationValueAttribute)) {
+            FacetUtil.addFacet(new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(annotationValueAttribute, processClassContext.getFacetHolder()));
+        } else {
+            final FacetHolder facetHolder = processClassContext.getFacetHolder();
+            final Class<?> originalClass = processClassContext.getCls();
+            final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
+            FacetUtil.addFacet(new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder));
+        }
 
-        FacetUtil.addFacet(new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(annotationValueAttribute, processClassContext.getFacetHolder()));
         FacetUtil.addFacet(new JdoDiscriminatorFacetDefault(annotationValueAttribute, processClassContext.getFacetHolder()));
+    }
+
+    @Override
+    public void setClassSubstitutor(ClassSubstitutor classSubstitutor) {
+        this.classSubstitutor = classSubstitutor;
     }
 
 }
