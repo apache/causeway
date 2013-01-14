@@ -12,5 +12,18 @@
 <supplementalDataModels xmlns="http://maven.apache.org/supplemental-model/1.0.0"
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                         xsi:schemaLocation="http://maven.apache.org/supplemental-model/1.0.0 http://maven.apache.org/xsd/supplemental-model-1.0.0.xsd">
- 
+
+  <supplement>
+    <project>
+      <groupId>aopalliance</groupId>
+      <artifactId>aopalliance</artifactId>
+      <version>1.0</version>
+      <licenses>
+          <license>
+              <name>Public Domain</name>
+          </license>
+      </licenses>
+    </project>
+  </supplement>
+
 </supplementalDataModels>
