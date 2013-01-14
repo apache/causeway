@@ -28,7 +28,9 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.log4j.Logger;
+import org.datanucleus.api.jdo.JDOPersistenceManager;
 import org.datanucleus.api.jdo.NucleusJDOHelper;
+import org.datanucleus.util.PersistenceUtils;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -158,8 +160,21 @@ public class FrameworkSynchronizer {
             @Override
             public void run() {
                 final IsisTransaction transaction = getCurrentTransaction();
-                final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
                 
+                if (adapter == null) {
+                    // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
+                    // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
+                    // mapped.
+                    
+                    // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
+                    // DN would not be calling this callback if the pojo was not persistent.
+                    
+                    adapter = lazilyLoaded(pojo, CalledFrom.EVENT_PREDIRTY);
+                    if(adapter == null) {
+                        throw new RuntimeException("DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=[" +  pojo + "]");
+                    }
+                }
                 if(adapter.isTransient()) {
                     // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
                     // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
