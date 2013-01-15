@@ -18,16 +18,21 @@
   under the License.
 -->
 <html>
+	<wicket:head>
+	</wicket:head>
 	<body>
 		<wicket:panel>
 			<div class="isisBlobPanel scalarNameAndValueComponentType">
 				<label for="scalarValue" wicket:id="scalarIfRegular">
 	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
 	      			<span class="scalarValue">
-		      			<input type="file" name="scalarValue" id="scalarValue" wicket:id="scalarValue"/>
+                        <span class="uploadFile">
+                            <span wicket:id="scalarIfRegularUpload" class="uploadTitle">Upload</span>
+			      			<input type="file" name="scalarValue" id="scalarValue" wicket:id="scalarValue"/>
+                        </span>
+	                    <a class="download" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
+	                    <a class="clear" wicket:id="scalarIfRegularClear"><span class="clearTitle">Clear</span></a>
 	      			</span>
-                    <a wicket:id="scalarIfRegularDownload">Download</a>
-                    <a wicket:id="scalarIfRegularClear">Clear</a>
 	                <span wicket:id="feedback"></span>
 				</label>
 

@@ -16,3 +16,55 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+.isisBlobPanel .scalarValue span.downloadTitle,
+.isisBlobPanel .scalarValue span.uploadTitle,
+.isisBlobPanel .scalarValue span.clearTitle {
+    margin-right: 10px;
+    margin-bottom:10px;
+    float:left;
+    display:block;
+    border: 0px;
+    padding:5px 10px;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background-color:#FFFFFF;
+    color:#46413B;
+    font-style:normal !important;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.isisBlobPanel .scalarValue span.uploadFile input {
+	display: none;
+}
+
+.isisBlobPanel .scalarValue a span.downloadTitle,
+.isisBlobPanel .scalarValue span.uploadTitle,
+.isisBlobPanel .scalarValue a span.clearTitle {
+    background-color:#F0EFEA;
+}
+ 
+.isisBlobPanel .scalarValue a:hover span.downloadTitle,
+.isisBlobPanel .scalarValue span.uploadTitle:hover,
+.isisBlobPanel .scalarValue a:hover span.clearTitle {
+	background-color:#20B5C2;
+    color:#FFFFFF;
+    text-decoration:none;
+    cursor: pointer;
+}
+ 
+.yourBtn{
+   position: relative;
+       top: 150px;
+   font-family: calibri;
+   width: 150px;
+   padding: 10px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border: 1px dashed #BBB; 
+   text-align: center;
+   background-color: #DDD;
+   cursor:pointer;
+}

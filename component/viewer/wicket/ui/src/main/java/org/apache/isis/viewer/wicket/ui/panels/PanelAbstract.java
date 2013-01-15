@@ -132,7 +132,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      */
     protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
         final String url = cls.getSimpleName() + ".css";
-        //response.renderCSSReference(new ResourceReference(cls, url));
         response.render(CssHeaderItem.forReference(new CssResourceReference(cls, url)));
     }
 

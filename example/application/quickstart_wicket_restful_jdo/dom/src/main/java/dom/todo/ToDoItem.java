@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
@@ -46,6 +47,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.joda.time.LocalDate;
 
@@ -193,6 +195,25 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.notes = notes;
     }
     // }}
+
+    
+
+    // {{ Attachment (property)
+    private Blob attachment;
+
+    @Persistent
+    @Optional
+    @MemberOrder(name="Detail", sequence = "7")
+    public Blob getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(final Blob attachment) {
+        this.attachment = attachment;
+    }
+    // }}
+
+
 
 
     // {{ Version (derived property)
