@@ -19,38 +19,25 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-
-import java.util.List;
-
-import org.apache.isis.applib.value.Blob;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.wicket.Component;
 
 /**
- * Panel for rendering scalars of type {@link Blob Isis' applib.Blob}.
+ * {@link ComponentFactory} for {@link IsisBlobPanel}.
  */
-public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
+public class IsisClobPanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisBlobPanel(final String id, final ScalarModel model) {
-        super(id, model);
+    public IsisClobPanelFactory() {
+        super(org.apache.isis.applib.value.Clob.class);
     }
 
-    
-    protected Blob getBlobOrClobFrom(final List<FileUpload> fileUploads) {
-        final FileUpload fileUpload = fileUploads.get(0);
-        final String contentType = fileUpload.getContentType();
-        final String clientFileName = fileUpload.getClientFileName();
-        final byte[] bytes = fileUpload.getBytes();
-        final Blob blob = new Blob(clientFileName, contentType, bytes);
-        return blob;
+    @Override
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new IsisClobPanel(id, scalarModel);
     }
-
-    protected ByteArrayResource newResource(final Blob blob) {
-        return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
-    }
-
 
 }

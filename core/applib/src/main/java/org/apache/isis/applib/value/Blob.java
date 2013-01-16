@@ -29,7 +29,7 @@ import javax.activation.MimeTypeParseException;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.OutputSupplier;
 
-public final class Blob implements Serializable {
+public final class Blob implements NamedWithMimeType, Serializable {
 
     /**
      * Computed for state:

@@ -44,13 +44,13 @@
 .isisBlobPanel .scalarValue span.uploadTitle,
 .isisBlobPanel .scalarValue a span.clearTitle {
     background-color:#F0EFEA;
+    text-decoration:none;
 }
  
 .isisBlobPanel .scalarValue a:hover span.downloadTitle,
 .isisBlobPanel .scalarValue span.uploadTitle:hover,
 .isisBlobPanel .scalarValue a:hover span.clearTitle {
-	background-color:#20B5C2;
-    color:#FFFFFF;
+	background-color:#E3E3D9;
     text-decoration:none;
     cursor: pointer;
 }

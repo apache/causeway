@@ -20,36 +20,48 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 
+import java.nio.charset.Charset;
 import java.util.List;
 
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.resource.StringResourceStream;
+
+import com.google.common.base.Charsets;
 
 /**
- * Panel for rendering scalars of type {@link Blob Isis' applib.Blob}.
+ * Panel for rendering scalars of type {@link Clob Isis' applib.Clob}.
  */
-public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
+public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
 
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * TODO: for now, this only handles CLOBs encoded as UTF-8.
+     * 
+     * <p>
+     * One option might be to 'guess' the character encoding, eg akin to cpdetector?
+     */
+    private static final Charset CHARSET = Charsets.UTF_8;
 
-    public IsisBlobPanel(final String id, final ScalarModel model) {
+    public IsisClobPanel(final String id, final ScalarModel model) {
         super(id, model);
     }
 
-    
-    protected Blob getBlobOrClobFrom(final List<FileUpload> fileUploads) {
+    protected Clob getBlobOrClobFrom(final List<FileUpload> fileUploads) {
         final FileUpload fileUpload = fileUploads.get(0);
         final String contentType = fileUpload.getContentType();
         final String clientFileName = fileUpload.getClientFileName();
-        final byte[] bytes = fileUpload.getBytes();
-        final Blob blob = new Blob(clientFileName, contentType, bytes);
+        final String str = new String(fileUpload.getBytes(), CHARSET);
+        final Clob blob = new Clob(clientFileName, contentType, str);
         return blob;
     }
 
-    protected ByteArrayResource newResource(final Blob blob) {
-        return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+    protected IResource newResource(final Clob clob) {
+        return new ResourceStreamResource(new StringResourceStream(clob.getChars(), clob.getMimeType().getBaseType()));
     }
 
 

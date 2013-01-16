@@ -20,6 +20,7 @@
 package org.apache.isis.applib.value;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 
 import javax.activation.MimeType;
@@ -28,7 +29,7 @@ import javax.activation.MimeTypeParseException;
 import com.google.common.io.CharStreams;
 import com.google.common.io.OutputSupplier;
 
-public final class Clob {
+public final class Clob implements NamedWithMimeType, Serializable {
 
     private final String name;
     private final MimeType mimeType;
