@@ -305,7 +305,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         if (adapter != null) {
             permanentlyHide(ID_ENTITY_TITLE_NULL);
         } else {
-            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(null)"));
+            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, ""));
         }
     }
 
