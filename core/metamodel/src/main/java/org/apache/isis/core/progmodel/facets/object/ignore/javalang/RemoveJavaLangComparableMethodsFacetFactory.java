@@ -19,13 +19,30 @@
 
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
+import java.lang.reflect.Method;
+
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+
 /**
- * Removes all methods inherited from {@link Object}.
+ * Removes all methods called <tt>compareTo</tt>.
  */
-public class RemoveJavaLangComparableMethodsFacetFactory extends AbstractRemoveMethodsFacetFactory {
+public class RemoveJavaLangComparableMethodsFacetFactory extends FacetFactoryAbstract {
 
     public RemoveJavaLangComparableMethodsFacetFactory() {
-        super(Comparable.class);
+        super(FeatureType.OBJECTS_ONLY);
+    }
+
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        super.process(processClassContext);
+        Class<?> cls = processClassContext.getCls();
+        Method[] declaredMethods = cls.getDeclaredMethods();
+        for (Method method : declaredMethods) {
+            if(method.getName().equals("compareTo")) {
+                processClassContext.removeMethod(method);
+            }
+        }
     }
 
 }
