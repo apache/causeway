@@ -27,18 +27,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
-
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.PackageResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache2;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+
+import com.google.common.collect.Maps;
+import com.google.inject.Singleton;
 
 /**
  * Caches images loaded up the <tt>images</tt> package (using the {@link Images}
@@ -48,7 +44,7 @@ import org.apache.isis.viewer.wicket.model.models.ImageResourceCache2;
  * Searches for a fixed set of suffixes: {@value #IMAGE_SUFFICES}.
  */
 @Singleton
-public class ImageCacheClassPath implements ImageResourceCache2 {
+public class ImageCacheClassPath implements ImageResourceCache {
 
     private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
     private static final String FALLBACK_IMAGE = "Default.png";
@@ -61,8 +57,7 @@ public class ImageCacheClassPath implements ImageResourceCache2 {
         return resourceReferenceFor(adapter.getSpecification());
     }
 
-    @Override
-    public ResourceReference resourceReferenceFor(final ObjectSpecification spec) {
+    private ResourceReference resourceReferenceFor(final ObjectSpecification spec) {
         ResourceReference resourceReference = resourceReferenceBySpec.get(spec);
         if(resourceReference != null) {
             return resourceReference;
