@@ -240,6 +240,63 @@ public void setPropertyName(PropertyType param)</programlisting></para>
       </sect1>
 
       <sect1>
+        <title condition="java">How to specify a title for a domain
+        entity</title>
+
+        <para>A title is used to identify an object to the user in the user
+        interface. For example, a <classname>Customer</classname>'s title
+        might be the organization's customer reference, or perhaps (more
+        informally) their first and last names.</para>
+
+        <para>By default, the framework will use the object's <literal
+        moreinfo="none">toString()</literal> method as the title. Most titles
+        tend to be made up of the same set of elements: for example a
+        Customer's name might be the concatenation of their customer first
+        name and their ;ast name. For these the <classname>@Title</classname>
+        annotation can be used:</para>
+
+        <para><programlisting>public class Customer {
+  @Title
+  public String getFirstName() { ... }
+  @Title
+  public String getLastName() { ... }
+  ...
+}</programlisting></para>
+
+        <para>For more control, the order of the title components can be
+        specified using a sequence number (specified in Dewey decimal
+        format):</para>
+
+        <programlisting>public class Customer {
+  @Title("1.0")
+  public String getFirstName() { ... }
+  @Title("1.1")
+  public String getLastName() { ... }
+  ...
+}</programlisting>
+
+        <para>For more control the title can be declared imperately using the
+        <literal moreinfo="none">title()</literal> method (returning a
+        <literal moreinfo="none">String</literal>). This leaves the programmer
+        needs to make use of the <literal moreinfo="none">toString()</literal>
+        method for other purposes, such as for debugging. For example, to
+        return the title for a customer which is their last name and then
+        first initial of their first name, we could use:</para>
+
+        <para><programlisting>public class Customer {
+  public String title() {
+    return getLastName() + ", " + getFirstName().substring(0,1);
+  } 
+  ...
+}</programlisting></para>
+
+        <para>The applib contains a class,
+        <classname>org.apache.isis.applib.util.TitleBuffer</classname>, which
+        you can use to help create title strings if you so wish. See <xref
+        linkend="apx.UtilityClasses" /> for more details.</para>
+      </sect1>
+
+      <sect1>
         <title>How to add a collection to a domain entity</title>
 
         <para>A collection is a multi-valued attribute/field of a entity, in
@@ -305,7 +362,8 @@ public class Department {
       </sect1>
 
       <sect1>
-        <title>How to add an action to a domain entity or service</title>
+        <title>How to add an action (or bulk action) to a domain entity or
+        service</title>
 
         <para>An 'action' is a method that we expect the user to be able to
         invoke on a domain entity via the user interface, though it may also
@@ -358,63 +416,36 @@ public class Department {
         are ignored: such functionality should reside in a service, such as a
         repository or factory (see <xref
         linkend="chp.DomainServices" />).</para>
-      </sect1>
 
-      <sect1>
-        <title condition="java">How to specify a title for a domain
-        entity</title>
+        <para>If the action is a bulk action - meaning that it should only be
+        applied to a collection of instances of the entity - then annotate
+        using <classname>@Bulk</classname>:</para>
 
-        <para>A title is used to identify an object to the user in the user
-        interface. For example, a <classname>Customer</classname>'s title
-        might be the organization's customer reference, or perhaps (more
-        informally) their first and last names.</para>
+        <programlisting>@Bulk
+public void actionName() { ... }</programlisting>
 
-        <para>By default, the framework will use the object's <literal
-        moreinfo="none">toString()</literal> method as the title. Most titles
-        tend to be made up of the same set of elements: for example a
-        Customer's name might be the concatenation of their customer first
-        name and their ;ast name. For these the <classname>@Title</classname>
-        annotation can be used:</para>
+        <para>Note that bulk actions have a couple of important
+        restrictions.</para>
 
-        <para><programlisting>public class Customer {
-  @Title
-  public String getFirstName() { ... }
-  @Title
-  public String getLastName() { ... }
-  ...
-}</programlisting></para>
+        <itemizedlist>
+          <listitem>
+            <para>entity actions cannot take any arguments, while contributed
+            actions can take only a single parameter (the contributee)</para>
 
-        <para>For more control, the order of the title components can be
-        specified using a sequence number (specified in Dewey decimal
-        format):</para>
+            <para>This restriction might be lifted in the future;</para>
+          </listitem>
 
-        <programlisting>public class Customer {
-  @Title("1.0")
-  public String getFirstName() { ... }
-  @Title("1.1")
-  public String getLastName() { ... }
-  ...
-}</programlisting>
+          <listitem>
+            <para>any business rules for hiding, disabling or validating the
+            action are ignored.</para>
+          </listitem>
+        </itemizedlist>
 
-        <para>For more control the title can be declared imperately using the
-        <literal moreinfo="none">title()</literal> method (returning a
-        <literal moreinfo="none">String</literal>). This leaves the programmer
-        needs to make use of the <literal moreinfo="none">toString()</literal>
-        method for other purposes, such as for debugging. For example, to
-        return the title for a customer which is their last name and then
-        first initial of their first name, we could use:</para>
+        <para>See <xref linkend="chp.BusinessRules" /> for more details on
+        writing business rules.</para>
 
-        <para><programlisting>public class Customer {
-  public String title() {
-    return getLastName() + ", " + getFirstName().substring(0,1);
-  } 
-  ...
-}</programlisting></para>
-
-        <para>The applib contains a class,
-        <classname>org.apache.isis.applib.util.TitleBuffer</classname>, which
-        you can use to help create title strings if you so wish. See <xref
-        linkend="apx.UtilityClasses" /> for more details.</para>
+        <para>At the time of writing, only the Wicket viewer recognizes bulk
+        actions; other viewers treat the action as a regular action.</para>
       </sect1>
 
       <sect1 id="sec.HowToSpecifyTheIconForAnObjectsClass">
@@ -508,11 +539,9 @@ public class Department {
     ...
 }</programlisting>
 
-        <para></para>
-
-        <para>***</para>
-
-        <para></para>
+        <para>The syntax for the <classname>@MemberOrder</classname> is dewey
+        decimal notation, so "3.5" and "3.6" come between "3" and "4"; "3.5.1"
+        comes between "3.5" and "3.6".</para>
       </sect1>
 
       <sect1>
@@ -844,13 +873,13 @@ persist(newCust);</programlisting>
       </sect1>
     </chapter>
 
-    <chapter id="chp.Properties">
+    <chapter id="chp.BusinessRules">
       <title>How to add business rules</title>
 
       <abstract>
         <para>How-to add business rules to domain entities and services,
         controlling whether a domain entity or service's class members are
-        visible, if they are enabled, and to validate arguments. </para>
+        visible, if they are enabled, and to validate arguments.</para>
       </abstract>
 
       <para>Business rules can be added to domain objects in a number of ways.
@@ -1989,7 +2018,7 @@ public class Customer {
 
       <para>The Isis viewers will automatically render the state of properties
       and collections, but the values of such need not be persisted; they can
-      be derived from other information available to the object. </para>
+      be derived from other information available to the object.</para>
 
       <para>For collections</para>
 
@@ -3144,6 +3173,14 @@ isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault
           If an action should neither be contributed nor appear in service
           menu items, then simply annotate it as
           <classname>@Hidden</classname>.</para>
+
+          <para>Alternatively, this can be performed using a supporting
+          method:</para>
+
+          <programlisting>public class LibraryImpl implements Library {
+    public Loan borrow(Loanable l, Borrower b) { ... }
+    public boolean notInServiceMenuBorrow() { ... }
+}</programlisting>
         </sect2>
 
         <sect2>
@@ -5280,6 +5317,27 @@ public class County {
           moreinfo="none">final</literal> classes. Its behaviour when used on
           interfaces, or classes with sub-classes is not specified</para>
         </note>
+      </sect1>
+
+      <sect1>
+        <title>@Bulk</title>
+
+        <para>For actions that should only be applied to a collection of
+        objects of the same type, annotate using
+        @<classname>Bulk</classname>.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class ToDoItem {
+    ...
+    @Bulk
+    public void markAsCompleted() {
+        setCompleted(true);
+    }
+}</programlisting>
+
+        <para>Bulk actions cannot take arguments, nor can they be hidden,
+        disabled or have validation rules.</para>
       </sect1>
 
       <sect1 id="sec.DebugAnnotation">

@@ -32,18 +32,18 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 
-final class BulkCollectionsLinkFactory implements CssMenuLinkFactory {
+final class BulkActionsLinkFactory implements CssMenuLinkFactory {
     private static final long serialVersionUID = 1L;
     private final EntityCollectionModel model;
     private final DataTable<ObjectAdapter,String> dataTable;
 
-    BulkCollectionsLinkFactory(EntityCollectionModel model, DataTable<ObjectAdapter,String> dataTable) {
+    BulkActionsLinkFactory(EntityCollectionModel model, DataTable<ObjectAdapter,String> dataTable) {
         this.model = model;
         this.dataTable = dataTable;
     }
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento contributorAdapterMemento, final ObjectAction objectAction, final String linkId) {
+    public LinkAndLabel newLink(final ObjectAdapterMemento serviceAdapterMemento, final ObjectAction objectAction, final String linkId) {
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         AbstractLink link = new AjaxLink<Void>(linkId) {
 
@@ -52,10 +52,29 @@ final class BulkCollectionsLinkFactory implements CssMenuLinkFactory {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 final ObjectAction objectAction = actionMemento.getAction();
-                for(ObjectAdapterMemento contributeeAdapterMemento: model.getToggleMementosList()) {
-                    final ObjectAdapter contributorAdapter = contributorAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                    final ObjectAdapter contributeeAdapter = contributeeAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-                    objectAction.execute(contributorAdapter, new ObjectAdapter[]{contributeeAdapter});
+                
+                for(ObjectAdapterMemento entityAdapterMemento: model.getToggleMementosList()) {
+                    final ObjectAdapter entityAdapter = entityAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+
+                    int numParameters = objectAction.getParameterCount();
+                    if(objectAction.isContributed()) {
+                        // a contributed action
+                        if(numParameters != 1) {
+                            return;
+                        }
+                        if(serviceAdapterMemento == null) {
+                            // not expected
+                            return;
+                        }
+                        final ObjectAdapter serviceAdapter = serviceAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                        objectAction.execute(serviceAdapter, new ObjectAdapter[]{entityAdapter});
+                    } else {
+                        // an entity action
+                        if(numParameters != 0) {
+                            return;
+                        }
+                        objectAction.execute(entityAdapter, new ObjectAdapter[]{});
+                    }                        
                 }
                 model.clearToggleMementosList();
                 target.add(dataTable);

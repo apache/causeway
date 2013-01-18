@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
 public class ObjectActionFilters {
 
@@ -54,14 +55,12 @@ public class ObjectActionFilters {
         };
     }
 
-    public static Filter<ObjectAction> withNoBusinessRules() {
+    public static Filter<ObjectAction> withNoValidationRules() {
         return new Filter<ObjectAction>(){
             @Override
             public boolean accept(final ObjectAction objectAction) {
-                final List<Facet> hidingFacets = objectAction.getFacets(FacetFilters.isA(HidingInteractionAdvisor.class));
-                final List<Facet> disablingFacets = objectAction.getFacets(FacetFilters.isA(DisablingInteractionAdvisor.class));
                 final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters.isA(ValidatingInteractionAdvisor.class));
-                return hidingFacets.isEmpty() && disablingFacets.isEmpty() && validatingFacets.isEmpty();
+                return validatingFacets.isEmpty();
             }};
     }
 
@@ -84,5 +83,14 @@ public class ObjectActionFilters {
                 return oa.getType() == type;
             }
         };
+    }
+
+    public static Filter<ObjectAction> bulk() {
+        return new Filter<ObjectAction>(){
+
+            @Override
+            public boolean accept(ObjectAction oa) {
+                return oa.containsDoOpFacet(BulkFacet.class);
+            }};
     }
 }

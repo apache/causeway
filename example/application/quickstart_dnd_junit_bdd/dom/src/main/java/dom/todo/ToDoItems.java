@@ -112,7 +112,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         });
     }
     // }}
-    
+
     // {{ autoComplete (hidden)
     @Hidden
     public List<ToDoItem> autoComplete(final String description) {

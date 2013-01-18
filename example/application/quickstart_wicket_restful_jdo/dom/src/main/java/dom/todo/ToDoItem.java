@@ -28,7 +28,9 @@ import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberGroups;
@@ -41,6 +43,7 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Resolve;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
@@ -48,7 +51,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.joda.time.LocalDate;
 
@@ -129,6 +131,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     public void setDueBy(final LocalDate dueBy) {
         this.dueBy = dueBy;
+    }
+    public void clearDueBy() {
+        setDueBy(null);
     }
     // proposed new value is validated before setting
     public String validateDueBy(final LocalDate dueBy) {
@@ -236,6 +241,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // }}
 
     // {{ completed (action)
+    @Bulk
     @MemberOrder(sequence = "1")
     public ToDoItem completed() {
         setComplete(true);
@@ -246,7 +252,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public String disableCompleted() {
         return complete ? "Already completed" : null;
     }
-
     // }}
 
     // {{ notYetCompleted (action)
@@ -262,6 +267,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return !complete ? "Not yet completed" : null;
     }
     // }}
+
+    
+    
     
     // {{ dependencies (Collection)
     private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
@@ -357,7 +365,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
     /**
      * by complete flag, then due by date, then description
      */
-    @Programmatic
     // exclude from the framework's metamodel
     @Override
     public int compareTo(final ToDoItem other) {
@@ -378,7 +385,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         return getDueBy().compareTo(getDueBy());
     }
-
     // }}
 
     // {{ helpers
@@ -429,8 +435,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
         };
     }
-
-
     // }}
 
     // {{ injected: DomainObjectContainer

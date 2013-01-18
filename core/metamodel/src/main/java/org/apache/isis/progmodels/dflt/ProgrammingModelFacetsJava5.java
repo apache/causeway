@@ -20,6 +20,7 @@
 package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
@@ -309,6 +310,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotContributedAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuMethodFacetFactory.class);
+        addFactory(BulkAnnotationFacetFactory.class);
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override

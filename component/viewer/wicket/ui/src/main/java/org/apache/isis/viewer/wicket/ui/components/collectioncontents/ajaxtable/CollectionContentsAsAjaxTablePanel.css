@@ -148,3 +148,14 @@
 	padding:20px 4px 0px;
 	background-color:#FFFFFF !important;
 }
+
+.collectionContentsAsAjaxTablePanel .actions {
+    float: right;
+    padding:0em 0em;
+}
+
+.collectionContentsAsAjaxTablePanel .entityActions .cssMenuPanel .menuh a:hover
+    {
+    color: #000;
+    background-color:#E3E3D9;
+}

@@ -25,7 +25,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 
 public interface ObjectActionContainer {
 

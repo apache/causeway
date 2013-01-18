@@ -139,6 +139,10 @@
 	color: gray;
 }
 
+.cssMenuPanel li.cssSubMenuItem {
+    margin-left:0px;
+}
+
 /******** overrides for grouped actions and entity actions ***************/
 .groupedActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
 	display: none;
@@ -220,11 +224,16 @@
 	padding: 0px;
 }
 
-.entityActions .cssMenuPanel .menuh li,
-.entityActions .cssMenuPanel .menuh li p {
+.entityActions .cssMenuPanel .menuh li {
 	float:left;
 	display:block;
 	margin-left:10px;
+}
+
+.entityActions .cssMenuPanel .menuh li p {
+    float:left;
+    display:block;
+    margin-left:0px;
 }
 
 .entityActions .cssMenuPanel .menuh a,

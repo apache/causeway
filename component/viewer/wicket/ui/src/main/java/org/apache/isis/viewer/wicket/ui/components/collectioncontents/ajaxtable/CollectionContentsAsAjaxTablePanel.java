@@ -19,8 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
@@ -39,6 +43,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
@@ -59,6 +64,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  */
 public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> {
 
+    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectActionFilters.bulk());
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_TABLE = "table";
@@ -75,57 +82,52 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private void buildGui() {
         final EntityCollectionModel model = getModel();
 
-        buildEntityActionsGui();
-        
         final List<IColumn<ObjectAdapter,String>> columns = Lists.newArrayList();
 
-        addToggleboxColumnIfRequired(columns);
+        List<ObjectAction> bulkActions = determineBulkActions();
+
+        addToggleboxColumnIfRequired(columns, bulkActions);
         addTitleColumn(columns);
         addPropertyColumnsIfRequired(columns);
         addSelectedButtonIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new MyAjaxFallbackDefaultDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
-        
+
+        buildEntityActionsGui(bulkActions);
+
         add(dataTable);
     }
     
-    private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
+    private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
         final EntityCollectionModel model = getModel();
-        
-        if(model.isStandalone()) {
-            columns.add(new ObjectAdapterToggleboxColumn(new SelectionHandler() {
-                
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onSelected(final Component context, final ObjectAdapter selectedAdapter) {
-                    model.toggleSelectionOn(selectedAdapter);
-                }
-            }));
+        if(bulkActions.isEmpty() || model.isParented()) {
+            return;
         }
+        
+        columns.add(new ObjectAdapterToggleboxColumn(new SelectionHandler() {
+            
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSelected(final Component context, final ObjectAdapter selectedAdapter) {
+                model.toggleSelectionOn(selectedAdapter);
+            }
+        }));
     }
 
-    private void buildEntityActionsGui() {
+    private void buildEntityActionsGui(List<ObjectAction> bulkActions) {
         final EntityCollectionModel model = getModel();
         
-        if(model.isParented()) {
+        if(bulkActions.isEmpty() || model.isParented()) {
             permanentlyHide(ID_ENTITY_ACTIONS);
             return;
         }
         
-        final ObjectSpecification typeSpec = model.getTypeOfSpecification();
-        
-        @SuppressWarnings("unchecked")
-        final List<ObjectAction> userActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, 
-                Filters.and(
-                        ObjectActionFilters.withNoBusinessRules(), ObjectActionFilters.contributedAnd1ParamAndVoid()
-                ));
+        if(!bulkActions.isEmpty()) {
+            final CssMenuLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable);
 
-        if(!userActions.isEmpty()) {
-            final CssMenuLinkFactory linkFactory = new BulkCollectionsLinkFactory(model, dataTable);
-
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), userActions, linkFactory);
+            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), bulkActions, linkFactory);
             // TODO: i18n
             final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
@@ -133,6 +135,20 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }
+    }
+
+    private List<ObjectAction> determineBulkActions() {
+        final EntityCollectionModel model = getModel();
+        
+        if(model.isParented()) {
+            return Collections.emptyList();
+        }
+        
+        final ObjectSpecification typeSpec = model.getTypeOfSpecification();
+        
+        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        List<ObjectAction> flattenedActions = ObjectActions.flattenedActions(objectActions);
+        return Lists.newArrayList(Iterables.filter(flattenedActions, BULK));
     }
 
 

@@ -19,14 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Collections2;
-
-import org.apache.wicket.Application;
 
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,12 +29,14 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
+
+import com.google.common.collect.Collections2;
 
 /**
  * Used to build a {@link CssMenuItem} hierarchy from a
@@ -48,18 +45,30 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.
  */
 public class CssMenuBuilder {
 
+    /**
+     * The target to invoke upon; may be null in case of bulk actions; not used if a contributed action. 
+     */
     private final ObjectAdapterMemento adapterMemento;
+    /**
+     * Used to determine wire up against contributed actions.
+     */
     private final List<ObjectAdapter> serviceAdapters;
+    
     private final List<ObjectAction> actions;
 
     private final CssMenuLinkFactory cssMenuLinkFactory;
-
+    
     public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters, final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
-        this.adapterMemento = adapterMemento;
+        this.adapterMemento = adapterMemento; // may be null
         this.serviceAdapters = serviceAdapters;
         this.actions = actions;
         this.cssMenuLinkFactory = cssMenuLinkFactory;
     }
+
+    public CssMenuBuilder(final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
+        this(null, null, actions, cssMenuLinkFactory);
+    }
+
 
     public CssMenuPanel buildPanel(final String wicketId, final String rootName) {
         final CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
@@ -100,10 +109,6 @@ public class CssMenuBuilder {
         }
     }
 
-    private void addMenuItems(final CssMenuItem parent, final ObjectAction[] actions) {
-        addMenuItems(parent, Arrays.asList(actions));
-    }
-
     private void addMenuItem(final CssMenuItem parent, final ObjectAction action) {
         if (action.getType() == ActionType.SET) {
             addMenuItemForActionSet(parent, action);
@@ -121,21 +126,29 @@ public class CssMenuBuilder {
         }
     }
 
-    private void addMenuItemForAction(final CssMenuItem parent, final ObjectAction contributedAction) {
-
-        // skip if annotated to not be contributed
-        if (contributedAction.getFacet(NotContributedFacet.class) != null) {
+    private void addMenuItemForAction(final CssMenuItem parent, final ObjectAction action) {
+        
+        if (action.getFacet(NotContributedFacet.class) != null) {
+            // skip if is an action that has been annotated to not be contributed
             return;
         }
 
-        final ObjectAdapterMemento serviceAdapterMemento = determineAdapterFor(contributedAction);
-        if(serviceAdapterMemento == null) {
-            return;
+        Builder subMenuItemBuilder = null;
+        
+        final ObjectAdapterMemento targetAdapterMemento = determineAdapterFor(action);
+        if(targetAdapterMemento != null) {
+            // against an entity or a service (if a contributed action)
+            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, cssMenuLinkFactory);
+        } else {
+            if (action.containsDoOpFacet(BulkFacet.class)) {
+                // ignore fact have no target action; 
+                // we expect that the link factory is able to handle this
+                // (ie will iterate through all objects from a list and invoke in bulk)
+                subMenuItemBuilder = parent.newSubMenuItem(action, cssMenuLinkFactory);
+            }
         }
-
-        final Builder subMenuItemBuilder = parent.newSubMenuItem(serviceAdapterMemento, contributedAction, cssMenuLinkFactory);
+        
         if (subMenuItemBuilder != null) {
-            // could be null if invisible
             subMenuItemBuilder.build();
         }
     }
@@ -148,14 +161,20 @@ public class CssMenuBuilder {
      * adapters also.
      */
     private ObjectAdapterMemento determineAdapterFor(final ObjectAction action) {
-        // search through service adapters first
-        final ObjectSpecification onType = action.getOnType();
-        for (final ObjectAdapter serviceAdapter : getServiceAdapters()) {
-            if (serviceAdapter.getSpecification() == onType) {
-                return ObjectAdapterMemento.createOrNull(serviceAdapter);
+        
+        if(getServiceAdapters() != null) {
+            // null check required because could be null.
+            
+            // search through service adapters first
+            final ObjectSpecification onType = action.getOnType();
+            for (final ObjectAdapter serviceAdapter : getServiceAdapters()) {
+                if (serviceAdapter.getSpecification() == onType) {
+                    return ObjectAdapterMemento.createOrNull(serviceAdapter);
+                }
             }
         }
-        // otherwise, specified adapter
+
+        // otherwise, specified adapter (could be null)
         return adapterMemento;
     }
 

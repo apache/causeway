@@ -231,6 +231,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     @Override
     public void init() {
+
         ValidationFailures validationFailures = initAndValidate();
         
         validationFailures.assertNone();
@@ -267,7 +268,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         facetProcessor.init();
         metaModelValidator.init();
 
-        // prime cache and validate
         primeCache();
         
         ValidationFailures validationFailures = new ValidationFailures();

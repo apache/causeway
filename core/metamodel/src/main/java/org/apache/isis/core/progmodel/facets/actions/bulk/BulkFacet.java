@@ -17,28 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.progmodel.facets.actions.bulk;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates the (service) action should be not be displayed in the service
- * menu.
+ * Indicates that the action (entity or service) can also be used as a bulk
+ * action against collections of objects.
  * 
  * <p>
- * It may still be contributed (unless it has been annotated as
- * {@link NotContributed}). If {@link Hidden}, then also implies that the menu
- * should not appear in the service menu.
- * 
- * <p>
- * Has no meaning if annotated on an action of a regular entity.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@Bulk</tt>.
  */
-@Inherited
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface NotInServiceMenu {
+public interface BulkFacet extends Facet {
+
 }

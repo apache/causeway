@@ -17,28 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.progmodel.facets.actions.bulk.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacetAbstract;
 
-/**
- * Indicates the (service) action should be not be displayed in the service
- * menu.
- * 
- * <p>
- * It may still be contributed (unless it has been annotated as
- * {@link NotContributed}). If {@link Hidden}, then also implies that the menu
- * should not appear in the service menu.
- * 
- * <p>
- * Has no meaning if annotated on an action of a regular entity.
- */
-@Inherited
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface NotInServiceMenu {
+public class BulkFacetAnnotation extends BulkFacetAbstract {
+
+    public BulkFacetAnnotation(final FacetHolder holder) {
+        super(holder);
+    }
+
 }

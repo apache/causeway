@@ -180,13 +180,14 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         runtimeContext.injectInto(reflector);
         reflector.injectInto(runtimeContext);
 
-        validationFailures = reflector.initAndValidate();
-        runtimeContext.init();
-
         for (final Object service : services) {
             final ObjectSpecification serviceSpec = reflector.loadSpecification(service.getClass());
             serviceSpec.markAsService();
         }
+
+        validationFailures = reflector.initAndValidate();
+        runtimeContext.init();
+
         state = State.INITIALIZED;
     }
     

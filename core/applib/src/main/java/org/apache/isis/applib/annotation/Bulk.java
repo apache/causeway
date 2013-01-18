@@ -26,19 +26,25 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the (service) action should be not be displayed in the service
- * menu.
+ * Indicates the (entity) action should be used only against many objects
+ * in a collection.
  * 
  * <p>
- * It may still be contributed (unless it has been annotated as
- * {@link NotContributed}). If {@link Hidden}, then also implies that the menu
- * should not appear in the service menu.
+ * Bulk actions have a number of constraints:
+ * <ul>
+ * <li>It must take no arguments
+ * <li>It must return <tt>void</tt>
+ * <li>It cannot be hidden (any annotations or supporting methods to that effect will be
+ *     ignored).
+ * <li>It cannot be disabled (any annotations or supporting methods to that effect will be
+ *     ignored).
+ * </ul>
  * 
  * <p>
- * Has no meaning if annotated on an action of a regular entity.
+ * Has no meaning if annotated on an action of a domain service.
  */
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotInServiceMenu {
+public @interface Bulk {
 }

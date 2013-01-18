@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
@@ -132,7 +133,6 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // }}
     
 
-    
     // {{ autoComplete (hidden)
     @Hidden
     public List<ToDoItem> autoComplete(final String description) {
@@ -155,4 +155,5 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
+    
 }

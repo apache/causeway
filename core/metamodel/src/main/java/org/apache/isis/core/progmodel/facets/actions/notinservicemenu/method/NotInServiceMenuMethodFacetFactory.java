@@ -41,23 +41,16 @@ public class NotInServiceMenuMethodFacetFactory extends MethodPrefixBasedFacetFa
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, /*
-                                                                                         * MethodPrefixConstants
-                                                                                         * .
-                                                                                         * HIDE_PREFIX
-                                                                                         */
+        final Method notInServiceMenuMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, 
                 "notInServiceMenu" + capitalizedName, boolean.class, new Class[] {});
-        if (hideMethod == null) {
+        if (notInServiceMenuMethod == null) {
             return;
         }
 
-        processMethodContext.removeMethod(hideMethod);
+        processMethodContext.removeMethod(notInServiceMenuMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        // FacetUtil.addFacet(new
-        // NotInServiceMenuFacetAnnotation(facetedMethod));
-        FacetUtil.addFacet(new NotInServiceMenuFacetMethod(hideMethod, facetedMethod));
-
+        FacetUtil.addFacet(new NotInServiceMenuFacetMethod(notInServiceMenuMethod, facetedMethod));
     }
 
 }

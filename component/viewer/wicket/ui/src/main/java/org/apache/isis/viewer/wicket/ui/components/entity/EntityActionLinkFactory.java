@@ -61,7 +61,6 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
         final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
-        final ObjectAdapter contextAdapter = entityModel.getObject();
         final String label = ObjectActions.nameFor(action);
 
         return new LinkAndLabel(link, label);

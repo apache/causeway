@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -194,30 +195,44 @@ public class CssMenuItem implements Serializable {
     private final Where where = Where.ANYWHERE;
 
     /**
+     * Creates a {@link Builder} for a submenu item invoking an action on the provided
+     * {@link ObjectAdapterMemento target adapter}.
+     * 
      * @return the builder, else <tt>null</tt> if the action is not visible for
      *         the current user.
      */
-    public Builder newSubMenuItem(final ObjectAdapterMemento adapterMemento, final ObjectAction objectAction, final CssMenuLinkFactory cssMenuLinkFactory) {
+    public Builder newSubMenuItem(final ObjectAdapterMemento targetAdapterMemento, final ObjectAction objectAction, final CssMenuLinkFactory cssMenuLinkFactory) {
 
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK);
+        final AbstractLink link = linkAndLabel.getLink();
+        final String actionLabel = linkAndLabel.getLabel();
+
+        // check visibility and whether enabled
         final AuthenticationSession session = getAuthenticationSession();
 
-        final CssMenuItem parentMenuItem = this;
-
-        final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+        final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
         final Consent visibility = objectAction.isVisible(session, adapter, where);
         if (visibility.isVetoed()) {
             return null;
         }
 
-        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(adapterMemento, objectAction, PageAbstract.ID_MENU_LINK);
+        final Consent usability = objectAction.isUsable(session, adapter, where);
+        final String reasonDisabledIfAny = usability.getReason();
+
+        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny);
+    }
+
+    /**
+     * Creates a {@link Builder} for a submenu item where the provided {@link CssMenuLinkFactory} is able to provide the target adapter. 
+     */
+    public Builder newSubMenuItem(final ObjectAction objectAction, final CssMenuLinkFactory cssMenuLinkFactory) {
+
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK);
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
-        final Consent usability = objectAction.isUsable(session, adapter, where);
-        final String reasonDisabledIfAny = usability.getReason();
-
-        return parentMenuItem.newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny);
+        return this.newSubMenuItem(actionLabel).link(link);
     }
 
     // //////////////////////////////////////////////////////////////
