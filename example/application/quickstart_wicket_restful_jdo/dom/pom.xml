@@ -117,6 +117,12 @@
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <artifactId>danhaywood-isis-wicket-gmap2-applib</artifactId>
+        </dependency>
+        
 	</dependencies>
 
    <profiles>

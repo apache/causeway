@@ -28,7 +28,6 @@ import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Disabled;
@@ -43,7 +42,6 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Resolve;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
@@ -54,6 +52,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.joda.time.LocalDate;
 
+import com.danhaywood.isis.wicket.gmap2.applib.Locatable;
+import com.danhaywood.isis.wicket.gmap2.applib.Location;
 import com.google.common.base.Objects;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -80,7 +80,7 @@ import com.google.common.base.Objects;
 @Auditable
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
-public class ToDoItem implements Comparable<ToDoItem> {
+public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
 
 	private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
@@ -454,6 +454,15 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
     // }}
 
+//    @Override
+//    public Location getLocation() {
+//        //51.5172° N, 0.1182° is Central London
+//        return new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05) );
+//    }
+//
+//    private static double random(double from, double to) {
+//        return Math.random() * (to-from) + from;
+//    }
 
 
 }

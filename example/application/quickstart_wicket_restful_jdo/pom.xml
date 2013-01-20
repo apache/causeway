@@ -225,8 +225,18 @@
             </dependency>
 
 
+            <!-- 3rd party extensions -->
+            <dependency>
+                <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+                <artifactId>danhaywood-isis-wicket-gmap2</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+    
 
     <profiles>
         <profile>
