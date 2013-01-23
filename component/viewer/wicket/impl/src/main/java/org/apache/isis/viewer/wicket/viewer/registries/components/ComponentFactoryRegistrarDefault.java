@@ -95,7 +95,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public void addComponentFactories(final ComponentFactoryList componentFactories) {
 
         addComponentFactoriesActingAsSelectors(componentFactories);
-
+        
         addComponentFactoriesUsingServiceLoader(componentFactories);
 
         addBuiltInComponentFactories(componentFactories);
@@ -107,13 +107,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
      * are found first.
      */
     protected void addComponentFactoriesActingAsSelectors(final ComponentFactoryList componentFactories) {
-        
-        // either this set...
-    	// addDropDownSelectorFactories(componentFactories);
-
-        // ... or this set (but not both)
         addLinksSelectorFactories(componentFactories);
-
         componentFactories.add(new CollectionContentsAsUnresolvedPanelFactory()); // to prevent eager loading
     }
 
@@ -122,7 +116,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new CollectionContentsLinksSelectorPanelFactory());
     }
 
-    protected void addDropDownSelectorFactories(final ComponentFactoryList componentFactories) {
+    @SuppressWarnings("unused")
+    private void addDropDownSelectorFactories(final ComponentFactoryList componentFactories) {
         componentFactories.add(new EntityDropDownSelectorPanelFactory());
         componentFactories.add(new CollectionContentsDropDownSelectorPanelFactory());
     }

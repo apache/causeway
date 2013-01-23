@@ -19,10 +19,18 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Resolve.Type;
+import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
+import org.apache.wicket.model.IModel;
 
 /**
  * Provides a list of links for selecting other views that support
@@ -40,5 +48,47 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
     public CollectionContentsLinksSelectorPanel(final String id, final EntityCollectionModel model, final ComponentFactory factory) {
         super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
     }
+
+    @Override
+    protected EntityCollectionModel dummyOf(EntityCollectionModel model) {
+        return model.asDummy();
+    }
+
+    /**
+     * return the index of {@link CollectionContentsAsUnresolvedPanelFactory unresolved panel} if present and not eager loading;
+     * else the index of {@link CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
+     * otherwise first factory.
+     */
+    protected int determineInitialFactory(final List<ComponentFactory> componentFactories, final IModel<?> model) {
+        if(!hasResolveEagerlyFacet(model)) {
+            for(int i=0; i<componentFactories.size(); i++) {
+                if(componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
+                    return i;
+                }
+            }
+        }
+        for(int i=0; i<componentFactories.size(); i++) {
+            if(componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private static boolean hasResolveEagerlyFacet(IModel<?> model) {
+        if(!(model instanceof EntityCollectionModel)) {
+            return false;
+        }
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        if(!entityCollectionModel.isParented()) {
+            return false;
+        }
+
+        final OneToManyAssociation collection = 
+                entityCollectionModel.getCollectionMemento().getCollection();
+        ResolveFacet resolveFacet = collection.getFacet(ResolveFacet.class);
+        return resolveFacet != null && resolveFacet.value() == Type.EAGERLY;
+    }
+
 
 }

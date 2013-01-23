@@ -167,9 +167,10 @@
 
         <!-- 3rd party dependency -->
         <!-- 
+        GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
         <dependency>
             <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
-            <artifactId>danhaywood-isis-wicket-gmap2-ui</artifactId>
+            <artifactId>danhaywood-isis-wicket-gmap3-ui</artifactId>
         </dependency>
          -->
 

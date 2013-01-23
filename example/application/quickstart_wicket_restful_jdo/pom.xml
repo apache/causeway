@@ -226,13 +226,16 @@
 
 
             <!-- 3rd party extensions -->
+            <!--
+            GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
             <dependency>
                 <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
-                <artifactId>danhaywood-isis-wicket-gmap2</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <artifactId>danhaywood-isis-wicket-gmap3</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            -->
 
         </dependencies>
     </dependencyManagement>

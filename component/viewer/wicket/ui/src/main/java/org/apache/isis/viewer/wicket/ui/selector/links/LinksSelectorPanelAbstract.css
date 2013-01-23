@@ -108,3 +108,7 @@ a span.ViewLinkItem.table {
 	text-transform:uppercase;
 	font-size:0.85em;
 }
+
+.linksSelectorPanel .link-selector-panel-invisible {
+	display:none;
+}

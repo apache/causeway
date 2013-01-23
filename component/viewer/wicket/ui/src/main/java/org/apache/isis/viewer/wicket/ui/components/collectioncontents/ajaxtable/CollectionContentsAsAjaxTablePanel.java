@@ -96,7 +96,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
         buildEntityActionsGui(bulkActions);
 
-        add(dataTable);
+        addOrReplace(dataTable);
     }
     
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
@@ -184,6 +184,11 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
     private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final ObjectAssociation property) {
         return new ObjectAdapterPropertyColumn(Model.of(property.getName()), property.getId(), property.getId());
+    }
+
+    @Override
+    protected void onModelChanged() {
+        buildGui();
     }
 
 }

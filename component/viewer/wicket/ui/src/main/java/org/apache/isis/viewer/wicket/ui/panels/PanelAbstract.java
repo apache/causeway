@@ -25,12 +25,10 @@ import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -131,9 +129,9 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      * their own CSS if required.
      */
     protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
-        final String url = cls.getSimpleName() + ".css";
-        response.render(CssHeaderItem.forReference(new CssResourceReference(cls, url)));
+        PanelUtil.renderHead(response, cls);
     }
+
 
     // ///////////////////////////////////////////////////////////////////
     // Convenience

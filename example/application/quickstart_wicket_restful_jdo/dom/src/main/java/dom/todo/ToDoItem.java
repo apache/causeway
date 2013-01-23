@@ -18,11 +18,14 @@
  */
 package dom.todo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Join;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
@@ -52,9 +55,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.joda.time.LocalDate;
 
-import com.danhaywood.isis.wicket.gmap2.applib.Locatable;
-import com.danhaywood.isis.wicket.gmap2.applib.Location;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
@@ -80,7 +82,7 @@ import com.google.common.base.Objects;
 @Auditable
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
-public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
+public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
 	private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
@@ -272,16 +274,19 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
     
     
     // {{ dependencies (Collection)
-    private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
+    @Persistent(table="TODO_DEPENDENCIES")
+    @Join(column="DEPENDING_TODO_ID")
+    @Element(column="DEPENDENT_TODO_ID")
+    private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @Disabled
     @MemberOrder(sequence = "1")
     @Resolve(Type.EAGERLY)
-    public List<ToDoItem> getDependencies() {
+    public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(final List<ToDoItem> dependencies) {
+    public void setDependencies(final SortedSet<ToDoItem> dependencies) {
         this.dependencies = dependencies;
     }
     // }}
@@ -319,7 +324,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
         return null;
     }
     public List<ToDoItem> choices0Remove() {
-        return getDependencies();
+        return Lists.newArrayList(getDependencies());
     }
     // }}
 
@@ -331,8 +336,23 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
-    public ToDoItem duplicate() {
-        return toDoItems.newToDo(getDescription() + " - Copy", getCategory(), getDueBy());
+    public ToDoItem duplicate(
+            @Named("Description") 
+            String description,
+            Category category, 
+            @Named("Due by") 
+            @Optional
+            LocalDate dueBy) {
+        return toDoItems.newToDo(description, category, dueBy);
+    }
+    public String default0Duplicate() {
+        return getDescription() + " - Copy";
+    }
+    public Category default1Duplicate() {
+        return getCategory();
+    }
+    public LocalDate default2Duplicate() {
+        return getDueBy();
     }
     // }}
 
@@ -352,7 +372,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
     // {{ SimilarItems (derived collection)
     @MemberOrder(sequence = "5")
     @NotPersisted
-    @Resolve(Type.EAGERLY)
+    @Resolve(Type.LAZILY)
     public List<ToDoItem> getSimilarItems() {
         return toDoItems.similarTo(this);
     }
@@ -454,15 +474,19 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable */{
     }
     // }}
 
-//    @Override
+// GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3    
+//    // {{
+//    @Persistent
+//    private Location location;
+//    
+//    @MemberOrder(name="Detail", sequence = "10")
+//    @Optional
 //    public Location getLocation() {
-//        //51.5172° N, 0.1182° is Central London
-//        return new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05) );
+//        return location;
 //    }
-//
-//    private static double random(double from, double to) {
-//        return Math.random() * (to-from) + from;
+//    public void setLocation(Location location) {
+//        this.location = location;
 //    }
-
+//    // }}
 
 }

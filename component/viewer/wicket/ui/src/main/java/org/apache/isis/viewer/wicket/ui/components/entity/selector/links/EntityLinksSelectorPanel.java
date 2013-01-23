@@ -19,10 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.selector.links;
 
+import java.util.List;
+
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
+import org.apache.wicket.model.IModel;
 
 /**
  * Provides a list of links for selecting other views that support
@@ -38,6 +41,16 @@ public class EntityLinksSelectorPanel extends LinksSelectorPanelAbstract<EntityM
 
     public EntityLinksSelectorPanel(final String id, final EntityModel model, final ComponentFactory factory) {
         super(id, ComponentType.ENTITY.toString(), model, factory);
+    }
+
+    @Override
+    protected EntityModel dummyOf(EntityModel model) {
+        return model;
+    }
+
+    @Override
+    protected int determineInitialFactory(List<ComponentFactory> componentFactories, IModel<?> model) {
+        return 0;
     }
 
 }

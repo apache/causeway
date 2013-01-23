@@ -291,4 +291,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return Collections.unmodifiableList(entityActions);
     }
 
+    public EntityCollectionModel asDummy() {
+        return new EntityCollectionModel(typeOf, Collections.<ObjectAdapterMemento>emptyList(), pageSize);
+    }
 }
