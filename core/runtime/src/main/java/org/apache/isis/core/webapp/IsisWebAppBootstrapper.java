@@ -82,16 +82,18 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final String webInfDir = servletContext.getRealPath("/WEB-INF");
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
-            String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
-            ResourceStreamSourceComposite compositeSource = null;
-            if ( configLocation == null ) {
-              LOG.info( "Config override location: No override location configured!" );
-              compositeSource = new ResourceStreamSourceComposite(ResourceStreamSourceContextLoaderClassPath.create(), new ResourceStreamSourceForWebInf(servletContext));
-            } else {
+            final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
+            final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(
+                    ResourceStreamSourceContextLoaderClassPath.create(), 
+                    new ResourceStreamSourceForWebInf(servletContext)) ;
+
+            if ( configLocation != null ) {
               LOG.info( "Config override location: " + configLocation );
-              ResourceStreamSource configSourceStream = ResourceStreamSourceFileSystem.create(configLocation);
-              compositeSource = new ResourceStreamSourceComposite(ResourceStreamSourceContextLoaderClassPath.create(), new ResourceStreamSourceForWebInf(servletContext), configSourceStream);
+              compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
+            } else {
+              LOG.info( "Config override location: No override location configured" );
             }
+            
             // will load either from WEB-INF, from the classpath or from config directory.
             final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
 

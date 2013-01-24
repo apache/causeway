@@ -136,7 +136,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
         
         putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-        putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+        putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test;hsqldb.sqllog=3");
         putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
         putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
         

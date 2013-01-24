@@ -49,8 +49,10 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -208,10 +210,22 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     }
 
     protected IsisConfigurationBuilder createConfigBuilder(final ServletContext servletContext) {
-        final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(servletContext);
-        final ResourceStreamSource rssTcl = ResourceStreamSourceContextLoaderClassPath.create();
-        final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
-        final IsisConfigurationBuilderResourceStreams configurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
+        
+        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
+        final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(
+                new ResourceStreamSourceForWebInf(servletContext),
+                ResourceStreamSourceContextLoaderClassPath.create(),
+                new ResourceStreamSourceCurrentClassClassPath());
+
+        if ( configLocation != null ) {
+            LOG.info( "Config override location: " + configLocation );
+            compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
+        } else {
+            LOG.info( "Config override location: No override location configured!" );
+        }
+        
+        final IsisConfigurationBuilder configurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
+        
         primeConfigurationBuilder(configurationBuilder, servletContext);
         configurationBuilder.addDefaultConfigurationResources();
         return configurationBuilder;
