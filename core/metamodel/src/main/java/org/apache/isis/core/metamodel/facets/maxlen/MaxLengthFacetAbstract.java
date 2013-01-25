@@ -62,7 +62,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
         if (!exceeds(proposedArgument)) {
             return null;
         }
-        return "Proposed value '" + proposedArgument.titleString() + "' exceeds the maximum length of " + value();
+        return "The value proposed exceeds the maximum length of " + value();
     }
 
     @Override
