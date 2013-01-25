@@ -125,7 +125,8 @@ public abstract class PageAbstract extends WebPage {
     }
     
     private void addHomePageLinkAndApplicationName() {
-        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/");
+        // this is a bit hacky, but it'll do...
+        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
         homePageLink.setContextRelative(true);
         add(homePageLink);
         homePageLink.add(new Label(ID_APPLICATION_NAME, applicationName));
