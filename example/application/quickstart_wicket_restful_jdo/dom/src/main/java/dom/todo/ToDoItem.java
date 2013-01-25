@@ -339,7 +339,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public ToDoItem duplicate(
             @Named("Description") 
             String description,
-            Category category, 
+            @Named("Category")
+            ToDoItem.Category category, 
             @Named("Due by") 
             @Optional
             LocalDate dueBy) {
