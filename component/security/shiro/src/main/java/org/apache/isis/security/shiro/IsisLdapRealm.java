@@ -47,6 +47,14 @@ import com.google.common.collect.Sets;
  * ldapRealm.groupObjectClass = groupOfUniqueNames
  * ldapRealm.uniqueMemberAttribute = uniqueMember
  * ldapRealm.uniqueMemberAttributeValueTemplate = uid={0}
+ *
+ * # optional mapping from physical groups to logical application roles
+ * ldapRealm.rolesByGroup = \
+ *    LDN_USERS: user_role,\
+ *    NYK_USERS: user_role,\
+ *    HKG_USERS: user_role,\
+ *    GLOBAL_ADMIN: admin_role,\
+ *    DEMOS: self-install_role
  * 
  * ldapRealm.permissionsByRole=\
  *    user_role = *:ToDoItemsJdo:*:*,\
@@ -72,6 +80,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     private String uniqueMemberAttributeValuePrefix;
     private String uniqueMemberAttributeValueSuffix;
     
+    private final Map<String,String> rolesByGroup = Maps.newLinkedHashMap();
     private final Map<String,List<String>> permissionsByRole = Maps.newLinkedHashMap();
     
     public IsisLdapRealm() {
@@ -140,11 +149,18 @@ public class IsisLdapRealm extends JndiLdapRealm {
                 if ((uniqueMemberAttributeValuePrefix + userName + uniqueMemberAttributeValueSuffix).equals(attrValue)) {
                     Attribute attribute = group.getAttributes().get("cn");
                     String groupName = attribute.get().toString();
-                    roleNames.add(groupName);
+                    String roleName = roleNameFor(groupName);
+                    if(roleName != null) {
+                        roleNames.add(roleName);
+                    }
                     break;
                 }
             }
         }
+    }
+
+    private String roleNameFor(String groupName) {
+        return !rolesByGroup.isEmpty() ? rolesByGroup.get(groupName) : groupName;
     }
 
 
@@ -188,6 +204,10 @@ public class IsisLdapRealm extends JndiLdapRealm {
         String suffix = template.substring(prefix.length() + UNIQUEMEMBER_SUBSTITUTION_TOKEN.length());
         this.uniqueMemberAttributeValuePrefix = prefix;
         this.uniqueMemberAttributeValueSuffix = suffix;
+    }
+
+    public void setRolesByGroup(Map<String, String> rolesByGroup) {
+        this.rolesByGroup.putAll(rolesByGroup);
     }
 
     public void setPermissionsByRole(String permissionsByRoleStr) {
