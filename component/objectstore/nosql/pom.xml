@@ -23,7 +23,7 @@
     <parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
     </parent>
 
@@ -75,49 +75,6 @@
 			</plugins>
 		</pluginManagement>
         <plugins>
-
-            <!--
-            REVIEW: have removed, cos for some bizarre reason causes maven
-            to restart the build???
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <copy todir="target/config" preservelastmodified="true">
-                                    <fileset dir="config" />
-                                </copy>
-                                <copy file="server.sh" todir="target" />
-                                <chmod file="target/server.sh" perm="ugo+rx" />
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-             -->
-
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-maven-plugin</artifactId>
@@ -153,6 +110,7 @@
     </reporting>
 
     <dependencyManagement>
+
     	<!-- for benefit of application developers, using scope=import -->
     	<dependencies>
 			<dependency>
@@ -160,7 +118,6 @@
 			    <artifactId>isis-objectstore-nosql</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
-
 
 
             <dependency>
@@ -187,8 +144,8 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
+
 
         <dependency>
             <groupId>commons-cli</groupId>
@@ -215,14 +172,12 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -230,28 +185,24 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-integtestsupport</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-bytecode-cglib</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-objectstore</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-objectstore</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

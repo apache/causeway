@@ -57,10 +57,9 @@
         <module>component/viewer/bdd</module>
         <module>component/viewer/junit</module>
 
-        
         <module>example/application/claims</module>
-        <module>example/application/onlinedemo</module>
-        <module>example/application/quickstart</module>
+        <module>example/application/quickstart_html_sql</module>
+        <module>example/application/quickstart_scimpi_nosql</module>
         <module>example/application/quickstart_dnd_junit_bdd</module>
         <module>example/application/quickstart_wicket_restful_jdo</module>
 

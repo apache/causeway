@@ -149,6 +149,7 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
         	<scope>test</scope>
 		</dependency>
 
+
         <!-- Required to support the implemented servers -->
         <dependency>
             <groupId>postgresql</groupId>

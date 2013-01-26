@@ -22,7 +22,7 @@
 	<parent>
     	<groupId>org.apache.isis.core</groupId>
     	<artifactId>isis-core-tck</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
 	</parent>
 
@@ -32,6 +32,9 @@
 
     <properties>
         <maven.test.skip>true</maven.test.skip>
+        
+        <isis-viewer-junit.version>1.0.0-SNAPSHOT</isis-viewer-junit.version>
+        
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>junit-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
@@ -44,13 +47,13 @@
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-fixture</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>
         </dependency>
+
 
         <!-- isis default runtime -->
         <dependency>
@@ -75,9 +78,10 @@
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-junit-impl</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${isis-viewer-junit.version}</version>
             <scope>test</scope>
         </dependency>
+        
 
 	</dependencies>
 

@@ -25,9 +25,20 @@
     <artifactId>quickstart_dnd_junit_bdd</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Quickstart DnD/Junit/BDD (JUnit/BDD) App</name>
+    <name>Quickstart (DnD/Junit/BDD) App</name>
 
     <packaging>pom</packaging>
+    
+    
+    <properties>
+        <isis.version>1.1.0-SNAPSHOT</isis.version>
+        <isis-objectstore-xml.version>1.0.0-SNAPSHOT</isis-objectstore-xml.version>
+        <isis-profilestore-xml.version>1.0.0-SNAPSHOT</isis-profilestore-xml.version>
+        <isis-viewer-bdd.version>1.0.0-SNAPSHOT</isis-viewer-bdd.version>
+        <isis-viewer-dnd.version>1.0.0-SNAPSHOT</isis-viewer-dnd.version>
+        <isis-viewer-junit.version>1.0.0-SNAPSHOT</isis-viewer-junit.version>
+        <isis-security-file.version>1.0.1-SNAPSHOT</isis-security-file.version>
+    </properties>
     
     <repositories>
         <repository>
@@ -152,6 +163,63 @@
     <dependencyManagement>
         <dependencies>
 
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis</artifactId>
+                <version>${isis.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-xml</artifactId>
+                <version>${isis-objectstore-xml.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.profilestore</groupId>
+                <artifactId>isis-profilestore-xml</artifactId>
+                <version>${isis-profilestore-xml.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-junit</artifactId>
+                <version>${isis-viewer-junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-bdd</artifactId>
+                <version>${isis-viewer-bdd.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-dnd</artifactId>
+                <version>${isis-viewer-dnd.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.security</groupId>
+                <artifactId>isis-security-file</artifactId>
+                <version>${isis-security-file.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
@@ -181,193 +249,6 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart_dnd_junit_bdd-tests-junit</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-
-            <!-- isis: applib -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-applib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-applib</artifactId>
-                <classifier>javadoc</classifier>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            
-            <!-- isis: core -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-metamodel</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-security</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: security: ldap -->
-            <dependency>
-                <groupId>org.apache.isis.security</groupId>
-                <artifactId>isis-security-ldap</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: security: file -->
-            <dependency>
-                <groupId>org.apache.isis.security</groupId>
-                <artifactId>isis-security-file</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtimes: dflt -->            
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-runtime</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-webserver</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-bytecode-javassist</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-
-            <!-- isis: runtimes-dflt: objectstores: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtimes-dflt: objectstores: jdo -->
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-applib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-nosql</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtimes-dflt: objectstore: sql -->
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-sql-impl</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: runtimes-dflt: objectstores: xml -->
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-xml</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-
-            <!-- isis: runtimes-dflt: profilestores: dflt -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-profilestore</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-            
-            <!-- isis: runtimes-dflt: profilestores: xml -->
-            <dependency>
-                <groupId>org.apache.isis.profilestore</groupId>
-                <artifactId>isis-profilestore-xml</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-
-            <!-- isis: viewer: dnd -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-dnd-impl</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: viewer: html -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-html-impl</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-
-            <!-- isis: viewer: junit -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-junit-impl</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <!-- isis: viewer: bdd -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-bdd</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-bdd-common</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-bdd-concordion</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.8.2</version>
-            </dependency>
-
-
-            <!-- isis: viewer: scimpi -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-scimpi</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-scimpi-dispatcher</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-scimpi-servlet</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
 

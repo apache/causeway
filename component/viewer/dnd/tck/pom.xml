@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
@@ -36,10 +36,13 @@
     <name>Isis Drag-n-Drop Viewer TCK tests</name>
 
 	<properties>
+        <isis-viewer-dnd.version>1.0.0-SNAPSHOT</isis-viewer-dnd.version>
+        <isis-objectstore-xml.version>1.0.0-SNAPSHOT</isis-objectstore-xml.version>
+
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>dnd-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
-                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/dnd</distMgmtSiteUrl>
+        <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/dnd</distMgmtSiteUrl>
 	</properties>
 
     <build>
@@ -71,7 +74,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-fixture</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- isis core -->
@@ -97,18 +99,18 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
+
         
-        <!-- isis viewers -->
+        <!-- isis non-core components -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-dnd-impl</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${isis-viewer-dnd.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.isis.objectstore</groupId>
             <artifactId>isis-objectstore-xml</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${isis-objectstore-xml.version}</version>
         </dependency>
 
     </dependencies>

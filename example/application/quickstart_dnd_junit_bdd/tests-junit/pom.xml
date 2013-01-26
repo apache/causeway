@@ -27,7 +27,8 @@
 	</parent>
 
 	<artifactId>quickstart_dnd_junit_bdd-tests-junit</artifactId>
-	<name>Quickstart DnD/Junit/BDD JUnit Tests</name>
+    
+	<name>Quickstart (DnD/Junit/BDD) JUnit Tests</name>
 
 	<dependencies>
 

@@ -23,18 +23,18 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>quickstart_wicket_restful_jdo</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <name>Quickstart Wicket/Restful/JDO App</name>
 
     <packaging>pom</packaging>
 
 	<properties>
-		<isis.version>1.0.1-SNAPSHOT</isis.version>
+        <isis.version>1.1.0-SNAPSHOT</isis.version>
 		<isis-objectstore-jdo.version>1.0.1-SNAPSHOT</isis-objectstore-jdo.version>
-		<isis-viewer-wicket.version>1.0.1-SNAPSHOT</isis-viewer-wicket.version>
+		<isis-viewer-wicket.version>1.1.0-SNAPSHOT</isis-viewer-wicket.version>
 		<isis-viewer-restfulobjects.version>1.0.1-SNAPSHOT</isis-viewer-restfulobjects.version>
-		<isis-security-shiro.version>1.0.1-SNAPSHOT</isis-security-shiro.version>
+		<isis-security-shiro.version>1.1.0-SNAPSHOT</isis-security-shiro.version>
 	</properties>
     
     <repositories>
@@ -199,25 +199,23 @@
 				<scope>import</scope>
 			</dependency>
 
+
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart_wicket_restful_jdo-webapp</artifactId>

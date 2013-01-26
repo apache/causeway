@@ -28,7 +28,7 @@
 
 	<artifactId>quickstart_dnd_junit_bdd-tests-bdd</artifactId>
 
-	<name>Quickstart DnD/Junit/BDD BDD (Concordion) Tests</name>
+	<name>Quickstart (DnD/Junit/BDD)BDD BDD (Concordion) Tests</name>
 
     <build>
 		<plugins>

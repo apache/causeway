@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
@@ -32,13 +32,18 @@
 	<name>Isis Scimpi Viewer TCK tests</name>
 	
 	<properties>
-		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>scimpi-tck/</relativeUrl>
-		<!-- until someone comes up with a better solution -->
-                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/scimpi</distMgmtSiteUrl>
-	</properties>
-	
-	<packaging>war</packaging>
+        <isis-viewer-scimpi.version>1.0.0-SNAPSHOT</isis-viewer-scimpi.version>
+        <isis-objectstore-xml.version>1.0.0-SNAPSHOT</isis-objectstore-xml.version>
+        <isis-profilestore-xml.version>1.0.0-SNAPSHOT</isis-profilestore-xml.version>
+        <isis-security-file.version>1.0.1-SNAPSHOT</isis-security-file.version>
+
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>scimpi-tck/</relativeUrl>
+        <!-- until someone comes up with a better solution -->
+        <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/scimpi</distMgmtSiteUrl>
+    </properties>
+
+        <packaging>war</packaging>
 
 	<build>
 		<plugins>
@@ -55,21 +60,35 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-dom</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-fixture</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
-		<!-- isis viewer -->
+
+		<!-- isis non-core components -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-scimpi-servlet</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${isis-viewer-scimpi.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-objectstore-xml</artifactId>
+            <version>${isis-objectstore-xml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.profilestore</groupId>
+            <artifactId>isis-profilestore-xml</artifactId>
+            <version>${isis-profilestore-xml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>isis-security-file</artifactId>
+            <version>${isis-security-file.version}</version>
+        </dependency>
+
 
         <!-- isis runtime -->
         <dependency>
@@ -84,7 +103,6 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-profilestore</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
@@ -96,22 +114,6 @@
             <artifactId>isis-core-webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-objectstore-xml</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.profilestore</groupId>
-            <artifactId>isis-profilestore-xml</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-security-file</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

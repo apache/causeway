@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
@@ -93,20 +93,6 @@
 				<groupId>org.apache.isis.progmodel</groupId>
 				<artifactId>isis-progmodel-groovy-metamodel</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
-			</dependency>
-
-
-
-			<!-- Apache Isis -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-applib</artifactId>
-				<version>1.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-metamodel</artifactId>
-				<version>1.0.1-SNAPSHOT</version>
 			</dependency>
 
 			<!-- Groovy -->

@@ -26,7 +26,6 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-dnd-impl</artifactId>
 
 	<name>Isis Drag-n-Drop Viewer Implementation</name>

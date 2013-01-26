@@ -27,7 +27,8 @@
     </parent>
 
     <artifactId>quickstart_dnd_junit_bdd-viewer-dnd</artifactId>
-    <name>Quickstart DnD/Junit/BDD Viewer DnD</name>
+    
+    <name>Quickstart (DnD/Junit/BDD) Viewer DnD</name>
     
     <description>This module runs Isis' DnD viewer, intended for exploration, prototyping and
     design.  By default the viewer is configured to run with the in-memory object store, 

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
@@ -36,6 +36,9 @@
 	
     <properties>
         <maven.test.skip>true</maven.test.skip>
+
+        <isis-viewer-restfulobjects.version>1.0.1-SNAPSHOT</isis-viewer-restfulobjects.version>
+
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>restfulobjects-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
@@ -75,18 +78,13 @@
             <artifactId>isis-core-tck-fixture</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>2.3.1.GA</version>
-        </dependency>
-
         <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-restfulobjects-impl</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>${isis-viewer-restfulobjects.version}</version>
 		</dependency>
+        
 
         <!-- isis runtime -->
         <dependency>
@@ -101,12 +99,16 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-profilestore</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+        </dependency>
+
         <!-- to run using WebServer -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>

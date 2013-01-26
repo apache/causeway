@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>quickstart_dnd_junit_bdd-dom</artifactId>
-	<name>Quickstart DnD/Junit/BDD DOM</name>
+	<name>Quickstart (DnD/Junit/BDD) DOM</name>
 
 	<dependencies>
 		<dependency>

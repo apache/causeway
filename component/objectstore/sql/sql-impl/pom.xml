@@ -61,7 +61,7 @@
             <artifactId>isis-core-runtime</artifactId>
         </dependency>
         
-	 <!-- Test dependencies -->
+        <!-- Test dependencies -->
 	    <dependency>
 	      <groupId>org.mockito</groupId>
 	      <artifactId>mockito-all</artifactId>

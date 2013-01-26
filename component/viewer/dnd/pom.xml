@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
@@ -90,57 +90,6 @@
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-dnd-tck</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-
-
-			<!-- isis core -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-runtime</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <scope>test</scope>
-            </dependency>
-    
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-runtime</artifactId>
-	            <version>1.0.1-SNAPSHOT</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-    
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-    
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <scope>test</scope>
-            </dependency>
-    
 	    </dependencies>
 	</dependencyManagement>
 

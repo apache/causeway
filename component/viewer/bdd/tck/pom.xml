@@ -61,12 +61,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-tck-fixture</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
         </dependency>
 
         <dependency>
@@ -81,7 +75,6 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-profilestore</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
@@ -102,18 +95,18 @@
             <artifactId>xom</artifactId>
             <version>1.2.5</version>
             <exclusions>
-            	<exclusion>
-					<!-- for dependency convergence -->
-            		<groupId>xml-apis</groupId>
-            		<artifactId>xml-apis</artifactId>
-            	</exclusion>
+            <exclusion>
+            	<!-- for dependency convergence -->
+            	<groupId>xml-apis</groupId>
+            	<artifactId>xml-apis</artifactId>
+            </exclusion>
             </exclusions>
         </dependency>
         
         <dependency>
-       		<groupId>xml-apis</groupId>
-       		<artifactId>xml-apis</artifactId>
-       		<version>1.3.03</version>
+        	<groupId>xml-apis</groupId>
+        	<artifactId>xml-apis</artifactId>
+        	<version>1.3.03</version>
         </dependency>
 
 	</dependencies>

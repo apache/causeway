@@ -20,7 +20,7 @@
     </parent>
 
     <groupId>org.apache.isis.core</groupId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     
     <artifactId>isis</artifactId>
     <packaging>pom</packaging>
@@ -931,13 +931,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <scope>test</scope>
+                <version>1.1.0-SNAPSHOT</version>
+                <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -946,12 +946,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -960,12 +962,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -974,12 +978,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -988,61 +992,70 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-javassist</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
 
             <!-- isis-webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
 
             <!-- isis-integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <scope>test</scope>
+                <version>1.1.0-SNAPSHOT</version>
+                <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
             <!-- default implementations of components -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore</artifactId>
+                <version>1.1.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-profilestore</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
+
+
 
             <!-- TCK -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-dom</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-fixture</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
 
 
