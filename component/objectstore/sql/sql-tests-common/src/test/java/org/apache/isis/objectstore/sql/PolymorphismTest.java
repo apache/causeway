@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -74,9 +75,13 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         return "hsql-poly.properties";
     }
 
+    @BeforeClass
+    public static void deleteHsqlDbFiles() {
+        Files.deleteFilesWithPrefix("hsql-db", "poly", Recursion.DONT_RECURSE);
+    }
+
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
-        Files.deleteFilesWithPrefix("hsql-db", "poly", Recursion.DONT_RECURSE);
         getSqlIntegrationTestFixtures();
     }
 

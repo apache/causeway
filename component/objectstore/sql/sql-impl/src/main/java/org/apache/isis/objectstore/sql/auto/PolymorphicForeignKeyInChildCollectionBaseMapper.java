@@ -29,7 +29,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -50,14 +49,11 @@ import org.apache.isis.objectstore.sql.jdbc.JdbcPolymorphicObjectReferenceMappin
 import org.apache.isis.objectstore.sql.mapping.FieldMapping;
 
 /**
- * Used to map 1-to-many collections by creating, in the collection child table
- * (which may be an interface or abstract class), 2 columns per parent
- * collection. The first column is the class type, the second is the entity ID.
- * The columns are named by combining the final part of the parent class name
- * and the collection variable name.
+ * Used to map 1-to-many collections by creating, in the collection child table (which may be an interface or abstract
+ * class), 2 columns per parent collection. The first column is the class type, the second is the entity ID. The columns
+ * are named by combining the final part of the parent class name and the collection variable name.
  * 
- * You have a choice between this class and
- * {@link PolymorphicForeignKeyInChildCollectionMapper}
+ * You have a choice between this class and {@link PolymorphicForeignKeyInChildCollectionMapper}
  * 
  * @author Kevin
  */
@@ -71,7 +67,9 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
 
     private final OidGenerator oidGenerator;
 
-    public PolymorphicForeignKeyInChildCollectionBaseMapper(final ObjectAssociation objectAssociation, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup, final AbstractAutoMapper abstractAutoMapper, final ObjectAssociation field) {
+    public PolymorphicForeignKeyInChildCollectionBaseMapper(final ObjectAssociation objectAssociation,
+        final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
+        final AbstractAutoMapper abstractAutoMapper, final ObjectAssociation field) {
 
         super(objectAssociation, parameterBase, lookup, objectMapperLookup, abstractAutoMapper, field);
 
@@ -117,7 +115,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
     }
 
     @Override
-    protected void appendCollectionUpdateValues(final DatabaseConnector connector, final ObjectAdapter parent, final StringBuffer sql) {
+    protected void appendCollectionUpdateValues(final DatabaseConnector connector, final ObjectAdapter parent,
+        final StringBuffer sql) {
         super.appendCollectionUpdateValues(connector, parent, sql);
     }
 
@@ -138,7 +137,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
     }
 
     @Override
-    protected void resetCollectionParent(final DatabaseConnector connector, final ObjectAdapter parent, final Iterator<ObjectAdapter> elements) {
+    protected void resetCollectionParent(final DatabaseConnector connector, final ObjectAdapter parent,
+        final Iterator<ObjectAdapter> elements) {
         LOG.debug("Saving polymorphic list");
 
         ObjectSpecification elementSpecification;
@@ -161,11 +161,11 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             // Row ID column
             final Object pojo = thisAdapter.getObject();
             final RootOid transientRootOid = oidGenerator.createTransientOid(pojo);
-            
+
             final RootOid persistentRootOid = oidGenerator.createPersistent(pojo, transientRootOid);
-            
+
             polyIdMapper.appendObjectId(connector, update, persistentRootOid);
-            
+
             // polyIdMapper.appendObjectId(connector, update,
             // thisAdapter.getOid());
             update.append(",");
@@ -192,8 +192,10 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
     }
 
     @Override
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField, final VersionMapping versionMapping,
-            final List<ObjectAdapter> list) {
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
+        final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract,
+        final Map<ObjectAssociation, FieldMapping> fieldMappingByField, final VersionMapping versionMapping,
+        final List<ObjectAdapter> list) {
         LOG.debug("Loading polymorphic list");
 
         final StringBuffer sql = new StringBuffer();
@@ -212,7 +214,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
         final Results rs = connector.select(sql.toString());
 
         final SpecificationLoaderSpi reflector = IsisContext.getSpecificationLoader();
-        final JdbcPolymorphicObjectReferenceMapping idMapping = (JdbcPolymorphicObjectReferenceMapping) idMappingAbstract;
+        final JdbcPolymorphicObjectReferenceMapping idMapping =
+            (JdbcPolymorphicObjectReferenceMapping) idMappingAbstract;
 
         while (rs.next()) {
             final ObjectSpecification itemSpecification = reflector.loadSpecification(rs.getString(classColumnName));

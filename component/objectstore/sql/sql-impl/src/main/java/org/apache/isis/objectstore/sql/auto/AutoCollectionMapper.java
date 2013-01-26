@@ -26,8 +26,6 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
@@ -51,7 +49,8 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
     private final ObjectReferenceMapping elementMapping;
     private final IdMapping idMapping;
 
-    public AutoCollectionMapper(final ObjectSpecification specification, final ObjectAssociation field, final FieldMappingLookup lookup) {
+    public AutoCollectionMapper(final ObjectSpecification specification, final ObjectAssociation field,
+        final FieldMappingLookup lookup) {
         this.field = field;
 
         final ObjectSpecification spec = field.getFacet(TypeOfFacet.class).valueSpec();
@@ -87,15 +86,15 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         final ObjectAdapter collectionAdapter = field.get(parentAdapter);
         if (!collectionAdapter.canTransitionToResolving()) {
             return;
-        } 
-        
-        if(LOG.isDebugEnabled()) {
+        }
+
+        if (LOG.isDebugEnabled()) {
             LOG.debug("loading internal collection " + field);
         }
-        
+
         try {
             PersistorUtil.startResolving(collectionAdapter);
-            
+
             final StringBuffer sql = new StringBuffer();
             sql.append("select ");
             idMapping.appendColumnNames(sql);
@@ -103,17 +102,18 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
             elementMapping.appendColumnNames(sql);
             sql.append(" from ");
             sql.append(tableName);
-            
+
             final Results rs = connector.select(sql.toString());
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
             while (rs.next()) {
                 final ObjectAdapter element = ((JdbcObjectReferenceMapping) elementMapping).initializeField(rs);
-                if(LOG.isDebugEnabled()) {
+                if (LOG.isDebugEnabled()) {
                     LOG.debug("  element  " + element.getOid());
                 }
                 list.add(element);
             }
-            final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
+            final CollectionFacet collectionFacet =
+                collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
             rs.close();
         } finally {

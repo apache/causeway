@@ -18,6 +18,7 @@
  */
 package org.apache.isis.objectstore.sql;
 
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
@@ -39,8 +40,8 @@ import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HsqlTest extends SqlIntegrationTestData {
 
-    @Override
-    public void resetPersistenceStoreDirectlyIfRequired() {
+    @BeforeClass
+    public static void deleteHsqlDbFiles() {
         Files.deleteFilesWithPrefix("hsql-db", "tests", Recursion.DONT_RECURSE);
     }
 

@@ -99,6 +99,8 @@ public abstract class SqlIntegrationTestCommonBase {
     /**
      * This method can be used to do any DB specific actions the first time the test framework is setup. e.g. In the XML
      * test, it must delete all XML files in the data store directory.
+     * 
+     * You can also use @BeforeClass to perform pre-connection cleanup, such as deleting hsql-db data directories.
      */
     public void resetPersistenceStoreDirectlyIfRequired() {
     }
