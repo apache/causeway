@@ -24,7 +24,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import org.apache.isis.core.tck.dom.poly.Empty;
 import org.apache.isis.core.tck.dom.poly.EmptyEntityWithOwnProperty;
@@ -57,6 +59,7 @@ import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures.State;
  * @version $Rev$ $Date$
  */
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     private static final String IMPL_A_STRING = "Impl A String";

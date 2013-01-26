@@ -19,6 +19,7 @@
 
 package org.apache.isis.objectstore.sql;
 
+import java.io.InputStream;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,5 +57,7 @@ public interface Results {
     Object getObject(String column);
 
     Object getAsType(String columnName, Class<?> clazz);
+
+    InputStream getStream(String column);
 
 }

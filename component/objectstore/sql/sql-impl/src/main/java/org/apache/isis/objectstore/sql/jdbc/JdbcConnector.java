@@ -19,6 +19,7 @@
 
 package org.apache.isis.objectstore.sql.jdbc;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -130,8 +131,9 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 
     }
 
-    private static Connection getConnection(final String url, final String user, final String password) throws SQLException {
-        if(user != null) {
+    private static Connection getConnection(final String url, final String user, final String password)
+        throws SQLException {
+        if (user != null) {
             LOG.info("Connecting to " + url + " as " + user);
             return DriverManager.getConnection(url, user, password);
         } else {
@@ -141,47 +143,36 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     }
 
     /*
-     * public void executeStoredProcedure(final StoredProcedure storedProcedure)
-     * { Parameter[] parameters = storedProcedure.getParameters(); StringBuffer
-     * sql = new StringBuffer("{call "); sql.append(storedProcedure.getName());
-     * sql.append(" ("); for (int i = 0, no = parameters.length; i < no; i++) {
-     * sql.append(i == 0 ? "?" : ",?"); } sql.append(")}"); LOG.debug("SQL: " +
-     * sql);
+     * public void executeStoredProcedure(final StoredProcedure storedProcedure) { Parameter[] parameters =
+     * storedProcedure.getParameters(); StringBuffer sql = new StringBuffer("{call ");
+     * sql.append(storedProcedure.getName()); sql.append(" ("); for (int i = 0, no = parameters.length; i < no; i++) {
+     * sql.append(i == 0 ? "?" : ",?"); } sql.append(")}"); LOG.debug("SQL: " + sql);
      * 
-     * CallableStatement statement; try { statement =
-     * connection.prepareCall(sql.toString());
+     * CallableStatement statement; try { statement = connection.prepareCall(sql.toString());
      * 
-     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " +
-     * i + " " + parameters[i]); parameters[i].setupParameter(i + 1,
-     * parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
-     * statement.execute(); for (int i = 0; i < parameters.length; i++) {
-     * parameters[i].retrieve(i + 1, parameters[i].getName(), storedProcedure);
-     * LOG.debug(" retrieve param " + i + " " + parameters[i]); } } catch
+     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " + i + " " + parameters[i]);
+     * parameters[i].setupParameter(i + 1, parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
+     * statement.execute(); for (int i = 0; i < parameters.length; i++) { parameters[i].retrieve(i + 1,
+     * parameters[i].getName(), storedProcedure); LOG.debug(" retrieve param " + i + " " + parameters[i]); } } catch
      * (SQLException e) { throw new ObjectAdapterRuntimeException(e); }
      * 
      * }
      * 
      * 
-     * public MultipleResults executeStoredProcedure(final String name, final
-     * Parameter[] parameters) { StringBuffer sql = new StringBuffer("{call ");
-     * sql.append(name); sql.append(" ("); for (int i = 0; i <
-     * parameters.length; i++) { sql.append(i == 0 ? "?" : ",?"); }
-     * sql.append(")}"); LOG.debug("SQL: " + sql);
+     * public MultipleResults executeStoredProcedure(final String name, final Parameter[] parameters) { StringBuffer sql
+     * = new StringBuffer("{call "); sql.append(name); sql.append(" ("); for (int i = 0; i < parameters.length; i++) {
+     * sql.append(i == 0 ? "?" : ",?"); } sql.append(")}"); LOG.debug("SQL: " + sql);
      * 
-     * CallableStatement statement; try { statement =
-     * connection.prepareCall(sql.toString());
+     * CallableStatement statement; try { statement = connection.prepareCall(sql.toString());
      * 
      * StoredProcedure storedProcedure = new JdbcStoredProcedure(statement);
      * 
-     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " +
-     * i + " " + parameters[i]); parameters[i].setupParameter(i + 1,
-     * parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
-     * statement.execute(); for (int i = 0; i < parameters.length; i++) {
-     * parameters[i].retrieve(i + 1, parameters[i].getName(), storedProcedure);
-     * LOG.debug(" retrieve param " + i + " " + parameters[i]); }
+     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " + i + " " + parameters[i]);
+     * parameters[i].setupParameter(i + 1, parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
+     * statement.execute(); for (int i = 0; i < parameters.length; i++) { parameters[i].retrieve(i + 1,
+     * parameters[i].getName(), storedProcedure); LOG.debug(" retrieve param " + i + " " + parameters[i]); }
      * 
-     * return new JdbcResults(statement); } catch (SQLException e) { throw new
-     * ObjectAdapterRuntimeException(e); } }
+     * return new JdbcResults(statement); } catch (SQLException e) { throw new ObjectAdapterRuntimeException(e); } }
      */
 
     @Override
@@ -201,6 +192,9 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 
     @Override
     public int update(final String sql) {
+        if (sql.length() == 0) {
+            return 0;
+        }
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
@@ -235,17 +229,21 @@ public class JdbcConnector extends AbstractDatabaseConnector {
                             // "undone"
                             final LocalDate localDate = (LocalDate) value;
                             final int millisOffset = -DateTimeZone.getDefault().getOffset(null);
-                            final java.util.Date javaDate = localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
+                            final java.util.Date javaDate =
+                                localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
 
                             statement.setObject(i, javaDate, java.sql.Types.DATE);
                         }
+                    } else if (value instanceof InputStream) {
+                        statement.setBlob(i, (InputStream) value);
                     } else {
                         statement.setObject(i, value);
                     }
                     i++;
                 }
             } catch (final SQLException e) {
-                LOG.error("Error adding prepared value " + i + " of type " + queryValues.get(i - 1).getClass().getSimpleName(), e);
+                LOG.error("Error adding prepared value " + i + " of type "
+                    + queryValues.get(i - 1).getClass().getSimpleName(), e);
                 throw e;
             }
         }
@@ -298,8 +296,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             statement = connection.prepareStatement(sql);
             statement.executeUpdate();
             /*
-             * require 3.0 ResultSet rs = statement.getGeneratedKeys();
-             * if(rs.next()) { int id = rs.getInt(1); }
+             * require 3.0 ResultSet rs = statement.getGeneratedKeys(); if(rs.next()) { int id = rs.getInt(1); }
              */statement.close();
         } catch (final SQLException e) {
             throw new SqlObjectStoreException("SQL error", e);
@@ -360,7 +357,8 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             final DatabaseMetaData metaData = connection.getMetaData();
             debug.appendln("Product", metaData.getDatabaseProductName() + "  " + metaData.getDatabaseProductVersion());
             try {
-                debug.appendln("Product Version", metaData.getDatabaseMajorVersion() + "." + metaData.getDatabaseMinorVersion());
+                debug.appendln("Product Version",
+                    metaData.getDatabaseMajorVersion() + "." + metaData.getDatabaseMinorVersion());
             } catch (final AbstractMethodError ignore) {
             }
             debug.appendln("Drive", metaData.getDriverName() + "  " + metaData.getDriverVersion());

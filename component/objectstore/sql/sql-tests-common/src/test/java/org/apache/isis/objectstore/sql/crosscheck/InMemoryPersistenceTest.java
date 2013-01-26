@@ -24,10 +24,14 @@ package org.apache.isis.objectstore.sql.crosscheck;
 
 import java.util.Properties;
 
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+
 import org.apache.isis.objectstore.sql.common.SqlIntegrationTestData;
 import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures;
 import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures.State;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class InMemoryPersistenceTest extends SqlIntegrationTestData {
 
     @Override

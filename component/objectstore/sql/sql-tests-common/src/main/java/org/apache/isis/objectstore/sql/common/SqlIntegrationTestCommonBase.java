@@ -28,7 +28,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
+import org.junit.runners.MethodSorters;
 
 import org.apache.isis.core.tck.dom.poly.ReferencingPolyTypesEntity;
 import org.apache.isis.core.tck.dom.sqlos.SqlDomainObjectRepository;
@@ -44,6 +46,7 @@ import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures.State;
  * 
  * @version $Rev$ $Date$
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class SqlIntegrationTestCommonBase {
 
     @Rule

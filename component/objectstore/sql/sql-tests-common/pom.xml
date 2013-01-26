@@ -36,7 +36,7 @@
 		<relativeUrl>sql-tests-common/</relativeUrl>
 
         <xml-objectstore.version>1.0.0-SNAPSHOT</xml-objectstore.version>
-        <hsqldb.version>2.2.9</hsqldb.version>
+        <hsqldb.version>2.2.8</hsqldb.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->

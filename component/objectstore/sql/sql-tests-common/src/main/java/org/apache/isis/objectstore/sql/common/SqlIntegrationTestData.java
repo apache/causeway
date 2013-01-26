@@ -29,11 +29,14 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
+import org.apache.isis.applib.value.Image;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
@@ -59,6 +62,7 @@ import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures.State;
  * 
  * @version $Rev$ $Date$
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBase {
 
     private static final Logger LOG = Logger.getLogger(SqlIntegrationTestData.class);
@@ -163,6 +167,12 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
                 simpleClassList2.add(simpleClass);
             }
         }
+
+        // Initialise Image
+        Image image = new Image(new int[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });
+        sqlDataClass.setImage(image);
+
+        // Save
         factory.save(sqlDataClass);
 
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
@@ -266,10 +276,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         if (!Data.applibDate.isEqualTo(sqlDataClass.getDate())) {
             fail("Applib date: Test '2010-3-5', expected " + Data.applibDate.toString() + ", but got "
                 + sqlDataClass.getDate().toString() + ". Check log for more info.");
-            // LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " +
-            // applibDate.toString() + ", but got "
-            // +
-            // sqlDataClass.getDate().toString()+". Check log for more info.");
         } else {
             // LOG.log(Level.INFO,
             // "SQL applib.value.date: test passed! Woohoo!");
@@ -301,10 +307,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         if (Data.sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0) {
             fail("SQL date: Test '2011-4-8', expected " + Data.sqlDate.toString() + ", but got "
                 + sqlDataClass.getSqlDate().toString() + ". Check log for more info.");
-            // LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " +
-            // sqlDate.toString() + ", and got "
-            // + sqlDataClass.getSqlDate().toString()
-            // +". Check log for more info.");
         } else {
             // LOG.log(Level.INFO, "SQL date: test passed! Woohoo!");
         }
@@ -390,17 +392,34 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      * Test {@link Image} type.
      */
     // TODO: Images are not equal...
-    /*
-     * public void testImage(){ SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson(); Image image2 =
-     * sqlDataClass.getImage(); assertEqual(image, image2); }
-     * 
-     * private void assertEqual(Image image2, Image image3) { assertEquals(image2.getHeight(), image3.getHeight());
-     * assertEquals(image2.getWidth(), image3.getWidth()); boolean same = true; int i=0,j=0; int p1=0, p2=0; String
-     * error = ""; int [][] i1 = image2.getImage(), i2 = image3.getImage(); for(i = 0; same &&
-     * i<image2.getHeight();i++){ int [] r1 = i1[i], r2 = i2[i]; for (j = 0; same && j < image2.getWidth(); j++){ if
-     * (r1[j] != r2[j]){ same = false; p1 = r1[j]; p2 = r2[j]; error = "Images differ at i = "+i+", j = "+j+", "+p1+
-     * " is not "+p2+"!"; break; } } } assertTrue(error, same); }
-     */
+    private void testImage() {
+        Image image1 = new Image(new int[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });
+        Image image2 = sqlDataClass.getImage();
+        assertImagesEqual(image1, image2);
+    }
+
+    private void assertImagesEqual(Image image2, Image image3) {
+        assertEquals(image2.getHeight(), image3.getHeight());
+        assertEquals(image2.getWidth(), image3.getWidth());
+        boolean same = true;
+        int i = 0, j = 0;
+        int p1 = 0, p2 = 0;
+        String error = "";
+        int[][] i1 = image2.getImage(), i2 = image3.getImage();
+        for (i = 0; same && i < image2.getHeight(); i++) {
+            int[] r1 = i1[i], r2 = i2[i];
+            for (j = 0; same && j < image2.getWidth(); j++) {
+                p1 = r1[j];
+                p2 = r2[j];
+                if (p1 != p2) {
+                    same = false;
+                    error = "Images differ at i = " + i + ", j = " + j + ", " + p1 + " is not " + p2 + "!";
+                    break;
+                }
+            }
+        }
+        assertTrue(error, same);
+    }
 
     /**
      * Test {@link Password} type.
@@ -555,7 +574,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
 
         final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
         final SimpleClass simpleClass1 = collection.get(0);
-        // simpleClass1.setString(stringList1.get(3));
 
         collection.remove(simpleClass1);
 
@@ -592,10 +610,4 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
             assertEquals(Data.stringList1.size() + 2, classes.size());
         }
     }
-
-    private void reinitializeFixtures() {
-        setFixtureInitializationState(State.INITIALIZE);
-        SqlIntegrationTestFixtures.recreate();
-    }
-
 }

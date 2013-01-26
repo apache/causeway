@@ -201,6 +201,7 @@ public class Defaults {
     static String PASSWORD_SEED;
     static Integer PASSWORD_ENC_LENGTH;
     static String TYPE_DEFAULT;
+    static String TYPE_BLOB;
 
     /**
      * Default SQL data types used to define the fields in the database. By providing this method, we allow the user an
@@ -211,6 +212,7 @@ public class Defaults {
      * @param baseName
      */
     private static void populateSqlDataTypes(final IsisConfiguration dataTypes, final String baseName) {
+        TYPE_BLOB = dataTypes.getString(baseName + "blob", "BLOB");
         TYPE_TIMESTAMP = dataTypes.getString(baseName + "timestamp", "DATETIME");
         TYPE_DATETIME = dataTypes.getString(baseName + "datetime", "DATETIME");
         TYPE_DATE = dataTypes.getString(baseName + "date", "DATE");
@@ -297,6 +299,10 @@ public class Defaults {
 
     public static String TYPE_TIME() {
         return TYPE_TIME;
+    }
+
+    public static String TYPE_BLOB() {
+        return TYPE_BLOB;
     }
 
     // }}

@@ -22,6 +22,7 @@ package org.apache.isis.objectstore.sql.jdbc.installer;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
+import org.apache.isis.applib.value.Image;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
@@ -35,6 +36,7 @@ import org.apache.isis.objectstore.sql.jdbc.JdbcColorValueMapper;
 import org.apache.isis.objectstore.sql.jdbc.JdbcDateMapper;
 import org.apache.isis.objectstore.sql.jdbc.JdbcDateTimeMapper;
 import org.apache.isis.objectstore.sql.jdbc.JdbcGeneralValueMapper;
+import org.apache.isis.objectstore.sql.jdbc.JdbcImageValueMapper;
 import org.apache.isis.objectstore.sql.jdbc.JdbcMoneyValueMapper;
 import org.apache.isis.objectstore.sql.jdbc.JdbcObjectReferenceFieldMapping;
 import org.apache.isis.objectstore.sql.jdbc.JdbcObjectReferenceMappingFactory;
@@ -46,6 +48,10 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
 
     @Override
     public void load(final FieldMappingLookup lookup) {
+
+        lookup.addFieldMappingFactory(Image.class,
+            new JdbcImageValueMapper.Factory(Defaults.TYPE_STRING(), Defaults.TYPE_BLOB()));
+
         lookup.addFieldMappingFactory(Boolean.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_BOOLEAN()));
         lookup.addFieldMappingFactory(Short.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_SHORT()));
         lookup.addFieldMappingFactory(Integer.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_INT()));

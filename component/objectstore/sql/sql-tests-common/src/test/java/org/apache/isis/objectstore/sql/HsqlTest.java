@@ -18,6 +18,9 @@
  */
 package org.apache.isis.objectstore.sql;
 
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+
 import org.apache.isis.core.unittestsupport.files.Files;
 import org.apache.isis.core.unittestsupport.files.Files.Recursion;
 import org.apache.isis.objectstore.sql.common.Data;
@@ -33,6 +36,7 @@ import org.apache.isis.objectstore.sql.common.SqlIntegrationTestFixtures;
  * 
  * @version $Rev$ $Date$
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HsqlTest extends SqlIntegrationTestData {
 
     @Override
@@ -49,10 +53,10 @@ public class HsqlTest extends SqlIntegrationTestData {
         super.testCreate();
     }
 
-    @Override
-    protected String getSqlSetupString() {
-        return "COMMIT;";
-    }
+    // @Override
+    // protected String getSqlSetupString() {
+    // return "COMMIT;";
+    // }
 
     @Override
     public String getPropertiesFilename() {

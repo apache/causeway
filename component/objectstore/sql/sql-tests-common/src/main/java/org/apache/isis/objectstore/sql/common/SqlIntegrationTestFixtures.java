@@ -50,7 +50,7 @@ import org.apache.isis.objectstore.sql.SqlObjectStore;
  * 
  */
 public class SqlIntegrationTestFixtures {
-    
+
     static SqlIntegrationTestFixtures instance;
 
     public static SqlIntegrationTestFixtures getInstance() {
@@ -63,30 +63,30 @@ public class SqlIntegrationTestFixtures {
     public static void recreate() {
         instance = new SqlIntegrationTestFixtures();
     }
-    
+
     public enum State {
-        INITIALIZE,
-        DONT_INITIALIZE;
-        
-        public boolean isInitialize() { return this == INITIALIZE; }
+        INITIALIZE, DONT_INITIALIZE;
+
+        public boolean isInitialize() {
+            return this == INITIALIZE;
+        }
     }
-    
+
     private State state = State.INITIALIZE;
+
     public State getState() {
         return state;
     }
+
     public void setState(final State state) {
         this.state = state;
     }
 
-    
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     //
-    ///////////////////////////////////////////////////////////////////////////
-    
-    
+    // /////////////////////////////////////////////////////////////////////////
+
     private IsisSystemWithFixtures system;
-    
 
     // JDBC
     private Connection conn = null;
@@ -96,7 +96,7 @@ public class SqlIntegrationTestFixtures {
 
         final Properties properties = new Properties();
         properties.load(new FileInputStream(propertiesDirectory + "/" + propertiesFileName));
-        
+
         initSystem(properties);
     }
 
@@ -108,30 +108,30 @@ public class SqlIntegrationTestFixtures {
         if (system != null) {
             system.tearDownSystem();
         }
-        
+
         final PersistenceMechanismInstallerAbstract persistorInstaller = Utils.createPersistorInstaller(configuration);
-        system = IsisSystemWithFixtures.builder().with(configuration).withServices(sqlDomainObjectRepository).with(Initialization.NO_INIT).with(persistorInstaller).build();
-        
+        system =
+            IsisSystemWithFixtures.builder().with(configuration).withServices(sqlDomainObjectRepository)
+                .with(Initialization.NO_INIT).with(persistorInstaller).build();
+
         system.setUpSystem();
 
         registerDriverAndConnect(configuration);
     }
 
-    
     public void shutDown() throws Exception {
         if (system != null) {
             system.tearDownSystem();
         }
     }
 
-    
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     //
-    ///////////////////////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////////////////////
 
     @SuppressWarnings("unchecked")
-    private void registerDriverAndConnect(final IsisConfiguration isisConfiguration) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void registerDriverAndConnect(final IsisConfiguration isisConfiguration) throws SQLException,
+        ClassNotFoundException, InstantiationException, IllegalAccessException {
         final String jdbcClassName = isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver");
         if (jdbcClassName == null) {
             conn = null;
@@ -143,13 +143,11 @@ public class SqlIntegrationTestFixtures {
         DriverManager.registerDriver(driver);
 
         // jdbc - connect to DB and drop tables.
-        conn = DriverManager.getConnection(isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.connection"), isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.user"), isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
+        conn =
+            DriverManager.getConnection(isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.connection"),
+                isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.user"),
+                isisConfiguration.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
         stmt = conn.createStatement();
-
-        
-        // doesn't seem to be used...
-        
-        // dropTable(SqlObjectStore.getTableName());
     }
 
     public void dropTable(final String tableName) {
@@ -160,31 +158,31 @@ public class SqlIntegrationTestFixtures {
                     sqlDomainObjectRepository.delete(sqlDataClass);
                 }
                 return;
-            } 
+            }
             if (tableName.equalsIgnoreCase("simpleclass")) {
                 final List<SimpleClass> list = sqlDomainObjectRepository.allSimpleClasses();
                 for (final SimpleClass sqlClass : list) {
                     sqlDomainObjectRepository.delete(sqlClass);
                 }
                 return;
-            } 
+            }
             if (tableName.equalsIgnoreCase("simpleclasstwo")) {
                 final List<SimpleClassTwo> list = sqlDomainObjectRepository.allSimpleClassTwos();
                 for (final SimpleClassTwo sqlClass : list) {
                     sqlDomainObjectRepository.delete(sqlClass);
                 }
                 return;
-            } 
+            }
             if (tableName.equalsIgnoreCase("primitivevaluedentity")) {
                 final List<PrimitiveValuedEntity> list = sqlDomainObjectRepository.allPrimitiveValueEntities();
                 for (final PrimitiveValuedEntity pve : list) {
                     sqlDomainObjectRepository.delete(pve);
                 }
                 return;
-            } 
+            }
             throw new IsisException("Unknown table: " + tableName);
         }
-        
+
         try {
             String tableIdentifier = Utils.tableIdentifierFor(tableName);
             stmt.executeUpdate("DROP TABLE " + tableIdentifier);
@@ -193,43 +191,38 @@ public class SqlIntegrationTestFixtures {
             // e.printStackTrace();
         }
     }
-    
+
     public void sqlExecute(final String sqlString) throws SQLException {
         if (stmt != null) {
             stmt.executeUpdate(sqlString);
         }
     }
 
-
-
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     //
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
 
     private SqlDomainObjectRepository sqlDomainObjectRepository = null;
-    
+
     private SqlDataClass sqlDataClass;
     private ReferencingPolyTypesEntity referencingPolyTypesEntity;
 
-    
     public SqlDomainObjectRepository getSqlDataClassFactory() {
         return sqlDomainObjectRepository;
     }
 
-
-    
     public SqlDataClass getSqlDataClass() {
         return sqlDataClass;
     }
+
     public void setSqlDataClass(SqlDataClass sqlDataClass) {
         this.sqlDataClass = sqlDataClass;
     }
 
-    
-    
     public ReferencingPolyTypesEntity getPolyTestClass() {
         return referencingPolyTypesEntity;
     }
+
     public void setPolyTestClass(final ReferencingPolyTypesEntity referencingPolyTypesEntity) {
         this.referencingPolyTypesEntity = referencingPolyTypesEntity;
     }

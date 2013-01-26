@@ -232,10 +232,11 @@ public final class SqlObjectStore implements ObjectStoreSpi {
                     final ObjectSpecification adapterSpec = adapter.getSpecification();
                     if (!adapterSpec.isParented()) {
                         saveRootAdapter(adapter, connection);
-                    } else if(adapterSpec.isParentedOrFreeCollection()) { 
+                    } else if (adapterSpec.isParentedOrFreeCollection()) {
                         saveParentedCollectionAdapter(adapter, connection);
                     } else {
-                        throw new NotYetImplementedException("cannot yet persist aggregated objects: " + adapter.toString());
+                        throw new NotYetImplementedException("cannot yet persist aggregated objects: "
+                            + adapter.toString());
                     }
                 } finally {
                     connectionPool.release(connection);
@@ -247,18 +248,19 @@ public final class SqlObjectStore implements ObjectStoreSpi {
                 mapping.save(connection, adapter);
             }
 
-            private void saveParentedCollectionAdapter(final ObjectAdapter collectionAdapter, final DatabaseConnector connection) {
+            private void saveParentedCollectionAdapter(final ObjectAdapter collectionAdapter,
+                final DatabaseConnector connection) {
                 final ObjectAdapter parent = collectionAdapter.getAggregateRoot();
                 LOG.debug("change to internal collection being persisted through parent");
-   
+
                 final Oid oid = collectionAdapter.getOid();
                 final CollectionOid collectionOid = (CollectionOid) oid;
                 if (!(oid instanceof CollectionOid)) {
                     throw new IsisAssertException("object should have a CollectionOid");
                 }
-                
+
                 final ObjectMapping mapping = objectMappingLookup.getMapping(parent, connection);
-                if (! mapping.saveCollection(connection, parent, collectionOid.getName()) ) {
+                if (!mapping.saveCollection(connection, parent, collectionOid.getName())) {
                     final ObjectMapping parentMapping = objectMappingLookup.getMapping(parent, connection);
                     parentMapping.save(connection, collectionAdapter);
                 }
@@ -276,7 +278,6 @@ public final class SqlObjectStore implements ObjectStoreSpi {
 
         };
     }
-
 
     @Override
     public void debugData(final DebugBuilder debug) {
@@ -411,7 +412,6 @@ public final class SqlObjectStore implements ObjectStoreSpi {
         return instances;
     }
 
-
     @Override
     public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
         final DatabaseConnector connection = connectionPool.acquire();
@@ -440,10 +440,10 @@ public final class SqlObjectStore implements ObjectStoreSpi {
             final Results results = connector.select(sql.toString());
             if (!results.next()) {
                 return null;
-            } 
+            }
             final int id = results.getInt(Defaults.getPkIdLabel());
-            return RootOidDefault.create(serviceSpec.getSpecId(), ""+id);
-            
+            return RootOidDefault.create(serviceSpec.getSpecId(), "" + id);
+
         } finally {
             connectionPool.release(connector);
         }
@@ -479,9 +479,9 @@ public final class SqlObjectStore implements ObjectStoreSpi {
         connectionPool.release(connector);
     }
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Dependencies (injected)
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     public void setConnectionPool(final DatabaseConnectorPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -491,11 +491,10 @@ public final class SqlObjectStore implements ObjectStoreSpi {
         this.objectMappingLookup = mapperLookup;
     }
 
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Dependencies (from context)
-    ///////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////
+
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }

@@ -19,6 +19,7 @@
 
 package org.apache.isis.objectstore.sql.jdbc;
 
+import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -215,6 +216,15 @@ public class JdbcResults implements Results {
     public Boolean getBoolean(final String columnName) {
         try {
             return set.getBoolean(columnName);
+        } catch (final SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
+
+    @Override
+    public InputStream getStream(String column) {
+        try {
+            return set.getBinaryStream(column);
         } catch (final SQLException e) {
             throw new SqlObjectStoreException(e);
         }
