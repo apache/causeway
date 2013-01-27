@@ -21,16 +21,21 @@
  */
 package dom.todo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Join;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberGroups;
@@ -49,10 +54,12 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.joda.time.LocalDate;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
@@ -78,7 +85,7 @@ import com.google.common.base.Objects;
 @Auditable
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
-public class ToDoItem implements Comparable<ToDoItem> {
+public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
 	private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
@@ -129,6 +136,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     public void setDueBy(final LocalDate dueBy) {
         this.dueBy = dueBy;
+    }
+    public void clearDueBy() {
+        setDueBy(null);
     }
     // proposed new value is validated before setting
     public String validateDueBy(final LocalDate dueBy) {
@@ -197,6 +207,25 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
     // }}
 
+    
+
+    // {{ Attachment (property)
+    private Blob attachment;
+
+    @Persistent
+    @Optional
+    @MemberOrder(name="Detail", sequence = "7")
+    public Blob getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(final Blob attachment) {
+        this.attachment = attachment;
+    }
+    // }}
+
+
+
 
     // {{ Version (derived property)
     @Hidden(where=Where.ALL_TABLES)
@@ -217,6 +246,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // }}
 
     // {{ completed (action)
+    @Bulk
     @MemberOrder(sequence = "1")
     public ToDoItem completed() {
         setComplete(true);
@@ -227,7 +257,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public String disableCompleted() {
         return complete ? "Already completed" : null;
     }
-
     // }}
 
     // {{ notYetCompleted (action)
@@ -243,18 +272,24 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return !complete ? "Not yet completed" : null;
     }
     // }}
+
+    
+    
     
     // {{ dependencies (Collection)
-    private List<ToDoItem> dependencies = new ArrayList<ToDoItem>();
+    @Persistent(table="TODO_DEPENDENCIES")
+    @Join(column="DEPENDING_TODO_ID")
+    @Element(column="DEPENDENT_TODO_ID")
+    private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @Disabled
     @MemberOrder(sequence = "1")
     @Resolve(Type.EAGERLY)
-    public List<ToDoItem> getDependencies() {
+    public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(final List<ToDoItem> dependencies) {
+    public void setDependencies(final SortedSet<ToDoItem> dependencies) {
         this.dependencies = dependencies;
     }
     // }}
@@ -292,7 +327,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return null;
     }
     public List<ToDoItem> choices0Remove() {
-        return getDependencies();
+        return Lists.newArrayList(getDependencies());
     }
     // }}
 
@@ -304,8 +339,24 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
-    public ToDoItem duplicate() {
-        return toDoItems.newToDo(getDescription() + " - Copy", getCategory(), getDueBy());
+    public ToDoItem duplicate(
+            @Named("Description") 
+            String description,
+            @Named("Category")
+            ToDoItem.Category category, 
+            @Named("Due by") 
+            @Optional
+            LocalDate dueBy) {
+        return toDoItems.newToDo(description, category, dueBy);
+    }
+    public String default0Duplicate() {
+        return getDescription() + " - Copy";
+    }
+    public Category default1Duplicate() {
+        return getCategory();
+    }
+    public LocalDate default2Duplicate() {
+        return getDueBy();
     }
     // }}
 
@@ -325,7 +376,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // {{ SimilarItems (derived collection)
     @MemberOrder(sequence = "5")
     @NotPersisted
-    @Resolve(Type.EAGERLY)
+    @Resolve(Type.LAZILY)
     public List<ToDoItem> getSimilarItems() {
         return toDoItems.similarTo(this);
     }
@@ -338,7 +389,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
     /**
      * by complete flag, then due by date, then description
      */
-    @Programmatic
     // exclude from the framework's metamodel
     @Override
     public int compareTo(final ToDoItem other) {
@@ -359,7 +409,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         return getDueBy().compareTo(getDueBy());
     }
-
     // }}
 
     // {{ helpers
@@ -410,8 +459,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
         };
     }
-
-
     // }}
 
     // {{ injected: DomainObjectContainer
@@ -431,6 +478,19 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
     // }}
 
-
+// GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3    
+//    // {{
+//    @Persistent
+//    private Location location;
+//    
+//    @MemberOrder(name="Detail", sequence = "10")
+//    @Optional
+//    public Location getLocation() {
+//        return location;
+//    }
+//    public void setLocation(Location location) {
+//        this.location = location;
+//    }
+//    // }}
 
 }

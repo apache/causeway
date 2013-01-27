@@ -114,10 +114,22 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         toDoItem.setCategory(category);
         toDoItem.setOwnedBy(userName);
         toDoItem.setDueBy(dueBy);
+
+        // 
+        // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3        
+        // toDoItem.setLocation(
+        //    new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
+        //
+        
         persist(toDoItem);
         return toDoItem;
     }
+    
+    private static double random(double from, double to) {
+        return Math.random() * (to-from) + from;
+    }
     // }}
+
 
     
     // {{ similarTo (action)
@@ -135,7 +147,6 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // }}
     
 
-    
     // {{ autoComplete (hidden)
     @Hidden
     public List<ToDoItem> autoComplete(final String description) {
@@ -158,4 +169,5 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
+    
 }
