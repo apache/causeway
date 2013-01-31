@@ -118,6 +118,7 @@ pomXml.appendNode {
     groupId("org.apache.isis.core")
     artifactId("isis")
     version(isis_version)
+    relativePath("../../../core/pom.xm")
   }
 }
 pomXml.groupId='org.apache.isis.archetype'

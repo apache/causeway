@@ -20,7 +20,7 @@
     <name>Example ProgModel: Namefile Facet</name>
 
     <properties>
-        <isis.version>1.1.0-SNAPSHOT</isis.version>
+        <isis.version>1.1.1-SNAPSHOT</isis.version>
     </properties>
     
     <build>

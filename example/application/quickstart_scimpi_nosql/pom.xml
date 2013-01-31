@@ -30,7 +30,7 @@
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>1.1.0-SNAPSHOT</isis.version>
+        <isis.version>1.1.1-SNAPSHOT</isis.version>
         <isis-objectstore-nosql.version>1.0.0-SNAPSHOT</isis-objectstore-nosql.version>
         <isis-viewer-scimpi.version>1.0.0-SNAPSHOT</isis-viewer-scimpi.version>
         <isis-security-file.version>1.0.1-SNAPSHOT</isis-security-file.version>
