@@ -38,6 +38,8 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+
+import org.apache.log4j.Logger;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -58,6 +60,7 @@ import com.google.inject.name.Named;
  */
 public abstract class PageAbstract extends WebPage {
 
+    private static Logger LOG = Logger.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
     
@@ -107,6 +110,8 @@ public abstract class PageAbstract extends WebPage {
             addAboutLink();
             add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
         } catch(RuntimeException ex) {
+            
+            LOG.error("Failed to construct page, going back to sign in page", ex);
             // hack for IE
             getSession().invalidate();
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
