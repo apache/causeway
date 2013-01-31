@@ -110,6 +110,15 @@
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
+        
+        <!--
+        GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3 
+        <dependency>
+            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <artifactId>danhaywood-isis-wicket-gmap3-applib</artifactId>
+        </dependency>
+         -->
+        
 	</dependencies>
 
    <profiles>

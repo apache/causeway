@@ -24,13 +24,13 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
 
 	<name>Isis Wicket Viewer</name>
 
@@ -40,9 +40,9 @@
         <siteBaseDir>.</siteBaseDir>
         <relativeUrl />
 
-        <wicket.version>6.3.0</wicket.version>
-        <wicketstuff.version>6.0.0</wicketstuff.version>
-        <wicket-select2.version>2.0</wicket-select2.version>
+        <wicket.version>6.5.0</wicket.version>
+        <wicketstuff.version>6.4.0</wicketstuff.version>
+        <wicket-select2.version>2.1</wicket-select2.version>
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -79,6 +79,7 @@
 	                        <exclude>**/*.project</exclude>
 	                        <exclude>**/.classpath</exclude>
 	                        <exclude>**/.settings/**</exclude>
+                            <exclude>**/*.pdn</exclude>
 	                    </excludes>
                     </configuration>
 	            </plugin>
@@ -100,36 +101,36 @@
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-				<version>1.1.0-SNAPSHOT</version>
+				<version>1.1.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>

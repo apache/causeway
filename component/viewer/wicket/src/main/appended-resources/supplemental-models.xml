@@ -26,8 +26,8 @@
     </project>
   </supplement>
 
+<!-- 
   <supplement>
-   	<!-- not quite sure why licenses:download-license flags this, since license info seems to be in its POM -->
     <project>
 		<groupId>org.datanucleus</groupId>
 	    <artifactId>datanucleus-jodatime</artifactId>
@@ -101,6 +101,7 @@
       </licenses>
     </project>
   </supplement>
+ -->
 
  
 </supplementalDataModels>
