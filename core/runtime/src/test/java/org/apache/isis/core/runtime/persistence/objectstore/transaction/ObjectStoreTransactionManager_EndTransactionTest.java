@@ -25,25 +25,50 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 
+import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+public class ObjectStoreTransactionManager_EndTransactionTest {
 
-public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStoreTransactionManagerAbstractTestCase {
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    
+    @Mock
+    private IsisSession mockSession;
+    @Mock
+    private PersistenceSession mockPersistenceSession;
+    @Mock
+    private TransactionalResource mockObjectStore;
+
+    @Mock
+    private AuditingService mockAuditingService;
+    @Mock
+    private PublishingServiceWithCanonicalizers mockPublishingService;
+
+    private IsisTransactionManager transactionManager;
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
     }
 
     @Test
     public void endTransactionDecrementsTransactionLevel() throws Exception {
         // setup
-        ignoreCallsToObjectStore();
+        context.ignoring(mockObjectStore);
         transactionManager.startTransaction();
         transactionManager.startTransaction();
 
@@ -55,7 +80,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
     @Test
     public void endTransactionCommitsTransactionWhenLevelDecrementsDownToZero() throws Exception {
         // setup
-        ignoreCallsToObjectStore();
+        context.ignoring(mockObjectStore);
         transactionManager.startTransaction();
 
         context.checking(new Expectations() {
@@ -71,7 +96,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
     @Test
     public void startTransactionInteractsWithObjectStore() throws Exception {
         // setup
-        ignoreCallsToPersistenceSession();
+        context.ignoring(mockPersistenceSession);
 
         context.checking(new Expectations() {
             {
@@ -85,7 +110,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
     @Test
     public void endTransactionInteractsWithObjectStore() throws Exception {
         // setup
-        ignoreCallsToPersistenceSession();
+        context.ignoring(mockPersistenceSession);
 
         context.checking(new Expectations() {
             {

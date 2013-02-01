@@ -25,28 +25,53 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
+import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectStoreTransactionManagerAbstractTestCase {
+public class ObjectStoreTransactionManager_StartTransactionTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    
+    @Mock
+    private IsisSession mockSession;
+    @Mock
+    private PersistenceSession mockPersistenceSession;
+    @Mock
+    private TransactionalResource mockObjectStore;
+
+    @Mock
+    private AuditingService mockAuditingService;
+    @Mock
+    private PublishingServiceWithCanonicalizers mockPublishingService;
+
+    private IsisTransactionManager transactionManager;
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
     }
 
     @Before
     public void setUpExpectations() throws Exception {
-        ignoreCallsToPersistenceSession();
+        context.ignoring(mockPersistenceSession);
     }
 
     @Test
     public void startTransactionCreateTransactionIfNone() throws Exception {
-        ignoreCallsToObjectStore();
+        context.ignoring(mockObjectStore);
 
         assertThat(transactionManager.getTransaction(), is(nullValue()));
         transactionManager.startTransaction();
@@ -55,7 +80,7 @@ public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectSt
 
     @Test
     public void startTransactionDoesNotOverwriteTransactionIfHasOne() throws Exception {
-        ignoreCallsToObjectStore();
+        context.ignoring(mockObjectStore);
 
         // cause a transaction to be created
         transactionManager.startTransaction();
@@ -68,7 +93,7 @@ public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectSt
 
     @Test
     public void startTransactionIncrementsTransactionLevel() throws Exception {
-        ignoreCallsToObjectStore();
+        context.ignoring(mockObjectStore);
 
         assertThat(transactionManager.getTransactionLevel(), is(0));
         transactionManager.startTransaction();

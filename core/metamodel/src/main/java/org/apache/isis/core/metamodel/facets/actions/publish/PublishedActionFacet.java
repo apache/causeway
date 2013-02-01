@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
+package org.apache.isis.core.metamodel.facets.actions.publish;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
-
+import org.apache.isis.applib.annotation.PublishedAction;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
- * Corresponds to annotating the class with the {@link Auditable} annotation.
+ * Indicates that the invocation of action should be published, specifying the means by which a
+ * canonical event representing this invocation should be created.
  */
-public interface AuditableFacet extends Facet {
+public interface PublishedActionFacet extends SingleValueFacet<PublishedAction.EventCanonicalizer> {
 
 }

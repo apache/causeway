@@ -30,7 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -39,6 +44,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -164,7 +172,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         public boolean isComplete() {
             return isComplete;
         }
-
     }
 
 
@@ -178,11 +185,22 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final UpdateNotifier updateNotifier;
     private final List<IsisException> exceptions = Lists.newArrayList();
 
+    /**
+     * could be null if none has been registered
+     */
+    private final AuditingService auditingService;
+    /**
+     * could be null if none has been registered
+     */
+    private final PublishingServiceWithCanonicalizers publishingService;
+
     private State state;
 
     private RuntimeException cause;
+    
+    private final UUID guid;
 
-    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore) {
+    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithCanonicalizers publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
@@ -191,6 +209,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
+        this.auditingService = auditingService;
+        this.publishingService = publishingService;
+        
+        this.guid = UUID.randomUUID();
 
         this.state = State.IN_PROGRESS;
 
@@ -200,6 +222,14 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
+    // ////////////////////////////////////////////////////////////////
+    // GUID
+    // ////////////////////////////////////////////////////////////////
+
+    public final UUID getGuid() {
+        return guid;
+    }
+    
     // ////////////////////////////////////////////////////////////////
     // State
     // ////////////////////////////////////////////////////////////////
@@ -345,7 +375,6 @@ public class IsisTransaction implements TransactionScopedComponent {
     private void doFlush() {
         
         try {
-            doAudit(getAuditEntries());
             
             objectStore.execute(Collections.unmodifiableList(commands));
             
@@ -367,13 +396,65 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     
-    /**
-     * Hook method for subtypes to audit as required.
-     */
-    protected void doAudit(Set<Entry<AdapterAndProperty, PreAndPostValues>> auditEntries) {
-        for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : auditEntries) {
-            LOG.info(auditEntry.getKey() + ": " + auditEntry.getValue());
+    protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+        if(auditingService == null) {
+            return;
         }
+        
+        // else
+        final String currentUser = getAuthenticationSession().getUserName();
+        final long currentTimestampEpoch = currentTimestampEpoch();
+        for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
+            auditChangedProperty(currentUser, currentTimestampEpoch, auditEntry);
+        }
+    }
+
+    protected void doPublish(final Set<ObjectAdapter> changedAdapters) {
+        if(publishingService == null) {
+            return;
+        }
+
+        // else
+        final String currentUser = getAuthenticationSession().getUserName();
+        final long currentTimestampEpoch = currentTimestampEpoch();
+        
+        for (ObjectAdapter changedAdapter : changedAdapters) {
+            PublishedObjectFacet publishedObjectFacet = changedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+            if(publishedObjectFacet == null) {
+                continue;
+            }
+            publishingService.publishObject(publishedObjectFacet.value(), getGuid(), currentUser, currentTimestampEpoch, changedAdapter);
+        }
+        
+        // TODO: use a ThreadLocal on ActionInvocationFacet to determine whether there is also a PublishedActionFacet to handle...
+    }
+
+    private static long currentTimestampEpoch() {
+        return Clock.getTime();
+    }
+
+    private void auditChangedProperty(final String currentUser, final long currentTimestampEpoch, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+        final AdapterAndProperty aap = auditEntry.getKey();
+        final ObjectAdapter adapter = aap.getAdapter();
+        if(!adapter.getSpecification().containsFacet(AuditableFacet.class)) {
+            return;
+        }
+        final RootOid oid = (RootOid) adapter.getOid();
+        final String objectType = oid.getObjectSpecId().asString();
+        final String identifier = oid.getIdentifier();
+        final PreAndPostValues papv = auditEntry.getValue();
+        final String preValue = asString(papv.getPre());
+        final String postValue = asString(papv.getPost());
+        auditingService.audit(currentUser, currentTimestampEpoch, objectType, identifier, preValue, postValue);
+    }
+
+    private static String asString(Object object) {
+        return object != null? object.toString(): null;
+    }
+
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
     }
 
 
@@ -399,8 +480,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
         
         try {
+            doAudit(getChangedObjectProperties());
             doFlush();
             setState(State.COMMITTED);
+            doPublish(getChangedObjects());
         } catch (final RuntimeException ex) {
             setAbortCause(ex);
             throw ex;
@@ -408,6 +491,9 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     
+
+
+
     // ////////////////////////////////////////////////////////////////
     // abort
     // ////////////////////////////////////////////////////////////////
@@ -535,6 +621,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     public static class AdapterAndProperty {
+        
         private final ObjectAdapter objectAdapter;
         private final ObjectAssociation property;
         
@@ -602,7 +689,7 @@ public class IsisTransaction implements TransactionScopedComponent {
    
     
     ////////////////////////////////////////////////////////////////////////
-    // Auditing
+    // Auditing/Publishing object tracking
     ////////////////////////////////////////////////////////////////////////
 
     public static class PreAndPostValues {
@@ -648,29 +735,54 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
     
    
-    private final Map<AdapterAndProperty, PreAndPostValues> auditLog = Maps.newLinkedHashMap();
+    private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();
+    private final Set<ObjectAdapter> changedObjects = Sets.newLinkedHashSet();
     
 
+    /**
+     * For object stores to record the current values of an {@link ObjectAdapter} that has enlisted
+     * into the transaction, prior to updating its values.
+     * 
+     * <p>
+     * The values of the {@link ObjectAdapter} after being updated are captured when the
+     * audit entries are requested, in {@link #getChangedObjectProperties()}.
+     * 
+     * <p>
+     * Supported by the JDO object store; check documentation for support in other objectstores.
+     */
     public void auditDirty(ObjectAdapter adapter) {
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
-            audit(adapter, property);
+            changedObjectProperty(adapter, property);
         }
     }
     
-    private void audit(ObjectAdapter adapter, ObjectAssociation property) {
+    private void changedObjectProperty(ObjectAdapter adapter, ObjectAssociation property) {
         final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
         PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-        auditLog.put(aap, papv);
+        changedObjectProperties.put(aap, papv);
+        changedObjects.add(adapter);
     }
 
 
-    public Set<Entry<AdapterAndProperty, PreAndPostValues>> getAuditEntries() {
-        updatePostValues(auditLog.entrySet());
+    /**
+     * Returns the pre- and post-values of all {@link ObjectAdapter}s that were enlisted and dirtied
+     * in this transaction.
+     * 
+     * <p>
+     * This requires that the object store called {@link #auditDirty(ObjectAdapter)} for each object being
+     * enlisted.
+     * 
+     * <p>
+     * Supported by the JDO object store (since it calls {@link #auditDirty(ObjectAdapter)}); 
+     * check documentation for support in other object stores.
+     */
+    public Set<Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
+        updatePostValues(changedObjectProperties.entrySet());
 
-        return Collections.unmodifiableSet(Sets.filter(auditLog.entrySet(), PreAndPostValues.CHANGED));
+        return Collections.unmodifiableSet(Sets.filter(changedObjectProperties.entrySet(), PreAndPostValues.CHANGED));
     }
 
-    private void updatePostValues(Set<Entry<AdapterAndProperty, PreAndPostValues>> entrySet) {
+    private static void updatePostValues(Set<Entry<AdapterAndProperty, PreAndPostValues>> entrySet) {
         for (Entry<AdapterAndProperty, PreAndPostValues> entry : entrySet) {
             final AdapterAndProperty aap = entry.getKey();
             final PreAndPostValues papv = entry.getValue();
@@ -679,13 +791,15 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
+    private Set<ObjectAdapter> getChangedObjects() {
+        return changedObjects;
+    }
 
     
     ////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     ////////////////////////////////////////////////////////////////////////
 
-    
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }

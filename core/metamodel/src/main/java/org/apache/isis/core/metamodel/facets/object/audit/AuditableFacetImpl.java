@@ -16,21 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.applib;
+package org.apache.isis.core.metamodel.facets.object.audit;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.log4j.Logger;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
-@SuppressWarnings("deprecation")
-public class AuditServiceLogging implements AuditService {
+public class AuditableFacetImpl extends AuditableFacetAbstract {
 
-    private final static Logger LOG = Logger.getLogger(AuditServiceLogging.class);
-    
-    @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
-        String auditMessage = objectType + ":" + identifier + " by " + user + ": " + preValue + " -> " + postValue;
-        LOG.info(auditMessage);
+    public AuditableFacetImpl(FacetHolder facetHolder) {
+        super(facetHolder);
     }
 
 }

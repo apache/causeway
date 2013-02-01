@@ -16,30 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
+package org.apache.isis.applib.services.publish;
 
+import java.util.UUID;
 
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.objectstore.jdo.applib.Auditable;
+import org.apache.isis.applib.annotation.Hidden;
 
+public interface PublishingService {
+    
+    @Hidden
+    public void publish(UUID guid, String currentUser, long currentTimestampEpoch, CanonicalEvent canonicalEvent);
+    
+    public static class Stderr implements PublishingService {
 
-public class AuditableMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
-
-    public AuditableMarkerInterfaceFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
-    }
-
-    @Override
-    public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        if(!Auditable.class.isAssignableFrom(cls)) {
-            return;
+        @Hidden
+        @Override
+        public void publish(UUID guid, String currentUser, long currentTimestampEpoch, CanonicalEvent canonicalEvent) {
+            System.err.println("PUBLISHED OBJECT: " + guid + ":" + currentTimestampEpoch + ":" + currentTimestampEpoch + ":" + canonicalEvent.asString());
         }
-        FacetUtil.addFacet(new AuditableFacetMarkerInterface(
-                processClassContext.getFacetHolder()));
+        
     }
-
-
 }
+
+

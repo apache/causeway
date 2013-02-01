@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -59,6 +57,7 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     private final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate;
     
     private List<Object> serviceList;
+
 
     private Boolean fixturesInstalled;
     
@@ -95,6 +94,7 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
         // check prereq dependencies injected
         ensureThatState(serviceList, is(notNullValue()));
+
 
         // a bit of a workaround, but required if anything in the metamodel (for
         // example, a
@@ -140,6 +140,7 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         servicesInjector.setServices(serviceList);
         servicesInjector.init();
     }
+
 
 
     @Override

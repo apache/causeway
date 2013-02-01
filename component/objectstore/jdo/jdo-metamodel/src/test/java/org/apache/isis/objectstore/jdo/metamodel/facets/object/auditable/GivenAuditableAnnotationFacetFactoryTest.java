@@ -29,11 +29,11 @@ import junit.framework.Assert;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAnnotation;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableFacetAnnotation;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetAnnotation;
@@ -42,13 +42,13 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 public class GivenAuditableAnnotationFacetFactoryTest extends
         AbstractFacetFactoryTest {
 
-    private AuditableAnnotationFacetFactory facetFactory;
+    private AuditableAnnotationInJdoApplibFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new AuditableAnnotationFacetFactory();
+        facetFactory = new AuditableAnnotationInJdoApplibFacetFactory();
     }
 
     @Override

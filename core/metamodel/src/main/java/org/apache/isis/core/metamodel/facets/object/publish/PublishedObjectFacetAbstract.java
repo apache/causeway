@@ -16,16 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
+package org.apache.isis.core.metamodel.facets.object.publish;
 
+import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
+public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstract<PublishedObject.EventCanonicalizer> implements PublishedObjectFacet {
 
-public class AuditableFacetMarkerInterface extends AuditableFacetImpl {
+    public static Class<? extends Facet> type() {
+        return PublishedObjectFacet.class;
+    }
 
-    public AuditableFacetMarkerInterface(FacetHolder facetHolder) {
-        super(facetHolder);
+    public PublishedObjectFacetAbstract(final PublishedObject.EventCanonicalizer eventCanonicalizer, final FacetHolder holder) {
+        super(type(), eventCanonicalizer, holder);
     }
 
 }

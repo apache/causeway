@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.objectstore.jdo.applib.annotations;
+package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -25,12 +25,26 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.services.publish.CanonicalEvent;
+import org.apache.isis.applib.services.publish.PublishingService;
+
 /**
- * @deprecated use the {@link org.apache.isis.applib.marker.Auditable the applib Auditable} annotation instead.
+ * Indicates that changes to the object's (properties) should be published.
+ * 
+ * <p>
+ * Requires that an implementation of the {@link PublishingService} is registered with the framework.
  */
-@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Auditable {
+public @interface PublishedObject {
+    
+    /**
+     * @see http://en.wikipedia.org/wiki/Canonicalization
+     */
+    public interface EventCanonicalizer {
+        public CanonicalEvent canonicalizeObject(Object changedObject);
+    }
+    
+    Class<? extends EventCanonicalizer> canonicalizeWith() default EventCanonicalizer.class;
 }

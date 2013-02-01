@@ -16,15 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
+package org.apache.isis.applib.services.audit;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.applib.annotation.Hidden;
 
+public interface AuditingService {
+    
+    @Hidden
+    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
+    
+    
+    public static class Stdout implements AuditingService {
 
-public class AuditableFacetImpl extends AuditableFacetAbstract {
-
-    public AuditableFacetImpl(FacetHolder facetHolder) {
-        super(facetHolder);
+        @Hidden
+        public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
+            String auditMessage = objectType + ":" + identifier + " by " + user + ": " + preValue + " -> " + postValue;
+            System.out.println(auditMessage);
+        }
     }
 
 }

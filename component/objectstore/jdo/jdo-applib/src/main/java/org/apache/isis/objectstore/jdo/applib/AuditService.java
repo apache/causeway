@@ -18,11 +18,10 @@
  */
 package org.apache.isis.objectstore.jdo.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
 
-public interface AuditService {
-    
-    @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
-    
+/**
+ * @deprecated use the {@link org.apache.isis.applib.services.audit.AuditingService the applib AuditService} instead.
+ */
+@Deprecated
+public interface AuditService extends org.apache.isis.applib.services.audit.AuditingService {
 }

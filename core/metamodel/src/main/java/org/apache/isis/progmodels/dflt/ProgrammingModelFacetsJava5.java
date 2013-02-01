@@ -19,6 +19,8 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
@@ -29,6 +31,7 @@ import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.N
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.publish.PublishedActionAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsFallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.IdempotentAnnotationFacetFactory;
@@ -106,6 +109,7 @@ import org.apache.isis.core.progmodel.facets.object.orderfields.FieldOrderAnnota
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.publish.PublishedObjectAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -432,6 +436,13 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // so we can dogfood the NO applib "value" types
         addFactory(ValueFacetFactory.class);
+
+        // services
+        addFactory(AuditableAnnotationFacetFactory.class);
+        addFactory(AuditableMarkerInterfaceFacetFactory.class);
+
+        addFactory(PublishedActionAnnotationFacetFactory.class);
+        addFactory(PublishedObjectAnnotationFacetFactory.class);
 
         addFactory(FacetsAnnotationFacetFactory.class);
     }

@@ -18,12 +18,7 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -38,23 +33,16 @@ import org.apache.isis.core.runtime.bytecode.identity.ObjectFactoryBasic;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.objectstore.jdo.applib.AuditService;
 import org.apache.isis.objectstore.jdo.datanucleus.bytecode.DataNucleusTypesClassSubstitutor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusTransactionManager;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceFacetFactory;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
@@ -62,10 +50,6 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 /**
  * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
@@ -86,22 +70,12 @@ import com.google.common.collect.Iterables;
  */
 public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
-    private static final Predicate<Object> LOCATE_AUDIT_SERVICE = new Predicate<Object>() {
-
-        @Override
-        public boolean apply(Object input) {
-            return input instanceof AuditService;
-        }
-    };
 
     public static final String NAME = "datanucleus";
     private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
 
     private DataNucleusApplicationComponents applicationComponents = null;
 
-    // only search once
-    private boolean searchedForAuditService;
-    private AuditService auditService;
     
     public DataNucleusPersistenceMechanismInstaller() {
         super(NAME);
@@ -156,29 +130,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     ////////////////////////////////////////////////////////////////////////
-    // createPersistenceSession
-    ////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public PersistenceSession createPersistenceSession(PersistenceSessionFactory persistenceSessionFactory) {
-        PersistenceSession persistenceSession = super.createPersistenceSession(persistenceSessionFactory);
-        searchAndCacheAuditServiceIfNotAlreadyDoneSo(persistenceSessionFactory);
-        return persistenceSession;
-    }
-
-    private void searchAndCacheAuditServiceIfNotAlreadyDoneSo(PersistenceSessionFactory persistenceSessionFactory) {
-        if(searchedForAuditService) {
-            return;
-        } 
-        List<Object> services = persistenceSessionFactory.getServices();
-        final Optional<Object> optionalService = Iterables.tryFind(services, LOCATE_AUDIT_SERVICE);
-        if(optionalService.isPresent()) {
-            auditService = (AuditService) optionalService.get();
-        }
-        searchedForAuditService = true;
-    }
-
-    ////////////////////////////////////////////////////////////////////////
     // PersistenceSessionFactoryDelegate impl
     ////////////////////////////////////////////////////////////////////////
 
@@ -213,8 +164,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
         baseProgrammingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
         
-        baseProgrammingModel.addFactory(AuditableAnnotationFacetFactory.class);
-        baseProgrammingModel.addFactory(AuditableMarkerInterfaceFacetFactory.class);
+        baseProgrammingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
+        baseProgrammingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);
     }
 
     private void addDataNucleusFacetFactoriesTo(ProgrammingModel baseProgrammingModel) {
@@ -229,11 +180,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
 
     @Override
-    protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
-        return new DataNucleusTransactionManager(persistor, objectStore, auditService);
-    }
-
-    @Override
     public ObjectFactory createObjectFactory(IsisConfiguration configuration) {
         return new ObjectFactoryBasic();
     }
@@ -242,7 +188,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     public DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {
         return new DataNucleusPojoRecreator();
     }
-
 
 
 

@@ -16,21 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.log4j.Logger;
+package org.apache.isis.core.metamodel.facets.object.publish;
 
+import java.util.UUID;
 
-@SuppressWarnings("deprecation")
-public class AuditServiceLogging implements AuditService {
+import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
-    private final static Logger LOG = Logger.getLogger(AuditServiceLogging.class);
-    
-    @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
-        String auditMessage = objectType + ":" + identifier + " by " + user + ": " + preValue + " -> " + postValue;
-        LOG.info(auditMessage);
-    }
+/**
+ * Indicates that changes to an object's properties are to be published has, specifying the means by which 
+ * a canonical event representing these changes should be created.
+ */
+public interface PublishedObjectFacet extends SingleValueFacet<PublishedObject.EventCanonicalizer> {
 
 }

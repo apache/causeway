@@ -19,30 +19,15 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
 
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAnnotation;
 
 
-public class AuditableAnnotationFacetFactory extends FacetFactoryAbstract {
+@Deprecated
+public class AuditableFacetAnnotationInJdoApplib extends AuditableFacetAnnotation {
 
-    public AuditableAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    public AuditableFacetAnnotationInJdoApplib(FacetHolder facetHolder) {
+        super(facetHolder);
     }
-
-    @Override
-    public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final Auditable annotation = Annotations.getAnnotation(cls, Auditable.class);
-        if (annotation == null) {
-            return;
-        }
-        FacetUtil.addFacet(new AuditableFacetAnnotation(
-                processClassContext.getFacetHolder()));
-        return;
-    }
-
 
 }

@@ -17,20 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.objectstore.jdo.applib.annotations;
+package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
+
+import org.apache.isis.applib.services.publish.CanonicalEvent;
+import org.apache.isis.applib.services.publish.PublishingService;
 
 /**
- * @deprecated use the {@link org.apache.isis.applib.marker.Auditable the applib Auditable} annotation instead.
+ * Indicates that the action should be published.
+ * 
+ * <p>
+ * Requires that an implementation of the {@link PublishingService} is registered with the framework.
  */
-@Deprecated
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Auditable {
+public @interface PublishedAction {
+    
+    public interface EventCanonicalizer {
+        public CanonicalEvent canonicalizeAction(Object invoked, String actionMethodName, List<Object> args, Object actionResult);
+    }
+    Class<? extends EventCanonicalizer> canonicalizeWith()  default EventCanonicalizer.class;
 }

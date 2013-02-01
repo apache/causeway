@@ -33,6 +33,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -63,6 +65,7 @@ import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -93,6 +96,10 @@ public class PersistenceSessionObjectStoreTest {
     private ObjectFactory objectFactory;
     @Mock
     private PersistAlgorithm mockPersistAlgorithm;
+    @Mock
+    private AuditingService mockAuditingService;
+    @Mock
+    private PublishingServiceWithCanonicalizers mockPublishingService;
 
     @Mock
     private CreateObjectCommand createObjectCommand;
@@ -128,6 +135,7 @@ public class PersistenceSessionObjectStoreTest {
 
         context.ignoring(mockRuntimeContext);
         context.ignoring(mockConfiguration);
+        context.ignoring(mockAuditingService);
 
         isisMetaModel = new IsisMetaModel(mockRuntimeContext, new ProgrammingModelFacetsJava5(), new CustomerRepository());
         isisMetaModel.init();
@@ -165,7 +173,7 @@ public class PersistenceSessionObjectStoreTest {
             
         };
         
-        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
         persistenceSession.setTransactionManager(transactionManager);
 
         servicesInjector.setServices(Collections.emptyList());

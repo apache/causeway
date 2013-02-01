@@ -16,16 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
+package org.apache.isis.core.metamodel.facets.object.audit.markerifc;
 
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.applib.marker.Auditable;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class AuditableFacetAnnotation extends AuditableFacetImpl {
+public class AuditableMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
 
-    public AuditableFacetAnnotation(FacetHolder facetHolder) {
-        super(facetHolder);
+    public AuditableMarkerInterfaceFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
     }
+
+    @Override
+    public void process(ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        if(!Auditable.class.isAssignableFrom(cls)) {
+            return;
+        }
+        FacetUtil.addFacet(new AuditableFacetMarkerInterface(
+                processClassContext.getFacetHolder()));
+    }
+
 
 }

@@ -19,8 +19,8 @@
 package org.apache.isis.objectstore.jdo.applib;
 
 /**
- * Marker interface to indicate that an entity should be audited.
+ * @deprecated use the {@link org.apache.isis.applib.marker.Auditable the applib Auditable} marker interface instead.
  */
-public interface Auditable {
-
+@Deprecated
+public interface Auditable extends org.apache.isis.applib.marker.Auditable {
 }

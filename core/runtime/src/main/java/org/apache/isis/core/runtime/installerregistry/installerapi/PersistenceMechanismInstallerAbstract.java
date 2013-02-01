@@ -25,20 +25,25 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.PublishedAction;
+import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.applib.annotation.PublishedObject.EventCanonicalizer;
+import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.publish.CanonicalEvent;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -63,12 +68,18 @@ import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
+import org.apache.log4j.Logger;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 /**
  * An abstract implementation of {@link PersistenceMechanismInstaller} that will
@@ -86,6 +97,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT + "persistenceSession";
     private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
 
+
+
+    
     private SystemDependencyInjector installerLookup;
 
     public PersistenceMechanismInstallerAbstract(final String name) {
@@ -99,11 +113,20 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         super(type, name);
     }
 
+    
+    //////////////////////////////////////////////////////////////////////
+    // createPersistenceSessionFactory
+    //////////////////////////////////////////////////////////////////////
 
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
         return new PersistenceSessionFactoryDelegating(deploymentType, getConfiguration(), this);
     }
+
+
+    //////////////////////////////////////////////////////////////////////
+    // createPersistenceSession
+    //////////////////////////////////////////////////////////////////////
 
 
     /**
@@ -114,6 +137,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      */
     @Override
     public PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory) {
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("installing " + this.getClass().getName());
         }
@@ -140,7 +164,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final PersistenceSession persistenceSession = 
                 new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
         
-        final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore);
+        final IsisTransactionManager transactionManager = createTransactionManager(persistenceSessionFactory, persistenceSession, objectStore);
         
         ensureThatArg(persistenceSession, is(not(nullValue())));
         ensureThatArg(transactionManager, is(not(nullValue())));
@@ -148,11 +172,11 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         persistenceSession.setDirtiableSupport(true);
         persistenceSession.setTransactionManager(transactionManager);
         
-        // ... and finally return
         return persistenceSession;
     }
 
-    
+
+
     // ///////////////////////////////////////////
     // Mandatory hook methods
     // ///////////////////////////////////////////
@@ -177,14 +201,70 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return new PersistAlgorithmDefault();
     }
 
+
     /**
      * Hook method to return an {@link IsisTransactionManager}.
      * 
      * <p>
      * By default returns a {@link IsisTransactionManager}.
+     * @param persistenceSessionFactory TODO
      */
-    protected IsisTransactionManager createTransactionManager(final EnlistedObjectDirtying persistor, final TransactionalResource objectStore) {
-        return new IsisTransactionManager(persistor, objectStore);
+    protected IsisTransactionManager createTransactionManager(PersistenceSessionFactory persistenceSessionFactory, final EnlistedObjectDirtying enlistedObjectDirtying, final TransactionalResource transactionalResource) {
+        List<Object> services = persistenceSessionFactory.getServices();
+
+        final AuditingService auditingServiceIfAny = getServiceIfAny(services, AuditingService.class);
+        final PublishingServiceWithCanonicalizers publishingServiceIfAny = getPublishingServiceIfAny(services);
+        return new IsisTransactionManager(enlistedObjectDirtying, transactionalResource, auditingServiceIfAny, publishingServiceIfAny);
+    }
+
+    protected PublishingServiceWithCanonicalizers getPublishingServiceIfAny(List<Object> services) {
+        final PublishingService publishingService = getServiceIfAny(services, PublishingService.class);
+        if(publishingService == null) {
+            return null;
+        }
+        
+        PublishedObject.EventCanonicalizer objectEventCanonicalizer = getServiceIfAny(services, PublishedObject.EventCanonicalizer.class);
+        if(objectEventCanonicalizer == null) {
+            objectEventCanonicalizer = newDefaultObjectEventCanonicalizer();
+        }
+        
+        PublishedAction.EventCanonicalizer actionEventCanonicalizer = getServiceIfAny(services, PublishedAction.EventCanonicalizer.class);
+        if(actionEventCanonicalizer == null) {
+            actionEventCanonicalizer = newDefaultActionEventCanonicalizer();
+        }
+        
+        return new PublishingServiceWithCanonicalizers(publishingService, objectEventCanonicalizer, actionEventCanonicalizer);
+    }
+
+    protected EventCanonicalizer newDefaultObjectEventCanonicalizer() {
+        return new PublishedObject.EventCanonicalizer() {
+            @Override
+            public CanonicalEvent canonicalizeObject(final Object changedObject) {
+                return new CanonicalEvent.Default(oidStrFor(changedObject));
+            }
+        };
+    }
+
+    protected org.apache.isis.applib.annotation.PublishedAction.EventCanonicalizer newDefaultActionEventCanonicalizer() {
+        return new PublishedAction.EventCanonicalizer() {
+
+            @Override
+            public CanonicalEvent canonicalizeAction(Object invokedObject, String actionMethodName, List<Object> args, Object actionResult) {
+                return new CanonicalEvent.Default(oidStrFor(invokedObject + "#" + actionMethodName + appendResultIfAny(actionResult)) );
+            }
+
+            private String appendResultIfAny(Object actionResult) {
+                if(actionResult == null) {
+                    return "";
+                }
+                return "=" + oidStrFor(actionResult);
+            }
+        };
+    }
+
+    private static String oidStrFor(final Object changedObject) {
+        final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(changedObject);
+        return adapter.getOid().enString(IsisContext.getOidMarshaller());
     }
 
 
@@ -287,9 +367,8 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String configuredClassName = configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
         return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
     }
-    
 
-    
+
     // ///////////////////////////////////////////
     // Non overridable.
     // ///////////////////////////////////////////
@@ -317,6 +396,43 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     }
 
 
+    // ///////////////////////////////////////////
+    // caching services by type
+    // ///////////////////////////////////////////
+
+    /**
+     * If no key, not yet searched for type; otherwise the {@link Optional} indicates
+     * whether a service was found.
+     */
+    private final Map<Class<?>, Optional<Object>> servicesByType = Maps.newHashMap();
+
+    @SuppressWarnings("unchecked")
+    private <T> T getServiceIfAny(List<Object> services, Class<T> serviceClass) {
+        locateAndCache(services, serviceClass);
+        Optional<T> optionalService = (Optional<T>) servicesByType.get(serviceClass);
+        return optionalService.orNull();
+    }
+
+    private void locateAndCache(List<Object> services, Class<?> serviceClass) {
+        if(servicesByType.containsKey(serviceClass)) {
+           return; 
+        }
+
+        final Optional<Object> optionalService = Iterables.tryFind(services, ofType(serviceClass));
+        servicesByType.put(serviceClass, optionalService);
+    }
+
+    private static final Predicate<Object> ofType(final Class<?> cls) {
+        return new Predicate<Object>() {
+            @Override
+            public boolean apply(Object input) {
+                return cls.isAssignableFrom(input.getClass());
+            }
+        };
+    };
+
+
+
     // /////////////////////////////////////////////////////
     // Dependencies (from setters)
     // /////////////////////////////////////////////////////
@@ -336,7 +452,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return installerLookup;
     }
 
-    
     // /////////////////////////////////////////////////////
     // Dependencies (from context)
     // /////////////////////////////////////////////////////
@@ -344,8 +459,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-    
-    
+
     // /////////////////////////////////////////////////////
     // Guice
     // /////////////////////////////////////////////////////
@@ -354,9 +468,4 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     public List<Class<?>> getTypes() {
         return listOf(PersistenceSessionFactory.class);
     }
-
-
-    
-    
-    
 }

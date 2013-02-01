@@ -63,6 +63,9 @@ public interface FacetFactory {
             this.methodRemover = methodRemover;
         }
 
+        /**
+         * The class being processed.
+         */
         public Class<?> getCls() {
             return cls;
         }

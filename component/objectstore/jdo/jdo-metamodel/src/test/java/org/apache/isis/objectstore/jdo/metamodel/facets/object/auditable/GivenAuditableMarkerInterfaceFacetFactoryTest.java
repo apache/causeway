@@ -27,23 +27,23 @@ import junit.framework.Assert;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterface;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.objectstore.jdo.applib.Auditable;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableFacetMarkerInterface;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceFacetFactory;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 
 
 public class GivenAuditableMarkerInterfaceFacetFactoryTest extends
         AbstractFacetFactoryTest {
 
-    private AuditableMarkerInterfaceFacetFactory facetFactory;
+    private AuditableMarkerInterfaceInJdoApplibFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new AuditableMarkerInterfaceFacetFactory();
+        facetFactory = new AuditableMarkerInterfaceInJdoApplibFacetFactory();
     }
 
     @Override

@@ -16,24 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
+package org.apache.isis.core.metamodel.facets.object.audit;
 
 
+import org.apache.isis.applib.marker.Auditable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
-public abstract class AuditableFacetAbstract extends FacetAbstract implements
-        AuditableFacet {
-
-
-    public static Class<? extends Facet> type() {
-        return AuditableFacet.class;
-    }
-
-    public AuditableFacetAbstract(FacetHolder facetHolder) {
-        super(AuditableFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
-    }
+/**
+ * Corresponds to annotating the class with the {@link Auditable} annotation.
+ */
+public interface AuditableFacet extends Facet {
 
 }
