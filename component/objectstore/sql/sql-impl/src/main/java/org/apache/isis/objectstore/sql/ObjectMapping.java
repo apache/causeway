@@ -32,7 +32,7 @@ public interface ObjectMapping {
 
     void destroyObject(DatabaseConnector connector, ObjectAdapter object);
 
-    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec);
+    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec, long startIndex, long rowCount);
 
     Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec, String title);
 

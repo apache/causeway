@@ -47,9 +47,11 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltInAbstract;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindPaged;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -328,7 +330,10 @@ public final class SqlObjectStore implements ObjectStoreSpi {
         if (query instanceof PersistenceQueryFindByTitle) {
             return findByTitle((PersistenceQueryFindByTitle) query);
         } else if (query instanceof PersistenceQueryFindAllInstances) {
-            return getAllInstances((PersistenceQueryFindAllInstances) query);
+            return getAllInstances((PersistenceQueryFindAllInstances) query, 0, 0);
+        } else if (query instanceof PersistenceQueryFindPaged) {
+            PersistenceQueryFindPaged findQuery = (PersistenceQueryFindPaged) query;
+            return getAllInstances((PersistenceQueryFindPaged) query, findQuery.getStart(), findQuery.getCount());
         } else if (query instanceof PersistenceQueryFindByPattern) {
             return findByPattern((PersistenceQueryFindByPattern) query);
         } else {
@@ -343,7 +348,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
         try {
             final List<ObjectAdapter> matchingInstances = Lists.newArrayList();
 
-            addSpecQueryInstances(specification, connector, query, matchingInstances);
+            addSpecQueryInstances(specification, connector, query, matchingInstances, 0, 0);
             return matchingInstances;
 
         } finally {
@@ -352,7 +357,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
     }
 
     private void addSpecQueryInstances(final ObjectSpecification specification, final DatabaseConnector connector,
-        final PersistenceQueryFindByPattern query, final List<ObjectAdapter> matchingInstances) {
+        final PersistenceQueryFindByPattern query, final List<ObjectAdapter> matchingInstances, long startIndex, long rowCount) {
 
         if (specification.isAbstract() == false) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
@@ -363,39 +368,39 @@ public final class SqlObjectStore implements ObjectStoreSpi {
         if (specification.hasSubclasses()) {
             final List<ObjectSpecification> subclasses = specification.subclasses();
             for (final ObjectSpecification subclassSpec : subclasses) {
-                addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
+                addSpecQueryInstances(subclassSpec, connector, query, matchingInstances, startIndex, rowCount);
             }
         }
     }
 
-    private List<ObjectAdapter> getAllInstances(final PersistenceQueryFindAllInstances criteria) {
+    private List<ObjectAdapter> getAllInstances(final PersistenceQueryBuiltInAbstract criteria, final long startIndex, final long rowCount) {
         final ObjectSpecification spec = criteria.getSpecification();
-        return allInstances(spec);
+        return allInstances(spec, startIndex, rowCount);
     }
 
-    private List<ObjectAdapter> allInstances(final ObjectSpecification spec) {
+    private List<ObjectAdapter> allInstances(final ObjectSpecification spec, long startIndex, long rowCount) {
         final DatabaseConnector connector = connectionPool.acquire();
         final List<ObjectAdapter> matchingInstances = Lists.newArrayList();
 
-        addSpecInstances(spec, connector, matchingInstances);
+        addSpecInstances(spec, connector, matchingInstances, startIndex, rowCount);
 
         connectionPool.release(connector);
         return matchingInstances;
     }
 
     private void addSpecInstances(final ObjectSpecification spec, final DatabaseConnector connector,
-        final List<ObjectAdapter> matchingInstances) {
+        final List<ObjectAdapter> matchingInstances, long startIndex, long rowCount) {
 
         if (!spec.isAbstract()) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
-            final List<ObjectAdapter> instances = mapper.getInstances(connector, spec);
+            final List<ObjectAdapter> instances = mapper.getInstances(connector, spec, startIndex, rowCount);
             matchingInstances.addAll(instances);
         }
 
         if (spec.hasSubclasses()) {
             final List<ObjectSpecification> subclasses = spec.subclasses();
             for (final ObjectSpecification subclassSpec : subclasses) {
-                addSpecInstances(subclassSpec, connector, matchingInstances);
+                addSpecInstances(subclassSpec, connector, matchingInstances, startIndex, rowCount);
             }
         }
 

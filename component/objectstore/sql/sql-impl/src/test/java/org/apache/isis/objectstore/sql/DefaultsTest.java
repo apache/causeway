@@ -46,4 +46,16 @@ public class DefaultsTest {
         Defaults.initialise(prefix, config);
         Assert.assertThat(Defaults.getTablePrefix(), is(""));
     }
+    
+    @Test 
+    public void checkLimitStatement(){
+        final String prefix = "isis.persistor.sql";
+        final IsisConfigurationDefault config = new IsisConfigurationDefault();
+        Defaults.initialise(prefix, config);
+        
+        final long startIndex=0;
+        final long rowCount=0;
+        
+        Assert.assertThat(Defaults.getLimitsClause(startIndex, rowCount), is("LIMIT 0, 0"));
+    }
 }

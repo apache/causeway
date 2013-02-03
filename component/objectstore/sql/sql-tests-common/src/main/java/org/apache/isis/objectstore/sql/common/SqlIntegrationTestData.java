@@ -228,6 +228,9 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         testTimeStamp();
         testDateTimezoneIssue();
         testDateTime();
+        
+        // Test LIMIT statement
+        testLimitCount();
 
         // Must be here so that the Isis framework is initialised for the next test package.
         setFixtureInitializationState(State.INITIALIZE);
@@ -584,6 +587,12 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         }
 
         factory.update(sqlDataClass);
+    }
+    
+    private void testLimitCount() {
+        //
+        final List<SimpleClass> subset = factory.someSimpleClasses(0, 2);
+        assertEquals(2, subset.size());
     }
 
     private void testFindByMatchString() {

@@ -357,4 +357,14 @@ public class Defaults {
     }
     // }}
 
+    /**
+     * Based on the database engine, return a LIMIT start, count clause. 
+     * 
+     * @param startIndex
+     * @param rowCount
+     */
+    public static String getLimitsClause(long startIndex, long rowCount) {
+        return String.format("LIMIT %d, %d", startIndex, rowCount);
+    }
+
 }
