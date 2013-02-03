@@ -32,6 +32,7 @@ import java.util.Map;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.applib.query.QueryFindAllPaged;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -77,6 +78,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObje
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindPaged;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -390,6 +392,10 @@ public class PersistenceSession implements
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {
             return new PersistenceQueryFindAllInstances(noSpec);
+        }
+        if (query instanceof QueryFindAllPaged ) {
+            QueryFindAllPaged<?> pagedQuery = (QueryFindAllPaged<?>) query;
+            return new PersistenceQueryFindPaged(noSpec, pagedQuery.getStart(), pagedQuery.getCount());
         }
         if (query instanceof QueryFindByTitle) {
             final QueryFindByTitle<?> queryByTitle = (QueryFindByTitle<?>) query;
