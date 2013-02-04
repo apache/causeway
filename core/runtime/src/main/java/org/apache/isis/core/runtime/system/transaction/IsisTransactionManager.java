@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.EventCanonicalizer;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -444,6 +445,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     public void setSession(final IsisSession session) {
         this.session = session;
+    }
+
+
+    /**
+     * Called back by {@link IsisTransaction}.
+     */
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
     }
 
 

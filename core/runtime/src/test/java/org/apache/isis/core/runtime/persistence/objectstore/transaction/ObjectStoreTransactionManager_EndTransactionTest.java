@@ -27,6 +27,7 @@ import java.util.Collections;
 
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -47,7 +48,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
 
     
     @Mock
-    private IsisSession mockSession;
+    private AuthenticationSession mockAuthenticationSession;
     @Mock
     private PersistenceSession mockPersistenceSession;
     @Mock
@@ -62,7 +63,17 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
+        context.checking(new Expectations(){{
+            allowing(mockAuthenticationSession).getUserName();
+            will(returnValue("sven"));
+        }});
+
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, mockAuditingService, mockPublishingService) {
+            @Override
+            public AuthenticationSession getAuthenticationSession() {
+                return mockAuthenticationSession;
+            }
+        };
     }
 
     @Test

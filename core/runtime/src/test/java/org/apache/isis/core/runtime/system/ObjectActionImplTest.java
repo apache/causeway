@@ -21,12 +21,6 @@ package org.apache.isis.core.runtime.system;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -43,6 +37,10 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
 import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.jmock.Expectations;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class ObjectActionImplTest {
 
@@ -68,30 +66,8 @@ public class ObjectActionImplTest {
     @Mock
     private CollectionTypeRegistry mockCollectionTypeRegistry;
 
-//    protected TestProxySystem system;
-//
-//    private TestProxyConfiguration mockConfiguration;
-//    private TestProxyReflector mockReflector;
-//    private AuthenticationSession mockAuthSession;
-//    private TestProxyPersistenceSessionFactory mockPersistenceSessionFactory;
-//    private TestProxyPersistenceSession mockPersistenceSession;
-//    private TestUserProfileStore mockUserProfileStore;
-
     @Before
     public void setUp() throws Exception {
-//        Logger.getRootLogger().setLevel(Level.OFF);
-//        
-//        system = new TestProxySystem();
-//        
-//        mockConfiguration = new TestProxyConfiguration();
-//        mockReflector = new TestProxyReflector();
-//        mockAuthSession = new TestProxySession();
-//        mockPersistenceSessionFactory = new TestProxyPersistenceSessionFactory();
-//        mockPersistenceSession = new TestProxyPersistenceSession(mockPersistenceSessionFactory);
-//        mockPersistenceSessionFactory.setPersistenceSessionToCreate(mockPersistenceSession);
-//        mockUserProfileStore = new TestUserProfileStore();
-//        
-//        system.openSession(mockConfiguration, mockReflector, mockAuthSession, null, null, null, mockUserProfileStore, null, mockPersistenceSessionFactory, null);
 
         context.checking(new Expectations() {
             {
@@ -103,41 +79,6 @@ public class ObjectActionImplTest {
         action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry), mockServicesProvider);
     }
 
-    @Ignore // DKH
-    @Test
-    public void testExecutePassedOnToPeer() {
-//        final TestProxyAdapter target = new TestProxyAdapter();
-//        target.setupSpecification(new TestSpecification());
-//        final ObjectAdapter[] parameters = new ObjectAdapter[2];
-//
-//        final TestProxyAdapter result = new TestProxyAdapter();
-//        final ActionInvocationFacet facet = new ActionInvocationFacetAbstract(mockFacetedMethod) {
-//            @Override
-//            public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
-//                return result;
-//            }
-//
-//            @Override
-//            public ObjectSpecification getReturnType() {
-//                return null;
-//            }
-//
-//            @Override
-//            public ObjectSpecification getOnType() {
-//                return new TestSpecification();
-//            }
-//        };
-//
-//        context.checking(new Expectations() {
-//            {
-//                exactly(2).of(mockFacetedMethod).getFacet(ActionInvocationFacet.class);
-//                will(returnValue(facet));
-//            }
-//        });
-//
-//        final ObjectAdapter returnObject = action.execute(target, parameters);
-//        assertEquals(returnObject, result);
-    }
 
     @Test
     public void testNameDefaultsToActionsMethodName() {

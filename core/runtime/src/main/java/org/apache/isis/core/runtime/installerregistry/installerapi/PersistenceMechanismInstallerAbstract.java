@@ -97,9 +97,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT + "persistenceSession";
     private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
 
-
-
-    
     private SystemDependencyInjector installerLookup;
 
     public PersistenceMechanismInstallerAbstract(final String name) {

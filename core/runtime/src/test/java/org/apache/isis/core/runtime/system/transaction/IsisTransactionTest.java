@@ -23,6 +23,7 @@ import java.util.Collections;
 
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
@@ -66,6 +67,8 @@ public class IsisTransactionTest {
 
     @Mock
     private IsisTransactionManager mockTransactionManager;
+    @Mock
+    private AuthenticationSession mockAuthenticationSession;
     @Mock
     private MessageBroker mockMessageBroker;
     @Mock
@@ -159,6 +162,16 @@ public class IsisTransactionTest {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         context.ignoring(mockAuditingService);
+        
+        context.checking(new Expectations(){{
+            allowing(mockTransactionManager).getAuthenticationSession();
+            will(returnValue(mockAuthenticationSession));
+        }});
+
+        context.checking(new Expectations(){{
+            allowing(mockAuthenticationSession).getUserName();
+            will(returnValue("sven"));
+        }});
         
         transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore, mockAuditingService, mockPublishingService);
         

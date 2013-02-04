@@ -35,6 +35,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -90,6 +91,9 @@ public class PersistenceSessionObjectStoreTest {
     @Mock
     private PersistenceSessionFactory mockPersistenceSessionFactory;
     
+    @Mock
+    private AuthenticationSession mockAuthenticationSession;
+
     @Mock
     private ObjectStoreSpi mockObjectStore;
     @Mock
@@ -173,7 +177,17 @@ public class PersistenceSessionObjectStoreTest {
             
         };
         
-        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
+        context.checking(new Expectations(){{
+            allowing(mockAuthenticationSession).getUserName();
+            will(returnValue("sven"));
+        }});
+
+        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore, mockAuditingService, mockPublishingService) {
+            @Override
+            public AuthenticationSession getAuthenticationSession() {
+                return mockAuthenticationSession;
+            }
+        };
         persistenceSession.setTransactionManager(transactionManager);
 
         servicesInjector.setServices(Collections.emptyList());

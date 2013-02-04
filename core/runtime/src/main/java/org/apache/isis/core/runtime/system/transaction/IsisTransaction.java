@@ -402,7 +402,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
         
         // else
-        final String currentUser = getAuthenticationSession().getUserName();
+        final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
         final long currentTimestampEpoch = currentTimestampEpoch();
         for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
             auditChangedProperty(currentUser, currentTimestampEpoch, auditEntry);
@@ -415,7 +415,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         // else
-        final String currentUser = getAuthenticationSession().getUserName();
+        final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
         final long currentTimestampEpoch = currentTimestampEpoch();
         
         for (ObjectAdapter changedAdapter : changedAdapters) {
