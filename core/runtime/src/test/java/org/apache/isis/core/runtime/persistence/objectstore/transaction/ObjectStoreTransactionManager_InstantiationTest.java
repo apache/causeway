@@ -19,42 +19,31 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class ObjectStoreTransactionManager_InstantiationTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    
-    @Mock
-    private IsisSession mockSession;
     @Mock
     private PersistenceSession mockPersistenceSession;
     @Mock
     private TransactionalResource mockObjectStore;
 
-    @Mock
-    private AuditingService mockAuditingService;
-    @Mock
-    private PublishingServiceWithCanonicalizers mockPublishingService;
-
+    @SuppressWarnings("unused")
     private IsisTransactionManager transactionManager;
 
     @Test
     public void canInstantiate() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault());
     }
 
 }

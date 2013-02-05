@@ -61,6 +61,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.IsisObjectStoreLogge
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -72,7 +73,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.log4j.Logger;
 
@@ -161,7 +161,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final PersistenceSession persistenceSession = 
                 new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
         
-        final IsisTransactionManager transactionManager = createTransactionManager(persistenceSessionFactory, persistenceSession, objectStore);
+        final IsisTransactionManager transactionManager = createTransactionManager(servicesInjector, persistenceSession, objectStore);
         
         ensureThatArg(persistenceSession, is(not(nullValue())));
         ensureThatArg(transactionManager, is(not(nullValue())));
@@ -204,64 +204,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * 
      * <p>
      * By default returns a {@link IsisTransactionManager}.
-     * @param persistenceSessionFactory TODO
      */
-    protected IsisTransactionManager createTransactionManager(PersistenceSessionFactory persistenceSessionFactory, final EnlistedObjectDirtying enlistedObjectDirtying, final TransactionalResource transactionalResource) {
-        List<Object> services = persistenceSessionFactory.getServices();
-
-        final AuditingService auditingServiceIfAny = getServiceIfAny(services, AuditingService.class);
-        final PublishingServiceWithCanonicalizers publishingServiceIfAny = getPublishingServiceIfAny(services);
-        return new IsisTransactionManager(enlistedObjectDirtying, transactionalResource, auditingServiceIfAny, publishingServiceIfAny);
-    }
-
-    protected PublishingServiceWithCanonicalizers getPublishingServiceIfAny(List<Object> services) {
-        final PublishingService publishingService = getServiceIfAny(services, PublishingService.class);
-        if(publishingService == null) {
-            return null;
-        }
-        
-        PublishedObject.EventCanonicalizer objectEventCanonicalizer = getServiceIfAny(services, PublishedObject.EventCanonicalizer.class);
-        if(objectEventCanonicalizer == null) {
-            objectEventCanonicalizer = newDefaultObjectEventCanonicalizer();
-        }
-        
-        PublishedAction.EventCanonicalizer actionEventCanonicalizer = getServiceIfAny(services, PublishedAction.EventCanonicalizer.class);
-        if(actionEventCanonicalizer == null) {
-            actionEventCanonicalizer = newDefaultActionEventCanonicalizer();
-        }
-        
-        return new PublishingServiceWithCanonicalizers(publishingService, objectEventCanonicalizer, actionEventCanonicalizer);
-    }
-
-    protected EventCanonicalizer newDefaultObjectEventCanonicalizer() {
-        return new PublishedObject.EventCanonicalizer() {
-            @Override
-            public CanonicalEvent canonicalizeObject(final Object changedObject) {
-                return new CanonicalEvent.Default(oidStrFor(changedObject));
-            }
-        };
-    }
-
-    protected org.apache.isis.applib.annotation.PublishedAction.EventCanonicalizer newDefaultActionEventCanonicalizer() {
-        return new PublishedAction.EventCanonicalizer() {
-
-            @Override
-            public CanonicalEvent canonicalizeAction(Object invokedObject, String actionMethodName, List<Object> args, Object actionResult) {
-                return new CanonicalEvent.Default(oidStrFor(invokedObject + "#" + actionMethodName + appendResultIfAny(actionResult)) );
-            }
-
-            private String appendResultIfAny(Object actionResult) {
-                if(actionResult == null) {
-                    return "";
-                }
-                return "=" + oidStrFor(actionResult);
-            }
-        };
-    }
-
-    private static String oidStrFor(final Object changedObject) {
-        final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(changedObject);
-        return adapter.getOid().enString(IsisContext.getOidMarshaller());
+    protected IsisTransactionManager createTransactionManager(ServicesInjectorSpi servicesInjectorSpi, final EnlistedObjectDirtying enlistedObjectDirtying, final TransactionalResource transactionalResource) {
+        return new IsisTransactionManager(enlistedObjectDirtying, transactionalResource, servicesInjectorSpi);
     }
 
 
@@ -366,6 +311,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     }
 
 
+
     // ///////////////////////////////////////////
     // Non overridable.
     // ///////////////////////////////////////////
@@ -391,42 +337,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
         return properties;
     }
-
-
-    // ///////////////////////////////////////////
-    // caching services by type
-    // ///////////////////////////////////////////
-
-    /**
-     * If no key, not yet searched for type; otherwise the {@link Optional} indicates
-     * whether a service was found.
-     */
-    private final Map<Class<?>, Optional<Object>> servicesByType = Maps.newHashMap();
-
-    @SuppressWarnings("unchecked")
-    private <T> T getServiceIfAny(List<Object> services, Class<T> serviceClass) {
-        locateAndCache(services, serviceClass);
-        Optional<T> optionalService = (Optional<T>) servicesByType.get(serviceClass);
-        return optionalService.orNull();
-    }
-
-    private void locateAndCache(List<Object> services, Class<?> serviceClass) {
-        if(servicesByType.containsKey(serviceClass)) {
-           return; 
-        }
-
-        final Optional<Object> optionalService = Iterables.tryFind(services, ofType(serviceClass));
-        servicesByType.put(serviceClass, optionalService);
-    }
-
-    private static final Predicate<Object> ofType(final Class<?> cls) {
-        return new Predicate<Object>() {
-            @Override
-            public boolean apply(Object input) {
-                return cls.isAssignableFrom(input.getClass());
-            }
-        };
-    };
 
 
 

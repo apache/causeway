@@ -36,5 +36,5 @@ public interface ServicesInjector extends Injectable {
      */
     void injectServicesInto(List<Object> objects);
 
-    Object lookupService(Class<?> serviceClass);
+    <T> T lookupService(Class<T> serviceClass);
 }

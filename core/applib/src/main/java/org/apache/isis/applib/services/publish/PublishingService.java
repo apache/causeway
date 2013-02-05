@@ -32,9 +32,8 @@ public interface PublishingService {
         @Hidden
         @Override
         public void publish(UUID guid, String currentUser, long currentTimestampEpoch, CanonicalEvent canonicalEvent) {
-            System.err.println("PUBLISHED OBJECT: " + guid + ":" + currentTimestampEpoch + ":" + currentTimestampEpoch + ":" + canonicalEvent.asString());
+            System.err.println("PUBLISHED: " + guid + ":" + currentUser + ":" + currentTimestampEpoch + ":" + canonicalEvent.asString());
         }
-        
     }
 }
 

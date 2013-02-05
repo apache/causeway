@@ -86,7 +86,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public Object lookupService(Class<?> serviceClass) {
+            public <T> T lookupService(Class<T> serviceClass) {
                 return null;
             }
 

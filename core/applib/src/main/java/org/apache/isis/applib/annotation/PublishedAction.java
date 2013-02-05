@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.publish.CanonicalEvent;
 import org.apache.isis.applib.services.publish.PublishingService;
 
@@ -41,7 +42,7 @@ import org.apache.isis.applib.services.publish.PublishingService;
 public @interface PublishedAction {
     
     public interface EventCanonicalizer {
-        public CanonicalEvent canonicalizeAction(Object invoked, String actionMethodName, List<Object> args, Object actionResult);
+        public CanonicalEvent canonicalizeAction(Object invoked, Identifier actionIdentifier, List<Object> args, Object actionResult);
     }
     Class<? extends EventCanonicalizer> canonicalizeWith()  default EventCanonicalizer.class;
 }

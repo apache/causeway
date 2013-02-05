@@ -25,12 +25,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -46,22 +44,16 @@ public class ObjectStoreTransactionManager_StartTransactionTest {
 
     
     @Mock
-    private IsisSession mockSession;
-    @Mock
     private PersistenceSession mockPersistenceSession;
     @Mock
     private TransactionalResource mockObjectStore;
 
-    @Mock
-    private AuditingService mockAuditingService;
-    @Mock
-    private PublishingServiceWithCanonicalizers mockPublishingService;
 
     private IsisTransactionManager transactionManager;
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, mockAuditingService, mockPublishingService);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault());
     }
 
     @Before

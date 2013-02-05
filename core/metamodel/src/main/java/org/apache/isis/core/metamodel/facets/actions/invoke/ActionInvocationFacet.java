@@ -19,9 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.actions.invoke;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * Represents the mechanism by which the action should be invoked.
@@ -38,5 +44,39 @@ public interface ActionInvocationFacet extends Facet {
     public ObjectSpecification getReturnType();
 
     public ObjectSpecification getOnType();
+
+    public static class CurrentInvocation {
+        private final ObjectAdapter target;
+        private final IdentifiedHolder action;
+        private final List<ObjectAdapter> parameters;
+        private final ObjectAdapter result;
+
+        public CurrentInvocation(ObjectAdapter target, IdentifiedHolder action, ObjectAdapter[] parameters, ObjectAdapter result) {
+            this(target, action, Arrays.asList(parameters), result);
+        }
+
+        public CurrentInvocation(ObjectAdapter target, IdentifiedHolder action, List<ObjectAdapter> parameters, ObjectAdapter result) {
+            this.target = target;
+            this.action = action;
+            this.parameters = parameters;
+            this.result = result;
+        }
+        
+        public ObjectAdapter getTarget() {
+            return target;
+        }
+        public IdentifiedHolder getAction() {
+            return action;
+        }
+        public List<ObjectAdapter> getParameters() {
+            return parameters;
+        }
+        
+        public ObjectAdapter getResult() {
+            return result;
+        }
+    }
+    
+    public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<CurrentInvocation>();
 
 }

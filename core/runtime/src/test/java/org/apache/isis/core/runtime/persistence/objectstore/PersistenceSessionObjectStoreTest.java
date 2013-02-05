@@ -57,6 +57,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
@@ -66,7 +67,6 @@ import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -177,20 +177,21 @@ public class PersistenceSessionObjectStoreTest {
             
         };
         
+        servicesInjector.setServices(Collections.emptyList());
+        
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();
             will(returnValue("sven"));
         }});
 
-        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore, mockAuditingService, mockPublishingService) {
+        
+        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore, servicesInjector) {
             @Override
             public AuthenticationSession getAuthenticationSession() {
                 return mockAuthenticationSession;
             }
         };
         persistenceSession.setTransactionManager(transactionManager);
-
-        servicesInjector.setServices(Collections.emptyList());
 
         persistentAdapter = PojoAdapterBuilder.create().withOid("CUS|1").withPojo(new Customer()).with(Persistence.PERSISTENT).with(mockVersion).with(isisMetaModel.getSpecificationLoader()).build();
         transientAdapter = PojoAdapterBuilder.create().withOid("CUS|2").withPojo(new Customer()).with(Persistence.TRANSIENT).with(isisMetaModel.getSpecificationLoader()).build();

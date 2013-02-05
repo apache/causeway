@@ -16,7 +16,11 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+
+import com.google.common.collect.Lists;
 
 public final class ObjectAdapterUtils {
 
@@ -39,6 +43,15 @@ public final class ObjectAdapterUtils {
             return null;
         }
         return (String) obj;
+    }
+
+
+    public static List<Object> unwrapObjects(final List<ObjectAdapter> adapters) {
+        List<Object> objects = Lists.newArrayList();
+        for (ObjectAdapter adapter : adapters) {
+            objects.add(unwrapObject(adapter));
+        }
+        return objects;
     }
 
 }

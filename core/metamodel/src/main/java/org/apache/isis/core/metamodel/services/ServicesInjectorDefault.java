@@ -28,10 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-
-import org.apache.log4j.Logger;
+import java.util.Map;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -39,6 +36,13 @@ import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.log4j.Logger;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Must be a thread-safe.
@@ -47,7 +51,14 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static final Logger LOG = Logger.getLogger(ServicesInjectorDefault.class);
 
+    /**
+     * If no key, not yet searched for type; otherwise the {@link Optional} indicates
+     * whether a service was found.
+     */
+    private final Map<Class<?>, Optional<Object>> servicesByType = Maps.newHashMap();
+
     private final List<Object> services = Lists.newArrayList();
+    
     private DomainObjectContainer container;
 
 
@@ -208,14 +219,31 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     }
 
     @Override
-    public Object lookupService(Class<?> serviceClass) {
-        for(final Object service: this.services) {
-            if(serviceClass.isAssignableFrom(service.getClass())) {
-                return service;
-            }
-        }
-        return null;
+    public <T> T lookupService(Class<T> serviceClass) {
+        locateAndCache(services, serviceClass);
+        @SuppressWarnings("unchecked")
+        Optional<T> optionalService = (Optional<T>) servicesByType.get(serviceClass);
+        return optionalService.orNull();
     }
+
+    private void locateAndCache(List<Object> services, Class<?> serviceClass) {
+        if(servicesByType.containsKey(serviceClass)) {
+           return; 
+        }
+
+        final Optional<Object> optionalService = Iterables.tryFind(services, ofType(serviceClass));
+        servicesByType.put(serviceClass, optionalService);
+    }
+
+    private static final Predicate<Object> ofType(final Class<?> cls) {
+        return new Predicate<Object>() {
+            @Override
+            public boolean apply(Object input) {
+                return cls.isAssignableFrom(input.getClass());
+            }
+        };
+    };
+
 
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.core.progmodel.facets.actions.invoke;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,10 +32,13 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
@@ -100,6 +104,13 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
             final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
             resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+            
+            PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+            ActionInvocationFacet.currentInvocation.set(
+                    publishedActionFacet != null
+                        ? new CurrentInvocation(inObject, getIdentified(), parameters, resultAdapter)
+                        :null);
+            
             return resultAdapter;
 
         } catch (final IllegalArgumentException e) {

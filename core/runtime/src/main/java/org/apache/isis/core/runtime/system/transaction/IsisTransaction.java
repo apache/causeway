@@ -32,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.isis.applib.annotation.PublishedAction.EventCanonicalizer;
+import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.PublishingService;
@@ -45,6 +47,9 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet.CurrentInvocation;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -52,6 +57,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -418,15 +424,36 @@ public class IsisTransaction implements TransactionScopedComponent {
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
         final long currentTimestampEpoch = currentTimestampEpoch();
         
-        for (ObjectAdapter changedAdapter : changedAdapters) {
-            PublishedObjectFacet publishedObjectFacet = changedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+        publishedChangedObjects(changedAdapters, currentUser, currentTimestampEpoch);
+        publishActionIfRequired(currentUser, currentTimestampEpoch);
+    }
+
+    protected void publishedChangedObjects(final Set<ObjectAdapter> changedAdapters, final String currentUser, final long currentTimestampEpoch) {
+        for (final ObjectAdapter changedAdapter : changedAdapters) {
+            final PublishedObjectFacet publishedObjectFacet = changedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
             if(publishedObjectFacet == null) {
                 continue;
             }
-            publishingService.publishObject(publishedObjectFacet.value(), getGuid(), currentUser, currentTimestampEpoch, changedAdapter);
+            final PublishedObject.EventCanonicalizer canonicalizer = publishedObjectFacet.value();
+            publishingService.publishObject(canonicalizer, getGuid(), currentUser, currentTimestampEpoch, changedAdapter);
         }
-        
-        // TODO: use a ThreadLocal on ActionInvocationFacet to determine whether there is also a PublishedActionFacet to handle...
+    }
+
+    protected void publishActionIfRequired(final String currentUser, final long currentTimestampEpoch) {
+        try {
+            final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
+            if(currentInvocation == null) {
+                return;
+            } 
+            final PublishedActionFacet publishedActionFacet = currentInvocation.getAction().getFacet(PublishedActionFacet.class);
+            if(publishedActionFacet == null) {
+                return;
+            } 
+            final EventCanonicalizer canonicalizer = publishedActionFacet.value();
+            publishingService.publishAction(canonicalizer, guid, currentUser, currentTimestampEpoch, currentInvocation);
+        } finally {
+            ActionInvocationFacet.currentInvocation.set(null);
+        }
     }
 
     private static long currentTimestampEpoch() {
