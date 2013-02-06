@@ -17,23 +17,21 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 
 public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
-    protected ResourceContext resourceContext;
+    protected RendererContext resourceContext;
     protected ObjectAdapter objectAdapter;
 
     @Override
-    public final DomainObjectLinkTo usingResourceContext(final ResourceContext resourceContext) {
+    public final DomainObjectLinkTo usingUrlBase(final RendererContext resourceContext) {
         this.resourceContext = resourceContext;
         return this;
     }

@@ -23,8 +23,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRendererAbstract;
@@ -41,12 +41,12 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ScalarValueReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ScalarValueReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 

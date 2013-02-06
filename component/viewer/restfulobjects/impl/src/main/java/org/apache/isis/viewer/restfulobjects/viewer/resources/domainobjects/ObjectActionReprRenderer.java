@@ -33,6 +33,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFactory;
@@ -50,12 +51,12 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ObjectActionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ObjectActionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORMS);
     }
 
@@ -112,7 +113,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             return super.linkToForMutatorInvoke();
         }
         final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
-        return linkTo.usingResourceContext(getResourceContext()).with(contributingServiceAdapter());
+        return linkTo.usingUrlBase(getResourceContext()).with(contributingServiceAdapter());
     }
 
     private ObjectAdapter contributingServiceAdapter() {

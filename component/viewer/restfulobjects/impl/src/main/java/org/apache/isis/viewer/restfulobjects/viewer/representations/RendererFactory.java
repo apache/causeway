@@ -20,12 +20,13 @@ package org.apache.isis.viewer.restfulobjects.viewer.representations;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 
 public interface RendererFactory {
 
     RepresentationType getRepresentationType();
 
-    ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation);
+    ReprRenderer<?, ?> newRenderer(RendererContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation);
 
 }

@@ -22,12 +22,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 
 public interface ObjectAdapterLinkTo {
 
-    ObjectAdapterLinkTo usingResourceContext(ResourceContext resourceContext);
+    ObjectAdapterLinkTo usingUrlBase(RendererContext resourceContext);
 
     ObjectAdapterLinkTo with(ObjectAdapter objectAdapter);
 

@@ -19,7 +19,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources.user;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRendererAbstract;
@@ -34,12 +34,12 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new UserReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private UserReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private UserReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 

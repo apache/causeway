@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
@@ -37,19 +37,19 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new PropertyDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         final String typeFullName = objectSpecification.getFullIdentifier();
         final String propertyId = property.getId();
         final String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 
-    public PropertyDescriptionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public PropertyDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 

@@ -23,20 +23,20 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 
 public final class OidUtils {
 
     private OidUtils() {
     }
 
-    public static ObjectAdapter getObjectAdapter(final ResourceContext resourceContext, final String oidEncodedStr) {
+    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
         return resourceContext.getAdapterManager().adapterFor(rootOid);
     }
 
-    public static String getOidStr(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
+    public static String getOidStr(final RendererContext resourceContext, final ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
         if(!(oid instanceof RootOid)) {
             throw new IllegalArgumentException("objectAdapter must be a root adapter");

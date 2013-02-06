@@ -55,6 +55,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFactory;
@@ -70,12 +71,12 @@ public final class DomainResourceHelper {
 
     private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-    private final ResourceContext resourceContext;
+    private final RendererContext resourceContext;
     private ObjectAdapterLinkTo adapterLinkTo;
 
     private final ObjectAdapter objectAdapter;
 
-    public DomainResourceHelper(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
+    public DomainResourceHelper(final RendererContext resourceContext, final ObjectAdapter objectAdapter) {
         this.resourceContext = resourceContext;
         this.objectAdapter = objectAdapter;
         using(new DomainObjectLinkTo());
@@ -83,7 +84,7 @@ public final class DomainResourceHelper {
 
     public DomainResourceHelper using(final ObjectAdapterLinkTo linkTo) {
         adapterLinkTo = linkTo;
-        adapterLinkTo.usingResourceContext(resourceContext).with(objectAdapter);
+        adapterLinkTo.usingUrlBase(resourceContext).with(objectAdapter);
         return this;
     }
 
@@ -91,7 +92,7 @@ public final class DomainResourceHelper {
     // multiple properties (persist or multi-property update)
     // //////////////////////////////////////////////////////////////
 
-    static boolean copyOverProperties(final ResourceContext resourceContext, final ObjectAdapter objectAdapter, final JsonRepresentation propertiesList) {
+    static boolean copyOverProperties(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final JsonRepresentation propertiesList) {
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
         final List<ObjectAssociation> properties = objectSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
         boolean allOk = true;
@@ -321,7 +322,7 @@ public final class DomainResourceHelper {
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
-    private static ObjectAdapter objectAdapterFor(final ResourceContext resourceContext, final ObjectSpecification objectSpec, final JsonRepresentation representation) {
+    private static ObjectAdapter objectAdapterFor(final RendererContext resourceContext, final ObjectSpecification objectSpec, final JsonRepresentation representation) {
 
         if (representation == null) {
             return null;
@@ -463,7 +464,7 @@ public final class DomainResourceHelper {
         return parseArguments(resourceContext, action, arguments);
     }
 
-    public static List<ObjectAdapter> parseArguments(final ResourceContext resourceContext, final ObjectAction action, final JsonRepresentation arguments) {
+    public static List<ObjectAdapter> parseArguments(final RendererContext resourceContext, final ObjectAction action, final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
         final List<ObjectAdapter> argAdapters = Lists.newArrayList();

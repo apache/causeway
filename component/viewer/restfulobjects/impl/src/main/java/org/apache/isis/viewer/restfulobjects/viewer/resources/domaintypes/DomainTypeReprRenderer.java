@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
@@ -46,12 +47,12 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new DomainTypeReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
+    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
         final String typeFullName = objectSpec.getFullIdentifier();
         final String url = "domainTypes/" + typeFullName;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_TYPE, url);
@@ -59,7 +60,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
     private ObjectSpecification objectSpecification;
 
-    public DomainTypeReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public DomainTypeReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
@@ -157,7 +158,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         return link;
     }
 
-    public static JsonRepresentation argumentsTo(final ResourceContext resourceContext, final String paramName, final ObjectSpecification objectSpec) {
+    public static JsonRepresentation argumentsTo(final RendererContext resourceContext, final String paramName, final ObjectSpecification objectSpec) {
         final JsonRepresentation arguments = JsonRepresentation.newMap();
         final JsonRepresentation link = JsonRepresentation.newMap();
         arguments.mapPut(paramName, link);

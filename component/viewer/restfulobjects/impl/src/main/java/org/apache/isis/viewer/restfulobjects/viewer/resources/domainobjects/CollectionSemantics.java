@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 
 public enum CollectionSemantics {
 
@@ -29,7 +28,6 @@ public enum CollectionSemantics {
 
     private CollectionSemantics(final String addToKey) {
         this.addToKey = addToKey;
-
     }
 
     public String getAddToKey() {
@@ -40,7 +38,7 @@ public enum CollectionSemantics {
         return "removeFrom";
     }
 
-    public static CollectionSemantics determine(final ResourceContext resourceContext, final OneToManyAssociation collection) {
+    public static CollectionSemantics determine(final OneToManyAssociation collection) {
         return collection.getCollectionSemantics().isSet() ? CollectionSemantics.SET : CollectionSemantics.LIST;
     }
 

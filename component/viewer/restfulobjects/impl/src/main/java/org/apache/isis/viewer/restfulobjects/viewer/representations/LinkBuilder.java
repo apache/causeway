@@ -22,19 +22,19 @@ import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 
 public final class LinkBuilder {
 
-    public static LinkBuilder newBuilder(final ResourceContext resourceContext, final Rel rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final RendererContext resourceContext, final Rel rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
         return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
     }
 
-    public static LinkBuilder newBuilder(final ResourceContext resourceContext, final Rel rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final RendererContext resourceContext, final Rel rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
         return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
-    private final ResourceContext resourceContext;
+    private final RendererContext resourceContext;
     private final JsonRepresentation representation = JsonRepresentation.newMap();
 
     private final Rel rel;
@@ -47,7 +47,7 @@ public final class LinkBuilder {
     private JsonRepresentation value;
     private String id;
 
-    protected LinkBuilder(final ResourceContext resourceContext, final Rel rel, final String href, final MediaType mediaType) {
+    protected LinkBuilder(final RendererContext resourceContext, final Rel rel, final String href, final MediaType mediaType) {
         this.resourceContext = resourceContext;
         this.rel = rel;
         this.href = href;

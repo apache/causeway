@@ -48,7 +48,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-public class ResourceContext {
+public class ResourceContext implements RendererContext {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -57,6 +57,8 @@ public class ResourceContext {
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
     private final Localization localization;
+
+    @SuppressWarnings("unused")
     private final IsisConfiguration configuration;
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
@@ -80,8 +82,15 @@ public class ResourceContext {
     private final Where where;
     private JsonRepresentation readQueryStringAsMap;
 
-    public ResourceContext(final RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request, final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final SecurityContext securityContext,
-            final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, IsisConfiguration configuration, Where where) {
+    public ResourceContext(
+            final RepresentationType representationType, 
+            final HttpHeaders httpHeaders, final UriInfo uriInfo, 
+            final Request request, 
+            final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, 
+            final SecurityContext securityContext,
+            final Localization localization, 
+            final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, 
+            final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, final IsisConfiguration configuration, final Where where) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;

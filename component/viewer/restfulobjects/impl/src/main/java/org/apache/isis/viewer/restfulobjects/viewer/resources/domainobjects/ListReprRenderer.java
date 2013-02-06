@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFactory;
@@ -39,7 +40,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ListReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
@@ -49,13 +50,13 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
 
-    private ListReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private ListReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
 
     public ListReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
-        this.linkTo = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
+        this.linkTo = objectAdapterLinkToBuilder.usingUrlBase(resourceContext);
         return this;
     }
 

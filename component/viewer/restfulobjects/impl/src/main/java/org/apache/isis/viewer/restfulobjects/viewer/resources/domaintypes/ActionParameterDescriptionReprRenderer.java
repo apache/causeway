@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
@@ -38,12 +38,12 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ActionParameterDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
+    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
         final String typeFullName = objectSpecification.getFullIdentifier();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
@@ -52,7 +52,7 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.ACTION_PARAMETER_DESCRIPTION, url).withId(deriveId(objectActionParameter));
     }
 
-    public ActionParameterDescriptionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public ActionParameterDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 

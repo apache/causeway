@@ -30,27 +30,28 @@ import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.domaintypes.DomainTypeReprRenderer;
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
-    protected final ResourceContext resourceContext;
+    protected final RendererContext resourceContext;
     private final LinkFollower linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
 
     protected boolean includesSelf;
 
-    public ReprRendererAbstract(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public ReprRendererAbstract(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         this.resourceContext = resourceContext;
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
     }
 
-    public ResourceContext getResourceContext() {
+    public RendererContext getResourceContext() {
         return resourceContext;
     }
 

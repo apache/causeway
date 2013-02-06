@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
@@ -47,12 +48,12 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ObjectCollectionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ObjectCollectionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private ObjectCollectionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation, Where.PARENTED_TABLES);
     }
 
@@ -120,7 +121,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             return;
         }
 
-        final CollectionSemantics semantics = CollectionSemantics.determine(this.resourceContext, objectMember);
+        final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
         addMutatorLink(semantics.getAddToKey());
         addMutatorLink(semantics.getRemoveFromKey());
 
@@ -150,7 +151,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
     @Override
     protected void putExtensionsIsisProprietary() {
-        final CollectionSemantics semantics = CollectionSemantics.determine(resourceContext, objectMember);
+        final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
         getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());
     }
 

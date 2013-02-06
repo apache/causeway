@@ -37,6 +37,7 @@ import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
@@ -57,12 +58,12 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new DomainObjectReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectAdapter elementAdapter) {
+    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectAdapter elementAdapter) {
         final String oidStr = ((RootOid) elementAdapter.getOid()).enString(getOidMarshaller());
         final String url = "objects/" + oidStr;
         final LinkBuilder builder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url).withTitle(elementAdapter.titleString());
@@ -93,7 +94,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private ObjectAdapter objectAdapter;
     private Mode mode = Mode.REGULAR;
 
-    private DomainObjectReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private DomainObjectReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
@@ -103,7 +104,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
      * generating links in {@link #linkTo(ObjectAdapter)}).
      */
     public DomainObjectReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
-        this.linkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
+        this.linkToBuilder = objectAdapterLinkToBuilder.usingUrlBase(resourceContext);
         return this;
     }
 
@@ -290,7 +291,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     //
     // ///////////////////////////////////////////////////////////////////
 
-    public static Object valueOrRef(final ResourceContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
+    public static Object valueOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
         final ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
             return new JsonValueEncoder().asObject(objectAdapter);

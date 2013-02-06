@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRendererAbstract;
@@ -66,7 +67,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
     private final Where where;
 
-    public AbstractObjectMemberReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
+    public AbstractObjectMemberReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
         super(resourceContext, linkFollower, representationType, representation);
         this.where = where;
     }
@@ -90,7 +91,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * {@link #objectAdapter}).
      */
     public R usingLinkTo(final ObjectAdapterLinkTo linkTo) {
-        this.linkTo = linkTo.usingResourceContext(resourceContext).with(objectAdapter);
+        this.linkTo = linkTo.usingUrlBase(resourceContext).with(objectAdapter);
         return cast(this);
     }
 

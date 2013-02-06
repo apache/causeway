@@ -19,10 +19,6 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources.domainobjects;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
-import org.codehaus.jackson.node.NullNode;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,13 +26,16 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
-import org.apache.isis.viewer.restfulobjects.viewer.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.RendererContext;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.domaintypes.PropertyDescriptionReprRenderer;
+import org.codehaus.jackson.node.NullNode;
+
+import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
@@ -47,12 +46,12 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ObjectPropertyReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ObjectPropertyReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    private ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORMS);
     }
 
