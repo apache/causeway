@@ -28,14 +28,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.MediaType;
-
-import org.junit.Test;
 
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
+import org.junit.Test;
+
+import com.google.common.net.MediaType;
 
 public class ParserTest {
 
@@ -114,8 +113,8 @@ public class ParserTest {
     }
 
     @Test
-    public void forMediaTypes() {
-        final Parser<MediaType> parser = Parser.forMediaType();
+    public void forGuavaMediaTypes() {
+        final Parser<MediaType> parser = Parser.forGuavaMediaType();
         final MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
         final String asString = parser.asString(mediaType);
         final MediaType valueOf = parser.valueOf(asString);
@@ -125,9 +124,9 @@ public class ParserTest {
 
     @Test
     public void forListOfMediaTypes() {
-        final Parser<List<MediaType>> parser = Parser.forListOfMediaTypes();
+        final Parser<List<MediaType>> parser = Parser.forListOfGuavaMediaTypes();
         final MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
-        final List<MediaType> v = Arrays.asList(mediaType, MediaType.APPLICATION_JSON_TYPE);
+        final List<MediaType> v = Arrays.asList(mediaType, MediaType.parse("application/json"));
         final String asString = parser.asString(v);
         final List<MediaType> valueOf = parser.valueOf(asString);
 
@@ -161,12 +160,12 @@ public class ParserTest {
     }
 
     @Test
-    public void forMediaType() {
-        final Parser<MediaType> parser = Parser.forMediaType();
+    public void forJaxRsMediaType() {
+        final Parser<javax.ws.rs.core.MediaType> parser = Parser.forJaxRsMediaType();
 
-        for (final MediaType v : new MediaType[] { MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE, MediaType.APPLICATION_XHTML_XML_TYPE, MediaType.valueOf(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT) }) {
+        for (final javax.ws.rs.core.MediaType v : new javax.ws.rs.core.MediaType[] { javax.ws.rs.core.MediaType.APPLICATION_ATOM_XML_TYPE, javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE, javax.ws.rs.core.MediaType.APPLICATION_XHTML_XML_TYPE, javax.ws.rs.core.MediaType.valueOf(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT) }) {
             final String asString = parser.asString(v);
-            final MediaType valueOf = parser.valueOf(asString);
+            final javax.ws.rs.core.MediaType valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
         }
     }

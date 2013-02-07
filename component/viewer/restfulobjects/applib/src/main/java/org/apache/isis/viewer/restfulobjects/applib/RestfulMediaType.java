@@ -18,10 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import javax.ws.rs.core.MediaType;
 
 /**
- * Values per the profile parameter
+ * Media types including the <tt>profile</tt> parameter.
+ * 
+ * <p>
+ * Because these values are used in the <tt>@Produces</tt> annotation on the jax-rs
+ * resources, they must be constants and must be strings. 
  * 
  * @see http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html
  */
@@ -29,8 +32,10 @@ public final class RestfulMediaType {
 
     private RestfulMediaType() {
     }
+    
+    static final String PROFILE_PARAM_PREFIX = "urn:org.restfulobjects:repr-types/";
 
-    private static final String BASE = MediaType.APPLICATION_JSON + ";profile=urn:org.restfulobjects/";
+    private static final String BASE = "application/json" + ";profile=" + PROFILE_PARAM_PREFIX;
 
     public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage";
     public final static String APPLICATION_JSON_USER = BASE + "user";

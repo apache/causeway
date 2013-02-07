@@ -28,10 +28,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
 
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
@@ -84,7 +84,7 @@ public class RepresentationMatchers {
         };
     }
 
-    public static Matcher<LinkRepresentation> isLink(final HttpMethod httpMethod) {
+    public static Matcher<LinkRepresentation> isLink(final RoHttpMethod httpMethod) {
         return new TypeSafeMatcher<LinkRepresentation>() {
 
             @Override
@@ -156,7 +156,7 @@ public class RepresentationMatchers {
 
     public static class LinkMatcherBuilder extends AbstractMatcherBuilder<JsonRepresentation> {
         private HttpStatusCode statusCode;
-        private HttpMethod httpMethod;
+        private RoHttpMethod httpMethod;
         private String rel;
         private String href;
         private Matcher<String> hrefMatcher;
@@ -190,7 +190,7 @@ public class RepresentationMatchers {
             return this;
         }
 
-        public LinkMatcherBuilder httpMethod(final HttpMethod httpMethod) {
+        public LinkMatcherBuilder httpMethod(final RoHttpMethod httpMethod) {
             this.httpMethod = httpMethod;
             return this;
         }

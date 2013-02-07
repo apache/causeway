@@ -20,10 +20,8 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import static org.junit.Assert.assertSame;
 
-import org.junit.Test;
-
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
+import org.junit.Test;
 
 public class RepresentationTypeTest_parser {
 

@@ -28,13 +28,13 @@ import java.util.List;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public abstract class Parser<T> {
     public T valueOf(final List<String> str) {
@@ -131,7 +131,7 @@ public abstract class Parser<T> {
         };
     }
 
-    public static Parser<MediaType> forMediaType() {
+    public static Parser<MediaType> forJaxRsMediaType() {
         return new Parser<MediaType>() {
             @Override
             public MediaType valueOf(final String str) {
@@ -143,6 +143,24 @@ public abstract class Parser<T> {
 
             @Override
             public String asString(final MediaType t) {
+                return t.toString();
+            }
+
+        };
+    }
+
+    public static Parser<com.google.common.net.MediaType> forGuavaMediaType() {
+        return new Parser<com.google.common.net.MediaType>() {
+            @Override
+            public com.google.common.net.MediaType valueOf(final String str) {
+                if (str == null) {
+                    return null;
+                }
+                return com.google.common.net.MediaType.parse(str);
+            }
+
+            @Override
+            public String asString(final com.google.common.net.MediaType t) {
                 return t.toString();
             }
 
@@ -328,7 +346,7 @@ public abstract class Parser<T> {
         };
     }
 
-    public static Parser<List<MediaType>> forListOfMediaTypes() {
+    public static Parser<List<MediaType>> forListOfJaxRsMediaTypes() {
         return new Parser<List<MediaType>>() {
 
             @Override
@@ -351,6 +369,37 @@ public abstract class Parser<T> {
                 final List<String> strings = Lists.transform(listOfMediaTypes, new Function<MediaType, String>() {
                     @Override
                     public String apply(final MediaType input) {
+                        return input.toString();
+                    }
+                });
+                return Joiner.on(",").join(strings);
+            }
+        };
+    }
+
+    public static Parser<List<com.google.common.net.MediaType>> forListOfGuavaMediaTypes() {
+        return new Parser<List<com.google.common.net.MediaType>>() {
+
+            @Override
+            public List<com.google.common.net.MediaType> valueOf(final String str) {
+                if (str == null) {
+                    return Collections.emptyList();
+                }
+                final List<String> strings = Lists.newArrayList(Splitter.on(",").split(str));
+                return Lists.transform(strings, new Function<String, com.google.common.net.MediaType>() {
+
+                    @Override
+                    public com.google.common.net.MediaType apply(final String input) {
+                        return com.google.common.net.MediaType.parse(input);
+                    }
+                });
+            }
+
+            @Override
+            public String asString(final List<com.google.common.net.MediaType> listOfMediaTypes) {
+                final List<String> strings = Lists.transform(listOfMediaTypes, new Function<com.google.common.net.MediaType, String>() {
+                    @Override
+                    public String apply(final com.google.common.net.MediaType input) {
                         return input.toString();
                     }
                 });

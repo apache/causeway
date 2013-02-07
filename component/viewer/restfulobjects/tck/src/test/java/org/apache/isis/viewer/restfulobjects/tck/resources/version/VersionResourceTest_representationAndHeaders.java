@@ -46,11 +46,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
@@ -90,7 +91,7 @@ public class VersionResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(HttpMethod.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(RoHttpMethod.GET));
 
         assertThat(repr.getString("specVersion"), is("0.52"));
         assertThat(repr.getString("implVersion"), is(not(nullValue())));
@@ -126,7 +127,7 @@ public class VersionResourceTest_representationAndHeaders {
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/version"));
-        assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));
+        assertThat(contentType, is(MediaTypes.guavaToJaxRs(RepresentationType.VERSION.getMediaType())));
 
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);

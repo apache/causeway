@@ -24,8 +24,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-
 public class RepresentationTypeTest_getName_lookup {
 
     @Test

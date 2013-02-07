@@ -30,12 +30,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.Header;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
@@ -59,7 +59,7 @@ public class AnyResourceTest_serverSideException_exceptionHandling {
     public void runtimeException_isMapped() throws Exception {
 
         // given
-        final RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "version");
+        final RestfulRequest restfulReq = client.createRequest(RoHttpMethod.GET, "version");
         final Header<Boolean> header = new Header<Boolean>("X-FAIL", Parser.forBoolean());
         restfulReq.withHeader(header, true);
 

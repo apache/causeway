@@ -26,11 +26,10 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.jboss.resteasy.client.core.BaseClientResponse;
 
-import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
+import com.google.common.collect.Maps;
 
 public final class RestfulRequest {
 
@@ -108,7 +107,7 @@ public final class RestfulRequest {
 
     public static class Header<X> {
         public static Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
-        public static Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfMediaTypes());
+        public static Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfJaxRsMediaTypes());
 
         private final String name;
         private final Parser<X> parser;

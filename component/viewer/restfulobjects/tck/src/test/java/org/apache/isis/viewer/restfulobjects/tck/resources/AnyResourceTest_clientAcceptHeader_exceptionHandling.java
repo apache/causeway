@@ -31,12 +31,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.Header;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
@@ -59,21 +60,21 @@ public class AnyResourceTest_clientAcceptHeader_exceptionHandling {
     @Test
     public void whenSetsNoAcceptHeader_isOk() throws Exception {
         // given
-        final RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
+        final RestfulRequest restfulReq = client.createRequest(RoHttpMethod.GET, "/");
 
         // when
         final RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
 
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
+        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.HOME_PAGE.getMediaType())));
     }
 
     @Test
     public void whenSetsAcceptHeaderOfApplicationJson_isOk() throws Exception {
 
         // given
-        final RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
+        final RestfulRequest restfulReq = client.createRequest(RoHttpMethod.GET, "/");
         restfulReq.withHeader(Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
 
         // when
@@ -81,7 +82,7 @@ public class AnyResourceTest_clientAcceptHeader_exceptionHandling {
 
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
+        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.HOME_PAGE.getMediaType())));
     }
 
     @Ignore("RestEasy seems to reject with a 500, 'No match for accept header', rather than a 405.")

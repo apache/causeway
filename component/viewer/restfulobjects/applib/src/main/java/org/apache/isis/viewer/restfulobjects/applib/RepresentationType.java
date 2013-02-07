@@ -18,9 +18,16 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.util.Enums;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectCollectionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.TransientDomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.ActionDescriptionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.ActionParameterDescriptionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.CollectionDescriptionRepresentation;
@@ -33,34 +40,45 @@ import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentat
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ActionResultRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ListRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ObjectActionRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ObjectCollectionRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ObjectPropertyRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ScalarValueRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.TransientDomainObjectRepresentation;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.net.MediaType;
 
 public enum RepresentationType {
 
-    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class), USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class), VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class), LIST(RestfulMediaType.APPLICATION_JSON_LIST,
-            ListRepresentation.class), SCALAR_VALUE(RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, ScalarValueRepresentation.class), DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, DomainObjectRepresentation.class), TRANSIENT_DOMAIN_OBJECT(
-            RestfulMediaType.APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT, TransientDomainObjectRepresentation.class), OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class), OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION,
-            ObjectCollectionRepresentation.class), OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class), ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class), TYPE_LIST(
-            RestfulMediaType.APPLICATION_JSON_TYPE_LIST, TypeListRepresentation.class), DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class), PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, PropertyDescriptionRepresentation.class), COLLECTION_DESCRIPTION(
-            RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, CollectionDescriptionRepresentation.class), ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, ActionDescriptionRepresentation.class), ACTION_PARAMETER_DESCRIPTION(
-            RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), ERROR(RestfulMediaType.APPLICATION_JSON_ERROR,
-            ErrorRepresentation.class), GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class);
+    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class), 
+    USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class), 
+    VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class), 
+    LIST(RestfulMediaType.APPLICATION_JSON_LIST, ListRepresentation.class), 
+    SCALAR_VALUE(RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, ScalarValueRepresentation.class), 
+    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, DomainObjectRepresentation.class), 
+    TRANSIENT_DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT, TransientDomainObjectRepresentation.class), 
+    OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class), 
+    OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, ObjectCollectionRepresentation.class), 
+    OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class), 
+    ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class), 
+    TYPE_LIST(RestfulMediaType.APPLICATION_JSON_TYPE_LIST, TypeListRepresentation.class), 
+    DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class), 
+    PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, PropertyDescriptionRepresentation.class), 
+    COLLECTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, CollectionDescriptionRepresentation.class), 
+    ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, ActionDescriptionRepresentation.class), 
+    ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), 
+    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), 
+    ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, ErrorRepresentation.class), 
+    GENERIC(MediaType.JSON_UTF_8, JsonRepresentation.class);
 
     private final String name;
     private final MediaType mediaType;
     private final Class<? extends JsonRepresentation> representationClass;
 
     private RepresentationType(final String mediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
+        this(MediaType.parse(mediaTypeStr), representationClass);
+    }
+
+    private RepresentationType(final MediaType mediaType, final Class<? extends JsonRepresentation> representationClass) {
         this.representationClass = representationClass;
         this.name = Enums.enumToCamelCase(this);
-        this.mediaType = MediaType.valueOf(mediaTypeStr);
+        this.mediaType = mediaType;
     }
 
     public String getName() {
@@ -71,8 +89,15 @@ public enum RepresentationType {
         return mediaType;
     }
 
-    public String getMediaTypeWithProfile() {
-        return getMediaType().getParameters().get("profile");
+    public String getMediaTypeProfile() {
+        ImmutableList<String> immutableList = getMediaType().parameters().get("profile");
+        if (immutableList == null || immutableList.isEmpty()) return null;
+        for (String profileValue : immutableList) {
+            if(profileValue.startsWith(RestfulMediaType.PROFILE_PARAM_PREFIX)) {
+                return profileValue;
+            }
+        }
+        return null;
     }
 
     public Class<? extends JsonRepresentation> getRepresentationClass() {

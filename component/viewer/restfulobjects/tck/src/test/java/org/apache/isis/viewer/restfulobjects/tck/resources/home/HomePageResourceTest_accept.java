@@ -28,11 +28,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
@@ -53,7 +54,7 @@ public class HomePageResourceTest_accept {
     @Test
     public void applicationJson() throws Exception {
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -62,7 +63,7 @@ public class HomePageResourceTest_accept {
     @Test
     public void applicationJson_profileHomePage() throws Exception {
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaTypes.guavaToJaxRs(RepresentationType.HOME_PAGE.getMediaType()));
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -71,7 +72,7 @@ public class HomePageResourceTest_accept {
     @Test
     public void applicationJson_invalid() throws Exception {
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaTypes.guavaToJaxRs(RepresentationType.USER.getMediaType()));
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

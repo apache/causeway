@@ -19,15 +19,43 @@
 package org.apache.isis.viewer.restfulobjects.applib.links;
 
 public enum Rel {
+    
     // IANA registered
-    SELF("self"), DESCRIBEDBY("describedby"), UP("up"), HELP("help"), ICON("icon"),
+    SELF("self"), 
+    DESCRIBEDBY("describedby"), 
+    UP("up"), 
+    HELP("help"), 
+    ICON("icon"),
 
     // Restful Objects namespace
-    ICON16("icon16"), ICON32("icon32"), OBJECT("object"), SERVICE("service"), CHOICE("choice"), DEFAULT("default"), DETAILS("details"), MODIFY("modify"), CLEAR("clear"), ADD_TO("addto"), REMOVE_FROM("removefrom"), INVOKE("invoke"), PERSIST("persist"), PROPERTY("property"), COLLECTION("collection"), ACTION(
-            "action"), TYPE_ACTION("typeaction"), ACTION_PARAM("actionparam"), RETURN_TYPE("returntype"), ELEMENT_TYPE("elementtype"), VERSION("version"), USER("user"), SERVICES("services"), TYPES("types"), DOMAIN_TYPE("domaintype"),
+    ICON16(Spec.REL_PREFIX + "icon16"), 
+    ICON32(Spec.REL_PREFIX + "icon32"), 
+    OBJECT(Spec.REL_PREFIX + "object"), 
+    SERVICE(Spec.REL_PREFIX + "service"), 
+    CHOICE(Spec.REL_PREFIX + "choice"), 
+    DEFAULT(Spec.REL_PREFIX + "default"), 
+    DETAILS(Spec.REL_PREFIX + "details"), 
+    MODIFY(Spec.REL_PREFIX + "modify"), 
+    CLEAR(Spec.REL_PREFIX + "clear"), 
+    ADD_TO(Spec.REL_PREFIX + "addto"), 
+    REMOVE_FROM(Spec.REL_PREFIX + "removefrom"), 
+    INVOKE(Spec.REL_PREFIX + "invoke"), 
+    PERSIST(Spec.REL_PREFIX + "persist"), 
+    PROPERTY(Spec.REL_PREFIX + "property"), 
+    COLLECTION(Spec.REL_PREFIX + "collection"), 
+    ACTION(Spec.REL_PREFIX + "action"), 
+    TYPE_ACTION(Spec.REL_PREFIX + "typeaction"), 
+    ACTION_PARAM(Spec.REL_PREFIX + "actionparam"), 
+    RETURN_TYPE(Spec.REL_PREFIX + "returntype"), 
+    ELEMENT_TYPE(Spec.REL_PREFIX + "elementtype"), 
+    VERSION(Spec.REL_PREFIX + "version"), 
+    USER(Spec.REL_PREFIX + "user"), 
+    SERVICES(Spec.REL_PREFIX + "services"), 
+    TYPES(Spec.REL_PREFIX + "types"), 
+    DOMAIN_TYPE(Spec.REL_PREFIX + "domaintype"),
 
     // implementation specific
-    CONTRIBUTED_BY("contributedby");
+    CONTRIBUTED_BY(Impl.REL_PREFIX + "contributedby");
 
     private final String name;
 
@@ -38,4 +66,13 @@ public enum Rel {
     public String getName() {
         return name;
     }
+
+    private static class Spec {
+        final static String REL_PREFIX = "urn:org.restfulobjects:rels/";
+    }
+
+    private static class Impl {
+        final static String REL_PREFIX = "urn:org.apache.isis.restfulobjects:rels/";
+    }
+
 }

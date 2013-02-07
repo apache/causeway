@@ -38,13 +38,14 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class DomainServiceResourceTest_serviceId_representationAndHeaders {
@@ -79,7 +80,7 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(HttpMethod.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(RoHttpMethod.GET));
         assertThat(repr.getOid(), matches("OID[:].+"));
         assertThat(repr.getTitle(), matches("Simples"));
 
@@ -99,7 +100,7 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
 
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.DOMAIN_OBJECT.getMediaType()));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.DOMAIN_OBJECT.getMediaType())));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
     }
 

@@ -22,11 +22,11 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import com.google.common.base.Charsets;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
+
+import com.google.common.base.Charsets;
 
 public class JsonNodeUtils {
 

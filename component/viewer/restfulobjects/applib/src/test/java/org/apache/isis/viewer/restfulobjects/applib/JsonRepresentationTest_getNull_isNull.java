@@ -32,8 +32,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 public class JsonRepresentationTest_getNull_isNull {
 
     private JsonRepresentation jsonRepresentation;

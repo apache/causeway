@@ -35,19 +35,19 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ListRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ObjectActionRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class DomainServiceResourceTest_invokeAction {
@@ -229,7 +229,7 @@ public class DomainServiceResourceTest_invokeAction {
     private JsonRepresentation givenAction(final String serviceId, final String actionId) throws JsonParseException, JsonMappingException, IOException {
         final String href = givenHrefToService(serviceId);
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));

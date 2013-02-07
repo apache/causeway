@@ -23,8 +23,6 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
-
 public class PathNodeTest_equalsHashcode {
 
     @Test

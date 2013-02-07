@@ -23,11 +23,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
-import javax.ws.rs.core.MediaType;
-
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import com.google.common.net.MediaType;
 
 public class RepresentationTypeTest_getMediaType_lookup {
 
@@ -42,7 +40,7 @@ public class RepresentationTypeTest_getMediaType_lookup {
 
     @Test
     public void whenUnknown() {
-        assertThat(RepresentationType.lookup(MediaType.APPLICATION_ATOM_XML_TYPE), is(RepresentationType.GENERIC));
+        assertThat(RepresentationType.lookup(MediaType.ANY_TEXT_TYPE), is(RepresentationType.GENERIC));
     }
 
     @Test
@@ -52,8 +50,7 @@ public class RepresentationTypeTest_getMediaType_lookup {
 
     @Test
     public void getMediaTypeProfile() {
-        assertThat(RepresentationType.VERSION.getMediaTypeWithProfile(), is("urn:org.restfulobjects/version"));
-        assertThat(RepresentationType.GENERIC.getMediaTypeWithProfile(), is(nullValue()));
+        assertThat(RepresentationType.VERSION.getMediaTypeProfile(), is("urn:org.restfulobjects/version"));
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
     }
-
 }

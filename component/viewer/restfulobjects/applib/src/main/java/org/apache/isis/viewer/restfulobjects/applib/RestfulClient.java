@@ -24,17 +24,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequestFactory;
-import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
-
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainObjectResource;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainServiceResource;
+import org.jboss.resteasy.client.ClientExecutor;
+import org.jboss.resteasy.client.ClientRequestFactory;
+import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
 
 public class RestfulClient {
 
@@ -116,7 +115,7 @@ public class RestfulClient {
         return link.<T> follow(executor, requestArgs);
     }
 
-    public RestfulRequest createRequest(final HttpMethod httpMethod, final String uriTemplate) {
+    public RestfulRequest createRequest(final RoHttpMethod httpMethod, final String uriTemplate) {
 
         final boolean includesScheme = uriTemplate.startsWith("http:") || uriTemplate.startsWith("https:");
         final String base = clientRequestFactory.getBase().toString();

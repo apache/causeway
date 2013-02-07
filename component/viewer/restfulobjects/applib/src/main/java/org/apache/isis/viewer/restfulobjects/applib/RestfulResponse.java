@@ -30,13 +30,12 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
+import com.google.common.collect.Maps;
 
 public class RestfulResponse<T> {
 
@@ -241,7 +240,7 @@ public class RestfulResponse<T> {
         public final static Header<String> WARNING = new Header<String>("Warning", Parser.forString());
         public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
         public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
-        public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forMediaType());
+        public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forJaxRsMediaType());
 
         private final String name;
         private final Parser<X> parser;
@@ -267,8 +266,8 @@ public class RestfulResponse<T> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static RestfulResponse<JsonRepresentation> of(final Response response) {
-        final MediaType mediaType = getHeader(response, Header.CONTENT_TYPE);
-        final RepresentationType representationType = RepresentationType.lookup(mediaType);
+        final MediaType jaxRsMediaType = getHeader(response, Header.CONTENT_TYPE);
+        final RepresentationType representationType = RepresentationType.lookup(MediaTypes.jaxRsToGuava(jaxRsMediaType));
         final Class<? extends JsonRepresentation> returnType = representationType.getRepresentationClass();
         return new RestfulResponse(response, returnType);
     }

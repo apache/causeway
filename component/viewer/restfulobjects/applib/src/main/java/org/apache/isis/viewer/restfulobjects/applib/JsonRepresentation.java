@@ -29,13 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
+import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
+import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
+import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -43,10 +40,12 @@ import org.codehaus.jackson.node.NullNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.node.POJONode;
 
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
-import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
-import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper

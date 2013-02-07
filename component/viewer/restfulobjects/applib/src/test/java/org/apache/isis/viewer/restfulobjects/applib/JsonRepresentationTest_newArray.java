@@ -23,8 +23,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 public class JsonRepresentationTest_newArray {
 
     @Test

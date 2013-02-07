@@ -33,15 +33,16 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ListRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class DomainServiceResourceTest_serviceId_accept {
@@ -62,7 +63,7 @@ public class DomainServiceResourceTest_serviceId_accept {
 
         final String href = givenLinkToService();
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -73,7 +74,7 @@ public class DomainServiceResourceTest_serviceId_accept {
 
         final String href = givenLinkToService();
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.DOMAIN_OBJECT.getMediaType());
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaTypes.guavaToJaxRs(RepresentationType.DOMAIN_OBJECT.getMediaType()));
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -84,7 +85,7 @@ public class DomainServiceResourceTest_serviceId_accept {
 
         final String href = givenLinkToService();
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaTypes.guavaToJaxRs(RepresentationType.USER.getMediaType()));
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

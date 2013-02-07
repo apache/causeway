@@ -46,10 +46,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
@@ -89,7 +90,7 @@ public class UserResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr.isMap(), is(true));
 
-        assertThat(repr.getSelf(), isLink(client).httpMethod(HttpMethod.GET));
+        assertThat(repr.getSelf(), isLink(client).httpMethod(RoHttpMethod.GET));
         assertThat(repr.getUserName(), is(not(nullValue())));
         assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change
                                                              // fixture so
@@ -118,7 +119,7 @@ public class UserResourceTest_representationAndHeaders {
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/user"));
-        assertThat(contentType, is(RepresentationType.USER.getMediaType()));
+        assertThat(contentType, is(MediaTypes.guavaToJaxRs(RepresentationType.USER.getMediaType())));
 
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);

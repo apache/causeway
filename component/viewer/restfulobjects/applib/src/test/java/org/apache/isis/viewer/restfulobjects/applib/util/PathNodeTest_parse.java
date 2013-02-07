@@ -25,8 +25,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
-
 public class PathNodeTest_parse {
 
     @Test

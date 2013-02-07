@@ -103,7 +103,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-restfulobjects-impl</artifactId>
+            <artifactId>isis-viewer-restfulobjects-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>

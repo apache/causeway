@@ -38,15 +38,16 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class DomainServiceResourceTest_services_representationAndHeaders {
@@ -74,14 +75,14 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
 
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.LIST.getMediaType()));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.LIST.getMediaType())));
         assertThat(restfulResponse.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
 
         final ListRepresentation repr = restfulResponse.getEntity();
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(HttpMethod.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(RoHttpMethod.GET));
 
         assertThat(repr.getValues(), isArray());
 

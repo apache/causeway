@@ -20,22 +20,21 @@ package org.apache.isis.viewer.restfulobjects.applib.links;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.restfulobjects.applib.ClientRequestConfigurer;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 import org.jboss.resteasy.client.ClientExecutor;
 
-import org.apache.isis.viewer.restfulobjects.applib.ClientRequestConfigurer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-
 public final class LinkRepresentation extends JsonRepresentation {
 
     public LinkRepresentation() {
         this(new ObjectNode(JsonNodeFactory.instance));
-        withMethod(HttpMethod.GET);
+        withMethod(RoHttpMethod.GET);
     }
 
     public LinkRepresentation(final JsonNode jsonNode) {
@@ -73,9 +72,9 @@ public final class LinkRepresentation extends JsonRepresentation {
         return this;
     }
 
-    public HttpMethod getHttpMethod() {
+    public RoHttpMethod getHttpMethod() {
         final String methodStr = asObjectNode().path("method").getTextValue();
-        return HttpMethod.valueOf(methodStr);
+        return RoHttpMethod.valueOf(methodStr);
     }
 
     public MediaType getType() {
@@ -86,7 +85,7 @@ public final class LinkRepresentation extends JsonRepresentation {
         return MediaType.valueOf(typeStr);
     }
 
-    public LinkRepresentation withMethod(final HttpMethod httpMethod) {
+    public LinkRepresentation withMethod(final RoHttpMethod httpMethod) {
         asObjectNode().put("method", httpMethod.name());
         return this;
     }

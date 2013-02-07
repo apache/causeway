@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.user;
 
-import org.codehaus.jackson.JsonNode;
-
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
+import org.codehaus.jackson.JsonNode;
 
 public class UserRepresentation extends DomainRepresentation {
 

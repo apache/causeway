@@ -24,11 +24,11 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.jackson.JsonNode;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-
-import org.codehaus.jackson.JsonNode;
 
 public final class UrlEncodingUtils {
 

@@ -18,9 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.errors;
 
-import org.codehaus.jackson.JsonNode;
-
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.codehaus.jackson.JsonNode;
 
 public class ErrorRepresentation extends JsonRepresentation {
 

@@ -24,9 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.ClientResponseType;
-
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/")
 public interface HomePageResource {

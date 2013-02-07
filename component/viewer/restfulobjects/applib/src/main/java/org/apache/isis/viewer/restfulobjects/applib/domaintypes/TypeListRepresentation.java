@@ -18,9 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domaintypes;
 
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
-
-import org.apache.isis.viewer.restfulobjects.domainobjects.DomainRepresentation;
 
 public class TypeListRepresentation extends DomainRepresentation {
 

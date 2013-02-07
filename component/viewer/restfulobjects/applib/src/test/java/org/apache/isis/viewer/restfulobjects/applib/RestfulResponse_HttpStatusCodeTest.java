@@ -23,9 +23,8 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.junit.Test;
-
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.junit.Test;
 
 public class RestfulResponse_HttpStatusCodeTest {
 

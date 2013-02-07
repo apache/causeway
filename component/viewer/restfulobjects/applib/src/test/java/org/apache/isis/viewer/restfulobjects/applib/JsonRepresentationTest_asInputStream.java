@@ -28,14 +28,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.common.base.Charsets;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import com.google.common.base.Charsets;
 
 public class JsonRepresentationTest_asInputStream {
 

@@ -33,13 +33,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
-import org.apache.isis.viewer.restfulobjects.domainobjects.ListRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class DomainServiceResourceTest_services_xrofollowlinks {
@@ -61,7 +61,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         RestfulResponse<ListRepresentation> restfulResponse;
         ListRepresentation repr;
 
-        request = client.createRequest(HttpMethod.GET, "services");
+        request = client.createRequest(RoHttpMethod.GET, "services");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
 
@@ -69,7 +69,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         assertThat(repr.getValues().size(), is(greaterThan(0)));
         assertThat(repr.getValues().arrayGet(0), isLink().novalue());
 
-        request = client.createRequest(HttpMethod.GET, "services").withArg(RequestParameter.FOLLOW_LINKS, "values");
+        request = client.createRequest(RoHttpMethod.GET, "services").withArg(RequestParameter.FOLLOW_LINKS, "values");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
 

@@ -25,19 +25,17 @@ import static org.junit.Assert.assertThat;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.junit.Test;
-
-import org.apache.isis.viewer.restfulobjects.applib.HttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
 
 public class LinkRepresentationTest_equals {
 
     @Test
     public void equalDependsOnMethodAndHref() throws UnsupportedEncodingException {
-        final LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod.GET);
-        final LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod.GET);
-        final LinkRepresentation link3 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod.PUT);
-        final LinkRepresentation link4 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:456").withMethod(HttpMethod.GET);
+        final LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(RoHttpMethod.GET);
+        final LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(RoHttpMethod.GET);
+        final LinkRepresentation link3 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(RoHttpMethod.PUT);
+        final LinkRepresentation link4 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:456").withMethod(RoHttpMethod.GET);
 
         assertThat(link, is(equalTo(link2)));
         assertThat(link, is(not(equalTo(link3))));
@@ -46,8 +44,8 @@ public class LinkRepresentationTest_equals {
 
     @Test
     public void equalDoesNotDependsOnMethodAndHref() throws UnsupportedEncodingException {
-        final LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod.GET).withRel("something");
-        final LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod.GET).withRel("else");
+        final LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(RoHttpMethod.GET).withRel("something");
+        final LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(RoHttpMethod.GET).withRel("else");
 
         assertThat(link, is(equalTo(link2)));
     }

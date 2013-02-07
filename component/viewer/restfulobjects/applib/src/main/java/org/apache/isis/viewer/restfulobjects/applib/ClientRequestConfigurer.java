@@ -24,13 +24,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.specimpl.UriBuilderImpl;
-
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+import org.jboss.resteasy.client.ClientExecutor;
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.specimpl.UriBuilderImpl;
 
 /**
  * Configures the body, query string etc of a {@link ClientRequest}.
@@ -72,7 +71,7 @@ public class ClientRequestConfigurer {
      * Prerequisite to {@link #configureArgs(JsonRepresentation)} or
      * {@link #configureArgs(Map)}.
      */
-    public ClientRequestConfigurer setHttpMethod(final HttpMethod httpMethod) {
+    public ClientRequestConfigurer setHttpMethod(final RoHttpMethod httpMethod) {
         clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
         return this;
     }
@@ -83,7 +82,7 @@ public class ClientRequestConfigurer {
      * <p>
      * Typical flow is:
      * <ul>
-     * <li> {@link RestfulClient#createRequest(HttpMethod, String)}
+     * <li> {@link RestfulClient#createRequest(RoHttpMethod, String)}
      * <li> {@link RestfulRequest#withArg(RequestParameter, Object)} for each arg
      * <li> {@link RestfulRequest#execute()} - which calls this method.
      * </ul>
@@ -123,7 +122,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Called back from
-     * {@link HttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * {@link RoHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     ClientRequestConfigurer body(final JsonRepresentation requestArgs) {
         clientRequest.body(MediaType.APPLICATION_JSON_TYPE, requestArgs.toString());
@@ -132,7 +131,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Called back from
-     * {@link HttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * {@link RoHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     ClientRequestConfigurer queryString(final JsonRepresentation requestArgs) {
         if (requestArgs.size() == 0) {
@@ -145,7 +144,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Called back from
-     * {@link HttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * {@link RoHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     ClientRequestConfigurer queryArgs(final JsonRepresentation requestArgs) {
         final MultivaluedMap<String, String> queryParameters = clientRequest.getQueryParameters();
@@ -165,9 +164,9 @@ public class ClientRequestConfigurer {
         return clientRequest;
     }
 
-    HttpMethod getHttpMethod() {
+    RoHttpMethod getHttpMethod() {
         final String httpMethod = clientRequest.getHttpMethod();
-        return HttpMethod.valueOf(httpMethod);
+        return RoHttpMethod.valueOf(httpMethod);
     }
 
 }
