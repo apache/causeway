@@ -28,7 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
@@ -63,7 +62,7 @@ public class VersionResourceTest_accept {
     @Test
     public void applicationJson_profileVersion() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, MediaTypes.guavaToJaxRs(RepresentationType.VERSION.getMediaType()));
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -72,7 +71,7 @@ public class VersionResourceTest_accept {
     @Test
     public void applicationJson_invalid() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaTypes.guavaToJaxRs(RepresentationType.USER.getMediaType()));
+        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

@@ -115,7 +115,7 @@ public class ParserTest {
     @Test
     public void forGuavaMediaTypes() {
         final Parser<MediaType> parser = Parser.forGuavaMediaType();
-        final MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
+        final MediaType mediaType = MediaType.parse("application/json");
         final String asString = parser.asString(mediaType);
         final MediaType valueOf = parser.valueOf(asString);
 
@@ -125,12 +125,11 @@ public class ParserTest {
     @Test
     public void forListOfMediaTypes() {
         final Parser<List<MediaType>> parser = Parser.forListOfGuavaMediaTypes();
-        final MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
-        final List<MediaType> v = Arrays.asList(mediaType, MediaType.parse("application/json"));
-        final String asString = parser.asString(v);
+        final List<MediaType> list = Arrays.asList(MediaType.parse("application/xml"), MediaType.parse("application/json"));
+        final String asString = parser.asString(list);
         final List<MediaType> valueOf = parser.valueOf(asString);
 
-        assertThat(v, IsisMatchers.sameContentsAs(valueOf));
+        assertThat(list, IsisMatchers.sameContentsAs(valueOf));
     }
 
     @Test

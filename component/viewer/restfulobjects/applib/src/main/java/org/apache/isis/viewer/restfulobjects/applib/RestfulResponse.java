@@ -267,7 +267,7 @@ public class RestfulResponse<T> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static RestfulResponse<JsonRepresentation> of(final Response response) {
         final MediaType jaxRsMediaType = getHeader(response, Header.CONTENT_TYPE);
-        final RepresentationType representationType = RepresentationType.lookup(MediaTypes.jaxRsToGuava(jaxRsMediaType));
+        final RepresentationType representationType = RepresentationType.lookup(jaxRsMediaType);
         final Class<? extends JsonRepresentation> returnType = representationType.getRepresentationClass();
         return new RestfulResponse(response, returnType);
     }

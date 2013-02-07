@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
@@ -160,31 +159,21 @@ public class ResourceContext implements RendererContext {
         if (representationType == null) {
             return;
         }
-        final com.google.common.net.MediaType producedType = representationType.getMediaType();
+        final MediaType producedType = representationType.getMediaType();
         
-        final List<MediaType> acceptableJaxRsMediaTypes = acceptableMediaTypes();
-        final List<com.google.common.net.MediaType> acceptableGuavaMediaTypes = Lists.transform(acceptableJaxRsMediaTypes, MediaTypes.JAXRS_TO_GUAVA);
+        final List<MediaType> acceptedMediaTypes = acceptedMediaTypes();
 
-        // reimplemented below using guava
-//        for (final MediaType mediaType : acceptableJaxRsMediaTypes) {
-//            if (compatible(mediaType, representationType)) {
-//                return;
-//            }
-//        }
-        
-        if(Iterables.tryFind(acceptableGuavaMediaTypes, accepts(producedType)).isPresent()) {
+        if(Iterables.tryFind(acceptedMediaTypes, accepts(producedType)).isPresent()) {
             return;
         }
-        if (!contains(producedType, acceptableJaxRsMediaTypes)) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "Resource produces %s media type", representationType.getMediaType());
-        }
+        throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "Resource produces %s media type", representationType.getMediaType());
     }
 
-    private static Predicate<com.google.common.net.MediaType> accepts(final com.google.common.net.MediaType producedType) {
-        return new Predicate<com.google.common.net.MediaType>() {
+    private static Predicate<MediaType> accepts(final MediaType producedType) {
+        return new Predicate<MediaType>() {
             @Override
-            public boolean apply(com.google.common.net.MediaType input) {
-                return producedType.is(input);
+            public boolean apply(MediaType accepted) {
+                return producedType.isCompatible(accepted);
             }
         };
 
@@ -202,7 +191,7 @@ public class ResourceContext implements RendererContext {
      * Otherwise, though, filter out the {@link MediaType#APPLICATION_JSON_TYPE
      * generic application/json} media type if it is present.
      */
-    private List<MediaType> acceptableMediaTypes() {
+    private List<MediaType> acceptedMediaTypes() {
         final List<MediaType> acceptableMediaTypes = getHttpHeaders().getAcceptableMediaTypes();
         if (Collections2.filter(acceptableMediaTypes, MEDIA_TYPE_CONTAINS_PROFILE).isEmpty()) {
             return acceptableMediaTypes;
@@ -211,7 +200,7 @@ public class ResourceContext implements RendererContext {
     }
 
     private boolean compatible(final MediaType acceptedMediaType, final RepresentationType representationType) {
-        final MediaType producedJaxRsMediaType = MediaTypes.guavaToJaxRs(representationType.getMediaType());
+        final MediaType producedJaxRsMediaType = representationType.getMediaType();
         final String profile = acceptedMediaType.getParameters().get("profile");
         return profile == null ? acceptedMediaType.isCompatible(producedJaxRsMediaType) : acceptedMediaType.equals(producedJaxRsMediaType);
     }

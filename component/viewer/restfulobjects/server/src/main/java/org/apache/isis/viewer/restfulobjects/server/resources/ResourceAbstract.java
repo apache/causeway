@@ -48,7 +48,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -194,7 +193,7 @@ public abstract class ResourceAbstract {
 
     public static ResponseBuilder responseOfOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
         final RepresentationType representationType = renderer.getRepresentationType();
-        final ResponseBuilder response = responseOf(HttpStatusCode.OK).type(MediaTypes.guavaToJaxRs(representationType.getMediaType())).cacheControl(caching.getCacheControl()).entity(jsonFor(renderer.render()));
+        final ResponseBuilder response = responseOf(HttpStatusCode.OK).type(representationType.getMediaType()).cacheControl(caching.getCacheControl()).entity(jsonFor(renderer.render()));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 

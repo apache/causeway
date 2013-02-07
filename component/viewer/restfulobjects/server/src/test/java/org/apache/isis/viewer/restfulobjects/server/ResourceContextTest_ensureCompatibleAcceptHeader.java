@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
 import org.jmock.Expectations;
@@ -56,7 +55,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     @Test
     public void noop() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaTypes.guavaToJaxRs(representationType.getMediaType())));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(representationType.getMediaType()));
 
         instantiateResourceContext(representationType);
     }
@@ -64,7 +63,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     @Test
     public void happyCase() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaTypes.guavaToJaxRs(representationType.getMediaType())));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(representationType.getMediaType()));
 
         instantiateResourceContext(representationType);
     }
@@ -96,7 +95,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     @Test(expected = ReprRendererException.class)
     public void nonMatchingProfile() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaTypes.guavaToJaxRs(RepresentationType.USER.getMediaType())));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType()));
 
         instantiateResourceContext(representationType);
     }
@@ -104,7 +103,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     @Test(expected = ReprRendererException.class)
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaTypes.guavaToJaxRs(RepresentationType.USER.getMediaType()), MediaType.APPLICATION_JSON_TYPE));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType(), MediaType.APPLICATION_JSON_TYPE));
 
         instantiateResourceContext(representationType);
     }

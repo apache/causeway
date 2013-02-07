@@ -39,23 +39,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
+import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
+import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class HomePageResourceTest_representationAndHeaders {
 
@@ -111,8 +109,8 @@ public class HomePageResourceTest_representationAndHeaders {
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/homepage"));
-        assertThat(contentType, is(MediaTypes.guavaToJaxRs(RepresentationType.HOME_PAGE.getMediaType())));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects:repr-types/homepage"));
+        assertThat(contentType, is(RepresentationType.HOME_PAGE.getMediaType()));
 
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);

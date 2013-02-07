@@ -17,12 +17,13 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 
-import com.google.common.net.MediaType;
 
 public final class LinkBuilder {
 

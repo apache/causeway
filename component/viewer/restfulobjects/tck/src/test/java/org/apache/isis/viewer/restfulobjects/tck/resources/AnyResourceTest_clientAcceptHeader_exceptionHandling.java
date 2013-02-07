@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
@@ -67,7 +66,7 @@ public class AnyResourceTest_clientAcceptHeader_exceptionHandling {
 
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.HOME_PAGE.getMediaType())));
+        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
     }
 
     @Test
@@ -82,7 +81,7 @@ public class AnyResourceTest_clientAcceptHeader_exceptionHandling {
 
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.HOME_PAGE.getMediaType())));
+        assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
     }
 
     @Ignore("RestEasy seems to reject with a 500, 'No match for accept header', rather than a 405.")

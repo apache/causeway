@@ -20,6 +20,8 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.Map;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
@@ -37,7 +39,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeActionRes
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 
 import com.google.common.collect.Maps;
-import com.google.common.net.MediaType;
 
 public class RendererFactoryRegistry {
 

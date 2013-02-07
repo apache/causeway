@@ -39,24 +39,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
+import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
+import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
-import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 public class VersionResourceTest_representationAndHeaders {
 
@@ -126,8 +124,8 @@ public class VersionResourceTest_representationAndHeaders {
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/version"));
-        assertThat(contentType, is(MediaTypes.guavaToJaxRs(RepresentationType.VERSION.getMediaType())));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects:repr-types/version"));
+        assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));
 
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);

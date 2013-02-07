@@ -23,9 +23,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
+import javax.ws.rs.core.MediaType;
+
 import org.junit.Test;
 
-import com.google.common.net.MediaType;
 
 public class RepresentationTypeTest_getMediaType_lookup {
 
@@ -40,7 +41,7 @@ public class RepresentationTypeTest_getMediaType_lookup {
 
     @Test
     public void whenUnknown() {
-        assertThat(RepresentationType.lookup(MediaType.ANY_TEXT_TYPE), is(RepresentationType.GENERIC));
+        assertThat(RepresentationType.lookup(MediaType.APPLICATION_SVG_XML), is(RepresentationType.GENERIC));
     }
 
     @Test

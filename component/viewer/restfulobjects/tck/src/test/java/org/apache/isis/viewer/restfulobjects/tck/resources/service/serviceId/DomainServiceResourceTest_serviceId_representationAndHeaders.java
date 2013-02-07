@@ -38,7 +38,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.MediaTypes;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
@@ -100,7 +99,7 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
 
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaTypes.guavaToJaxRs(RepresentationType.DOMAIN_OBJECT.getMediaType())));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.DOMAIN_OBJECT.getMediaType()));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
     }
 

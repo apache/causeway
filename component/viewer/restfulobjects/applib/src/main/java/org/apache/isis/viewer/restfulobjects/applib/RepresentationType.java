@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
@@ -41,9 +43,6 @@ import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.net.MediaType;
-
 public enum RepresentationType {
 
     HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class), 
@@ -65,14 +64,14 @@ public enum RepresentationType {
     ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), 
     TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), 
     ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, ErrorRepresentation.class), 
-    GENERIC(MediaType.JSON_UTF_8, JsonRepresentation.class);
+    GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class);
 
     private final String name;
     private final MediaType mediaType;
     private final Class<? extends JsonRepresentation> representationClass;
 
     private RepresentationType(final String mediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
-        this(MediaType.parse(mediaTypeStr), representationClass);
+        this(MediaType.valueOf(mediaTypeStr), representationClass);
     }
 
     private RepresentationType(final MediaType mediaType, final Class<? extends JsonRepresentation> representationClass) {
@@ -90,14 +89,7 @@ public enum RepresentationType {
     }
 
     public String getMediaTypeProfile() {
-        ImmutableList<String> immutableList = getMediaType().parameters().get("profile");
-        if (immutableList == null || immutableList.isEmpty()) return null;
-        for (String profileValue : immutableList) {
-            if(profileValue.startsWith(RestfulMediaType.PROFILE_PARAM_PREFIX)) {
-                return profileValue;
-            }
-        }
-        return null;
+        return getMediaType().getParameters().get("profile");
     }
 
     public Class<? extends JsonRepresentation> getRepresentationClass() {
