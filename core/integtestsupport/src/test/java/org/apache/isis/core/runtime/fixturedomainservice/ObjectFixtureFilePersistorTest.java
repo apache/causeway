@@ -139,7 +139,7 @@ public class ObjectFixtureFilePersistorTest {
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        final String actual = out.toString().replaceAll("\r\n", "\n");
+        final String actual = canonicalize(out);
         
         final String expected = SimpleEntity.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         
@@ -154,12 +154,21 @@ public class ObjectFixtureFilePersistorTest {
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        final String actual = out.toString().replaceAll("\r\n", "\n");
+        final String actual = canonicalize(out);
 
         final String expected1 = SimpleEntity.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
-        final String expected2 = SimpleEntity.class.getName() + "#3\n  date: \n  name: \n";
+        final String expected2 = SimpleEntity.class.getName() + "#3\n  date: \n  name: 3\n";
         assertThat(actual, IsisMatchers.contains(expected1));
         assertThat(actual, IsisMatchers.contains(expected2));
+    }
+
+
+    private String canonicalize(final String out) {
+        return out.replaceAll("\r\n", "\n");
+    }
+
+    private String canonicalize(final StringWriter out) {
+        return canonicalize(out.toString());
     }
 
     @Test
@@ -173,7 +182,7 @@ public class ObjectFixtureFilePersistorTest {
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        final String actual = out.toString().replaceAll("\r\n", "\n");
+        final String actual = canonicalize(out);
 
         final String expected1 = ReferencingEntity.class.getName() + "#2\n  aggregatedEntities: \n  aggregatedReference: \n  reference: " + SimpleEntity.class.getName() + "#3";
         final String expected2 = SimpleEntity.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
@@ -196,7 +205,7 @@ public class ObjectFixtureFilePersistorTest {
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        final String actual = out.toString().replaceAll("\r\n", "\n");
+        final String actual = canonicalize(out);
         
         final String expected1a = ParentEntity.class.getName() + "#2\n";
         final String expected1b = "heterogeneousCollection: \n  homogeneousCollection: " + SimpleEntity.class.getName() + "#3 " + SimpleEntity.class.getName() + "#4 " + "\n";
