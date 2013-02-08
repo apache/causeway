@@ -20,9 +20,9 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
 
 public final class LinkBuilder {
@@ -42,7 +42,7 @@ public final class LinkBuilder {
     private final String href;
     private final MediaType mediaType;
 
-    private RoHttpMethod method = RoHttpMethod.GET;
+    private RestfulHttpMethod method = RestfulHttpMethod.GET;
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
@@ -55,7 +55,7 @@ public final class LinkBuilder {
         this.mediaType = mediaType;
     }
 
-    public LinkBuilder withHttpMethod(final RoHttpMethod method) {
+    public LinkBuilder withHttpMethod(final RestfulHttpMethod method) {
         this.method = method;
         return this;
     }

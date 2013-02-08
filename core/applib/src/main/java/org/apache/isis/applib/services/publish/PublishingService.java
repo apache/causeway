@@ -18,23 +18,32 @@
  */
 package org.apache.isis.applib.services.publish;
 
-import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Hidden;
 
 public interface PublishingService {
     
     @Hidden
-    public void publish(UUID guid, String currentUser, long currentTimestampEpoch, CanonicalEvent canonicalEvent);
+    public void publish(EventMetadata metadata, EventPayload payload);
     
     public static class Stderr implements PublishingService {
 
+        private EventSerializer eventSerializer = new EventSerializer.Simple();
+
         @Hidden
         @Override
-        public void publish(UUID guid, String currentUser, long currentTimestampEpoch, CanonicalEvent canonicalEvent) {
-            System.err.println("PUBLISHED: " + guid + ":" + currentUser + ":" + currentTimestampEpoch + ":" + canonicalEvent.asString());
+        public void publish(EventMetadata metadata, EventPayload payload) {
+            Object serializedEvent = eventSerializer.serialize(metadata, payload);
+            System.err.println(serializedEvent);
+        }
+
+        @Override
+        public void setEventSerializer(EventSerializer eventSerializer) {
+            this.eventSerializer = eventSerializer;
         }
     }
+    
+    void setEventSerializer(EventSerializer eventSerializer);
 }
 
 

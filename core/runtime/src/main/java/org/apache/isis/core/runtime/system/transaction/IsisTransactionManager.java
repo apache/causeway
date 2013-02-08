@@ -31,22 +31,31 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.annotation.PublishedObject.EventCanonicalizer;
 import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.publish.CanonicalEvent;
+import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
+import org.apache.isis.applib.services.publish.EventPayloadForChangedObject;
+import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.log4j.Logger;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -65,7 +74,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     /**
      * Could be null.
      */
-    private final PublishingServiceWithCanonicalizers publishingService;
+    private final PublishingServiceWithDefaultPayloadFactories publishingService;
 
     private IsisSession session;
 
@@ -388,61 +397,79 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // Publishing service
     // ///////////////////////////////////////////
 
-    public PublishingServiceWithCanonicalizers getPublishingServiceIfAny(ServicesInjectorSpi servicesInjectorSpi) {
+    public PublishingServiceWithDefaultPayloadFactories getPublishingServiceIfAny(ServicesInjectorSpi servicesInjectorSpi) {
         final PublishingService publishingService = servicesInjectorSpi.lookupService(PublishingService.class);
         if(publishingService == null) {
             return null;
         }
-        
-        PublishedObject.EventCanonicalizer objectEventCanonicalizer = servicesInjectorSpi.lookupService(PublishedObject.EventCanonicalizer.class);
-        if(objectEventCanonicalizer == null) {
-            objectEventCanonicalizer = newDefaultObjectEventCanonicalizer();
+
+        EventSerializer eventSerializer = servicesInjectorSpi.lookupService(EventSerializer.class);
+        if(eventSerializer == null) {
+            eventSerializer = newSimpleEventSerializer();
+        }
+
+        PublishedObject.PayloadFactory objectPayloadFactory = servicesInjectorSpi.lookupService(PublishedObject.PayloadFactory.class);
+        if(objectPayloadFactory == null) {
+            objectPayloadFactory = newDefaultObjectPayloadFactory();
         }
         
-        PublishedAction.EventCanonicalizer actionEventCanonicalizer = servicesInjectorSpi.lookupService(PublishedAction.EventCanonicalizer.class);
-        if(actionEventCanonicalizer == null) {
-            actionEventCanonicalizer = newDefaultActionEventCanonicalizer();
+        PublishedAction.PayloadFactory actionPayloadFactory = servicesInjectorSpi.lookupService(PublishedAction.PayloadFactory.class);
+        if(actionPayloadFactory == null) {
+            actionPayloadFactory = newDefaultActionPayloadFactory();
         }
         
-        return new PublishingServiceWithCanonicalizers(publishingService, objectEventCanonicalizer, actionEventCanonicalizer);
+        return new PublishingServiceWithDefaultPayloadFactories(publishingService, objectPayloadFactory, actionPayloadFactory);
+    }
+
+    protected EventSerializer newSimpleEventSerializer() {
+        return new EventSerializer.Simple();
     }
 
 
-    protected PublishedObject.EventCanonicalizer newDefaultObjectEventCanonicalizer() {
-        return new PublishedObject.EventCanonicalizer() {
+    protected PublishedObject.PayloadFactory newDefaultObjectPayloadFactory() {
+        return new PublishedObject.PayloadFactory() {
             @Override
-            public CanonicalEvent canonicalizeObject(final Object changedObject) {
-                return new CanonicalEvent.Default("CHANGED_OBJECT\n    "+oidStrFor(changedObject));
+            public EventPayload payloadFor(final Object changedObject) {
+                return new EventPayloadForChangedObject(changedObject)
+                            .with(objectStringifier());
+            }
+
+        };
+    }
+
+    protected PublishedAction.PayloadFactory newDefaultActionPayloadFactory() {
+        return new PublishedAction.PayloadFactory(){
+            @Override
+            public EventPayload payloadFor(Identifier actionIdentifier, Object target, List<Object> arguments, Object result) {
+                return new EventPayloadForActionInvocation(
+                        actionIdentifier, 
+                        target, 
+                        arguments, 
+                        result).with(objectStringifier());
             }
         };
     }
 
-    protected PublishedAction.EventCanonicalizer newDefaultActionEventCanonicalizer() {
-        return new PublishedAction.EventCanonicalizer() {
-
+    protected ObjectStringifier objectStringifier() {
+        return new ObjectStringifier() {
             @Override
-            public CanonicalEvent canonicalizeAction(Object invokedObject, Identifier identifier, List<Object> args, Object actionResult) {
-                final StringBuilder buf = new StringBuilder();
-                buf.append("ACTION\n").append(identifier.toString());
-                buf.append("\n    target=").append(oidStrFor(invokedObject));
-                buf.append("\n      args=[");
-                for (Object arg : args) {
-                    buf.append("\n           ").append(oidStrFor(arg));
+            public String toString(Object object) {
+                if(object == null) {
+                    return null;
                 }
-                buf.append("\n      ]");
-                buf.append("\n    result=").append(actionResult != null ? oidStrFor(actionResult) : "void");
-                return new CanonicalEvent.Default(buf.toString()) ;
+                final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+                Oid oid = adapter.getOid();
+                return oid != null? oid.enString(IsisContext.getOidMarshaller()): encodedValueOf(adapter);
+            }
+            private String encodedValueOf(ObjectAdapter adapter) {
+                EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
+                return facet != null? facet.toEncodedString(adapter): adapter.toString();
             }
         };
     }
 
-    private static String oidStrFor(final Object changedObject) {
-        final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(changedObject);
-        return adapter.getOid().enString(IsisContext.getOidMarshaller());
-    }
 
 
-    
     // //////////////////////////////////////////////////////////////
     // Hooks
     // //////////////////////////////////////////////////////////////
@@ -513,6 +540,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.session = session;
     }
 
+    
+    // ////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // ////////////////////////////////////////////////////////////////
+
 
     /**
      * Called back by {@link IsisTransaction}.
@@ -520,8 +552,9 @@ public class IsisTransactionManager implements SessionScopedComponent {
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-
-
-
     
+    protected AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
 }

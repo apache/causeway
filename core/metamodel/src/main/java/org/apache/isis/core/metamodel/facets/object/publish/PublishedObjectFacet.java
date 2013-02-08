@@ -29,6 +29,6 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * Indicates that changes to an object's properties are to be published has, specifying the means by which 
  * a canonical event representing these changes should be created.
  */
-public interface PublishedObjectFacet extends SingleValueFacet<PublishedObject.EventCanonicalizer> {
+public interface PublishedObjectFacet extends SingleValueFacet<PublishedObject.PayloadFactory> {
 
 }

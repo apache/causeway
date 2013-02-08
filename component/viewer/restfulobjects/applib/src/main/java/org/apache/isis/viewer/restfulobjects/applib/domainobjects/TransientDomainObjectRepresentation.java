@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 public class TransientDomainObjectRepresentation extends AbstractDomainObjectRepresentation {

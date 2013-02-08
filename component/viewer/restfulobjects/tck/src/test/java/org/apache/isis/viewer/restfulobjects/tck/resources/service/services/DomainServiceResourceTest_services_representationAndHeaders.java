@@ -33,14 +33,14 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -80,7 +80,7 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(RoHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(RestfulHttpMethod.GET));
 
         assertThat(repr.getValues(), isArray());
 

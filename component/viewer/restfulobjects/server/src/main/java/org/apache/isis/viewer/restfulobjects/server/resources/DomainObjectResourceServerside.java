@@ -39,15 +39,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.util.UrlParserUtils;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.Intent;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.MemberMode;
+import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {

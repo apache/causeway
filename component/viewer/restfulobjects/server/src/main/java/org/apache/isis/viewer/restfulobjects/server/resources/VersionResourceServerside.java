@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;

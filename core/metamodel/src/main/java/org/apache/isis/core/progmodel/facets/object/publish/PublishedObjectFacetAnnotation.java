@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet
 
 public class PublishedObjectFacetAnnotation extends PublishedObjectFacetAbstract {
 
-    public PublishedObjectFacetAnnotation(PublishedObject.EventCanonicalizer eventCanonicalizer, final FacetHolder holder) {
+    public PublishedObjectFacetAnnotation(PublishedObject.PayloadFactory eventCanonicalizer, final FacetHolder holder) {
         super(eventCanonicalizer, holder);
     }
 

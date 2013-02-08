@@ -33,12 +33,12 @@ import org.junit.Test;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.Header;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
@@ -59,7 +59,7 @@ public class AnyResourceTest_clientAcceptHeader_exceptionHandling {
     @Test
     public void whenSetsNoAcceptHeader_isOk() throws Exception {
         // given
-        final RestfulRequest restfulReq = client.createRequest(RoHttpMethod.GET, "/");
+        final RestfulRequest restfulReq = client.createRequest(RestfulHttpMethod.GET, "/");
 
         // when
         final RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
@@ -73,7 +73,7 @@ public class AnyResourceTest_clientAcceptHeader_exceptionHandling {
     public void whenSetsAcceptHeaderOfApplicationJson_isOk() throws Exception {
 
         // given
-        final RestfulRequest restfulReq = client.createRequest(RoHttpMethod.GET, "/");
+        final RestfulRequest restfulReq = client.createRequest(RestfulHttpMethod.GET, "/");
         restfulReq.withHeader(Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
 
         // when

@@ -41,11 +41,11 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
@@ -88,10 +88,10 @@ public class HomePageResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink(client).httpMethod(RoHttpMethod.GET));
-        assertThat(repr.getUser(), isLink(client).httpMethod(RoHttpMethod.GET));
-        assertThat(repr.getServices(), isLink(client).httpMethod(RoHttpMethod.GET));
-        assertThat(repr.getVersion(), isLink(client).httpMethod(RoHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink(client).httpMethod(RestfulHttpMethod.GET));
+        assertThat(repr.getUser(), isLink(client).httpMethod(RestfulHttpMethod.GET));
+        assertThat(repr.getServices(), isLink(client).httpMethod(RestfulHttpMethod.GET));
+        assertThat(repr.getVersion(), isLink(client).httpMethod(RestfulHttpMethod.GET));
 
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());

@@ -39,10 +39,10 @@ import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
@@ -79,7 +79,7 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(RoHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(RestfulHttpMethod.GET));
         assertThat(repr.getOid(), matches("OID[:].+"));
         assertThat(repr.getTitle(), matches("Simples"));
 

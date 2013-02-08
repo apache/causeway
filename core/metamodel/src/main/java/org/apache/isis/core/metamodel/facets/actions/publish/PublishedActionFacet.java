@@ -26,6 +26,6 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * Indicates that the invocation of action should be published, specifying the means by which a
  * canonical event representing this invocation should be created.
  */
-public interface PublishedActionFacet extends SingleValueFacet<PublishedAction.EventCanonicalizer> {
+public interface PublishedActionFacet extends SingleValueFacet<PublishedAction.PayloadFactory> {
 
 }

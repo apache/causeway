@@ -22,6 +22,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -34,9 +35,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
@@ -46,7 +47,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter> {
 
@@ -70,22 +70,31 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private static enum Mode {
-        REGULAR(false, true), PERSIST_LINK_ARGUMENTS(true, true), MODIFY_PROPERTIES_LINK_ARGUMENTS(true, false);
+        REGULAR(false, true, true), 
+        PERSIST_LINK_ARGUMENTS(true, true, false), 
+        MODIFY_PROPERTIES_LINK_ARGUMENTS(true, false, false),
+        EVENT_SERIALIZATION(false, false, true);
 
-        private final boolean cutDown;
+        private final boolean representsArguments;
         private final boolean describedBy;
+        private boolean checkVisibility;
 
-        private Mode(final boolean cutDown, final boolean describedBy) {
-            this.cutDown = cutDown;
+        private Mode(final boolean representsArguments, final boolean describedBy, final boolean visibilityCheck) {
+            this.representsArguments = representsArguments;
             this.describedBy = describedBy;
+            this.checkVisibility = visibilityCheck;
         }
 
-        public boolean isCutDown() {
-            return cutDown;
+        public boolean representsArguments() {
+            return representsArguments;
         }
 
         public boolean includesDescribedBy() {
             return describedBy;
+        }
+        
+        public boolean checkVisibility() {
+            return checkVisibility;
         }
     }
 
@@ -117,7 +126,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     public JsonRepresentation render() {
 
         // self, oid
-        if (!mode.isCutDown()) {
+        if (!mode.representsArguments()) {
             if (objectAdapter.representsPersistent()) {
                 if (includesSelf) {
                     final JsonRepresentation self = linkToBuilder.with(objectAdapter).builder(Rel.SELF).build();
@@ -128,14 +137,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
 
         // title
-        if (!mode.isCutDown()) {
+        if (!mode.representsArguments()) {
             final String title = objectAdapter.titleString();
             representation.mapPut("title", title);
 
         }
 
         // serviceId
-        if (!mode.isCutDown()) {
+        if (!mode.representsArguments()) {
             final boolean isService = objectAdapter.getSpecification().isService();
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
@@ -150,9 +159,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             getLinks().arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
         }
 
-        if (!mode.isCutDown()) {
+        if (!mode.representsArguments()) {
             // update/persist
-            addPersistLinkIfTransient();
+            addPersistLinkIfTransientAndPersistable();
             addUpdatePropertiesLinkIfPersistent();
 
             // extensions
@@ -165,7 +174,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getOidStr() {
-        return OidUtils.getOidStr(resourceContext, objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(resourceContext, objectAdapter);
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
@@ -173,7 +182,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
         addAssociations(objectAdapter, members, associations);
 
-        if (!mode.isCutDown()) {
+        if (!mode.representsArguments()) {
             final List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
             addActions(objectAdapter, actions, members);
         }
@@ -185,7 +194,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final LinkFollower linkFollower = getLinkFollower().follow("members");
         for (final ObjectAssociation assoc : associations) {
 
-            if (!mode.isCutDown()) {
+            if (mode.checkVisibility()) {
                 final Consent visibility = assoc.isVisible(getAuthenticationSession(), objectAdapter, resourceContext.getWhere());
                 if (!visibility.isAllowed()) {
                     continue;
@@ -199,14 +208,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
                 renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
-                if (mode.isCutDown()) {
+                if (mode.representsArguments()) {
                     renderer.asArguments();
                 }
 
                 members.arrayAdd(renderer.render());
             }
 
-            if (mode.isCutDown()) {
+            if (mode.representsArguments()) {
                 // don't include collections
                 continue;
             }
@@ -247,15 +256,18 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
     }
 
-    private void addPersistLinkIfTransient() {
+    private void addPersistLinkIfTransientAndPersistable() {
         if (objectAdapter.representsPersistent()) {
+            return;
+        }
+        if(objectAdapter.getSpecification().containsDoOpFacet(NotPersistableFacet.class)) {
             return;
         }
         final RendererFactory rendererFactory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
         final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST, RepresentationType.DOMAIN_OBJECT, "objects/").withHttpMethod(RoHttpMethod.POST).withArguments(domainObjectRepr);
+        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST, RepresentationType.DOMAIN_OBJECT, "objects/").withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
 
@@ -269,6 +281,13 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return this;
     }
 
+    // not part of the spec
+    public DomainObjectReprRenderer asEventSerialization() {
+        this.mode = Mode.EVENT_SERIALIZATION;
+        return this;
+    }
+
+
     private void addUpdatePropertiesLinkIfPersistent() {
         if (!objectAdapter.representsPersistent()) {
             return;
@@ -278,7 +297,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asModifyPropertiesLinkArguments().render();
 
-        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.MODIFY, RepresentationType.DOMAIN_OBJECT, "objects/%s", getOidStr()).withHttpMethod(RoHttpMethod.PUT).withArguments(domainObjectRepr);
+        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.MODIFY, RepresentationType.DOMAIN_OBJECT, "objects/%s", getOidStr()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
 

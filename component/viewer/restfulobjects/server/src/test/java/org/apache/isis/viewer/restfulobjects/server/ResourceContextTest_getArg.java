@@ -32,7 +32,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
 public class ResourceContextTest_getArg {

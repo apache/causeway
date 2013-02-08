@@ -17,27 +17,27 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
 public class MutatorSpec {
 
-    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RoHttpMethod httpMethod, final BodyArgs argSpec) {
+    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RestfulHttpMethod httpMethod, final BodyArgs argSpec) {
         return of(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, null);
     }
 
-    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RoHttpMethod httpMethod, final BodyArgs argSpec, final String suffix) {
+    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RestfulHttpMethod httpMethod, final BodyArgs argSpec, final String suffix) {
         return new MutatorSpec(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, suffix);
     }
 
     public final Rel rel;
     public final Class<? extends Facet> validationFacetType;
     public final Class<? extends Facet> mutatorFacetType;
-    public final RoHttpMethod httpMethod;
+    public final RestfulHttpMethod httpMethod;
     public final String suffix;
     public final BodyArgs arguments;
 
-    private MutatorSpec(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RoHttpMethod httpMethod, final BodyArgs bodyArgs, final String suffix) {
+    private MutatorSpec(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RestfulHttpMethod httpMethod, final BodyArgs bodyArgs, final String suffix) {
         this.rel = rel;
         this.validationFacetType = validationFacetType;
         this.mutatorFacetType = mutatorFacetType;

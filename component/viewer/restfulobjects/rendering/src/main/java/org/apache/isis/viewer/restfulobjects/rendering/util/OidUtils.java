@@ -22,18 +22,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
 
     private OidUtils() {
-    }
-
-    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String oidEncodedStr) {
-        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
-        return resourceContext.getAdapterManager().adapterFor(rootOid);
     }
 
     public static String getOidStr(final RendererContext resourceContext, final ObjectAdapter objectAdapter) {

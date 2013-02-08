@@ -35,16 +35,16 @@ import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
 import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    PROPERTY("properties/", "id", RepresentationType.OBJECT_PROPERTY, ImmutableMap.of("modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, RoHttpMethod.PUT, BodyArgs.ONE), "clear",
-            MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, RoHttpMethod.DELETE, BodyArgs.NONE))) {
+    PROPERTY("properties/", "id", RepresentationType.OBJECT_PROPERTY, ImmutableMap.of("modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE), "clear",
+            MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))) {
         @Override
         public ObjectSpecification specFor(final ObjectMember objectMember) {
             return objectMember.getSpecification();
@@ -54,8 +54,8 @@ public enum MemberType {
      * {@link #getMutators()} are keyed by
      * {@link CollectionSemantics#getAddToKey()}
      */
-    COLLECTION("collections/", "id", RepresentationType.OBJECT_COLLECTION, ImmutableMap.of("addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RoHttpMethod.PUT, BodyArgs.ONE), "addToList",
-            MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RoHttpMethod.POST, BodyArgs.ONE), "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, RoHttpMethod.DELETE, BodyArgs.ONE))) {
+    COLLECTION("collections/", "id", RepresentationType.OBJECT_COLLECTION, ImmutableMap.of("addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE), "addToList",
+            MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RestfulHttpMethod.POST, BodyArgs.ONE), "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, RestfulHttpMethod.DELETE, BodyArgs.ONE))) {
         @Override
         public ObjectSpecification specFor(final ObjectMember objectMember) {
             return objectMember.getSpecification();
@@ -65,8 +65,8 @@ public enum MemberType {
      * {@link #getMutators()} are keyed by
      * {@link ActionSemantics#getInvokeKey()}
      */
-    ACTION("actions/", "id", RepresentationType.ACTION_RESULT, ImmutableMap.of("invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RoHttpMethod.GET, BodyArgs.MANY, "invoke"), "invokeIdempotent",
-            MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RoHttpMethod.PUT, BodyArgs.MANY, "invoke"), "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RoHttpMethod.POST, BodyArgs.MANY, "invoke"))) {
+    ACTION("actions/", "id", RepresentationType.ACTION_RESULT, ImmutableMap.of("invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.GET, BodyArgs.MANY, "invoke"), "invokeIdempotent",
+            MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.PUT, BodyArgs.MANY, "invoke"), "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke"))) {
         @Override
         public ObjectSpecification specFor(final ObjectMember objectMember) {
             final ObjectAction objectAction = (ObjectAction) objectMember;

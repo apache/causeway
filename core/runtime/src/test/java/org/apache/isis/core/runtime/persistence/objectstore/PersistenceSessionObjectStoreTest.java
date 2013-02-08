@@ -57,7 +57,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
@@ -103,7 +103,7 @@ public class PersistenceSessionObjectStoreTest {
     @Mock
     private AuditingService mockAuditingService;
     @Mock
-    private PublishingServiceWithCanonicalizers mockPublishingService;
+    private PublishingServiceWithDefaultPayloadFactories mockPublishingService;
 
     @Mock
     private CreateObjectCommand createObjectCommand;

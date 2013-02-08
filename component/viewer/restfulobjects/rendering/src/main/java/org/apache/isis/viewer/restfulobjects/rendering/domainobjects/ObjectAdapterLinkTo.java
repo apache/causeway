@@ -20,8 +20,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 

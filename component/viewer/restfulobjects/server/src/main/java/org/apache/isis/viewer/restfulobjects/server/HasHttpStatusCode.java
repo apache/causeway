@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 
 public interface HasHttpStatusCode {
 

@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.publish.CanonicalEvent;
+import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.PublishingService;
 
 /**
@@ -39,12 +39,10 @@ import org.apache.isis.applib.services.publish.PublishingService;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PublishedObject {
     
-    /**
-     * @see http://en.wikipedia.org/wiki/Canonicalization
-     */
-    public interface EventCanonicalizer {
-        public CanonicalEvent canonicalizeObject(Object changedObject);
+    public interface PayloadFactory {
+        @Programmatic
+        public EventPayload payloadFor(Object changedObject);
     }
     
-    Class<? extends EventCanonicalizer> canonicalizeWith() default EventCanonicalizer.class;
+    Class<? extends PayloadFactory> value() default PayloadFactory.class;
 }

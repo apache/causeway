@@ -22,8 +22,8 @@ import java.util.Collection;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;

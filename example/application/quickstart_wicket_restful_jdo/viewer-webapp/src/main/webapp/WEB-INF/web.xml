@@ -203,7 +203,7 @@
     <!-- used by RestEasy to determine the JAX-RS resources and other related configuration -->
     <context-param>
         <param-name>javax.ws.rs.Application</param-name>
-        <param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
+        <param-value>org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication</param-value>
     </context-param>
     
     <context-param>
@@ -219,7 +219,7 @@
         <!-- authentication required for REST -->
         <init-param>
             <param-name>authenticationSessionStrategy</param-name>
-            <param-value>org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
+            <param-value>org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
         </init-param>
         <init-param>
             <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->

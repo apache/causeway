@@ -32,11 +32,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.isis.applib.annotation.PublishedAction.EventCanonicalizer;
+import org.apache.isis.applib.annotation.PublishedAction.PayloadFactory;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -198,7 +198,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     /**
      * could be null if none has been registered
      */
-    private final PublishingServiceWithCanonicalizers publishingService;
+    private final PublishingServiceWithDefaultPayloadFactories publishingService;
 
     private State state;
 
@@ -206,7 +206,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     
     private final UUID guid;
 
-    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithCanonicalizers publishingService) {
+    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
@@ -434,8 +434,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(publishedObjectFacet == null) {
                 continue;
             }
-            final PublishedObject.EventCanonicalizer canonicalizer = publishedObjectFacet.value();
-            publishingService.publishObject(canonicalizer, getGuid(), currentUser, currentTimestampEpoch, changedAdapter);
+            final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
+            final EventMetadata metadata = new EventMetadata(getGuid(), currentUser, currentTimestampEpoch);
+
+            publishingService.publishObject(payloadFactory, metadata, changedAdapter);
         }
     }
 
@@ -449,8 +451,9 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(publishedActionFacet == null) {
                 return;
             } 
-            final EventCanonicalizer canonicalizer = publishedActionFacet.value();
-            publishingService.publishAction(canonicalizer, guid, currentUser, currentTimestampEpoch, currentInvocation);
+            final PayloadFactory payloadFactory = publishedActionFacet.value();
+            final EventMetadata metadata = new EventMetadata(getGuid(), currentUser, currentTimestampEpoch);
+            publishingService.publishAction(payloadFactory, metadata, currentInvocation);
         } finally {
             ActionInvocationFacet.currentInvocation.set(null);
         }

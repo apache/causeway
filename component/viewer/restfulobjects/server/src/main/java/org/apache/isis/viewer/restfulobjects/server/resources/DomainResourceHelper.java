@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
@@ -67,12 +67,12 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder.ExpectedStringRepresentingValueException;
-import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
-import org.apache.isis.viewer.restfulobjects.rendering.util.UrlDecoderUtils;
-import org.apache.isis.viewer.restfulobjects.rendering.util.UrlParserUtils;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.resources.ResourceAbstract.Caching;
+import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
+import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
+import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 

@@ -41,11 +41,11 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
@@ -88,7 +88,7 @@ public class UserResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr.isMap(), is(true));
 
-        assertThat(repr.getSelf(), isLink(client).httpMethod(RoHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink(client).httpMethod(RestfulHttpMethod.GET));
         assertThat(repr.getUserName(), is(not(nullValue())));
         assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change
                                                              // fixture so

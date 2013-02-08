@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 @Provider

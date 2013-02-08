@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;

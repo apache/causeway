@@ -24,13 +24,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstract<PublishedObject.EventCanonicalizer> implements PublishedObjectFacet {
+public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstract<PublishedObject.PayloadFactory> implements PublishedObjectFacet {
 
     public static Class<? extends Facet> type() {
         return PublishedObjectFacet.class;
     }
 
-    public PublishedObjectFacetAbstract(final PublishedObject.EventCanonicalizer eventCanonicalizer, final FacetHolder holder) {
+    public PublishedObjectFacetAbstract(final PublishedObject.PayloadFactory eventCanonicalizer, final FacetHolder holder) {
         super(type(), eventCanonicalizer, holder);
     }
 

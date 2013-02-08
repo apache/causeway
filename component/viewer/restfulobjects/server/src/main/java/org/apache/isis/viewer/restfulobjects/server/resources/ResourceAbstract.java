@@ -49,14 +49,14 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
-import org.apache.isis.viewer.restfulobjects.rendering.util.UrlDecoderUtils;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
+import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 

@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
@@ -184,8 +184,10 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
         final List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
-            final ObjectSpecification objectSpec = param.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+            // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
+            // final ObjectSpecification choiceSpec = param.getSpecification();
+            final ObjectSpecification choiceSpec = choiceAdapter.getSpecification();
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, choiceSpec));
         }
         return list;
     }
@@ -195,8 +197,10 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         if (defaultAdapter == null) {
             return null;
         }
-        final ObjectSpecification objectSpec = param.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, defaultAdapter, objectSpec);
+        // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
+        // final ObjectSpecification defaultSpec = param.getSpecification();
+        final ObjectSpecification defaultSpec = defaultAdapter.getSpecification();
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, defaultAdapter, defaultSpec);
     }
 
     // ///////////////////////////////////////////////////

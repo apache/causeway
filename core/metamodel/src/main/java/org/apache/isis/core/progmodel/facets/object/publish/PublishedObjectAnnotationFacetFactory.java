@@ -41,15 +41,15 @@ public class PublishedObjectAnnotationFacetFactory extends FacetFactoryAbstract 
     }
 
     private PublishedObjectFacet create(final PublishedObject annotation, final FacetHolder holder) {
-        return annotation == null ? null : new PublishedObjectFacetAnnotation(newEventCanonicalizer(annotation.canonicalizeWith()), holder);
+        return annotation == null ? null : new PublishedObjectFacetAnnotation(newPayloadFactory(annotation.value()), holder);
     }
 
-    private static PublishedObject.EventCanonicalizer newEventCanonicalizer(final Class<? extends PublishedObject.EventCanonicalizer> value) {
+    private static PublishedObject.PayloadFactory newPayloadFactory(final Class<? extends PublishedObject.PayloadFactory> value) {
         if(value == null) {
             return null;
         }
         try {
-            return (PublishedObject.EventCanonicalizer) value.newInstance();
+            return (PublishedObject.PayloadFactory) value.newInstance();
         } catch (final InstantiationException e) {
             return null;
         } catch (final IllegalAccessException e) {

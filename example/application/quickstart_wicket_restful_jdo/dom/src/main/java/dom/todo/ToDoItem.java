@@ -82,7 +82,7 @@ import com.google.common.collect.Lists;
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("TODO")
 @Audited
-@PublishedObject
+@PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
@@ -296,6 +296,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // }}
 
     // {{ add (action)
+    @PublishedAction
     @MemberOrder(name="dependencies", sequence = "3")
     public ToDoItem add(final ToDoItem toDoItem) {
         getDependencies().add(toDoItem);

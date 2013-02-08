@@ -28,7 +28,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-class JsonFixture {
+public class JsonFixture {
 
     private JsonFixture() {
     }

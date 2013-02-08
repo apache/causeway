@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
@@ -77,15 +77,18 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // ///////////////////////////////////////////////////
 
     private void addValue() {
-        representation.mapPut("value", valueRep());
+        representation.mapPut("value", valueOrRefRepr());
     }
 
-    private Object valueRep() {
+    private Object valueOrRefRepr() {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
         if (valueAdapter == null) {
             return NullNode.getInstance();
         }
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
+        // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
+        // final ObjectSpecification valueSpec = objectMember.getSpecification();
+        ObjectSpecification valueSpec = valueAdapter.getSpecification();
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, valueSpec);
     }
 
     // ///////////////////////////////////////////////////
@@ -139,8 +142,10 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
         final List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
-            final ObjectSpecification objectSpec = objectMember.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+            // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
+            // final ObjectSpecification choiceSpec = objectMember.getSpecification();
+            final ObjectSpecification choiceSpec = objectAdapter.getSpecification();
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, choiceSpec));
         }
         return list;
     }

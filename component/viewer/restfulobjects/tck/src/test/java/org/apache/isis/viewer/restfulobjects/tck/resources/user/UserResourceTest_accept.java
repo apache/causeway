@@ -25,11 +25,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.RoHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class UserResourceTest_accept {
     @Test
     public void applicationJson() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -61,7 +61,7 @@ public class UserResourceTest_accept {
     @Test
     public void applicationJson_profileUser() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -70,7 +70,7 @@ public class UserResourceTest_accept {
     @Test
     public void applicationJson_invalid() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RoHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

@@ -33,7 +33,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithCanonicalizers;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -77,7 +77,7 @@ public class IsisTransactionTest {
     @Mock
     private AuditingService mockAuditingService;
     @Mock
-    private PublishingServiceWithCanonicalizers mockPublishingService;
+    private PublishingServiceWithDefaultPayloadFactories mockPublishingService;
 
     private PersistenceCommand command;
     private PersistenceCommand command2;

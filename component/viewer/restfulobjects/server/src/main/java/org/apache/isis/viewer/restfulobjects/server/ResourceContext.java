@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper;
 

@@ -37,11 +37,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
-import org.apache.isis.viewer.restfulobjects.applib.links.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
@@ -56,8 +56,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ParentSpecAnd
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.util.UrlParserUtils;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 import com.google.common.base.Strings;

@@ -18,8 +18,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;

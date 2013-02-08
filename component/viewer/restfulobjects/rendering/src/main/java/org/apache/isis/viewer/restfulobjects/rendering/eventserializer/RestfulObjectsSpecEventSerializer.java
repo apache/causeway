@@ -1,0 +1,70 @@
+package org.apache.isis.viewer.restfulobjects.rendering.eventserializer;
+
+import java.io.IOException;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.EventSerializer;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+
+public class RestfulObjectsSpecEventSerializer implements EventSerializer {
+
+    private final static JsonMapper jsonMapper = JsonMapper.instance();
+
+    private final static DomainObjectReprRenderer.Factory objectRendererFactory = new DomainObjectReprRenderer.Factory();
+    
+    @Programmatic
+    @Override
+    public Object serialize(EventMetadata metadata, EventPayload payload) {
+        final RendererContext rendererContext = new EventSerializerRendererContext(Where.OBJECT_FORMS);
+
+        final JsonRepresentation payloadRepr = asPayloadRepr(rendererContext, payload);
+        final JsonRepresentation eventRepr = asEventRepr(metadata, payloadRepr);
+        
+        return jsonFor(eventRepr);
+    }
+
+    JsonRepresentation asEventRepr(EventMetadata metadata, final JsonRepresentation payloadRepr) {
+        final JsonRepresentation eventRepr = JsonRepresentation.newMap();
+        final JsonRepresentation metadataRepr = JsonRepresentation.newMap();
+        eventRepr.mapPut("metadata", metadataRepr);
+        metadataRepr.mapPut("guid", metadata.getGuid());
+        metadataRepr.mapPut("user", metadata.getUser());
+        metadataRepr.mapPut("timestamp", metadata.getTimestamp());
+        eventRepr.mapPut("payload", payloadRepr);
+        return eventRepr;
+    }
+
+    JsonRepresentation asPayloadRepr(final RendererContext rendererContext, EventPayload payload) {
+        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) objectRendererFactory.newRenderer(rendererContext, null, JsonRepresentation.newMap());
+        final ObjectAdapter objectAdapter = rendererContext.getAdapterManager().adapterFor(payload);
+        renderer.with(objectAdapter).asEventSerialization();
+        return renderer.render();
+    }
+
+    String jsonFor(final Object object) {
+        try {
+            return getJsonMapper().write(object);
+        } catch (final JsonGenerationException e) {
+            throw new RuntimeException(e);
+        } catch (final JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    JsonMapper getJsonMapper() {
+        return jsonMapper;
+    }
+
+
+}
