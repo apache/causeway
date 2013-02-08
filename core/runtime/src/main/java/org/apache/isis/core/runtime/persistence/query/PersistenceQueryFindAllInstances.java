@@ -31,15 +31,12 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
     private long index;
     private long countedSoFar;
     
-    public PersistenceQueryFindAllInstances(final ObjectSpecification specification) {
-        this(specification, 0, 0);
-    }
-    
-    public PersistenceQueryFindAllInstances(final ObjectSpecification specification, final long start, final long count) {
-        super(specification, start, count);
+    public PersistenceQueryFindAllInstances(final ObjectSpecification specification, final long ... range) {
+        super(specification, range);
         index=0;
         countedSoFar=0;
     }
+    
 
     /**
      * Returns true so it matches all instances.
@@ -49,10 +46,10 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
         if (getCount() == 0 && getStart() == 0){
             return true;
         }
-        if (index++ < getStart()){
+        if (index++ < start){
             return false;
         }
-        if (countedSoFar++ <getCount()){
+        if (countedSoFar++ < count){
             return true;
         }
         return false;

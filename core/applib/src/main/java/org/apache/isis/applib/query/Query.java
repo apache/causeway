@@ -50,4 +50,17 @@ public interface Query<T> extends Serializable {
      * A human-readable representation of this query and its values.
      */
     public String getDescription();
+
+    /**
+     * The start index into the set table
+     * @return
+     */
+    public long getStart();
+
+
+    /**
+     * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
+     * @return
+     */
+    public long getCount();
 }

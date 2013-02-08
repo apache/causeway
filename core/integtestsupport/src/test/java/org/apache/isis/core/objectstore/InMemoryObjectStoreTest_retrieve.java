@@ -48,6 +48,8 @@ public class InMemoryObjectStoreTest_retrieve {
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().build();
     
     protected ObjectAdapter epv2Adapter;
+    protected ObjectAdapter epv3Adapter;
+    protected ObjectAdapter epv4Adapter;
     protected ObjectSpecification epvSpecification;
 
     protected InMemoryObjectStore getStore() {
@@ -57,6 +59,8 @@ public class InMemoryObjectStoreTest_retrieve {
     @Before
     public void setUpFixtures() throws Exception {
         epv2Adapter = iswf.adapterFor(iswf.fixtures.smpl2);
+        epv3Adapter = iswf.adapterFor(iswf.fixtures.smpl3);
+        epv4Adapter = iswf.adapterFor(iswf.fixtures.smpl4);
         epvSpecification = iswf.loadSpecification(SimpleEntity.class);
     }
 
@@ -126,6 +130,28 @@ public class InMemoryObjectStoreTest_retrieve {
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
     }
 
+    @Test
+    public void getInstances_findRange() throws Exception {
+        // given
+        iswf.persist(iswf.fixtures.smpl1); // 0
+        iswf.persist(iswf.fixtures.smpl2); // 1
+        iswf.persist(iswf.fixtures.smpl3); // 2 <- this one
+        iswf.persist(iswf.fixtures.smpl4); // 3 <- this one
+        iswf.bounceSystem();
+
+        // when
+        final List<ObjectAdapter> retrievedAdapters = getStore().loadInstancesAndAdapt(new PersistenceQueryFindAllInstances(epvSpecification, 2, 2));
+        
+        // then
+        assertEquals(2, retrievedAdapters.size());
+        final ObjectAdapter retrievedAdapter = retrievedAdapters.get(0);
+
+        assertNotSame(epv4Adapter, retrievedAdapter);
+        assertEquals(((SimpleEntity)epv4Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
+        assertEquals(epv4Adapter.getOid(), retrievedAdapter.getOid());
+    }
+    
+    
     @Test
     public void hasInstances_whenEmpty() throws Exception {
         assertEquals(false, getStore().hasInstances(epvSpecification));

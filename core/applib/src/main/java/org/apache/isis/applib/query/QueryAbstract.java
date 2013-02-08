@@ -38,16 +38,23 @@ public abstract class QueryAbstract<T> implements Query<T> {
      */
     private transient Class<T> resultType;
 
-    public QueryAbstract(final Class<T> type, final long start, final long count) {
+
+    /**
+     * Base query based on Class type. 
+     * 
+     * @param type
+     * @param range optional start and count of the range of dataset. 0
+     */
+    public QueryAbstract(final Class<T> type, final long ... range) {
         this.resultTypeName = type.getName();
-        this.start = start;
-        this.count = count;
+        this.start = range.length > 0 ? range[0]:0;
+        this.count = range.length > 1 ? range[1]:0;
     }
 
-    public QueryAbstract(final String typeName, final long start, final long count) {
+    public QueryAbstract(final String typeName, final long ... range) {
         this.resultTypeName = typeName;
-        this.start = start;
-        this.count = count;
+        this.start = range.length > 0 ? range[0]:0;
+        this.count = range.length > 1 ? range[1]:0;
     }
 
     /**

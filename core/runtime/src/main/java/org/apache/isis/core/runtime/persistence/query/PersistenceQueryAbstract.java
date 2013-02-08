@@ -31,21 +31,24 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery, Encodable {
 
-    private final long start;
-    private final long count;
+    protected final long start;
+    protected final long count;
+    
     private final ObjectSpecification specification;
 
-    public PersistenceQueryAbstract(final ObjectSpecification specification, final long start, final long count) {
-        this.specification = specification;
-        this.start = start;
-        this.count = count;
+    public PersistenceQueryAbstract(final ObjectSpecification specification, final long ... range) {
+        this.start = range.length > 0 ? range[0]:0;
+        this.count = range.length > 1 ? range[1]:0;
+        
+        this.specification = specification;        
         initialized();
     }
 
-    protected PersistenceQueryAbstract(final DataInputExtended input, final long start, final long count) throws IOException {
+    protected PersistenceQueryAbstract(final DataInputExtended input, final long ... range) throws IOException {
         final String specName = input.readUTF();
-        this.start = start;
-        this.count = count;
+        this.start = range.length > 0 ? range[0]:0;
+        this.count = range.length > 1 ? range[1]:0;
+        
         specification = getSpecificationLoader().loadSpecification(specName);
         initialized();
     }

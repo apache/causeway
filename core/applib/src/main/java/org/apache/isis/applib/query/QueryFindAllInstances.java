@@ -34,20 +34,12 @@ public class QueryFindAllInstances<T> extends QueryBuiltInAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public QueryFindAllInstances(final Class<T> type) {
-        this(type, 0, 0);
+    public QueryFindAllInstances(final Class<T> type, final long ... range) {
+        super(type, range);
     }
 
-    public QueryFindAllInstances(final String typeName) {
-        this(typeName, 0, 0);
-    }
-
-    public QueryFindAllInstances(Class<T> type, final long startIndex, final long rowCount) {
-        super(type, startIndex, rowCount);
-    }
-
-    public QueryFindAllInstances(String typeName, final long startIndex, final long rowCount) {
-        super(typeName, startIndex, rowCount);
+    public QueryFindAllInstances(final String typeName, final long ... range) {
+        super(typeName, range);
     }
 
     @Override

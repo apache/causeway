@@ -41,16 +41,16 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
     private final QueryCardinality cardinality;
     private final Map<String, ObjectAdapter> argumentsAdaptersByParameterName;
 
-    public PersistenceQueryFindUsingApplibQueryDefault(final ObjectSpecification specification, final String queryName, final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, final QueryCardinality cardinality, final long start, final long count) {
-        super(specification, start, count);
+    public PersistenceQueryFindUsingApplibQueryDefault(final ObjectSpecification specification, final String queryName, final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, final QueryCardinality cardinality, final long ... range) {
+        super(specification, range);
         this.queryName = queryName;
         this.cardinality = cardinality;
         this.argumentsAdaptersByParameterName = argumentsAdaptersByParameterName;
         initialized();
     }
 
-    public PersistenceQueryFindUsingApplibQueryDefault(final DataInputExtended input, final long start, final long count) throws IOException {
-        super(input, start, count);
+    public PersistenceQueryFindUsingApplibQueryDefault(final DataInputExtended input, final long ... range) throws IOException {
+        super(input, range);
         this.queryName = input.readUTF();
         this.cardinality = QueryCardinality.valueOf(input.readUTF());
         // TODO: need to read from input

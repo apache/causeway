@@ -47,12 +47,12 @@ public abstract class QueryBuiltInAbstract<T> extends QueryAbstract<T> {
 
     private static final long serialVersionUID = 1L;
     
-    public QueryBuiltInAbstract(final Class<T> type, final long start, final long count) {
-        super(type, start, count);
+    public QueryBuiltInAbstract(final Class<T> type, final long ... range) {
+        super(type, range);
     }
 
-    public QueryBuiltInAbstract(final String typeName, final long start, final long count) {
-        super(typeName, start, count);
+    public QueryBuiltInAbstract(final String typeName, final long ... range) {
+        super(typeName, range);
     }
     
 }

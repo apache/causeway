@@ -162,12 +162,12 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
             wve1 = container.newTransientInstance(WrapperValuedEntity.class);
             wve2 = container.newTransientInstance(WrapperValuedEntity.class);
             
-            smpl1 = container.newTransientInstance(SimpleEntity.class);
-            smpl2 = container.newTransientInstance(SimpleEntity.class);
-            smpl3 = container.newTransientInstance(SimpleEntity.class);
-            smpl4 = container.newTransientInstance(SimpleEntity.class);
-            smpl5 = container.newTransientInstance(SimpleEntity.class);
-            smpl6 = container.newTransientInstance(SimpleEntity.class);
+            smpl1 = container.newTransientInstance(SimpleEntity.class);smpl1.setName("1");
+            smpl2 = container.newTransientInstance(SimpleEntity.class);smpl2.setName("2");
+            smpl3 = container.newTransientInstance(SimpleEntity.class);smpl3.setName("3");
+            smpl4 = container.newTransientInstance(SimpleEntity.class);smpl4.setName("4");
+            smpl5 = container.newTransientInstance(SimpleEntity.class);smpl5.setName("5");
+            smpl6 = container.newTransientInstance(SimpleEntity.class);smpl6.setName("6");
             rfcg1 = container.newTransientInstance(ReferencingEntity.class);
             rfcg2 = container.newTransientInstance(ReferencingEntity.class);
             rfcg3 = container.newTransientInstance(ReferencingEntity.class);

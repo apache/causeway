@@ -51,7 +51,6 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltInAbs
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindPaged;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -331,9 +330,6 @@ public final class SqlObjectStore implements ObjectStoreSpi {
             return findByTitle((PersistenceQueryFindByTitle) query, query.getStart(), query.getCount());
         } else if (query instanceof PersistenceQueryFindAllInstances) {
             return getAllInstances((PersistenceQueryFindAllInstances) query,  query.getStart(), query.getCount());
-        } else if (query instanceof PersistenceQueryFindPaged) {
-            PersistenceQueryFindPaged findQuery = (PersistenceQueryFindPaged) query;
-            return getAllInstances((PersistenceQueryFindPaged) query, findQuery.getStart(), findQuery.getCount());
         } else if (query instanceof PersistenceQueryFindByPattern) {
             return findByPattern((PersistenceQueryFindByPattern) query,  query.getStart(), query.getCount());
         } else {

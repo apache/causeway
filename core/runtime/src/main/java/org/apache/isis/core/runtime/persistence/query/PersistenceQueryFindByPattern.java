@@ -36,8 +36,8 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
         return pattern;
     }
 
-    public PersistenceQueryFindByPattern(final ObjectSpecification specification, final ObjectAdapter pattern, final long start, final long count) {
-        super(specification, start, count);
+    public PersistenceQueryFindByPattern(final ObjectSpecification specification, final ObjectAdapter pattern, final long ... range) {
+        super(specification, range);
         this.pattern = pattern;
     }
 

@@ -30,12 +30,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class PersistenceQueryFindByTitle extends PersistenceQueryBuiltInAbstract {
     private final String title;
 
-    public PersistenceQueryFindByTitle(final ObjectSpecification specification, final String title) {
-        this(specification, title, 0, 0);
-    }
-    
-    public PersistenceQueryFindByTitle(final ObjectSpecification specification, final String title, final long start, final long count) {
-        super(specification, start, count);
+    public PersistenceQueryFindByTitle(final ObjectSpecification specification, final String title, final long ... range) {
+        super(specification, range);
         this.title = title == null ? "" : title.toLowerCase();
     }
 

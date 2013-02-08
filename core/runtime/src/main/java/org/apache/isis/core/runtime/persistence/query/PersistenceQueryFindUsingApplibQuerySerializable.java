@@ -37,14 +37,14 @@ public class PersistenceQueryFindUsingApplibQuerySerializable extends Persistenc
     private final QueryCardinality cardinality;
 
     public PersistenceQueryFindUsingApplibQuerySerializable(final ObjectSpecification specification, final Query<?> query, final QueryCardinality cardinality) {
-        super(specification, 0, 0);
+        super(specification, query.getStart(), query.getCount());
         this.query = query;
         this.cardinality = cardinality;
         initialized();
     }
 
-    public PersistenceQueryFindUsingApplibQuerySerializable(final DataInputExtended input) throws IOException {
-        super(input, 0, 0);
+    public PersistenceQueryFindUsingApplibQuerySerializable(final DataInputExtended input, final long ... range) throws IOException {
+        super(input, range);
         this.query = input.readSerializable(Query.class);
         this.cardinality = QueryCardinality.valueOf(input.readUTF());
         initialized();
