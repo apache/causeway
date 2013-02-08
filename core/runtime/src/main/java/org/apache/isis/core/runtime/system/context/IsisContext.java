@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.runtime.system.context;
 
+import java.lang.reflect.Method;
 import java.util.List;
+
+import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 
@@ -33,6 +36,8 @@ import org.apache.isis.core.commons.debug.DebugList;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -71,7 +76,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
     private static IsisConfiguration configuration;
 
     // ///////////////////////////////////////////////////////////
-    // Singleton & Constructor
+    // Singleton & Constructor, shutdown
     // ///////////////////////////////////////////////////////////
 
     /**
@@ -133,6 +138,15 @@ public abstract class IsisContext implements DebuggableWithTitle {
         this.replacePolicy = replacePolicy;
     }
 
+    protected void shutdownInstance() {
+        this.sessionFactory.shutdown();
+    }
+
+    public static void shutdown() {
+        getInstance().shutdownInstance();
+    }
+
+
     // ///////////////////////////////////////////////////////////
     // SessionFactory
     // ///////////////////////////////////////////////////////////
@@ -179,7 +193,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     // ///////////////////////////////////////////////////////////
-    // open / close / shutdown
+    // open / close 
     // ///////////////////////////////////////////////////////////
 
     /**
@@ -227,6 +241,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
      */
     protected abstract void closeAllSessionsInstance();
 
+    
+
     // ///////////////////////////////////////////////////////////
     // getSession()
     // ///////////////////////////////////////////////////////////
@@ -256,6 +272,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
     // ///////////////////////////////////////////////////////////
     // Static Convenience methods (session management)
     // ///////////////////////////////////////////////////////////
+
 
     /**
      * Convenience method to open a new {@link IsisSession}.
@@ -549,5 +566,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
     public void debugData(final DebugBuilder debug) {
         debug.appendln("context ", this);
     }
+
 
 }

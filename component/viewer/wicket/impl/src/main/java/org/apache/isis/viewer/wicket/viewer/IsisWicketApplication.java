@@ -29,6 +29,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import net.sf.cglib.transform.impl.AddInitTransformer;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
@@ -72,6 +74,7 @@ import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.viewer.integration.isis.IsisContextForWicket;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
@@ -121,7 +124,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
 public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
-    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(IsisWicketApplication.class);
 
     /**
@@ -195,6 +197,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         this.bookmarkedPagesModel = new BookmarkedPagesModel();
 
         initWicketComponentInjection(injector);
+        
+    }
+    
+    @Override
+    protected void onDestroy() {
+        IsisContext.shutdown();
+        super.onDestroy();
     }
 
     protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
