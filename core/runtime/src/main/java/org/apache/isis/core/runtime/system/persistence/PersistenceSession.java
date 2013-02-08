@@ -29,10 +29,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.applib.query.QueryFindAllPaged;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -78,7 +82,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObje
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindPaged;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -87,17 +90,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
-import org.apache.log4j.Logger;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-public class PersistenceSession implements  
-        Persistor,
-        EnlistedObjectDirtying, ToPersistObjectSet,
-        RecreatedPojoRemapper,
-        AdapterLifecycleTransitioner,
-        SessionScopedComponent, DebuggableWithTitle {
+public class PersistenceSession implements Persistor, EnlistedObjectDirtying, ToPersistObjectSet, RecreatedPojoRemapper, AdapterLifecycleTransitioner, SessionScopedComponent, DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
 
@@ -124,39 +118,24 @@ public class PersistenceSession implements
     }
 
     private State state;
-    
-    
+
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(
-                final PersistenceSessionFactory persistenceSessionFactory, 
-                final ObjectAdapterFactory adapterFactory, 
-                final ObjectFactory objectFactory, 
-                final ServicesInjectorSpi servicesInjector, 
-                final IdentifierGenerator identifierGenerator, 
-                final AdapterManagerSpi adapterManager,
-                final PersistAlgorithm persistAlgorithm, 
-                final ObjectStore objectStore) {
+    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjectorSpi servicesInjector, final IdentifierGenerator identifierGenerator, final AdapterManagerSpi adapterManager,
+            final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
 
-        this(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager,
-            persistAlgorithm, objectStore);
+        this(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager, persistAlgorithm, objectStore);
     }
 
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(
-                final PersistenceSessionFactory persistenceSessionFactory, 
-                final ObjectAdapterFactory adapterFactory, 
-                final ObjectFactory objectFactory, 
-                final ServicesInjectorSpi servicesInjector, 
-                final OidGenerator oidGenerator, 
-                final AdapterManagerSpi adapterManager,
+    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjectorSpi servicesInjector, final OidGenerator oidGenerator, final AdapterManagerSpi adapterManager,
             final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
-        
+
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
         ensureThatArg(adapterFactory, is(not(nullValue())), "adapter factory required");
@@ -176,8 +155,7 @@ public class PersistenceSession implements
         this.adapterManager = adapterManager;
 
         setState(State.NOT_INITIALIZED);
-        
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
         }
@@ -188,7 +166,6 @@ public class PersistenceSession implements
         this.persistAlgorithm = persistAlgorithm;
         this.objectStore = objectStore;
     }
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // PersistenceSessionFactory
@@ -236,19 +213,17 @@ public class PersistenceSession implements
         ensureThatState(objectStore, is(notNullValue()), "object store required");
         ensureThatState(getTransactionManager(), is(notNullValue()), "transaction manager required");
         ensureThatState(persistAlgorithm, is(notNullValue()), "persist algorithm required");
-        
+
         getAdapterManager().injectInto(objectStore);
         getSpecificationLoader().injectInto(objectStore);
-        
+
         objectStore.open();
-        
+
         createServiceAdapters();
 
         setState(State.OPEN);
     }
 
-
-    
     /**
      * Calls {@link #doClose()}, then closes all components.
      * 
@@ -272,7 +247,6 @@ public class PersistenceSession implements
 
         setState(State.CLOSED);
     }
-
 
     /**
      * Creates (or recreates following a {@link #testReset()})
@@ -351,14 +325,13 @@ public class PersistenceSession implements
         final Object pojo = objectSpec.createObject();
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo, parentAdapter);
         // returned adapter's ResolveState will either be TRANSIENT or GHOST
-        objectSpec.initialize(adapter); 
+        objectSpec.initialize(adapter);
         if (adapter.isGhost()) {
             adapter.changeState(ResolveState.RESOLVING);
             adapter.changeState(ResolveState.RESOLVED);
         }
         return adapter;
     }
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // findInstances, getInstances
@@ -386,33 +359,30 @@ public class PersistenceSession implements
      * {@link PersistenceQuery NOF-internal representation}.
      */
     protected final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
-        if(LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("createPersistenceQueryFor: " + query.getDescription());
         }
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {
-            return new PersistenceQueryFindAllInstances(noSpec);
-        }
-        if (query instanceof QueryFindAllPaged ) {
-            QueryFindAllPaged<?> pagedQuery = (QueryFindAllPaged<?>) query;
-            return new PersistenceQueryFindPaged(noSpec, pagedQuery.getStart(), pagedQuery.getCount());
+            final QueryFindAllInstances<?> queryFindAllInstances = (QueryFindAllInstances<?>) query;
+            return new PersistenceQueryFindAllInstances(noSpec, queryFindAllInstances.getStart(), queryFindAllInstances.getCount());
         }
         if (query instanceof QueryFindByTitle) {
             final QueryFindByTitle<?> queryByTitle = (QueryFindByTitle<?>) query;
             final String title = queryByTitle.getTitle();
-            return new PersistenceQueryFindByTitle(noSpec, title);
+            return new PersistenceQueryFindByTitle(noSpec, title, queryByTitle.getStart(), queryByTitle.getCount());
         }
         if (query instanceof QueryFindByPattern) {
             final QueryFindByPattern<?> queryByPattern = (QueryFindByPattern<?>) query;
             final Object pattern = queryByPattern.getPattern();
             final ObjectAdapter patternAdapter = getAdapterManager().adapterFor(pattern);
-            return new PersistenceQueryFindByPattern(noSpec, patternAdapter);
+            return new PersistenceQueryFindByPattern(noSpec, patternAdapter, queryByPattern.getStart(), queryByPattern.getCount());
         }
         if (query instanceof QueryDefault) {
             final QueryDefault<?> queryDefault = (QueryDefault<?>) query;
             final String queryName = queryDefault.getQueryName();
             final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = wrap(queryDefault.getArgumentsByParameterName());
-            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, argumentsAdaptersByParameterName, cardinality);
+            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, argumentsAdaptersByParameterName, cardinality, queryDefault.getStart(), queryDefault.getCount());
         }
         // fallback; generic serializable applib query.
         return new PersistenceQueryFindUsingApplibQuerySerializable(noSpec, query, cardinality);
@@ -529,7 +499,6 @@ public class PersistenceSession implements
         }
     }
 
-    
     // ///////////////////////////////////////////////////////////////////////////
     // Services
     // ///////////////////////////////////////////////////////////////////////////
@@ -576,7 +545,7 @@ public class PersistenceSession implements
         final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
         final ObjectAdapter serviceAdapter = mapRecreatedPojo(oid, servicePojo);
-        
+
         serviceAdapter.markAsResolvedIfPossible();
         return serviceAdapter;
     }
@@ -598,11 +567,9 @@ public class PersistenceSession implements
         return oid;
     }
 
-
     // ///////////////////////////////////////////////////////////////////////////
     // fixture installation
     // ///////////////////////////////////////////////////////////////////////////
-
 
     /**
      * Determine if the object store has been initialized with its set of start
@@ -645,8 +612,7 @@ public class PersistenceSession implements
         super.finalize();
         LOG.debug("finalizing persistence session");
     }
-    
-    
+
     // ///////////////////////////////////////////////////////////////////////////
     // loadObject, reload
     // ///////////////////////////////////////////////////////////////////////////
@@ -670,7 +636,7 @@ public class PersistenceSession implements
                 return objectStore.loadInstanceAndAdapt(oid);
             }
         });
-		return adapter;
+        return adapter;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -790,7 +756,7 @@ public class PersistenceSession implements
             @Override
             public void execute() {
                 persistAlgorithm.makePersistent(adapter, PersistenceSession.this);
-                
+
                 // clear out the map of transient -> persistent
                 PersistenceSession.this.persistentByTransient.clear();
             }
@@ -872,7 +838,6 @@ public class PersistenceSession implements
         getUpdateNotifier().addChangedObject(adapter);
     }
 
-    
     // ///////////////////////////////////////////////////////////////////////////
     // destroyObject
     // ///////////////////////////////////////////////////////////////////////////
@@ -916,7 +881,6 @@ public class PersistenceSession implements
         });
     }
 
-
     // ///////////////////////////////////////////////////////////////////////////
     // hasInstances
     // ///////////////////////////////////////////////////////////////////////////
@@ -938,7 +902,6 @@ public class PersistenceSession implements
         });
     }
 
-    
     // ///////////////////////////////////////////////////////////////////////////
     // RecreatedPojoRemapper
     // ///////////////////////////////////////////////////////////////////////////
@@ -953,7 +916,6 @@ public class PersistenceSession implements
         adapterManager.remapRecreatedPojo(adapter, recreatedPojo);
     }
 
-
     // ///////////////////////////////////////////////////////////////////////////
     // AdapterLifecycleTransitioner
     // ///////////////////////////////////////////////////////////////////////////
@@ -967,9 +929,7 @@ public class PersistenceSession implements
     public void removeAdapter(ObjectAdapter adapter) {
         adapterManager.removeAdapter(adapter);
     }
-    
-    
-    
+
     // ///////////////////////////////////////////////////////////////////////////
     // ToPersistObjectSet
     // ///////////////////////////////////////////////////////////////////////////
@@ -1002,14 +962,11 @@ public class PersistenceSession implements
         persistentByTransient.put(transientOid, persistentOid);
     }
 
-
-    
     @Override
     public Oid remappedFrom(Oid transientOid) {
         return persistentByTransient.get(transientOid);
     }
 
-    
     /**
      * Uses the {@link ObjectStoreSpi} to
      * {@link ObjectStoreSpi#createCreateObjectCommand(ObjectAdapter) create} a
@@ -1021,11 +978,9 @@ public class PersistenceSession implements
         getTransactionManager().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
-    
     // ///////////////////////////////////////////////////////////////////////////
     // Debugging
     // ///////////////////////////////////////////////////////////////////////////
-
 
     @Override
     public String debugTitle() {
@@ -1059,7 +1014,6 @@ public class PersistenceSession implements
         }
         debug.appendln();
 
-        
         debug.appendTitle("Persistor");
         getTransactionManager().debugData(debug);
         debug.appendln("Persist Algorithm", persistAlgorithm);
@@ -1068,7 +1022,7 @@ public class PersistenceSession implements
 
         objectStore.debugData(debug);
     }
-    
+
     @Override
     public String toString() {
         final ToString toString = new ToString(this);
@@ -1081,7 +1035,6 @@ public class PersistenceSession implements
         return toString.toString();
     }
 
-    
     // ////////////////////////////////////////////////////////////////////
     // Helpers
     // ////////////////////////////////////////////////////////////////////
@@ -1091,8 +1044,6 @@ public class PersistenceSession implements
         return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.representsPersistent());
     }
 
-
-    
     // ///////////////////////////////////////////////////////////////////////////
     // test support
     // ///////////////////////////////////////////////////////////////////////////
@@ -1104,7 +1055,6 @@ public class PersistenceSession implements
         objectStore.reset();
         adapterManager.reset();
     }
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (injected in constructor, possibly implicitly)
@@ -1175,11 +1125,9 @@ public class PersistenceSession implements
         return objectFactory;
     }
 
-
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////////////////////////
-
 
     /**
      * Inject the {@link IsisTransactionManager}.
@@ -1195,7 +1143,6 @@ public class PersistenceSession implements
         this.transactionManager = transactionManager;
     }
 
-    
     /**
      * The configured {@link IsisTransactionManager}.
      * 
@@ -1204,7 +1151,6 @@ public class PersistenceSession implements
     public IsisTransactionManager getTransactionManager() {
         return transactionManager;
     }
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)

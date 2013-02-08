@@ -27,6 +27,8 @@ package org.apache.isis.applib.query;
  */
 public abstract class QueryAbstract<T> implements Query<T> {
 
+    private final long start;
+    private final long count;
     private static final long serialVersionUID = 1L;
 
     private final String resultTypeName;
@@ -36,12 +38,16 @@ public abstract class QueryAbstract<T> implements Query<T> {
      */
     private transient Class<T> resultType;
 
-    public QueryAbstract(final Class<T> type) {
+    public QueryAbstract(final Class<T> type, final long start, final long count) {
         this.resultTypeName = type.getName();
+        this.start = start;
+        this.count = count;
     }
 
-    public QueryAbstract(final String typeName) {
+    public QueryAbstract(final String typeName, final long start, final long count) {
         this.resultTypeName = typeName;
+        this.start = start;
+        this.count = count;
     }
 
     /**
@@ -66,4 +72,20 @@ public abstract class QueryAbstract<T> implements Query<T> {
         return resultTypeName;
     }
 
+    /**
+     * The start index into the set table
+     * @return
+     */
+    public long getStart() {
+        return start;
+    }
+
+
+    /**
+     * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
+     * @return
+     */
+    public long getCount() {
+        return count;
+    }
 }

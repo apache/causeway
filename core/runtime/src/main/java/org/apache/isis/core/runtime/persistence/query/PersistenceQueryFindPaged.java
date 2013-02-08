@@ -32,7 +32,7 @@ public class PersistenceQueryFindPaged extends PersistenceQueryBuiltInAbstract {
     private long index;
     private long countedSoFar;
     public PersistenceQueryFindPaged(final ObjectSpecification specification, final long start, final long count) {
-        super(specification);
+        super(specification, start, count);
         this.start = start;
         this.count = count;
         index=0;

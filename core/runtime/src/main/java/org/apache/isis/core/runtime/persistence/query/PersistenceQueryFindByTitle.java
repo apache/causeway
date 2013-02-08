@@ -31,7 +31,11 @@ public class PersistenceQueryFindByTitle extends PersistenceQueryBuiltInAbstract
     private final String title;
 
     public PersistenceQueryFindByTitle(final ObjectSpecification specification, final String title) {
-        super(specification);
+        this(specification, title, 0, 0);
+    }
+    
+    public PersistenceQueryFindByTitle(final ObjectSpecification specification, final String title, final long start, final long count) {
+        super(specification, start, count);
         this.title = title == null ? "" : title.toLowerCase();
     }
 

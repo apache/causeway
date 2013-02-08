@@ -161,7 +161,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final long startIndex, final long rowCount) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, 
+            final long startIndex, final long rowCount) {
         final StringBuffer sql = createSelectStatement();
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
         loadInstancesToVector(connector, spec, completeSelectStatement(sql, startIndex, rowCount), instances);
@@ -169,7 +170,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final PersistenceQueryFindByPattern query) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, 
+            final PersistenceQueryFindByPattern query) {
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
@@ -245,19 +247,20 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             }
         }
         // if (foundFields > 0) {
-        loadInstancesToVector(connector, spec, completeSelectStatement(sql, 0, 0), instances);
+        loadInstancesToVector(connector, spec, completeSelectStatement(sql, query.getStart(), query.getCount()), instances);
         // }
         return instances;
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final String title) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, 
+            final String title, final long startIndex, final long rowCount) {
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
         sql.append(" WHERE ");
         titleMapping.appendWhereClause(sql, title);
-        loadInstancesToVector(connector, spec, completeSelectStatement(sql, 0, 0), instances);
+        loadInstancesToVector(connector, spec, completeSelectStatement(sql, startIndex, rowCount), instances);
         return instances;
     }
 

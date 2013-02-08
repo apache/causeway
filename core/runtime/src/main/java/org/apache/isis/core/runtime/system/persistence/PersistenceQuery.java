@@ -32,4 +32,15 @@ public interface PersistenceQuery {
      * The type of instances in the resulting set.
      */
     ObjectSpecification getSpecification();
+    
+    /**
+     * The index of the first record to return, 0 means the first.
+     * @return
+     */
+    public long getStart() ;
+    /**
+     * The number of records to return, 0 means all.
+     * @return
+     */
+    public long getCount() ;
 }

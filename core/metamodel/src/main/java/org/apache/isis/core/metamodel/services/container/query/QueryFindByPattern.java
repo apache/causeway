@@ -38,9 +38,13 @@ public class QueryFindByPattern<T> extends QueryBuiltInAbstract<T> {
     private static final long serialVersionUID = 1L;
 
     private final T pattern;
+    
+    public QueryFindByPattern(final Class<T> type, final T pattern){
+        this(type, pattern, 0, 0);
+    }
 
-    public QueryFindByPattern(final Class<T> type, final T pattern) {
-        super(type);
+    public QueryFindByPattern(final Class<T> type, final T pattern, final long start, final long count) {
+        super(type, start, count);
         this.pattern = pattern;
     }
 

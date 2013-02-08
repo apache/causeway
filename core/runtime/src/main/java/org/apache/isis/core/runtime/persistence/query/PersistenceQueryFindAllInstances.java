@@ -28,8 +28,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * Corresponds to {@link QueryFindAllInstances}
  */
 public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbstract {
+    private long index;
+    private long countedSoFar;
+    
     public PersistenceQueryFindAllInstances(final ObjectSpecification specification) {
-        super(specification);
+        this(specification, 0, 0);
+    }
+    
+    public PersistenceQueryFindAllInstances(final ObjectSpecification specification, final long start, final long count) {
+        super(specification, start, count);
+        index=0;
+        countedSoFar=0;
     }
 
     /**
@@ -37,7 +46,16 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
      */
     @Override
     public boolean matches(final ObjectAdapter object) {
-        return true;
+        if (getCount() == 0 && getStart() == 0){
+            return true;
+        }
+        if (index++ < getStart()){
+            return false;
+        }
+        if (countedSoFar++ <getCount()){
+            return true;
+        }
+        return false;
     }
 
     @Override

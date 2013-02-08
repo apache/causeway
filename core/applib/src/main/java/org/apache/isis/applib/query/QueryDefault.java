@@ -84,7 +84,7 @@ public class QueryDefault<T> extends QueryAbstract<T> {
     }
 
     public QueryDefault(final Class<T> resultType, final String queryName, final Map<String, Object> argumentsByParameterName) {
-        super(resultType);
+        super(resultType, 0, 0);
         this.queryName = queryName;
         this.argumentsByParameterName = argumentsByParameterName;
     }

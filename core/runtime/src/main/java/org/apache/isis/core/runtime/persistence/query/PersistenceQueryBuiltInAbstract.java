@@ -36,12 +36,13 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
  */
 public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements PersistenceQueryBuiltIn {
 
-    public PersistenceQueryBuiltInAbstract(final ObjectSpecification specification) {
-        super(specification);
+
+    public PersistenceQueryBuiltInAbstract(final ObjectSpecification specification, final long start, final long count) {
+        super(specification, start, count);
     }
 
-    public PersistenceQueryBuiltInAbstract(final DataInputExtended input) throws IOException {
-        super(input);
+    public PersistenceQueryBuiltInAbstract(final DataInputExtended input, final long start, final long count) throws IOException {
+        super(input, start, count);
     }
-
+    
 }

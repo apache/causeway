@@ -31,15 +31,21 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery, Encodable {
 
+    private final long start;
+    private final long count;
     private final ObjectSpecification specification;
 
-    public PersistenceQueryAbstract(final ObjectSpecification specification) {
+    public PersistenceQueryAbstract(final ObjectSpecification specification, final long start, final long count) {
         this.specification = specification;
+        this.start = start;
+        this.count = count;
         initialized();
     }
 
-    protected PersistenceQueryAbstract(final DataInputExtended input) throws IOException {
+    protected PersistenceQueryAbstract(final DataInputExtended input, final long start, final long count) throws IOException {
         final String specName = input.readUTF();
+        this.start = start;
+        this.count = count;
         specification = getSpecificationLoader().loadSpecification(specName);
         initialized();
     }
@@ -52,6 +58,24 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
     private void initialized() {
         // nothing to do
     }
+    
+    /**
+     * The start index into the set table
+     * @return
+     */
+    public long getStart() {
+        return start;
+    }
+
+
+    /**
+     * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
+     * @return
+     */
+    public long getCount() {
+        return count;
+    }
+    
 
     // ///////////////////////////////////////////////////////
     //

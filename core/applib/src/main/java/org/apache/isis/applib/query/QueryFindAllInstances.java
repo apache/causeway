@@ -21,6 +21,7 @@ package org.apache.isis.applib.query;
 
 import java.io.Serializable;
 
+
 /**
  * Although implements {@link Query} and thus is intended to be (and indeed is)
  * {@link Serializable}, it will be converted into a <tt>PersistenceQuery</tt>
@@ -34,11 +35,19 @@ public class QueryFindAllInstances<T> extends QueryBuiltInAbstract<T> {
     private static final long serialVersionUID = 1L;
 
     public QueryFindAllInstances(final Class<T> type) {
-        super(type);
+        this(type, 0, 0);
     }
 
     public QueryFindAllInstances(final String typeName) {
-        super(typeName);
+        this(typeName, 0, 0);
+    }
+
+    public QueryFindAllInstances(Class<T> type, final long startIndex, final long rowCount) {
+        super(type, startIndex, rowCount);
+    }
+
+    public QueryFindAllInstances(String typeName, final long startIndex, final long rowCount) {
+        super(typeName, startIndex, rowCount);
     }
 
     @Override

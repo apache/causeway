@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryFindAllPaged;
+import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.tck.dom.poly.Empty;
 import org.apache.isis.core.tck.dom.poly.ReferencingPolyTypesEntity;
 import org.apache.isis.core.tck.dom.poly.SelfReferencingEntity;
@@ -169,7 +169,7 @@ public class SqlDomainObjectRepository extends AbstractFactoryAndRepository {
     }
 
     public List<SimpleClass> someSimpleClasses(final long startIndex, final long rowCount) {
-        Query<SimpleClass> query = new QueryFindAllPaged<SimpleClass>(SimpleClass.class, startIndex, rowCount);
+        Query<SimpleClass> query = new QueryFindAllInstances<SimpleClass>(SimpleClass.class, startIndex, rowCount);
         return allMatches(query);
     }
 

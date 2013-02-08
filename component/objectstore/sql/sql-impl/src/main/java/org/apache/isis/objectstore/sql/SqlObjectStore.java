@@ -328,27 +328,27 @@ public final class SqlObjectStore implements ObjectStoreSpi {
     @Override
     public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery query) {
         if (query instanceof PersistenceQueryFindByTitle) {
-            return findByTitle((PersistenceQueryFindByTitle) query);
+            return findByTitle((PersistenceQueryFindByTitle) query, query.getStart(), query.getCount());
         } else if (query instanceof PersistenceQueryFindAllInstances) {
-            return getAllInstances((PersistenceQueryFindAllInstances) query, 0, 0);
+            return getAllInstances((PersistenceQueryFindAllInstances) query,  query.getStart(), query.getCount());
         } else if (query instanceof PersistenceQueryFindPaged) {
             PersistenceQueryFindPaged findQuery = (PersistenceQueryFindPaged) query;
             return getAllInstances((PersistenceQueryFindPaged) query, findQuery.getStart(), findQuery.getCount());
         } else if (query instanceof PersistenceQueryFindByPattern) {
-            return findByPattern((PersistenceQueryFindByPattern) query);
+            return findByPattern((PersistenceQueryFindByPattern) query,  query.getStart(), query.getCount());
         } else {
             throw new SqlObjectStoreException("Query type not supported: " + query);
         }
     }
 
-    private List<ObjectAdapter> findByPattern(final PersistenceQueryFindByPattern query) {
+    private List<ObjectAdapter> findByPattern(final PersistenceQueryFindByPattern query, final long startIndex, final long rowCount) {
         final ObjectSpecification specification = query.getSpecification();// query.getPattern().getSpecification();//
                                                                            // getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
         try {
             final List<ObjectAdapter> matchingInstances = Lists.newArrayList();
 
-            addSpecQueryInstances(specification, connector, query, matchingInstances, 0, 0);
+            addSpecQueryInstances(specification, connector, query, matchingInstances, startIndex, rowCount);
             return matchingInstances;
 
         } finally {
@@ -389,7 +389,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
     }
 
     private void addSpecInstances(final ObjectSpecification spec, final DatabaseConnector connector,
-        final List<ObjectAdapter> matchingInstances, long startIndex, long rowCount) {
+        final List<ObjectAdapter> matchingInstances, final long startIndex, final long rowCount) {
 
         if (!spec.isAbstract()) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
@@ -406,12 +406,12 @@ public final class SqlObjectStore implements ObjectStoreSpi {
 
     }
 
-    private List<ObjectAdapter> findByTitle(final PersistenceQueryFindByTitle criteria) {
+    private List<ObjectAdapter> findByTitle(final PersistenceQueryFindByTitle criteria, final long startIndex, final long rowCount) {
         final ObjectSpecification spec = criteria.getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
         final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
 
-        final Vector<ObjectAdapter> instances = mapper.getInstances(connector, spec, criteria.getTitle());
+        final Vector<ObjectAdapter> instances = mapper.getInstances(connector, spec, criteria.getTitle(), startIndex, rowCount);
         connectionPool.release(connector);
 
         return instances;

@@ -40,10 +40,14 @@ public class QueryFindByTitle<T> extends QueryBuiltInAbstract<T> {
     private final String title;
 
     public QueryFindByTitle(final Class<T> type, final String title) {
-        super(type);
-        this.title = title;
+        this(type, title, 0, 0);
     }
 
+    public QueryFindByTitle(final Class<T> type, final String title, final long start, final long count) {
+        super(type, start, count);
+        this.title = title;
+    }
+    
     public String getTitle() {
         return title;
     }
