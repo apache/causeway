@@ -35,7 +35,7 @@ import org.apache.isis.applib.filter.Filter;
  * <b>Note:</b> that not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you
  * can use the {@link Filter} interface to similar effect, for example in
- * {@link DomainObjectContainer#allMatches(Class, Filter)}). Note that the
+ * {@link DomainObjectContainer#allMatches(Class, Filter, long...)}). Note that the
  * filtering is done within the {@link DomainObjectContainer} rather than being
  * pushed back to the object store.
  */

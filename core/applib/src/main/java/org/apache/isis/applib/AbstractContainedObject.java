@@ -74,43 +74,43 @@ public abstract class AbstractContainedObject {
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
-     * @see DomainObjectContainer#allInstances(Class)
+     * @see DomainObjectContainer#allInstances(Class, long...)
      */
-    protected <T> List<T> allInstances(final Class<T> ofType) {
-        return getContainer().allInstances(ofType);
+    protected <T> List<T> allInstances(final Class<T> ofType, long... range) {
+        return getContainer().allInstances(ofType, range);
     }
 
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
-     * @see DomainObjectContainer#allMatches(Class, Filter)
+     * @see DomainObjectContainer#allMatches(Class, Filter, long...)
      */
-    protected <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter) {
-        return getContainer().allMatches(ofType, filter);
+    protected <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range) {
+        return getContainer().allMatches(ofType, filter, range);
     }
 
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
-     * @see DomainObjectContainer#allMatches(Class, Object)
+     * @see DomainObjectContainer#allMatches(Class, Object, long...)
      */
-    protected <T> List<T> allMatches(final Class<T> ofType, final T pattern) {
-        return getContainer().allMatches(ofType, pattern);
+    protected <T> List<T> allMatches(final Class<T> ofType, final T pattern, long... range) {
+        return getContainer().allMatches(ofType, pattern, range);
     }
 
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
-     * @see DomainObjectContainer#allMatches(Class, String)
+     * @see DomainObjectContainer#allMatches(Class, String, long...)
      */
-    protected <T> List<T> allMatches(final Class<T> ofType, final String title) {
-        return getContainer().allMatches(ofType, title);
+    protected <T> List<T> allMatches(final Class<T> ofType, final String title, long... range) {
+        return getContainer().allMatches(ofType, title, range);
     }
 
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
-     * @see DomainObjectContainer#allMatches(Query)
+     * @see DomainObjectContainer#allMatches(Query, long...)
      */
     protected <T> List<T> allMatches(final Query<T> query) {
         return getContainer().allMatches(query);

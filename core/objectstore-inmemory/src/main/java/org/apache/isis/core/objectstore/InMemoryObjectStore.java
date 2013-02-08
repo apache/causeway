@@ -24,6 +24,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -54,13 +58,9 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 public class InMemoryObjectStore implements ObjectStoreSpi {
 
@@ -367,7 +367,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
         debug.appendln();
     }
 
-    private String debugCollectionGraph(final ObjectAdapter collection, final int level, final Vector recursiveElements) {
+    private String debugCollectionGraph(final ObjectAdapter collection, final int level, final Vector<ObjectAdapter> recursiveElements) {
         final StringBuffer s = new StringBuffer();
 
         if (recursiveElements.contains(collection)) {
@@ -397,14 +397,14 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
         return s.toString();
     }
 
-    private String debugGraph(final ObjectAdapter object, final int level, final Vector recursiveElements) {
+    private String debugGraph(final ObjectAdapter object, final int level, final Vector<ObjectAdapter> recursiveElements) {
         if (level > 3) {
             return "...\n"; // only go 3 levels?
         }
 
-        Vector elements;
+        Vector<ObjectAdapter> elements;
         if (recursiveElements == null) {
-            elements = new Vector(25, 10);
+            elements = new Vector<ObjectAdapter>(25, 10);
         } else {
             elements = recursiveElements;
         }
@@ -416,7 +416,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
         }
     }
 
-    private String debugObjectGraph(final ObjectAdapter object, final int level, final Vector recursiveElements) {
+    private String debugObjectGraph(final ObjectAdapter object, final int level, final Vector<ObjectAdapter> recursiveElements) {
         final StringBuffer s = new StringBuffer();
 
         recursiveElements.addElement(object);

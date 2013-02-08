@@ -276,8 +276,9 @@ public interface DomainObjectContainer {
      * <p>
      * This method should only be called where the number of instances is known
      * to be relatively low.
+     * @param range TODO
      */
-    public <T> List<T> allInstances(Class<T> ofType);
+    public <T> List<T> allInstances(Class<T> ofType, long... range);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -291,9 +292,10 @@ public interface DomainObjectContainer {
      * 
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query)} for production code.
+     * use {@link #allMatches(Query, long...)} for production code.
+     * @param range TODO
      */
-    public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter);
+    public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -307,9 +309,10 @@ public interface DomainObjectContainer {
      * 
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query)} for production code.
+     * use {@link #allMatches(Query, long...)} for production code.
+     * @param range TODO
      */
-    public <T> List<T> allMatches(Class<T> ofType, String title);
+    public <T> List<T> allMatches(Class<T> ofType, String title, long... range);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -324,9 +327,10 @@ public interface DomainObjectContainer {
      * 
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query)} for production code.
+     * use {@link #allMatches(Query, long...)} for production code.
+     * @param range TODO
      */
-    <T> List<T> allMatches(Class<T> ofType, T pattern);
+    <T> List<T> allMatches(Class<T> ofType, T pattern, long... range);
 
     /**
      * Returns all the instances that match the given {@link Query}.

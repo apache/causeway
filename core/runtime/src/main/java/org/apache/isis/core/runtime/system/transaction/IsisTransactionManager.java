@@ -33,7 +33,6 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;

@@ -319,13 +319,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public <T> List<T> allInstances(final Class<T> type) {
-        return allMatches(new QueryFindAllInstances<T>(type));
+    public <T> List<T> allInstances(final Class<T> type, long... range) {
+        return allMatches(new QueryFindAllInstances<T>(type, range));
     }
 
     @Override
-    public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter) {
-        final List<T> allInstances = allInstances(cls);
+    public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter, long... range) {
+        final List<T> allInstances = allInstances(cls, range);
         final List<T> filtered = new ArrayList<T>();
         for (final T instance : allInstances) {
             if (filter.accept(instance)) {
@@ -336,14 +336,14 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public <T> List<T> allMatches(final Class<T> type, final T pattern) {
+    public <T> List<T> allMatches(final Class<T> type, final T pattern, long... range) {
         Assert.assertTrue("pattern not compatible with type", type.isAssignableFrom(pattern.getClass()));
-        return allMatches(new QueryFindByPattern<T>(type, pattern));
+        return allMatches(new QueryFindByPattern<T>(type, pattern, range));
     }
 
     @Override
-    public <T> List<T> allMatches(final Class<T> type, final String title) {
-        return allMatches(new QueryFindByTitle<T>(type, title));
+    public <T> List<T> allMatches(final Class<T> type, final String title, long... range) {
+        return allMatches(new QueryFindByTitle<T>(type, title, range));
     }
 
     @Override
@@ -359,7 +359,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
-        final List<T> allInstances = allInstances(cls);
+        final List<T> allInstances = allInstances(cls); // Have to fetch all, as matching is done in next loop
         for (final T instance : allInstances) {
             if (filter.accept(instance)) {
                 return instance;
@@ -370,13 +370,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> T firstMatch(final Class<T> type, final T pattern) {
-        final List<T> instances = allMatches(type, pattern);
+        final List<T> instances = allMatches(type, pattern, 0, 1); // No need to fetch more than 1
         return firstInstanceElseNull(instances);
     }
 
     @Override
     public <T> T firstMatch(final Class<T> type, final String title) {
-        final List<T> instances = allMatches(type, title);
+        final List<T> instances = allMatches(type, title, 0, 1); // No need to fetch more than 1
         return firstInstanceElseNull(instances);
     }
 
@@ -394,7 +394,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
-        final List<T> instances = allMatches(type, filter);
+        final List<T> instances = allMatches(type, filter, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more than one instance of " + type + " matching filter " + filter);
         }
@@ -403,7 +403,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> T uniqueMatch(final Class<T> type, final T pattern) {
-        final List<T> instances = allMatches(type, pattern);
+        final List<T> instances = allMatches(type, pattern, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more that one instance of " + type + " matching pattern " + pattern);
         }
@@ -412,7 +412,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> T uniqueMatch(final Class<T> type, final String title) {
-        final List<T> instances = allMatches(type, title);
+        final List<T> instances = allMatches(type, title, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more that one instance of " + type + " with title " + title);
         }
@@ -421,7 +421,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     @Override
     public <T> T uniqueMatch(final Query<T> query) {
-        final List<T> instances = allMatches(query);
+        final List<T> instances = allMatches(query); // No need to fetch more than 2. 
         if (instances.size() > 1) {
             throw new RepositoryException("Found more that one instance for query:" + query.getDescription());
         }
