@@ -104,7 +104,7 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
             }
         }
 
-        return true;
+        return matchesRange(true);
     }
 
 }

@@ -28,9 +28,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * Corresponds to {@link QueryFindAllInstances}
  */
 public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbstract {
-    private long index;
-    private long countedSoFar;
-    
     public PersistenceQueryFindAllInstances(final ObjectSpecification specification, final long ... range) {
         super(specification, range);
         index=0;
@@ -43,18 +40,9 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
      */
     @Override
     public boolean matches(final ObjectAdapter object) {
-        if (getCount() == 0 && getStart() == 0){
-            return true;
-        }
-        if (index++ < start){
-            return false;
-        }
-        if (countedSoFar++ < count){
-            return true;
-        }
-        return false;
+        return matchesRange(true);
     }
-
+    
     @Override
     public String toString() {
         final ToString str = ToString.createAnonymous(this);

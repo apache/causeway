@@ -37,12 +37,32 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements PersistenceQueryBuiltIn {
 
 
+    protected long index;
+    protected long countedSoFar;
+
     public PersistenceQueryBuiltInAbstract(final ObjectSpecification specification, final long ... range) {
         super(specification, range);
     }
 
     public PersistenceQueryBuiltInAbstract(final DataInputExtended input, final long ... range) throws IOException {
         super(input, range);
+    }
+
+    protected boolean matchesRange(final boolean ifMatches) {
+        if (ifMatches == false){
+            return false;
+        }
+        
+        if (getCount() == 0 && getStart() == 0){
+            return true;
+        }
+        if (index++ < start){
+            return false;
+        }
+        if (countedSoFar++ < count){
+            return true;
+        }
+        return false;
     }
     
 }
