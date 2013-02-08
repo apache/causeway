@@ -30,7 +30,11 @@ import org.apache.isis.applib.filter.Filter;
  * <p>
  * The implementations of these objects are be provided by the underlying
  * persistor/object store; consult its documentation.
- * 
+ * <p>
+ * Implementations are expected to implement the {@link #getStart()} and 
+ * {@link #getCount()} methods, which are used to support range / paging
+ * the data. Retutned result sets are expected to start from index "start",
+ * and no more than "count" items are expected. 
  * <p>
  * <b>Note:</b> that not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you

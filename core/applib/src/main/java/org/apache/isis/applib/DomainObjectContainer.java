@@ -266,7 +266,8 @@ public interface DomainObjectContainer {
 
     /**
      * Returns all the instances of the specified type (including subtypes).
-     * 
+     * If the optional range parameters are used, the dataset returned starts 
+     * from (0 based) index, and consists of only up to count items.  
      * <p>
      * If there are no instances the list will be empty. This method creates a
      * new {@link List} object each time it is called so the caller is free to
@@ -275,14 +276,18 @@ public interface DomainObjectContainer {
      * 
      * <p>
      * This method should only be called where the number of instances is known
-     * to be relatively low.
-     * @param range TODO
+     * to be relatively low, unless the optional range parameters (2 longs) are
+     * specified. The range parameters are "start" and "count".
+     * 
+     * @param range 2 longs, specifying 0-based start and count.
      */
     public <T> List<T> allInstances(Class<T> ofType, long... range);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
-     * the filter object accepts.
+     * the filter object accepts. If the optional range parameters are used, the 
+     * dataset returned starts from (0 based) index, and consists of only up to 
+     * count items. 
      * 
      * <p>
      * If there are no instances the list will be empty. This method creates a
@@ -292,14 +297,17 @@ public interface DomainObjectContainer {
      * 
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query, long...)} for production code.
-     * @param range TODO
+     * use {@link #allMatches(Query)} for production code.
+     * 
+     * @param range 2 longs, specifying 0-based start and count.
      */
     public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
      * have the given title.
+     * If the optional range parameters are used, the dataset returned starts 
+     * from (0 based) index, and consists of only up to count items.  
      * 
      * <p>
      * If there are no instances the list will be empty. This method creates a
@@ -309,8 +317,9 @@ public interface DomainObjectContainer {
      * 
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query, long...)} for production code.
-     * @param range TODO
+     * use {@link #allMatches(Query)} for production code.
+     * 
+     * @param range 2 longs, specifying 0-based start and count.
      */
     public <T> List<T> allMatches(Class<T> ofType, String title, long... range);
 
@@ -318,6 +327,8 @@ public interface DomainObjectContainer {
      * Returns all the instances of the specified type (including subtypes) that
      * match the given object: where any property that is set will be tested and
      * properties that are not set will be ignored.
+     * If the optional range parameters are used, the dataset returned starts 
+     * from (0 based) index, and consists of only up to count items.  
      * 
      * <p>
      * If there are no instances the list will be empty. This method creates a
@@ -328,7 +339,8 @@ public interface DomainObjectContainer {
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #allMatches(Query, long...)} for production code.
-     * @param range TODO
+     * 
+     * @param range 2 longs, specifying 0-based start and count.
      */
     <T> List<T> allMatches(Class<T> ofType, T pattern, long... range);
 
