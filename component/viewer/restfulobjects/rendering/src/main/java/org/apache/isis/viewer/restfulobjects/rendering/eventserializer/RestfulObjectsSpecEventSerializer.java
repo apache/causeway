@@ -1,6 +1,10 @@
 package org.apache.isis.viewer.restfulobjects.rendering.eventserializer;
 
 import java.io.IOException;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
@@ -20,15 +24,29 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
     private final static JsonMapper jsonMapper = JsonMapper.instance();
 
     private final static DomainObjectReprRenderer.Factory objectRendererFactory = new DomainObjectReprRenderer.Factory();
-    
+    private final static String BASE_URL_KEY = RestfulObjectsSpecEventSerializer.class.getName() + ".baseUrl";
+    private static final String BASE_URL_DEFAULT = "http://localhost:8080/restful/";
+
+    private String baseUrl;
+
+    @PostConstruct
+    public void init(Map<String,String> props) {
+        final String baseUrlFromConfig = props.get(BASE_URL_KEY);
+        baseUrl = baseUrlFromConfig != null? baseUrlFromConfig: BASE_URL_DEFAULT;
+    }
+
+    @PreDestroy
+    public void shutdown() {
+    }
+
     @Programmatic
     @Override
     public Object serialize(EventMetadata metadata, EventPayload payload) {
-        final RendererContext rendererContext = new EventSerializerRendererContext(Where.OBJECT_FORMS);
+        final RendererContext rendererContext = new EventSerializerRendererContext(baseUrl, Where.OBJECT_FORMS);
 
         final JsonRepresentation payloadRepr = asPayloadRepr(rendererContext, payload);
         final JsonRepresentation eventRepr = asEventRepr(metadata, payloadRepr);
-        
+
         return jsonFor(eventRepr);
     }
 

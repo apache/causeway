@@ -24,13 +24,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -41,6 +48,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.log4j.Logger;
 
 /**
  * Creates an implementation of
@@ -57,6 +65,8 @@ import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
  */
 public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
 
+    private final static Logger LOG = Logger.getLogger(IsisSessionFactoryAbstract.class);
+    
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
     private final TemplateImageLoader templateImageLoader;
@@ -91,7 +101,60 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         this.persistenceSessionFactory = persistenceSessionFactory;
         this.serviceList = serviceList;
         this.oidMarshaller = oidMarshaller;
+        
+        validateServices(serviceList);
     }
+
+    /**
+     * Validate domain services lifecycle events.
+     * 
+     * <p>
+     * Specifically:
+     * <ul>
+     * <li>All {@link PostConstruct} methods must either take no arguments or take a {@link Properties} object.</li>
+     * <li>All {@link PreDestroy} methods must take no arguments.</li>
+     * </ul>
+     * 
+     * <p>
+     * If this isn't the case, then we fail fast.
+     */
+    private void validateServices(List<Object> serviceList) {
+        for (Object service : serviceList) {
+            final Method[] methods = service.getClass().getMethods();
+            for (Method method : methods) {
+                validatePostConstructMethods(service, method);
+                validatePreDestroyMethods(service, method);
+            }
+        }
+    }
+
+    private void validatePostConstructMethods(Object service, Method method) {
+        PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
+        if(postConstruct == null) {
+            return;
+        }
+        final int numParams = method.getParameterTypes().length;
+        if(numParams == 0) {
+            return;
+        }
+        if(numParams == 1 && method.getParameterTypes()[0].isAssignableFrom(Map.class)) {
+            return;
+        }
+        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PostConstruct method " + method.getName() + "; such methods must take either no argument or 1 argument of type Map<String,String>"); 
+    }
+
+    private void validatePreDestroyMethods(Object service, Method method) {
+        PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
+        if(preDestroy == null) {
+            return;
+        }
+        final int numParams = method.getParameterTypes().length;
+        if(numParams == 0) {
+            return;
+        }
+        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PreDestroy method " + method.getName() + "; such methods must take no arguments"); 
+    }
+
 
     // ///////////////////////////////////////////
     // init, shutdown
@@ -117,16 +180,78 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         authenticationManager.init();
         authorizationManager.init();
         persistenceSessionFactory.init();
+        
+        initServices(getConfiguration());
     }
 
+    
     @Override
     public void shutdown() {
+        
+        shutdownServices();
+        
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
         specificationLoaderSpi.shutdown();
         templateImageLoader.shutdown();
         userProfileLoader.shutdown();
     }
+
+    protected void initServices(IsisConfiguration configuration) {
+        final List<Object> services = getServices();
+        Map<String, String> props = configuration.asMap();
+        for (Object service : services) {
+            callPostConstructIfExists(service, props);
+        }
+    }
+
+    private void callPostConstructIfExists(Object service, Map<String, String> props) {
+        LOG.info("calling @PostConstruct on all domain services");
+        Method[] methods = service.getClass().getMethods();
+        for (Method method : methods) {
+            PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
+            if(postConstruct == null) {
+                continue;
+            }
+            LOG.info("calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
+
+            final int numParams = method.getParameterTypes().length;
+            
+            // unlike shutdown, we don't swallow exceptions; would rather fail early
+            if(numParams == 0) {
+                InvokeUtils.invoke(method, service);
+            } else {
+                InvokeUtils.invoke(method, service, new Object[]{props});
+            }
+        }
+    }
+
+
+    protected void shutdownServices() {
+        final List<Object> services = getServices();
+        for (Object service : services) {
+            callPreDestroyIfExists(service);
+        }
+    }
+
+    private void callPreDestroyIfExists(Object service) {
+        LOG.info("calling @PreDestroy on all domain services");
+        final Method[] methods = service.getClass().getMethods();
+        for (Method method : methods) {
+            PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
+            if(preDestroy == null) {
+                continue;
+            }
+            LOG.info("calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
+            try {
+                InvokeUtils.invoke(method, service);
+            } catch(Exception ex) {
+                // do nothing
+                LOG.warn("@PreDestroy method threw exception - continuing anyway", ex);
+            }
+        }
+    }
+
 
     @Override
     public IsisSession openSession(final AuthenticationSession authenticationSession) {

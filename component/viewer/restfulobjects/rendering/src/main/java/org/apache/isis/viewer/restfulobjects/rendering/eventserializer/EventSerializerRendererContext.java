@@ -12,15 +12,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public class EventSerializerRendererContext implements RendererContext {
 
+    private final String baseUrl;
     private final Where where;
     
-    public EventSerializerRendererContext(Where where) {
+    public EventSerializerRendererContext(String baseUrl, Where where) {
+        this.baseUrl = baseUrl;
         this.where = where;
     }
 
     @Override
     public String urlFor(String url) {
-        return "[base]/" + url;
+        return baseUrl + url;
     }
 
     @Override
