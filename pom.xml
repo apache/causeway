@@ -31,6 +31,13 @@
         The parent POM of all modules is core/pom.xml
     </description>
 
+    <scm>
+        <connection>scm:git:http://git.apache.org/isis.git</connection>
+        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</developerConnection>
+        <url>git://git.apache.org/isis.git</url>
+      <tag>HEAD</tag>
+  </scm>
+
     <modules>
         <module>core</module>
 
