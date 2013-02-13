@@ -122,7 +122,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response,
         final Request req, final Context context) throws IOException, ServletException {
         response.setContentType("text/html");
-
+        response.setCharacterEncoding(encoding);
         // no need to check if logged in; the IsisSessionFilter would
         // have prevented us from getting here.
 
