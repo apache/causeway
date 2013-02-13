@@ -43,8 +43,11 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        final boolean hasNoChoices = scalarModel.getChoices().isEmpty();
-        return appliesIf(hasNoChoices && scalarModel.isScalarTypeAnyOf(scalarTypes));
+        if(!scalarModel.isScalarTypeAnyOf(scalarTypes)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final boolean hasNoChoices = !scalarModel.hasChoices();
+        return appliesIf(hasNoChoices);
     }
 
     @Override

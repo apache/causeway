@@ -40,7 +40,7 @@ public class ValueChoicesSelect2PanelComponentFactory extends ComponentFactoryAb
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        final boolean hasChoices = !scalarModel.getChoices().isEmpty();
+        final boolean hasChoices = scalarModel.hasChoices();
         return appliesIf(hasChoices);
     }
 

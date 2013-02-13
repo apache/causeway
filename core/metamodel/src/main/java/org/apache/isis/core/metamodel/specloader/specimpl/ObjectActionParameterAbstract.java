@@ -258,6 +258,13 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parameterChoices.toArray(new ObjectAdapter[0]);
     }
 
+    @Override
+    public boolean hasChoices() {
+        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+
+        return choicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
+    }
+
     private <T> void addParameterChoicesForBounded(final List<ObjectAdapter> parameterChoices) {
         final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
         final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);

@@ -48,6 +48,12 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public ObjectAdapter[] getChoices(ObjectAdapter object);
 
     /**
+     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * method) for the association.
+     */
+    public boolean hasChoices();
+
+    /**
      * Returns true if calculated from other data in the object, that is, should
      * not be persisted.
      */
@@ -65,10 +71,5 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     boolean isMandatory();
 
-    /**
-     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
-     * method) for the association.
-     */
-    public boolean hasChoices();
 
 }

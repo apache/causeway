@@ -250,7 +250,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     }
 
     public void abortTransaction() {
-        rollbackJpaTransaction();
+        rollbackJdoTransaction();
     }
 
     private void beginJdoTransaction() {
@@ -268,7 +268,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         }
     }
 
-    private void rollbackJpaTransaction() {
+    private void rollbackJdoTransaction() {
         final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
         if (transaction.isActive()) {
             transaction.rollback();

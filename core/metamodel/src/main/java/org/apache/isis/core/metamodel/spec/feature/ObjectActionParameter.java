@@ -95,8 +95,19 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
 
+    /**
+     * Returns a list of possible references/values for this parameter, which the
+     * user can choose from.
+     */
     ObjectAdapter[] getChoices(ObjectAdapter adapter);
 
+    /**
+     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * method) for the parameter.
+     */
+    boolean hasChoices();
+    
     ObjectAdapter getDefault(ObjectAdapter adapter);
+
 
 }

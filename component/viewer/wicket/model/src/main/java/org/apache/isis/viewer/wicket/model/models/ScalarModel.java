@@ -150,8 +150,15 @@ public class ScalarModel extends EntityModel {
             public List<ObjectAdapter> getChoices(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
-                final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
+                final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
                 return choicesAsList(choices);
+            }
+
+            @Override
+            public boolean hasChoices(final ScalarModel scalarModel) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty();
+                return property.hasChoices();
             }
 
             @Override
@@ -240,8 +247,15 @@ public class ScalarModel extends EntityModel {
             public List<ObjectAdapter> getChoices(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
+                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
                 return choicesAsList(choices);
+            }
+
+            @Override
+            public boolean hasChoices(final ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                return actionParameter.hasChoices();
             }
 
             @Override
@@ -292,6 +306,8 @@ public class ScalarModel extends EntityModel {
         public abstract void resetVersion(ScalarModel scalarModel);
 
         public abstract String getDescribedAs(ScalarModel scalarModel);
+
+        public abstract boolean hasChoices(ScalarModel scalarModel);
     }
 
     private final Kind kind;
@@ -465,6 +481,10 @@ public class ScalarModel extends EntityModel {
 
     public String getDescribedAs() {
         return kind.getDescribedAs(this);
+    }
+
+    public boolean hasChoices() {
+        return kind.hasChoices(this);
     }
 
 }

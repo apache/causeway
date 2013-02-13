@@ -231,8 +231,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public boolean hasChoices() {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        final boolean optionEnabled = propertyChoicesFacet != null;
-        return BoundedFacetUtils.isBoundedSet(getSpecification()) || optionEnabled;
+        return propertyChoicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
     }
 
     @Override

@@ -282,8 +282,12 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             @Override
             protected List<ObjectAdapterMemento> obtainMementos(String term) {
                 final ScalarModel scalarModel = (ScalarModel) entityModel;
+                final boolean hasChoices = scalarModel.hasChoices();
+                if(!hasChoices) {
+                    return null;
+                }
                 final List<ObjectAdapter> choices = scalarModel.getChoices();
-                if (choices.size() == 0) {
+                if(choices.isEmpty()) {
                     return null;
                 }
                 // take a copy otherwise is only lazily evaluated
@@ -393,8 +397,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             return false;
         } 
         final ScalarModel scalarModel = (ScalarModel) entityModel;
-        final List<ObjectAdapter> choices = scalarModel.getChoices();
-        return choices.size() == 0 ? false : true;
+        return scalarModel.hasChoices();
     }
 
     private boolean hasAutoComplete() {
