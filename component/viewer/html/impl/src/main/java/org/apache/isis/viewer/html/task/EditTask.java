@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
@@ -188,6 +187,9 @@ public class EditTask extends Task {
                     final ObjectAdapter currentAdapter = oneToOneAssociation.get(targetAdapter);
                     final Object currentPojo = AdapterUtils.unwrap(currentAdapter);
                     if (currentAdapter == null || currentPojo == null || !currentPojo.equals(entryPojo)) {
+                        if (entryAdapter.isTransient()){ 
+                            getPersistenceSession().makePersistent(entryAdapter);
+                        }
                         oneToOneAssociation.setAssociation(targetAdapter, entryAdapter);
                     }
                 }
