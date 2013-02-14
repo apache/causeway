@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.publish.EventMetadata;
@@ -19,6 +20,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjec
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
+@Hidden
 public class RestfulObjectsSpecEventSerializer implements EventSerializer {
 
     private final static JsonMapper jsonMapper = JsonMapper.instance();
