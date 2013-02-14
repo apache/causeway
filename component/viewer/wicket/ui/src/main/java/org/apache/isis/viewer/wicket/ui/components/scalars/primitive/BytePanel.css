@@ -16,3 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.bytePanel input {
+    text-align: right;
+}

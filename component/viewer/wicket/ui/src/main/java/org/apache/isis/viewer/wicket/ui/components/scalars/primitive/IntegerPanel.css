@@ -16,3 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.integerPanel input {
+    text-align: right;
+}

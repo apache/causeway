@@ -16,3 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.javaMathBigIntegerPanel input {
+    text-align: right;
+}
