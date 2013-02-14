@@ -243,7 +243,11 @@
 		min-width:220px;
 	}
 	
-	
+    #applicationActions ul.cssSubMenuItemsPanel li.cssSubMenuItem p.disabled {
+        color: #888;
+        background-color: #F0EFEA;
+    } 
+
 
 /**************** ELEMENTS **************/
 
