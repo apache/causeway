@@ -34,7 +34,7 @@
     <scm>
         <connection>scm:git:http://git.apache.org/isis.git</connection>
         <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</developerConnection>
-        <url>git://git.apache.org/isis.git</url>
+        <url>http://git.apache.org/isis.git</url>
       <tag>HEAD</tag>
   </scm>
 
