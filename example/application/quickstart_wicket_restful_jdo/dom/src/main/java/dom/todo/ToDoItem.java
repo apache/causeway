@@ -18,11 +18,13 @@
  */
 package dom.todo;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Join;
@@ -77,7 +79,7 @@ import com.google.common.collect.Lists;
         value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && category == :category"),
     @javax.jdo.annotations.Query(
             name="todo_autoComplete", language="JDOQL",  
-            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.startsWith(:description)")
+            value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.indexOf(:description) >= 0")
 })
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("TODO")
@@ -463,6 +465,25 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     // }}
 
+    
+    // {{ Cost (property)
+    
+    private BigDecimal cost;
+
+    @Optional
+    @Column(scale=4)
+    @MemberOrder(sequence = "99")
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(final BigDecimal cost) {
+        this.cost = cost;
+    }
+    // }}
+
+
+    
     // {{ injected: DomainObjectContainer
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
