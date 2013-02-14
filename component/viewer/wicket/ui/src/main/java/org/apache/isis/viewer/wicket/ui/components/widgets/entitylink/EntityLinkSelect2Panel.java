@@ -333,12 +333,14 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private void addOrReplaceIconAndTitle(ObjectAdapter pendingOrCurrentAdapter) {
         final EntityModel entityModelForLink = new EntityModel(pendingOrCurrentAdapter);
+        entityModelForLink.setRenderingHint(getEntityModel().getRenderingHint());
         final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
         final Component component = componentFactory.createComponent(entityModelForLink);
         addOrReplace(component);
     }
 
 
+    @SuppressWarnings("unused")
     private static List<ObjectAction> findServiceActionsFor(final ObjectSpecification scalarTypeSpec) {
         final List<ObjectAction> actionList = Lists.newArrayList();
         addServiceActionsFor(scalarTypeSpec, ActionType.USER, actionList);
@@ -381,7 +383,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     
     private boolean isEditableWithEitherAutoCompleteOrChoices() {
         // never doesn't apply in compact rendering contexts (ie tables)
-        if(getEntityModel().getRenderingHint() == RenderingHint.COMPACT) {
+        if(getEntityModel().getRenderingHint().isCompactOrUltraCompact()) {
             return false;
         }
         // doesn't apply if not editable, either

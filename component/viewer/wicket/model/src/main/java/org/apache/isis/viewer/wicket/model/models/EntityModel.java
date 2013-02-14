@@ -89,7 +89,27 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public enum RenderingHint {
         REGULAR,
-        COMPACT
+        COMPACT,
+        /**
+         * icon only
+         */
+        ULTRA_COMPACT;
+
+        public boolean isCompactOrUltraCompact() {
+            return isCompact() || isUltraCompact();
+        }
+
+        public boolean isRegular() {
+            return this == REGULAR;
+        }
+
+        public boolean isCompact() {
+            return this == COMPACT;
+        }
+
+        public boolean isUltraCompact() {
+            return this == ULTRA_COMPACT;
+        }
     }
 
 	public enum Mode {

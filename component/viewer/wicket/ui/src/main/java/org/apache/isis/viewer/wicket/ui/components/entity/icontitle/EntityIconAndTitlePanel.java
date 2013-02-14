@@ -19,22 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import java.io.InputStream;
-
-import images.Images;
-
-import com.google.inject.Inject;
-
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -44,6 +28,15 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ResourceReference;
+
+import com.google.inject.Inject;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
@@ -51,12 +44,15 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
  */
 public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
 
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_LINK_WRAPPER = "entityLinkWrapper";
     private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
+
+    private static final int TITLE_MAX_LEN_IF_ULTRA_COMPACT = 12;
 
     private Label label;
     private Image image;
@@ -94,7 +90,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
         final AbstractLink link = newLink(ID_ENTITY_LINK, pageClass, pageParameters);
         
-        label = new Label(ID_ENTITY_TITLE, determineTitle());
+        String title = determineTitle();
+        label = new Label(ID_ENTITY_TITLE, title);
         link.add(label);
 
         final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
@@ -113,10 +110,24 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     private String determineTitle() {
-        final ObjectAdapter adapter = getModel().getObject();
-         // TODO: i18n
-        return adapter != null ? adapter.titleString() : "(no object)";
+        EntityModel model = getModel();
+        final ObjectAdapter adapter = model.getObject();
+         if (adapter != null) {
+            String titleString = adapter.titleString();
+            if(model.getRenderingHint().isUltraCompact()) {
+                //return "";
+                return abbreviated(titleString, TITLE_MAX_LEN_IF_ULTRA_COMPACT);
+            }
+            return titleString;
+        } else {
+            return "(no object)";
+        }
     }
+    
+    private static String abbreviated(final String str, final int maxLength) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    }
+
 
     private AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);

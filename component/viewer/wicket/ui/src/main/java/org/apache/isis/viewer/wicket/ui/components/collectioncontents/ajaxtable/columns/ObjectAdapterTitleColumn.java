@@ -35,7 +35,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     private static final long serialVersionUID = 1L;
 
     public ObjectAdapterTitleColumn() {
-        super("Title"); // i18n
+        super("Object"); // i18n
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
         final ObjectAdapter adapter = rowModel.getObject();
         final EntityModel model = new EntityModel(adapter);
-        model.setRenderingHint(RenderingHint.COMPACT);
+        model.setRenderingHint(RenderingHint.ULTRA_COMPACT);
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
         return componentFactory.createComponent(id, model);
     }
