@@ -30,18 +30,37 @@
 	display: inline;
 }
 
+.bookmarkedPagesPanel .bookmarkedPageItem {
+    display: inline;
+}
+
+.bookmarkedPagesPanel span.bookmarkedPageImageAndTitle {
+    margin-right: 5px;
+    margin-bottom:5px;
+    float:left;
+
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background-color:#F0EFEA;
+
+    padding:1px 6px 1px 6px;
+}
+
+.bookmarkedPagesPanel span.bookmarkedPageImageAndTitle:hover {
+    background-color:#FFFFFF;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList a img.bookmarkedPageImage {
+    float:left;
+    background-color: transparent;
+}
+
 .bookmarkedPagesPanel .bookmarkedPagesList span.bookmarkedPageTitle {
-	margin-right: 5px;
-	margin-bottom:5px;
 	float:left;
 	display:block;
-	padding:3px 6px 3px 6px;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	background-color:#FFFFFF;
-	color:#46413B;
 	font-style:normal !important;
+    padding:3px 0px 0px 2px;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList a span.bookmarkedPageTitle {
@@ -49,12 +68,8 @@
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
-	background-color:#FFFFFF;
 	text-decoration:none;
-}
-
-.bookmarkedPagesPanel .bookmarkedPageItem {
-	display: inline;
+    background-color:#FFFFFF;
 }
 
 .bookmarkedPagesPanel .clearBookmarks {
@@ -74,3 +89,4 @@
     padding:3px 8px 3px 8px;
 	text-indent: -999em;
 }
+

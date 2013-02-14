@@ -50,14 +50,19 @@ public class ImageCacheClassPath implements ImageResourceCache {
     private static final String FALLBACK_IMAGE = "Default.png";
     
     private final Map<ObjectSpecification, ResourceReference> resourceReferenceBySpec = Maps.newHashMap();
+    private PackageResourceReference fallbackResourceReference;
 
 
     @Override
     public ResourceReference resourceReferenceFor(ObjectAdapter adapter) {
-        return resourceReferenceFor(adapter.getSpecification());
+        return resourceReferenceForSpec(adapter.getSpecification());
     }
 
-    private ResourceReference resourceReferenceFor(final ObjectSpecification spec) {
+    @Override
+    public ResourceReference resourceReferenceForSpec(final ObjectSpecification spec) {
+        if(spec == null) {
+            return fallbackResourceReference(); 
+        }
         ResourceReference resourceReference = resourceReferenceBySpec.get(spec);
         if(resourceReference != null) {
             return resourceReference;
@@ -81,11 +86,18 @@ public class ImageCacheClassPath implements ImageResourceCache {
         // search up hierarchy
         final ObjectSpecification superSpec = spec.superclass();
         if(superSpec != null) {
-            return resourceReferenceFor(superSpec);
+            return resourceReferenceForSpec(superSpec);
         } 
-        
-        // fallback
-        return newPackageResourceReference(FALLBACK_IMAGE);
+
+        return fallbackResourceReference();
+    }
+
+    
+    private ResourceReference fallbackResourceReference() {
+        if(fallbackResourceReference == null) {
+            fallbackResourceReference = newPackageResourceReference(FALLBACK_IMAGE);
+        }
+        return fallbackResourceReference;
     }
 
     private static ResourceReference resourceReferenceFor(final String specName) {

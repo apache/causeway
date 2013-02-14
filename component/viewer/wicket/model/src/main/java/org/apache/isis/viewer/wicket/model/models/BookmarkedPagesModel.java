@@ -28,6 +28,8 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 
@@ -74,6 +76,14 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
 
     public static String titleFrom(final PageParameters pageParameters) {
         return PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters);
+    }
+
+    public static RootOid oidFrom(final PageParameters pageParameters) {
+        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        if(oidStr == null) {
+            return null;
+        }
+        return IsisContext.getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
 
     public void clear() {

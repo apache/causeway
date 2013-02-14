@@ -26,13 +26,21 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ResourceReference;
 
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -42,10 +50,12 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
     
-    private static final String BOOKMARK_LIST = "bookmarkList";
-    private static final String BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
-    private static final String BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
-    private static final String BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
+    private static final String ID_BOOKMARK_LIST = "bookmarkList";
+    private static final String ID_BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
+    private static final String ID_BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
+    private static final String ID_BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
+    
+    private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
     
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
@@ -59,14 +69,14 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private void buildGui() {
 
-        final WebMarkupContainer container = new WebMarkupContainer(BOOKMARK_LIST);
+        final WebMarkupContainer container = new WebMarkupContainer(ID_BOOKMARK_LIST);
         // allow to be updated by AjaxLink
         container.setOutputMarkupId(true); 
         add(container);
 
         final BookmarkedPagesModel bookmarkedPagesModel = getModel();
 
-        final ListView<PageParameters> listView = new ListView<PageParameters>(BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel) {
+        final ListView<PageParameters> listView = new ListView<PageParameters>(ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel) {
 
             private static final long serialVersionUID = 1L;
 
@@ -77,8 +87,27 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 final PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(pageParameters, PageType.class);
                 final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
                 
-                final AbstractLink link = Links.newBookmarkablePageLink(BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
-                link.add(new Label(BOOKMARKED_PAGE_TITLE, BookmarkedPagesModel.titleFrom(pageParameters)));
+                final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
+
+                final RootOid oid = BookmarkedPagesModel.oidFrom(pageParameters);
+                ObjectSpecification objectSpec = null;
+                if(oid != null) {
+                    ObjectSpecId objectSpecId = oid.getObjectSpecId();
+                    objectSpec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+                }
+                final ResourceReference imageResource = imageCache.resourceReferenceForSpec(objectSpec);
+                final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
+                    private static final long serialVersionUID = 1L;
+                    @Override
+                    protected boolean shouldAddAntiCacheParameter() {
+                        return false;
+                    }
+                };
+                link.addOrReplace(image);
+
+                String title = BookmarkedPagesModel.titleFrom(pageParameters);
+                link.add(new Label(ID_BOOKMARKED_PAGE_TITLE, title));
+
                 item.add(link);
             }
         };
@@ -103,4 +132,21 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
         }
 
     }
+    
+    // ///////////////////////////////////////////////
+    // Dependency Injection
+    // ///////////////////////////////////////////////
+
+    @Inject
+    private ImageResourceCache imageCache;
+
+    protected ImageResourceCache getImageCache() {
+        return imageCache;
+    }
+
+    
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
 }

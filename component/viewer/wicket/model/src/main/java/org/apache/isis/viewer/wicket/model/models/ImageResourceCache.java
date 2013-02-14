@@ -22,9 +22,12 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ImageResourceCache {
 
     ResourceReference resourceReferenceFor(ObjectAdapter adapter);
+    
+    ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
 
 }

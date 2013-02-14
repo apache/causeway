@@ -27,7 +27,12 @@
 			<div id="bookmarkedPages" class="bookmarkedPagesPanel bookmarkedPagesComponentType">
 				<ul wicket:id="bookmarkList" class="bookmarkedPagesList">
 				  <li wicket:id="bookmarkedPageItem" class="bookmarkedPageItem">
-				  	<a href="#" wicket:id="bookmarkedPageLink"><span wicket:id="bookmarkedPageTitle" class="bookmarkedPageTitle">[link title]</span></a>
+				  	<a href="#" wicket:id="bookmarkedPageLink">
+                        <span class="bookmarkedPageImageAndTitle">
+                            <img wicket:id="bookmarkedPageImage" class="bookmarkedPageImage" width="24" height="24"/>
+                            <span wicket:id="bookmarkedPageTitle" class="bookmarkedPageTitle">[link title]</span>
+                        </span>
+                    </a>
 			  	  </li>
 				</ul>
 			  	<a href="#" wicket:id="clearBookmarks" class="clearBookmarks" title="Clear Bookmarks">clear</a>
