@@ -19,9 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.empty;
 
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -35,16 +32,7 @@ public class EmptyCollectionPanel extends PanelAbstract<ActionModel> {
     }
 
     private void buildGui(final String id) {
-        final ActionModel model = getModel();
-        addOrReplace(new Button("ok", Model.of("OK")) { // TODO: i18n
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onSubmit() {
-                model.getNoResultsHandler().onNoResults(this);
-            }
-        });
+        // nothing to do...
     }
 
 }
