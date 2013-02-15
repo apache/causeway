@@ -19,28 +19,37 @@
 
 package org.apache.isis.core.progmodel.facets.members.resolve;
 
-import org.apache.isis.applib.annotation.Resolve;
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 
-public class ResolveAnnotationFacetFactory extends FacetFactoryAbstract {
+public class RenderOrResolveAnnotationFacetFactory extends FacetFactoryAbstract {
 
-    public ResolveAnnotationFacetFactory() {
+    public RenderOrResolveAnnotationFacetFactory() {
         super(FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Resolve annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Resolve.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        final Render renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Render.class);
+        FacetUtil.addFacet(create(renderAnnotation, processMethodContext.getFacetHolder()));
+
+        @SuppressWarnings("deprecation")
+        final org.apache.isis.applib.annotation.Resolve resolveAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), org.apache.isis.applib.annotation.Resolve.class);
+        FacetUtil.addFacet(create(resolveAnnotation, processMethodContext.getFacetHolder()));
     }
 
-    private ResolveFacet create(final Resolve annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ResolveFacetAnnotation(holder, annotation.value());
+    private RenderFacet create(final Render annotation, final FacetHolder holder) {
+        return annotation == null ? null : new RenderFacetAnnotation(holder, annotation.value());
+    }
+
+    @SuppressWarnings("deprecation")
+    private RenderFacet create(final org.apache.isis.applib.annotation.Resolve annotation, final FacetHolder holder) {
+        return annotation == null ? null : new RenderFacetViaResolveAnnotation(holder, annotation.value());
     }
 
 }

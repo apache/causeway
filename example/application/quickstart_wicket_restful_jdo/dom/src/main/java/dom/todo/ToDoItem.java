@@ -18,17 +18,12 @@
  */
 package dom.todo;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Join;
-import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
@@ -49,8 +44,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.Resolve;
-import org.apache.isis.applib.annotation.Resolve.Type;
+import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
@@ -127,9 +122,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // }}
 
     // {{ DueBy (property)
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     private LocalDate dueBy;
 
-    @javax.jdo.annotations.Persistent
     @MemberOrder(name="Detail", sequence = "3")
     @Optional
     public LocalDate getDueBy() {
@@ -214,9 +209,10 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // {{ Attachment (property)
     private Blob attachment;
 
-    @Persistent
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
     @Optional
     @MemberOrder(name="Detail", sequence = "7")
+    @Hidden(where=Where.STANDALONE_TABLES)
     public Blob getAttachment() {
         return attachment;
     }
@@ -280,14 +276,14 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     
     // {{ dependencies (Collection)
-    @Persistent(table="TODO_DEPENDENCIES")
-    @Join(column="DEPENDING_TODO_ID")
-    @Element(column="DEPENDENT_TODO_ID")
+    @javax.jdo.annotations.Persistent(table="TODO_DEPENDENCIES")
+    @javax.jdo.annotations.Join(column="DEPENDING_TODO_ID")
+    @javax.jdo.annotations.Element(column="DEPENDENT_TODO_ID")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @Disabled
     @MemberOrder(sequence = "1")
-    @Resolve(Type.EAGERLY)
+    @Render(Type.EAGERLY)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }
@@ -380,7 +376,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // {{ SimilarItems (derived collection)
     @MemberOrder(sequence = "5")
     @NotPersisted
-    @Resolve(Type.LAZILY)
+    @Render(Type.LAZILY)
     public List<ToDoItem> getSimilarItems() {
         return toDoItems.similarTo(this);
     }
@@ -466,24 +462,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // }}
 
     
-    // {{ Cost (property)
-    
-    private BigDecimal cost;
 
-    @Optional
-    @Column(scale=4)
-    @MemberOrder(sequence = "99")
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(final BigDecimal cost) {
-        this.cost = cost;
-    }
-    // }}
-
-
-    
     // {{ injected: DomainObjectContainer
     @SuppressWarnings("unused")
     private DomainObjectContainer container;

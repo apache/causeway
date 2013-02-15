@@ -17,22 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.resolve;
+package org.apache.isis.core.progmodel.facets.members.resolve;
 
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Resolve;
-import org.apache.isis.applib.annotation.Resolve.Type;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacetAbstract;
 
-public abstract class ResolveFacetAbstract extends SingleValueFacetAbstract<Resolve.Type> implements ResolveFacet {
+public class RenderFacetAnnotation extends RenderFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return ResolveFacet.class;
+    public RenderFacetAnnotation(final FacetHolder holder, Render.Type value) {
+        super(value, holder);
     }
 
-    public ResolveFacetAbstract(Type value, final FacetHolder holder) {
-        super(type(), value, holder);
-    }
-    
 }

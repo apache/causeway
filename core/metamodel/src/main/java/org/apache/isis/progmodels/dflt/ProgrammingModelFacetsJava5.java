@@ -60,7 +60,7 @@ import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenF
 import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnotationOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.resolve.ResolveAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.resolve.RenderOrResolveAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.autocomplete.annotation.AutoCompleteAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bounded.annotation.BoundedAnnotationFacetFactory;
@@ -268,7 +268,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(HiddenFacetViaHideForSessionMethodFacetFactory.class);
         addFactory(HiddenFacetViaAlwaysHideMethodFacetFactory.class);
         addFactory(HiddenFacetViaHideMethodFacetFactory.class);
-        addFactory(ResolveAnnotationFacetFactory.class);
+        addFactory(RenderOrResolveAnnotationFacetFactory.class);
 
         // objects
         addFactory(ObjectSpecIdAnnotationFacetFactory.class);

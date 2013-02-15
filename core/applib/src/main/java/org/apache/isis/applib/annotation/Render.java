@@ -26,27 +26,41 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see Render - use instead
+ * Indicates that the rendering of a collection should be performed lazily or eagerly.
+ * 
+ * <p>
+ * By default, collections and reference properties are rendered
+ * lazily, meaning that their contents is not shown automatically; value properties 
+ * on the other hand are rendered eagerly (the title at least is shown).
+ * 
+ * <p>
+ * Using this annotation, an <tt>Order#lineItems</tt> collection might be
+ * rendered eagerly.  A viewer might use this hint to &quot;open&quot; 
+ * the collection automatically so that the user could see a list of
+ * line items immediately when the order is rendered.
+ * 
+ * <p>
+ * Or, a reference property containing an <tt>Address</tt> might be shown
+ * address as an embedded property.
+ *
+ * <p>
+ * Or, a value property might be annotated to render lazily; this would be
+ * suitable for handling of BLOBs and CLOBs.
+ * 
+ * <p>
+ * For properties and collections there is some similarity between this concept 
+ * and that of eager-loading as supported by some object stores.  Indeed, some 
+ * object stores may choose use their own specific annotations (eg a JDO default 
+ * fetch group) in order to infer this semantic.
  */
-@Deprecated
 @Inherited
 @Target( ElementType.METHOD )
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Resolve {
+public @interface Render {
 
     public enum Type {
-        EAGERLY(Render.Type.EAGERLY),
-        LAZILY(Render.Type.LAZILY);
-        
-        private final org.apache.isis.applib.annotation.Render.Type renderType;
-
-        private Type(Render.Type renderType) {
-            this.renderType = renderType;
-        }
-        
-        public org.apache.isis.applib.annotation.Render.Type getRenderType() {
-            return renderType;
-        }
+        EAGERLY,
+        LAZILY
     }
 
     /**

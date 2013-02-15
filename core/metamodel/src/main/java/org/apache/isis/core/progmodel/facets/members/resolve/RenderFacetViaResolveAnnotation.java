@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.resolve;
+package org.apache.isis.core.progmodel.facets.members.resolve;
 
-import org.apache.isis.applib.annotation.Resolve;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacetAbstract;
 
-/**
- * Indicates that a class member should be resolved eagerly/lazily and so should
- * be presented in the viewer in an appropriate manner.
- * 
- * <p>
- * @see Resolve
- */
-public interface ResolveFacet extends SingleValueFacet<Resolve.Type> {
+public class RenderFacetViaResolveAnnotation extends RenderFacetAbstract {
+
+    @SuppressWarnings("deprecation")
+    public RenderFacetViaResolveAnnotation(final FacetHolder holder, org.apache.isis.applib.annotation.Resolve.Type value) {
+        super(value.getRenderType(), holder);
+    }
 
 }

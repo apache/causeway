@@ -25,24 +25,24 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.isis.applib.annotation.Resolve;
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Resolve.Type;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
-public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class RenderOrResolveAnnotationFacetFactoryTest_withRenderAnnotation extends AbstractFacetFactoryTest {
 
-    private ResolveAnnotationFacetFactory facetFactory;
+    private RenderOrResolveAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ResolveAnnotationFacetFactory();
+        facetFactory = new RenderOrResolveAnnotationFacetFactory();
     }
 
     @Override
@@ -54,7 +54,8 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
     public void testAnnotationWithNoHintPickedUpOnProperty() {
 
         class Customer {
-            @Resolve
+            @SuppressWarnings("unused")
+            @Render
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -63,11 +64,11 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "numberOfOrders");
         facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ResolveFacet.class);
+        final Facet facet = facetedMethod.getFacet(RenderFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ResolveFacetAnnotation);
-        ResolveFacet resolveFacet = (ResolveFacet) facet;
-        assertThat(resolveFacet.value(), is(Resolve.Type.EAGERLY));
+        assertTrue(facet instanceof RenderFacetAnnotation);
+        RenderFacet resolveFacet = (RenderFacet) facet;
+        assertThat(resolveFacet.value(), is(Render.Type.EAGERLY));
 
         assertNoMethodsRemoved();
     }
@@ -75,7 +76,8 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
     public void testAnnotationWithEagerlyHintPickedUpOnProperty() {
 
         class Customer {
-            @Resolve(Type.EAGERLY)
+            @SuppressWarnings("unused")
+            @Render(Type.EAGERLY)
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -84,14 +86,15 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "numberOfOrders");
         facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
-        final ResolveFacet facet = facetedMethod.getFacet(ResolveFacet.class);
-        assertThat(facet.value(), is(Resolve.Type.EAGERLY));
+        final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
+        assertThat(facet.value(), is(Render.Type.EAGERLY));
     }
 
     public void testAnnotationForLazilyPickedUpOnProperty() {
 
         class Customer {
-            @Resolve(Type.LAZILY)
+            @SuppressWarnings("unused")
+            @Render(Type.LAZILY)
             public int getNumberOfOrders() {
                 return 0;
             }
@@ -100,13 +103,14 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "numberOfOrders");
         facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
-        final ResolveFacet facet = facetedMethod.getFacet(ResolveFacet.class);
-        assertThat(facet.value(), is(Resolve.Type.LAZILY));
+        final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
+        assertThat(facet.value(), is(Render.Type.LAZILY));
     }
 
     public void testAnnotationNoHintPickedUpOnCollection() {
         class Customer {
-            @Resolve
+            @SuppressWarnings("unused")
+            @Render
             public Collection<?> getOrders() {
                 return null;
             }
@@ -114,18 +118,19 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
         facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ResolveFacet.class);
+        final Facet facet = facetedMethod.getFacet(RenderFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ResolveFacetAnnotation);
-        ResolveFacet resolveFacet = (ResolveFacet) facet;
-        assertThat(resolveFacet.value(), is(Resolve.Type.EAGERLY));
+        assertTrue(facet instanceof RenderFacetAnnotation);
+        RenderFacet resolveFacet = (RenderFacet) facet;
+        assertThat(resolveFacet.value(), is(Render.Type.EAGERLY));
 
         assertNoMethodsRemoved();
     }
 
     public void testAnnotationEagerlyHintPickedUpOnCollection() {
         class Customer {
-            @Resolve(Type.EAGERLY)
+            @SuppressWarnings("unused")
+            @Render(Type.EAGERLY)
             public Collection<?> getOrders() {
                 return null;
             }
@@ -133,13 +138,14 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
         facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
-        final ResolveFacet facet = facetedMethod.getFacet(ResolveFacet.class);
-        assertThat(facet.value(), is(Resolve.Type.EAGERLY));
+        final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
+        assertThat(facet.value(), is(Render.Type.EAGERLY));
     }
 
     public void testAnnotationWithLazilyHintPickedUpOnCollection() {
         class Customer {
-            @Resolve(Type.LAZILY)
+            @SuppressWarnings("unused")
+            @Render(Type.LAZILY)
             public Collection<?> getOrders() {
                 return null;
             }
@@ -147,8 +153,8 @@ public class ResolveAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
         facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
-        final ResolveFacet facet = facetedMethod.getFacet(ResolveFacet.class);
-        assertThat(facet.value(), is(Resolve.Type.LAZILY));
+        final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
+        assertThat(facet.value(), is(Render.Type.LAZILY));
     }
 
 

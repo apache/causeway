@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.selector.dropdown;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Resolve.Type;
-import org.apache.isis.core.metamodel.facets.members.resolve.ResolveFacet;
+import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -100,7 +100,7 @@ public abstract class DropDownSelectorPanelAbstract<T extends IModel<?>> extends
 
         final OneToManyAssociation collection = 
                 entityCollectionModel.getCollectionMemento().getCollection();
-        ResolveFacet resolveFacet = collection.getFacet(ResolveFacet.class);
+        RenderFacet resolveFacet = collection.getFacet(RenderFacet.class);
         return resolveFacet != null && resolveFacet.value() == Type.EAGERLY;
     }
 
