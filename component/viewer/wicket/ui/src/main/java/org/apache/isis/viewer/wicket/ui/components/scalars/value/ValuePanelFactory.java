@@ -48,7 +48,7 @@ public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
         if(valueFacet == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        return appliesIf(scalarModel.hasChoices());
+        return appliesIf(!scalarModel.hasChoices());
     }
 
     @Override
