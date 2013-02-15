@@ -105,7 +105,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
             addConfigurationResourcesForWebApps(isisConfigurationBuilder);
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
-            addConfigurationResourcesForViewers(isisConfigurationBuilder, servletContext);
+            IsisWebAppBootstrapperUtil.addConfigurationResourcesForViewers(isisConfigurationBuilder, servletContext);
 
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
@@ -181,21 +181,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             if (config != null) {
                 configurationLoader.addConfigurationResource(config, NotFoundPolicy.CONTINUE);
             }
-        }
-    }
-
-    private void addConfigurationResourcesForViewers(final IsisConfigurationBuilder configurationLoader, final ServletContext servletContext) {
-        addConfigurationResourcesForContextParam(configurationLoader, servletContext, "isis.viewers");
-        addConfigurationResourcesForContextParam(configurationLoader, servletContext, "isis.viewer");
-    }
-
-    private void addConfigurationResourcesForContextParam(final IsisConfigurationBuilder configurationLoader, final ServletContext servletContext, final String name) {
-        final String viewers = servletContext.getInitParameter(name);
-        if (viewers == null) {
-            return;
-        }
-        for (final String viewer : viewers.split(",")) {
-            configurationLoader.addConfigurationResource("viewer_" + viewer + ".properties", NotFoundPolicy.CONTINUE);
         }
     }
 

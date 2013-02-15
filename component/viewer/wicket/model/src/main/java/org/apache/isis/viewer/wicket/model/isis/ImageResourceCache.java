@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.wicket.model.isis;
 
 import org.apache.wicket.request.resource.ResourceReference;
 

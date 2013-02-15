@@ -20,8 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.isis.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -52,7 +53,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
 
-    private static final int TITLE_MAX_LEN_IF_ULTRA_COMPACT = 12;
 
     private Label label;
     private Image image;
@@ -115,8 +115,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
          if (adapter != null) {
             String titleString = adapter.titleString();
             if(model.getRenderingHint().isUltraCompact()) {
-                //return "";
-                return abbreviated(titleString, TITLE_MAX_LEN_IF_ULTRA_COMPACT);
+                return abbreviated(titleString, getSettings().getMaxTitleLengthInTables());
             }
             return titleString;
         } else {
@@ -124,8 +123,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         }
     }
     
-    private static String abbreviated(final String str, final int maxLength) {
-        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    static String abbreviated(final String str, final int maxLength) {
+        int length = str.length();
+        if (length <= maxLength) {
+            return str;
+        }
+        return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
     }
 
 
@@ -153,6 +156,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
 
     protected ImageResourceCache getImageCache() {
         return imageCache;
+    }
+    
+    @Inject
+    private WicketViewerSettings settings;
+    protected WicketViewerSettings getSettings() {
+        return settings;
     }
 
 }

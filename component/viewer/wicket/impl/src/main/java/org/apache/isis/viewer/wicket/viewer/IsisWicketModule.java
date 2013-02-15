@@ -23,16 +23,18 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.isis.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.viewer.imagecache.ImageCacheClassPath;
+import org.apache.isis.viewer.wicket.viewer.imagecache.ImageResourceCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
+import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault;
 
 /**
  * To override
@@ -63,7 +65,8 @@ public class IsisWicketModule extends AbstractModule {
         bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
         bind(PageClassList.class).to(PageClassListDefault.class);
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
-        bind(ImageResourceCache.class).to(ImageCacheClassPath.class);
+        bind(ImageResourceCache.class).to(ImageResourceCacheClassPath.class);
+        bind(WicketViewerSettings.class).to(WicketViewerSettingsDefault.class);
         
         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
         bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String)null));

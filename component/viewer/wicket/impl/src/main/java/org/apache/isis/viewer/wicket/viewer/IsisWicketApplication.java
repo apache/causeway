@@ -47,9 +47,11 @@ import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -60,11 +62,13 @@ import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.webapp.IsisWebAppBootstrapperUtil;
 import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
+import org.apache.isis.viewer.wicket.model.isis.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -149,6 +153,12 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * {@link Inject}ed when {@link #init() initialized}.
      */
     @Inject
+    private WicketViewerSettings wicketViewerSettings;
+
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
     private PageClassRegistry pageClassRegistry;
 
 
@@ -177,11 +187,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected void init() {
         super.init();
 
-        final RenderStrategy renderStrategy = RenderStrategy.REDIRECT_TO_RENDER;
+        getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
 
-        getRequestCycleSettings().setRenderStrategy(renderStrategy);
-
-        // 6.0.0 instead of subclassing newRequestCycle
         getRequestCycleListeners().add(new WebRequestCycleForIsis());
 
         getResourceSettings().setParentFolderPlaceholder("$up$");
@@ -237,6 +244,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         
         primeConfigurationBuilder(configurationBuilder, servletContext);
         configurationBuilder.addDefaultConfigurationResources();
+        
+        IsisWebAppBootstrapperUtil.addConfigurationResourcesForViewers(configurationBuilder, servletContext);
         return configurationBuilder;
     }
 

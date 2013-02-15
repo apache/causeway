@@ -27,7 +27,6 @@
         <welcome-file>about/index.html</welcome-file>
     </welcome-file-list>
 
-
     <!-- shiro security configuration -->
     <listener>
         <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
@@ -66,6 +65,16 @@
       <param-value>location of your config directory if fixed</param-value>
     </context-param>
     -->
+
+
+    <!--
+    determines which additional configuration files to search for 
+     -->
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>wicket,restfulobjects</param-value>
+    </context-param>
+
 
 
 

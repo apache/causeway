@@ -29,7 +29,7 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.isis.ImageResourceCache;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -44,7 +44,7 @@ import com.google.inject.Singleton;
  * Searches for a fixed set of suffixes: {@value #IMAGE_SUFFICES}.
  */
 @Singleton
-public class ImageCacheClassPath implements ImageResourceCache {
+public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
     private static final String FALLBACK_IMAGE = "Default.png";
