@@ -6793,12 +6793,12 @@ y}</programlisting>
       </sect1>
 
       <sect1>
-        <title>@Resolve</title>
+        <title>@Render</title>
 
-        <para>The <classname>@Resolve</classname> annotation is a hint for
+        <para>The <classname>@Render</classname> annotation is a hint for
         properties and collections to indicate that a value property should be
-        resolved lazily (rather than eagerly, as usual), or that a reference
-        property or collection should be resolved eagerly (rather than lazily,
+        rendered lazily (rather than eagerly, as usual), or that a reference
+        property or collection should be rendered eagerly (rather than lazily,
         as usual).</para>
 
         <para>Viewers can use this to present the property/collection in an
@@ -6809,7 +6809,8 @@ y}</programlisting>
             <para>an <classname>Order</classname>'s
             <methodname>lineItems</methodname> collection might initially be
             rendered expanded form so that the user could see a list of line
-            items immediately when the order is rendered.</para>
+            items immediately when the order is rendered. This is the most
+            common use case.</para>
           </listitem>
 
           <listitem>
@@ -6825,7 +6826,7 @@ y}</programlisting>
         <para>For example:</para>
 
         <programlisting format="linespecific">public class Order {
-    @Resolve(Type.EAGERLY)
+    @Render(Type.EAGERLY)
     public List&lt;LineItem&gt; getDetails() { ... }
 
     ...
@@ -6836,6 +6837,14 @@ y}</programlisting>
         stores. Indeed, some object stores may choose use their own specific
         annotations (eg a JDO default fetch group) in order to infer this
         semantic.</para>
+      </sect1>
+
+      <sect1>
+        <title>@Resolve</title>
+
+        <para>The <code>@Resolve</code> annotation is deprecated, and has been
+        replaced by the <code>@Render</code> annotation (with exact same
+        semantics).</para>
       </sect1>
 
       <sect1 id="sec.TitleAnnotation">

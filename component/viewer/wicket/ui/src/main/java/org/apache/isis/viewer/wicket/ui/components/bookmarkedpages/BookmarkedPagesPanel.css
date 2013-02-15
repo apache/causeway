@@ -54,13 +54,16 @@
 .bookmarkedPagesPanel .bookmarkedPagesList a img.bookmarkedPageImage {
     float:left;
     background-color: transparent;
+    width: 16px;
+    height: 16px;
+    padding:3px 0px 0px 3px;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList span.bookmarkedPageTitle {
 	float:left;
 	display:block;
 	font-style:normal !important;
-    padding:3px 0px 0px 2px;
+    padding:3px 0px 0px 3px;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList a span.bookmarkedPageTitle {
