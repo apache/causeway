@@ -55,6 +55,10 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     @Override
     public ResourceReference resourceReferenceFor(ObjectAdapter adapter) {
+        String adapterIconName = adapter.getIconName();
+        if (adapterIconName != null) {
+            return resourceReferenceFor(adapter.getIconName());
+        }
         return resourceReferenceForSpec(adapter.getSpecification());
     }
 
