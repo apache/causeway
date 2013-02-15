@@ -77,16 +77,20 @@ public class ObjectAssociationFiltersTest_visibleWhere {
                 {When.ALWAYS, Where.OBJECT_FORMS, Where.OBJECT_FORMS, false},
                 {When.ALWAYS, Where.OBJECT_FORMS, Where.ALL_TABLES, true},
                 {When.ALWAYS, Where.OBJECT_FORMS, Where.PARENTED_TABLES, true},
+                {When.ALWAYS, Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true},
                 {When.ALWAYS, Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true},
                 {When.ALWAYS, Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true},
                 {When.ALWAYS, Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true},
+                {When.ALWAYS, Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true},
                 {When.ALWAYS, Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false},
                 {When.ALWAYS, Where.PARENTED_TABLES, Where.OBJECT_FORMS, true},
                 {When.ALWAYS, Where.PARENTED_TABLES, Where.PARENTED_TABLES, false},
+                {When.ALWAYS, Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true},
                 {When.ALWAYS, Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true},
                 {When.ALWAYS, Where.ALL_TABLES, Where.OBJECT_FORMS, true},
                 {When.ALWAYS, Where.ALL_TABLES, Where.PARENTED_TABLES, false},
                 {When.ALWAYS, Where.ALL_TABLES, Where.STANDALONE_TABLES, false},
+                {When.ALWAYS, Where.ALL_TABLES, Where.REFERENCES_PARENT, true},
                 });
     }
 

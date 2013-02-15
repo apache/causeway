@@ -56,6 +56,14 @@ public enum Where {
      */
     OBJECT_FORMS,
     /**
+     * The member should be disabled/hidden when displayed as a column of a table
+     * within parent object's collection, and references that parent.
+     * 
+     * <p>
+     * For most (all?) viewers, this will have meaning only if applied to a property member.
+     */
+    REFERENCES_PARENT,
+    /**
      * The member should be disabled/hidden when displayed as a column of a table within
      * a parent object's collection.
      * 

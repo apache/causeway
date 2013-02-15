@@ -34,10 +34,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -161,16 +164,44 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         if (getModel().hasSelectionHandler()) {
             return;
         }
+
+        final ObjectSpecification parentSpecIfAny = 
+                getModel().isParented() 
+                    ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification() 
+                    : null;
         
         @SuppressWarnings("unchecked")
         final Filter<ObjectAssociation> filter = Filters.and(
                 ObjectAssociationFilters.PROPERTIES, 
-                ObjectAssociationFilters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
+                ObjectAssociationFilters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES),
+                associationDoesNotReferenceParent(parentSpecIfAny));
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(filter);
         for (final ObjectAssociation property : propertyList) {
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
             columns.add(nopc);
         }
+    }
+
+    Filter<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
+        if(parentSpec == null) {
+            return Filters.any();
+        }
+        return new Filter<ObjectAssociation>() {
+            @Override
+            public boolean accept(ObjectAssociation association) {
+                final HiddenFacet facet = association.getFacet(HiddenFacet.class);
+                if(facet == null) {
+                    return true;
+                }
+                if (facet.where() != Where.REFERENCES_PARENT) {
+                    return true;
+                }
+                final ObjectSpecification assocSpec = association.getSpecification();
+                final boolean associationSpecIsOfParentSpec = assocSpec.isOfType(parentSpec);
+                final boolean isVisible = !associationSpecIsOfParentSpec;
+                return isVisible;
+            }
+        };
     }
 
     private void addSelectedButtonIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
