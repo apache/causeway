@@ -26,7 +26,8 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
     private final static JsonMapper jsonMapper = JsonMapper.instance();
 
     private final static DomainObjectReprRenderer.Factory objectRendererFactory = new DomainObjectReprRenderer.Factory();
-    private final static String BASE_URL_KEY = RestfulObjectsSpecEventSerializer.class.getName() + ".baseUrl";
+
+    private final static String BASE_URL_KEY = "isis.viewer.restfulobjects.RestfulObjectsSpecEventSerializer.baseUrl";
     private static final String BASE_URL_DEFAULT = "http://localhost:8080/restful/";
 
     private String baseUrl;
