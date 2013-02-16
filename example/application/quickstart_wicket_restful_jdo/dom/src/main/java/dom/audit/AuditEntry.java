@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.bookmarks.Bookmark;
-import org.apache.isis.applib.bookmarks.BookmarkHolder;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.value.DateTime;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
