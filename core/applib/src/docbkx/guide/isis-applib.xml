@@ -5240,6 +5240,34 @@ public class Customer {
       </sect1>
 
       <sect1>
+        <title>@Audited</title>
+
+        <para>This annotation, which applies only to objects, indicates that
+        if the object is modified, then it should be submitted to the
+        <code>AuditingService</code>, if one has been configured.</para>
+
+        <para>For example:</para>
+
+        <programlisting>@Audited
+public class Customer extends AbstractDomainObject {
+   ....
+}</programlisting>
+
+        <para>The <code>AuditingService</code> is defined within the applib
+        (in the <code>org.apache.isis.applib.services.audit</code>
+        package):</para>
+
+        <programlisting>public interface AuditingService {
+    @Hidden
+    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
+}</programlisting>
+
+        <para>At the time of writing only the JDO Object Store supported this
+        annotation. Check with the documentation of the object store or ask on
+        the mailing list to determine whether auditing is supported.</para>
+      </sect1>
+
+      <sect1>
         <title>@AutoComplete</title>
 
         <para>This annotation is to support an auto-complete capability for
@@ -6689,6 +6717,22 @@ public class Child {
       </sect1>
 
       <sect1>
+        <title>@PublishedAction</title>
+
+        <para>See <ulink
+        url="http://isis.apache.org/core/publishing-service.html">Isis
+        website</ulink>.</para>
+      </sect1>
+
+      <sect1>
+        <title>@PublishedObject</title>
+
+        <para>See <ulink
+        url="http://isis.apache.org/core/publishing-service.html">Isis
+        website</ulink>.</para>
+      </sect1>
+
+      <sect1>
         <title>@Programmatic</title>
 
         <para>The <classname>@Programmatic</classname> annotation can be used
@@ -6840,7 +6884,7 @@ y}</programlisting>
       </sect1>
 
       <sect1>
-        <title>@Resolve</title>
+        <title>@Resolve (deprecated)</title>
 
         <para>The <code>@Resolve</code> annotation is deprecated, and has been
         replaced by the <code>@Render</code> annotation (with exact same
@@ -7418,6 +7462,8 @@ public class CustomerAndOrdersViewModel {
       <abstract>
         <para>The dependencies between the packages.</para>
       </abstract>
+
+      <para>*** these diagrams are out of date ***</para>
 
       <para>The following diagram shows that the relationship between the
       different packages that make up the applib (note that there are no
