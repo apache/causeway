@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.services.bookmarks;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.bookmarks.Bookmark;
-import org.apache.isis.applib.bookmarks.BookmarkHolder;
-import org.apache.isis.applib.bookmarks.BookmarkService;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkHolder;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 
@@ -39,6 +39,7 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         return lookup;
     }
 
+
     @Override
     @Programmatic
     public void setDomainObjectServices(DomainObjectServices domainObjectServices) {
@@ -50,5 +51,6 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     public Bookmark bookmarkFor(Object domainObject) {
         return domainObjectServices.bookmarkFor(domainObject);
     }
+
 
 }

@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.bookmarks.Bookmark;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**
  * Specifies a repository action to use to support auto-complete.

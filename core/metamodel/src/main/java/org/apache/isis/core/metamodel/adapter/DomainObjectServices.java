@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.adapter;
 
 import java.util.List;
 
-import org.apache.isis.applib.bookmarks.Bookmark;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;

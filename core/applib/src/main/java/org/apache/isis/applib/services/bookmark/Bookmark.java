@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.bookmarks;
+package org.apache.isis.applib.services.bookmark;
 
 import java.io.Serializable;
 import java.util.Iterator;

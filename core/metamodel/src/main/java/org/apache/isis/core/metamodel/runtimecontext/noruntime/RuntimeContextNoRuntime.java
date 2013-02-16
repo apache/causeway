@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.runtimecontext.noruntime;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;

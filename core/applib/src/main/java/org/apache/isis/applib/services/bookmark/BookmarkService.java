@@ -16,12 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.bookmarks;
+package org.apache.isis.applib.services.bookmark;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 
-public interface BookmarkHolder {
+@Named("Bookmarks")
+public interface BookmarkService {
 
-    @Programmatic
-    Bookmark bookmark();
+    @NotInServiceMenu
+    Object lookup(BookmarkHolder bookmarkHolder);
+
+    @Hidden
+    Bookmark bookmarkFor(Object domainObject);
+    
 }

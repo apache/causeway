@@ -22,9 +22,9 @@ package org.apache.isis.core.runtime.persistence.internal;
 import java.util.List;
 
 import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.applib.bookmarks.Bookmark;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
@@ -58,7 +58,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
