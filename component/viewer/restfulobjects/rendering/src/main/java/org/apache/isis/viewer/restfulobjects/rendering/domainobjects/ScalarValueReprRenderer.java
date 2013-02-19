@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
@@ -32,7 +32,7 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
     private final JsonValueEncoder jsonValueEncoder = new JsonValueEncoder();
     private ObjectSpecification returnType;
 
-    ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, null, representation); // null for representationType (there is none)
     }
 

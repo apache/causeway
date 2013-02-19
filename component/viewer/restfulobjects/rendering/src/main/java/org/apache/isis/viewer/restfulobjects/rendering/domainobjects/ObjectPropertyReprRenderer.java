@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.OBJECT_PROPERTY, representation, Where.OBJECT_FORMS);
     }
 
@@ -84,7 +84,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), getLinkFollower(), JsonRepresentation.newMap());
+        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

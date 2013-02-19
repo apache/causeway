@@ -28,7 +28,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.codehaus.jackson.node.NullNode;
@@ -45,7 +45,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
     private ObjectSpecification objectSpecification;
 
-    public DomainTypeReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public DomainTypeReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.DOMAIN_TYPE, representation);
     }
 

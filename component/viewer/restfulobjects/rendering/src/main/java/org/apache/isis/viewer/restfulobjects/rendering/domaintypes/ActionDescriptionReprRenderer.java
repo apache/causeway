@@ -26,7 +26,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<ActionDescriptionReprRenderer, ObjectAction> {
@@ -38,7 +38,7 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.ACTION_DESCRIPTION, url);
     }
 
-    public ActionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ActionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_DESCRIPTION, representation);
     }
 

@@ -34,13 +34,13 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeRep
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
     protected final RendererContext rendererContext;
-    private final LinkFollower linkFollower;
+    private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
 
     protected boolean includesSelf;
 
-    public ReprRendererAbstract(final RendererContext rendererContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public ReprRendererAbstract(final RendererContext rendererContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         this.rendererContext = rendererContext;
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
@@ -51,15 +51,15 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         return rendererContext;
     }
 
-    public LinkFollower getLinkFollower() {
+    public LinkFollowSpecs getLinkFollowSpecs() {
         return linkFollower;
     }
 
-    private LinkFollower asProvidedElseCreate(final LinkFollower linkFollower) {
+    private LinkFollowSpecs asProvidedElseCreate(final LinkFollowSpecs linkFollower) {
         if (linkFollower != null) {
             return linkFollower;
         }
-        return LinkFollower.create(rendererContext.getFollowLinks());
+        return LinkFollowSpecs.create(rendererContext.getFollowLinks());
     }
 
     @Override
@@ -73,23 +73,28 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         return (R) this;
     }
 
-    public R withSelf(final String href) {
+    public R withSelf(final JsonRepresentation link) {
+        return withLink(Rel.SELF, link);
+    }
+
+    public R withLink(final Rel rel, final String href) {
         if (href != null) {
-            getLinks().arrayAdd(LinkBuilder.newBuilder(rendererContext, Rel.SELF.getName(), representationType, href).build());
+            getLinks().arrayAdd(LinkBuilder.newBuilder(rendererContext, rel.getName(), representationType, href).build());
         }
         return cast(this);
     }
 
-    public R withSelf(final JsonRepresentation link) {
-        final String rel = link.getString("rel");
-        if (rel == null || !rel.equals(Rel.SELF.getName())) {
-            throw new IllegalArgumentException("Provided link does not have a 'rel' of 'self'; was: " + link);
+    public R withLink(final Rel rel, final JsonRepresentation link) {
+        final String relStr = link.getString("rel");
+        if (relStr == null || !relStr.equals(rel.getName())) {
+            throw new IllegalArgumentException("Provided link does not have a 'rel' of '" + rel.getName() + "'; was: " + link);
         }
         if (link != null) {
             getLinks().arrayAdd(link);
         }
         return cast(this);
     }
+
 
     /**
      * Will lazily create links array as required

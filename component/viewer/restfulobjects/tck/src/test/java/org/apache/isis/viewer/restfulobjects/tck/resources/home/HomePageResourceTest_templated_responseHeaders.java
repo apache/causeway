@@ -27,7 +27,7 @@ import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.i
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -43,7 +43,6 @@ import javax.ws.rs.core.Response.Status.Family;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
@@ -57,7 +56,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class HomePageResourceTest_templated_representationAndHeaders {
+public class HomePageResourceTest_templated_responseHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -71,64 +70,6 @@ public class HomePageResourceTest_templated_representationAndHeaders {
         resource = client.getHomePageResource();
     }
 
-    @Test
-    public void representation() throws Exception {
-
-        // given
-        final Response resp = resource.homePage();
-
-        // when
-        final RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-        assertThat(restfulResponse.getStatus().getFamily(), is(Family.SUCCESSFUL));
-
-        // then
-        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
-
-        final HomePageRepresentation repr = restfulResponse.getEntity();
-        assertThat(repr, is(not(nullValue())));
-        assertThat(repr, isMap());
-
-        assertThat(repr.getSelf(), isLink(client)
-                                        .rel(Rel.SELF)
-                                        .href(endsWith(":39393/"))
-                                        .httpMethod(RestfulHttpMethod.GET)
-                                        .type(RepresentationType.HOME_PAGE.getMediaType())
-                                        .returning(HttpStatusCode.OK)
-                                        );
-        assertThat(repr.getUser(), isLink(client)
-                                        .rel(Rel.USER)
-                                        .href(endsWith(":39393/user"))
-                                        .httpMethod(RestfulHttpMethod.GET)
-                                        .type(RepresentationType.USER.getMediaType())
-                                        .returning(HttpStatusCode.OK)
-                                        );
-        assertThat(repr.getServices(), isLink(client)
-                                        .rel(Rel.SERVICES)
-                                        .href(endsWith(":39393/services"))
-                                        .httpMethod(RestfulHttpMethod.GET)
-                                        .type(RepresentationType.LIST.getMediaType())
-                                        .returning(HttpStatusCode.OK)
-                                        );
-        assertThat(repr.getVersion(), isLink(client)
-                                        .rel(Rel.VERSION)
-                                        .href(endsWith(":39393/version"))
-                                        .httpMethod(RestfulHttpMethod.GET)
-                                        .type(RepresentationType.VERSION.getMediaType())
-                                        .returning(HttpStatusCode.OK)
-                                        );
-
-        assertThat(repr.getLinks(), isArray());
-        assertThat(repr.getExtensions(), isMap());
-    }
-
-    @Test
-    public void self_isFollowable() throws Exception {
-        // given
-        final HomePageRepresentation repr = givenRepresentation();
-
-        // when, then
-        assertThat(repr, isFollowableLinkToSelf(client));
-    }
 
     @Test
     public void headers() throws Exception {
@@ -149,11 +90,6 @@ public class HomePageResourceTest_templated_representationAndHeaders {
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
         assertThat(cacheControl, hasMaxAge(24 * 60 * 60));
         assertThat(cacheControl.getMaxAge(), is(24 * 60 * 60));
-    }
-
-    private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        final RestfulResponse<HomePageRepresentation> response = RestfulResponse.ofT(resource.homePage());
-        return response.getEntity();
     }
 
 }

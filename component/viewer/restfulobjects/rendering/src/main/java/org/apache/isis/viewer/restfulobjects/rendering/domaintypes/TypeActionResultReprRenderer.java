@@ -20,7 +20,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
@@ -30,7 +30,7 @@ public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActio
     private LinkRepresentation selfLink;
     private Object value;
 
-    public TypeActionResultReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public TypeActionResultReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.TYPE_ACTION_RESULT, representation);
     }
 

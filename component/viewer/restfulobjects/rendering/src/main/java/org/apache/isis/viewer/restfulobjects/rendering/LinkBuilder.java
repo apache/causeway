@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 

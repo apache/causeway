@@ -38,7 +38,7 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
@@ -87,7 +87,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private ObjectAdapter objectAdapter;
     private Mode mode = Mode.REGULAR;
 
-    public DomainObjectReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public DomainObjectReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.DOMAIN_OBJECT, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
@@ -184,7 +184,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addAssociations(final ObjectAdapter objectAdapter, final JsonRepresentation members, final List<ObjectAssociation> associations) {
-        final LinkFollower linkFollower = getLinkFollower().follow("members");
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("members");
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
@@ -224,7 +224,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addActions(final ObjectAdapter objectAdapter, final List<ObjectAction> actions, final JsonRepresentation members) {
-        final LinkFollower linkFollower = getLinkFollower().follow("members");
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("members");
         for (final ObjectAction action : actions) {
             final Consent visibility = action.isVisible(getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
             if (!visibility.isAllowed()) {

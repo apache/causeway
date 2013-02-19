@@ -92,7 +92,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
         instantiateResourceContext(representationType);
     }
 
-    @Test(expected = ReprRendererException.class)
+    @Test(expected = RestfulObjectsApplicationException.class)
     public void nonMatchingProfile() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType()));
@@ -100,7 +100,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
         instantiateResourceContext(representationType);
     }
 
-    @Test(expected = ReprRendererException.class)
+    @Test(expected = RestfulObjectsApplicationException.class)
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType(), MediaType.APPLICATION_JSON_TYPE));

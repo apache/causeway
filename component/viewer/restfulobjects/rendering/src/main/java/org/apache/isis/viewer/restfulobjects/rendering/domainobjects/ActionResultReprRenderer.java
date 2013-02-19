@@ -29,7 +29,7 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
@@ -42,7 +42,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     private JsonRepresentation arguments;
     private ObjectAdapter returnedAdapter;
 
-    public ActionResultReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ActionResultReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
     }
 

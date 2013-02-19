@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.codehaus.jackson.node.NullNode;
@@ -65,7 +65,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
     private final Where where;
 
-    public AbstractObjectMemberReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
+    public AbstractObjectMemberReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
         super(resourceContext, linkFollower, representationType, representation);
         this.where = where;
     }
@@ -209,8 +209,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, memberType, objectMember).build();
         getLinks().arrayAdd(link);
 
-        final LinkFollower membersLinkFollower = getLinkFollower();
-        final LinkFollower detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", Rel.DETAILS.getName());
+        final LinkFollowSpecs membersLinkFollower = getLinkFollowSpecs();
+        final LinkFollowSpecs detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", Rel.DETAILS.getName());
         if (membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }

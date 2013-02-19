@@ -21,8 +21,9 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.nio.charset.Charset;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication;
@@ -33,7 +34,7 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
 
     private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/restfulobjects-viewer/pom.properties";
 
-    VersionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    VersionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.VERSION, representation);
     }
 
@@ -46,7 +47,7 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
     public JsonRepresentation render() {
 
         if (includesSelf) {
-            withSelf("version/");
+            withLink(Rel.SELF, "version/");
         }
 
         representation.mapPut("specVersion", RestfulObjectsApplication.SPEC_VERSION);

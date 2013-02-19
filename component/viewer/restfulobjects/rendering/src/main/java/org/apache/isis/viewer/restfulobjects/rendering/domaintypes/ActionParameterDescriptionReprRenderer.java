@@ -24,7 +24,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureReprRenderer<ActionParameterDescriptionReprRenderer, ObjectActionParameter> {
@@ -38,7 +38,7 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 
-    public ActionParameterDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ActionParameterDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_PARAMETER_DESCRIPTION, representation);
     }
 

@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.applib.user;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
@@ -26,6 +28,10 @@ public class UserRepresentation extends DomainRepresentation {
 
     public UserRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
+    }
+
+    public LinkRepresentation getUp() {
+        return getLinkWithRel(Rel.UP);
     }
 
     public String getUserName() {

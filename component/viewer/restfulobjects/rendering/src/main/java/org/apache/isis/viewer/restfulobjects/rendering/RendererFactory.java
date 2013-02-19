@@ -25,6 +25,6 @@ public interface RendererFactory {
 
     RepresentationType getRepresentationType();
 
-    ReprRenderer<?, ?> newRenderer(RendererContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation);
+    ReprRenderer<?, ?> newRenderer(RendererContext resourceContext, LinkFollowSpecs linkFollower, JsonRepresentation representation);
 
 }

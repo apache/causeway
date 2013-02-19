@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
 
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
-    public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
     }
 
@@ -64,7 +64,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), getLinkFollower(), JsonRepresentation.newMap());
+        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndAction(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

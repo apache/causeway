@@ -28,7 +28,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
 
@@ -36,7 +36,7 @@ import com.google.common.collect.Lists;
 
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
-    public ObjectCollectionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ObjectCollectionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
     }
 
@@ -88,7 +88,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollower(), JsonRepresentation.newMap());
+        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

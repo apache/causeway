@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
@@ -34,7 +34,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
 
-    public ListReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public ListReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.LIST, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
@@ -78,15 +78,16 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         }
 
         final JsonRepresentation values = JsonRepresentation.newArray();
-        final LinkFollower linkFollower = getLinkFollower().follow("value");
 
         for (final ObjectAdapter adapter : objectAdapters) {
-            if (adapter.getSpecification().isHidden()) {
+            final ObjectSpecification specification = adapter.getSpecification();
+            if (specification.isHidden()) {
                 continue;
             }
             final JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
             values.arrayAdd(linkToObject);
 
+            final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("value");
             if (linkFollower.matches(linkToObject)) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
                 final JsonRepresentation domainObject = renderer.with(adapter).render();

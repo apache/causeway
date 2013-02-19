@@ -23,6 +23,7 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
+import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.junit.Test;
 
 public class DomainResourceHelperTest_readBodyAsMap {
@@ -69,7 +70,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
         assertThat(representation.size(), is(1));
     }
 
-    @Test(expected = ReprRendererException.class)
+    @Test(expected = RestfulObjectsApplicationException.class)
     public void whenArray() throws Exception {
         DomainResourceHelper.readAsMap("[]");
     }

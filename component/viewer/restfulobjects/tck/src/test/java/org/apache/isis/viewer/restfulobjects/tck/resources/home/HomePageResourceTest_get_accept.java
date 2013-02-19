@@ -51,9 +51,9 @@ public class HomePageResourceTest_get_accept {
     }
 
     @Test
-    public void applicationJson_profileHomePage_returns200() throws Exception {
+    public void applicationJson_noProfile_returns200() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -61,9 +61,9 @@ public class HomePageResourceTest_get_accept {
     }
 
     @Test
-    public void applicationJson_noProfile_returns200() throws Exception {
+    public void applicationJson_profileHomePage_returns200() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));

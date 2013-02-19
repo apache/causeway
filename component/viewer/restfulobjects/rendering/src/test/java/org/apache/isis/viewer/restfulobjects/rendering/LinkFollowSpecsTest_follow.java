@@ -28,13 +28,13 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.junit.Test;
 
-public class LinkFollowerTest_follow {
+public class LinkFollowSpecsTest_follow {
 
     @Test
     public void simple() throws Exception {
         final List<List<String>> links = asListOfLists("a.b.c");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
         assertThat(linkFollower.follow("a").isFollowing(), is(true));
         assertThat(linkFollower.follow("a").isTerminated(), is(false));
@@ -44,7 +44,7 @@ public class LinkFollowerTest_follow {
     public void notMatching() throws Exception {
         final List<List<String>> links = asListOfLists("a.b.c");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
         assertThat(linkFollower.follow("x").isFollowing(), is(false));
         assertThat(linkFollower.follow("x").isTerminated(), is(true));
@@ -54,9 +54,8 @@ public class LinkFollowerTest_follow {
     public void create_noCriteria() throws Exception {
         final List<List<String>> links = asListOfLists("a.b.c");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
-        assertThat(linkFollower.criteria().size(), is(0));
         assertThat(linkFollower.matches(JsonRepresentation.newMap()), is(true));
     }
 
@@ -64,11 +63,8 @@ public class LinkFollowerTest_follow {
     public void follow_noCriteria() throws Exception {
         final List<List<String>> links = asListOfLists("a.b.c");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
-        final LinkFollower followA = linkFollower.follow("a");
-
-        assertThat(followA.criteria().size(), is(0));
         assertThat(linkFollower.matches(JsonRepresentation.newMap()), is(true));
     }
 
@@ -76,16 +72,13 @@ public class LinkFollowerTest_follow {
     public void follow_withSingleCriteria() throws Exception {
         final List<List<String>> links = asListOfLists("a[x=y].b.c");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
         assertThat(linkFollower.follow("x").isFollowing(), is(false));
 
-        final LinkFollower followA = linkFollower.follow("a");
+        final LinkFollowSpecs followA = linkFollower.follow("a");
 
         assertThat(followA.isFollowing(), is(true));
-        final Map<String, String> criteria = followA.criteria();
-        assertThat(criteria.size(), is(1));
-        assertThat(criteria.get("x"), is("y"));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(true));
         assertThat(followA.matches(JsonRepresentation.newMap()), is(false));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "z")), is(false));
@@ -95,18 +88,14 @@ public class LinkFollowerTest_follow {
     public void follow_withMultipleCriteria() throws Exception {
         final List<List<String>> links = asListOfLists("a[x=y z=w].b.c");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
         assertThat(linkFollower.follow("x").isFollowing(), is(false));
 
-        final LinkFollower followA = linkFollower.follow("a");
+        final LinkFollowSpecs followA = linkFollower.follow("a");
 
         assertThat(followA.isFollowing(), is(true));
-        final Map<String, String> criteria = followA.criteria();
-        assertThat(criteria.size(), is(2));
 
-        assertThat(criteria.get("x"), is("y"));
-        assertThat(criteria.get("z"), is("w"));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "w")), is(true));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "w", "foo", "bar")), is(true));
         assertThat(followA.matches(JsonRepresentation.newMap()), is(false));
@@ -121,25 +110,25 @@ public class LinkFollowerTest_follow {
     public void simple_multiplePaths() throws Exception {
         final List<List<String>> links = asListOfLists("a.b.c,x.y.z");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
-        LinkFollower followA = linkFollower.follow("a");
+        LinkFollowSpecs followA = linkFollower.follow("a");
         assertThat(followA.isFollowing(), is(true));
         assertThat(followA.isTerminated(), is(false));
 
-        LinkFollower followX = linkFollower.follow("x");
+        LinkFollowSpecs followX = linkFollower.follow("x");
         assertThat(followX.isFollowing(), is(true));
         assertThat(followX.isTerminated(), is(false));
         
-        LinkFollower followXY = followX.follow("y");
+        LinkFollowSpecs followXY = followX.follow("y");
         assertThat(followXY.isFollowing(), is(true));
         assertThat(followXY.isTerminated(), is(false));
         
-        LinkFollower followXYZ = followXY.follow("z");
+        LinkFollowSpecs followXYZ = followXY.follow("z");
         assertThat(followXYZ.isFollowing(), is(true));
         assertThat(followXYZ.isTerminated(), is(false));
         
-        LinkFollower followXYZQ = followXY.follow("q");
+        LinkFollowSpecs followXYZQ = followXY.follow("q");
         assertThat(followXYZQ.isFollowing(), is(false));
         assertThat(followXYZQ.isTerminated(), is(true));
     }
@@ -148,15 +137,15 @@ public class LinkFollowerTest_follow {
     public void multiplePaths_withCriteria() throws Exception {
         final List<List<String>> links = asListOfLists("links[rel=urn:org.restfulobjects:rels/version].x,links[rel=urn:org.restfulobjects:rels/user].y");
 
-        final LinkFollower linkFollower = LinkFollower.create(links);
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
 
-        LinkFollower followRelVersion = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/version]");
+        LinkFollowSpecs followRelVersion = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/version]");
         assertThat(followRelVersion.isFollowing(), is(true));
         assertThat(followRelVersion.isTerminated(), is(false));
         
         assertThat(followRelVersion.follow("x").isFollowing(), is(true));
 
-        LinkFollower followRelUser = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/user]");
+        LinkFollowSpecs followRelUser = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/user]");
         assertThat(followRelUser.isFollowing(), is(true));
         assertThat(followRelUser.isTerminated(), is(false));
         assertThat(followRelUser.follow("y").isFollowing(), is(true));

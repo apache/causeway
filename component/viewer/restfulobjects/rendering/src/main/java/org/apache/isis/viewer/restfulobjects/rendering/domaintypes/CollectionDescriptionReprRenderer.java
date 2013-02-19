@@ -22,7 +22,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<CollectionDescriptionReprRenderer, OneToManyAssociation> {
@@ -34,7 +34,7 @@ public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRen
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.COLLECTION_DESCRIPTION, url);
     }
 
-    public CollectionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    public CollectionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.COLLECTION_DESCRIPTION, representation);
     }
 

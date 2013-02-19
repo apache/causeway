@@ -126,7 +126,7 @@ public class HomePageResourceTest_xrofollowlinks {
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
     }
 
-    @Test // currently failing
+    @Test
     public void servicesValuesWithCriteria() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "].value[rel=" + Rel.SERVICE.andParam("serviceId", "WrapperValuedEntities")+"]");

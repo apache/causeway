@@ -18,14 +18,15 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, AuthenticationSession> {
 
-    UserReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+    UserReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.USER, representation);
     }
 
@@ -43,7 +44,8 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
     @Override
     public JsonRepresentation render() {
         if (includesSelf) {
-            withSelf("user");
+            withLink(Rel.SELF, "user");
+            withLink(Rel.UP, "");
         }
         getExtensions();
         return representation;
