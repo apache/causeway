@@ -28,10 +28,6 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
 
@@ -39,20 +35,8 @@ import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-
-        public Factory() {
-            super(RepresentationType.OBJECT_PROPERTY);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new ObjectPropertyReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
-
-    private ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORMS);
+    public ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.OBJECT_PROPERTY, representation, Where.OBJECT_FORMS);
     }
 
     @Override
@@ -88,7 +72,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification valueSpec = objectMember.getSpecification();
         ObjectSpecification valueSpec = valueAdapter.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, valueSpec);
+        return DomainObjectReprRenderer.valueOrRef(rendererContext, valueAdapter, valueSpec);
     }
 
     // ///////////////////////////////////////////////////
@@ -100,8 +84,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
-        final ObjectPropertyReprRenderer renderer = (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), getLinkFollower(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
@@ -142,11 +125,12 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
         final List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
-            // REVIEW: for some reason I had this to use the spec of the adapter, rather than of the member
-            // this fails to ToDoItem$Category (at least)
-            //final ObjectSpecification choiceSpec = objectAdapter.getSpecification();
-            final ObjectSpecification choiceSpec = objectMember.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, choiceSpec));
+            // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
+            // final ObjectSpecification choiceSpec = objectMember.getSpecification();
+            
+            // REVIEW: check that it works for ToDoItem$Category, though...
+            final ObjectSpecification choiceSpec = objectAdapter.getSpecification();
+            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, choiceAdapter, choiceSpec));
         }
         return list;
     }
@@ -157,7 +141,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        getLinks().arrayAdd(PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+        getLinks().arrayAdd(PropertyDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
     }
 
     @Override

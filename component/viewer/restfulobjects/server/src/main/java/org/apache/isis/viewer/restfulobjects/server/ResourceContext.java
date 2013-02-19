@@ -159,50 +159,25 @@ public class ResourceContext implements RendererContext {
         if (representationType == null) {
             return;
         }
-        final MediaType producedType = representationType.getMediaType();
-        
-        final List<MediaType> acceptedMediaTypes = acceptedMediaTypes();
 
-        if(Iterables.tryFind(acceptedMediaTypes, accepts(producedType)).isPresent()) {
-            return;
-        }
-        throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "Resource produces %s media type", representationType.getMediaType());
-    }
-
-    private static Predicate<MediaType> accepts(final MediaType producedType) {
-        return new Predicate<MediaType>() {
-            @Override
-            public boolean apply(MediaType accepted) {
-                return producedType.isCompatible(accepted);
+        // RestEasy will check the basic media types...
+        // ... so we just need to check the profile paramter
+        final String producedProfile = representationType.getMediaTypeProfile();
+        if(producedProfile != null) {
+            for (MediaType mediaType : httpHeaders.getAcceptableMediaTypes()) {
+                String acceptedProfileValue = mediaType.getParameters().get("profile");
+                if(acceptedProfileValue == null) {
+                    continue;
+                }
+                if(!producedProfile.equals(acceptedProfileValue)) {
+                    throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE);
+                }
             }
-        };
-
+        }
     }
 
     protected boolean contains(final com.google.common.net.MediaType producedType, final List<MediaType> acceptableMediaTypes) {
         return acceptableMediaTypes.contains(producedType);
-    }
-
-    /**
-     * If no media type has a profile parameter, then simply return all the
-     * media types.
-     * 
-     * <p>
-     * Otherwise, though, filter out the {@link MediaType#APPLICATION_JSON_TYPE
-     * generic application/json} media type if it is present.
-     */
-    private List<MediaType> acceptedMediaTypes() {
-        final List<MediaType> acceptableMediaTypes = getHttpHeaders().getAcceptableMediaTypes();
-        if (Collections2.filter(acceptableMediaTypes, MEDIA_TYPE_CONTAINS_PROFILE).isEmpty()) {
-            return acceptableMediaTypes;
-        }
-        return Lists.newArrayList(Iterables.filter(acceptableMediaTypes, MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON));
-    }
-
-    private boolean compatible(final MediaType acceptedMediaType, final RepresentationType representationType) {
-        final MediaType producedJaxRsMediaType = representationType.getMediaType();
-        final String profile = acceptedMediaType.getParameters().get("profile");
-        return profile == null ? acceptedMediaType.isCompatible(producedJaxRsMediaType) : acceptedMediaType.equals(producedJaxRsMediaType);
     }
 
     public List<List<String>> getFollowLinks() {

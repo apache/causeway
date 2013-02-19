@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib.homepage;
 
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
@@ -29,15 +30,15 @@ public class HomePageRepresentation extends DomainRepresentation {
     }
 
     public LinkRepresentation getUser() {
-        return getLinkWithRel("user");
+        return getLinkWithRel(Rel.USER);
     }
 
     public LinkRepresentation getServices() {
-        return getLinkWithRel("services");
+        return getLinkWithRel(Rel.SERVICES);
     }
 
     public LinkRepresentation getVersion() {
-        return getLinkWithRel("version");
+        return getLinkWithRel(Rel.VERSION);
     }
 
 }

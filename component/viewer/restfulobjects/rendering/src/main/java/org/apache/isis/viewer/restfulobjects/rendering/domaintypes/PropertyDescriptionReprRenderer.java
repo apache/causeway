@@ -25,32 +25,18 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 
 public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<PropertyDescriptionReprRenderer, OneToOneAssociation> {
-
-    public static class Factory extends ReprRendererFactoryAbstract {
-
-        public Factory() {
-            super(RepresentationType.PROPERTY_DESCRIPTION);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new PropertyDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         final String typeFullName = objectSpecification.getFullIdentifier();
         final String propertyId = property.getId();
         final String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.PROPERTY_DESCRIPTION, url);
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 
-    public PropertyDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public PropertyDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.PROPERTY_DESCRIPTION, representation);
     }
 
     @Override
@@ -72,7 +58,7 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
         if (returnType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.RETURN_TYPE, returnType);
         getLinks().arrayAdd(linkBuilder.build());
     }
 

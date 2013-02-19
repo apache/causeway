@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Title;
 @javax.jdo.annotations.Discriminator("PIS3")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@ObjectType("PIS3")
+@ObjectType("PIIS3")
 public class PolyInterfaceIdentityStrategySubtype3Entity extends BaseEntity implements PolyInterfaceIdentityStrategy {
 
     

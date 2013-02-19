@@ -41,20 +41,22 @@ public final class RestfulMediaType {
     public final static String APPLICATION_JSON_USER = BASE + "user";
     public final static String APPLICATION_JSON_VERSION = BASE + "version";
     public final static String APPLICATION_JSON_LIST = BASE + "list";
-    public final static String APPLICATION_JSON_SCALAR_VALUE = BASE + "scalarvalue";
-    public final static String APPLICATION_JSON_DOMAIN_OBJECT = BASE + "domainobject";
-    public final static String APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT = BASE + "transient";
-    public final static String APPLICATION_JSON_OBJECT_PROPERTY = BASE + "objectproperty";
-    public final static String APPLICATION_JSON_OBJECT_COLLECTION = BASE + "objectcollection";
-    public final static String APPLICATION_JSON_OBJECT_ACTION = BASE + "objectaction";
-    public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "actionresult";
-    public final static String APPLICATION_JSON_TYPE_LIST = BASE + "typelist";
-    public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domaintype";
-    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = BASE + "typeactionresult";
-    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "propertydescription";
-    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collectiondescription";
-    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "actiondescription";
-    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "actionparameterdescription";
+    public final static String APPLICATION_JSON_OBJECT = BASE + "object";
+    public final static String APPLICATION_JSON_OBJECT_PROPERTY = BASE + "object-property";
+    public final static String APPLICATION_JSON_OBJECT_COLLECTION = BASE + "object-collection";
+    public final static String APPLICATION_JSON_OBJECT_ACTION = BASE + "object-action";
+    public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "action-result";
+    public final static String APPLICATION_JSON_TYPE_LIST = BASE + "type-list";
+    public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domain-type";
+    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "property-description";
+    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collection-description";
+    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "action-description";
+    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "action-param-description";
     public final static String APPLICATION_JSON_ERROR = BASE + "error";
+    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = BASE + "type-action-result";
+
+    // REVIEW: these do not appear in RO spec 1.0.0 
+    // public final static String APPLICATION_JSON_SCALAR_VALUE = BASE + "scalarvalue";
+    // public final static String APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT = BASE + "transient";
 
 }

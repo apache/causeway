@@ -29,6 +29,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
+import org.jboss.resteasy.spi.Failure;
 
 import com.google.common.collect.Lists;
 
@@ -37,7 +38,12 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
 
     @Override
     public Response toResponse(final RuntimeException ex) {
-        final ResponseBuilder builder = Response.status(HttpStatusCode.INTERNAL_SERVER_ERROR.getJaxrsStatusType()).type(RestfulMediaType.APPLICATION_JSON_ERROR).entity(jsonFor(ex));
+        HttpStatusCode statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR;
+        if(ex instanceof Failure) {
+            Failure failure = (Failure) ex;
+            statusCode = HttpStatusCode.statusFor(failure.getErrorCode());
+        }
+        final ResponseBuilder builder = Response.status(statusCode.getJaxrsStatusType()).type(RestfulMediaType.APPLICATION_JSON_ERROR).entity(jsonFor(ex));
         return builder.build();
     }
 

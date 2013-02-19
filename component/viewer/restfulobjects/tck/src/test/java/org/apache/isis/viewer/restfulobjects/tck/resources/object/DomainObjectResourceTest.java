@@ -80,7 +80,7 @@ public class DomainObjectResourceTest {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
         // when
-        final Response domainObjectResp = domainObjectResource.object("OID:6");
+        final Response domainObjectResp = domainObjectResource.object("OID","6");
         final RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
@@ -93,11 +93,11 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentationForPersistentObject_hasSelfAndOid() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
 
         // then
         final LinkRepresentation self = domainObjectRepr.getSelf();
-        assertThat(self, isLink().rel(Rel.SELF).href(matches(".+objects/OID:32")).httpMethod(RestfulHttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
+        assertThat(self, isLink().rel(Rel.SELF).href(matches(".+objects/OID/32")).httpMethod(RestfulHttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
         assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + BidirWithSetChildEntity.class.getName())).httpMethod(RestfulHttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
 
         assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
@@ -131,7 +131,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentation_hasTitle() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
 
         // then
         assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
@@ -141,7 +141,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentation_hasDescribedByLink() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
 
         // then
         assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + BidirWithSetChildEntity.class.getName())).httpMethod(RestfulHttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
@@ -151,7 +151,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentation_noIcon() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
 
         // then
         final LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
@@ -163,7 +163,7 @@ public class DomainObjectResourceTest {
     public void domainObjectWithIcon() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:xxx");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","xxx");
 
         // icon
         final LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
@@ -175,7 +175,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentationContent_Properties() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
         final LinkRepresentation self = domainObjectRepr.getSelf();
 
         // then properties
@@ -198,7 +198,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentationContent_Collections() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
 
         // then collections
 
@@ -209,7 +209,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentationContent() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
         final LinkRepresentation self = domainObjectRepr.getSelf();
 
         // then actions
@@ -253,7 +253,7 @@ public class DomainObjectResourceTest {
     public void domainObjectWithDisabledMembers() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:xxx");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","xxx");
 
         // property ('name')
         final JsonRepresentation properties = domainObjectRepr.getProperties();
@@ -268,7 +268,7 @@ public class DomainObjectResourceTest {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
         // when
-        final Response idPropertyResp = domainObjectResource.propertyDetails("OID:1", "id");
+        final Response idPropertyResp = domainObjectResource.propertyDetails("OID","1", "id");
         final RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.ofT(idPropertyResp);
         assertThat(idPropertyJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
@@ -305,7 +305,7 @@ public class DomainObjectResourceTest {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
         // when
-        final Response actionPromptResp = domainObjectResource.actionPrompt("OID:1", "list");
+        final Response actionPromptResp = domainObjectResource.actionPrompt("OID","1", "list");
         final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         assertThat(actionPromptJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
@@ -360,7 +360,7 @@ public class DomainObjectResourceTest {
         final JsonRepresentation body = JsonRepresentation.newArray();
 
         // when
-        final Response actionInvokeResp = domainObjectResource.invokeAction("OID:1", "list", body.asInputStream());
+        final Response actionInvokeResp = domainObjectResource.invokeAction("OID","1", "list", body.asInputStream());
         final RestfulResponse<ScalarValueRepresentation> actionInvokeJsonResp = RestfulResponse.ofT(actionInvokeResp);
         assertThat(actionInvokeJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
@@ -387,10 +387,10 @@ public class DomainObjectResourceTest {
         assertThat(domainObjectIconLink.getHref(), matches("http://localhost:\\d+/images/null.png")); // TODO
     }
 
-    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String oidStr) throws JsonParseException, JsonMappingException, IOException {
+    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws JsonParseException, JsonMappingException, IOException {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
-        final Response domainObjectResp = domainObjectResource.object(oidStr);
+        final Response domainObjectResp = domainObjectResource.object(domainType, instanceId);
         final RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 

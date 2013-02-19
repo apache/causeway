@@ -25,12 +25,12 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
-@Named("PolyClassParentEntities")
-@ObjectType("PolyClassParentEntities")
+@Named("PolyInterfaceParentEntities")
+@ObjectType("PolyInterfaceParentEntities")
 public class PolyInterfaceParentEntityRepository extends AbstractEntityRepository<PolyInterfaceParentEntity> {
 
     public PolyInterfaceParentEntityRepository() {
-        super(PolyInterfaceParentEntity.class, "PolyClassParentEntities");
+        super(PolyInterfaceParentEntity.class, "PolyInterfaceParentEntities");
     }
 
     @MemberOrder(sequence = "2")

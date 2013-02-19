@@ -29,14 +29,32 @@ public final class OidUtils {
     private OidUtils() {
     }
 
-    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String oidEncodedStr) {
-        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
-        return resourceContext.getAdapterManager().adapterFor(rootOid);
+    public static String getDomainType(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getDomainType(objectAdapter);
+    }
+
+    public static String getInstanceId(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(renderContext, objectAdapter);
     }
     
-    public static String getOidStr(final RendererContext resourceContext, final ObjectAdapter objectAdapter) {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(resourceContext, objectAdapter);
+    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String domainType, final String instanceId) {
+
+        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceId);
+        
+        // REVIEW: it's a bit hokey to join these together just to split them out again.
+        final String oidStr = getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
+        
+        return getObjectAdapterForUnencoded(resourceContext, oidStr);
+    }
+
+    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String oidEncodedStr) {
+        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
+        return getObjectAdapterForUnencoded(resourceContext, oidStr);
+    }
+
+    private static ObjectAdapter getObjectAdapterForUnencoded(final RendererContext resourceContext, final String oidStr) {
+        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
+        return resourceContext.getAdapterManager().adapterFor(rootOid);
     }
 
     private static OidMarshaller getOidMarshaller() {

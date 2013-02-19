@@ -31,7 +31,6 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 
 /**
@@ -39,20 +38,17 @@ import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationExc
  * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
  * and 1.1-RC2).
  */
-@Path("/version")
+//@Path("/version")
 public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
 
     @Override
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     public Response version() {
-        final RepresentationType representationType = RepresentationType.VERSION;
-
-        init(representationType, Where.NOWHERE);
+        init(RepresentationType.VERSION, Where.NOWHERE);
         fakeRuntimeExceptionIfXFail();
 
-        final RendererFactory factory = rendererFactoryRegistry.find(representationType);
-        final VersionReprRenderer renderer = (VersionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();

@@ -25,8 +25,6 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
 
     private final static JsonMapper jsonMapper = JsonMapper.instance();
 
-    private final static DomainObjectReprRenderer.Factory objectRendererFactory = new DomainObjectReprRenderer.Factory();
-
     private final static String BASE_URL_KEY = "isis.viewer.restfulobjects.RestfulObjectsSpecEventSerializer.baseUrl";
     private static final String BASE_URL_DEFAULT = "http://localhost:8080/restful/";
 
@@ -68,7 +66,7 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
     }
 
     JsonRepresentation asPayloadRepr(final RendererContext rendererContext, EventPayload payload) {
-        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) objectRendererFactory.newRenderer(rendererContext, null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, JsonRepresentation.newMap());
         final ObjectAdapter objectAdapter = rendererContext.getAdapterManager().adapterFor(payload);
         renderer.with(objectAdapter).asEventSerialization();
         return renderer.render();

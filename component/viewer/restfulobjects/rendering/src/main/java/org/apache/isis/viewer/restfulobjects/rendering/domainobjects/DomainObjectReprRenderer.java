@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -41,31 +40,17 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter> {
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-
-        public Factory() {
-            super(RepresentationType.DOMAIN_OBJECT);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new DomainObjectReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
-
-    public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectAdapter elementAdapter) {
-        final String oidStr = ((RootOid) elementAdapter.getOid()).enString(getOidMarshaller());
-        final String url = "objects/" + oidStr;
-        final LinkBuilder builder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url).withTitle(elementAdapter.titleString());
+    public static LinkBuilder newLinkToBuilder(final RendererContext rendererContext, final Rel rel, final ObjectAdapter objectAdapter) {
+        String domainType = OidUtils.getDomainType(objectAdapter);
+        String instanceId = OidUtils.getInstanceId(rendererContext, objectAdapter);
+        final String url = "objects/" + domainType + "/" + instanceId;
+        final LinkBuilder builder = LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString());
         return builder;
     }
 
@@ -102,8 +87,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private ObjectAdapter objectAdapter;
     private Mode mode = Mode.REGULAR;
 
-    private DomainObjectReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public DomainObjectReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.DOMAIN_OBJECT, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
 
@@ -112,7 +97,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
      * generating links in {@link #linkTo(ObjectAdapter)}).
      */
     public DomainObjectReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
-        this.linkToBuilder = objectAdapterLinkToBuilder.usingUrlBase(resourceContext);
+        this.linkToBuilder = objectAdapterLinkToBuilder.usingUrlBase(rendererContext);
         return this;
     }
 
@@ -156,7 +141,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // described by
         if (mode.includesDescribedBy()) {
-            getLinks().arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
+            getLinks().arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
         }
 
         if (!mode.representsArguments()) {
@@ -173,8 +158,16 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return representation;
     }
 
+    private String getDomainType() {
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getDomainType(objectAdapter);
+    }
+
+    private String getInstanceId() {
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(rendererContext, objectAdapter);
+    }
+
     private String getOidStr() {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(resourceContext, objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(rendererContext, objectAdapter);
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
@@ -195,7 +188,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(getAuthenticationSession(), objectAdapter, resourceContext.getWhere());
+                final Consent visibility = assoc.isVisible(getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -203,8 +196,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (assoc instanceof OneToOneAssociation) {
                 final OneToOneAssociation property = (OneToOneAssociation) assoc;
 
-                final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_PROPERTY);
-                final ObjectPropertyReprRenderer renderer = (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+                final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
@@ -222,8 +214,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (assoc instanceof OneToManyAssociation) {
                 final OneToManyAssociation collection = (OneToManyAssociation) assoc;
 
-                final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_COLLECTION);
-                final ObjectCollectionReprRenderer renderer = (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+                final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
 
@@ -235,7 +226,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private void addActions(final ObjectAdapter objectAdapter, final List<ObjectAction> actions, final JsonRepresentation members) {
         final LinkFollower linkFollower = getLinkFollower().follow("members");
         for (final ObjectAction action : actions) {
-            final Consent visibility = action.isVisible(getAuthenticationSession(), objectAdapter, resourceContext.getWhere());
+            final Consent visibility = action.isVisible(getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
             if (!visibility.isAllowed()) {
                 continue;
             }
@@ -246,8 +237,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             } else {
 
-                final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_ACTION);
-                final ObjectActionReprRenderer renderer = (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+                final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);
 
@@ -263,11 +253,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if(objectAdapter.getSpecification().containsDoOpFacet(NotPersistableFacet.class)) {
             return;
         }
-        final RendererFactory rendererFactory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
-        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST, RepresentationType.DOMAIN_OBJECT, "objects/").withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
+        final String domainType = objectAdapter.getSpecification().getSpecId().asString();
+        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
 
@@ -293,16 +283,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return;
         }
 
-        final RendererFactory rendererFactory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
-        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asModifyPropertiesLinkArguments().render();
 
-        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.MODIFY, RepresentationType.DOMAIN_OBJECT, "objects/%s", getOidStr()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
+        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.MODIFY.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
-    }
-
-    protected RendererFactoryRegistry getRendererFactoryRegistry() {
-        return RendererFactoryRegistry.instance;
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -316,7 +301,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
         final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
         final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
-        return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).withTitle(title).build();
+        return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
     }
 
  

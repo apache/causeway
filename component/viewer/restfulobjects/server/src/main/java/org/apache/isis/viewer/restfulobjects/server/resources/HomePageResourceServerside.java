@@ -30,7 +30,6 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 
 /**
@@ -43,11 +42,9 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     @Override
     @Produces({ RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
-        final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        init(representationType, Where.NOWHERE);
+        init(RepresentationType.HOME_PAGE, Where.NOWHERE);
 
-        final RendererFactory factory = rendererFactoryRegistry.find(representationType);
-        final HomePageReprRenderer renderer = (HomePageReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();

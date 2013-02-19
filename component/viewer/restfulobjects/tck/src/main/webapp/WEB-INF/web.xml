@@ -94,7 +94,7 @@
 		<init-param>
 			<!-- trusted client, so no authentication required -->
 			<param-name>authenticationSessionStrategy</param-name>
-			<param-value>org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted</param-value>
+			<param-value>org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyTrusted</param-value>
 		</init-param>
 		<init-param>
             <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->
@@ -117,7 +117,7 @@
 
 	<context-param>
 		<param-name>javax.ws.rs.Application</param-name>
-		<param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
+		<param-value>org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication</param-value>
 	</context-param>
 
 	<servlet>

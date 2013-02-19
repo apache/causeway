@@ -38,113 +38,113 @@ import org.jboss.resteasy.annotations.ClientResponseType;
 public interface DomainObjectResource {
 
     @POST
-    @Path("/")
+    @Path("/{domainType}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response persist(final InputStream object);
+    public Response persist(@PathParam("domainType") String domainType, final InputStream object);
 
     // //////////////////////////////////////////////////////////
     // domain object
     // //////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Path("/{domainType}/{instanceId}")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response object(@PathParam("oid") final String oidStr);
+    public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
 
     @PUT
-    @Path("/{oid}")
+    @Path("/{domainType}/{instanceId}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response object(@PathParam("oid") final String oidStr, final InputStream arguments);
+    public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream arguments);
 
     // //////////////////////////////////////////////////////////
     // domain object property
     // //////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}/properties/{propertyId}")
+    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response propertyDetails(@PathParam("oid") final String oidStr, @PathParam("propertyId") final String propertyId);
+    public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
     @PUT
-    @Path("/{oid}/properties/{propertyId}")
+    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response modifyProperty(@PathParam("oid") final String oidStr, @PathParam("propertyId") final String propertyId, final InputStream arguments);
+    public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream arguments);
 
     @DELETE
-    @Path("/{oid}/properties/{propertyId}")
+    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response clearProperty(@PathParam("oid") final String oidStr, @PathParam("propertyId") final String propertyId);
+    public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
     // //////////////////////////////////////////////////////////
     // domain object collection
     // //////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}/collections/{collectionId}")
+    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response accessCollection(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId);
+    public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
 
     @PUT
-    @Path("/{oid}/collections/{collectionId}")
+    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response addToSet(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId, final InputStream arguments);
+    public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
 
     @POST
-    @Path("/{oid}/collections/{collectionId}")
+    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response addToList(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId, final InputStream arguments);
+    public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
 
     @DELETE
-    @Path("/{oid}/collections/{collectionId}")
+    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response removeFromCollection(@PathParam("oid") final String oidStr, @PathParam("collectionId") final String collectionId);
+    public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
 
     // //////////////////////////////////////////////////////////
     // domain object action
     // //////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}/actions/{actionId}")
+    @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response actionPrompt(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId);
+    public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
     // //////////////////////////////////////////////////////////
     // domain object action invoke
     // //////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response invokeActionQueryOnly(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId);
+    public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
     @PUT
-    @Path("/{oid}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
-    public Response invokeActionIdempotent(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId, final InputStream arguments);
-
-    @POST
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response invokeAction(@PathParam("oid") final String oidStr, @PathParam("actionId") final String actionId, final InputStream arguments);
+    public Response invokeActionIdempotent(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
+
+    @POST
+    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType = String.class)
+    public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
 }

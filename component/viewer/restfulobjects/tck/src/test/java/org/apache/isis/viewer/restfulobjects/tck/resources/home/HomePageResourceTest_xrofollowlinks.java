@@ -27,22 +27,20 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class HomePageResourceTest_xrofollowlinks {
 
@@ -57,8 +55,7 @@ public class HomePageResourceTest_xrofollowlinks {
 
     @Before
     public void setUp() throws Exception {
-        final WebServer webServer = webServerRule.getWebServer();
-        client = new RestfulClient(webServer.getBase());
+        client = webServerRule.getClient();
 
         request = client.createRequest(RestfulHttpMethod.GET, "");
         restfulResponse = request.executeT();
@@ -73,7 +70,7 @@ public class HomePageResourceTest_xrofollowlinks {
     @Test
     public void canFollowUser() throws Exception {
 
-        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=user]");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.USER.getName() + "]");
 
         assertThat(repr.getUser().getValue(), is(not(nullValue())));
     }
@@ -81,7 +78,7 @@ public class HomePageResourceTest_xrofollowlinks {
     @Test
     public void canFollowServices() throws Exception {
 
-        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services]");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "]");
 
         assertThat(repr.getServices().getValue(), is(not(nullValue())));
     }
@@ -89,65 +86,64 @@ public class HomePageResourceTest_xrofollowlinks {
     @Test
     public void canFollowVersion() throws Exception {
 
-        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=version]");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.VERSION.getName() + "]");
 
         assertThat(repr.getVersion().getValue(), is(not(nullValue())));
     }
 
-    @Ignore("broken... (did this ever work, not sure)")
     @Test
     public void canFollowAll() throws Exception {
 
-        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=user],links[rel=services],links[rel=version]");
+        repr = whenExecuteAndFollowLinksUsing("/", 
+                        "links[rel=" + Rel.USER.getName() + "]," +
+        		        "links[rel=" + Rel.SERVICES.getName() + "]," +
+        				"links[rel=" + Rel.VERSION.getName() + "]");
 
+        assertThat(repr.getServices().getValue(), is(not(nullValue())));
         assertThat(repr.getUser().getValue(), is(not(nullValue())));
         assertThat(repr.getVersion().getValue(), is(not(nullValue())));
-        assertThat(repr.getServices().getValue(), is(not(nullValue())));
     }
 
     @Test
     public void servicesValues() throws Exception {
 
-        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services].values");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "].value");
 
         final JsonRepresentation servicesValue = repr.getServices().getValue();
         assertThat(servicesValue, is(not(nullValue())));
         assertThat(servicesValue, isMap());
-        final JsonRepresentation serviceLinkList = servicesValue.getArray("values");
+        final JsonRepresentation serviceLinkList = servicesValue.getArray("value");
         assertThat(serviceLinkList, isArray());
 
         JsonRepresentation service;
 
-        service = serviceLinkList.getRepresentation("[id=%s]", "simples");
+        service = serviceLinkList.getRepresentation("[rel=%s;serviceId=\"%s\"]", Rel.SERVICE.getName(), "JdkValuedEntities");
         assertThat(service, isMap());
-        assertThat(service.getString("id"), is("simples"));
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
 
-        service = serviceLinkList.getRepresentation("[id=%s]", "applibValuedEntities");
+        service = serviceLinkList.getRepresentation("[rel=%s;serviceId=\"%s\"]", Rel.SERVICE.getName(), "WrapperValuedEntities");
         assertThat(service, isMap());
-        assertThat(service.getString("id"), is("applibValuedEntities"));
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
     }
 
-    @Test
+    @Test // currently failing
     public void servicesValuesWithCriteria() throws Exception {
 
-        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services].values[id=simples]");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "].value[rel=" + Rel.SERVICE.andParam("serviceId", "WrapperValuedEntities")+"]");
 
         final JsonRepresentation servicesValue = repr.getServices().getValue();
         assertThat(servicesValue, is(not(nullValue())));
         assertThat(servicesValue, isMap());
-        final JsonRepresentation serviceLinkList = servicesValue.getArray("values");
+        final JsonRepresentation serviceLinkList = servicesValue.getArray("value");
         assertThat(serviceLinkList, isArray());
 
         JsonRepresentation service;
 
-        service = serviceLinkList.getRepresentation("[id=%s]", "simples");
+        service = serviceLinkList.getRepresentation("[rel=%s;serviceId=\"%s\"]", Rel.SERVICE.getName(), "WrapperValuedEntities");
         assertThat(service, isMap());
-        assertThat(service.getString("id"), is("simples"));
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
 
-        service = serviceLinkList.getRepresentation("[id=%s]", "applibValuedEntities");
+        service = serviceLinkList.getRepresentation("[rel=%s;serviceId=\"%s\"]", Rel.SERVICE.getName(), "JdkValuedEntities");
         assertThat(service.getRepresentation("value"), is(nullValue()));
     }
 

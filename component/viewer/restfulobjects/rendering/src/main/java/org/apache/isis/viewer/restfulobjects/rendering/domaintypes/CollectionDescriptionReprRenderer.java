@@ -24,32 +24,18 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 
 public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<CollectionDescriptionReprRenderer, OneToManyAssociation> {
-
-    public static class Factory extends ReprRendererFactoryAbstract {
-
-        public Factory() {
-            super(RepresentationType.COLLECTION_DESCRIPTION);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new CollectionDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
         final String typeFullName = objectSpecification.getFullIdentifier();
         final String collectionId = collection.getId();
         final String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.COLLECTION_DESCRIPTION, url);
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.COLLECTION_DESCRIPTION, url);
     }
 
-    public CollectionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public CollectionDescriptionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.COLLECTION_DESCRIPTION, representation);
     }
 
     @Override
@@ -62,7 +48,7 @@ public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRen
         if (elementType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, elementType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.ELEMENT_TYPE, elementType);
         getLinks().arrayAdd(linkBuilder.build());
     }
 

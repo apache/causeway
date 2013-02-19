@@ -28,8 +28,6 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresenta
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectCollectionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.TransientDomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.ActionDescriptionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.ActionParameterDescriptionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.CollectionDescriptionRepresentation;
@@ -49,9 +47,7 @@ public enum RepresentationType {
     USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class), 
     VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class), 
     LIST(RestfulMediaType.APPLICATION_JSON_LIST, ListRepresentation.class), 
-    SCALAR_VALUE(RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, ScalarValueRepresentation.class), 
-    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, DomainObjectRepresentation.class), 
-    TRANSIENT_DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT, TransientDomainObjectRepresentation.class), 
+    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_OBJECT, DomainObjectRepresentation.class), 
     OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class), 
     OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, ObjectCollectionRepresentation.class), 
     OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class), 

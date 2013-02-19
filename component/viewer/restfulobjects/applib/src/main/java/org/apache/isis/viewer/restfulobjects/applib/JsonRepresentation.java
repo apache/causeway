@@ -1047,7 +1047,7 @@ public class JsonRepresentation {
 
     private JsonNode getNode(final String path) {
         JsonNode jsonNode = this.jsonNode;
-        final String[] keys = path.split("\\.");
+        final List<String> keys = PathNode.split(path);
         for (final String key : keys) {
             final PathNode pathNode = PathNode.parse(key);
             if (!pathNode.getKey().isEmpty()) {

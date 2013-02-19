@@ -24,15 +24,16 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
 
 public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
-    protected RendererContext resourceContext;
+    protected RendererContext rendererContext;
     protected ObjectAdapter objectAdapter;
 
     @Override
     public final DomainObjectLinkTo usingUrlBase(final RendererContext resourceContext) {
-        this.resourceContext = resourceContext;
+        this.rendererContext = resourceContext;
         return this;
     }
 
@@ -49,7 +50,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     @Override
     public LinkBuilder builder(final Rel rel) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, relElseDefault(rel), RepresentationType.DOMAIN_OBJECT, linkRef());
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(rendererContext, relElseDefault(rel).getName(), RepresentationType.DOMAIN_OBJECT, linkRef(new StringBuilder()).toString());
         linkBuilder.withTitle(objectAdapter.titleString());
         return linkBuilder;
     }
@@ -57,19 +58,13 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
     /**
      * hook method
      */
-    protected String linkRef() {
-        if (resourceContext == null) {
-            throw new IllegalStateException("resourceContext not provided");
-        }
-        if (objectAdapter == null) {
-            throw new IllegalStateException("objectAdapter not provided");
-        }
-        final StringBuilder buf = new StringBuilder("objects/");
-        buf.append(objectAdapter.getOid().enString(getOidMarshaller()));
-        return buf.toString();
+    protected StringBuilder linkRef(StringBuilder buf) {
+        String domainType = OidUtils.getDomainType(objectAdapter);
+        String instanceId = OidUtils.getInstanceId(rendererContext, objectAdapter);
+        return buf.append("objects/").append(domainType).append("/").append(instanceId);
     }
 
-    private Rel relElseDefault(final Rel rel) {
+    protected Rel relElseDefault(final Rel rel) {
         return rel != null ? rel : defaultRel();
     }
 
@@ -77,7 +72,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      * hook method; used by {@link #builder(Rel)}.
      */
     protected Rel defaultRel() {
-        return Rel.OBJECT;
+        return Rel.VALUE;
     }
 
     @Override
@@ -87,7 +82,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     @Override
     public final LinkBuilder memberBuilder(final Rel rel, final MemberType memberType, final ObjectMember objectMember, final RepresentationType representationType, final String... parts) {
-        final StringBuilder buf = new StringBuilder(linkRef());
+        final StringBuilder buf = linkRef(new StringBuilder());
         buf.append("/").append(memberType.getUrlPart()).append(objectMember.getId());
         for (final String part : parts) {
             if (part == null) {
@@ -96,7 +91,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             buf.append("/").append(part);
         }
         final String url = buf.toString();
-        return LinkBuilder.newBuilder(resourceContext, rel, representationType, url);
+        return LinkBuilder.newBuilder(rendererContext, rel.getName(), representationType, url);
     }
 
 

@@ -35,8 +35,6 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ListReprRenderer;
@@ -50,14 +48,11 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
-        final RepresentationType representationType = RepresentationType.LIST;
-        init(representationType, Where.STANDALONE_TABLES);
+        init(RepresentationType.LIST, Where.STANDALONE_TABLES);
 
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
 
-        final RendererFactory factory = RendererFactoryRegistry.instance.find(representationType);
-
-        final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ListReprRenderer renderer = new ListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo()).withSelf("services").with(serviceAdapters);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -70,15 +65,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     @GET
     @Path("/{serviceId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response service(@PathParam("serviceId") final String serviceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
-
-        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo()).with(serviceAdapter).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();

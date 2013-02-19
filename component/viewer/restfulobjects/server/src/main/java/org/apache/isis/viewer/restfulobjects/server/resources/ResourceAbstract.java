@@ -40,6 +40,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -51,7 +52,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
@@ -86,8 +86,6 @@ public abstract class ResourceAbstract {
     // nb: SET is excluded; we simply flatten contributed actions.
     public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
-    // TODO: should inject this instead...
-    protected final static RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
 
     @Context
     HttpHeaders httpHeaders;
@@ -152,15 +150,19 @@ public abstract class ResourceAbstract {
         return getSpecificationLoader().loadSpecification(specFullName);
     }
 
-    protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
+    protected ObjectAdapter getObjectAdapter(String domainType, final String instanceId) {
 
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, oidEncodedStr);
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, domainType, instanceId);
 
         if (objectAdapter == null) {
-            final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s'", oidStr);
+            final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceId);
+            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
         }
         return objectAdapter;
+    }
+
+    OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
     }
 
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
@@ -175,9 +177,6 @@ public abstract class ResourceAbstract {
         throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
     }
 
-    protected String getOidStr(final ObjectAdapter objectAdapter) {
-        return OidUtils.getOidStr(resourceContext, objectAdapter);
-    }
 
     // //////////////////////////////////////////////////////////////
     // Responses

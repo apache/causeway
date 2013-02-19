@@ -33,22 +33,22 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeRep
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
-    protected final RendererContext resourceContext;
+    protected final RendererContext rendererContext;
     private final LinkFollower linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
 
     protected boolean includesSelf;
 
-    public ReprRendererAbstract(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        this.resourceContext = resourceContext;
+    public ReprRendererAbstract(final RendererContext rendererContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+        this.rendererContext = rendererContext;
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
     }
 
-    public RendererContext getResourceContext() {
-        return resourceContext;
+    public RendererContext getRendererContext() {
+        return rendererContext;
     }
 
     public LinkFollower getLinkFollower() {
@@ -59,7 +59,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         if (linkFollower != null) {
             return linkFollower;
         }
-        return LinkFollower.create(resourceContext.getFollowLinks());
+        return LinkFollower.create(rendererContext.getFollowLinks());
     }
 
     @Override
@@ -75,7 +75,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
     public R withSelf(final String href) {
         if (href != null) {
-            getLinks().arrayAdd(LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType, href).build());
+            getLinks().arrayAdd(LinkBuilder.newBuilder(rendererContext, Rel.SELF.getName(), representationType, href).build());
         }
         return cast(this);
     }
@@ -107,7 +107,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         if (objectSpec == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), rel, objectSpec);
         getLinks().arrayAdd(linkBuilder.build());
     }
 
@@ -154,7 +154,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPut(key, adapterList);
         for (final ObjectAdapter adapter : adapters) {
-            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.OBJECT, adapter).build());
+            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getRendererContext(), Rel.VALUE, adapter).build());
         }
     }
 

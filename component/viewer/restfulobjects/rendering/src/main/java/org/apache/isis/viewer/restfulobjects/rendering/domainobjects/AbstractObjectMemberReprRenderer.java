@@ -89,7 +89,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * {@link #objectAdapter}).
      */
     public R usingLinkTo(final ObjectAdapterLinkTo linkTo) {
-        this.linkTo = linkTo.usingUrlBase(resourceContext).with(objectAdapter);
+        this.linkTo = linkTo.usingUrlBase(rendererContext).with(objectAdapter);
         return cast(this);
     }
 

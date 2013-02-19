@@ -24,38 +24,42 @@ public enum Rel {
     SELF("self"), 
     DESCRIBEDBY("describedby"), 
     UP("up"), 
+    PREVIOUS("previous"),
+    NEXT("next"),
     HELP("help"), 
     ICON("icon"),
 
     // Restful Objects namespace
-    ICON16(Spec.REL_PREFIX + "icon16"), 
-    ICON32(Spec.REL_PREFIX + "icon32"), 
-    OBJECT(Spec.REL_PREFIX + "object"), 
-    SERVICE(Spec.REL_PREFIX + "service"), 
-    CHOICE(Spec.REL_PREFIX + "choice"), 
-    DEFAULT(Spec.REL_PREFIX + "default"), 
-    DETAILS(Spec.REL_PREFIX + "details"), 
-    MODIFY(Spec.REL_PREFIX + "modify"), 
+    ACTION(Spec.REL_PREFIX + "action"), 
+    ACTION_PARAM(Spec.REL_PREFIX + "action-param"), 
+    ADD_TO(Spec.REL_PREFIX + "add-to"), 
+    ATTACHMENT(Spec.REL_PREFIX + "attachment"), 
+    CHOICE(Spec.REL_PREFIX + "choice"),
     CLEAR(Spec.REL_PREFIX + "clear"), 
-    ADD_TO(Spec.REL_PREFIX + "addto"), 
-    REMOVE_FROM(Spec.REL_PREFIX + "removefrom"), 
+    COLLECTION(Spec.REL_PREFIX + "collection"), 
+    DEFAULT(Spec.REL_PREFIX + "default"), 
+    DELETE(Spec.REL_PREFIX + "delete"), 
+    DETAILS(Spec.REL_PREFIX + "details"), 
+    DOMAIN_TYPE(Spec.REL_PREFIX + "domain-type"),
+    DOMAIN_TYPES(Spec.REL_PREFIX + "domain-types"), 
+    ELEMENT(Spec.REL_PREFIX + "element"), 
+    ELEMENT_TYPE(Spec.REL_PREFIX + "element-type"), 
     INVOKE(Spec.REL_PREFIX + "invoke"), 
+    MODIFY(Spec.REL_PREFIX + "modify"), 
     PERSIST(Spec.REL_PREFIX + "persist"), 
     PROPERTY(Spec.REL_PREFIX + "property"), 
-    COLLECTION(Spec.REL_PREFIX + "collection"), 
-    ACTION(Spec.REL_PREFIX + "action"), 
-    TYPE_ACTION(Spec.REL_PREFIX + "typeaction"), 
-    ACTION_PARAM(Spec.REL_PREFIX + "actionparam"), 
-    RETURN_TYPE(Spec.REL_PREFIX + "returntype"), 
-    ELEMENT_TYPE(Spec.REL_PREFIX + "elementtype"), 
-    VERSION(Spec.REL_PREFIX + "version"), 
-    USER(Spec.REL_PREFIX + "user"), 
+    REMOVE_FROM(Spec.REL_PREFIX + "remove-from"), 
+    RETURN_TYPE(Spec.REL_PREFIX + "return-type"), 
+    SERVICE(Spec.REL_PREFIX + "service"), 
     SERVICES(Spec.REL_PREFIX + "services"), 
-    TYPES(Spec.REL_PREFIX + "types"), 
-    DOMAIN_TYPE(Spec.REL_PREFIX + "domaintype"),
+    UPDATE(Spec.REL_PREFIX + "update"), 
+    USER(Spec.REL_PREFIX + "user"), 
+    VALUE(Spec.REL_PREFIX + "value"), 
+    VERSION(Spec.REL_PREFIX + "version"), 
+    
 
     // implementation specific
-    CONTRIBUTED_BY(Impl.REL_PREFIX + "contributedby");
+    CONTRIBUTED_BY(Impl.REL_PREFIX + "contributed-by");
 
     private final String name;
 
@@ -65,6 +69,13 @@ public enum Rel {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * For those {@link Rel}s that also take a param
+     */
+    public String andParam(String paramName, String paramValue) {
+        return name + ";" + paramName + "=" + "\"" + paramValue + "\"";
     }
 
     private static class Spec {

@@ -25,37 +25,22 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 
 public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Collection<ObjectAdapter>> {
-
-    public static class Factory extends ReprRendererFactoryAbstract {
-        public Factory() {
-            super(RepresentationType.LIST);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new ListReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
 
     private ObjectAdapterLinkTo linkTo;
     private Collection<ObjectAdapter> objectAdapters;
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
 
-    private ListReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public ListReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.LIST, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
 
     public ListReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
-        this.linkTo = objectAdapterLinkToBuilder.usingUrlBase(resourceContext);
+        this.linkTo = objectAdapterLinkToBuilder.usingUrlBase(rendererContext);
         return this;
     }
 
@@ -103,8 +88,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
             values.arrayAdd(linkToObject);
 
             if (linkFollower.matches(linkToObject)) {
-                final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
-                final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);
             }

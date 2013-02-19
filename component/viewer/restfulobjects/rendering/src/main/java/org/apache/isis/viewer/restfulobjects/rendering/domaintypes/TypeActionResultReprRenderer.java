@@ -22,29 +22,16 @@ import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 
 public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActionResultReprRenderer, ObjectSpecification> {
-
-    public static class Factory extends ReprRendererFactoryAbstract {
-        public Factory() {
-            super(RepresentationType.TYPE_ACTION_RESULT);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new TypeActionResultReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
 
     private ObjectSpecification objectSpecification;
     private LinkRepresentation selfLink;
     private Object value;
 
-    public TypeActionResultReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public TypeActionResultReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.TYPE_ACTION_RESULT, representation);
     }
 
     @Override

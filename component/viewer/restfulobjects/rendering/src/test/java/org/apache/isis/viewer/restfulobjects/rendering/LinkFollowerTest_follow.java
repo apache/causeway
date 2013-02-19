@@ -116,6 +116,53 @@ public class LinkFollowerTest_follow {
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "bad")), is(false));
     }
 
+
+    @Test
+    public void simple_multiplePaths() throws Exception {
+        final List<List<String>> links = asListOfLists("a.b.c,x.y.z");
+
+        final LinkFollower linkFollower = LinkFollower.create(links);
+
+        LinkFollower followA = linkFollower.follow("a");
+        assertThat(followA.isFollowing(), is(true));
+        assertThat(followA.isTerminated(), is(false));
+
+        LinkFollower followX = linkFollower.follow("x");
+        assertThat(followX.isFollowing(), is(true));
+        assertThat(followX.isTerminated(), is(false));
+        
+        LinkFollower followXY = followX.follow("y");
+        assertThat(followXY.isFollowing(), is(true));
+        assertThat(followXY.isTerminated(), is(false));
+        
+        LinkFollower followXYZ = followXY.follow("z");
+        assertThat(followXYZ.isFollowing(), is(true));
+        assertThat(followXYZ.isTerminated(), is(false));
+        
+        LinkFollower followXYZQ = followXY.follow("q");
+        assertThat(followXYZQ.isFollowing(), is(false));
+        assertThat(followXYZQ.isTerminated(), is(true));
+    }
+
+    @Test
+    public void multiplePaths_withCriteria() throws Exception {
+        final List<List<String>> links = asListOfLists("links[rel=urn:org.restfulobjects:rels/version].x,links[rel=urn:org.restfulobjects:rels/user].y");
+
+        final LinkFollower linkFollower = LinkFollower.create(links);
+
+        LinkFollower followRelVersion = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/version]");
+        assertThat(followRelVersion.isFollowing(), is(true));
+        assertThat(followRelVersion.isTerminated(), is(false));
+        
+        assertThat(followRelVersion.follow("x").isFollowing(), is(true));
+
+        LinkFollower followRelUser = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/user]");
+        assertThat(followRelUser.isFollowing(), is(true));
+        assertThat(followRelUser.isTerminated(), is(false));
+        assertThat(followRelUser.follow("y").isFollowing(), is(true));
+    }
+
+    
     private List<List<String>> asListOfLists(final String string) {
         return Parser.forListOfListOfStrings().valueOf(string);
     }

@@ -30,36 +30,23 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.base.Strings;
 
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-        public Factory() {
-            super(RepresentationType.DOMAIN_TYPE);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new DomainTypeReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
-
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
         final String typeFullName = objectSpec.getFullIdentifier();
         final String url = "domainTypes/" + typeFullName;
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_TYPE, url);
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
     }
 
     private ObjectSpecification objectSpecification;
 
-    public DomainTypeReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public DomainTypeReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.DOMAIN_TYPE, representation);
     }
 
     @Override
@@ -77,7 +64,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
         // self
         if (includesSelf) {
-            final JsonRepresentation selfLink = newLinkToBuilder(getResourceContext(), Rel.SELF, objectSpecification).build();
+            final JsonRepresentation selfLink = newLinkToBuilder(getRendererContext(), Rel.SELF, objectSpecification).build();
             getLinks().arrayAdd(selfLink);
         }
 
@@ -100,17 +87,17 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         for (final ObjectAssociation association : associations) {
             if (association.isOneToOneAssociation()) {
                 final OneToOneAssociation property = (OneToOneAssociation) association;
-                final LinkBuilder linkBuilder = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property);
+                final LinkBuilder linkBuilder = PropertyDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.PROPERTY, objectSpecification, property);
                 membersList.arrayAdd(linkBuilder.build());
             } else if (association.isOneToManyAssociation()) {
                 final OneToManyAssociation collection = (OneToManyAssociation) association;
-                final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, collection);
+                final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.PROPERTY, objectSpecification, collection);
                 membersList.arrayAdd(linkBuilder.build());
             }
         }
         final List<ObjectAction> actions = objectSpecification.getObjectActions(Contributed.INCLUDED);
         for (final ObjectAction action : actions) {
-            final LinkBuilder linkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
+            final LinkBuilder linkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.ACTION, objectSpecification, action);
             membersList.arrayAdd(linkBuilder.build());
         }
     }
@@ -127,32 +114,23 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addTypeActions() {
         getTypeActions().arrayAdd(linkToIsSubtypeOf());
         getTypeActions().arrayAdd(linkToIsSupertypeOf());
-        getTypeActions().arrayAdd(linkToNewTransientInstance());
     }
 
     private JsonRepresentation linkToIsSubtypeOf() {
         final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/isSubtypeOf/invoke";
 
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.TYPE_ACTION, RepresentationType.TYPE_ACTION_RESULT, url);
-        final JsonRepresentation arguments = argumentsTo(getResourceContext(), "supertype", null);
-        final JsonRepresentation link = linkBuilder.withArguments(arguments).withId("isSubtypeOf").build();
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.INVOKE.andParam("typeaction", "isSubtypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
+        final JsonRepresentation arguments = argumentsTo(getRendererContext(), "supertype", null);
+        final JsonRepresentation link = linkBuilder.withArguments(arguments).build();
         return link;
     }
 
     private JsonRepresentation linkToIsSupertypeOf() {
         final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/isSupertypeOf/invoke";
 
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.TYPE_ACTION, RepresentationType.TYPE_ACTION_RESULT, url);
-        final JsonRepresentation arguments = argumentsTo(getResourceContext(), "subtype", null);
-        final JsonRepresentation link = linkBuilder.withArguments(arguments).withId("isSupertypeOf").build();
-        return link;
-    }
-
-    private JsonRepresentation linkToNewTransientInstance() {
-        final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/newTransientInstance/invoke";
-
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.TYPE_ACTION, RepresentationType.TYPE_ACTION_RESULT, url);
-        final JsonRepresentation link = linkBuilder.withId("newTransientInstance").build();
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.INVOKE.andParam("typeaction", "isSupertypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
+        final JsonRepresentation arguments = argumentsTo(getRendererContext(), "subtype", null);
+        final JsonRepresentation link = linkBuilder.withArguments(arguments).build();
         return link;
     }
 

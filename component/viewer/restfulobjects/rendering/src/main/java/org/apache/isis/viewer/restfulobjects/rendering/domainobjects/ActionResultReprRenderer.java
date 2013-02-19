@@ -31,11 +31,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRe
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 
 public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultReprRenderer, ObjectAndActionInvocation> {
 
@@ -46,20 +42,8 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     private JsonRepresentation arguments;
     private ObjectAdapter returnedAdapter;
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-
-        public Factory() {
-            super(RepresentationType.ACTION_RESULT);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new ActionResultReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
-
-    private ActionResultReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public ActionResultReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
     }
 
     @Override
@@ -116,8 +100,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
-            final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.LIST);
-            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, result);
+            final ListReprRenderer renderer = new ListReprRenderer(rendererContext, null, result);
             renderer.with(collectionAdapters).withReturnType(action.getReturnType()).withElementType(returnedAdapter.getElementSpecification());
 
             renderer.render();
@@ -128,9 +111,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         if (encodableFacet != null) {
             // scalar
 
-            final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.SCALAR_VALUE);
-
-            final ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, result);
+            final ScalarValueReprRenderer renderer = new ScalarValueReprRenderer(rendererContext, null, result);
             renderer.with(returnedAdapter).withReturnType(action.getReturnType());
 
             renderer.render();
@@ -140,8 +121,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         {
             // object
-            final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
-            final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, result);
+            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, result);
 
             renderer.with(returnedAdapter).includesSelf();
 
@@ -173,11 +153,6 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         links.arrayAdd(selfLink);
         selfLink.mapPut("args", bodyArgs);
         return representation;
-    }
-
-    protected RendererFactoryRegistry getRendererFactoryRegistry() {
-        // TODO: yuck
-        return RendererFactoryRegistry.instance;
     }
 
 }

@@ -24,31 +24,29 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 
 public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ObjectAdapter> {
 
     private final JsonValueEncoder jsonValueEncoder = new JsonValueEncoder();
     private ObjectSpecification returnType;
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-        public Factory() {
-            super(RepresentationType.SCALAR_VALUE);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new ScalarValueReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
+    ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, null, representation); // null for representationType (there is none)
     }
 
-    private ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    /**
+     * Fail early...
+     * 
+     * <p>
+     * In case I forget in the future that scalar values don't have a representation.  
+     */
+    @Override
+    public RepresentationType getRepresentationType() {
+        throw new UnsupportedOperationException("no representationType defined for scalar values");
     }
-
+    
     @Override
     public ScalarValueReprRenderer with(final ObjectAdapter objectAdapter) {
         final EncodableFacet facet = objectAdapter.getSpecification().getFacet(EncodableFacet.class);
@@ -60,7 +58,7 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         representation.mapPut("value", value);
         return this;
     }
-
+    
     @Override
     public JsonRepresentation render() {
 

@@ -80,9 +80,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-
-        final TypeListReprRenderer renderer = (TypeListReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeListReprRenderer renderer = new TypeListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -94,14 +92,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(@PathParam("domainType") final String domainType) {
 
-        final RepresentationType representationType = RepresentationType.DOMAIN_TYPE;
-        init(representationType, Where.ANYWHERE);
+        init(RepresentationType.DOMAIN_TYPE, Where.ANYWHERE);
 
         final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-
-        final DomainTypeReprRenderer renderer = (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -126,9 +121,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
         final OneToOneAssociation property = (OneToOneAssociation) objectMember;
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-
-        final PropertyDescriptionReprRenderer renderer = (PropertyDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final PropertyDescriptionReprRenderer renderer = new PropertyDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -153,9 +146,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
         final OneToManyAssociation collection = (OneToManyAssociation) objectMember;
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-
-        final CollectionDescriptionReprRenderer renderer = (CollectionDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final CollectionDescriptionReprRenderer renderer = new CollectionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -180,9 +171,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
         final ObjectAction action = (ObjectAction) objectMember;
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-
-        final ActionDescriptionReprRenderer renderer = (ActionDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -209,9 +198,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-
-        final ActionParameterDescriptionReprRenderer renderer = (ActionParameterDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -225,12 +212,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @GET
     @Path("/{domainType}/typeactions/isSubtypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response domainTypeIsSubtypeOf(@PathParam("domainType") final String domainType, @QueryParam("supertype") final String superTypeStr, // simple
-                                                                                                                                                // style
+    public Response domainTypeIsSubtypeOf(
+            @PathParam("domainType") final String domainType, 
+            @QueryParam("supertype") final String superTypeStr, // simple style
             @QueryParam("args") final String args // formal style
-    ) {
-
-        final RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
+            ) {
         init(Where.ANYWHERE);
 
         final String supertype = domainTypeFor(superTypeStr, args, "supertype");
@@ -238,11 +224,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainType);
         final ObjectSpecification supertypeSpec = getSpecificationLoader().loadSpecification(supertype);
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-        final TypeActionResultReprRenderer renderer = (TypeActionResultReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
         final String url = "domainTypes/" + domainTypeSpec.getFullIdentifier() + "/typeactions/isSubtypeOf/invoke";
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF, RepresentationType.TYPE_ACTION_RESULT, url);
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(getResourceContext(), "supertype", supertypeSpec);
         final JsonRepresentation selfLink = linkBuilder.withArguments(arguments).build();
 
@@ -262,7 +247,6 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("args") final String args // formal style
             ) {
 
-        final RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
         init(Where.ANYWHERE);
 
         final String subtype = domainTypeFor(subTypeStr, args, "subtype");
@@ -270,47 +254,15 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainType);
         final ObjectSpecification subtypeSpec = getSpecificationLoader().loadSpecification(subtype);
 
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-        final TypeActionResultReprRenderer renderer = (TypeActionResultReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
         final String url = "domainTypes/" + domainTypeSpec.getFullIdentifier() + "/typeactions/isSupertypeOf/invoke";
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF, RepresentationType.TYPE_ACTION_RESULT, url);
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(getResourceContext(), "subtype", subtypeSpec);
         final JsonRepresentation selfLink = linkBuilder.withArguments(arguments).build();
 
         final boolean value = subtypeSpec.isOfType(domainTypeSpec);
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
-
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
-    }
-
-    @Override
-    @GET
-    @Path("/{domainType}/typeactions/newTransientInstance/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
-    public Response newTransientInstance(@PathParam("domainType") final String domainTypeStr, @QueryParam("args") final String args) {
-
-        final RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
-        init(representationType, Where.ANYWHERE);
-
-        final String domainType = domainTypeFor(domainTypeStr, args, "domainType");
-
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainType);
-
-        final RendererFactory rendererFactory = rendererFactoryRegistry.find(representationType);
-        final TypeActionResultReprRenderer renderer = (TypeActionResultReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-
-        final String url = "domainTypes/" + domainTypeSpec.getFullIdentifier() + "/typeactions/newTransientInstance/invoke";
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF, RepresentationType.TYPE_ACTION_RESULT, url);
-        final JsonRepresentation selfLink = linkBuilder.build();
-
-        final RendererFactory domainObjectRendererFactory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
-        final DomainObjectReprRenderer domainObjectRenderer = (DomainObjectReprRenderer) domainObjectRendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        final ObjectAdapter transientInstance = getResourceContext().getPersistenceSession().createTransientInstance(domainTypeSpec);
-        domainObjectRenderer.with(transientInstance).includesSelf();
-
-        renderer.with(domainTypeSpec).withSelf(selfLink).withValue(domainObjectRenderer.render());
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }

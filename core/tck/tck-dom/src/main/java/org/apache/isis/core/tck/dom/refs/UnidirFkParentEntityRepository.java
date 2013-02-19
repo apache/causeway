@@ -24,8 +24,8 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
-@Named("UnidirParentEntities")
-@ObjectType("UnidirParentEntities")
+@Named("UnidirFkParentEntities")
+@ObjectType("UnidirFkParentEntities")
 public class UnidirFkParentEntityRepository extends AbstractEntityRepository<UnidirFkParentEntity> {
 
     public UnidirFkParentEntityRepository() {

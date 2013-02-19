@@ -23,6 +23,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 
 public class IsisWebServerRule implements MethodRule {
 
@@ -34,6 +35,7 @@ public class IsisWebServerRule implements MethodRule {
             return webServer;
         };
     };
+    private RestfulClient client;
 
     @Override
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
@@ -45,4 +47,12 @@ public class IsisWebServerRule implements MethodRule {
         return WEBSERVER.get();
     }
 
+    public RestfulClient getClient() {
+        if(client == null) {
+            final WebServer webServer = getWebServer();
+            client = new RestfulClient(webServer.getBase());
+        }
+        return client;
+    }
+    
 }

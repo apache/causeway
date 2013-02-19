@@ -27,18 +27,15 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
-        final RepresentationType user = RepresentationType.USER;
-        init(user, Where.NOWHERE);
+        init(RepresentationType.USER, Where.NOWHERE);
 
-        final RendererFactory factory = rendererFactoryRegistry.find(user);
-        final UserReprRenderer renderer = (UserReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf().with(getAuthenticationSession());
 
         return responseOfOk(renderer, Caching.ONE_HOUR).build();

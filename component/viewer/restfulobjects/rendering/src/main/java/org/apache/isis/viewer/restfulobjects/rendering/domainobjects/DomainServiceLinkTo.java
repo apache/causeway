@@ -19,6 +19,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 
 public class DomainServiceLinkTo extends DomainObjectLinkTo {
@@ -31,10 +32,19 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     }
 
     @Override
-    protected String linkRef() {
-        final StringBuilder buf = new StringBuilder("services/");
-        buf.append(serviceId);
-        return buf.toString();
+    public LinkBuilder builder(final Rel rel) {
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(rendererContext, 
+                relElseDefault(rel).andParam("serviceId", serviceId), 
+                RepresentationType.DOMAIN_OBJECT, 
+                linkRef(new StringBuilder()).toString());
+        linkBuilder.withTitle(objectAdapter.titleString());
+        return linkBuilder;
+    }
+
+
+    @Override
+    protected StringBuilder linkRef(StringBuilder buf) {
+        return buf.append("services/").append(serviceId);
     }
 
     @Override
@@ -42,9 +52,5 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
         return Rel.SERVICE;
     }
 
-    @Override
-    public LinkBuilder builder(final Rel rel) {
-        return super.builder(rel).withId(serviceId);
-    }
 
 }

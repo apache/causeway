@@ -24,9 +24,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication;
 
 import com.google.common.io.Resources;
@@ -35,19 +33,8 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
 
     private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/restfulobjects-viewer/pom.properties";
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-        public Factory() {
-            super(RepresentationType.VERSION);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new VersionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
-
-    private VersionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation);
+    VersionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.VERSION, representation);
     }
 
     @Override

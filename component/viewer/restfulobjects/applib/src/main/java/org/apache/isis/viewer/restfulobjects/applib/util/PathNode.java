@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib.util;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +28,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class PathNode {
@@ -35,6 +37,33 @@ public class PathNode {
     private static final Pattern KEY_VALUE = Pattern.compile("^([^=]+)=(.+)$");
 
     public static final PathNode NULL = new PathNode("", Collections.<String, String> emptyMap());
+
+    public static List<String> split(String path) {
+        List<String> parts = Lists.newArrayList();
+        String curr = null;
+        for (String part : Splitter.on(".").split(path)) {
+            if(curr != null) {
+                if(part.contains("]")) {
+                    curr = curr + "." + part;
+                    parts.add(curr);
+                    curr = null;
+                } else {
+                    curr = curr + "." + part;
+                }
+                continue;
+            }
+            if(!part.contains("[")) {
+                parts.add(part);
+                continue;
+            } 
+            if(part.contains("]")) {
+                parts.add(part);
+            } else {
+                curr = part;
+            }
+        }
+        return parts;
+    }
 
     public static PathNode parse(final String path) {
         final Matcher nodeMatcher = NODE.matcher(path);
@@ -94,39 +123,43 @@ public class PathNode {
         return true;
     }
 
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((criteria == null) ? 0 : criteria.hashCode());
         result = prime * result + ((key == null) ? 0 : key.hashCode());
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
             return false;
-        }
-        final PathNode other = (PathNode) obj;
-        if (key == null) {
-            if (other.key != null) {
+        PathNode other = (PathNode) obj;
+        if (criteria == null) {
+            if (other.criteria != null)
                 return false;
-            }
-        } else if (!key.equals(other.key)) {
+        } else if (!criteria.equals(other.criteria))
             return false;
-        }
+        if (key == null) {
+            if (other.key != null)
+                return false;
+        } else if (!key.equals(other.key))
+            return false;
         return true;
     }
-
+    
     @Override
     public String toString() {
         return key + (criteria.isEmpty() ? "" : criteria);
     }
 
+
+    
 }

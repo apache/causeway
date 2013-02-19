@@ -30,10 +30,6 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollower;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
 
@@ -41,20 +37,8 @@ import com.google.common.collect.Lists;
 
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
-    public static class Factory extends ReprRendererFactoryAbstract {
-
-        public Factory() {
-            super(RepresentationType.OBJECT_ACTION);
-        }
-
-        @Override
-        public ReprRenderer<?, ?> newRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
-            return new ObjectActionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
-        }
-    }
-
-    private ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, representationType, representation, Where.OBJECT_FORMS);
+    public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
     }
 
     @Override
@@ -80,8 +64,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
-        final ObjectActionReprRenderer renderer = (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), getLinkFollower(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndAction(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
@@ -110,7 +93,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             return super.linkToForMutatorInvoke();
         }
         final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
-        return linkTo.usingUrlBase(getResourceContext()).with(contributingServiceAdapter());
+        return linkTo.usingUrlBase(getRendererContext()).with(contributingServiceAdapter());
     }
 
     private ObjectAdapter contributingServiceAdapter() {
@@ -139,7 +122,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         if (objectMember.isContributed()) {
             final ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
             if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).build();
+                return DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, objectAdapter).build();
             }
         }
         // force a null into the map
@@ -187,7 +170,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
             final ObjectSpecification choiceSpec = choiceAdapter.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, choiceSpec));
+            list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, choiceAdapter, choiceSpec));
         }
         return list;
     }
@@ -200,7 +183,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
         final ObjectSpecification defaultSpec = defaultAdapter.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, defaultAdapter, defaultSpec);
+        return DomainObjectReprRenderer.valueOrRef(rendererContext, defaultAdapter, defaultSpec);
     }
 
     // ///////////////////////////////////////////////////
@@ -209,14 +192,14 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        getLinks().arrayAdd(ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+        getLinks().arrayAdd(ActionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
     }
 
     @Override
     protected void addLinksIsisProprietary() {
         if (objectMember.isContributed()) {
             final ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
+            final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
             getLinks().arrayAdd(contributedByLink);
         }
     }

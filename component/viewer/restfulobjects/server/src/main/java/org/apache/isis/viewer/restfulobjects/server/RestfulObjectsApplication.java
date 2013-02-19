@@ -18,15 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactoryRegistry;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainObjectResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainServiceResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainTypeResourceServerside;
-import org.apache.isis.viewer.restfulobjects.server.resources.HomePageReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.resources.HomePageResourceServerside;
-import org.apache.isis.viewer.restfulobjects.server.resources.UserReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.resources.UserResourceServerside;
-import org.apache.isis.viewer.restfulobjects.server.resources.VersionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.resources.VersionResourceServerside;
 
 public class RestfulObjectsApplication extends AbstractJaxRsApplication {
@@ -44,10 +40,6 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         addSingleton(new RestfulObjectsApplicationExceptionMapper());
         addSingleton(new RuntimeExceptionMapper());
         
-        RendererFactoryRegistry.instance.register(new HomePageReprRenderer.Factory());
-        RendererFactoryRegistry.instance.register(new UserReprRenderer.Factory());
-        RendererFactoryRegistry.instance.register(new VersionReprRenderer.Factory());
-
         // TODO: doesn't get injected
         // addSingleton(new TypedReprBuilderFactoryRegistry());
 

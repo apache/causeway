@@ -114,7 +114,21 @@ public class OidMarshaller {
     ////////////////////////////////////////////////////////////////
 
 	public OidMarshaller() {}
+
 	
+    ////////////////////////////////////////////////////////////////
+    // join, split
+    ////////////////////////////////////////////////////////////////
+
+	public String joinAsOid(String domainType, String instanceId) {
+	    return domainType + SEPARATOR + instanceId;
+	}
+	
+    public String splitInstanceId(String oidStr) {
+        final int indexOfSeperator = oidStr.indexOf(SEPARATOR);
+        return indexOfSeperator > 0? oidStr.substring(indexOfSeperator+1): null;
+    }
+
     ////////////////////////////////////////////////////////////////
     // unmarshal
     ////////////////////////////////////////////////////////////////
@@ -257,5 +271,9 @@ public class OidMarshaller {
         return obj == null? "": "" + obj;
     }
 
+
+
+
+    
 
 }

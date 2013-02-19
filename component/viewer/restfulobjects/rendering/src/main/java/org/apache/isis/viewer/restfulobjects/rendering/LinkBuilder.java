@@ -27,18 +27,18 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
 public final class LinkBuilder {
 
-    public static LinkBuilder newBuilder(final RendererContext resourceContext, final Rel rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final RendererContext resourceContext, final String rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
         return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
     }
 
-    public static LinkBuilder newBuilder(final RendererContext resourceContext, final Rel rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final RendererContext resourceContext, final String rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
         return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
     private final RendererContext resourceContext;
     private final JsonRepresentation representation = JsonRepresentation.newMap();
 
-    private final Rel rel;
+    private final String rel;
     private final String href;
     private final MediaType mediaType;
 
@@ -48,7 +48,7 @@ public final class LinkBuilder {
     private JsonRepresentation value;
     private String id;
 
-    protected LinkBuilder(final RendererContext resourceContext, final Rel rel, final String href, final MediaType mediaType) {
+    protected LinkBuilder(final RendererContext resourceContext, final String rel, final String href, final MediaType mediaType) {
         this.resourceContext = resourceContext;
         this.rel = rel;
         this.href = href;
@@ -70,19 +70,13 @@ public final class LinkBuilder {
         return this;
     }
 
-    public LinkBuilder withId(final String id) {
-        this.id = id;
-        return this;
-    }
-
     public LinkBuilder withValue(final JsonRepresentation value) {
         this.value = value;
         return this;
     }
 
     public JsonRepresentation build() {
-        representation.mapPut("id", id);
-        representation.mapPut("rel", rel.getName());
+        representation.mapPut("rel", rel);
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);
         representation.mapPut("type", mediaType.toString());

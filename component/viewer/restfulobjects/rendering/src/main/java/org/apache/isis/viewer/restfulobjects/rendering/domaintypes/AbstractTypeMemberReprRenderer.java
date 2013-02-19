@@ -57,7 +57,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
     @Override
     protected void addLinkUpToParent() {
-        final LinkBuilder parentLinkBuilder = DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification);
+        final LinkBuilder parentLinkBuilder = DomainTypeReprRenderer.newLinkToBuilder(rendererContext, Rel.UP, objectSpecification);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
         }
 
         final ObjectMember objectMember = getObjectFeature();
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF, getRepresentationType(), "domainTypes/%s/%s%s", getParentSpecification().getFullIdentifier(), getMemberType().getUrlPart(), objectMember.getId());
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.SELF.getName(), getRepresentationType(), "domainTypes/%s/%s%s", getParentSpecification().getFullIdentifier(), getMemberType().getUrlPart(), objectMember.getId());
         getLinks().arrayAdd(linkBuilder.build());
     }
 

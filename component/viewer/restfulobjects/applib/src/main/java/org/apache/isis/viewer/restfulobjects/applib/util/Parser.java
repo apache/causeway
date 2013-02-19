@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -235,7 +236,7 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return Collections.emptyList();
                 }
-                return Lists.newArrayList(Splitter.on(",").split(str));
+                return PathNode.split(str);
             }
 
             @Override
@@ -258,8 +259,7 @@ public abstract class Parser<T> {
                 }
                 final List<List<String>> listOfLists = Lists.newArrayList();
                 for (final String s : str) {
-                    final Iterable<String> split = Splitter.on('.').split(s);
-                    listOfLists.add(Lists.newArrayList(split));
+                    listOfLists.add(PathNode.split(s));
                 }
                 return listOfLists;
             }
@@ -285,7 +285,7 @@ public abstract class Parser<T> {
 
                     @Override
                     public List<String> apply(final String input) {
-                        return Lists.newArrayList(Splitter.on('.').split(input));
+                        return PathNode.split(input);
                     }
                 });
             }
