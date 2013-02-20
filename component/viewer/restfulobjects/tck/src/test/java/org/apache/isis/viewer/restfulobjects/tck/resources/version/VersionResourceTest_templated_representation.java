@@ -27,6 +27,7 @@ import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.i
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -41,6 +42,7 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -56,7 +58,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class VersionResourceTest_representationAndHeaders {
+public class VersionResourceTest_templated_representation {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -89,62 +91,35 @@ public class VersionResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(RestfulHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink(client)
+                                    .rel(Rel.SELF)
+                                    .href(endsWith(":39393/version"))
+                                    .httpMethod(RestfulHttpMethod.GET)
+                                    .type(RepresentationType.VERSION.getMediaType())
+                                    .returning(HttpStatusCode.OK)
+                                    );
+        assertThat(repr.getUp(), isLink(client)
+                                    .rel(Rel.UP)
+                                    .href(endsWith(":39393/"))
+                                    .httpMethod(RestfulHttpMethod.GET)
+                                    .type(RepresentationType.HOME_PAGE.getMediaType())
+                                    .returning(HttpStatusCode.OK)
+                                    );
 
-        assertThat(repr.getString("specVersion"), is("0.52"));
+        assertThat(repr.getString("specVersion"), is("1.0.0"));
         assertThat(repr.getString("implVersion"), is(not(nullValue())));
+        //assertThat(repr.getString("implVersion"), is(not("UNKNOWN")));
 
         final JsonRepresentation optionalCapbilitiesRepr = repr.getOptionalCapabilities();
         assertThat(optionalCapbilitiesRepr, isMap());
 
-        assertThat(optionalCapbilitiesRepr.getString("concurrencyChecking"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("transientObjects"), is("yes"));
-        assertThat(optionalCapbilitiesRepr.getString("deleteObjects"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("simpleArguments"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("partialArguments"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("followLinks"), is("yes"));
-        assertThat(optionalCapbilitiesRepr.getString("validateOnly"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("pagination"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("sorting"), is("no"));
-        assertThat(optionalCapbilitiesRepr.getString("domainModel"), is("rich"));
+        assertThat(optionalCapbilitiesRepr.getString("blobsClobs"), is("yes"));
+        assertThat(optionalCapbilitiesRepr.getString("deleteObjects"), is("yes"));
+        assertThat(optionalCapbilitiesRepr.getString("domainModel"), is("formal"));
+        assertThat(optionalCapbilitiesRepr.getString("validateOnly"), is("yes"));
+        assertThat(optionalCapbilitiesRepr.getString("protoPersistentObjects"), is("yes"));
 
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), is(not(nullValue())));
     }
-
-    @Test
-    public void headers() throws Exception {
-        // given
-        final Response resp = resource.version();
-
-        // when
-        final RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-
-        // then
-        final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
-        assertThat(contentType, hasType("application"));
-        assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects:repr-types/version"));
-        assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));
-
-        // then
-        final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
-        assertThat(cacheControl, hasMaxAge(24 * 60 * 60));
-        assertThat(cacheControl.getMaxAge(), is(24 * 60 * 60));
-    }
-
-    @Test
-    public void selfIsFollowable() throws Exception {
-        // given
-        final VersionRepresentation repr = givenRepresentation();
-
-        // when, then
-        assertThat(repr, isFollowableLinkToSelf(client));
-    }
-
-    private VersionRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        final RestfulResponse<VersionRepresentation> jsonResp = RestfulResponse.ofT(resource.version());
-        return jsonResp.getEntity();
-    }
-
 }

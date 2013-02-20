@@ -23,21 +23,25 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.MediaType;
 
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.client.ClientResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
-public class VersionResourceTest_accept {
+public class VersionResourceTest_get_accept {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -46,21 +50,22 @@ public class VersionResourceTest_accept {
 
     @Before
     public void setUp() throws Exception {
-        final WebServer webServer = webServerRule.getWebServer();
-        client = new RestfulClient(webServer.getBase());
+        client = webServerRule.getClient();
     }
 
     @Test
-    public void applicationJson() throws Exception {
+    public void applicationJson_noProfile_returns200() throws Exception {
 
         final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.VERSION.getMediaType()));
     }
 
+
     @Test
-    public void applicationJson_profileVersion() throws Exception {
+    public void applicationJson_profileVersion_returns200() throws Exception {
 
         final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
@@ -69,12 +74,38 @@ public class VersionResourceTest_accept {
     }
 
     @Test
-    public void applicationJson_invalid() throws Exception {
+    public void missingHeader_returns200() throws Exception {
+        // given
+        final RestfulRequest restfulReq = client.createRequest(RestfulHttpMethod.GET, "version");
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        // when
+        final RestfulResponse<VersionRepresentation> restfulResp = restfulReq.executeT();
+
+        // then
+        assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
+    }
+
+    @Test
+    public void applicationJson_profileIncorrect_returns406() throws Exception {
+
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
     }
 
+    @Test
+    public void incorrectMediaType_returnsNotAcceptable() throws Exception {
+
+        // given
+        final ClientRequest clientRequest = client.getClientRequestFactory().createRelativeRequest("version");
+        clientRequest.accept(MediaType.APPLICATION_ATOM_XML_TYPE);
+
+        // when
+        final ClientResponse<?> resp = clientRequest.get();
+        final RestfulResponse<JsonRepresentation> restfulResp = RestfulResponse.of(resp);
+        
+        // then
+        assertThat(restfulResp.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
+    }
 }

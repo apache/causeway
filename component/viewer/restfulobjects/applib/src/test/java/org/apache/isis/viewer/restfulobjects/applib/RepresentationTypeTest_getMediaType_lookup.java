@@ -51,7 +51,7 @@ public class RepresentationTypeTest_getMediaType_lookup {
 
     @Test
     public void getMediaTypeProfile() {
-        assertThat(RepresentationType.VERSION.getMediaTypeProfile(), is("urn:org.restfulobjects/version"));
+        assertThat(RepresentationType.VERSION.getMediaTypeProfile(), is("urn:org.restfulobjects:repr-types/version"));
         assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
     }
 }

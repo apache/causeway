@@ -27,7 +27,7 @@ import org.apache.isis.viewer.restfulobjects.server.resources.VersionResourceSer
 
 public class RestfulObjectsApplication extends AbstractJaxRsApplication {
 
-    public static final String SPEC_VERSION = "0.52";
+    public static final String SPEC_VERSION = "1.0.0";
 
     public RestfulObjectsApplication() {
         addClass(HomePageResourceServerside.class);

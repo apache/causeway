@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.common.net.MediaType;
 
 public class ParserTest {

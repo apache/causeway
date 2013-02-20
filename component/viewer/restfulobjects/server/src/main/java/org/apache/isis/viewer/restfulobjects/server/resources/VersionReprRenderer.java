@@ -18,7 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Properties;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -32,7 +34,7 @@ import com.google.common.io.Resources;
 
 public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRenderer, Void> {
 
-    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/restfulobjects-viewer/pom.properties";
+    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/isis-viewer-restfulobjects-server/pom.properties";
 
     VersionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.VERSION, representation);
@@ -47,7 +49,8 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
     public JsonRepresentation render() {
 
         if (includesSelf) {
-            withLink(Rel.SELF, "version/");
+            withLink(Rel.SELF, "version");
+            withLink(Rel.UP, "");
         }
 
         representation.mapPut("specVersion", RestfulObjectsApplication.SPEC_VERSION);
@@ -61,7 +64,10 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
 
     private static String versionFromManifest() {
         try {
-            return Resources.toString(Resources.getResource(META_INF_POM_PROPERTIES), Charset.defaultCharset());
+            URL resource = Resources.getResource(META_INF_POM_PROPERTIES);
+            Properties p = new Properties();
+            p.load(Resources.newReaderSupplier(resource, Charset.defaultCharset()).getInput());
+            return p.getProperty("version");
         } catch (final Exception ex) {
             return "UNKNOWN";
         }
@@ -70,16 +76,11 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
     private void putOptionalCapabilities() {
         final JsonRepresentation optionalCapabilities = JsonRepresentation.newMap();
 
-        optionalCapabilities.mapPut("concurrencyChecking", "no");
-        optionalCapabilities.mapPut("transientObjects", "yes");
-        optionalCapabilities.mapPut("deleteObjects", "no");
-        optionalCapabilities.mapPut("simpleArguments", "no");
-        optionalCapabilities.mapPut("partialArguments", "no");
-        optionalCapabilities.mapPut("followLinks", "yes");
-        optionalCapabilities.mapPut("validateOnly", "no");
-        optionalCapabilities.mapPut("pagination", "no");
-        optionalCapabilities.mapPut("sorting", "no");
-        optionalCapabilities.mapPut("domainModel", "rich");
+        optionalCapabilities.mapPut("blobsClobs", "yes");
+        optionalCapabilities.mapPut("deleteObjects", "yes");
+        optionalCapabilities.mapPut("domainModel", "formal");
+        optionalCapabilities.mapPut("validateOnly", "yes");
+        optionalCapabilities.mapPut("protoPersistentObjects", "yes");
 
         representation.mapPut("optionalCapabilities", optionalCapabilities);
     }

@@ -104,6 +104,4 @@ public class UserResourceTest_get_accept {
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
     }
-
-
 }

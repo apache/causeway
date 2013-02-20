@@ -33,20 +33,6 @@ public class PathNodeTest_equalsHashcode {
     }
 
     @Test
-    public void oneCriterium() throws Exception {
-        final PathNode node = PathNode.parse("a[b=c]");
-        final PathNode node2 = PathNode.parse("a");
-        assertFalse(node.equals(node2));
-    }
-
-    @Test
-    public void moreThanOneCriterium() throws Exception {
-        final PathNode node = PathNode.parse("a[b=c d=e]");
-        final PathNode node2 = PathNode.parse("a");
-        assertFalse(node.equals(node2));
-    }
-
-    @Test
     public void sameCriterium() throws Exception {
         final PathNode node = PathNode.parse("a[b=c]");
         final PathNode node2 = PathNode.parse("a[b=c]");
@@ -68,9 +54,17 @@ public class PathNodeTest_equalsHashcode {
     }
 
     @Test
-    public void notEqualCriterium() throws Exception {
+    public void criteriumIgnored() throws Exception {
         final PathNode node = PathNode.parse("a[b=c]");
         final PathNode node2 = PathNode.parse("a[b=d]");
-        assertFalse(node.equals(node2));
+        assertEquals(node, node2);
     }
+
+    @Test
+    public void criteriumIgnoredHereAlso() throws Exception {
+        final PathNode node = PathNode.parse("a[b=c d=e]");
+        final PathNode node2 = PathNode.parse("a");
+        assertEquals(node, node2);
+    }
+
 }

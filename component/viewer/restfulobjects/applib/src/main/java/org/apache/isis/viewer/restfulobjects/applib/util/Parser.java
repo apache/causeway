@@ -236,7 +236,7 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return Collections.emptyList();
                 }
-                return PathNode.split(str);
+                return Lists.newArrayList(Splitter.on(",").split(str));
             }
 
             @Override

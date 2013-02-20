@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +29,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -84,32 +87,44 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
         instantiateResourceContext(representationType);
     }
 
-    @Test(expected = ReprRendererException.class)
+    @Test
     public void nonMatching() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_ATOM_XML_TYPE));
 
-        instantiateResourceContext(representationType);
+        try {
+            instantiateResourceContext(representationType);
+        } catch(RestfulObjectsApplicationException ex ) {
+            assertThat(ex.getHttpStatusCode(), is(HttpStatusCode.NOT_ACCEPTABLE));
+        }
     }
 
-    @Test(expected = RestfulObjectsApplicationException.class)
+    @Test
     public void nonMatchingProfile() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType()));
 
-        instantiateResourceContext(representationType);
+        try {
+            instantiateResourceContext(representationType);
+        } catch(RestfulObjectsApplicationException ex ) {
+            assertThat(ex.getHttpStatusCode(), is(HttpStatusCode.NOT_ACCEPTABLE));
+        }
     }
 
-    @Test(expected = RestfulObjectsApplicationException.class)
+    @Test
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType(), MediaType.APPLICATION_JSON_TYPE));
 
-        instantiateResourceContext(representationType);
+        try {
+            instantiateResourceContext(representationType);
+        } catch(RestfulObjectsApplicationException ex ) {
+            assertThat(ex.getHttpStatusCode(), is(HttpStatusCode.NOT_ACCEPTABLE));
+        }
     }
 
-    @Test(expected = ReprRendererException.class)
-    public void emptyList() throws Exception {
+    @Test
+    public void emptyList_isOK() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList());
 
