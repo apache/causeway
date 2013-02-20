@@ -84,7 +84,7 @@ public class DomainServiceResourceTest_invokeAction {
         final RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
         final ListRepresentation listRepr = restfulResponse.getEntity();
 
-        assertThat(listRepr.getValues().size(), is(5));
+        assertThat(listRepr.getValue().size(), is(5));
     }
 
     @Ignore("TODO - fix broken test resulting from introduction of actionresult repr")
@@ -259,7 +259,7 @@ public class DomainServiceResourceTest_invokeAction {
         final RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
         final ListRepresentation listRepr = restfulResponse.getEntity();
 
-        return listRepr.getValues().arrayGet(num).asLink();
+        return listRepr.getValue().arrayGet(num).asLink();
     }
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.resources.errorhandling;
+package org.apache.isis.viewer.restfulobjects.tck.resources;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

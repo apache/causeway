@@ -19,7 +19,12 @@
 package org.apache.isis.viewer.restfulobjects.tck.resources.user;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.assertThat;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasMaxAge;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasParameter;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasSubType;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasType;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
 import static org.hamcrest.CoreMatchers.endsWith;
@@ -28,6 +33,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
@@ -36,15 +45,19 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class UserResourceTest_templated_representation {
+public class UserResourceTest_responseHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -58,47 +71,26 @@ public class UserResourceTest_templated_representation {
         resource = client.getUserResource();
     }
 
+
     @Test
-    public void representation() throws Exception {
+    public void contentType_and_cacheControl() throws Exception {
 
         // given
         final Response resp = resource.user();
 
         // when
-        final RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resp);
-        assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+        final RestfulResponse<UserRepresentation> restfulResponse = RestfulResponse.ofT(resp);
 
         // then
-        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
+        final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
+        assertThat(contentType, hasType("application"));
+        assertThat(contentType, hasSubType("json"));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects:repr-types/user"));
+        assertThat(contentType, is(RepresentationType.USER.getMediaType()));
 
-        final UserRepresentation repr = jsonResp.getEntity();
-        assertThat(repr, is(not(nullValue())));
-        assertThat(repr.isMap(), is(true));
-
-        assertThat(repr.getSelf(), isLink(client)
-                                    .rel(Rel.SELF)
-                                    .href(endsWith(":39393/user"))
-                                    .httpMethod(RestfulHttpMethod.GET)
-                                    .type(RepresentationType.USER.getMediaType())
-                                    .returning(HttpStatusCode.OK)
-                                    );
-        assertThat(repr.getUp(), isLink(client)
-                                    .rel(Rel.UP)
-                                    .href(endsWith(":39393/"))
-                                    .httpMethod(RestfulHttpMethod.GET)
-                                    .type(RepresentationType.HOME_PAGE.getMediaType())
-                                    .returning(HttpStatusCode.OK)
-                                    );
-        assertThat(repr.getUserName(), is(not(nullValue())));
-        
-        // TODO: change fixture so populated
-        assertThat(repr.getFriendlyName(), is(nullValue())); 
-        assertThat(repr.getEmail(), is(nullValue())); 
-        assertThat(repr.getRoles(), is(not(nullValue()))); 
-
-        assertThat(repr.getLinks(), isArray());
-        assertThat(repr.getExtensions(), isMap());
+        // then
+        final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
+        assertThat(cacheControl, hasMaxAge(60 * 60));
+        assertThat(cacheControl.getMaxAge(), is(60 * 60));
     }
 }
-
-

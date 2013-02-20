@@ -247,11 +247,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     protected Consent usability() {
-        return objectMember.isUsable(getAuthenticationSession(), objectAdapter, where);
+        return objectMember.isUsable(getRendererContext().getAuthenticationSession(), objectAdapter, where);
     }
 
     protected Consent visibility() {
-        return objectMember.isVisible(getAuthenticationSession(), objectAdapter, where);
+        return objectMember.isVisible(getRendererContext().getAuthenticationSession(), objectAdapter, where);
     }
 
 }

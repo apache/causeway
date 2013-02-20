@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.resources.service.services;
+package org.apache.isis.viewer.restfulobjects.tck.resources.domainService;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -34,6 +36,7 @@ import javax.ws.rs.core.Response.Status.Family;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
@@ -44,11 +47,12 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresenta
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class DomainServiceResourceTest_services_representationAndHeaders {
+public class DomainServiceResourceTest_services_representation {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -72,29 +76,29 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
         final RestfulResponse<ListRepresentation> restfulResponse = RestfulResponse.ofT(response);
 
         // then
-        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.LIST.getMediaType()));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
-
         final ListRepresentation repr = restfulResponse.getEntity();
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod(RestfulHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink(client)
+                                    .rel(Rel.SELF)
+                                    .href(endsWith(":39393/services"))
+                                    .httpMethod(RestfulHttpMethod.GET)
+                                    .type(RepresentationType.LIST.getMediaType())
+                                    .returning(HttpStatusCode.OK)
+                                    );
+        assertThat(repr.getUp(), isLink(client)
+                                    .rel(Rel.UP)
+                                    .href(endsWith(":39393/"))
+                                    .httpMethod(RestfulHttpMethod.GET)
+                                    .type(RepresentationType.HOME_PAGE.getMediaType())
+                                    .returning(HttpStatusCode.OK)
+                                    );
 
-        assertThat(repr.getValues(), isArray());
+        assertThat(repr.getValue(), isArray());
 
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
-    }
-
-    @Test
-    public void self_isFollowable() throws Exception {
-        // given
-        final ListRepresentation repr = givenRepresentation();
-
-        // when, then
-        assertThat(repr, isFollowableLinkToSelf(client));
     }
 
     @Test
@@ -104,19 +108,24 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
         final ListRepresentation repr = givenRepresentation();
 
         // when
-        final JsonRepresentation values = repr.getValues();
+        final JsonRepresentation values = repr.getValue();
 
         // then
         for (final LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
             assertThat("HiddenRepository should not show up in services list", false, is(link.getHref().endsWith("HiddenRepository")));
+        }
+        
+        // and also
+        for (final LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
 
-            final RestfulResponse<JsonRepresentation> followJsonResp = client.follow(link);
-            assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
-
-            final JsonRepresentation followRepr = followJsonResp.getEntity();
-            final LinkRepresentation self = followRepr.getLink("links[rel=self]");
-
-            assertThat(self.getHref(), is(link.getHref()));
+            assertThat(link, isLink(client)
+                    .rel(containsString(Rel.SERVICE.getName()))
+                    .href(endsWith(":39393/"))
+                    .httpMethod(RestfulHttpMethod.GET)
+                    .type(RepresentationType.HOME_PAGE.getMediaType())
+                    .returning(HttpStatusCode.OK)
+                    .responseEntityWithSelfHref(link.getHref())
+                    );
         }
     }
 

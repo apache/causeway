@@ -38,22 +38,24 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class UserResourceTest_get_accept {
+public class UserResourceTest_acceptHeader {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     private RestfulClient client;
+    private RestfulRequest request;
 
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
+        request = client.createRequest(RestfulHttpMethod.GET, "user");
     }
 
     @Test
     public void applicationJson_noProfile_returns200() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        request.withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<UserRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -63,7 +65,7 @@ public class UserResourceTest_get_accept {
     @Test
     public void applicationJson_profileUser_returns200() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        request.withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<UserRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -71,20 +73,16 @@ public class UserResourceTest_get_accept {
 
     @Test
     public void missingHeader_returns200() throws Exception {
-        // given
-        final RestfulRequest restfulReq = client.createRequest(RestfulHttpMethod.GET, "user");
 
-        // when
-        final RestfulResponse<UserRepresentation> restfulResp = restfulReq.executeT();
+        final RestfulResponse<UserRepresentation> restfulResp = request.executeT();
 
-        // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
     }
 
     @Test
     public void applicationJson_profileIncorrect_returns406() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
+        request.withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
         final RestfulResponse<UserRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

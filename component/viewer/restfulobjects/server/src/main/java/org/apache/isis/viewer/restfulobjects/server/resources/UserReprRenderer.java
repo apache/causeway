@@ -20,14 +20,15 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, AuthenticationSession> {
 
-    UserReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, RepresentationType.USER, representation);
+    UserReprRenderer(final RendererContext rendererContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+        super(rendererContext, linkFollower, RepresentationType.USER, representation);
     }
 
     @Override
@@ -44,11 +45,36 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
     @Override
     public JsonRepresentation render() {
         if (includesSelf) {
-            withLink(Rel.SELF, "user");
-            withLink(Rel.UP, "");
+            addLinkToSelf();
+            addLinkToUp();
         }
         getExtensions();
         return representation;
     }
+
+    private void addLinkToSelf() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(getRendererContext(), Rel.SELF.getName(), RepresentationType.USER, "user").build();
+
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
+        if (linkFollower.matches(link)) {
+            final UserReprRenderer renderer = new UserReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
+            renderer.with(getRendererContext().getAuthenticationSession());
+            link.mapPut("value", renderer.render());
+        }
+
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToUp() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(rendererContext, Rel.UP.getName(), RepresentationType.HOME_PAGE, "").build();
+
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
+        if (linkFollower.matches(link)) {
+            final HomePageReprRenderer renderer = new HomePageReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
+            link.mapPut("value", renderer.render());
+        }
+        getLinks().arrayAdd(link);
+    }
+
 
 }

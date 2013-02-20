@@ -19,12 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.tck.resources.home;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasMaxAge;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasParameter;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasSubType;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasType;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
 import static org.hamcrest.CoreMatchers.endsWith;
@@ -33,10 +28,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.IOException;
-
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
@@ -45,18 +36,15 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class HomePageResourceTest_templated_representation {
+public class HomePageResourceTest_representation {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();

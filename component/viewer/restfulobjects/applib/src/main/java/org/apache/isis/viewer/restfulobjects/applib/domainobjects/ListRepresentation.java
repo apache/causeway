@@ -19,16 +19,24 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.codehaus.jackson.JsonNode;
 
-public class ListRepresentation extends DomainRepresentation {
+public class ListRepresentation extends DomainRepresentation implements HasLinkToUp {
 
     public ListRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 
-    public JsonRepresentation getValues() {
+    public JsonRepresentation getValue() {
         return getArray("value").ensureArray();
+    }
+
+    @Override
+    public LinkRepresentation getUp() {
+        return getLinkWithRel(Rel.UP);
     }
 
 }

@@ -52,8 +52,12 @@ import com.google.common.collect.Maps;
  */
 public class JsonRepresentation {
 
-    public interface LinksToSelf {
+    public interface HasLinkToSelf {
         public LinkRepresentation getSelf();
+    }
+
+    public interface HasLinkToUp {
+        public LinkRepresentation getUp();
     }
 
     public interface HasLinks {

@@ -25,6 +25,7 @@ import java.util.Properties;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
@@ -49,8 +50,8 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
     public JsonRepresentation render() {
 
         if (includesSelf) {
-            withLink(Rel.SELF, "version");
-            withLink(Rel.UP, "");
+            addLinkToSelf();
+            addLinkToUp();
         }
 
         representation.mapPut("specVersion", RestfulObjectsApplication.SPEC_VERSION);
@@ -60,6 +61,29 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
         putExtensions();
 
         return representation;
+    }
+
+    private void addLinkToSelf() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(getRendererContext(), Rel.SELF.getName(), RepresentationType.VERSION, "version").build();
+
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
+        if (linkFollower.matches(link)) {
+            final VersionReprRenderer renderer = new VersionReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
+            link.mapPut("value", renderer.render());
+        }
+
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToUp() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(rendererContext, Rel.UP.getName(), RepresentationType.HOME_PAGE, "").build();
+
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
+        if (linkFollower.matches(link)) {
+            final HomePageReprRenderer renderer = new HomePageReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
+            link.mapPut("value", renderer.render());
+        }
+        getLinks().arrayAdd(link);
     }
 
     private static String versionFromManifest() {

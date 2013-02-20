@@ -52,7 +52,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
         // self
         if (includesSelf) {
-            addLinkToSelf(representation);
+            addLinkToSelf();
         }
 
         addLinkToUser(getRendererContext().getAuthenticationSession());
@@ -66,10 +66,10 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         return representation;
     }
 
-    private void addLinkToSelf(final JsonRepresentation representation) {
-        final JsonRepresentation link = LinkBuilder.newBuilder(rendererContext, Rel.SELF.getName(), getRepresentationType(), "").build();
+    private void addLinkToSelf() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(rendererContext, Rel.SELF.getName(), RepresentationType.HOME_PAGE, "").build();
 
-        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links[rel=" + Rel.SELF.getName() + "]");
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final HomePageReprRenderer renderer = new HomePageReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
             link.mapPut("value", renderer.render());
@@ -80,7 +80,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     private void addLinkToVersion() {
         final JsonRepresentation link = LinkBuilder.newBuilder(getRendererContext(), Rel.VERSION.getName(), RepresentationType.VERSION, "version").build();
 
-        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links[rel=" + Rel.VERSION.getName() + "]");
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final VersionReprRenderer renderer = new VersionReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
             link.mapPut("value", renderer.render());

@@ -19,17 +19,19 @@
 package org.apache.isis.viewer.restfulobjects.applib.version;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class VersionRepresentation extends DomainRepresentation {
+public class VersionRepresentation extends DomainRepresentation implements HasLinkToUp {
 
     public VersionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 
+    @Override
     public LinkRepresentation getUp() {
         return getLinkWithRel(Rel.UP);
     }

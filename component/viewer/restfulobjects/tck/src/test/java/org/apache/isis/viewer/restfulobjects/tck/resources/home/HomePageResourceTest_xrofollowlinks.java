@@ -57,18 +57,30 @@ public class HomePageResourceTest_xrofollowlinks {
     public void setUp() throws Exception {
         client = webServerRule.getClient();
 
+    }
+
+    @Test
+    public void noFollow() throws Exception {
         request = client.createRequest(RestfulHttpMethod.GET, "");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
-
-        // given
+        
+        assertThat(repr.getSelf().getValue(), is(nullValue()));
         assertThat(repr.getUser().getValue(), is(nullValue()));
         assertThat(repr.getVersion().getValue(), is(nullValue()));
         assertThat(repr.getServices().getValue(), is(nullValue()));
     }
+    
+    @Test
+    public void self() throws Exception {
+
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SELF.getName() + "]");
+
+        assertThat(repr.getSelf().getValue(), is(not(nullValue())));
+    }
 
     @Test
-    public void canFollowUser() throws Exception {
+    public void user() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.USER.getName() + "]");
 
@@ -76,7 +88,7 @@ public class HomePageResourceTest_xrofollowlinks {
     }
 
     @Test
-    public void canFollowServices() throws Exception {
+    public void services() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "]");
 
@@ -84,7 +96,7 @@ public class HomePageResourceTest_xrofollowlinks {
     }
 
     @Test
-    public void canFollowVersion() throws Exception {
+    public void version() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.VERSION.getName() + "]");
 
@@ -92,7 +104,7 @@ public class HomePageResourceTest_xrofollowlinks {
     }
 
     @Test
-    public void canFollowAll() throws Exception {
+    public void multiple() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", 
                         "links[rel=" + Rel.USER.getName() + "]," +
@@ -105,7 +117,7 @@ public class HomePageResourceTest_xrofollowlinks {
     }
 
     @Test
-    public void servicesValues() throws Exception {
+    public void allServices_Value() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "].value");
 
@@ -127,7 +139,7 @@ public class HomePageResourceTest_xrofollowlinks {
     }
 
     @Test
-    public void servicesValuesWithCriteria() throws Exception {
+    public void selectedService_Value() throws Exception {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=" + Rel.SERVICES.getName() + "].value[rel=" + Rel.SERVICE.andParam("serviceId", "WrapperValuedEntities")+"]");
 

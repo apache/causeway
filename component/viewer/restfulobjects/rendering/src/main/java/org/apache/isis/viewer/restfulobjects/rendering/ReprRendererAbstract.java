@@ -167,10 +167,6 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         return IsisContext.getPersistenceSession().getServices();
     }
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
-    }
-
     protected UpdateNotifier getUpdateNotifier() {
         return IsisContext.getCurrentTransaction().getUpdateNotifier();
     }

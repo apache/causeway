@@ -41,7 +41,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class VersionResourceTest_templated_responseHeaders {
+public class VersionResourceTest_responseHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -59,7 +59,7 @@ public class VersionResourceTest_templated_responseHeaders {
 
 
     @Test
-    public void headers() throws Exception {
+    public void contentType_and_cacheControl() throws Exception {
         // given
         final Response resp = resource.version();
 

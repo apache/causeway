@@ -19,16 +19,45 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.codehaus.jackson.JsonNode;
 
-public class DomainObjectRepresentation extends AbstractDomainObjectRepresentation {
+public class DomainObjectRepresentation extends DomainRepresentation  {
 
     public DomainObjectRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 
+    public String getTitle() {
+        return getString("title");
+    }
+
+    /**
+     * Only for persistent or addressable objects 
+     */
     public String getOid() {
         return getString("oid");
+    }
+
+    public JsonRepresentation getMembers() {
+        return getRepresentation("members").ensureArray();
+    }
+
+    public JsonRepresentation getProperty(final String id) {
+        return getRepresentation("members[memberType=property id=%s]", id);
+    }
+
+    public JsonRepresentation getProperties() {
+        return getRepresentation("members[memberType=property]").ensureArray();
+    }
+
+    public JsonRepresentation getCollection(final String id) {
+        return getRepresentation("members[memberType=collection id=%s]", id);
+    }
+
+    public JsonRepresentation getCollections() {
+        return getRepresentation("members[memberType=collection]").ensureArray();
     }
 
     public JsonRepresentation getActions() {
@@ -37,6 +66,13 @@ public class DomainObjectRepresentation extends AbstractDomainObjectRepresentati
 
     public JsonRepresentation getAction(final String id) {
         return getRepresentation("members[memberType=action id=%s]", id);
+    }
+
+    /**
+     * Only for transient, persistable, objects
+     */
+    public LinkRepresentation getPersistLink() {
+        return getLinkWithRel(Rel.PERSIST);
     }
 
 }

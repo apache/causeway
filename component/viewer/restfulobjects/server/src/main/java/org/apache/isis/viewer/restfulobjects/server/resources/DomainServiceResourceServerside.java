@@ -54,7 +54,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
 
         final ListReprRenderer renderer = new ListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.usingLinkToBuilder(new DomainServiceLinkTo()).withLink(Rel.SELF, "services").with(serviceAdapters);
+        renderer.usingLinkToBuilder(new DomainServiceLinkTo())
+            .withLink(Rel.SELF, "services")
+            .with(serviceAdapters);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }

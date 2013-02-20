@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck;
 
+import java.io.IOException;
+
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
@@ -32,10 +34,13 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.LinksToSelf;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.AbstractMatcherBuilder;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 public class RepresentationMatchers {
 
@@ -109,7 +114,7 @@ public class RepresentationMatchers {
 
             @Override
             public boolean matchesSafely(final T item) {
-                final LinksToSelf initialRepr = (LinksToSelf) item; // no easy
+                final HasLinkToSelf initialRepr = (HasLinkToSelf) item; // no easy
                                                                     // way to do
                                                                     // this with
                                                                     // Hamcrest
@@ -119,7 +124,7 @@ public class RepresentationMatchers {
 
                     // then
                     final T repr2 = followedResp.getEntity();
-                    final LinksToSelf repr2AsLinksToSelf = (LinksToSelf) repr2;
+                    final HasLinkToSelf repr2AsLinksToSelf = (HasLinkToSelf) repr2;
                     return initialRepr.getSelf().equals(repr2AsLinksToSelf.getSelf());
                 } catch (final Exception e) {
                     throw new RuntimeException(e);
@@ -159,12 +164,14 @@ public class RepresentationMatchers {
         private RestfulHttpMethod httpMethod;
         private String rel;
         private String href;
+        private Matcher<String> relNameMatcher;
         private Matcher<String> hrefMatcher;
         private Matcher<JsonRepresentation> valueMatcher;
         private Boolean novalue;
         private MediaType mediaType;
         private String typeParameterName;
         private String typeParameterValue;
+        private String selfHref;
 
         private LinkMatcherBuilder(final RestfulClient client) {
             super(client);
@@ -180,13 +187,18 @@ public class RepresentationMatchers {
             return this;
         }
 
+        public LinkMatcherBuilder rel(final Matcher<String> relNameMatcher) {
+            this.relNameMatcher = relNameMatcher;
+            return this;
+        }
+
         public LinkMatcherBuilder href(final String href) {
             this.href = href;
             return this;
         }
 
-        public LinkMatcherBuilder href(final Matcher<String> methodMatcher) {
-            this.hrefMatcher = methodMatcher;
+        public LinkMatcherBuilder href(final Matcher<String> hrefMatcher) {
+            this.hrefMatcher = hrefMatcher;
             return this;
         }
 
@@ -227,6 +239,11 @@ public class RepresentationMatchers {
             return this;
         }
 
+        public LinkMatcherBuilder responseEntityWithSelfHref(String selfHref) {
+            this.selfHref = selfHref;
+            return this;
+        }
+
         @Override
         public Matcher<JsonRepresentation> build() {
             return new TypeSafeMatcher<JsonRepresentation>() {
@@ -263,16 +280,20 @@ public class RepresentationMatchers {
                     }
 
                     // trigger link being followed
-                    if (statusCode != null) {
+                    if (statusCode != null || selfHref != null) {
                         if (client == null) {
                             throw new IllegalStateException("require client in order to assert on statusCode");
                         }
-                        description.appendText(" that when followed returns status " + statusCode);
-                    }
-
-                    // assertions on response
-                    if (statusCode != null) {
-                        description.appendText(" returns ").appendValue(statusCode);
+                        description.appendText(" that when followed");
+                        if (statusCode != null) {
+                            description.appendText(" returns status " + statusCode);
+                        }
+                        if (statusCode != null || selfHref != null) {
+                            description.appendText(" and");
+                        }
+                        if (selfHref != null) {
+                            description.appendText(" an response whose self.href is " + selfHref);
+                        }
                     }
                 }
 
@@ -283,6 +304,9 @@ public class RepresentationMatchers {
                     }
                     final LinkRepresentation link = linkRepr.asLink();
                     if (rel != null && !rel.equals(link.getRel())) {
+                        return false;
+                    }
+                    if (relNameMatcher != null && !relNameMatcher.matches(link.getHref())) {
                         return false;
                     }
                     if (href != null && !href.equals(link.getHref())) {
@@ -313,7 +337,7 @@ public class RepresentationMatchers {
 
                     // follow link if criteria require it
                     RestfulResponse<JsonRepresentation> jsonResp = null;
-                    if (statusCode != null) {
+                    if (statusCode != null || selfHref != null) {
                         if (client == null) {
                             return false;
                         }
@@ -330,11 +354,30 @@ public class RepresentationMatchers {
                             return false;
                         }
                     }
+                    if (selfHref != null) {
+                        JsonRepresentation entity;
+                        try {
+                            entity = jsonResp.getEntity();
+                        } catch (Exception e) {
+                            return false;
+                        }
+                        if(entity == null) {
+                            return false;
+                        }
+                        LinkRepresentation selfLink = entity.getLink("self");
+                        if(selfLink == null) {
+                            return false;
+                        }
+                        if (!selfLink.getHref().equals(selfHref)) {
+                            return false;
+                        }
+                    }
 
                     return true;
                 }
             };
         }
+
 
     }
 

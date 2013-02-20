@@ -41,22 +41,25 @@ import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
-public class VersionResourceTest_get_accept {
+public class VersionResourceTest_acceptHeader {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     private RestfulClient client;
 
+    private RestfulRequest request;
+
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
+        request = client.createRequest(RestfulHttpMethod.GET, "version");
     }
 
     @Test
     public void applicationJson_noProfile_returns200() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        request.withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -67,7 +70,7 @@ public class VersionResourceTest_get_accept {
     @Test
     public void applicationJson_profileVersion_returns200() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
+        request.withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -75,20 +78,16 @@ public class VersionResourceTest_get_accept {
 
     @Test
     public void missingHeader_returns200() throws Exception {
-        // given
-        final RestfulRequest restfulReq = client.createRequest(RestfulHttpMethod.GET, "version");
 
-        // when
-        final RestfulResponse<VersionRepresentation> restfulResp = restfulReq.executeT();
+        final RestfulResponse<VersionRepresentation> restfulResp = request.executeT();
 
-        // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
     }
 
     @Test
     public void applicationJson_profileIncorrect_returns406() throws Exception {
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, "version").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        request.withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

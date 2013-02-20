@@ -19,14 +19,14 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasExtensions;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasExtensions;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinks;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.LinksToSelf;
 import org.codehaus.jackson.JsonNode;
 
-public abstract class DomainRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
+public abstract class DomainRepresentation extends JsonRepresentation implements HasLinkToSelf, HasLinks, HasExtensions {
 
     public DomainRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
