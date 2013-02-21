@@ -36,20 +36,26 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.feedback.JGrowlBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -99,6 +105,7 @@ public abstract class PageAbstract extends WebPage {
     @Named("applicationJs")
     private String applicationJs;
 
+    
     public PageAbstract(final PageParameters pageParameters, final ComponentType... childComponentIds) {
         try {
             addApplicationActionsComponent();
@@ -106,6 +113,7 @@ public abstract class PageAbstract extends WebPage {
             this.pageParameters = pageParameters;
             addHomePageLinkAndApplicationName();
             addUserName();
+            addNotificationPanel();
             addLogoutLink();
             addAboutLink();
             add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
@@ -118,9 +126,12 @@ public abstract class PageAbstract extends WebPage {
         }
     }
 
+    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
+    
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
@@ -162,6 +173,31 @@ public abstract class PageAbstract extends WebPage {
                 setResponsePage(AboutPage.class);
             }
         });
+    }
+
+    private void addNotificationPanel() {
+        Form<?> form = new Form("form") {
+
+            @Override
+            protected void onSubmit() {
+                Session.get().error("Test error");
+                Session.get().warn("Test warning");
+                Session.get().info("Test info");
+                Session.get().getFeedbackMessages().add(new FeedbackMessage(null, "Test sticky info", JGrowlBehavior.INFO_STICKY));
+            }
+        };
+        add(form);
+
+        AjaxButton b = new AjaxButton("ajaxbutton", form) {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(form);
+            }
+        };
+        form.add(b);
+        form.add(new JGrowlBehavior());
+    
     }
 
 

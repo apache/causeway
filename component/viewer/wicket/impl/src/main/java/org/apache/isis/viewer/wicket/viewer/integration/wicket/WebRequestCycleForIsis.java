@@ -19,16 +19,19 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import org.apache.log4j.Logger;
-import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
-import org.apache.wicket.request.cycle.RequestCycle;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.log4j.Logger;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 /**
  * Isis-specific implementation of the Wicket's {@link WebRequestCycle},
@@ -38,18 +41,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends AbstractRequestCycleListener {
 
     private static final Logger LOG = Logger.getLogger(WebRequestCycleForIsis.class);
-
-//    public WebRequestCycleForIsis(final WebApplication application, final WebRequest request, final Response response) {
-//        super(application, request, response);
-//    }
-//
-//    /**
-//     * Convenience, downcasts.
-//     */
-//    @Override
-//    public AuthenticatedWebSessionForIsis getWebSession() {
-//        return (AuthenticatedWebSessionForIsis) super.getWebSession();
-//    }
 
       private AuthenticatedWebSessionForIsis getWebSession() {
           return (AuthenticatedWebSessionForIsis) WebSession.get();
@@ -82,7 +73,6 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
             commitTransactionIfAny();
             getIsisContext().closeSessionInstance();
         }
-        //super.onEndRequest();
     }
 
     private void commitTransactionIfAny() {
@@ -96,6 +86,11 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
         }
     }
 
+    @Override
+    public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+        return new RenderPageRequestHandler(new PageProvider(new ErrorPage(ex)));
+    }
+    
     /**
      * Factored out so can be overridden in testing.
      */
@@ -103,13 +98,6 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
         return IsisContext.getInstance();
     }
 
-//    /**
-//     * Simply downcasts superclass' implementation, for convenience of callers.
-//     */
-//    @Override
-//    protected WebClientInfo newClientInfo() {
-//        return (WebClientInfo) super.newClientInfo();
-//    }
 
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();

@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.ui.feedback.JGrowlBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -229,6 +230,8 @@ public class CssMenuItem implements Serializable {
 
         final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK);
 
+        linkAndLabel.getLink().add(new JGrowlBehavior());
+
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
@@ -262,8 +265,8 @@ public class CssMenuItem implements Serializable {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
-            label.add(new AttributeModifier("title", true, Model.of(this.getDisabledReason())));
-            label.add(new AttributeModifier("class", true, Model.of("disabled")));
+            label.add(new AttributeModifier("title", Model.of(this.getDisabledReason())));
+            label.add(new AttributeModifier("class", Model.of("disabled")));
             markupContainer.add(label);
 
             return label;

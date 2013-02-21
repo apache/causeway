@@ -19,18 +19,24 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -433,12 +439,31 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return results;
     }
 
+    
+    // TODO: hacky!!
+    public static ThreadLocal<String> applicationError = new ThreadLocal<String>();
+    
     private ObjectAdapter executeAction() {
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] arguments = getArgumentsAsArray();
         final ObjectAction action = getActionMemento().getAction();
-        final ObjectAdapter results = action.execute(targetAdapter, arguments);
-        return results;
+        try {
+            final ObjectAdapter results = action.execute(targetAdapter, arguments);
+            return results;
+        } catch(RuntimeException ex) {
+            final ApplicationException appEx = getApplicationExceptionIfAny(ex);
+            if(appEx != null) {
+                applicationError.set(appEx.getMessage());
+                return null;
+            }
+            throw ex;
+        }
+    }
+
+    private ApplicationException getApplicationExceptionIfAny(Exception ex) {
+        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
+        Iterator<ApplicationException> iterator = appEx.iterator();
+        return iterator.hasNext() ? iterator.next() : null;
     }
 
     public String getReasonInvalidIfAny() {

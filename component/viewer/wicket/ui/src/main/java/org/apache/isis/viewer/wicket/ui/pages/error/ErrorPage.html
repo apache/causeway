@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xml:lang="en"  
+      lang="en">
+	<wicket:head>
+		<wicket:link>
+			<link href="ErrorPage.css" rel="stylesheet" type="text/css"/>
+		</wicket:link>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery(".errorPage .content").hide();
+      //toggle the componenet with class msg_body
+      jQuery(".errorPage .heading").click(function()
+      {
+        jQuery(this).next(".errorPage .content").slideToggle(500);
+      });
+    });
+</script>
+	</wicket:head>
+	<body>
+		<wicket:extend>
+			<div class="errorPage">
+                <span id="message">Sorry, an unexpected error occurred.</span>
+                <div class="errorDetail">
+                    <div class="heading"><span>Show detail</span></div>
+                    <div class="content">
+                        <div class="exceptionMessage">
+                            <h3>Message:</h3>
+                            <p wicket:id="message">Message goes here</p>
+                        </div>
+                        <div class="exceptionStackTrace">
+                            <h3>Stack trace:</h3>
+                            <p wicket:id="stackTrace">Stacktrace goes here</p>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</wicket:extend>
+	</body>
+</html>

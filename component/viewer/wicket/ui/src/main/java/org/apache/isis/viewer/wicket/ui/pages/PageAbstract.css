@@ -689,3 +689,40 @@ div.actionPanelHeaderNew .actions {
 
 
 
+div#jGrowl {
+ margin-top: 55px;
+ margin-right: 25px;
+ color: white;
+ font-size: larger;
+ opacity: .90;
+ filter: alpha(opacity = 90);
+}
+
+div#jGrowl div.jgrowl-ERROR {
+ background-color: #BF0B0B;
+}
+div#jGrowl div.jgrowl-WARNING {
+ background-color: orange;
+}
+div#jGrowl div.jgrowl-INFO {
+ background-color: #20B5C2;
+}
+div#jGrowl div.jgrowl-WARNING {
+ background-color: orange;
+}
+div#jGrowl div.jGrowl-closer {
+ background-color: #F0EFEA;
+ color: #46423C;
+ font-size: small;
+}
+
+/*
+colors
+#413D37 - dark banner
+#46423C - dark (writing?)
+#E4E4DB - page background
+#20B5C2 - accent
+#BF0B0B - jgrowl error
+#00477F - dark blue
+#F0EFEA - bookmark background
+*/

@@ -22,13 +22,14 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head>
+	<wicket:head>
+        <wicket:link>
+    		<link href="cssreset.css" rel="stylesheet" type="text/css"/>
+    		<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>
+            <link href="jquery.jgrowl.css" rel="stylesheet" type="text/css"/>
+        </wicket:link>
 		<title wicket:id="pageTitle"></title>
-		<wicket:link>
-			<link href="cssreset.css" rel="stylesheet" type="text/css"/>
-			<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</head>
+	</wicket:head>
 	<body>
 		
 		<div id="container" class="page">
@@ -60,7 +61,12 @@
 
 				<div class="clear"/>
 			</div>
-
+            
+            <form wicket:id="form">
+            <input type="submit" value="Normal OK"/>
+            <input type="submit" value="Ajax OK" wicket:id="ajaxbutton"/>
+            </form>
+            
 			<div id="footer">
 				<div class="links">
 					powered by: <a href="http://isis.apache.org">Apache Isis</a>
