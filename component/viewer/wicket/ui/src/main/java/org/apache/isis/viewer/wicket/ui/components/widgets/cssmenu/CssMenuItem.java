@@ -25,8 +25,19 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -37,21 +48,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.ui.feedback.JGrowlBehavior;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import com.google.common.collect.Lists;
 
 public class CssMenuItem implements Serializable {
 
