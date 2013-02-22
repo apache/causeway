@@ -26,16 +26,6 @@
 		<wicket:link>
 			<link href="ErrorPage.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-      jQuery(".errorPage .content").hide();
-      //toggle the componenet with class msg_body
-      jQuery(".errorPage .heading").click(function()
-      {
-        jQuery(this).next(".errorPage .content").slideToggle(500);
-      });
-    });
-</script>
 	</wicket:head>
 	<body>
 		<wicket:extend>
@@ -50,7 +40,9 @@
                         </div>
                         <div class="exceptionStackTrace">
                             <h3>Stack trace:</h3>
-                            <p wicket:id="stackTrace">Stacktrace goes here</p>
+                            <ul>
+                                <li wicket:id="detail"><span wicket:id="line">line</span></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

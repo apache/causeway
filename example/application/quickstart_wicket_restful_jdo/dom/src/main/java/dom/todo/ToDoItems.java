@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 import org.joda.time.LocalDate;
 
@@ -53,6 +54,14 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
+        List<ToDoItem> items = doNotYetComplete();
+        if(items.isEmpty()) {
+            getContainer().informUser("All to-do items have been completed :-)");
+        }
+        return items;
+    }
+
+    protected List<ToDoItem> doNotYetComplete() {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem t) {
@@ -66,6 +75,14 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     public List<ToDoItem> complete() {
+        List<ToDoItem> items = doComplete();
+        if(items.isEmpty()) {
+            getContainer().informUser("No to-do items have yet been completed :-(");
+        }
+        return items;
+    }
+
+    protected List<ToDoItem> doComplete() {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem t) {
@@ -84,6 +101,9 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         final String ownedBy = currentUserName();
         return newToDo(description, category, ownedBy, dueBy);
     }
+    public LocalDate default2NewToDo() {
+        return new LocalDate(Clock.getTime()).plusDays(14);
+    }
     // }}
 
     
@@ -94,6 +114,9 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         final String currentUser = currentUserName();
         final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
         Collections.sort(items);
+        if(items.isEmpty()) {
+            getContainer().warnUser("No to-do items found.");
+        }
         return items;
     }
     // }}

@@ -23,12 +23,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -40,6 +42,7 @@ import org.apache.isis.viewer.wicket.ui.feedback.JGrowlBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,7 +50,9 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -81,6 +86,8 @@ public abstract class PageAbstract extends WebPage {
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_ABOUT_LINK = "aboutLink";
 
+    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
+    
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
     
@@ -113,7 +120,6 @@ public abstract class PageAbstract extends WebPage {
             this.pageParameters = pageParameters;
             addHomePageLinkAndApplicationName();
             addUserName();
-            addNotificationPanel();
             addLogoutLink();
             addAboutLink();
             add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
@@ -126,12 +132,19 @@ public abstract class PageAbstract extends WebPage {
         }
     }
 
-    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
     
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
+        
+        final String feedbackMsg = renderFeedback();
+        if (!StringUtils.isEmpty(feedbackMsg)) {
+            response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
+        }
+
+        
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
@@ -139,6 +152,39 @@ public abstract class PageAbstract extends WebPage {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
     }
+
+    private String renderFeedback() {
+        final StringBuilder buf = new StringBuilder();
+        
+        for (String info : IsisContext.getMessageBroker().getMessages()) {
+            addJGrowlCall(info, "INFO", false, buf);
+        }
+        for (String warning : IsisContext.getMessageBroker().getWarnings()) {
+            addJGrowlCall(warning, "WARNING", true, buf);
+        }
+        
+        try {
+            final String error = ActionModel.applicationError.get();
+            if(error!=null) {
+                addJGrowlCall(error, "ERROR", true, buf);
+            }
+        } finally {
+            ActionModel.applicationError.remove();
+        }
+        return buf.toString();
+    }
+
+    void addJGrowlCall(final String msg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
+        buf.append("$.jGrowl(\"").append(msg).append('\"');
+        buf.append(", {");
+        buf.append("theme: \'jgrowl-").append(cssClassSuffix).append("\'");
+        if (sticky) {
+            buf.append(", sticky: true");
+        }
+        buf.append("}");
+        buf.append(");");
+    }
+
     
     private void addHomePageLinkAndApplicationName() {
         // this is a bit hacky, but it'll do...
@@ -173,31 +219,6 @@ public abstract class PageAbstract extends WebPage {
                 setResponsePage(AboutPage.class);
             }
         });
-    }
-
-    private void addNotificationPanel() {
-        Form<?> form = new Form("form") {
-
-            @Override
-            protected void onSubmit() {
-                Session.get().error("Test error");
-                Session.get().warn("Test warning");
-                Session.get().info("Test info");
-                Session.get().getFeedbackMessages().add(new FeedbackMessage(null, "Test sticky info", JGrowlBehavior.INFO_STICKY));
-            }
-        };
-        add(form);
-
-        AjaxButton b = new AjaxButton("ajaxbutton", form) {
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                target.add(form);
-            }
-        };
-        form.add(b);
-        form.add(new JGrowlBehavior());
-    
     }
 
 

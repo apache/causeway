@@ -230,8 +230,6 @@ public class CssMenuItem implements Serializable {
 
         final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK);
 
-        linkAndLabel.getLink().add(new JGrowlBehavior());
-
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
