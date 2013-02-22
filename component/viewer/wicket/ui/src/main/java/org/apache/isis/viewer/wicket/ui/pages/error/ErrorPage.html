@@ -30,19 +30,24 @@
 	<body>
 		<wicket:extend>
 			<div class="errorPage">
-                <span id="message">Sorry, an unexpected error occurred.</span>
-                <div class="errorDetail">
-                    <div class="heading"><span>Show detail</span></div>
-                    <div class="content">
-                        <div class="exceptionMessage">
-                            <h3>Message:</h3>
-                            <p wicket:id="message">Message goes here</p>
-                        </div>
-                        <div class="exceptionStackTrace">
-                            <h3>Stack trace:</h3>
-                            <ul>
-                                <li wicket:id="detail"><span wicket:id="line">line</span></li>
-                            </ul>
+                <div wicket:id="breadcrumbs"/>
+                <div class="errorInfo clear">
+                    <span wicket:id="mainMessage" class="mainMessage">[main message text]</span>
+                    <div class="errorDetail" wicket:id="exceptionDetail">
+                        <div class="heading"><span>Show detail</span></div>
+                        <div class="content">
+                            <div class="exceptionMessage">
+                                <h3>Message:</h3>
+                                <p wicket:id="exceptionMessage">[exception message]</p>
+                            </div>
+                            <div class="exceptionStackTrace">
+                                <h3>Stack trace:</h3>
+                                <ul>
+                                    <li wicket:id="stackTraceElement">
+                                        <span wicket:id="stackTraceElementLine">[stack trace element line]</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

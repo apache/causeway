@@ -30,6 +30,10 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerGeneral;
+import org.apache.isis.applib.services.exceprecog.RecognizedException;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -57,7 +61,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware {
+public class  DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware, ExceptionRecognizer {
 
     private ObjectDirtier objectDirtier;
     private ObjectPersistor objectPersistor;
@@ -432,6 +436,27 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         return instances.size() == 0 ? null : instances.get(0);
     }
 
+    
+    ///////////////////////////////////////////////////////////////
+    // ExceptionRecognitionService
+    ///////////////////////////////////////////////////////////////
+
+    private final ExceptionRecognizer recogService = new ExceptionRecognizerForType(RecognizedException.class);
+    
+    /**
+     * Framework-provided implementation of {@link ExceptionRecognizer},
+     * which will automatically recognize any {@link RecognizedException}.
+     */
+    @Override
+    public String recognize(Throwable ex) {
+        return getRecogService().recognize(ex);
+    }
+    
+    ExceptionRecognizer getRecogService() {
+        return recogService;
+    }
+
+    
     // //////////////////////////////////////////////////////////////////
     // Dependencies
     // //////////////////////////////////////////////////////////////////
@@ -503,5 +528,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         this.localizationProvider = localizationProvider;
     }
+
+    
 
 }

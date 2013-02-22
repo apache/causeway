@@ -19,7 +19,13 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import java.util.List;
+
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -88,7 +94,24 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-        return new RenderPageRequestHandler(new PageProvider(new ErrorPage(ex)));
+        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        final ErrorPage page = message != null ? new ErrorPage(message) : new ErrorPage(ex);
+        
+        return new RenderPageRequestHandler(new PageProvider(page));
+    }
+
+
+    
+    ///////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////////////
+    
+    /**
+     * Factored out so can be overridden in testing.
+     */
+    protected ServicesInjector getServicesInjector() {
+        return IsisContext.getPersistenceSession().getServicesInjector();
     }
     
     /**
@@ -98,7 +121,9 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
         return IsisContext.getInstance();
     }
 
-
+    /**
+     * Factored out so can be overridden in testing.
+     */
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }

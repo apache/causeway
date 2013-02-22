@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
@@ -52,10 +53,10 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     private static final Logger LOG = Logger.getLogger(ServicesInjectorDefault.class);
 
     /**
-     * If no key, not yet searched for type; otherwise the {@link Optional} indicates
+     * If no key, not yet searched for type; otherwise the {@link List} indicates
      * whether a service was found.
      */
-    private final Map<Class<?>, Optional<Object>> servicesByType = Maps.newHashMap();
+    private final Map<Class<?>, List<Object>> servicesByType = Maps.newHashMap();
 
     private final List<Object> services = Lists.newArrayList();
     
@@ -220,19 +221,23 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     @Override
     public <T> T lookupService(Class<T> serviceClass) {
-        locateAndCache(services, serviceClass);
-        @SuppressWarnings("unchecked")
-        Optional<T> optionalService = (Optional<T>) servicesByType.get(serviceClass);
-        return optionalService.orNull();
+        List<T> services = lookupServices(serviceClass);
+        return !services.isEmpty() ? services.get(0) : null;
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> lookupServices(Class<T> serviceClass) {
+        locateAndCache(services, serviceClass);
+        return (List<T>) servicesByType.get(serviceClass);
+    };
 
     private void locateAndCache(List<Object> services, Class<?> serviceClass) {
         if(servicesByType.containsKey(serviceClass)) {
            return; 
         }
 
-        final Optional<Object> optionalService = Iterables.tryFind(services, ofType(serviceClass));
-        servicesByType.put(serviceClass, optionalService);
+        servicesByType.put(serviceClass, Lists.newArrayList(Iterables.filter(services, ofType(serviceClass))));
     }
 
     private static final Predicate<Object> ofType(final Class<?> cls) {
@@ -242,7 +247,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
                 return cls.isAssignableFrom(input.getClass());
             }
         };
-    };
+    }
 
 
 

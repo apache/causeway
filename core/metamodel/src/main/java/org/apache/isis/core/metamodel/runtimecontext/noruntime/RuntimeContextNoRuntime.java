@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     private final DeploymentCategory deploymentCategory;
-    private final ServicesInjector dependencyInjector;
+    private final ServicesInjector servicesInjector;
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ObjectInstantiatorAbstract objectInstantiator;
@@ -76,7 +76,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         this.deploymentCategory = deploymentCategory;
         // Unlike most of the methods in this implementation, does nothing
         // (because this will always be called, even in a no-runtime context).
-        dependencyInjector = new ServicesInjector() {
+        servicesInjector = new ServicesInjector() {
             @Override
             public void injectServicesInto(final Object domainObject) {
             }
@@ -92,6 +92,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
             @Override
             public void injectInto(Object candidate) {
+            }
+
+            @Override
+            public <T> List<T> lookupServices(Class<T> serviceClass) {
+                return null;
             }
         };
         authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
@@ -308,7 +313,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     @Override
     public ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
+        return servicesInjector;
     }
 
     // ///////////////////////////////////////////

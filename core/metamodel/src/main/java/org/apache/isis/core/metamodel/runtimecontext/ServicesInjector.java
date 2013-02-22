@@ -18,6 +18,8 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.List;
 
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.components.Injectable;
 
 public interface ServicesInjector extends Injectable {
@@ -36,5 +38,28 @@ public interface ServicesInjector extends Injectable {
      */
     void injectServicesInto(List<Object> objects);
 
+    /**
+     * Returns the first registered domain service implementing the requested type.
+     * 
+     * <p>
+     * Typically there will only ever be one domain service implementing a given type,
+     * (eg {@link PublishingService}), but for some services there can be more than one
+     * (eg {@link ExceptionRecognizer}).
+     * 
+     * @see #lookupServices(Class)
+     */
     <T> T lookupService(Class<T> serviceClass);
+    
+    /**
+     * Returns all domain services implementing the requested type, in the order
+     * that they were registered in <tt>isis.properties</tt>.
+     * 
+     * <p>
+     * Typically there will only ever be one domain service implementing a given type,
+     * (eg {@link PublishingService}), but for some services there can be more than one
+     * (eg {@link ExceptionRecognizer}).
+     * 
+     * @see #lookupService(Class)
+     */
+    <T> List<T> lookupServices(Class<T> serviceClass);
 }

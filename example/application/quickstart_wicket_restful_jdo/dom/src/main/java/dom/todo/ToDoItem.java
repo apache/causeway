@@ -109,7 +109,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // {{ Description
     private String description;
 
-    @javax.jdo.annotations.Unique
+    @javax.jdo.annotations.Unique(name="ToDoItem_description_must_be_unique")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     // words, spaces and selected punctuation
     @MemberOrder(sequence = "1")

@@ -84,7 +84,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
         }
         addOrReplace(labelIfRegular);
 
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueField));
+        labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueField));
         return labelIfRegular;
     }
 

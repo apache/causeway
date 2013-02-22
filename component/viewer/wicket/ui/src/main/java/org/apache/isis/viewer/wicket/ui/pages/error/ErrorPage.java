@@ -22,11 +22,12 @@ package org.apache.isis.viewer.wicket.ui.pages.error;
 import java.util.List;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -44,9 +45,15 @@ public class ErrorPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_MESSAGE = "message";
-    private static final String ID_DETAIL = "detail";
-    private static final String ID_LINE = "line";
+    private static final String MAIN_MESSAGE_IF_NOT_RECOGNIZED = "Sorry, an unexpected error occurred.";
+    
+    private static final String ID_MAIN_MESSAGE = "mainMessage";
+    
+    private static final String ID_EXCEPTION_DETAIL = "exceptionDetail";
+    private static final String ID_EXCEPTION_MESSAGE = "exceptionMessage";
+    
+    private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
+    private static final String ID_LINE = "stackTraceElementLine";
 
     private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(ErrorPage.class, "div-toggle.js");
 
@@ -64,13 +71,35 @@ public class ErrorPage extends PageAbstract {
         }
     }
 
-    public ErrorPage(Exception ex) {
-        super(new PageParameters());
-        add(new Label(ID_MESSAGE, ex.getMessage()));
-        
-        add(new ListView<Detail>(ID_DETAIL, asStackTrace(ex)) {
-                private static final long serialVersionUID = 1L;
+    /**
+     * For recognized messages.
+     */
+    public ErrorPage(String message) {
+        this(message, null, null);
+    }
 
+
+    /**
+     * For non-recognized messages.
+     */
+    public ErrorPage(Exception ex) {
+        this(MAIN_MESSAGE_IF_NOT_RECOGNIZED, ex.getMessage(), asStackTrace(ex));
+    }
+
+    private ErrorPage(String mainMessage, String exceptionMessage, List<Detail> stackTraceDetail) {
+        super(new PageParameters());
+        
+        addBookmarkedPages();
+
+        add(new Label(ID_MAIN_MESSAGE, mainMessage).setEscapeModelStrings(false));
+        MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL);
+        add(container);
+        
+        if(exceptionMessage != null) {
+            container.add(new Label(ID_EXCEPTION_MESSAGE, exceptionMessage));
+            container.add(new ListView<Detail>(ID_STACK_TRACE_ELEMENT, stackTraceDetail) {
+                private static final long serialVersionUID = 1L;
+                
                 @Override
                 protected void populateItem(ListItem<Detail> item) {
                     final Detail detail = item.getModelObject();
@@ -79,6 +108,10 @@ public class ErrorPage extends PageAbstract {
                     item.add(label);
                 }
             });
+        } else {
+            // don't bother adding children, they won't ever be rendered.
+            container.setVisible(false);
+        }
     }
 
     @Override

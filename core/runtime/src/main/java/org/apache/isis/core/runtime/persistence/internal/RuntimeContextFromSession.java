@@ -280,12 +280,18 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
+            public <T> List<T> lookupServices(Class<T> serviceClass) {
+                return getPersistenceSession().getServicesInjector().lookupServices(serviceClass);
+            }
+            
+            @Override
             public void injectInto(Object candidate) {
                 if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {
                     final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
                     cast.setServicesInjector(this);
                 }
             }
+
         };
         this.localizationProvider = new LocalizationProviderAbstract() {
 

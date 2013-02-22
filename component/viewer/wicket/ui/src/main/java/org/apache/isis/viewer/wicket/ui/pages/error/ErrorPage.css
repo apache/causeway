@@ -18,13 +18,14 @@
  */
 
 
-.errorPage {
+.errorPage .errorInfo {
     margin-left: 50px;
     margin-right: 50px;
-    margin-top: 50px;
+    padding-top: 50px;
 }
 
-.errorPage #message {
+
+.errorPage .mainMessage {
     background:#FFFFFF;
     border-radius:4px;
     -moz-border-radius:4px;
