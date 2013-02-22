@@ -30,8 +30,11 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.MessageBroker;
+import org.apache.isis.core.runtime.system.transaction.MessageBrokerDefault;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Session;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.protocol.http.WebSession;
@@ -54,7 +57,6 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
 
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
-        //super.onBeginRequest();
         final AuthenticatedWebSessionForIsis wicketSession = getWebSession();
         if (wicketSession == null) {
             return;
@@ -83,12 +85,13 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
 
     private void commitTransactionIfAny() {
         final IsisTransaction transaction = getTransactionManager().getTransaction();
-        if (transaction != null) {
-            if (transaction.getState() == IsisTransaction.State.MUST_ABORT) {
-                getTransactionManager().abortTransaction();
-            } else if (transaction.getState() == IsisTransaction.State.IN_PROGRESS) {
-                getTransactionManager().endTransaction();
-            }
+        if (transaction == null) {
+            return;
+        }
+        if (transaction.getState() == IsisTransaction.State.MUST_ABORT) {
+            getTransactionManager().abortTransaction();
+        } else if (transaction.getState() == IsisTransaction.State.IN_PROGRESS) {
+            getTransactionManager().endTransaction();
         }
     }
 

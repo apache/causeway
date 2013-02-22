@@ -106,7 +106,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    
+
     // {{ AllToDos (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "4")

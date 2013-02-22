@@ -62,4 +62,16 @@ public interface AuthenticationSession extends Encodable, Serializable {
      * @see #getAttribute(String)
      */
     public void setAttribute(String attributeName, Object attribute);
+
+    /**
+     * The {@link MessageBroker} that holds messages for this user.
+     */
+    public MessageBroker getMessageBroker();
+    /**
+     * Providing the ability for a {@link MessageBroker} to be set on this
+     * {@link AuthenticationSession} (is lazily created by the runtime).
+     */
+    public void setMessageBroker(MessageBroker messageBroker);
+    
+    
 }

@@ -25,11 +25,9 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 
-import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
@@ -55,6 +53,8 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     @Mock
     private PersistenceSession mockPersistenceSession;
     @Mock
+    private MessageBroker mockMessageBroker;
+    @Mock
     private TransactionalResource mockObjectStore;
 
     private IsisTransactionManager transactionManager;
@@ -64,6 +64,9 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();
             will(returnValue("sven"));
+
+            allowing(mockAuthenticationSession).getMessageBroker();
+            will(returnValue(mockMessageBroker));
         }});
 
         transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault()) {

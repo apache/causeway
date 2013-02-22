@@ -125,6 +125,21 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         attributeByName.put(attributeName, attribute);
     }
 
+
+    // ///////////////////////////////////////////////////////
+    // MessageBroker
+    // ///////////////////////////////////////////////////////
+
+    private MessageBroker messageBroker;
+    @Override
+    public MessageBroker getMessageBroker() {
+        return messageBroker;
+    }
+    @Override
+    public void setMessageBroker(MessageBroker messageBroker) {
+        this.messageBroker = messageBroker;
+    }
+
     // ///////////////////////////////////////////////////////
     // toString
     // ///////////////////////////////////////////////////////

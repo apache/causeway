@@ -17,12 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system.transaction;
+package org.apache.isis.core.commons.authentication;
+
+import java.util.List;
 
 /**
- * @deprecated - replace with {@link org.apache.isis.core.commons.authentication.MessageBroker} in the core.
+ * Moving from runtime, so that can preserve messages between interactions that
+ * correspond to the same session.
  */
-@Deprecated
-public interface MessageBroker extends org.apache.isis.core.commons.authentication.MessageBroker {
+public interface MessageBroker {
+
+    void addMessage(String message);
+    List<String> getMessages();
+    String getMessagesCombined();
+
+    void addWarning(String message);
+    List<String> getWarnings();
+    String getWarningsCombined();
+
+
+    void setApplicationError(String message);
+    String getApplicationError();
+
+    void ensureEmpty();
 
 }

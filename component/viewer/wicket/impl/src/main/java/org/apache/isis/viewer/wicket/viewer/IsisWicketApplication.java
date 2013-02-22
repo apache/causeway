@@ -58,6 +58,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -128,7 +129,10 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
 public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
+    
     private static final Logger LOG = Logger.getLogger(IsisWicketApplication.class);
+
+    private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
      * Convenience locator, downcasts inherited functionality.
@@ -146,12 +150,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
+    @SuppressWarnings("unused")
     @Inject
     private ImageResourceCache imageCache;
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
+    @SuppressWarnings("unused")
     @Inject
     private WicketViewerSettings wicketViewerSettings;
 
@@ -165,6 +171,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
+    @SuppressWarnings("unused")
     @Inject
     private IsisSystem system;
 
@@ -186,6 +193,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Override
     protected void init() {
         super.init();
+
+        final String webInfDir = getServletContext().getRealPath("/WEB-INF");
+        loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
         getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
 

@@ -510,7 +510,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * {@link #getCurrentTransaction() current transaction}.
      */
     public static MessageBroker getMessageBroker() {
-        return getCurrentTransaction().getMessageBroker();
+        return (MessageBroker) getCurrentTransaction().getMessageBroker();
     }
 
     /**

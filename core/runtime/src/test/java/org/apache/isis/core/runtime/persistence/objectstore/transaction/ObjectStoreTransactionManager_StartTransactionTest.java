@@ -25,6 +25,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -47,18 +49,33 @@ public class ObjectStoreTransactionManager_StartTransactionTest {
     private PersistenceSession mockPersistenceSession;
     @Mock
     private TransactionalResource mockObjectStore;
+    @Mock
+    private MessageBroker mockMessageBroker;
+    @Mock
+    private AuthenticationSession mockAuthenticationSession;
 
 
     private IsisTransactionManager transactionManager;
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault());
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault()) {
+            @Override
+            protected AuthenticationSession getAuthenticationSession() {
+                return mockAuthenticationSession;
+            }
+        };
     }
 
     @Before
     public void setUpExpectations() throws Exception {
         context.ignoring(mockPersistenceSession);
+        context.checking(new Expectations() {
+            {
+                allowing(mockAuthenticationSession).getMessageBroker();
+                will(returnValue(mockMessageBroker));
+            }
+        });
     }
 
     @Test

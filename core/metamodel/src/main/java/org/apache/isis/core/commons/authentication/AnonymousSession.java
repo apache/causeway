@@ -40,6 +40,7 @@ public class AnonymousSession extends AuthenticationSessionAbstract {
     private static final String ROLE = "not-logged-in";
     private static final String CODE = "";
 
+
     public AnonymousSession() {
         super(USER_NAME, Arrays.asList(ROLE), CODE);
     }
@@ -47,5 +48,6 @@ public class AnonymousSession extends AuthenticationSessionAbstract {
     public AnonymousSession(final DataInputExtended input) throws IOException {
         super(input);
     }
+
 
 }

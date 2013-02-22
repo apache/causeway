@@ -36,6 +36,7 @@ import org.junit.Test;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -121,6 +122,9 @@ public class PersistenceSessionObjectStoreTest {
     @Mock
     private IsisConfiguration mockConfiguration;
     
+    @Mock
+    private MessageBroker mockMessageBroker;
+    
     
     private IsisMetaModel isisMetaModel;
 
@@ -155,6 +159,9 @@ public class PersistenceSessionObjectStoreTest {
                 ignoring(saveObjectCommand);
                 ignoring(destroyObjectCommand);
                 ignoring(mockVersion);
+                
+                allowing(mockAuthenticationSession).getMessageBroker();
+                will(returnValue(mockMessageBroker));
             }
         });
 

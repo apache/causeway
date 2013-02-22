@@ -31,6 +31,7 @@ import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -193,7 +194,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             if(message != null) {
                 // recognized
                 feedbackOwner.error(message);
-                getTransactionManager().abortTransaction();
+                
+                // there's no need to abort the transaction, it will have already been done
+                // (in IsisTransactionManager#executeWithinTransaction(...)). 
                 return false;
             }
 
@@ -207,18 +210,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
         return true;
     }
-
-    /**
-     * The executeAction method will set a value on the thread if an
-     * {@link ApplicationException} is thrown.  This will allow the exception
-     * to be rendered in the usual way (using jGrowl).  Once rendered,
-     * this {@link ThreadLocal} will be cleared (see {@link PageAbstract}).
-     * 
-     * <p>
-     * Using a {@link ThreadLocal} is always a  bit hacky, but will do, I think.
-     */
-    public static ThreadLocal<String> applicationError = new ThreadLocal<String>();
-
 
     /**
      * Executes the action, handling any {@link ApplicationException}s that
@@ -244,8 +235,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             // see if is an application-defined exception
             final ApplicationException appEx = getApplicationExceptionIfAny(ex);
             if (appEx != null) {
-                applicationError.set(appEx.getMessage());
-                getTransactionManager().abortTransaction();
+                getMessageBroker().setApplicationError(appEx.getMessage());
+
+                // there's no need to abort the transaction, it will have already been done
+                // (in IsisTransactionManager#executeWithinTransaction(...)). 
                 return null;
             } 
 
@@ -253,6 +246,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             throw ex;
         }
     }
+
 
     private ApplicationException getApplicationExceptionIfAny(Exception ex) {
         Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
@@ -438,6 +432,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      */
     protected ServicesInjector getServicesInjector() {
         return IsisContext.getPersistenceSession().getServicesInjector();
+    }
+
+    protected MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
     }
 
 }

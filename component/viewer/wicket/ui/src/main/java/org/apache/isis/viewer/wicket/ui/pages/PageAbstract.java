@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -134,11 +135,10 @@ public abstract class PageAbstract extends WebPage {
         response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         
-        final String feedbackMsg = renderFeedback();
+        final String feedbackMsg = asJGrowlCalls(getMessageBroker());
         if (!StringUtils.isEmpty(feedbackMsg)) {
             response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
         }
-
         
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
@@ -148,26 +148,23 @@ public abstract class PageAbstract extends WebPage {
         }
     }
 
-    private String renderFeedback() {
+    private String asJGrowlCalls(MessageBroker messageBroker) {
         final StringBuilder buf = new StringBuilder();
         
-        for (String info : IsisContext.getMessageBroker().getMessages()) {
+        for (String info : messageBroker.getMessages()) {
             addJGrowlCall(info, "INFO", false, buf);
         }
-        for (String warning : IsisContext.getMessageBroker().getWarnings()) {
+        for (String warning : getMessageBroker().getWarnings()) {
             addJGrowlCall(warning, "WARNING", true, buf);
         }
         
-        try {
-            final String error = ActionPanel.applicationError.get();
-            if(error!=null) {
-                addJGrowlCall(error, "ERROR", true, buf);
-            }
-        } finally {
-            ActionPanel.applicationError.remove();
+        final String error =  getMessageBroker().getApplicationError();
+        if(error!=null) {
+            addJGrowlCall(error, "ERROR", true, buf);
         }
         return buf.toString();
     }
+
 
     void addJGrowlCall(final String msg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
         buf.append("$.jGrowl(\"").append(msg).append('\"');
@@ -310,4 +307,9 @@ public abstract class PageAbstract extends WebPage {
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
+    
+    protected MessageBroker getMessageBroker() {
+        return IsisContext.getMessageBroker();
+    }
+
 }

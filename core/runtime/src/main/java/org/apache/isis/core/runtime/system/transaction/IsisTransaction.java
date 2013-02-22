@@ -187,7 +187,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final TransactionalResource objectStore;
     private final List<PersistenceCommand> commands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
-    private final MessageBroker messageBroker;
+    private final org.apache.isis.core.commons.authentication.MessageBroker messageBroker;
     private final UpdateNotifier updateNotifier;
     private final List<IsisException> exceptions = Lists.newArrayList();
 
@@ -206,14 +206,14 @@ public class IsisTransaction implements TransactionScopedComponent {
     
     private final UUID guid;
 
-    public IsisTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
+    public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker2, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
-        ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
+        ensureThatArg(messageBroker2, is(not(nullValue())), "message broker is required");
         ensureThatArg(updateNotifier, is(not(nullValue())), "update notifier is required");
 
         this.transactionManager = transactionManager;
-        this.messageBroker = messageBroker;
+        this.messageBroker = messageBroker2;
         this.updateNotifier = updateNotifier;
         this.auditingService = auditingService;
         this.publishingService = publishingService;
@@ -637,9 +637,12 @@ public class IsisTransaction implements TransactionScopedComponent {
      * 
      * <p>
      * Injected in constructor
+     *
+     * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
      */
+    @Deprecated
     public MessageBroker getMessageBroker() {
-        return messageBroker;
+        return (MessageBroker) messageBroker;
     }
 
     /**

@@ -25,16 +25,35 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle {
 
     private final List<String> messages = Lists.newArrayList();
     private final List<String> warnings = Lists.newArrayList();
+    private String applicationError;
 
+    public static org.apache.isis.core.commons.authentication.MessageBroker acquire(final AuthenticationSession authenticationSession) {
+        org.apache.isis.core.commons.authentication.MessageBroker messageBroker;
+        synchronized (authenticationSession) {
+            messageBroker = authenticationSession.getMessageBroker();
+            if(messageBroker == null) {
+                messageBroker = new MessageBrokerDefault();
+                authenticationSession.setMessageBroker(messageBroker);
+            }
+        }
+        return messageBroker;
+    }
+
+    /**
+     * @deprecated - use {@link #acquire()}
+     */
+    @Deprecated
     public MessageBrokerDefault() {
     }
 
@@ -99,6 +118,24 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
         return string;
     }
 
+
+    // //////////////////////////////////////////////////
+    // Application error
+    // //////////////////////////////////////////////////
+
+    @Override
+    public void setApplicationError(String error) {
+        this.applicationError = error;
+        
+    }
+
+    @Override
+    public String getApplicationError() {
+        String error = applicationError;
+        setApplicationError(null);
+        return error;
+    }
+
     // //////////////////////////////////////////////////
     // Debugging
     // //////////////////////////////////////////////////
@@ -136,5 +173,6 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
         messages.clear();
         return copy;
     }
+
 
 }
