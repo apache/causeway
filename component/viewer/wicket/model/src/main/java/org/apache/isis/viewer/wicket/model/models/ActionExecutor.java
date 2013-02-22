@@ -21,12 +21,14 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
+import org.apache.wicket.MarkupContainer;
+
 /**
  * Decouples the {@link ActionModel}, which needs to delegate the actual
  * execution of an action, from its implementor.
  */
 public interface ActionExecutor extends Serializable {
 
-    void executeActionAndProcessResults();
+    void executeActionAndProcessResults(MarkupContainer paramForm);
 
 }

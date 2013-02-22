@@ -24,12 +24,12 @@ import java.util.ServiceLoader;
 import com.google.inject.Singleton;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.actions.params.ActionParametersFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActionsCssMenuFactory;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;

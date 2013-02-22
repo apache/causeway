@@ -440,30 +440,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     
-    // TODO: hacky!!
-    public static ThreadLocal<String> applicationError = new ThreadLocal<String>();
     
     private ObjectAdapter executeAction() {
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] arguments = getArgumentsAsArray();
         final ObjectAction action = getActionMemento().getAction();
-        try {
-            final ObjectAdapter results = action.execute(targetAdapter, arguments);
-            return results;
-        } catch(RuntimeException ex) {
-            final ApplicationException appEx = getApplicationExceptionIfAny(ex);
-            if(appEx != null) {
-                applicationError.set(appEx.getMessage());
-                return null;
-            }
-            throw ex;
-        }
-    }
 
-    private ApplicationException getApplicationExceptionIfAny(Exception ex) {
-        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
-        Iterator<ApplicationException> iterator = appEx.iterator();
-        return iterator.hasNext() ? iterator.next() : null;
+        // let any exceptions propogate, will be caught by UI layer 
+        // (ActionPanel at time of writing)
+        final ObjectAdapter results = action.execute(targetAdapter, arguments);
+        return results;
     }
 
     public String getReasonInvalidIfAny() {

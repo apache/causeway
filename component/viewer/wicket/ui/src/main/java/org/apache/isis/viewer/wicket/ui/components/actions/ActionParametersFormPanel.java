@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.actions.params;
+package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -82,7 +82,9 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
             addParameters();
 
-            addOrReplace(new FormFeedbackPanel(ID_FEEDBACK));
+            FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
+            formFeedback.setEscapeModelStrings(false);
+            addOrReplace(formFeedback);
             addOkButton();
         }
 
@@ -118,7 +120,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
                 @Override
                 public void onSubmit() {
-                    actionExecutor.executeActionAndProcessResults();
+                    actionExecutor.executeActionAndProcessResults(ActionParameterForm.this);
                 };
             });
         }

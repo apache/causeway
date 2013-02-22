@@ -38,6 +38,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.log4j.Logger;
@@ -158,12 +159,12 @@ public abstract class PageAbstract extends WebPage {
         }
         
         try {
-            final String error = ActionModel.applicationError.get();
+            final String error = ActionPanel.applicationError.get();
             if(error!=null) {
                 addJGrowlCall(error, "ERROR", true, buf);
             }
         } finally {
-            ActionModel.applicationError.remove();
+            ActionPanel.applicationError.remove();
         }
         return buf.toString();
     }
