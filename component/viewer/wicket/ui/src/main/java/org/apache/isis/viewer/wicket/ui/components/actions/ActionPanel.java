@@ -53,7 +53,6 @@ import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -133,57 +132,65 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         ObjectAdapter targetAdapter = null;
         boolean clearArgs = true;
         try {
-
-            targetAdapter = getModel().getTargetAdapter();
-
-            // no concurrency exception, so continue...
-            clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, feedbackForm);
-
-        } catch (ConcurrencyException ex) {
-
-            // second attempt should succeed, because the Oid would have
-            // been updated in the attempt
-            if (targetAdapter == null) {
+            try {
                 targetAdapter = getModel().getTargetAdapter();
+
+                // no concurrency exception, so continue...
+                clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, feedbackForm);
+
+            } catch (ConcurrencyException ex) {
+
+                // second attempt should succeed, because the Oid would have
+                // been updated in the attempt
+                if (targetAdapter == null) {
+                    targetAdapter = getModel().getTargetAdapter();
+                }
+
+                
+                // forward onto the target page with the concurrency exception
+                
+                // REVIEW: doesn't seem to get rendered
+                ResultType.OBJECT.addResults(this, targetAdapter, ex);
+
+                getMessageBroker().addWarning(ex.getMessage());
+                return;
             }
-
-            // forward onto the target page with the concurrency exception
-            final ResultType resultType = ResultType.determineFor(targetAdapter);
-            resultType.addResults(this, targetAdapter, ex);
-
-            return;
-            
         } finally {
             if(clearArgs) {
                 getActionModel().clearArguments();
             }
+            
         }
     }
 
-    /**
-     * @return - whether action arguments should be cleared or not.
-     */
-    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, MarkupContainer feedbackOwner) {
+    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, MarkupContainer feedbackForm) {
 
         // validate the action parameters (if any)
         final ActionModel actionModel = getActionModel();
         final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
         if (invalidReasonIfAny != null) {
-            feedbackOwner.error(invalidReasonIfAny);
+            feedbackForm.error(invalidReasonIfAny);
             return false;
-        }
-
+        } 
         // the object store could raise an exception (eg uniqueness constraint)
         // so we handle it here.
         try {
             // could be programmatic flushing, so must include in the try... finally
-            final ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions(feedbackOwner);
-    
+            final ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions();
+      
+            // flush any queued changes, so concurrency or violation exceptions (if any)
+            // will be thrown here
+            getTransactionManager().flushTransaction();
+            
             final ResultType resultType = ResultType.determineFor(resultAdapter);
             
-            // this will flush any queued changes, so exception (if any)
-            // will be thrown here
             resultType.addResults(this, resultAdapter);
+
+            if (actionModel.hasSafeActionSemantics()) {
+                bookmarkPage(actionModel);
+            }
+
+            return true;
 
         } catch (RuntimeException ex) {
 
@@ -193,22 +200,28 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             if(message != null) {
                 // recognized
-                feedbackOwner.error(message);
-                
-                // there's no need to abort the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)). 
-                return false;
-            }
+                if(feedbackForm != null) {
+                    feedbackForm.error(message);
+                } else {
+                     // use notification mechanism otherwise
+                     getMessageBroker().setApplicationError(message);
 
+                     // forward on instead to void page
+                     final ResultType resultType = ResultType.determineFor(null);
+                     resultType.addResults(this, null);
+                }
+                
+
+                // there's no need to abort the transaction, it will have already been done
+                // (in IsisTransactionManager#executeWithinTransaction(...)).
+                
+                return false;
+            } 
+            
             // not handled, so propagate
             throw ex;
         }
 
-        if (actionModel.hasSafeActionSemantics()) {
-            bookmarkPage(actionModel);
-        }
-
-        return true;
     }
 
     /**
@@ -216,15 +229,14 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * might be encountered.
      * 
      * <p>
-     * If an {@link ApplicationException} is encountered, then the {@link #applicationError} thread-local
-     * will be set so that a suitable message can be rendered, and the current {@link IsisTransaction transaction}
-     * will also be aborted.
+     * If an {@link ApplicationException} is encountered, then the application error will be
+     * {@link MessageBroker#setApplicationError(String) set} so that a suitable message can be 
+     * rendered higher up the call stack.
      * 
      * <p>
-     * Any other types of exception will be ignored (to be picked up higher up in the callstack).
-     * @param feedbackOwner 
+     * Any other types of exception will be ignored (to be picked up higher up in the callstack)
      */
-    private ObjectAdapter executeActionHandlingApplicationExceptions(MarkupContainer feedbackOwner) {
+    private ObjectAdapter executeActionHandlingApplicationExceptions() {
         final ActionModel actionModel = getActionModel();
         try {
             ObjectAdapter resultAdapter = actionModel.getObject();
@@ -241,6 +253,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 // (in IsisTransactionManager#executeWithinTransaction(...)). 
                 return null;
             } 
+            
+            // the ExceptionRecognizers stuff is done in the calling method (because may be triggered
+            // by a flush to the object store (which in most cases won't have happened in the execute of
+            // the action body)
 
             // not handled, so propagate
             throw ex;
@@ -371,8 +387,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
         public abstract void addResults(ActionPanel panel, ObjectAdapter resultAdapter);
 
+        /**
+         * Only overridden for ResultType.OBJECT
+         */
         public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-            ResultType.OBJECT.addResults(actionPanel, targetAdapter, ex);
+            throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
         }
 
         static ResultType determineFor(final ObjectAdapter resultAdapter) {
