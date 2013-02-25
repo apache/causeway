@@ -46,6 +46,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter> {
 
+    private static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
+
     public static LinkBuilder newLinkToBuilder(final RendererContext rendererContext, final Rel rel, final ObjectAdapter objectAdapter) {
         String domainType = OidUtils.getDomainType(objectAdapter);
         String instanceId = OidUtils.getInstanceId(rendererContext, objectAdapter);
@@ -104,8 +106,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public DomainObjectReprRenderer with(final ObjectAdapter objectAdapter) {
         this.objectAdapter = objectAdapter;
+        addMediaTypeParams(X_RO_DOMAIN_TYPE, objectAdapter.getSpecification().getFullIdentifier());
         return this;
     }
+
 
     @Override
     public JsonRepresentation render() {

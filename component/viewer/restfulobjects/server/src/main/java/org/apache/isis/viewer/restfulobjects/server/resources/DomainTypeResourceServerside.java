@@ -237,6 +237,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
+
     @Override
     @GET
     @Path("/{domainType}/typeactions/isSupertypeOf/invoke")

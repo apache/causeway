@@ -64,7 +64,7 @@ public final class RestfulRequest {
         public static RequestParameter<Integer> PAGE = new RequestParameter<Integer>("x-ro-page", Parser.forInteger(), 1);
         public static RequestParameter<Integer> PAGE_SIZE = new RequestParameter<Integer>("x-ro-page-size", Parser.forInteger(), 25);
         public static RequestParameter<List<String>> SORT_BY = new RequestParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings(), Collections.<String> emptyList());
-        public static RequestParameter<DomainModel> DOMAIN_MODEL = new RequestParameter<DomainModel>("x-ro-domain-model", DomainModel.parser(), DomainModel.SIMPLE);
+        public static RequestParameter<DomainModel> DOMAIN_MODEL = new RequestParameter<DomainModel>("x-ro-domain-model", DomainModel.parser(), DomainModel.FORMAL);
         public static RequestParameter<Boolean> VALIDATE_ONLY = new RequestParameter<Boolean>("x-ro-validate-only", Parser.forBoolean(), false);
 
         private final String name;

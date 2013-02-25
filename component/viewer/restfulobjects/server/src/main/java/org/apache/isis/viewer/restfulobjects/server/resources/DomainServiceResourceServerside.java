@@ -32,13 +32,14 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.MemberMode;
 
 @Path("/services")
@@ -50,12 +51,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
         init(RepresentationType.LIST, Where.STANDALONE_TABLES);
+        
 
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
 
-        final ListReprRenderer renderer = new ListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
-            .withLink(Rel.SELF, "services")
+            .includesSelf()
             .with(serviceAdapters);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();

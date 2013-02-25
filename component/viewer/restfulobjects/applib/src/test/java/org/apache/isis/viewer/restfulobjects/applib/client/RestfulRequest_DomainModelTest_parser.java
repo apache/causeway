@@ -16,19 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering;
+package org.apache.isis.viewer.restfulobjects.applib.client;
 
-import javax.ws.rs.core.MediaType;
+import static org.junit.Assert.assertSame;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
+import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
+import org.junit.Test;
 
-public interface ReprRenderer<R extends ReprRenderer<R, T>, T> {
+public class RestfulRequest_DomainModelTest_parser {
 
-    MediaType getMediaType();
-
-    R with(T t);
-
-    public JsonRepresentation render();
+    @Test
+    public void parser_roundtrips() {
+        final Parser<DomainModel> parser = RestfulRequest.DomainModel.parser();
+        for (final DomainModel domainModel : DomainModel.values()) {
+            final String asString = parser.asString(domainModel);
+            final DomainModel roundtripped = parser.valueOf(asString);
+            assertSame(roundtripped, domainModel);
+        }
+    }
 
 }

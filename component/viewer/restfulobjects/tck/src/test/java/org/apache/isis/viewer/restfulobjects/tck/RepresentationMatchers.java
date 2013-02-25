@@ -254,6 +254,10 @@ public class RepresentationMatchers {
                     if (rel != null) {
                         description.appendText(" with rel '").appendText(rel).appendText("'");
                     }
+                    if (relNameMatcher != null) {
+                        description.appendText(" with rel '");
+                        relNameMatcher.describeTo(description);
+                    }
                     if (href != null) {
                         description.appendText(" with href '").appendText(href).appendText("'");
                     }
@@ -292,7 +296,7 @@ public class RepresentationMatchers {
                             description.appendText(" and");
                         }
                         if (selfHref != null) {
-                            description.appendText(" an response whose self.href is " + selfHref);
+                            description.appendText(" has a response whose self.href is " + selfHref);
                         }
                     }
                 }
@@ -306,7 +310,7 @@ public class RepresentationMatchers {
                     if (rel != null && !rel.equals(link.getRel())) {
                         return false;
                     }
-                    if (relNameMatcher != null && !relNameMatcher.matches(link.getHref())) {
+                    if (relNameMatcher != null && !relNameMatcher.matches(link.getRel())) {
                         return false;
                     }
                     if (href != null && !href.equals(link.getHref())) {
@@ -331,7 +335,7 @@ public class RepresentationMatchers {
                     if (novalue != null && novalue && link.getValue() != null) {
                         return false;
                     }
-                    if (valueMatcher != null && !valueMatcher.matches(link)) {
+                    if (valueMatcher != null && !valueMatcher.matches(link.getValue())) {
                         return false;
                     }
 
@@ -364,7 +368,7 @@ public class RepresentationMatchers {
                         if(entity == null) {
                             return false;
                         }
-                        LinkRepresentation selfLink = entity.getLink("self");
+                        LinkRepresentation selfLink = entity.getLink("links[rel=self]");
                         if(selfLink == null) {
                             return false;
                         }

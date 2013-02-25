@@ -19,6 +19,9 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 
+import java.util.Collections;
+import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.util.Enums;
@@ -40,6 +43,8 @@ import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentat
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
+
+import com.google.common.collect.Maps;
 
 public enum RepresentationType {
 
@@ -84,6 +89,24 @@ public enum RepresentationType {
         return mediaType;
     }
 
+    /**
+     * Clones the (immutable) {@link #getMediaType() media type}, adding in one additional
+     * parameter value.
+     */
+    public MediaType getMediaType(String parameter, String paramValue) {
+        return getMediaType(Collections.singletonMap(parameter, paramValue));
+    }
+
+    /**
+     * Clones the (immutable) {@link #getMediaType() media type}, adding all provided
+     * parameters.
+     */
+    public MediaType getMediaType(Map<String, String> mediaTypeParams) {
+        Map<String, String> parameters = Maps.newHashMap(mediaType.getParameters());
+        parameters.putAll(mediaTypeParams);
+        return new MediaType(mediaType.getType(), mediaType.getSubtype(), parameters);
+    }
+
     public String getMediaTypeProfile() {
         return getMediaType().getParameters().get("profile");
     }
@@ -123,5 +146,7 @@ public enum RepresentationType {
             }
         };
     }
+
+
 
 }

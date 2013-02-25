@@ -191,12 +191,12 @@ public abstract class ResourceAbstract {
     }
 
     public static ResponseBuilder responseOfOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
-        final RepresentationType representationType = renderer.getRepresentationType();
-        final ResponseBuilder response = responseOf(HttpStatusCode.OK).type(representationType.getMediaType()).cacheControl(caching.getCacheControl()).entity(jsonFor(renderer.render()));
+        final MediaType mediaType = renderer.getMediaType();
+        final ResponseBuilder response = responseOf(HttpStatusCode.OK).type(mediaType).cacheControl(caching.getCacheControl()).entity(jsonFor(renderer.render()));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 
-    private static ResponseBuilder responseOf(final HttpStatusCode httpStatusCode) {
+    protected static ResponseBuilder responseOf(final HttpStatusCode httpStatusCode) {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 

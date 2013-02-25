@@ -19,71 +19,67 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 public enum Rel {
-    
-    // IANA registered
-    SELF("self"), 
-    DESCRIBEDBY("describedby"), 
-    UP("up"), 
-    PREVIOUS("previous"),
-    NEXT("next"),
-    HELP("help"), 
-    ICON("icon"),
+
+    SELF(RelDefinition.IANA, "self"), 
+    DESCRIBEDBY(RelDefinition.IANA, "describedby"), 
+    UP(RelDefinition.IANA,"up"), 
+    PREVIOUS(RelDefinition.IANA,"previous"),
+    NEXT(RelDefinition.IANA,"next"),
+    HELP(RelDefinition.IANA,"help"), 
+    ICON(RelDefinition.IANA,"icon"),
 
     // Restful Objects namespace
-    ACTION(Spec.REL_PREFIX + "action"), 
-    ACTION_PARAM(Spec.REL_PREFIX + "action-param"), 
-    ADD_TO(Spec.REL_PREFIX + "add-to"), 
-    ATTACHMENT(Spec.REL_PREFIX + "attachment"), 
-    CHOICE(Spec.REL_PREFIX + "choice"),
-    CLEAR(Spec.REL_PREFIX + "clear"), 
-    COLLECTION(Spec.REL_PREFIX + "collection"), 
-    DEFAULT(Spec.REL_PREFIX + "default"), 
-    DELETE(Spec.REL_PREFIX + "delete"), 
-    DETAILS(Spec.REL_PREFIX + "details"), 
-    DOMAIN_TYPE(Spec.REL_PREFIX + "domain-type"),
-    DOMAIN_TYPES(Spec.REL_PREFIX + "domain-types"), 
-    ELEMENT(Spec.REL_PREFIX + "element"), 
-    ELEMENT_TYPE(Spec.REL_PREFIX + "element-type"), 
-    INVOKE(Spec.REL_PREFIX + "invoke"), 
-    MODIFY(Spec.REL_PREFIX + "modify"), 
-    PERSIST(Spec.REL_PREFIX + "persist"), 
-    PROPERTY(Spec.REL_PREFIX + "property"), 
-    REMOVE_FROM(Spec.REL_PREFIX + "remove-from"), 
-    RETURN_TYPE(Spec.REL_PREFIX + "return-type"), 
-    SERVICE(Spec.REL_PREFIX + "service"), 
-    SERVICES(Spec.REL_PREFIX + "services"), 
-    UPDATE(Spec.REL_PREFIX + "update"), 
-    USER(Spec.REL_PREFIX + "user"), 
-    VALUE(Spec.REL_PREFIX + "value"), 
-    VERSION(Spec.REL_PREFIX + "version"), 
+    ACTION(RelDefinition.RO_SPEC, "action"), 
+    ACTION_PARAM(RelDefinition.RO_SPEC, "action-param"), 
+    ADD_TO(RelDefinition.RO_SPEC, "add-to"), 
+    ATTACHMENT(RelDefinition.RO_SPEC, "attachment"), 
+    CHOICE(RelDefinition.RO_SPEC, "choice"),
+    CLEAR(RelDefinition.RO_SPEC, "clear"), 
+    COLLECTION(RelDefinition.RO_SPEC, "collection"), 
+    DEFAULT(RelDefinition.RO_SPEC, "default"), 
+    DELETE(RelDefinition.RO_SPEC, "delete"), 
+    DETAILS(RelDefinition.RO_SPEC, "details"), 
+    DOMAIN_TYPE(RelDefinition.RO_SPEC, "domain-type"),
+    DOMAIN_TYPES(RelDefinition.RO_SPEC, "domain-types"), 
+    ELEMENT(RelDefinition.RO_SPEC, "element"), 
+    ELEMENT_TYPE(RelDefinition.RO_SPEC, "element-type"), 
+    INVOKE(RelDefinition.RO_SPEC, "invoke"), 
+    MODIFY(RelDefinition.RO_SPEC, "modify"), 
+    PERSIST(RelDefinition.RO_SPEC, "persist"), 
+    PROPERTY(RelDefinition.RO_SPEC, "property"), 
+    REMOVE_FROM(RelDefinition.RO_SPEC, "remove-from"), 
+    RETURN_TYPE(RelDefinition.RO_SPEC, "return-type"), 
+    SERVICE(RelDefinition.RO_SPEC, "service"), 
+    SERVICES(RelDefinition.RO_SPEC, "services"), 
+    UPDATE(RelDefinition.RO_SPEC, "update"), 
+    USER(RelDefinition.RO_SPEC, "user"), 
+    VALUE(RelDefinition.RO_SPEC, "value"), 
+    VERSION(RelDefinition.RO_SPEC, "version"), 
     
 
     // implementation specific
-    CONTRIBUTED_BY(Impl.REL_PREFIX + "contributed-by");
+    CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by");
 
-    private final String name;
+    private final RelDefinition relDef;
+    private final String relSuffix;
 
-    private Rel(final String name) {
-        this.name = name;
+    private Rel(final RelDefinition relDef, final String name) {
+        this.relDef = relDef;
+        this.relSuffix = name;
     }
 
     public String getName() {
-        return name;
+        return relDef.nameOf(relSuffix);
     }
 
     /**
      * For those {@link Rel}s that also take a param
      */
     public String andParam(String paramName, String paramValue) {
-        return name + ";" + paramName + "=" + "\"" + paramValue + "\"";
-    }
-
-    private static class Spec {
-        final static String REL_PREFIX = "urn:org.restfulobjects:rels/";
-    }
-
-    private static class Impl {
-        final static String REL_PREFIX = "urn:org.apache.isis.restfulobjects:rels/";
+        return getName() +
+                (relDef.canAddParams() 
+                 ?";" + paramName + "=" + "\"" + paramValue + "\""
+                 :"");
     }
 
 }

@@ -19,6 +19,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
@@ -43,6 +44,10 @@ public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActio
     public TypeActionResultReprRenderer withValue(final Object value) {
         this.value = value;
         return this;
+    }
+
+    public TypeActionResultReprRenderer withSelf(final JsonRepresentation link) {
+        return withLink(Rel.SELF, link);
     }
 
     @Override

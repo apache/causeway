@@ -19,8 +19,10 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
+import java.util.Map;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -31,12 +33,15 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
 
+import com.google.common.collect.Maps;
+
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
     protected final RendererContext rendererContext;
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
+    private final Map<String,String> mediaTypeParams = Maps.newLinkedHashMap();
 
     protected boolean includesSelf;
 
@@ -63,18 +68,18 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     @Override
-    public RepresentationType getRepresentationType() {
-        return representationType;
+    public MediaType getMediaType() {
+        return representationType.getMediaType(mediaTypeParams);
+    }
+
+    protected void addMediaTypeParams(String param, String paramValue) {
+        mediaTypeParams.put(param, paramValue);
     }
 
     @SuppressWarnings("unchecked")
     public R includesSelf() {
         this.includesSelf = true;
         return (R) this;
-    }
-
-    public R withSelf(final JsonRepresentation link) {
-        return withLink(Rel.SELF, link);
     }
 
     public R withLink(final Rel rel, final String href) {
@@ -113,7 +118,16 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
             return;
         }
         final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), rel, objectSpec);
-        getLinks().arrayAdd(linkBuilder.build());
+        JsonRepresentation link = linkBuilder.build();
+        getLinks().arrayAdd(link);
+        
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
+        if (linkFollower.matches(link)) {
+            final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap())
+                .with(objectSpec);
+            link.mapPut("value", renderer.render());
+        }
+
     }
 
     /**

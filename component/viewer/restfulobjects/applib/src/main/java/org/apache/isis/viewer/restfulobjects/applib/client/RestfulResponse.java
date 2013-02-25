@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 public class RestfulResponse<T> {
@@ -239,7 +241,7 @@ public class RestfulResponse<T> {
 
     public static class Header<X> {
 
-        public final static Header<String> WARNING = new Header<String>("Warning", Parser.forString());
+        public final static Header<String> WARNING = new Header<String>("Warning", warningParser());
         public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
         public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
         public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forJaxRsMediaType());
@@ -260,6 +262,24 @@ public class RestfulResponse<T> {
             return parser.valueOf(value);
         }
 
+        private static Parser<String> warningParser() {
+            return new Parser<String>(){
+                private static final String PREFIX = "199 RestfulObjects ";
+
+                @Override
+                public String valueOf(String str) {
+                    return stripPrefix(str, PREFIX);
+                }
+
+                @Override
+                public String asString(String str) {
+                    return PREFIX + str;
+                }
+                private String stripPrefix(String str, String prefix) {
+                    return str.startsWith(prefix) ? str.substring(prefix.length()) : str;
+                }
+            };
+        }
     }
 
     private final Response response;

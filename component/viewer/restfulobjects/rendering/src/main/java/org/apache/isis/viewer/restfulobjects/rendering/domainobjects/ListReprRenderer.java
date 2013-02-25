@@ -64,8 +64,8 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     public JsonRepresentation render() {
         addValue();
 
-        addLink(Rel.RETURN_TYPE, returnType);
-        addLink(Rel.ELEMENT_TYPE, elementType);
+        addLinkToReturnType();
+        addLinkToElementType();
 
         getExtensions();
 
@@ -95,6 +95,15 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
             }
         }
         representation.mapPut("value", values);
+    }
+
+
+    protected void addLinkToReturnType() {
+        addLink(Rel.RETURN_TYPE, returnType);
+    }
+
+    protected void addLinkToElementType() {
+        addLink(Rel.ELEMENT_TYPE, elementType);
     }
 
 }

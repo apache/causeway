@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
@@ -68,20 +69,12 @@ public class ResourceContext implements RendererContext {
 
     private List<List<String>> followLinks;
 
-    private final static Predicate<MediaType> MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON = new Predicate<MediaType>() {
-        @Override
-        public boolean apply(final MediaType mediaType) {
-            return !mediaType.equals(MediaType.APPLICATION_JSON_TYPE);
-        }
-    };
-    private final static Predicate<MediaType> MEDIA_TYPE_CONTAINS_PROFILE = new Predicate<MediaType>() {
-        @Override
-        public boolean apply(final MediaType mediaType) {
-            return mediaType.getParameters().containsKey("profile");
-        }
-    };
     private final Where where;
     private JsonRepresentation readQueryStringAsMap;
+
+    //////////////////////////////////////////////////////////////////
+    // constructor and init
+    //////////////////////////////////////////////////////////////////
 
     public ResourceContext(
             final RepresentationType representationType, 
@@ -112,9 +105,47 @@ public class ResourceContext implements RendererContext {
 
     void init(final RepresentationType representationType) {
         ensureCompatibleAcceptHeader(representationType);
+        ensureDomainModelQueryParamSupported();
+        
         this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
     }
 
+    private void ensureDomainModelQueryParamSupported() {
+        final DomainModel domainModel = getArg(RequestParameter.DOMAIN_MODEL);
+        if(domainModel != DomainModel.FORMAL) {
+            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST,  
+                                           "x-ro-domain-model of '%s' is not supported", domainModel);
+        }
+    }
+
+    private void ensureCompatibleAcceptHeader(final RepresentationType representationType) {
+        if (representationType == null) {
+            return;
+        }
+
+        // RestEasy will check the basic media types...
+        // ... so we just need to check the profile paramter
+        final String producedProfile = representationType.getMediaTypeProfile();
+        if(producedProfile != null) {
+            for (MediaType mediaType : httpHeaders.getAcceptableMediaTypes()) {
+                String acceptedProfileValue = mediaType.getParameters().get("profile");
+                if(acceptedProfileValue == null) {
+                    continue;
+                }
+                if(!producedProfile.equals(acceptedProfileValue)) {
+                    throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE);
+                }
+            }
+        }
+    }
+
+
+    
+    //////////////////////////////////////////////////////////////////
+    //
+    //////////////////////////////////////////////////////////////////
+    
+    
     public HttpHeaders getHttpHeaders() {
         return httpHeaders;
     }
@@ -155,39 +186,13 @@ public class ResourceContext implements RendererContext {
         return securityContext;
     }
 
-    private void ensureCompatibleAcceptHeader(final RepresentationType representationType) {
-        if (representationType == null) {
-            return;
-        }
-
-        // RestEasy will check the basic media types...
-        // ... so we just need to check the profile paramter
-        final String producedProfile = representationType.getMediaTypeProfile();
-        if(producedProfile != null) {
-            for (MediaType mediaType : httpHeaders.getAcceptableMediaTypes()) {
-                String acceptedProfileValue = mediaType.getParameters().get("profile");
-                if(acceptedProfileValue == null) {
-                    continue;
-                }
-                if(!producedProfile.equals(acceptedProfileValue)) {
-                    throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE);
-                }
-            }
-        }
-    }
-
-    protected boolean contains(final com.google.common.net.MediaType producedType, final List<MediaType> acceptableMediaTypes) {
-        return acceptableMediaTypes.contains(producedType);
-    }
 
     public List<List<String>> getFollowLinks() {
         return followLinks;
     }
 
-    public String urlFor(final String url) {
-        return getUriInfo().getBaseUri().toString() + url;
-    }
 
+    
     public Localization getLocalization() {
         return localization;
     }
@@ -215,5 +220,14 @@ public class ResourceContext implements RendererContext {
     public Where getWhere() {
         return where;
     }
-    
+
+
+    //////////////////////////////////////////////////////////////////
+    //
+    //////////////////////////////////////////////////////////////////
+
+    public String urlFor(final String url) {
+        return getUriInfo().getBaseUri().toString() + url;
+    }
+
 }

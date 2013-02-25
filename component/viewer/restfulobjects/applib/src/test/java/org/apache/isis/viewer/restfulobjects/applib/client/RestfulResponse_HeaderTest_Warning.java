@@ -16,19 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering;
+package org.apache.isis.viewer.restfulobjects.applib.client;
 
-import javax.ws.rs.core.MediaType;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.junit.Test;
 
-public interface ReprRenderer<R extends ReprRenderer<R, T>, T> {
+public class RestfulResponse_HeaderTest_Warning {
 
-    MediaType getMediaType();
+    
+    @Test
+    public void nonEmptyString() throws Exception {
+        assertThat(RestfulResponse.Header.WARNING.parse("199 RestfulObjects abc"), is("abc"));
+    }
 
-    R with(T t);
+    @Test
+    public void emptyString() throws Exception {
+        assertThat(RestfulResponse.Header.WARNING.parse("199 RestfulObjects "), is(""));
+    }
 
-    public JsonRepresentation render();
-
+    @Test
+    public void noPrefix() throws Exception {
+        assertThat(RestfulResponse.Header.WARNING.parse("199 RestfulObject prefix is missing an 's'"), is("199 RestfulObject prefix is missing an 's'"));
+    }
 }

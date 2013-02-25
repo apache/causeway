@@ -164,7 +164,6 @@ public abstract class Parser<T> {
             public String asString(final com.google.common.net.MediaType t) {
                 return t.toString();
             }
-
         };
     }
 

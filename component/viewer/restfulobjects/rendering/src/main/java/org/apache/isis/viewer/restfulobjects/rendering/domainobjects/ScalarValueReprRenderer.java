@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -43,8 +45,8 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
      * In case I forget in the future that scalar values don't have a representation.  
      */
     @Override
-    public RepresentationType getRepresentationType() {
-        throw new UnsupportedOperationException("no representationType defined for scalar values");
+    public MediaType getMediaType() {
+        throw new UnsupportedOperationException("no mediaType defined for scalar values");
     }
     
     @Override
