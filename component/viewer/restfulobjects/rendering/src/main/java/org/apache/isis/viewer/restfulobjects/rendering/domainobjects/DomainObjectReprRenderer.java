@@ -43,6 +43,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
+import org.hamcrest.core.IsSame;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter> {
 
@@ -106,7 +107,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public DomainObjectReprRenderer with(final ObjectAdapter objectAdapter) {
         this.objectAdapter = objectAdapter;
-        addMediaTypeParams(X_RO_DOMAIN_TYPE, objectAdapter.getSpecification().getFullIdentifier());
+        String domainTypeHref = DomainTypeReprRenderer.newLinkToBuilder(getRendererContext(), Rel.DOMAIN_TYPE, objectAdapter.getSpecification()).build().getString("href");
+        addMediaTypeParams(X_RO_DOMAIN_TYPE, domainTypeHref);
         return this;
     }
 
@@ -114,14 +116,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public JsonRepresentation render() {
 
-        // self, oid
+        // self, extensions.oid
         if (!mode.representsArguments()) {
             if (objectAdapter.representsPersistent()) {
                 if (includesSelf) {
                     final JsonRepresentation self = linkToBuilder.with(objectAdapter).builder(Rel.SELF).build();
                     getLinks().arrayAdd(self);
                 }
-                representation.mapPut("oid", getOidStr());
+                getExtensions().mapPut("oid", getOidStr());
             }
         }
 
@@ -151,7 +153,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (!mode.representsArguments()) {
             // update/persist
             addPersistLinkIfTransientAndPersistable();
-            addUpdatePropertiesLinkIfPersistent();
+            addUpdatePropertiesLinkIfPersistentAndNotService();
 
             // extensions
             final boolean isService = objectAdapter.getSpecification().isService();
@@ -175,7 +177,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
-        final JsonRepresentation members = JsonRepresentation.newArray();
+        final JsonRepresentation members = JsonRepresentation.newMap();
         final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
         addAssociations(objectAdapter, members, associations);
 
@@ -208,7 +210,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                     renderer.asArguments();
                 }
 
-                members.arrayAdd(renderer.render());
+                members.mapPut(assoc.getId(), renderer.render());
             }
 
             if (mode.representsArguments()) {
@@ -222,7 +224,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
 
-                members.arrayAdd(renderer.render());
+                members.mapPut(assoc.getId(), renderer.render());
             }
         }
     }
@@ -245,7 +247,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
                 renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);
 
-                members.arrayAdd(renderer.render());
+                members.mapPut(action.getId(), renderer.render());
             }
         }
     }
@@ -282,8 +284,12 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
 
-    private void addUpdatePropertiesLinkIfPersistent() {
+    private void addUpdatePropertiesLinkIfPersistentAndNotService() {
         if (!objectAdapter.representsPersistent()) {
+            return;
+        }
+        final boolean isService = objectAdapter.getSpecification().isService();
+        if(isService) {
             return;
         }
 

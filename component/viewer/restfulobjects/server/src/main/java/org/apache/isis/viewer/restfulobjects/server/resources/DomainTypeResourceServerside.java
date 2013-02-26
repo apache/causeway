@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -43,8 +42,6 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
@@ -58,7 +55,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeActionRes
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 import com.google.common.base.Strings;
 
@@ -67,7 +63,7 @@ import com.google.common.base.Strings;
  * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
  * and 1.1-RC2).
  */
-@Path("/domainTypes")
+@Path("/domain-types")
 public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
 
     @Override
@@ -210,7 +206,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @Override
     @GET
-    @Path("/{domainType}/typeactions/isSubtypeOf/invoke")
+    @Path("/{domainType}/type-actions/isSubtypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSubtypeOf(
             @PathParam("domainType") final String domainType, 
@@ -240,7 +236,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @Override
     @GET
-    @Path("/{domainType}/typeactions/isSupertypeOf/invoke")
+    @Path("/{domainType}/type-actions/isSupertypeOf/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSupertypeOf(
             @PathParam("domainType") final String domainType, 

@@ -34,38 +34,62 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
     }
 
     /**
-     * Only for persistent or addressable objects 
+     * Populated only for domain objects, not for domain services.
      */
-    public String getOid() {
-        return getString("oid");
+    public String getDomainType() {
+        return getString("instanceId");
+    }
+
+    /**
+     * Populated only for domain objects, not for domain services.
+     */
+    public String getInstanceId() {
+        return getString("instanceId");
+    }
+
+    /**
+     * Populated only for domain services, not for domain objects.
+     */
+    public String getServiceId() {
+        return getString("serviceId");
     }
 
     public JsonRepresentation getMembers() {
-        return getRepresentation("members").ensureArray();
+        return getRepresentation("members");
     }
 
-    public JsonRepresentation getProperty(final String id) {
-        return getRepresentation("members[memberType=property id=%s]", id);
+    public DomainObjectMemberRepresentation getProperty(final String id) {
+        return getMember(id, "property");
     }
 
     public JsonRepresentation getProperties() {
         return getRepresentation("members[memberType=property]").ensureArray();
     }
 
-    public JsonRepresentation getCollection(final String id) {
-        return getRepresentation("members[memberType=collection id=%s]", id);
+    public DomainObjectMemberRepresentation getCollection(final String id) {
+        return getMember(id, "collection");
     }
 
     public JsonRepresentation getCollections() {
         return getRepresentation("members[memberType=collection]").ensureArray();
     }
 
-    public JsonRepresentation getActions() {
-        return getRepresentation("members[memberType=action]");
+    public DomainObjectMemberRepresentation getAction(final String id) {
+        return getMember(id, "action");
     }
 
-    public JsonRepresentation getAction(final String id) {
-        return getRepresentation("members[memberType=action id=%s]", id);
+    private DomainObjectMemberRepresentation getMember(final String id, String memberType) {
+        // TODO: would be nice to use "members.%s[memberType=...]" instead
+        JsonRepresentation jsonRepr = getRepresentation("members.%s", id);
+        if(jsonRepr == null) {
+            return null;
+        }
+        DomainObjectMemberRepresentation member = jsonRepr.as(DomainObjectMemberRepresentation.class);
+        return member.getMemberType().equals(memberType) ? member : null;
+    }
+
+    public JsonRepresentation getActions() {
+        return getRepresentation("members[memberType=action]");
     }
 
     /**
@@ -74,5 +98,14 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
     public LinkRepresentation getPersistLink() {
         return getLinkWithRel(Rel.PERSIST);
     }
+
+    
+    /**
+     * Isis extension.
+     */
+    public String getOid() {
+        return getString("extensions.oid");
+    }
+
 
 }

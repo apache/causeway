@@ -51,7 +51,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
         init(RepresentationType.LIST, Where.STANDALONE_TABLES);
-        
 
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
 

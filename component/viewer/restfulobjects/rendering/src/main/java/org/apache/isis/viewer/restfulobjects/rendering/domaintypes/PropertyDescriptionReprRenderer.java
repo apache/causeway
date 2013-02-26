@@ -31,7 +31,7 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         final String typeFullName = objectSpecification.getFullIdentifier();
         final String propertyId = property.getId();
-        final String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
+        final String url = "domain-types/" + typeFullName + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 

@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
@@ -57,10 +58,13 @@ public class DomainServiceResourceTest_serviceId_response_headers {
         // when
         final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
 
+        
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.DOMAIN_OBJECT.getMediaType("x-ro-domain-type", "org.apache.isis.core.tck.dom.scalars.JdkValuedEntityRepository")));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.DOMAIN_OBJECT.getMediaType("x-ro-domain-type", "http://localhost:39393/domain-types/JdkValuedEntities")));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
+        // update spec so this that an ETag is not required for services
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.ETAG), is(nullValue()));
     }
 
 }

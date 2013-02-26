@@ -19,13 +19,17 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -62,6 +66,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 public abstract class ResourceAbstract {
 
+
     protected final static JsonMapper jsonMapper = JsonMapper.instance();
 
     public enum Caching {
@@ -86,6 +91,7 @@ public abstract class ResourceAbstract {
     // nb: SET is excluded; we simply flatten contributed actions.
     public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
+    private final static String UTC_DATEFORMAT = "yyyy-MM-ddTHH:mm:ss.sss";
 
     @Context
     HttpHeaders httpHeaders;
@@ -204,9 +210,16 @@ public abstract class ResourceAbstract {
         if (version != null && version.getTime() != null) {
             final Date time = version.getTime();
             responseBuilder.lastModified(time);
-            responseBuilder.tag("" + time);
+            responseBuilder.tag(asETag(time));
         }
         return responseBuilder;
+    }
+
+    private static EntityTag asETag(final Date time) {
+        final SimpleDateFormat sdf = new SimpleDateFormat(UTC_DATEFORMAT);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        final String utcTime = sdf.format(time);
+        return new EntityTag(utcTime, true);
     }
 
     // //////////////////////////////////////////////////////////////
@@ -231,10 +244,6 @@ public abstract class ResourceAbstract {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
-    }
-
-    private OidGenerator getOidGenerator() {
-        return getPersistenceSession().getOidGenerator();
     }
 
     protected Localization getLocalization() {

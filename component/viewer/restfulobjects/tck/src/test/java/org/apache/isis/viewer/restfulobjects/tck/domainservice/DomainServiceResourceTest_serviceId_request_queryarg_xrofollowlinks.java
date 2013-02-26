@@ -88,6 +88,26 @@ public class DomainServiceResourceTest_serviceId_request_queryarg_xrofollowlinks
                                                                                                // followed
     }
 
+    @Ignore("todo")
+    @Test
+    public void toSelf() throws Exception {
+    
+    }
+
+    @Ignore("todo")
+    @Test
+    public void toDescribedBy() throws Exception {
+    
+    }
+
+    @Ignore("todo")
+    @Test
+    public void toMembers() throws Exception {
+    
+        // no need to do an individual member, that's been tested already elsewhere
+    }
+
+    
     private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
         final DomainServiceResource resource = client.getDomainServiceResource();
         final Response response = resource.services();

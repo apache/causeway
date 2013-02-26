@@ -77,7 +77,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
         final Response response = exceptionMapper.toResponse(ex);
 
         // then
-        assertThat((String) response.getMetadata().get("Warning").get(0), is(ex.getMessage()));
+        assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects " + ex.getMessage()));
 
         // and then
         final String entity = (String) response.getEntity();

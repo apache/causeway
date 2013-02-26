@@ -1,9 +1,10 @@
 {
-    "oid": "OID:25",
+    "domainType": "Simple",
+    "instanceId": "25",
     "title": "Untitled Simple Entity",
-    "members": [
-        {
-            "id": "ABigDecimal",
+    
+    "members": {
+        "ABigDecimal": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -21,8 +22,7 @@
                 }
             ]
         },
-        {
-            "id": "ABigInteger",
+        "ABigInteger": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -40,8 +40,7 @@
                 }
             ]
         },
-        {
-            "id": "ADouble",
+        "ADouble": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -60,8 +59,7 @@
                 }
             ]
         },
-        {
-            "id": "ALong",
+        "ALong": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -80,8 +78,7 @@
                 }
             ]
         },
-        {
-            "id": "anInt",
+        "anInt": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -100,8 +97,7 @@
                 }
             ]
         },
-        {
-            "id": "anotherDouble",
+        "anotherDouble": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -119,8 +115,7 @@
                 }
             ]
         },
-        {
-            "id": "anotherInt",
+        "anotherInt": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -138,8 +133,7 @@
                 }
             ]
         },
-        {
-            "id": "anotherLong",
+        "anotherLong": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -157,8 +151,7 @@
                 }
             ]
         },
-        {
-            "id": "flag",
+        "flag": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -177,8 +170,7 @@
                 }
             ]
         },
-        {
-            "id": "name",
+        "name": {
             "memberType": "property",
             "details": {
                 "rel": "details",
@@ -197,8 +189,7 @@
                 }
             ]
         },
-        {
-            "id": "toggle",
+        "toggle": {
             "memberType": "action",
             "details": {
                 "rel": "details",
@@ -225,7 +216,7 @@
                 }
             ]
         }
-    ],
+    },
     "links": [
         {
             "rel": "describedby",
@@ -234,5 +225,7 @@
             "type": "application/json;profile=\"urn:org.restfulobjects/domaintype\""
         }
     ],
-    "extensions": {}
+    "extensions": {
+        "oid": "Simple:25"
+    }
 }

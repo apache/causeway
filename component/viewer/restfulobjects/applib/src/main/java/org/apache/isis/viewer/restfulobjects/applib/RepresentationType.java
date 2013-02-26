@@ -125,9 +125,20 @@ public enum RepresentationType {
     }
 
     public static RepresentationType lookup(final MediaType mediaType) {
-        for (final RepresentationType representationType : values()) {
-            if (representationType.getMediaType().equals(mediaType)) {
-                return representationType;
+        if(mediaType != null) {
+            for (final RepresentationType representationType : values()) {
+                final MediaType candidate = representationType.getMediaType();
+                if(!candidate.getType().equals(mediaType.getType())) {
+                    continue;
+                }
+                if(!candidate.getSubtype().equals(mediaType.getSubtype())) {
+                    continue;
+                }
+                String candidateProfile = candidate.getParameters().get("profile");
+                String mediaTypeProfile = mediaType.getParameters().get("profile");
+                if(candidateProfile == null || candidateProfile.equals(mediaTypeProfile)) {
+                    return representationType;
+                }
             }
         }
         return RepresentationType.GENERIC;

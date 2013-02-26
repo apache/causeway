@@ -38,8 +38,8 @@ import com.google.common.base.Strings;
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
-        final String typeFullName = objectSpec.getFullIdentifier();
-        final String url = "domainTypes/" + typeFullName;
+        final String typeFullName = objectSpec.getSpecId().asString();
+        final String url = "domain-types/" + typeFullName;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
     }
 

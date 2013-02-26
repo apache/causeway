@@ -49,7 +49,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
         memberType = MemberType.determineFrom(objectFeature);
 
         // done eagerly so can use as criteria for x-ro-follow-links
-        representation.mapPut(memberType.getJsProp(), objectFeature.getId());
+        representation.mapPut("id", objectFeature.getId());
         representation.mapPut("memberType", memberType.getName());
 
         return cast(this);

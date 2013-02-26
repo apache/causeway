@@ -34,7 +34,7 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         final String typeFullName = objectSpecification.getFullIdentifier();
         final String actionId = objectAction.getId();
-        final String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
+        final String url = "domain-types/" + typeFullName + "/actions/" + actionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.ACTION_DESCRIPTION, url);
     }
 

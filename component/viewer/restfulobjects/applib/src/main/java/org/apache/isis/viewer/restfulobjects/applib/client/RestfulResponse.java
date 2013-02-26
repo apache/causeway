@@ -245,6 +245,7 @@ public class RestfulResponse<T> {
         public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
         public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
         public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forJaxRsMediaType());
+        public final static Header<String> ETAG = new Header<String>("ETag", Parser.forETag());
 
         private final String name;
         private final Parser<X> parser;

@@ -20,38 +20,22 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
-
-import javax.ws.rs.core.MediaType;
 
 import org.junit.Test;
 
 
-public class RepresentationTypeTest_getMediaType_lookup {
+public class RepresentationTypeTest_getMediaType {
 
     @Test
-    public void roundtrip() {
-        for (final RepresentationType repType : RepresentationType.values()) {
-            final MediaType mediaType = repType.getMediaType();
-            final RepresentationType lookup = RepresentationType.lookup(mediaType);
-            assertSame(repType, lookup);
-        }
-    }
-
-    @Test
-    public void whenUnknown() {
-        assertThat(RepresentationType.lookup(MediaType.APPLICATION_SVG_XML), is(RepresentationType.GENERIC));
-    }
-
-    @Test
-    public void whenNull() {
-        assertThat(RepresentationType.lookup((MediaType) null), is(RepresentationType.GENERIC));
-    }
-
-    @Test
-    public void getMediaTypeProfile() {
-        assertThat(RepresentationType.VERSION.getMediaTypeProfile(), is("urn:org.restfulobjects:repr-types/version"));
+    public void whenHasProfile() {
         assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
     }
+
+    @Test
+    public void whenHasNoProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
+    }
+
+
 }

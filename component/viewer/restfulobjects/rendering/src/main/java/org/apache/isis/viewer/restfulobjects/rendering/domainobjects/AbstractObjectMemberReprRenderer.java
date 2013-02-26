@@ -80,7 +80,9 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         usingLinkTo(new DomainObjectLinkTo());
 
         // done eagerly so can use as criteria for x-ro-follow-links
-        representation.mapPut(memberType.getJsProp(), objectMember.getId());
+        if(!mode.isInline()) {
+            representation.mapPut("id", objectMember.getId());
+        }
         representation.mapPut("memberType", memberType.getName());
 
         return cast(this);

@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -405,6 +404,26 @@ public abstract class Parser<T> {
                 return Joiner.on(",").join(strings);
             }
         };
+    }
+
+    public static Parser<String> forETag() {
+        return new Parser<String>(){
+
+            private final static String WEAK_PREFIX="W/";
+            
+            @Override
+            public String valueOf(String str) {
+                if(str == null) { 
+                    return null;
+                }
+                return null;
+            }
+
+            @Override
+            public String asString(String t) {
+                // TODO Auto-generated method stub
+                return null;
+            }};
     }
 
 }

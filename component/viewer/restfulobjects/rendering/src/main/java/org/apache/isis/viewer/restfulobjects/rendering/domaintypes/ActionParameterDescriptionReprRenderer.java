@@ -34,7 +34,7 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
         final String paramName = objectActionParameter.getName();
-        final String url = String.format("domainTypes/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
+        final String url = String.format("domain-types/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 
