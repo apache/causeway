@@ -117,7 +117,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private JsonRepresentation linkToIsSubtypeOf() {
-        final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/isSubtypeOf/invoke";
+        final String url = "domain-types/" + objectSpecification.getSpecId().asString() + "/type-actions/isSubtypeOf/invoke";
 
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.INVOKE.andParam("typeaction", "isSubtypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = argumentsTo(getRendererContext(), "supertype", null);
@@ -126,7 +126,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private JsonRepresentation linkToIsSupertypeOf() {
-        final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/isSupertypeOf/invoke";
+        final String url = "domain-types/" + objectSpecification.getSpecId().asString() + "/type-actions/isSupertypeOf/invoke";
 
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.INVOKE.andParam("typeaction", "isSupertypeOf"), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = argumentsTo(getRendererContext(), "subtype", null);
@@ -139,7 +139,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         final JsonRepresentation link = JsonRepresentation.newMap();
         arguments.mapPut(paramName, link);
         if (objectSpec != null) {
-            link.mapPut("href", resourceContext.urlFor("domainTypes/" + objectSpec.getFullIdentifier()));
+            link.mapPut("href", resourceContext.urlFor("domain-types/" + objectSpec.getSpecId().asString()));
         } else {
             link.mapPut("href", NullNode.instance);
         }

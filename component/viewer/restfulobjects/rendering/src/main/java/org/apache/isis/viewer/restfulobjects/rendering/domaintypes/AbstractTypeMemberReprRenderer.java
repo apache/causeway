@@ -68,7 +68,9 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
         }
 
         final ObjectMember objectMember = getObjectFeature();
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.SELF.getName(), getMediaType(), "domainTypes/%s/%s%s", getParentSpecification().getFullIdentifier(), getMemberType().getUrlPart(), objectMember.getId());
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(
+                getRendererContext(), Rel.SELF.getName(), getMediaType(), 
+                "domain-types/%s/%s%s", getParentSpecification().getSpecId().asString(), getMemberType().getUrlPart(), objectMember.getId());
         getLinks().arrayAdd(linkBuilder.build());
     }
 

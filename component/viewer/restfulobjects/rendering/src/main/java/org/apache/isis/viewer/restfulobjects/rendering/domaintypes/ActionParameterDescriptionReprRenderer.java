@@ -30,11 +30,11 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureReprRenderer<ActionParameterDescriptionReprRenderer, ObjectActionParameter> {
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
-        final String typeFullName = objectSpecification.getFullIdentifier();
+        final String domainType = objectSpecification.getSpecId().asString();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
         final String paramName = objectActionParameter.getName();
-        final String url = String.format("domain-types/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
+        final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramName);
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 

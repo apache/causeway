@@ -28,9 +28,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<CollectionDescriptionReprRenderer, OneToManyAssociation> {
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
-        final String typeFullName = objectSpecification.getFullIdentifier();
+        final String domainType = objectSpecification.getSpecId().asString();
         final String collectionId = collection.getId();
-        final String url = "domain-types/" + typeFullName + "/collections/" + collectionId;
+        final String url = "domain-types/" + domainType + "/collections/" + collectionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.COLLECTION_DESCRIPTION, url);
     }
 

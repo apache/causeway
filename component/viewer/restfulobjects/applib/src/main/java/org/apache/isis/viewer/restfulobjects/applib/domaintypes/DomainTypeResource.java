@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
-@Path("/domainTypes")
+@Path("/domain-types")
 public interface DomainTypeResource {
 
     // /////////////////////////////////////////////////////

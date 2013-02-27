@@ -48,12 +48,12 @@ public class TypeListReprRenderer extends ReprRendererAbstract<TypeListReprRende
 
         // self
         if (includesSelf) {
-            withLink(Rel.SELF, "domainTypes");
+            withLink(Rel.SELF, "domain-types");
         }
 
         final JsonRepresentation specList = JsonRepresentation.newArray();
         for (final ObjectSpecification objectSpec : specifications) {
-            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
+            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.DOMAIN_TYPE.getName(), RepresentationType.DOMAIN_TYPE, "domain-types/%s", objectSpec.getSpecId().asString());
             specList.arrayAdd(linkBuilder.build());
         }
 

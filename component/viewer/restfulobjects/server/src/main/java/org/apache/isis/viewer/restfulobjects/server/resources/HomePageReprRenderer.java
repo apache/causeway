@@ -120,12 +120,12 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
     private void addLinkToDomainTypes(final Collection<ObjectSpecification> specifications) {
 
-        final JsonRepresentation link = LinkBuilder.newBuilder(getRendererContext(), Rel.DOMAIN_TYPES.getName(), RepresentationType.TYPE_LIST, "domainTypes").build();
+        final JsonRepresentation link = LinkBuilder.newBuilder(getRendererContext(), Rel.DOMAIN_TYPES.getName(), RepresentationType.TYPE_LIST, "domain-types").build();
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final TypeListReprRenderer renderer = new TypeListReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.withLink(Rel.SELF, "domainTypes").with(specifications);
+            renderer.withLink(Rel.SELF, "domain-types").with(specifications);
             link.mapPut("value", renderer.render());
         }
 

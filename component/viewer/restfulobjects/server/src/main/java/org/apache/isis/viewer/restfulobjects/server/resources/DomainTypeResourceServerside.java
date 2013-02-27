@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -90,7 +91,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         init(RepresentationType.DOMAIN_TYPE, Where.ANYWHERE);
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
 
         final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
@@ -106,7 +107,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.PROPERTY_DESCRIPTION;
         init(representationType, Where.ANYWHERE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -131,7 +132,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.COLLECTION_DESCRIPTION;
         init(representationType, Where.ANYWHERE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -156,7 +157,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.ACTION_DESCRIPTION;
         init(representationType, Where.ANYWHERE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -181,7 +182,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.ACTION_PARAMETER_DESCRIPTION;
         init(representationType, Where.ANYWHERE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -217,12 +218,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final String supertype = domainTypeFor(superTypeStr, args, "supertype");
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainType);
-        final ObjectSpecification supertypeSpec = getSpecificationLoader().loadSpecification(supertype);
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification supertypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(supertype));
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
-        final String url = "domainTypes/" + domainTypeSpec.getFullIdentifier() + "/typeactions/isSubtypeOf/invoke";
+        final String url = "domain-types/" + domainType + "/type-actions/isSubtypeOf/invoke";
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(getResourceContext(), "supertype", supertypeSpec);
         final JsonRepresentation selfLink = linkBuilder.withArguments(arguments).build();
@@ -248,12 +249,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final String subtype = domainTypeFor(subTypeStr, args, "subtype");
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainType);
-        final ObjectSpecification subtypeSpec = getSpecificationLoader().loadSpecification(subtype);
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification subtypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(subtype));
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
-        final String url = "domainTypes/" + domainTypeSpec.getFullIdentifier() + "/typeactions/isSupertypeOf/invoke";
+        final String url = "domain-types/" + domainType + "/type-actions/isSupertypeOf/invoke";
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
         final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(getResourceContext(), "subtype", subtypeSpec);
         final JsonRepresentation selfLink = linkBuilder.withArguments(arguments).build();

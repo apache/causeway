@@ -29,9 +29,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<PropertyDescriptionReprRenderer, OneToOneAssociation> {
 
     public static LinkBuilder newLinkToBuilder(final RendererContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
-        final String typeFullName = objectSpecification.getFullIdentifier();
+        final String domainType = objectSpecification.getSpecId().asString();
         final String propertyId = property.getId();
-        final String url = "domain-types/" + typeFullName + "/properties/" + propertyId;
+        final String url = "domain-types/" + domainType + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 
