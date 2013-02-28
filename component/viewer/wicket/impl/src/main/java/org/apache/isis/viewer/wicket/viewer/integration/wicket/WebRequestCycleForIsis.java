@@ -49,7 +49,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
  * automatically opening a {@link IsisSession} at the beginning of the request
  * and committing the transaction and closing the session at the end.
  */
-public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends AbstractRequestCycleListener {
+public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     private static final Logger LOG = Logger.getLogger(WebRequestCycleForIsis.class);
 
@@ -91,6 +91,13 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
             } catch(Exception ex) {
+                if(handler instanceof RenderPageRequestHandler) {
+                    RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
+                    if(requestHandler.getPage() instanceof ErrorPage) {
+                        // do nothing; 
+                        return;
+                    }
+                }
                 throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
             }
         }
@@ -118,9 +125,11 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
         // previously we had a handler in here.  However, it seems to be sufficient to just
         // use the exception handling in the onRequestHandlerExecuted(...) callback
         // which fires before the onEndRequest(...) callback.
+        //return super.onException(cycle, ex);
         
-        //return new RenderPageRequestHandler(errorPageProviderFor(ex));
-        return super.onException(cycle, ex);
+        // hmm, maybe not.  making in edit page do a flush seems to belie that.
+        
+        return new RenderPageRequestHandler(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
     }
 
     protected PageProvider errorPageProviderFor(Exception ex) {

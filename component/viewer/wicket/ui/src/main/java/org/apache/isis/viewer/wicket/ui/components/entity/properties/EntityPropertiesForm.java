@@ -21,6 +21,35 @@ package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacet;
+import org.apache.isis.core.runtime.memento.Memento;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
+import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
+import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
+import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
+import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
+import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -37,30 +66,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacet;
-import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
-import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
-import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
-import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
-import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 
 class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
@@ -195,28 +200,40 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             public void onSubmit() {
-                if (!getForm().hasError()) {
-                    final ObjectAdapter object = getEntityModel().getObject();
-                    final Memento snapshotToRollbackToIfInvalid = new Memento(object);
-                    // to perform object-level validation, we must apply the
-                    // changes first
-                    // contrast this with ActionPanel (for validating action
-                    // arguments) where
-                    // we do the validation prior to the execution of the
-                    // action
-                    getEntityModel().apply();
-                    final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
-                    if (invalidReasonIfAny != null) {
-                        getForm().error(invalidReasonIfAny);
-                        snapshotToRollbackToIfInvalid.recreateObject();
-                        return;
-                    } else {
-                        getEntityModel().resetPropertyModels();
-                        toViewMode(null);
-                    }
-                } else {
+                if (getForm().hasError()) {
                     // stay in edit mode
+                    return;
+                } 
+                
+                final ObjectAdapter object = getEntityModel().getObject();
+                final Memento snapshotToRollbackToIfInvalid = new Memento(object);
+                // to perform object-level validation, we must apply the
+                // changes first
+                // contrast this with ActionPanel (for validating action
+                // arguments) where
+                // we do the validation prior to the execution of the
+                // action
+                getEntityModel().apply();
+                final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
+                if (invalidReasonIfAny != null) {
+                    getForm().error(invalidReasonIfAny);
+                    snapshotToRollbackToIfInvalid.recreateObject();
+                    return;
                 }
+                
+                try {
+                    EntityPropertiesForm.this.getTransactionManager().flushTransaction();
+                } catch(RuntimeException ex) {
+                    String message = recognizeException(ex, EntityPropertiesForm.this);
+                    if(message == null) {
+                        throw ex;
+                    }
+                    return;
+                }
+
+                getEntityModel().resetPropertyModels();
+
+                toViewMode(null);
             }
 
         };
@@ -261,6 +278,28 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         editButton.setOutputMarkupPlaceholderTag(true);
         cancelButton.setOutputMarkupPlaceholderTag(true);
+    }
+
+    private String recognizeException(RuntimeException ex, Component feedbackComponent) {
+        // see if the exception is recognized as being a non-serious error
+        // (nb: similar code in WebRequestCycleForIsis, as a fallback)
+        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        if(message != null) {
+            // recognized
+            if(feedbackComponent != null) {
+                feedbackComponent.error(message);
+            } else {
+                 // use notification mechanism otherwise
+                 getMessageBroker().setApplicationError(message);
+            }
+
+            // there's no need to abort the transaction, it will have already been done
+            // (in IsisTransactionManager#executeWithinTransaction(...)).
+            getTransactionManager().getTransaction().clearAbortCause();
+
+        }
+        return message;
     }
 
     private void requestRepaintPanel(final AjaxRequestTarget target) {
@@ -341,6 +380,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     private void addFeedbackGui() {
         final FeedbackPanel feedback = addOrReplaceFeedback();
+        feedback.setEscapeModelStrings(false);
 
         final ObjectAdapter adapter = getEntityModel().getObject();
         if (adapter == null) {
@@ -354,4 +394,21 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         addOrReplace(feedback);
         return feedback;
     }
+    
+    ///////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////
+    
+    protected IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
+    }
+
+    protected ServicesInjector getServicesInjector() {
+        return IsisContext.getPersistenceSession().getServicesInjector();
+    }
+
+    protected MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
+    }
+
 }

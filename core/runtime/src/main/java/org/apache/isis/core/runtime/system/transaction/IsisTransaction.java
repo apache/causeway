@@ -303,10 +303,18 @@ public class IsisTransaction implements TransactionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public synchronized final void flush() {
-        if(commands.isEmpty()) {
-            // nothing to do
-            return;
-        }
+        // have removed the guard below because not every objectstore necessarily 
+        // wraps up every change inside a command.
+        
+        // for example, the JDO object store just lets DataNucleus do the change tracking
+        // itself
+        
+//        if(commands.isEmpty()) {
+//            // nothing to do
+//            return;
+//        }
+        
+        
         ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
         if (LOG.isDebugEnabled()) {
             LOG.debug("flush transaction " + this);

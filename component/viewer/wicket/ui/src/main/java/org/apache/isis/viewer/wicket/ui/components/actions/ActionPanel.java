@@ -23,12 +23,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -39,7 +34,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -55,6 +49,10 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -194,36 +192,46 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
         } catch (RuntimeException ex) {
 
-            // see if the exception is recognized as being a non-serious error
-            // (nb: similar code in WebRequestCycleForIsis, as a fallback)
-            List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-            String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-            if(message != null) {
-                // recognized
-                if(feedbackForm != null) {
-                    feedbackForm.error(message);
-                } else {
-                     // use notification mechanism otherwise
-                     getMessageBroker().setApplicationError(message);
-
-                     // forward on instead to void page
-                     final ResultType resultType = ResultType.determineFor(null);
-                     resultType.addResults(this, null);
+            String message = recognizeException(ex, feedbackForm);
+            
+            if (message != null) {
+                if(feedbackForm == null) {
+                    // forward on instead to void page
+                    // (otherwise, we'll have rendered an action parameters page 
+                    // and so we'll be staying on that page)
+                    final ResultType resultType = ResultType.determineFor(null);
+                    resultType.addResults(this, null);
                 }
                 
-
-                // there's no need to abort the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)).
-                
-                getTransactionManager().getTransaction().clearAbortCause();
-                
                 return false;
-            } 
+            }
             
             // not handled, so propagate
             throw ex;
         }
 
+    }
+
+    private String recognizeException(RuntimeException ex, Component feedbackComponent) {
+        // see if the exception is recognized as being a non-serious error
+        // (nb: similar code in WebRequestCycleForIsis, as a fallback)
+        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        if(message != null) {
+            // recognized
+            if(feedbackComponent != null) {
+                feedbackComponent.error(message);
+            } else {
+                 // use notification mechanism otherwise
+                 getMessageBroker().setApplicationError(message);
+            }
+
+            // there's no need to abort the transaction, it will have already been done
+            // (in IsisTransactionManager#executeWithinTransaction(...)).
+            getTransactionManager().getTransaction().clearAbortCause();
+
+        }
+        return message;
     }
 
     /**
@@ -446,9 +454,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         return IsisContext.getTransactionManager();
     }
 
-    /**
-     * Factored out so can be overridden in testing.
-     */
     protected ServicesInjector getServicesInjector() {
         return IsisContext.getPersistenceSession().getServicesInjector();
     }
