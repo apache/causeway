@@ -1,7 +1,7 @@
 apache-isis
 ===========
 
-*[Apache Isis]((http://isis.apache.org))™ software is a framework for rapidly developing domain-driven apps in Java.  Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API. Use for prototyping or production.*
+*[Apache Isis](http://isis.apache.org)™ software is a framework for rapidly developing domain-driven apps in Java.  Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API. Use for prototyping or production.*
 
 To see Isis in action, watch these [screencasts](http://isis.apache.org/getting-started/screencasts.html).
 
