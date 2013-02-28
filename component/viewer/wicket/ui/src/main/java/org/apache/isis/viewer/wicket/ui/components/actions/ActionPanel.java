@@ -215,6 +215,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 // there's no need to abort the transaction, it will have already been done
                 // (in IsisTransactionManager#executeWithinTransaction(...)).
                 
+                getTransactionManager().getTransaction().clearAbortCause();
+                
                 return false;
             } 
             
@@ -308,7 +310,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
                     // force any changes in state etc to happen now prior to the redirect;
                     // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
-                    IsisContext.getTransactionManager().getTransaction().flush();
+                    panel.getTransactionManager().flushTransaction();
                     
                     // build page, also propogate any concurrency exception that might have occurred already
                     final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
@@ -347,8 +349,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
 
             private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                
-                
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
                 final SelectionHandler selectionHandler = panel.getModel().getSelectionHandler();
                 if (selectionHandler != null) {

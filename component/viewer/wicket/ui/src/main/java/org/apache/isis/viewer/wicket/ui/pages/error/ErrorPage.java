@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.error;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -57,7 +58,10 @@ public class ErrorPage extends PageAbstract {
 
     private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(ErrorPage.class, "div-toggle.js");
 
-    private static class Detail {
+    private static class Detail implements Serializable {
+        
+        private static final long serialVersionUID = 1L;
+        
         enum Type {
             EXCEPTION_CLASS_NAME,
             EXCEPTION_MESSAGE,

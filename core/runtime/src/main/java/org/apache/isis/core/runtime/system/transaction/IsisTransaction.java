@@ -510,19 +510,38 @@ public class IsisTransaction implements TransactionScopedComponent {
     // handle exceptions on load, flush or commit
     /////////////////////////////////////////////////////////////////////////
 
+    @Deprecated
     public void ensureNoAbortCause() {
         Ensure.ensureThatArg(abortCause, is(nullValue()), "abort cause has been set");
     }
 
-    public void setAbortCause(IsisException exception) {
+    
+    
+    /**
+     * Indicate that the transaction must be aborted, and that there is
+     * an unhandled exception to be rendered somehow.
+     * 
+     * <p>
+     * If the cause is subsequently rendered by code higher up the stack, then the
+     * cause can be {@link #clearAbortCause() cleared}.  However, it is not possible
+     * to change the state from {@link State#MUST_ABORT}.
+     */
+    public void setAbortCause(IsisException abortCause) {
         setState(State.MUST_ABORT);
-        abortCause = exception;
+        this.abortCause = abortCause;
     }
     
     public IsisException getAbortCause() {
         return abortCause;
     }
 
+    /**
+     * If the cause has been rendered higher up in the stack, then clear the cause so that
+     * it won't be picked up and rendered elsewhere.
+     */
+    public void clearAbortCause() {
+        abortCause = null;
+    }
 
     
     // //////////////////////////////////////////////////////////
@@ -805,5 +824,6 @@ public class IsisTransaction implements TransactionScopedComponent {
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
+
     
 }

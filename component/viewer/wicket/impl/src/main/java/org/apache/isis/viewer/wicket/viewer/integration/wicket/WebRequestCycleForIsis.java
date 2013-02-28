@@ -38,6 +38,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
@@ -74,13 +75,15 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
         getTransactionManager().startTransaction();
     }
 
-    @Override
-    public synchronized void onEndRequest(RequestCycle cycle) {
-    }
-
-
+    
+    /**
+     * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
+     * throw an exception.
+     */
     @Override
     public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
+        LOG.info("onRequestHandlerExecuted: handler: " + handler);
+        
         final IsisSession session = getIsisContext().getSessionInstance();
         if (session != null) {
             try {
@@ -88,17 +91,40 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
             } catch(Exception ex) {
-                throw new RestartResponseException(errorPageFor(ex));
+                throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
+            }
+        }
+    }
+
+    /**
+     * It is not possible to throw exceptions here, hence use of {@link #onRequestHandlerExecuted(RequestCycle, IRequestHandler)}.
+     */
+    @Override
+    public synchronized void onEndRequest(RequestCycle cycle) {
+        final IsisSession session = getIsisContext().getSessionInstance();
+        if (session != null) {
+            try {
+                // belt and braces
+                getTransactionManager().endTransaction();
             } finally {
                 getIsisContext().closeSessionInstance();
             }
         }
     }
-    
+
+
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-        final ErrorPage page = errorPageFor(ex);
-        return new RenderPageRequestHandler(new PageProvider(page));
+        // previously we had a handler in here.  However, it seems to be sufficient to just
+        // use the exception handling in the onRequestHandlerExecuted(...) callback
+        // which fires before the onEndRequest(...) callback.
+        
+        //return new RenderPageRequestHandler(errorPageProviderFor(ex));
+        return super.onException(cycle, ex);
+    }
+
+    protected PageProvider errorPageProviderFor(Exception ex) {
+        return new PageProvider(errorPageFor(ex));
     }
 
     protected ErrorPage errorPageFor(Exception ex) {

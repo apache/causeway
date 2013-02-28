@@ -319,14 +319,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
 
         final IsisTransaction transaction = getTransaction();
-        if (transaction == null) {
+        if (transaction == null || transaction.getState().isComplete()) {
+            // allow this method to be called >1 with no adverse affects
             return;
         }
 
         // terminate the transaction early if an abort cause was already set.
         RuntimeException abortCause = this.getTransaction().getAbortCause();
-        if(transaction.getState().mustAbort() || abortCause != null) {
-            // these two checks are, in fact, equivalent.
+        if(transaction.getState().mustAbort()) {
             
             if (LOG.isDebugEnabled()) {
                 LOG.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '" + abortCause.getMessage() + "' has been set");
@@ -335,9 +335,16 @@ public class IsisTransactionManager implements SessionScopedComponent {
             
             // just in case any different exception was raised...
             abortCause = this.getTransaction().getAbortCause();
-            throw abortCause;
+            
+            if(abortCause != null) {
+                // hasn't been rendered lower down the stack, so fall back
+                throw abortCause;
+            } else {
+                // assume that any rendering of the problem has been done lower down the stack.
+                return;
+            }
         }
-        
+
         
         transactionLevel--;
         if (transactionLevel == 0) {
