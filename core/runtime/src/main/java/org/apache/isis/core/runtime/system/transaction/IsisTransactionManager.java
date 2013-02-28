@@ -301,13 +301,44 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
     /**
-     * Ends the transaction if nesting level is 0.
+     * Ends the transaction if nesting level is 0 (but will abort the transaction instead, 
+     * even if nesting level is not 0, if an {@link IsisTransaction#getAbortCause() abort cause}
+     * has been {@link IsisTransaction#setAbortCause(IsisException) set}.
+     * 
+     * <p>
+     * If in the process of committing the transaction an exception is thrown, then this will
+     * be handled and will abort the transaction instead.
+     * 
+     * <p>
+     * If an abort cause has been set (or an exception occurs), then will throw this
+     * exception in turn.
      */
     public synchronized void endTransaction() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("endTransaction: level " + (transactionLevel) + "->" + (transactionLevel - 1));
         }
 
+        final IsisTransaction transaction = getTransaction();
+        if (transaction == null) {
+            return;
+        }
+
+        // terminate the transaction early if an abort cause was already set.
+        RuntimeException abortCause = this.getTransaction().getAbortCause();
+        if(transaction.getState().mustAbort() || abortCause != null) {
+            // these two checks are, in fact, equivalent.
+            
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '" + abortCause.getMessage() + "' has been set");
+            }
+            abortTransaction();
+            
+            // just in case any different exception was raised...
+            abortCause = this.getTransaction().getAbortCause();
+            throw abortCause;
+        }
+        
+        
         transactionLevel--;
         if (transactionLevel == 0) {
 
@@ -317,46 +348,53 @@ public class IsisTransactionManager implements SessionScopedComponent {
             // once the contract/API for the objectstore is better tied down, hopefully can simplify this...
             //
             
-            List<IsisException> exceptions = this.getTransaction().getExceptionsIfAny();
-            if(exceptions.isEmpty()) {
+            if(abortCause == null) {
             
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("endTransaction: committing");
                 }
-                
-                objectPersistor.objectChangedAllDirty();
-                
-                // just in case any additional exceptions were raised...
-                exceptions = this.getTransaction().getExceptionsIfAny();
+
+                try {
+                    objectPersistor.objectChangedAllDirty();
+                } catch(RuntimeException ex) {
+                    // just in case any new exception was raised...
+                    abortCause = ex;
+                }
             }
             
-            if(exceptions.isEmpty()) {
-                getTransaction().commit();
+            if(abortCause == null) {
                 
-                // in case any additional exceptions were raised...
-                exceptions = this.getTransaction().getExceptionsIfAny();
+                try {
+                    getTransaction().commit();
+                } catch(RuntimeException ex) {
+                    // just in case any new exception was raised...
+                    abortCause = ex;
+                }
             }
             
-            if(exceptions.isEmpty()) {
-                transactionalResource.endTransaction();
-                
-                // just in case any additional exceptions were raised...
-                exceptions = this.getTransaction().getExceptionsIfAny();
+            if(abortCause == null) {
+                try {
+                    transactionalResource.endTransaction();
+                } catch(RuntimeException ex) {
+                    // just in case any new exception was raised...
+                    abortCause = ex;
+                }
             }
             
-            if(!exceptions.isEmpty()) {
+            if(abortCause != null) {
                 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("endTransaction: aborting instead, " + exceptions.size() + " exception(s) have been raised");
+                    LOG.debug("endTransaction: aborting instead, abort cause has been set");
                 }
-                abortTransaction();
+                try {
+                    abortTransaction();
+                } catch(RuntimeException ex) {
+                    // just in case any new exception was raised...
+                    abortCause = ex;
+                }
                 
-                // just in case any additional exceptions were raised...
-                exceptions = this.getTransaction().getExceptionsIfAny();
-                
-                throw exceptionToThrowFrom(exceptions);
+                throw abortCause;
             }
-            
         } else if (transactionLevel < 0) {
             LOG.error("endTransaction: transactionLevel=" + transactionLevel);
             transactionLevel = 0;
@@ -365,21 +403,9 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
 
-    private IsisException exceptionToThrowFrom(List<IsisException> exceptions) {
-        if(exceptions.size() == 1) {
-            return exceptions.get(0);
-        } 
-        final StringBuilder buf = new StringBuilder();
-        for (IsisException ope : exceptions) {
-            buf.append(ope.getMessage()).append("\n");
-        }
-        return new IsisException(buf.toString());
-    }
-    
-
     public synchronized void abortTransaction() {
         if (getTransaction() != null) {
-            getTransaction().abort();
+            getTransaction().markAsAborted();
             transactionLevel = 0;
             transactionalResource.abortTransaction();
         }

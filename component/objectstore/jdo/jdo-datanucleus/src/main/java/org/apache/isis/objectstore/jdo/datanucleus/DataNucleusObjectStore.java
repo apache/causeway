@@ -173,8 +173,12 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         ensureThatState(persistenceManager, is(notNullValue()));
 
         final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
-        if (currentTransaction != null && currentTransaction.getState().canCommit()) {
-            getTransactionManager().endTransaction();
+        if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
+            if(currentTransaction.getState().canCommit()) {
+                getTransactionManager().endTransaction();
+            } else if(currentTransaction.getState().canAbort()) {
+                getTransactionManager().abortTransaction();
+            }
         }
 
         persistenceManager.close();
@@ -341,15 +345,23 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     }
 
     private void executeCommands(final List<PersistenceCommand> commands) {
-        try {
+        
+        // there's no need to do any exception handling here, because we are called
+        // from IsisTransaction.flush() that will catch exceptions and set its abortCause
+        // if need be.
+        
+//        try {
             for (final PersistenceCommand command : commands) {
                 command.execute(null);
             }
             getPersistenceManager().flush();
-        } catch (final RuntimeException e) {
-            LOG.warn("Failure during execution", e);
-            throw e;
-        }
+//        } catch (final RuntimeException e) {
+//            LOG.warn("Failure during execution - aborting transaction and rethrowing", e);
+//            
+//            abortTransaction();
+//            
+//            throw e;
+//        }
     }
 
     // ///////////////////////////////////////////////////////////////////////

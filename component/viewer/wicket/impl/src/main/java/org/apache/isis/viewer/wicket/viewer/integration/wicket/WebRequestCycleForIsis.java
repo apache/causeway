@@ -34,6 +34,7 @@ import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.core.runtime.system.transaction.MessageBrokerDefault;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.log4j.Logger;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
@@ -74,34 +75,37 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
     }
 
     @Override
-    public synchronized void onEndRequest(RequestCycle requestCycle) {
-        final IsisSession session = getIsisContext().getSessionInstance();
-        if (session != null) {
-            // in session
-            commitTransactionIfAny();
-            getIsisContext().closeSessionInstance();
-        }
+    public synchronized void onEndRequest(RequestCycle cycle) {
     }
 
-    private void commitTransactionIfAny() {
-        final IsisTransaction transaction = getTransactionManager().getTransaction();
-        if (transaction == null) {
-            return;
-        }
-        if (transaction.getState() == IsisTransaction.State.MUST_ABORT) {
-            getTransactionManager().abortTransaction();
-        } else if (transaction.getState() == IsisTransaction.State.IN_PROGRESS) {
-            getTransactionManager().endTransaction();
-        }
-    }
 
     @Override
+    public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
+        final IsisSession session = getIsisContext().getSessionInstance();
+        if (session != null) {
+            try {
+                // will commit (or abort) the transaction;
+                // an abort will cause the exception to be thrown.
+                getTransactionManager().endTransaction();
+            } catch(Exception ex) {
+                throw new RestartResponseException(errorPageFor(ex));
+            } finally {
+                getIsisContext().closeSessionInstance();
+            }
+        }
+    }
+    
+    @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+        final ErrorPage page = errorPageFor(ex);
+        return new RenderPageRequestHandler(new PageProvider(page));
+    }
+
+    protected ErrorPage errorPageFor(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
         String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         final ErrorPage page = message != null ? new ErrorPage(message) : new ErrorPage(ex);
-        
-        return new RenderPageRequestHandler(new PageProvider(page));
+        return page;
     }
 
 

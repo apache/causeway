@@ -17,33 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.exceptions;
+package org.apache.isis.core.runtime.system.transaction;
 
-import java.text.MessageFormat;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
-/**
- * General exception raised by the framework, typically a system exception.
- */
-public class IsisException extends RuntimeException {
-    
+public class IsisTransactionManagerDomCallbackException extends IsisException {
+
     private static final long serialVersionUID = 1L;
-    
-    public IsisException() {
+
+    public IsisTransactionManagerDomCallbackException() {
     }
 
-    public IsisException(final String message) {
+    public IsisTransactionManagerDomCallbackException(final String message) {
         super(message);
     }
 
-    public IsisException(final String messageFormat, final Object... args) {
-        super(MessageFormat.format(messageFormat, args));
+    public IsisTransactionManagerDomCallbackException(final Throwable cause) {
+        super(cause);
     }
 
-    public IsisException(final String message, final Throwable cause) {
+    public IsisTransactionManagerDomCallbackException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public IsisException(final Throwable cause) {
-        super(cause);
-    }
 }
