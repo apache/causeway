@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.wicket.ui.notifications;
+package org.apache.isis.viewer.wicket.ui.errors;
 
 import org.apache.isis.core.commons.authentication.MessageBroker;
 

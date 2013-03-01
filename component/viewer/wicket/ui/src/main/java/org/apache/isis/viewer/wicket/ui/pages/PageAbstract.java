@@ -40,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
-import org.apache.isis.viewer.wicket.ui.notifications.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.log4j.Logger;
@@ -51,6 +51,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -133,8 +134,8 @@ public abstract class PageAbstract extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
-        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
+        response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS)));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if (!StringUtils.isEmpty(feedbackMsg)) {

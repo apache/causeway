@@ -209,7 +209,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             // not handled, so propagate
             throw ex;
         }
-
     }
 
     private String recognizeException(RuntimeException ex, Component feedbackComponent) {
@@ -227,7 +226,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             if(feedbackComponent != null) {
                 feedbackComponent.error(recognizedErrorIfAny);
             }
-            getMessageBroker().setApplicationError(recognizedErrorIfAny);
+            getMessageBroker().addWarning(recognizedErrorIfAny);
 
             getTransactionManager().getTransaction().clearAbortCause();
             
@@ -257,7 +256,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             return resultAdapter;
 
         } catch (RuntimeException ex) {
-
+            
             // see if is an application-defined exception
             final ApplicationException appEx = getApplicationExceptionIfAny(ex);
             if (appEx != null) {

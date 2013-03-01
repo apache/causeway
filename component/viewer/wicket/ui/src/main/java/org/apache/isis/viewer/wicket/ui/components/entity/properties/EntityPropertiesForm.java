@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
 import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
-import org.apache.isis.viewer.wicket.ui.notifications.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
