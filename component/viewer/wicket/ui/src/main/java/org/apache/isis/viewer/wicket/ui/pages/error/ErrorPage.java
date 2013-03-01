@@ -22,7 +22,9 @@ package org.apache.isis.viewer.wicket.ui.pages.error;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -35,6 +37,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
+import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
@@ -78,8 +81,8 @@ public class ErrorPage extends PageAbstract {
     /**
      * For recognized messages.
      */
-    public ErrorPage(String message) {
-        this(message, null, null);
+    public ErrorPage(String message, Exception ex) {
+        this(message, null, asStackTrace(ex));
     }
 
 
@@ -99,23 +102,20 @@ public class ErrorPage extends PageAbstract {
         MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL);
         add(container);
         
-        if(exceptionMessage != null) {
-            container.add(new Label(ID_EXCEPTION_MESSAGE, exceptionMessage));
-            container.add(new ListView<Detail>(ID_STACK_TRACE_ELEMENT, stackTraceDetail) {
-                private static final long serialVersionUID = 1L;
-                
-                @Override
-                protected void populateItem(ListItem<Detail> item) {
-                    final Detail detail = item.getModelObject();
-                    Label label = new Label(ID_LINE, detail.line);
-                    item.add(new AttributeAppender("class", detail.type.name().toLowerCase()));
-                    item.add(label);
-                }
-            });
-        } else {
-            // don't bother adding children, they won't ever be rendered.
-            container.setVisible(false);
-        }
+        container.add(
+                new Label(ID_EXCEPTION_MESSAGE, Strings.nullToEmpty(exceptionMessage)).setVisible(exceptionMessage != null));
+        
+        container.add(new ListView<Detail>(ID_STACK_TRACE_ELEMENT, stackTraceDetail) {
+            private static final long serialVersionUID = 1L;
+            
+            @Override
+            protected void populateItem(ListItem<Detail> item) {
+                final Detail detail = item.getModelObject();
+                Label label = new Label(ID_LINE, detail.line);
+                item.add(new AttributeAppender("class", detail.type.name().toLowerCase()));
+                item.add(label);
+            }
+        });
     }
 
     @Override

@@ -146,7 +146,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             exceptionRecognizers = Collections.emptyList();
         }
         String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        final ErrorPage page = message != null ? new ErrorPage(message) : new ErrorPage(ex);
+        final ErrorPage page = message != null ? new ErrorPage(message, ex) : new ErrorPage(ex);
         return page;
     }
 

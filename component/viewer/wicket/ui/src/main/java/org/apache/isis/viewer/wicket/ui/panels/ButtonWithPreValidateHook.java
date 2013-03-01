@@ -18,6 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-public interface IFormSubmitterWithPreSubmitHook {
-    void preSubmit();
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.model.IModel;
+
+public abstract class ButtonWithPreValidateHook extends Button implements IFormSubmitterWithPreValidateHook {
+    private static final long serialVersionUID = 1L;
+    public ButtonWithPreValidateHook(String id, IModel<String> model) {
+        super(id, model);
+    }
 }

@@ -47,8 +47,7 @@ import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.notifications.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
-import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
+import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 import org.apache.wicket.Component;
@@ -65,9 +64,13 @@ import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 
 class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
@@ -172,12 +175,15 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             public void validate() {
+
+                // same logic as in cancelButton; should this be factored out?
                 try {
                     getEntityModel().load(ConcurrencyChecking.CHECK);
                 } catch(ConcurrencyException ex) {
                     getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
                     getEntityModel().load(ConcurrencyChecking.NO_CHECK);
                 }
+                
                 super.validate();
             }
             
@@ -194,23 +200,52 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         };
         add(editButton);
 
-        okButton = new ButtonWithPreSubmitHook(ID_OK_BUTTON, Model.of("OK")) {
+        
+        okButton = new ButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
             private static final long serialVersionUID = 1L;
 
-            @Override
-            public void preSubmit() {
 
+            @Override
+            public String preValidate() {
+                // attempt to load with concurrency checking, catching recognized exceptions
                 try {
-                    getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-                } catch(ConcurrencyException ex){
-                    // simplify this?
-                    Session.get().getFeedbackMessages().add(new FeedbackMessage(EntityPropertiesForm.this, ex.getMessage(), FeedbackMessage.ERROR));
+                    getEntityModel().load(ConcurrencyChecking.CHECK); // could have also just called #getObject(), since CHECK is the default
+
+                } catch(RuntimeException ex){
+                    String recognizedErrorMessage = recognizeException(ex);
+                    if(recognizedErrorMessage == null) {
+                        throw ex;
+                    }
+
+                    // reload
+                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                    
+                    getForm().clearInput();
+                    getEntityModel().resetPropertyModels();
+                    
+                    toViewMode(null);
+                    toEditMode(null);
+                    
+                    return recognizedErrorMessage;
                 }
+                
+                return null;
             }
 
             @Override
             public void validate() {
-                super.validate();
+
+                // add in any error message that we might have recognized from above
+                EntityPropertiesForm form = EntityPropertiesForm.this;
+                String preValidationErrorIfAny = form.getPreValidationErrorIfAny();
+                
+                if(preValidationErrorIfAny != null) {
+                    feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
+                    // skip validation, because would relate to old values
+                } else {
+                    // run Wicket's validation
+                    super.validate();
+                }
             }
             
             @Override
@@ -239,7 +274,11 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 try {
                     EntityPropertiesForm.this.getTransactionManager().flushTransaction();
                 } catch(RuntimeException ex) {
-                    String message = recognizeException(ex, EntityPropertiesForm.this);
+                    
+                    // There's no need to abort the transaction here, as it will have already been done
+                    // (in IsisTransactionManager#executeWithinTransaction(...)).
+
+                    String message = recognizeExceptionAndNotify(ex, EntityPropertiesForm.this);
                     if(message == null) {
                         throw ex;
                     }
@@ -258,8 +297,20 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         };
         add(okButton);
+        
+        okButton.add(new IValidator<String>(){
 
-        cancelButton = new AjaxButtonWithPreSubmitHook(ID_CANCEL_BUTTON, Model.of("Cancel")) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void validate(IValidatable<String> validatable) {
+
+
+                //validatable.error(new ValidationError("testing 1,2,3"));
+            }
+        });
+
+        cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
             private static final long serialVersionUID = 1L;
             
             {
@@ -268,6 +319,8 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             public void validate() {
+
+                // same logic as in editButton; should this be factored out?
                 try {
                     getEntityModel().load(ConcurrencyChecking.CHECK);
                 } catch(ConcurrencyException ex) {
@@ -277,13 +330,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 super.validate();
             }
             
-            @Override
-            public void preSubmit() {
-                
-                // NO LONGER WORKS...
-                // getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-            }
-
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                 Session.get().getFeedbackMessages().clear();
@@ -321,25 +367,37 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         cancelButton.add(new JGrowlBehaviour());
     }
 
-    private String recognizeException(RuntimeException ex, Component feedbackComponent) {
+    private String recognizeExceptionAndNotify(RuntimeException ex, Component feedbackComponentIfAny) {
+        
         // see if the exception is recognized as being a non-serious error
-        // (nb: similar code in WebRequestCycleForIsis, as a fallback)
-        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        if(message != null) {
-            // recognized
-            if(feedbackComponent != null) {
-                feedbackComponent.error(message);
-            } else {
-                 // use notification mechanism otherwise
-                 getMessageBroker().setApplicationError(message);
-            }
+        
+        String recognizedErrorMessageIfAny = recognizeException(ex);
+        feedbackOrNotifyAnyRecognizedError(recognizedErrorMessageIfAny, feedbackComponentIfAny);
 
-            // there's no need to abort the transaction, it will have already been done
-            // (in IsisTransactionManager#executeWithinTransaction(...)).
-            getTransactionManager().getTransaction().clearAbortCause();
+        return recognizedErrorMessageIfAny;
+    }
 
+    private void feedbackOrNotifyAnyRecognizedError(String recognizedErrorMessageIfAny, Component feedbackComponentIfAny) {
+        if(recognizedErrorMessageIfAny == null) {
+            return;
         }
+        
+        if(feedbackComponentIfAny != null) {
+            feedbackComponentIfAny.error(recognizedErrorMessageIfAny);
+        }
+        getMessageBroker().addWarning(recognizedErrorMessageIfAny);
+
+        // we clear the abort cause because we've handled rendering the exception
+        getTransactionManager().getTransaction().clearAbortCause();
+    }
+
+    private String recognizeException(RuntimeException ex) {
+        
+        // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
+        // REVIEW: similar code also in WebRequestCycleForIsis; combine?
+        
+        final List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        final String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         return message;
     }
 
@@ -352,35 +410,22 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void addValidator() {
-        add(new AbstractFormValidator() {
 
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public FormComponent<?>[] getDependentFormComponents() {
-                return new FormComponent<?>[0];
-            }
-
-            @Override
-            public void validate(final Form<?> form) {
-                final EntityModel entityModel = (EntityModel) getModel();
-                String invalidReasonIfAny;
-                try {
-                    final ObjectAdapter adapter = entityModel.getObject();
-                    
-                    final ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
-                    if (facet == null) {
-                        return;
-                    }
-                    invalidReasonIfAny = facet.invalidReason(adapter);
-                } catch(ConcurrencyException ex) {
-                    invalidReasonIfAny = ex.getMessage();
-                }
-                if (invalidReasonIfAny != null) {
-                    Session.get().getFeedbackMessages().add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
-                }
-            }
-        });
+        // no longer used, instead using the PreValidate stuff.
+        
+//        add(new AbstractFormValidator() {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            public FormComponent<?>[] getDependentFormComponents() {
+//                return new FormComponent<?>[0];
+//            }
+//
+//            @Override
+//            public void validate(final Form<?> form) {
+//            }
+//        });
     }
 
     private EntityModel getEntityModel() {

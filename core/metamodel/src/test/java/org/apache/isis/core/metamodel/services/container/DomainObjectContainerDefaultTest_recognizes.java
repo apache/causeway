@@ -1,49 +1,54 @@
 package org.apache.isis.core.metamodel.services.container;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.RecognizedException;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class DomainObjectContainerDefaultTest_recognizes {
 
+    static class SomeRandomException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
+
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private ExceptionRecognizer mockERS;
-
-    private RecognizedException ex;
+    private Exception ex;
     
     private DomainObjectContainerDefault container;
     
     @Before
     public void setUp() throws Exception {
-        ex = new RecognizedException("foo");
-        container = new DomainObjectContainerDefault() {
-            @Override
-            ExceptionRecognizer getRecogService() {
-                return mockERS;
-            }
-        };
+        container = new DomainObjectContainerDefault();
     }
     
     @Test
-    public void delegates() throws Exception {
-        context.checking(new Expectations() {
-            {
-                one(mockERS).recognize(ex);
-            }
-        });
-        container.recognize(ex);
+    public void whenConcurrencyException_is_recognized() throws Exception {
+        ex = new ConcurrencyException("foo", RootOidDefault.create(ObjectSpecId.of("CUS"), "123"));
+        assertThat(container.recognize(ex), is(not(nullValue())));
     }
+
+    @Test
+    public void whenRecognizedException_is_recognized() throws Exception {
+        ex = new RecognizedException("foo");
+        assertThat(container.recognize(ex), is(not(nullValue())));
+    }
+
+    @Test
+    public void whenSomeRandomException_is_not_recognized() throws Exception {
+        ex = new SomeRandomException();
+        assertThat(container.recognize(ex), is(nullValue()));
+    }
+    
 }

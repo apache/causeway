@@ -213,25 +213,29 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
 
     private String recognizeException(RuntimeException ex, Component feedbackComponent) {
+        
+        // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
+        // REVIEW: similar code also in WebRequestCycleForIsis; combine?
+        
         // see if the exception is recognized as being a non-serious error
         // (nb: similar code in WebRequestCycleForIsis, as a fallback)
         List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        if(message != null) {
+        String recognizedErrorIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        if(recognizedErrorIfAny != null) {
+
             // recognized
             if(feedbackComponent != null) {
-                feedbackComponent.error(message);
-            } else {
-                 // use notification mechanism otherwise
-                 getMessageBroker().setApplicationError(message);
+                feedbackComponent.error(recognizedErrorIfAny);
             }
+            getMessageBroker().setApplicationError(recognizedErrorIfAny);
 
+            getTransactionManager().getTransaction().clearAbortCause();
+            
             // there's no need to abort the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
-            getTransactionManager().getTransaction().clearAbortCause();
 
         }
-        return message;
+        return recognizedErrorIfAny;
     }
 
     /**
