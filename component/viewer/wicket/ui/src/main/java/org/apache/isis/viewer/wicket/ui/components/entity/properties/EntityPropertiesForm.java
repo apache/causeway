@@ -110,8 +110,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         addPropertiesAndOrCollections();
         addButtons();
         addFeedbackGui();
-
-        addValidator();
     }
 
     private void addPropertiesAndOrCollections() {
@@ -297,18 +295,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         };
         add(okButton);
-        
-        okButton.add(new IValidator<String>(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void validate(IValidatable<String> validatable) {
-
-
-                //validatable.error(new ValidationError("testing 1,2,3"));
-            }
-        });
 
         cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
             private static final long serialVersionUID = 1L;
@@ -407,25 +393,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             // TODO: is it necessary to add these too?
             target.add(editButton, okButton, cancelButton, feedback);
         }
-    }
-
-    private void addValidator() {
-
-        // no longer used, instead using the PreValidate stuff.
-        
-//        add(new AbstractFormValidator() {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            public FormComponent<?>[] getDependentFormComponents() {
-//                return new FormComponent<?>[0];
-//            }
-//
-//            @Override
-//            public void validate(final Form<?> form) {
-//            }
-//        });
     }
 
     private EntityModel getEntityModel() {

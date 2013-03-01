@@ -323,6 +323,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         authenticationSession = authenticationManager.authenticate(authenticationRequest);
 
         IsisContext.openSession(authenticationSession);
+        
         container = getContainer();
         if(firstTime && fixturesInitialization == Fixtures.Initialization.INIT) {
             fixtures.init(container);

@@ -190,14 +190,14 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private final UUID guid;
 
-    public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker2, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
+    public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
-        ensureThatArg(messageBroker2, is(not(nullValue())), "message broker is required");
+        ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
         ensureThatArg(updateNotifier, is(not(nullValue())), "update notifier is required");
 
         this.transactionManager = transactionManager;
-        this.messageBroker = messageBroker2;
+        this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
         this.auditingService = auditingService;
         this.publishingService = publishingService;
@@ -308,12 +308,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         // for example, the JDO object store just lets DataNucleus do the change tracking
         // itself
-        
-//        if(commands.isEmpty()) {
-//            // nothing to do
-//            return;
-//        }
-        
         
         ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
         if (LOG.isDebugEnabled()) {

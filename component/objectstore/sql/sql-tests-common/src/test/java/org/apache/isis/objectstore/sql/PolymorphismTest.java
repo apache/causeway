@@ -18,17 +18,22 @@
  */
 package org.apache.isis.objectstore.sql;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.tck.dom.poly.Empty;
 import org.apache.isis.core.tck.dom.poly.EmptyEntityWithOwnProperty;
 import org.apache.isis.core.tck.dom.poly.ReferencingPolyTypesEntity;
@@ -98,6 +103,18 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
      */
     public void test1SetupStoreAndDatabaseConnection() throws Exception {
         testSetup();
+    }
+
+    @Before
+    public void setUpXactn() throws Exception {
+        IsisContext.getTransactionManager().startTransaction();
+    }
+
+    @After
+    public void tearDownXactn() throws Exception {
+        IsisContext.getTransactionManager().endTransaction();
+        assertThat(IsisContext.getTransactionManager().getTransaction().getState().isComplete(), is(true));
+        
     }
 
     @Test
@@ -188,7 +205,6 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
     }
 
-    @Test
     /**
      * The actual "tests". Unless the test is using the "in-memory" object store 
      * the Isis framework is re-created, thus ensuring that no domain objects are
@@ -200,6 +216,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
      * Confirms that polymorphic classes are loaded as expected (via interface, 
      * via super-class, etc.)
      */
+    @Test
     public void test3All() throws Exception {
         load();
 

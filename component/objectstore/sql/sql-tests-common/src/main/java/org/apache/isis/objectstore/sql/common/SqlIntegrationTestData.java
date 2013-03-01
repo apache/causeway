@@ -19,8 +19,10 @@
 
 package org.apache.isis.objectstore.sql.common;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -29,6 +31,8 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -42,6 +46,9 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.core.tck.dom.sqlos.SqlDomainObjectRepository;
 import org.apache.isis.core.tck.dom.sqlos.data.SimpleClass;
@@ -76,7 +83,20 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     private static PrimitiveValuedEntity pve1;
     private static PrimitiveValuedEntity pve2;
 
-    @Test
+    
+    @Before
+    public void setUpXactn() throws Exception {
+        IsisContext.getTransactionManager().startTransaction();
+    }
+
+    @After
+    public void tearDownXactn() throws Exception {
+        IsisContext.getTransactionManager().endTransaction();
+        assertThat(IsisContext.getTransactionManager().getTransaction().getState().isComplete(), is(true));
+        
+    }
+
+    
     /**
      * Uses factory methods within the Isis framework to create the test data,
      * thus exercising the "create data" portion of the object store.
@@ -85,6 +105,7 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      * object store is "in-memory" (this is required since "in-memory" has to be
      * left alone for created data to still be present in the next test).
      */
+    @Test
     public void testSetupStore() throws Exception {
         testSetup();
         setUpFactory();
@@ -178,7 +199,6 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
     }
 
-    @Test
     /**
      * The actual "tests". Unless the test is using the "in-memory" object store 
      * the Isis framework is re-created, thus ensuring that no domain objects are
@@ -191,7 +211,9 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
      * Especially, it confirms that dates, times, etc, do not suffer from differences in
      * time zones between the database and the Isis framework.
      */
+    @Test
     public void testTestAll() throws Exception {
+        
         testLoad();
 
         setUpFactory();
@@ -241,6 +263,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
 
     private void testLoad() throws Exception {
         final List<SqlDataClass> dataClasses = factory.allDataClasses();
+        IsisContext.getTransactionManager().flushTransaction();
+        
         assertEquals(1, dataClasses.size());
         final SqlDataClass sqlDataClass = dataClasses.get(0);
         getSqlIntegrationTestFixtures().setSqlDataClass(sqlDataClass);

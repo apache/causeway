@@ -18,6 +18,9 @@
  */
 package org.apache.isis.objectstore.sql.common;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,6 +35,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.runners.MethodSorters;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.tck.dom.poly.ReferencingPolyTypesEntity;
 import org.apache.isis.core.tck.dom.sqlos.SqlDomainObjectRepository;
 import org.apache.isis.core.tck.dom.sqlos.data.SqlDataClass;
@@ -150,13 +154,19 @@ public abstract class SqlIntegrationTestCommonBase {
         sqlDataClass = getSqlIntegrationTestFixtures().getSqlDataClass();
         referencingPolyTypesEntity = getSqlIntegrationTestFixtures().getPolyTestClass();
     }
+    
+
 
     // //////////////////////////////////////////////////////////////////////////////
     // after
     // //////////////////////////////////////////////////////////////////////////////
 
+
     @After
     public void tearDown() throws Exception {
+        
+        
+        
         if (!getSqlIntegrationTestFixtures().getState().isInitialize()) {
             return;
         }
@@ -170,6 +180,7 @@ public abstract class SqlIntegrationTestCommonBase {
         }
         getSqlIntegrationTestFixtures().shutDown();
     }
+
 
     /**
      * optional hook

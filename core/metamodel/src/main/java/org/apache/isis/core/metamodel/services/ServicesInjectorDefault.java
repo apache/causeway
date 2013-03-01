@@ -240,12 +240,16 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
         List<Object> matchingServices = Lists.newArrayList();
         addMatchingTo(serviceClass, services, matchingServices);
-        addMatchingTo(serviceClass, Collections.<Object>singletonList(container), matchingServices);
+        addMatchingTo(serviceClass, singletonListFor(container), matchingServices);
         
         servicesByType.put(serviceClass, matchingServices);
     }
 
-    private void addMatchingTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {
+    private static List<Object> singletonListFor(Object obj) {
+        return obj!=null? Collections.singletonList(obj): Collections.emptyList();
+    }
+
+    private static void addMatchingTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {
         Iterable<Object> filteredServices = Iterables.filter(candidates, ofType(type));
         filteredServicesAndContainer.addAll(Lists.newArrayList(filteredServices));
     }
