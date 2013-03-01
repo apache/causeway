@@ -40,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
+import org.apache.isis.viewer.wicket.ui.notifications.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.log4j.Logger;
@@ -135,7 +136,7 @@ public abstract class PageAbstract extends WebPage {
         response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         
-        final String feedbackMsg = asJGrowlCalls(getMessageBroker());
+        final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if (!StringUtils.isEmpty(feedbackMsg)) {
             response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
         }
@@ -148,36 +149,7 @@ public abstract class PageAbstract extends WebPage {
         }
     }
 
-    private String asJGrowlCalls(MessageBroker messageBroker) {
-        final StringBuilder buf = new StringBuilder();
-        
-        for (String info : messageBroker.getMessages()) {
-            addJGrowlCall(info, "INFO", false, buf);
-        }
-        for (String warning : getMessageBroker().getWarnings()) {
-            addJGrowlCall(warning, "WARNING", true, buf);
-        }
-        
-        final String error =  getMessageBroker().getApplicationError();
-        if(error!=null) {
-            addJGrowlCall(error, "ERROR", true, buf);
-        }
-        return buf.toString();
-    }
 
-
-    void addJGrowlCall(final String msg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
-        buf.append("$.jGrowl(\"").append(msg).append('\"');
-        buf.append(", {");
-        buf.append("theme: \'jgrowl-").append(cssClassSuffix).append("\'");
-        if (sticky) {
-            buf.append(", sticky: true");
-        }
-        buf.append("}");
-        buf.append(");");
-    }
-
-    
     private void addHomePageLinkAndApplicationName() {
         // this is a bit hacky, but it'll do...
         ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");

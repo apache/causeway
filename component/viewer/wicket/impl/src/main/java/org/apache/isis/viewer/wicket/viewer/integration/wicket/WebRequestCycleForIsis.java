@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -137,7 +138,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     }
 
     protected ErrorPage errorPageFor(Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        List<ExceptionRecognizer> exceptionRecognizers;
+        try {
+            exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        } catch(Exception ex2) {
+            LOG.warn("Unable to obtain exceptionRecognizers (no session?)");
+            exceptionRecognizers = Collections.emptyList();
+        }
         String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         final ErrorPage page = message != null ? new ErrorPage(message) : new ErrorPage(ex);
         return page;

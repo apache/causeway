@@ -46,6 +46,7 @@ import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
 import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
+import org.apache.isis.viewer.wicket.ui.notifications.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
 import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
@@ -53,6 +54,7 @@ import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -165,14 +167,20 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void addButtons() {
-        editButton = new AjaxButtonWithPreSubmitHook(ID_EDIT_BUTTON, Model.of("Edit")) {
+        editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void preSubmit() {
-                getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            public void validate() {
+                try {
+                    getEntityModel().load(ConcurrencyChecking.CHECK);
+                } catch(ConcurrencyException ex) {
+                    getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
+                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                }
+                super.validate();
             }
-
+            
             @Override
             public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                 getEntityModel().resetPropertyModels();
@@ -191,13 +199,20 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             public void preSubmit() {
+
                 try {
                     getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
                 } catch(ConcurrencyException ex){
+                    // simplify this?
                     Session.get().getFeedbackMessages().add(new FeedbackMessage(EntityPropertiesForm.this, ex.getMessage(), FeedbackMessage.ERROR));
                 }
             }
 
+            @Override
+            public void validate() {
+                super.validate();
+            }
+            
             @Override
             public void onSubmit() {
                 if (getForm().hasError()) {
@@ -228,10 +243,15 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     if(message == null) {
                         throw ex;
                     }
+                    toEditMode(null);
                     return;
                 }
 
-                getEntityModel().resetPropertyModels();
+                try {
+                    getEntityModel().resetPropertyModels();
+                } catch(RuntimeException ex) {
+                    throw ex;
+                }
 
                 toViewMode(null);
             }
@@ -247,8 +267,21 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             }
 
             @Override
+            public void validate() {
+                try {
+                    getEntityModel().load(ConcurrencyChecking.CHECK);
+                } catch(ConcurrencyException ex) {
+                    getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
+                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                }
+                super.validate();
+            }
+            
+            @Override
             public void preSubmit() {
-                getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                
+                // NO LONGER WORKS...
+                // getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
             }
 
             @Override
@@ -265,7 +298,12 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                         }
                     }
                 });
-                getEntityModel().resetPropertyModels();
+                
+                try {
+                    getEntityModel().resetPropertyModels();
+                } catch(RuntimeException ex) {
+                    throw ex;
+                }
                 toViewMode(target);
             }
 
@@ -278,6 +316,9 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         editButton.setOutputMarkupPlaceholderTag(true);
         cancelButton.setOutputMarkupPlaceholderTag(true);
+        
+        editButton.add(new JGrowlBehaviour());
+        cancelButton.add(new JGrowlBehaviour());
     }
 
     private String recognizeException(RuntimeException ex, Component feedbackComponent) {
@@ -326,6 +367,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 String invalidReasonIfAny;
                 try {
                     final ObjectAdapter adapter = entityModel.getObject();
+                    
                     final ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
                     if (facet == null) {
                         return;
