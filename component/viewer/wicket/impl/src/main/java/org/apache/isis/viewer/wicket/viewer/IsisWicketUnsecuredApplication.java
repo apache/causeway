@@ -60,10 +60,12 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
@@ -73,7 +75,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 
-public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider {
+public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -108,6 +110,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     @Inject
     private IsisSystem system;
 
+    private BookmarkedPagesModel bookmarkedPagesModel;
+
     // /////////////////////////////////////////////////
     // constructor, init
     // /////////////////////////////////////////////////
@@ -140,6 +144,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
+
+        this.bookmarkedPagesModel = new BookmarkedPagesModel();
 
         initWicketComponentInjection(injector);
     }
@@ -310,6 +316,11 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
         }
+    }
+
+    @Override
+    public BookmarkedPagesModel getBookmarkedPagesModel() {
+        return bookmarkedPagesModel;
     }
 
 }
