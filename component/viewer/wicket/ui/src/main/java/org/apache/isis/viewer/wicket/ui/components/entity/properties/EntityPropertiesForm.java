@@ -21,9 +21,39 @@ package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacet;
+import org.apache.isis.core.runtime.memento.Memento;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
+import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
+import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
+import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,33 +64,13 @@ import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacet;
-import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
-import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
-import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreSubmitHook;
-import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreSubmitHook;
-import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 
 class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
@@ -100,8 +110,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         addPropertiesAndOrCollections();
         addButtons();
         addFeedbackGui();
-
-        addValidator();
     }
 
     private void addPropertiesAndOrCollections() {
@@ -160,14 +168,23 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void addButtons() {
-        editButton = new AjaxButtonWithPreSubmitHook(ID_EDIT_BUTTON, Model.of("Edit")) {
+        editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void preSubmit() {
-                getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-            }
+            public void validate() {
 
+                // same logic as in cancelButton; should this be factored out?
+                try {
+                    getEntityModel().load(ConcurrencyChecking.CHECK);
+                } catch(ConcurrencyException ex) {
+                    getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
+                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                }
+                
+                super.validate();
+            }
+            
             @Override
             public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                 getEntityModel().resetPropertyModels();
@@ -181,48 +198,105 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         };
         add(editButton);
 
-        okButton = new ButtonWithPreSubmitHook(ID_OK_BUTTON, Model.of("OK")) {
+        
+        okButton = new ButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
             private static final long serialVersionUID = 1L;
 
+
             @Override
-            public void preSubmit() {
+            public String preValidate() {
+                // attempt to load with concurrency checking, catching recognized exceptions
                 try {
-                    getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-                } catch(ConcurrencyException ex){
-                    Session.get().getFeedbackMessages().add(new FeedbackMessage(EntityPropertiesForm.this, ex.getMessage(), FeedbackMessage.ERROR));
+                    getEntityModel().load(ConcurrencyChecking.CHECK); // could have also just called #getObject(), since CHECK is the default
+
+                } catch(RuntimeException ex){
+                    String recognizedErrorMessage = recognizeException(ex);
+                    if(recognizedErrorMessage == null) {
+                        throw ex;
+                    }
+
+                    // reload
+                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                    
+                    getForm().clearInput();
+                    getEntityModel().resetPropertyModels();
+                    
+                    toViewMode(null);
+                    toEditMode(null);
+                    
+                    return recognizedErrorMessage;
                 }
+                
+                return null;
             }
 
             @Override
-            public void onSubmit() {
-                if (!getForm().hasError()) {
-                    final ObjectAdapter object = getEntityModel().getObject();
-                    final Memento snapshotToRollbackToIfInvalid = new Memento(object);
-                    // to perform object-level validation, we must apply the
-                    // changes first
-                    // contrast this with ActionPanel (for validating action
-                    // arguments) where
-                    // we do the validation prior to the execution of the
-                    // action
-                    getEntityModel().apply();
-                    final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
-                    if (invalidReasonIfAny != null) {
-                        getForm().error(invalidReasonIfAny);
-                        snapshotToRollbackToIfInvalid.recreateObject();
-                        return;
-                    } else {
-                        getEntityModel().resetPropertyModels();
-                        toViewMode(null);
-                    }
+            public void validate() {
+
+                // add in any error message that we might have recognized from above
+                EntityPropertiesForm form = EntityPropertiesForm.this;
+                String preValidationErrorIfAny = form.getPreValidationErrorIfAny();
+                
+                if(preValidationErrorIfAny != null) {
+                    feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
+                    // skip validation, because would relate to old values
                 } else {
-                    // stay in edit mode
+                    // run Wicket's validation
+                    super.validate();
                 }
+            }
+            
+            @Override
+            public void onSubmit() {
+                if (getForm().hasError()) {
+                    // stay in edit mode
+                    return;
+                } 
+                
+                final ObjectAdapter object = getEntityModel().getObject();
+                final Memento snapshotToRollbackToIfInvalid = new Memento(object);
+                // to perform object-level validation, we must apply the
+                // changes first
+                // contrast this with ActionPanel (for validating action
+                // arguments) where
+                // we do the validation prior to the execution of the
+                // action
+                getEntityModel().apply();
+                final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
+                if (invalidReasonIfAny != null) {
+                    getForm().error(invalidReasonIfAny);
+                    snapshotToRollbackToIfInvalid.recreateObject();
+                    return;
+                }
+                
+                try {
+                    EntityPropertiesForm.this.getTransactionManager().flushTransaction();
+                } catch(RuntimeException ex) {
+                    
+                    // There's no need to abort the transaction here, as it will have already been done
+                    // (in IsisTransactionManager#executeWithinTransaction(...)).
+
+                    String message = recognizeExceptionAndNotify(ex, EntityPropertiesForm.this);
+                    if(message == null) {
+                        throw ex;
+                    }
+                    toEditMode(null);
+                    return;
+                }
+
+                try {
+                    getEntityModel().resetPropertyModels();
+                } catch(RuntimeException ex) {
+                    throw ex;
+                }
+
+                toViewMode(null);
             }
 
         };
         add(okButton);
 
-        cancelButton = new AjaxButtonWithPreSubmitHook(ID_CANCEL_BUTTON, Model.of("Cancel")) {
+        cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
             private static final long serialVersionUID = 1L;
             
             {
@@ -230,10 +304,18 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             }
 
             @Override
-            public void preSubmit() {
-                getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-            }
+            public void validate() {
 
+                // same logic as in editButton; should this be factored out?
+                try {
+                    getEntityModel().load(ConcurrencyChecking.CHECK);
+                } catch(ConcurrencyException ex) {
+                    getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
+                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                }
+                super.validate();
+            }
+            
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                 Session.get().getFeedbackMessages().clear();
@@ -248,7 +330,12 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                         }
                     }
                 });
-                getEntityModel().resetPropertyModels();
+                
+                try {
+                    getEntityModel().resetPropertyModels();
+                } catch(RuntimeException ex) {
+                    throw ex;
+                }
                 toViewMode(target);
             }
 
@@ -261,6 +348,43 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         editButton.setOutputMarkupPlaceholderTag(true);
         cancelButton.setOutputMarkupPlaceholderTag(true);
+        
+        editButton.add(new JGrowlBehaviour());
+        cancelButton.add(new JGrowlBehaviour());
+    }
+
+    private String recognizeExceptionAndNotify(RuntimeException ex, Component feedbackComponentIfAny) {
+        
+        // see if the exception is recognized as being a non-serious error
+        
+        String recognizedErrorMessageIfAny = recognizeException(ex);
+        feedbackOrNotifyAnyRecognizedError(recognizedErrorMessageIfAny, feedbackComponentIfAny);
+
+        return recognizedErrorMessageIfAny;
+    }
+
+    private void feedbackOrNotifyAnyRecognizedError(String recognizedErrorMessageIfAny, Component feedbackComponentIfAny) {
+        if(recognizedErrorMessageIfAny == null) {
+            return;
+        }
+        
+        if(feedbackComponentIfAny != null) {
+            feedbackComponentIfAny.error(recognizedErrorMessageIfAny);
+        }
+        getMessageBroker().addWarning(recognizedErrorMessageIfAny);
+
+        // we clear the abort cause because we've handled rendering the exception
+        getTransactionManager().getTransaction().clearAbortCause();
+    }
+
+    private String recognizeException(RuntimeException ex) {
+        
+        // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
+        // REVIEW: similar code also in WebRequestCycleForIsis; combine?
+        
+        final List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        final String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        return message;
     }
 
     private void requestRepaintPanel(final AjaxRequestTarget target) {
@@ -269,37 +393,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             // TODO: is it necessary to add these too?
             target.add(editButton, okButton, cancelButton, feedback);
         }
-    }
-
-    private void addValidator() {
-        add(new AbstractFormValidator() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public FormComponent<?>[] getDependentFormComponents() {
-                return new FormComponent<?>[0];
-            }
-
-            @Override
-            public void validate(final Form<?> form) {
-                final EntityModel entityModel = (EntityModel) getModel();
-                String invalidReasonIfAny;
-                try {
-                    final ObjectAdapter adapter = entityModel.getObject();
-                    final ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
-                    if (facet == null) {
-                        return;
-                    }
-                    invalidReasonIfAny = facet.invalidReason(adapter);
-                } catch(ConcurrencyException ex) {
-                    invalidReasonIfAny = ex.getMessage();
-                }
-                if (invalidReasonIfAny != null) {
-                    Session.get().getFeedbackMessages().add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
-                }
-            }
-        });
     }
 
     private EntityModel getEntityModel() {
@@ -341,6 +434,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     private void addFeedbackGui() {
         final FeedbackPanel feedback = addOrReplaceFeedback();
+        feedback.setEscapeModelStrings(false);
 
         final ObjectAdapter adapter = getEntityModel().getObject();
         if (adapter == null) {
@@ -354,4 +448,21 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         addOrReplace(feedback);
         return feedback;
     }
+    
+    ///////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////
+    
+    protected IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
+    }
+
+    protected ServicesInjector getServicesInjector() {
+        return IsisContext.getPersistenceSession().getServicesInjector();
+    }
+
+    protected MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
+    }
+
 }

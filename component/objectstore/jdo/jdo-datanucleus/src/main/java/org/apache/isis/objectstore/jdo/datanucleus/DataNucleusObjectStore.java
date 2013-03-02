@@ -173,8 +173,12 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         ensureThatState(persistenceManager, is(notNullValue()));
 
         final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
-        if (currentTransaction != null && currentTransaction.getState().canCommit()) {
-            getTransactionManager().endTransaction();
+        if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
+            if(currentTransaction.getState().canCommit()) {
+                getTransactionManager().endTransaction();
+            } else if(currentTransaction.getState().canAbort()) {
+                getTransactionManager().abortTransaction();
+            }
         }
 
         persistenceManager.close();
@@ -326,30 +330,30 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         ensureOpened();
         ensureInTransaction();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("execute " + commands.size() + " commands");
-        }
+        // no longer check if there are no commands; it could be that
+        // DataNucleus has some dirty objects anyway that don't have
+        // commands wrapped around them...
 
-        if (commands.size() <= 0) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("no commands");
-            }
-            return;
-        }
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("execute " + commands.size() + " commands");
+//        }
+//
+//        if (commands.size() <= 0) {
+//            if (LOG.isDebugEnabled()) {
+//                LOG.debug("no commands");
+//            }
+//            return;
+//        }
 
         executeCommands(commands);
     }
 
     private void executeCommands(final List<PersistenceCommand> commands) {
-        try {
-            for (final PersistenceCommand command : commands) {
-                command.execute(null);
-            }
-            getPersistenceManager().flush();
-        } catch (final RuntimeException e) {
-            LOG.warn("Failure during execution", e);
-            throw e;
+        
+        for (final PersistenceCommand command : commands) {
+            command.execute(null);
         }
+        getPersistenceManager().flush();
     }
 
     // ///////////////////////////////////////////////////////////////////////

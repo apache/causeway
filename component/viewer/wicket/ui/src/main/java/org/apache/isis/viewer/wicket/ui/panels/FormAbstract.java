@@ -84,13 +84,28 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     // process() override
     // ///////////////////////////////////////////////////////////////////
 
+    private String preValidationErrorIfAny;
+    /**
+     * Temporarily made available during {@link #process(IFormSubmitter)},
+     * for the benefit of any form validation.
+     */
+    protected String getPreValidationErrorIfAny() {
+        return preValidationErrorIfAny;
+    }
+    
     @Override
     public void process(IFormSubmitter submittingComponent) {
-        if(submittingComponent instanceof IFormSubmitterWithPreSubmitHook) {
-            IFormSubmitterWithPreSubmitHook componentWithPreSubmitHook = (IFormSubmitterWithPreSubmitHook) submittingComponent;
-            componentWithPreSubmitHook.preSubmit();
+        try {
+            
+            if(submittingComponent instanceof IFormSubmitterWithPreValidateHook) {
+                IFormSubmitterWithPreValidateHook componentWithPreSubmitHook = (IFormSubmitterWithPreValidateHook) submittingComponent;
+                preValidationErrorIfAny = componentWithPreSubmitHook.preValidate();
+            }
+            super.process(submittingComponent);
+            
+        } finally {
+            preValidationErrorIfAny = null;
         }
-        super.process(submittingComponent);
     }
     
 

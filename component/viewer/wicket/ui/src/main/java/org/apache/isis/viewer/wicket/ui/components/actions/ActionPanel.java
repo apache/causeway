@@ -23,12 +23,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.ApplicationException;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -39,7 +34,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -53,9 +47,12 @@ import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -133,82 +130,111 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         ObjectAdapter targetAdapter = null;
         boolean clearArgs = true;
         try {
-
-            targetAdapter = getModel().getTargetAdapter();
-
-            // no concurrency exception, so continue...
-            clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, feedbackForm);
-
-        } catch (ConcurrencyException ex) {
-
-            // second attempt should succeed, because the Oid would have
-            // been updated in the attempt
-            if (targetAdapter == null) {
+            try {
                 targetAdapter = getModel().getTargetAdapter();
+
+                // no concurrency exception, so continue...
+                clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, feedbackForm);
+
+            } catch (ConcurrencyException ex) {
+
+                // second attempt should succeed, because the Oid would have
+                // been updated in the attempt
+                if (targetAdapter == null) {
+                    targetAdapter = getModel().getTargetAdapter();
+                }
+
+                
+                // forward onto the target page with the concurrency exception
+                
+                // REVIEW: doesn't seem to get rendered
+                ResultType.OBJECT.addResults(this, targetAdapter, ex);
+
+                getMessageBroker().addWarning(ex.getMessage());
+                return;
             }
-
-            // forward onto the target page with the concurrency exception
-            final ResultType resultType = ResultType.determineFor(targetAdapter);
-            resultType.addResults(this, targetAdapter, ex);
-
-            return;
-            
         } finally {
             if(clearArgs) {
                 getActionModel().clearArguments();
             }
+            
         }
     }
 
-    /**
-     * @return - whether action arguments should be cleared or not.
-     */
-    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, MarkupContainer feedbackOwner) {
+    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, MarkupContainer feedbackForm) {
 
         // validate the action parameters (if any)
         final ActionModel actionModel = getActionModel();
         final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
         if (invalidReasonIfAny != null) {
-            feedbackOwner.error(invalidReasonIfAny);
+            feedbackForm.error(invalidReasonIfAny);
             return false;
-        }
-
+        } 
         // the object store could raise an exception (eg uniqueness constraint)
         // so we handle it here.
         try {
             // could be programmatic flushing, so must include in the try... finally
-            final ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions(feedbackOwner);
-    
+            final ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions();
+      
+            // flush any queued changes, so concurrency or violation exceptions (if any)
+            // will be thrown here
+            getTransactionManager().flushTransaction();
+            
             final ResultType resultType = ResultType.determineFor(resultAdapter);
             
-            // this will flush any queued changes, so exception (if any)
-            // will be thrown here
             resultType.addResults(this, resultAdapter);
+
+            if (actionModel.hasSafeActionSemantics()) {
+                bookmarkPage(actionModel);
+            }
+
+            return true;
 
         } catch (RuntimeException ex) {
 
-            // see if the exception is recognized as being a non-serious error
-            // (nb: similar code in WebRequestCycleForIsis, as a fallback)
-            List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-            String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-            if(message != null) {
-                // recognized
-                feedbackOwner.error(message);
+            String message = recognizeException(ex, feedbackForm);
+            
+            if (message != null) {
+                if(feedbackForm == null) {
+                    // forward on instead to void page
+                    // (otherwise, we'll have rendered an action parameters page 
+                    // and so we'll be staying on that page)
+                    final ResultType resultType = ResultType.determineFor(null);
+                    resultType.addResults(this, null);
+                }
                 
-                // there's no need to abort the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)). 
                 return false;
             }
-
+            
             // not handled, so propagate
             throw ex;
         }
+    }
 
-        if (actionModel.hasSafeActionSemantics()) {
-            bookmarkPage(actionModel);
+    private String recognizeException(RuntimeException ex, Component feedbackComponent) {
+        
+        // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
+        // REVIEW: similar code also in WebRequestCycleForIsis; combine?
+        
+        // see if the exception is recognized as being a non-serious error
+        // (nb: similar code in WebRequestCycleForIsis, as a fallback)
+        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        String recognizedErrorIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        if(recognizedErrorIfAny != null) {
+
+            // recognized
+            if(feedbackComponent != null) {
+                feedbackComponent.error(recognizedErrorIfAny);
+            }
+            getMessageBroker().addWarning(recognizedErrorIfAny);
+
+            getTransactionManager().getTransaction().clearAbortCause();
+            
+            // there's no need to abort the transaction, it will have already been done
+            // (in IsisTransactionManager#executeWithinTransaction(...)).
+
         }
-
-        return true;
+        return recognizedErrorIfAny;
     }
 
     /**
@@ -216,22 +242,21 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * might be encountered.
      * 
      * <p>
-     * If an {@link ApplicationException} is encountered, then the {@link #applicationError} thread-local
-     * will be set so that a suitable message can be rendered, and the current {@link IsisTransaction transaction}
-     * will also be aborted.
+     * If an {@link ApplicationException} is encountered, then the application error will be
+     * {@link MessageBroker#setApplicationError(String) set} so that a suitable message can be 
+     * rendered higher up the call stack.
      * 
      * <p>
-     * Any other types of exception will be ignored (to be picked up higher up in the callstack).
-     * @param feedbackOwner 
+     * Any other types of exception will be ignored (to be picked up higher up in the callstack)
      */
-    private ObjectAdapter executeActionHandlingApplicationExceptions(MarkupContainer feedbackOwner) {
+    private ObjectAdapter executeActionHandlingApplicationExceptions() {
         final ActionModel actionModel = getActionModel();
         try {
             ObjectAdapter resultAdapter = actionModel.getObject();
             return resultAdapter;
 
         } catch (RuntimeException ex) {
-
+            
             // see if is an application-defined exception
             final ApplicationException appEx = getApplicationExceptionIfAny(ex);
             if (appEx != null) {
@@ -241,6 +266,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 // (in IsisTransactionManager#executeWithinTransaction(...)). 
                 return null;
             } 
+            
+            // the ExceptionRecognizers stuff is done in the calling method (because may be triggered
+            // by a flush to the object store (which in most cases won't have happened in the execute of
+            // the action body)
 
             // not handled, so propagate
             throw ex;
@@ -292,7 +321,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
                     // force any changes in state etc to happen now prior to the redirect;
                     // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
-                    IsisContext.getTransactionManager().getTransaction().flush();
+                    panel.getTransactionManager().flushTransaction();
                     
                     // build page, also propogate any concurrency exception that might have occurred already
                     final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
@@ -331,8 +360,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
 
             private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                
-                
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
                 final SelectionHandler selectionHandler = panel.getModel().getSelectionHandler();
                 if (selectionHandler != null) {
@@ -371,8 +398,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
         public abstract void addResults(ActionPanel panel, ObjectAdapter resultAdapter);
 
+        /**
+         * Only overridden for ResultType.OBJECT
+         */
         public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-            ResultType.OBJECT.addResults(actionPanel, targetAdapter, ex);
+            throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
         }
 
         static ResultType determineFor(final ObjectAdapter resultAdapter) {
@@ -427,9 +457,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         return IsisContext.getTransactionManager();
     }
 
-    /**
-     * Factored out so can be overridden in testing.
-     */
     protected ServicesInjector getServicesInjector() {
         return IsisContext.getPersistenceSession().getServicesInjector();
     }

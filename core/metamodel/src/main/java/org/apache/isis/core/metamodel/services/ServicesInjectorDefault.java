@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -228,16 +229,29 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> lookupServices(Class<T> serviceClass) {
-        locateAndCache(services, serviceClass);
+        locateAndCache(serviceClass);
         return (List<T>) servicesByType.get(serviceClass);
     };
 
-    private void locateAndCache(List<Object> services, Class<?> serviceClass) {
+    private void locateAndCache(Class<?> serviceClass) {
         if(servicesByType.containsKey(serviceClass)) {
            return; 
         }
 
-        servicesByType.put(serviceClass, Lists.newArrayList(Iterables.filter(services, ofType(serviceClass))));
+        List<Object> matchingServices = Lists.newArrayList();
+        addMatchingTo(serviceClass, services, matchingServices);
+        addMatchingTo(serviceClass, singletonListFor(container), matchingServices);
+        
+        servicesByType.put(serviceClass, matchingServices);
+    }
+
+    private static List<Object> singletonListFor(Object obj) {
+        return obj!=null? Collections.singletonList(obj): Collections.emptyList();
+    }
+
+    private static void addMatchingTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {
+        Iterable<Object> filteredServices = Iterables.filter(candidates, ofType(type));
+        filteredServicesAndContainer.addAll(Lists.newArrayList(filteredServices));
     }
 
     private static final Predicate<Object> ofType(final Class<?> cls) {
@@ -248,7 +262,5 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
             }
         };
     }
-
-
 
 }

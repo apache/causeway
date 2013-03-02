@@ -36,11 +36,13 @@ public class IsisSystemWithFixturesTest_basicTest {
     @Test
     public void savePojo() throws Exception {
 
+        iswf.beginTran();
         assertThat(iswf.container.allInstances(JdkValuedEntity.class).size(), is(0));
         
         iswf.container.persist(iswf.fixtures.jve1);
         
         assertThat(iswf.container.allInstances(JdkValuedEntity.class).size(), is(1));
+        iswf.commitTran();
     }
 
 }

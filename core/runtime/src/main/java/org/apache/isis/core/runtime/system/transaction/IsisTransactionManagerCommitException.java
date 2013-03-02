@@ -16,8 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.panels;
 
-public interface IFormSubmitterWithPreSubmitHook {
-    void preSubmit();
+package org.apache.isis.core.runtime.system.transaction;
+
+import org.apache.isis.core.commons.exceptions.IsisException;
+
+public class IsisTransactionManagerCommitException extends IsisException {
+
+    private static final long serialVersionUID = 1L;
+
+    public IsisTransactionManagerCommitException() {
+    }
+
+    public IsisTransactionManagerCommitException(final String message) {
+        super(message);
+    }
+
+    public IsisTransactionManagerCommitException(final Throwable cause) {
+        super(cause);
+    }
+
+    public IsisTransactionManagerCommitException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
 }

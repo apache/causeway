@@ -131,6 +131,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
      * {@link ConcurrencyException}, if any, that might have occurred previously
      */
     private ConcurrencyException concurrencyException;
+    private ConcurrencyChecking loadingHint;
 
     // //////////////////////////////////////////////////////////
     // constructors
@@ -197,7 +198,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     // //////////////////////////////////////////////////////////
-    // load, setObject
+    // loadObject, load, setObject
     // //////////////////////////////////////////////////////////
 
     /**
@@ -211,16 +212,23 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
         
         final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(concurrencyChecking);
-        if(concurrencyChecking == ConcurrencyChecking.NO_CHECK) {
-            this.resetPropertyModels();
-        }
         return objectAdapter;
     }
 
+
+    /**
+     * Callback from {@link #getObject()}, defaults to loading the object
+     * using {@link ConcurrencyChecking#CHECK strict} checking.
+     * 
+     * <p>
+     * If non-strict checking is required, then just call {@link #load(ConcurrencyChecking)} with an
+     * argument of {@link ConcurrencyChecking#NO_CHECK} first.
+     */
     @Override
     public ObjectAdapter load() {
         return load(ConcurrencyChecking.CHECK);
     }
+
 
     @Override
     public void setObject(final ObjectAdapter adapter) {
@@ -455,6 +463,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 
 

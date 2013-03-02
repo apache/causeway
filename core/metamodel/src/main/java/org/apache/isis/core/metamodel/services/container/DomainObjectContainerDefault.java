@@ -31,6 +31,7 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerGeneral;
 import org.apache.isis.applib.services.exceprecog.RecognizedException;
@@ -54,6 +55,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
@@ -438,22 +440,33 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
 
     
     ///////////////////////////////////////////////////////////////
-    // ExceptionRecognitionService
+    // ExceptionRecognizer
     ///////////////////////////////////////////////////////////////
 
-    private final ExceptionRecognizer recogService = new ExceptionRecognizerForType(RecognizedException.class);
+    static class ExceptionRecognizerForConcurrencyException extends ExceptionRecognizerForType {
+        public ExceptionRecognizerForConcurrencyException() {
+            super(ConcurrencyException.class, prefix("Another user has just changed this data"));
+        }
+    }
+    
+    private final ExceptionRecognizer recognizer = 
+            new ExceptionRecognizerComposite(
+                    new ExceptionRecognizerForType(RecognizedException.class),
+                    new ExceptionRecognizerForConcurrencyException()
+                );
     
     /**
      * Framework-provided implementation of {@link ExceptionRecognizer},
-     * which will automatically recognize any {@link RecognizedException}.
+     * which will automatically recognize any {@link RecognizedException}s or
+     * any {@link ConcurrencyException}s.
      */
     @Override
     public String recognize(Throwable ex) {
-        return getRecogService().recognize(ex);
+        return getRecognizer().recognize(ex);
     }
     
-    ExceptionRecognizer getRecogService() {
-        return recogService;
+    ExceptionRecognizer getRecognizer() {
+        return recognizer;
     }
 
     

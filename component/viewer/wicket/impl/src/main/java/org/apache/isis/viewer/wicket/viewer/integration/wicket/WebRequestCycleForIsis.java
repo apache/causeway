@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -34,9 +35,11 @@ import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.core.runtime.system.transaction.MessageBrokerDefault;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.log4j.Logger;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
@@ -47,7 +50,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
  * automatically opening a {@link IsisSession} at the beginning of the request
  * and committing the transaction and closing the session at the end.
  */
-public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends AbstractRequestCycleListener {
+public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     private static final Logger LOG = Logger.getLogger(WebRequestCycleForIsis.class);
 
@@ -73,35 +76,78 @@ public class WebRequestCycleForIsis /*extends WebRequestCycle*/ extends Abstract
         getTransactionManager().startTransaction();
     }
 
+    
+    /**
+     * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
+     * throw an exception.
+     */
     @Override
-    public synchronized void onEndRequest(RequestCycle requestCycle) {
+    public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
+        LOG.info("onRequestHandlerExecuted: handler: " + handler);
+        
         final IsisSession session = getIsisContext().getSessionInstance();
         if (session != null) {
-            // in session
-            commitTransactionIfAny();
-            getIsisContext().closeSessionInstance();
+            try {
+                // will commit (or abort) the transaction;
+                // an abort will cause the exception to be thrown.
+                getTransactionManager().endTransaction();
+            } catch(Exception ex) {
+                if(handler instanceof RenderPageRequestHandler) {
+                    RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
+                    if(requestHandler.getPage() instanceof ErrorPage) {
+                        // do nothing; 
+                        return;
+                    }
+                }
+                throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
+            }
         }
     }
 
-    private void commitTransactionIfAny() {
-        final IsisTransaction transaction = getTransactionManager().getTransaction();
-        if (transaction == null) {
-            return;
-        }
-        if (transaction.getState() == IsisTransaction.State.MUST_ABORT) {
-            getTransactionManager().abortTransaction();
-        } else if (transaction.getState() == IsisTransaction.State.IN_PROGRESS) {
-            getTransactionManager().endTransaction();
+    /**
+     * It is not possible to throw exceptions here, hence use of {@link #onRequestHandlerExecuted(RequestCycle, IRequestHandler)}.
+     */
+    @Override
+    public synchronized void onEndRequest(RequestCycle cycle) {
+        final IsisSession session = getIsisContext().getSessionInstance();
+        if (session != null) {
+            try {
+                // belt and braces
+                getTransactionManager().endTransaction();
+            } finally {
+                getIsisContext().closeSessionInstance();
+            }
         }
     }
+
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        final ErrorPage page = message != null ? new ErrorPage(message) : new ErrorPage(ex);
+        // previously we had a handler in here.  However, it seems to be sufficient to just
+        // use the exception handling in the onRequestHandlerExecuted(...) callback
+        // which fires before the onEndRequest(...) callback.
+        //return super.onException(cycle, ex);
         
-        return new RenderPageRequestHandler(new PageProvider(page));
+        // hmm, maybe not.  making in edit page do a flush seems to belie that.
+        
+        return new RenderPageRequestHandler(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
+    }
+
+    protected PageProvider errorPageProviderFor(Exception ex) {
+        return new PageProvider(errorPageFor(ex));
+    }
+
+    protected ErrorPage errorPageFor(Exception ex) {
+        List<ExceptionRecognizer> exceptionRecognizers;
+        try {
+            exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        } catch(Exception ex2) {
+            LOG.warn("Unable to obtain exceptionRecognizers (no session?)");
+            exceptionRecognizers = Collections.emptyList();
+        }
+        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        final ErrorPage page = message != null ? new ErrorPage(message, ex) : new ErrorPage(ex);
+        return page;
     }
 
 

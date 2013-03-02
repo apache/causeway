@@ -293,14 +293,14 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
 
         // attempt to locate adapter for the Oid
         ObjectAdapter adapter = getAdapterFor(typedOid);
-        if (adapter != null) {
-            return adapter;
-        } 
-        
-        final Object pojo = pojoRecreator.recreatePojo(typedOid);
-        adapter = mapRecreatedPojo(typedOid, pojo);
-        
-        final Oid adapterOid = adapter.getOid();
+        if (adapter == null) {
+            // else recreate
+            final Object pojo = pojoRecreator.recreatePojo(typedOid);
+            adapter = mapRecreatedPojo(typedOid, pojo);
+        }
+
+        // sync versions of original, with concurrency checking if required
+        Oid adapterOid = adapter.getOid();
         if(adapterOid instanceof RootOid) {
             final RootOid recreatedOid = (RootOid) adapterOid;
             final RootOid originalOid = (RootOid) typedOid;
@@ -312,6 +312,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
                 originalOid.setVersion(recreatedOid.getVersion());
             }
         }
+
         return adapter;
     }
 

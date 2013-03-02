@@ -196,7 +196,7 @@ public class IsisTransactionTest {
 
         transaction.addCommand(command);
         transaction.addCommand(command2);
-        transaction.abort();
+        transaction.markAsAborted();
     }
 
 
@@ -305,14 +305,14 @@ public class IsisTransactionTest {
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyAbortedTransaction() throws Exception {
-        transaction.abort();
+        transaction.markAsAborted();
 
-        transaction.abort();
+        transaction.markAsAborted();
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyAbortedTransaction() throws Exception {
-        transaction.abort();
+        transaction.markAsAborted();
 
         transaction.commit();
     }
@@ -327,7 +327,7 @@ public class IsisTransactionTest {
 
         transaction.commit();
 
-        transaction.abort();
+        transaction.markAsAborted();
     }
 
     @Test(expected = IllegalStateException.class)

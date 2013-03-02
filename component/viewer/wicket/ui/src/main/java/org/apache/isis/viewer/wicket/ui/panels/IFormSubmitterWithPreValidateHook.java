@@ -16,34 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.wicket.ui.panels;
 
-package org.apache.isis.core.commons.exceptions;
-
-import java.text.MessageFormat;
-
-/**
- * General exception raised by the framework, typically a system exception.
- */
-public class IsisException extends RuntimeException {
-    
-    private static final long serialVersionUID = 1L;
-    
-    public IsisException() {
-    }
-
-    public IsisException(final String message) {
-        super(message);
-    }
-
-    public IsisException(final String messageFormat, final Object... args) {
-        super(MessageFormat.format(messageFormat, args));
-    }
-
-    public IsisException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public IsisException(final Throwable cause) {
-        super(cause);
-    }
+public interface IFormSubmitterWithPreValidateHook {
+    String preValidate();
 }

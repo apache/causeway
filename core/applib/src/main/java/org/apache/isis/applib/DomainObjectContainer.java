@@ -75,9 +75,10 @@ public interface DomainObjectContainer {
      * Flush all changes to the object store.
      * 
      * <p>
-     * Typically only for use by tests.
+     * Occasionally useful to ensure that newly persisted domain objects
+     * are flushed to the database prior to a subsequent repository query. 
      * 
-     * @return <tt>true</tt>
+     * @return  - is never used, always returns <tt>false</tt>. 
      */
     boolean flush();
 
@@ -85,8 +86,13 @@ public interface DomainObjectContainer {
      * Commit all changes to the object store.
      * 
      * <p>
-     * Typically only for use by tests.
+     * This has been deprecated because the demarcation of transaction
+     * boundaries is a framework responsibility rather than being a
+     * responsibility of the domain object model.
+     * 
+     * @deprecated
      */
+    @Deprecated
     void commit();
 
     // ////////////////////////////////////////////////////////////////

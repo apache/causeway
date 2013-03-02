@@ -16,14 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.panels;
 
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.model.IModel;
+package org.apache.isis.core.runtime.system.transaction;
 
-public abstract class ButtonWithPreSubmitHook extends Button implements IFormSubmitterWithPreSubmitHook {
+import org.apache.isis.core.commons.exceptions.IsisException;
+
+public class IsisTransactionManagerDomCallbackException extends IsisException {
+
     private static final long serialVersionUID = 1L;
-    public ButtonWithPreSubmitHook(String id, IModel<String> model) {
-        super(id, model);
+
+    public IsisTransactionManagerDomCallbackException() {
     }
+
+    public IsisTransactionManagerDomCallbackException(final String message) {
+        super(message);
+    }
+
+    public IsisTransactionManagerDomCallbackException(final Throwable cause) {
+        super(cause);
+    }
+
+    public IsisTransactionManagerDomCallbackException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
 }

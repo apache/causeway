@@ -91,7 +91,7 @@ public class FrameworkSynchronizer {
                     // since there was already an adapter, do concurrency check
                     if(previousVersion != null && datastoreVersion != null) {
                         if(previousVersion.different(datastoreVersion)) {
-                            getCurrentTransaction().addException(new ConcurrencyException(getAuthenticationSession().getUserName(), oid, previousVersion, datastoreVersion));
+                            getCurrentTransaction().setAbortCause(new ConcurrencyException(getAuthenticationSession().getUserName(), oid, previousVersion, datastoreVersion));
                         }
                     }
                 } else {
