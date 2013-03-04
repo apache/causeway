@@ -38,52 +38,70 @@
       <tag>HEAD</tag>
   </scm>
 
-    <modules>
-        <module>core</module>
+    
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>core</module>
+        
+                <module>component/objectstore/xml</module>
+                <module>component/objectstore/sql</module>
+                <module>component/objectstore/nosql</module>
+                <module>component/objectstore/jdo</module>
+                <module>component/progmodel/wrapper</module>
+                <module>component/progmodel/groovy</module>
+        
+                <module>component/profilestore/xml</module>
+                <module>component/profilestore/sql</module>
+        
+                <module>component/security/file</module>
+                <module>component/security/ldap</module>
+                <module>component/security/sql</module>
+                <module>component/security/shiro</module>
+        
+                <module>component/viewer/dnd</module>
+                <module>component/viewer/html</module>
+                <module>component/viewer/scimpi</module>
+                <module>component/viewer/wicket</module>
+                <module>component/viewer/restfulobjects</module>
+                <module>component/viewer/bdd</module>
+                <module>component/viewer/junit</module>
+        
+                <module>example/application/claims</module>
+                <module>example/application/quickstart_html_sql</module>
+                <module>example/application/quickstart_scimpi_nosql</module>
+                <module>example/application/quickstart_dnd_junit_bdd</module>
+                <module>example/application/quickstart_wicket_restful_jdo</module>
+        
+                <module>example/archetype/quickstart_wicket_restful_jdo</module>
+        
+                <module>example/domain-service/email-service</module>
+                <module>example/misc/metamodel/namefile</module>
+        
+        <!-- 
+                <module>example/misc/metamodel/jsr303</module>
+         -->        
+        
+                <module>site-skin</module>
+                <module>tool/maven-plugin</module>
+            </modules>
+        </profile>
 
-        <module>component/objectstore/xml</module>
-        <module>component/objectstore/sql</module>
-        <module>component/objectstore/nosql</module>
-        <module>component/objectstore/jdo</module>
-        <module>component/progmodel/wrapper</module>
-        <module>component/progmodel/groovy</module>
-
-        <module>component/profilestore/xml</module>
-        <module>component/profilestore/sql</module>
-
-        <module>component/security/file</module>
-        <module>component/security/ldap</module>
-        <module>component/security/sql</module>
-        <module>component/security/shiro</module>
-
-        <module>component/viewer/dnd</module>
-        <module>component/viewer/html</module>
-        <module>component/viewer/scimpi</module>
-        <module>component/viewer/wicket</module>
-        <module>component/viewer/restfulobjects</module>
-        <module>component/viewer/bdd</module>
-        <module>component/viewer/junit</module>
-
-        <module>example/application/claims</module>
-        <module>example/application/quickstart_html_sql</module>
-        <module>example/application/quickstart_scimpi_nosql</module>
-        <module>example/application/quickstart_dnd_junit_bdd</module>
-        <module>example/application/quickstart_wicket_restful_jdo</module>
-
-        <module>example/archetype/quickstart_wicket_restful_jdo</module>
-
-
-        <module>example/domain-service/email-service</module>
-        <module>example/misc/metamodel/namefile</module>
-
-<!-- 
-        <module>example/misc/metamodel/jsr303</module>
- -->        
-
-        <module>site-skin</module>
-        <module>tool/maven-plugin</module>
-
-    </modules>
-
+        <profile>
+            <id>sonar</id>
+            <modules>
+                <module>core</module>
+                <module>component/objectstore/jdo</module>
+                <module>component/security/file</module>
+                <module>component/security/shiro</module>
+                <module>component/viewer/wicket</module>
+                <module>component/viewer/restfulobjects</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
