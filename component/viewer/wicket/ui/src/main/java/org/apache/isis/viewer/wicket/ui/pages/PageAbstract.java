@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.RecognizedException;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -40,12 +43,18 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.Session;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -64,8 +73,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 /**
- * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}
- * s.
+ * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
 public abstract class PageAbstract extends WebPage {
 
@@ -85,7 +93,13 @@ public abstract class PageAbstract extends WebPage {
     public static final String ID_ABOUT_LINK = "aboutLink";
 
     private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
-    
+
+    /**
+     * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
+     * if there is a problem rendering this page.
+     */
+    public static ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<ExceptionModel>(); 
+
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
     
@@ -121,13 +135,38 @@ public abstract class PageAbstract extends WebPage {
             addLogoutLink();
             addAboutLink();
             add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
-        } catch(RuntimeException ex) {
             
+        } catch(RuntimeException ex) {
+
             LOG.error("Failed to construct page, going back to sign in page", ex);
-            // hack for IE
+            
+            // REVIEW: similar code in WebRequestCycleForIsis
+            final  List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+            final ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
+
             getSession().invalidate();
+            getSession().clear();
+            
+            // for the WicketSignInPage to render
+            EXCEPTION.set(exceptionModel);
+
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
         }
+    }
+    
+
+
+    protected ExceptionModel recognizeException(Exception ex) {
+        List<ExceptionRecognizer> exceptionRecognizers;
+        try {
+            exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        } catch(Exception ex2) {
+            LOG.warn("Unable to obtain exceptionRecognizers (no session?)");
+            exceptionRecognizers = Collections.emptyList();
+        }
+        final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        return ExceptionModel.create(recognizedMessageIfAny, ex);
     }
 
     

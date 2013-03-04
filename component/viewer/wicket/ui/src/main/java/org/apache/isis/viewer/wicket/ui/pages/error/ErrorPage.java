@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.error;
 
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -33,21 +35,8 @@ public class ErrorPage extends PageAbstract {
 
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
-    /**
-     * For recognized messages.
-     */
-    public ErrorPage(String message, Exception ex) {
-        this(ExceptionModel.recognized(message, ex));
-    }
 
-    /**
-     * For non-recognized messages.
-     */
-    public ErrorPage(Exception ex) {
-        this(ExceptionModel.notRecognized(ex));
-    }
-
-    private ErrorPage(ExceptionModel exceptionModel) {
+    public ErrorPage(ExceptionModel exceptionModel) {
         super(new PageParameters());
         
         addBookmarkedPages();

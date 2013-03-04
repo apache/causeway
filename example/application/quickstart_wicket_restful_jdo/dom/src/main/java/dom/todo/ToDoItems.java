@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 import org.joda.time.LocalDate;
@@ -92,6 +93,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
+    
     // {{ newToDo  (action)
     @MemberOrder(sequence = "3")
     public ToDoItem newToDo(
@@ -107,14 +109,21 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // }}
 
 
-    // {{ AllToDos (action)
+    // {{ allToDos (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "4")
     public List<ToDoItem> allToDos() {
+        return allToDos(NotifyUserIfNone.YES);
+    }
+
+    public enum NotifyUserIfNone { YES, NO }
+    
+    @Programmatic
+    public List<ToDoItem> allToDos(NotifyUserIfNone notifyUser) {
         final String currentUser = currentUserName();
         final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
         Collections.sort(items);
-        if(items.isEmpty()) {
+        if(notifyUser == NotifyUserIfNone.YES && items.isEmpty()) {
             getContainer().warnUser("No to-do items found.");
         }
         return items;
@@ -166,7 +175,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
     
-
+    
     // {{ autoComplete (hidden)
     @Hidden
     public List<ToDoItem> autoComplete(final String description) {
@@ -189,5 +198,5 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
     // }}
 
-    
+
 }

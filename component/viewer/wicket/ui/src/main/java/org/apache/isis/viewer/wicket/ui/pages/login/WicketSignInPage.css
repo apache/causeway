@@ -95,3 +95,7 @@
 .loginPanel table tr td {
 	color:#46423C;
 }
+
+.wicketSignInPanel .mainMessage {
+	margin-top: 550px;
+}

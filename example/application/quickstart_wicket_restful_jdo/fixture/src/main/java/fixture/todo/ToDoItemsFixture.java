@@ -28,6 +28,7 @@ import org.joda.time.LocalDate;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
+import dom.todo.ToDoItems.NotifyUserIfNone;
 
 public class ToDoItemsFixture extends AbstractFixture {
 
@@ -61,7 +62,7 @@ public class ToDoItemsFixture extends AbstractFixture {
     // {{ helpers
     private void removeAllToDosForCurrentUser() {
         
-        final List<ToDoItem> allToDos = toDoItems.allToDos();
+        final List<ToDoItem> allToDos = toDoItems.allToDos(NotifyUserIfNone.NO);
         for (final ToDoItem toDoItem : allToDos) {
             getContainer().remove(toDoItem);
         }

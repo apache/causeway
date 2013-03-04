@@ -1,9 +1,8 @@
-package org.apache.isis.viewer.wicket.ui.pages.error;
+package org.apache.isis.viewer.wicket.ui.errors;
 
 import java.util.List;
 
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -18,22 +17,17 @@ public class ExceptionModel extends ModelAbstract<Exception> {
     private boolean recognized;
 
     private final String mainMessage;
-
-    private final String exceptionMessage;
     
 
-    public static ExceptionModel recognized(String message, Exception ex) {
-        return new ExceptionModel(message, null, ex);
+    public static ExceptionModel create(String recognizedMessageIfAny, Exception ex) {
+        return recognizedMessageIfAny != null
+                ? new ExceptionModel(recognizedMessageIfAny, true, ex)
+                : new ExceptionModel(MAIN_MESSAGE_IF_NOT_RECOGNIZED, false, ex);
     }
 
-    public static ExceptionModel notRecognized(Exception ex) {
-        return new ExceptionModel(MAIN_MESSAGE_IF_NOT_RECOGNIZED, ex.getMessage(), ex);
-    }
-
-    private ExceptionModel(String mainMessage, String exceptionMessage, Exception ex) {
+    private ExceptionModel(String mainMessage, boolean recognized, Exception ex) {
         this.mainMessage = mainMessage;
-        this.exceptionMessage = exceptionMessage;
-        this.recognized = (exceptionMessage == null);
+        this.recognized = recognized;
         this.exception = ex;
     }
 
@@ -58,9 +52,6 @@ public class ExceptionModel extends ModelAbstract<Exception> {
         return mainMessage;
     }
     
-    public String getExceptionMessage() {
-        return exceptionMessage;
-    }
     
     public List<StackTraceDetail> getStackTrace() {
         return asStackTrace(exception);

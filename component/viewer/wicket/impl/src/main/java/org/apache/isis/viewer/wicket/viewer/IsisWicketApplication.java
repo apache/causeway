@@ -24,35 +24,12 @@ import java.util.ServiceLoader;
 
 import javax.servlet.ServletContext;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
-import net.sf.cglib.transform.impl.AddInitTransformer;
-
-import org.apache.log4j.Logger;
-import org.apache.wicket.Application;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.guice.GuiceComponentInjector;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
-import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
@@ -79,13 +56,29 @@ import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.IsisContextForWicket;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
+import org.apache.log4j.Logger;
+import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -214,7 +207,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         this.bookmarkedPagesModel = new BookmarkedPagesModel();
 
         initWicketComponentInjection(injector);
-        
     }
     
     @Override

@@ -17,9 +17,8 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.error;
+package org.apache.isis.viewer.wicket.ui.errors;
 
-import org.apache.isis.viewer.wicket.ui.errors.StackTraceListView;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -28,8 +27,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
-import com.google.common.base.Strings;
 
 public class ExceptionStackTracePanel extends Panel {
 
@@ -45,20 +42,6 @@ public class ExceptionStackTracePanel extends Panel {
 
     private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(ExceptionStackTracePanel.class, "div-toggle.js");
 
-    /**
-     * For recognized messages.
-     */
-    public ExceptionStackTracePanel(String id, String message, Exception ex) {
-        this(id, ExceptionModel.recognized(message, ex));
-    }
-
-    /**
-     * For non-recognized messages.
-     */
-    public ExceptionStackTracePanel(String id, Exception ex) {
-        this(id, ExceptionModel.notRecognized(ex));
-    }
-
     public ExceptionStackTracePanel(String id, ExceptionModel exceptionModel) {
         super(id, exceptionModel);
         
@@ -71,7 +54,6 @@ public class ExceptionStackTracePanel extends Panel {
                 response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
             }
         };
-        container.add(new Label(ID_EXCEPTION_MESSAGE, Strings.nullToEmpty(exceptionModel.getExceptionMessage())).setVisible(exceptionModel.isRecognized()));
         container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
         add(container);
     }

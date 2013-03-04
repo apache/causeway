@@ -33,15 +33,20 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.core.runtime.system.transaction.MessageBrokerDefault;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.log4j.Logger;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
+import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 
@@ -123,13 +128,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-        // previously we had a handler in here.  However, it seems to be sufficient to just
-        // use the exception handling in the onRequestHandlerExecuted(...) callback
-        // which fires before the onEndRequest(...) callback.
-        //return super.onException(cycle, ex);
-        
-        // hmm, maybe not.  making in edit page do a flush seems to belie that.
-        
         return new RenderPageRequestHandler(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
     }
 
@@ -137,43 +135,73 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         return new PageProvider(errorPageFor(ex));
     }
 
-    protected ErrorPage errorPageFor(Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers;
-        try {
+    protected IRequestablePage errorPageFor(Exception ex) {
+        List<ExceptionRecognizer> exceptionRecognizers = Collections.emptyList();
+        if(inIsisSession()) {
             exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-        } catch(Exception ex2) {
-            LOG.warn("Unable to obtain exceptionRecognizers (no session?)");
-            exceptionRecognizers = Collections.emptyList();
+        } else {
+            LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception");
         }
-        String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        final ErrorPage page = message != null ? new ErrorPage(message, ex) : new ErrorPage(ex);
-        return page;
+        String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
+        
+        if( isSignedIn()) {
+            return new ErrorPage(exceptionModel);
+        } else {
+            return new WicketSignInPage(null, exceptionModel);
+        }
+    }
+
+    /**
+     * TODO: this is very hacky...
+     * 
+     * <p>
+     * Matters should improve once ISIS-299 gets implemented...
+     */
+    protected boolean isSignedIn() {
+        if(!inIsisSession()) {
+            return false;
+        }
+        if(getAuthenticationSession() == null) {
+            return false;
+        }
+        return getWicketAuthenticationSession().isSignedIn();
     }
 
 
+
     
     ///////////////////////////////////////////////////////////////
-    // Dependencies (from context)
+    // Dependencies (from isis' context)
     ///////////////////////////////////////////////////////////////
     
-    /**
-     * Factored out so can be overridden in testing.
-     */
     protected ServicesInjector getServicesInjector() {
         return IsisContext.getPersistenceSession().getServicesInjector();
     }
     
-    /**
-     * Factored out so can be overridden in testing.
-     */
     protected IsisContext getIsisContext() {
         return IsisContext.getInstance();
     }
 
-    /**
-     * Factored out so can be overridden in testing.
-     */
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
+
+    protected boolean inIsisSession() {
+        return IsisContext.inSession();
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
+    ///////////////////////////////////////////////////////////////
+    // Dependencies (from wicket)
+    ///////////////////////////////////////////////////////////////
+
+    
+    protected AuthenticatedWebSession getWicketAuthenticationSession() {
+        return AuthenticatedWebSession.get();
+    }
+
 }
