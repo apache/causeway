@@ -90,7 +90,7 @@ public class DomainServiceTest_req_queryarg_xrofollowlinks {
     }
 
     @Test
-    public void toMembers() throws Exception {
+    public void toMembersDetails() throws Exception {
         final String href = givenHrefToService("WrapperValuedEntities");
 
         final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members.links[rel=%s]", Rel.DETAILS.getName());
@@ -139,7 +139,7 @@ public class DomainServiceTest_req_queryarg_xrofollowlinks {
     }
 
     @Test
-    public void multipleMembers() throws Exception {
+    public void toMultipleMembersDetails() throws Exception {
 
         final String href = givenHrefToService("WrapperValuedEntities");
 
@@ -163,7 +163,6 @@ public class DomainServiceTest_req_queryarg_xrofollowlinks {
         assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // also followed
     }
     
-
 
     
     private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {

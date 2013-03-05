@@ -23,11 +23,13 @@ import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.a
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -40,6 +42,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectMe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -125,23 +128,76 @@ public class DomainServiceTest_resp_representation {
     }
 
 
-    @Ignore("todo")
-    @Test
-    public void disabledAction() throws Exception {
-        
-        
-        // has a disabledRead
 
+    @Test
+    public void visibleAndInvocableAction() throws Exception {
+        
+        // given
+        final Response resp = resource.service("BusinessRulesEntities");
+
+        // when
+        final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
+
+        // then
+        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = jsonResp.getEntity();
+
+        assertThat(repr, isMap());
+
+        final DomainObjectMemberRepresentation actionRepr = repr.getAction("visibleAndInvocableAction");
+        assertThat(actionRepr, isMap());
+
+        assertThat(actionRepr.getDisabledReason(), is(nullValue()));
+
+        final LinkRepresentation actionDetailsLink = actionRepr.getLinkWithRel(Rel.DETAILS);
+        assertThat(actionDetailsLink, isLink(this.client)
+                                        .rel(Rel.DETAILS)
+                                        .httpMethod(RestfulHttpMethod.GET)
+                                        .href(Matchers.endsWith(":39393/services/BusinessRulesEntities/actions/visibleAndInvocableAction"))
+                                        .returning(HttpStatusCode.OK));
     }
 
-    @Ignore("todo")
+
     @Test
-    public void nonExistentAction() throws Exception {
+    public void visibleButNotInvocableAction() throws Exception {
         
+        // given
+        final Response resp = resource.service("BusinessRulesEntities");
 
-        // eg...
-        // DomainObjectMemberRepresentation listMemberRepr = repr.getAction("foobar");
+        // when
+        final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
 
+        // then
+        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = jsonResp.getEntity();
+
+        final DomainObjectMemberRepresentation actionRepr = repr.getAction("visibleButNotInvocableAction");
+        assertThat(actionRepr, isMap());
+
+        assertThat(actionRepr.getDisabledReason(), is("Always disabled"));
+
+        final LinkRepresentation actionDetailsLink = actionRepr.getLinkWithRel(Rel.DETAILS);
+
+        // even though not invocable, still can traverse to its details page
+        assertThat(actionDetailsLink, isLink(this.client)
+                                        .href(Matchers.endsWith(":39393/services/BusinessRulesEntities/actions/visibleButNotInvocableAction"))
+                                        .returning(HttpStatusCode.OK));
+    }
+
+    @Test
+    public void invisibleAction() throws Exception {
+        
+        // given
+        final Response resp = resource.service("BusinessRulesEntities");
+
+        // when
+        final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
+
+        // then
+        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = jsonResp.getEntity();
+
+        assertThat(repr.getAction("invisibleAction"), is(nullValue()));
     }
 
 
