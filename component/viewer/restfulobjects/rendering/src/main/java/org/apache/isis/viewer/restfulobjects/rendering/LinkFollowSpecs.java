@@ -105,7 +105,7 @@ public final class LinkFollowSpecs {
      * Any keys in the criterium are ignored (these were matched on during the
      * {@link #follow(String, Object...)} call).
      */
-    public boolean matches(final JsonRepresentation link) {
+    public boolean matches(final JsonRepresentation jsonRepr) {
         if (!isFollowing()) {
             return false;
         }
@@ -113,12 +113,16 @@ public final class LinkFollowSpecs {
             return true;
         }
         for (PathNode criteriaSpec : criteriaSpecs) {
-            if(criteriaSpec.matches(link)) {
+            if(criteriaSpec.matches(jsonRepr)) {
                 return true;
             }
         }
         return false;
     }
 
+    @Override
+    public String toString() {
+        return mode + " : " + criteriaSpecs + " : " + pathSpecs;
+    }
 
 }

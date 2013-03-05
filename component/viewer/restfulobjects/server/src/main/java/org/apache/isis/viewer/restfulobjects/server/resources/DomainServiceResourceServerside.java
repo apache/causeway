@@ -76,7 +76,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
 
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.usingLinkToBuilder(new DomainServiceLinkTo()).with(serviceAdapter).includesSelf();
+        renderer.usingLinkToBuilder(new DomainServiceLinkTo())
+            .with(serviceAdapter)
+            .includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }

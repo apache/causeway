@@ -35,8 +35,8 @@ import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, RepresentationType.OBJECT_PROPERTY, representation, Where.OBJECT_FORMS);
+    public ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final String propertyId, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, propertyId, RepresentationType.OBJECT_PROPERTY, representation, Where.OBJECT_FORMS);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
+        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

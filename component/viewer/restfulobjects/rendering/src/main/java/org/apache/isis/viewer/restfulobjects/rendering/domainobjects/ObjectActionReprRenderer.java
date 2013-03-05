@@ -37,13 +37,13 @@ import com.google.common.collect.Lists;
 
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
-    public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
+    public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollowSpecs, String actionId, final JsonRepresentation representation) {
+        super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
     }
 
     @Override
     public JsonRepresentation render() {
-        // id and memberType are rendered eagerly
+        // memberType is rendered eagerly
 
         renderMemberContent();
         putDisabledReasonIfDisabled();
@@ -64,7 +64,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
+        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(new ObjectAndAction(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
@@ -47,6 +48,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.*;
 
 public class DomainServiceTest_req_queryarg_xrofollowlinks {
 
@@ -61,51 +63,107 @@ public class DomainServiceTest_req_queryarg_xrofollowlinks {
         client = new RestfulClient(webServer.getBase());
     }
 
-    @Ignore("todo... the service Id is wrong")
     @Test
-    public void withCriteria() throws Exception {
+    public void self() throws Exception {
+        final String href = givenHrefToService("WrapperValuedEntities");
 
-        final String href = givenHrefToService("simples");
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "links[rel=self]");
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", "list");
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = restfulResponse.getEntity();
+        
+        assertThat(repr.getSelf().getValue(), is(not(nullValue())));
+    }
+
+    @Test
+    public void toDescribedBy() throws Exception {
+        final String href = givenHrefToService("WrapperValuedEntities");
+
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "links[rel=describedby]");
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
+
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = restfulResponse.getEntity();
+        
+        assertThat(repr.getLinkWithRel(Rel.DESCRIBEDBY).getValue(), is(not(nullValue())));
+    }
+
+    @Test
+    public void toMembers() throws Exception {
+        final String href = givenHrefToService("WrapperValuedEntities");
+
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members.links[rel=%s]", Rel.DETAILS.getName());
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
 
         final JsonRepresentation membersList = repr.getMembers();
-        assertThat(membersList, isArray());
+        assertThat(membersList, isMap());
 
         JsonRepresentation actionRepr;
 
-        actionRepr = membersList.getRepresentation("[id=%s]", "list");
-        assertThat(actionRepr.getRepresentation("links[rel=details]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(not(nullValue()))); // followed
+        actionRepr = membersList.getRepresentation("list");
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // followed
 
-        actionRepr = membersList.getRepresentation("[id=%s]", "newTransientEntity");
-        assertThat(actionRepr.getRepresentation("links[rel=details]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(nullValue())); // not
-                                                                                               // followed
+        actionRepr = membersList.getRepresentation("newEntity");
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // also followed
     }
 
-    @Ignore("todo")
     @Test
-    public void toSelf() throws Exception {
-    
+    public void singleMember_specified_by_criteria() throws Exception {
+
+        final String href = givenHrefToService("WrapperValuedEntities");
+
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s]", "list", Rel.DETAILS.getName());
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
+
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = restfulResponse.getEntity();
+
+        final JsonRepresentation membersList = repr.getMembers();
+        assertThat(membersList, isMap());
+
+        JsonRepresentation actionRepr;
+
+        actionRepr = membersList.getRepresentation("list");
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // followed
+
+        actionRepr = membersList.getRepresentation("newEntity");
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(nullValue())); // not followed
     }
 
-    @Ignore("todo")
     @Test
-    public void toDescribedBy() throws Exception {
-    
-    }
+    public void multipleMembers() throws Exception {
 
-    @Ignore("todo")
-    @Test
-    public void toMembers() throws Exception {
-    
-        // no need to do an individual member, that's been tested already elsewhere
+        final String href = givenHrefToService("WrapperValuedEntities");
+
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s],members[%s].links[rel=%s]", "list", Rel.DETAILS.getName(), "newEntity", Rel.DETAILS.getName());
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
+
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        final DomainObjectRepresentation repr = restfulResponse.getEntity();
+
+        final JsonRepresentation membersList = repr.getMembers();
+        assertThat(membersList, isMap());
+
+        JsonRepresentation actionRepr;
+
+        actionRepr = membersList.getRepresentation("list");
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // followed
+
+        actionRepr = membersList.getRepresentation("newEntity");
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // also followed
     }
+    
+
 
     
     private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
@@ -113,7 +171,7 @@ public class DomainServiceTest_req_queryarg_xrofollowlinks {
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation> ofT(response).getEntity();
 
-        return services.getRepresentation("values[id=%s]", serviceId).asLink().getHref();
+        return services.getRepresentation("value[rel=urn:org.restfulobjects:rels/service;serviceId=\"%s\"]", serviceId).asLink().getHref();
     }
 
 }

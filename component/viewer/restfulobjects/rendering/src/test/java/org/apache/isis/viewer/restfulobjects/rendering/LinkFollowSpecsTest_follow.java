@@ -68,7 +68,7 @@ public class LinkFollowSpecsTest_follow {
     }
 
     @Test
-    public void follow_withSingleCriteria() throws Exception {
+    public void follow_withSingleListCriteria() throws Exception {
         final List<List<String>> links = asListOfLists("a[x=y].b.c");
 
         final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
@@ -81,6 +81,23 @@ public class LinkFollowSpecsTest_follow {
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(true));
         assertThat(followA.matches(JsonRepresentation.newMap()), is(false));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "z")), is(false));
+    }
+
+    @Test
+    public void follow_withSingleMapCriteria() throws Exception {
+        final List<List<String>> links = asListOfLists("a[x].b.c");
+
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
+
+        assertThat(linkFollower.follow("x").isFollowing(), is(false));
+
+        final LinkFollowSpecs followA = linkFollower.follow("a");
+
+        assertThat(followA.isFollowing(), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap("x", "z")), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap()), is(false));
+        assertThat(followA.matches(JsonRepresentation.newMap("p", "z")), is(false));
     }
 
     @Test

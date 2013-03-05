@@ -65,11 +65,23 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected T objectMember;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
 
+    /**
+     * Not for rendering, but is the key that the representation being rendered will be held under.
+     * 
+     * <p>
+     * Used to determine whether to follow links; only populated for {@link Mode#INLINE inline} Mode.
+     */
+    private final String memberId;
     private final Where where;
 
-    public AbstractObjectMemberReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
+    public AbstractObjectMemberReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, String memberId, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
         super(resourceContext, linkFollower, representationType, representation);
+        this.memberId = memberId;
         this.where = where;
+    }
+    
+    protected String getMemberId() {
+        return memberId;
     }
 
     @Override
@@ -79,10 +91,6 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.memberType = MemberType.determineFrom(objectMember);
         usingLinkTo(new DomainObjectLinkTo());
 
-        // done eagerly so can use as criteria for x-ro-follow-links
-        if(!mode.isInline()) {
-            representation.mapPut("id", objectMember.getId());
-        }
         representation.mapPut("memberType", memberType.getName());
 
         return cast(this);
@@ -214,8 +222,12 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         getLinks().arrayAdd(link);
 
         final LinkFollowSpecs membersLinkFollower = getLinkFollowSpecs();
-        final LinkFollowSpecs detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", Rel.DETAILS.getName());
-        if (membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
+        final LinkFollowSpecs detailsLinkFollower = membersLinkFollower.follow("links");
+        
+        // create a temporary map that looks the same as the member map we'll be following
+        final JsonRepresentation memberMap = JsonRepresentation.newMap();
+        memberMap.mapPut(getMemberId(), this.representation);
+        if (membersLinkFollower.matches(memberMap) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }
         return;

@@ -34,7 +34,7 @@ import com.google.common.collect.Maps;
 public class PathNode {
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    private static final Pattern KEY_VALUE = Pattern.compile("^([^=]+)=(.+)$");
+    private static final Pattern LIST_CRITERIA_SYNTAX = Pattern.compile("^([^=]+)=(.+)$");
 
     public static final PathNode NULL = new PathNode("", Collections.<String, String> emptyMap());
 
@@ -79,9 +79,12 @@ public class PathNode {
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
             for (final String criterium : Splitter.on(WHITESPACE).split(criteriaStr)) {
-                final Matcher keyValueMatcher = KEY_VALUE.matcher(criterium);
+                final Matcher keyValueMatcher = LIST_CRITERIA_SYNTAX.matcher(criterium);
                 if (keyValueMatcher.matches()) {
                     criteria.put(keyValueMatcher.group(1), keyValueMatcher.group(2));
+                } else {
+                    // take content as a map criteria
+                    criteria.put(criterium, null);
                 }
             }
         }
@@ -115,9 +118,15 @@ public class PathNode {
         }
         for (final Map.Entry<String, String> criterium : getCriteria().entrySet()) {
             final String requiredValue = criterium.getValue();
-            final String actualValue = repr.getString(criterium.getKey());
-            if (!Objects.equal(requiredValue, actualValue)) {
-                return false;
+            if(requiredValue != null) {
+                // list syntax
+                final String actualValue = repr.getString(criterium.getKey());
+                if (!Objects.equal(requiredValue, actualValue)) {
+                    return false;
+                }
+            } else {
+                // map syntax
+                return repr.getRepresentation(criterium.getKey()) != null;
             }
         }
         return true;

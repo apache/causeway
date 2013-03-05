@@ -36,8 +36,8 @@ import com.google.common.collect.Lists;
 
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
-    public ObjectCollectionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
+    public ObjectCollectionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final String collectionId, final JsonRepresentation representation) {
+        super(resourceContext, linkFollower, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
+        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
