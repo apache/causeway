@@ -26,7 +26,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -45,9 +44,9 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
+
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.*;
 
 public class DomainServiceTest_req_queryarg_xrofollowlinks {
@@ -163,14 +162,8 @@ public class DomainServiceTest_req_queryarg_xrofollowlinks {
         assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // also followed
     }
     
-
-    
     private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
-        final DomainServiceResource resource = client.getDomainServiceResource();
-        final Response response = resource.services();
-        final ListRepresentation services = RestfulResponse.<ListRepresentation> ofT(response).getEntity();
-
-        return services.getRepresentation("value[rel=urn:org.restfulobjects:rels/service;serviceId=\"%s\"]", serviceId).asLink().getHref();
+        return Util.givenHrefToService(client, serviceId);
     }
 
 }

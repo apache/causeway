@@ -32,6 +32,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Reques
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;

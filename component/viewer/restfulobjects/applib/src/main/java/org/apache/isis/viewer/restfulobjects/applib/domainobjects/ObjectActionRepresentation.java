@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.codehaus.jackson.JsonNode;
 
 public class ObjectActionRepresentation extends AbstractObjectMemberRepresentation {
@@ -28,7 +29,7 @@ public class ObjectActionRepresentation extends AbstractObjectMemberRepresentati
     }
 
     public LinkRepresentation getInvoke() {
-        return getLinkWithRel("invoke");
+        return getLinkWithRel(Rel.INVOKE);
     }
 
 }

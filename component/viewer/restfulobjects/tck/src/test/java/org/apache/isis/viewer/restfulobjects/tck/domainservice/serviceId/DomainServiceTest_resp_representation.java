@@ -23,13 +23,11 @@ import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.a
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -44,7 +42,6 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceR
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 

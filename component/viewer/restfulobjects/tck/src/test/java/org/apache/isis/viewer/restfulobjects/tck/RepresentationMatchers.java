@@ -39,6 +39,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.AbstractMatcherBuilder;
+import org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.LinkMatcherBuilder;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -172,6 +173,7 @@ public class RepresentationMatchers {
         private String typeParameterName;
         private String typeParameterValue;
         private String selfHref;
+        private JsonRepresentation arguments;
 
         private LinkMatcherBuilder(final RestfulClient client) {
             super(client);
@@ -215,6 +217,11 @@ public class RepresentationMatchers {
         public LinkMatcherBuilder typeParameter(final String typeParameterName, final String typeParameterValue) {
             this.typeParameterName = typeParameterName;
             this.typeParameterValue = typeParameterValue;
+            return this;
+        }
+
+        public LinkMatcherBuilder arguments(JsonRepresentation arguments) {
+            this.arguments = arguments;
             return this;
         }
 
@@ -275,6 +282,10 @@ public class RepresentationMatchers {
                         description.appendText(" with media type parameter '").appendText(typeParameterName).appendText("=").appendText(typeParameterValue).appendText("'");
                     }
 
+                    if (arguments != null) {
+                        description.appendText(" with arguments").appendText(arguments.toString());
+                    }
+
                     if (novalue != null && novalue) {
                         description.appendText(" with no value");
                     }
@@ -333,6 +344,9 @@ public class RepresentationMatchers {
                         }
                     }
                     if (novalue != null && novalue && link.getValue() != null) {
+                        return false;
+                    }
+                    if (arguments != null && !arguments.equals(link.getArguments())) {
                         return false;
                     }
                     if (valueMatcher != null && !valueMatcher.matches(link.getValue())) {

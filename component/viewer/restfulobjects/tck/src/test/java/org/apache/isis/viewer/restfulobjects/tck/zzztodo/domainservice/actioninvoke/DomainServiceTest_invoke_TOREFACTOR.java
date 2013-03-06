@@ -62,30 +62,11 @@ public class DomainServiceTest_invoke_TOREFACTOR {
 
     @Before
     public void setUp() throws Exception {
-        final WebServer webServer = webServerRule.getWebServer();
-        client = new RestfulClient(webServer.getBase());
+        client = webServerRule.getClient();
 
         resource = client.getDomainServiceResource();
     }
 
-    @Ignore("TODO - fix broken test resulting from introduction of actionresult repr")
-    @Test
-    public void invokeQueryOnly_noArg_usingClientFollow() throws Exception {
-
-        // given
-        final JsonRepresentation givenAction = givenAction("simples", "list");
-        final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-
-        // when
-        final LinkRepresentation invokeLink = actionRepr.getInvoke();
-
-        // then
-        assertThat(invokeLink, is(not(nullValue())));
-        final RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
-        final ListRepresentation listRepr = restfulResponse.getEntity();
-
-        assertThat(listRepr.getValue().size(), is(5));
-    }
 
     @Ignore("TODO - fix broken test resulting from introduction of actionresult repr")
     @Test

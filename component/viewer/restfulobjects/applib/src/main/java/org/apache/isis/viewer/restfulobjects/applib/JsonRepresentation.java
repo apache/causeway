@@ -1121,6 +1121,36 @@ public class JsonRepresentation {
         return buf.toString();
     }
 
+
+    // ///////////////////////////////////////////////////////////////////////
+    // equals and hashcode
+    // ///////////////////////////////////////////////////////////////////////
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((jsonNode == null) ? 0 : jsonNode.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        JsonRepresentation other = (JsonRepresentation) obj;
+        if (jsonNode == null) {
+            if (other.jsonNode != null)
+                return false;
+        } else if (!jsonNode.equals(other.jsonNode))
+            return false;
+        return true;
+    }
+    
     // ///////////////////////////////////////////////////////////////////////
     // toString
     // ///////////////////////////////////////////////////////////////////////
@@ -1129,5 +1159,6 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
 
 }
