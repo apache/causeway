@@ -23,9 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 
@@ -44,7 +46,7 @@ public abstract class AbstractEntityRepository<T> extends AbstractFactoryAndRepo
         return serviceId;
     }
 
-    @QueryOnly
+    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<T> list() {
         return allInstances(entityClass);

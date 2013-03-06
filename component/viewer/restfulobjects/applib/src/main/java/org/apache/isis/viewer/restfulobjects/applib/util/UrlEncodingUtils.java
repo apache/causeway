@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 import com.google.common.base.Charsets;
@@ -61,7 +62,11 @@ public final class UrlEncodingUtils {
     }
 
     public static String urlEncode(final JsonNode jsonNode) {
-        return UrlEncodingUtils.urlEncode(jsonNode.toString());
+        return urlEncode(jsonNode.toString());
+    }
+
+    public static String urlEncode(final JsonRepresentation jsonRepresentation ) {
+        return urlEncode(jsonRepresentation.toString());
     }
 
     public static String urlEncode(final String str) {

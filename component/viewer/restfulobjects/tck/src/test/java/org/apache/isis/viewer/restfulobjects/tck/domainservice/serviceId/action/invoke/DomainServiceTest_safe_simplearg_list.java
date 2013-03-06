@@ -18,14 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
+import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.IOException;
-
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -35,64 +32,92 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
+import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
-
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.*;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class DomainServiceTest_action_invoke {
+public class DomainServiceTest_safe_simplearg_list {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     private RestfulClient client;
 
-    @SuppressWarnings("unused")
-    private DomainServiceResource resource;
+    private DomainServiceResource serviceResource;
 
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
 
-        resource = client.getDomainServiceResource();
+        serviceResource = client.getDomainServiceResource();
     }
 
     @Test
     public void invokeQueryOnly_noArg_usingClientFollow_returning_list() throws Exception {
 
         // given
-        final JsonRepresentation givenAction = Util.givenAction(client, "ParentEntities", "list");
+        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subList");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
 
-        // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
 
-        // then
         assertThat(invokeLink, isLink(client)
                                     .rel(Rel.INVOKE)
                                     .httpMethod(RestfulHttpMethod.GET)
-                                    .href(Matchers.endsWith(":39393/services/ParentEntities/actions/list/invoke"))
-                                    .arguments(JsonRepresentation.newMap())
+                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subList/invoke"))
                                     .build());
         
-        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink);
+        JsonRepresentation args =invokeLink.getArguments();
+        assertThat(args.size(), is(2));
+        assertThat(args, RepresentationMatchers.mapHas("from"));
+        assertThat(args, RepresentationMatchers.mapHas("to"));
+        
+        // when
+        args.mapPut("from", 1);
+        args.mapPut("to", 3);
+
+        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
+        
+        // then
+        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
+        
+        assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
+        final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
+        assertThat(listRepr.getValue().size(), is(2));
+    }
+
+
+    @Ignore("up to here...")
+    @Test
+    public void invokeQueryOnly_noArg_usingResourceProxy_returning_list() throws Exception {
+
+        // given, when
+        JsonRepresentation args = JsonRepresentation.newMap();
+        args.mapPut("from", 1);
+        args.mapPut("to", 3);
+        String xIsisQueryString = UrlEncodingUtils.urlEncode(args);
+        
+        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", xIsisQueryString);
+        RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
+        
+        // then
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
         
         assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
         
         final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
 
-        assertThat(listRepr.getValue().size(), is(5));
+        assertThat(listRepr.getValue().size(), is(2));
     }
 
 }

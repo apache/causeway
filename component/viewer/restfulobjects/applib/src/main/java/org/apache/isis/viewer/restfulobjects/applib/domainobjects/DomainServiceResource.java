@@ -27,6 +27,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -75,11 +76,18 @@ public interface DomainServiceResource {
     // domain service action invoke
     // //////////////////////////////////////////////////////////
 
+    /**
+     * Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead 
+     * we provide an additional syntax of passing an Isis-defined query param <tt>x-isis-querystring</tt>.
+     * 
+     * <p>
+     * The content of this is taken to be the URL encoded map of arguments.
+     */
     @GET
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
-    public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+    public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
 
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")

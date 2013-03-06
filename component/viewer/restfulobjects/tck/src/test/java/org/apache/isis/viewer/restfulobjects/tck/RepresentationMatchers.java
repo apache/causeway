@@ -509,4 +509,19 @@ public class RepresentationMatchers {
         };
     }
 
+    public static Matcher<? super JsonRepresentation> mapHas(final String key) {
+        return new TypeSafeMatcher<JsonRepresentation>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is a map with key '" + key + "'");
+            }
+
+            @Override
+            protected boolean matchesSafely(JsonRepresentation item) {
+                return item.mapHas(key);
+            }
+        };
+    }
+
 }

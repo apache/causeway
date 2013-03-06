@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.tck.fixture.busrules;
+package org.apache.isis.core.tck.fixture.actions;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.core.tck.dom.actions.ActionsEntity;
+import org.apache.isis.core.tck.dom.actions.ActionsEntityRepository;
 import org.apache.isis.core.tck.dom.busrules.BusRulesEntity;
 import org.apache.isis.core.tck.dom.busrules.BusRulesEntityRepository;
 
-public class BusRulesEntityFixture extends AbstractFixture {
+public class ActionsEntityFixture extends AbstractFixture {
 
     @Override
     public void install() {
@@ -33,16 +35,16 @@ public class BusRulesEntityFixture extends AbstractFixture {
         createEntity(5);
     }
 
-    private BusRulesEntity createEntity(Integer id) {
-        final BusRulesEntity entity = repository.newEntity();
+    private ActionsEntity createEntity(Integer id) {
+        final ActionsEntity entity = repository.newEntity();
         entity.setId(id);
         return entity;
     }
 
-    // {{ injected: BusRulesEntityRepository
-    private BusRulesEntityRepository repository;
+    // {{ injected: ActionSemanticsEntityRepository
+    private ActionsEntityRepository repository;
 
-    public void setBusRulesEntityRepository(final BusRulesEntityRepository repository) {
+    public void setActionSemanticsEntityRepository(final ActionsEntityRepository repository) {
         this.repository = repository;
     }
     // }}
