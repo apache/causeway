@@ -27,6 +27,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -169,23 +170,29 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static void injectServices(final Object object, final List<Object> services) {
         final Class<?> cls = object.getClass();
-        for (final Object service : services) {
-            final Class<?> serviceClass = service.getClass();
-            final Method[] methods = cls.getMethods();
-            for (int j = 0; j < methods.length; j++) {
-                if (!methods[j].getName().startsWith("set")) {
-                    continue;
-                }
-                final Class<?>[] parameterTypes = methods[j].getParameterTypes();
-                if (parameterTypes.length != 1 || parameterTypes[0] == Object.class || !parameterTypes[0].isAssignableFrom(serviceClass)) {
-                    continue;
-                }
+        final Method[] methods = cls.getMethods();
 
-                methods[j].setAccessible(true);
-
-                invokeSetMethod(methods[j], object, service);
+        for (int j = 0; j < methods.length; j++) {
+            for (final Object service : services) {
+                final Class<?> serviceClass = service.getClass();
+                boolean isInjectorMethod = isInjectorMethodFor(methods[j], serviceClass);
+                if(isInjectorMethod) {
+                    methods[j].setAccessible(true);
+                    invokeSetMethod(methods[j], object, service);
+                }
             }
         }
+    }
+
+    public static boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
+        final String methodName = method.getName();
+        if (methodName.startsWith("set") || methodName.startsWith("inject")) {
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class && parameterTypes[0].isAssignableFrom(serviceClass)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void invokeMethod(final Method method, final Object target, final Object[] parameters) {

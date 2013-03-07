@@ -476,7 +476,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // {{ injected: ToDoItems
     private ToDoItems toDoItems;
 
-    public void setToDoItems(final ToDoItems toDoItems) {
+    public void injectToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
     // }}

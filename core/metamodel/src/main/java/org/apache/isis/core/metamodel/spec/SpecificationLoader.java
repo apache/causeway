@@ -66,6 +66,7 @@ public interface SpecificationLoader extends Injectable {
     Collection<ObjectSpecification> allSpecifications();
 
 
+    List<Class<?>> getServiceClasses();
     
     /**
      * Whether this class has been loaded.

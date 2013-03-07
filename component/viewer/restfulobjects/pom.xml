@@ -159,7 +159,6 @@
 
     <modules>
 	    <module>applib</module>
-	    <module>jaxrs</module>
 	    <module>rendering</module>
 	    <module>server</module>
 	    <module>tck</module>

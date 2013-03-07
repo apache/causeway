@@ -292,6 +292,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 }
             }
 
+            @Override
+            public List<Object> getRegisteredServices() {
+                return getPersistenceSession().getServicesInjector().getRegisteredServices();
+            }
+
         };
         this.localizationProvider = new LocalizationProviderAbstract() {
 

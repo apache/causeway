@@ -69,13 +69,6 @@ public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injecta
      */
     void setServices(List<Object> services);
 
-    /**
-     * All registered services, as an immutable {@link List}.
-     * 
-     * <p>
-     * Does not include the {@link #getContainer() container}.
-     */
-    List<Object> getRegisteredServices();
 
 
 }

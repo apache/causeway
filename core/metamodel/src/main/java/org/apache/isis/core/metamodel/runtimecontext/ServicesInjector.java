@@ -25,6 +25,14 @@ import org.apache.isis.core.commons.components.Injectable;
 public interface ServicesInjector extends Injectable {
 
     /**
+     * All registered services, as an immutable {@link List}.
+     * 
+     * <p>
+     * Does not include the {@link #getContainer() container}.
+     */
+    List<Object> getRegisteredServices();
+
+    /**
      * Provided by the <tt>ServicesInjectorDefault</tt> when used by framework.
      * 
      * <p>

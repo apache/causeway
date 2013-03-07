@@ -137,6 +137,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             public ObjectSpecification introspectIfRequired(ObjectSpecification spec) {
                 return specificationLoader.introspectIfRequired(spec);
             }
+
+            @Override
+            public List<Class<?>> getServiceClasses() {
+                return specificationLoader.getServiceClasses();
+            }
         });
     }
 

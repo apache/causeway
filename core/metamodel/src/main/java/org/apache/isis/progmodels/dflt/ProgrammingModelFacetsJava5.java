@@ -87,6 +87,7 @@ import org.apache.isis.core.progmodel.facets.object.ignore.isis.RemoveStaticGett
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveGetClassMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveInitMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveInjectMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangComparableMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
@@ -213,6 +214,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RemoveJavaLangComparableMethodsFacetFactory.class);
         addFactory(RemoveSetDomainObjectContainerMethodFacetFactory.class);
         addFactory(RemoveInitMethodFacetFactory.class);
+        addFactory(RemoveInjectMethodsFacetFactory.class);
         addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
         addFactory(RemoveGetClassMethodFacetFactory.class);
         addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);

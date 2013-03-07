@@ -98,6 +98,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public <T> List<T> lookupServices(Class<T> serviceClass) {
                 return null;
             }
+
+            @Override
+            public List<Object> getRegisteredServices() {
+                return null;
+            }
         };
         authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
             @Override
