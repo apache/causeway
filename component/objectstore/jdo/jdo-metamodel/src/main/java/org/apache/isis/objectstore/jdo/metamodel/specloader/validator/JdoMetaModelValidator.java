@@ -20,6 +20,8 @@ package org.apache.isis.objectstore.jdo.metamodel.specloader.validator;
 
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -30,8 +32,8 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
 
     public JdoMetaModelValidator() {
         addValidatorToEnsurePersistenceCapables();
-
         addValidatorToEnsureIdentityType();
+        addValidatorToCheckForUnsupportedAnnotations();
     }
 
     private void addValidatorToEnsurePersistenceCapables() {
@@ -54,7 +56,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                     validationFailures.add("DataNucleus object store: no @PersistenceCapable found. " +
                             "(Are the entities referenced by the registered services? " + 
                             "are all services registered? " + 
-                            "are you using the JDO programming model facets?)");
+                            "did the DataNucleus enhancer run?)");
                 }
             }
         };
@@ -76,6 +78,19 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                 
                 return true;
                 // TODO: ensure that DATASTORE has recognised @DatastoreIdentity attribute
+            }};
+            
+        add(new MetaModelValidatorVisiting(ensureIdentityType));
+    }
+
+    private void addValidatorToCheckForUnsupportedAnnotations() {
+        MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
+            @Override
+            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
+                if (objSpec.containsDoOpFacet(ParentedFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
+                    validationFailures.add("DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations: see %s", objSpec.getFullIdentifier());
+                }
+                return true;
             }};
             
         add(new MetaModelValidatorVisiting(ensureIdentityType));
