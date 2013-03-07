@@ -361,6 +361,20 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     // }}
 
+    
+    // {{ delete (action)
+    @Bulk
+    @MemberOrder(sequence = "4")
+    public List<ToDoItem> delete() {
+        container.removeIfNotAlready(this);
+        container.informUser("Deleted " + container.titleOf(this));
+        // invalid to return 'this' (cannot render a deleted object)
+        return toDoItems.notYetComplete(); 
+    }
+    // }}
+
+
+    
     // {{ isDue (programmatic)
     @Programmatic
     // excluded from the framework's metamodel

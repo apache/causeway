@@ -33,7 +33,6 @@ import java.lang.annotation.Target;
  * Bulk actions have a number of constraints:
  * <ul>
  * <li>It must take no arguments
- * <li>It must return <tt>void</tt>
  * <li>It cannot be hidden (any annotations or supporting methods to that effect will be
  *     ignored).
  * <li>It cannot be disabled (any annotations or supporting methods to that effect will be

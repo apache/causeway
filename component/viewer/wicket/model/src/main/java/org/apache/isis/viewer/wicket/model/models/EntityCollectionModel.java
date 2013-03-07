@@ -70,6 +70,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
                 return Lists.transform(entityCollectionModel.mementoList, ObjectAdapters.fromMemento());
             }
+
+            @Override
+            void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list) {
+                entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapters.toMemento()));
+            }
+
         },
         /**
          * A collection of an entity (eg Order/OrderDetail).
@@ -93,9 +99,17 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             private Iterable<Object> asIterable(final ObjectAdapter collectionAsAdapter) {
                 return (Iterable<Object>) collectionAsAdapter.getObject();
             }
+
+            @Override
+            void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list) {
+                // no-op
+                throw new UnsupportedOperationException();
+            }
         };
 
         abstract List<ObjectAdapter> load(EntityCollectionModel entityCollectionModel);
+
+        abstract void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list);
     }
 
     /**
@@ -225,6 +239,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return typeOfSpec;
     }
 
+    @Override
+    public void setObject(List<ObjectAdapter> list) {
+        super.setObject(list);
+        type.setObject(this, list);
+    }
+    
     /**
      * Populated only if {@link Type#PARENTED}.
      */

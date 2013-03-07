@@ -52,6 +52,17 @@ public final class ObjectAdapters {
         };
     }
 
+    public static Function<ObjectAdapter, ObjectAdapterMemento> toMemento() {
+        return new Function<ObjectAdapter, ObjectAdapterMemento>() {
+
+            @Override
+            public ObjectAdapterMemento apply(ObjectAdapter from) {
+                return ObjectAdapterMemento.createOrNull(from);
+            }
+            
+        };
+    }
+
     public static Function<Oid, ObjectAdapter> fromOid() {
         return new Function<Oid, ObjectAdapter>() {
             @Override
@@ -69,4 +80,5 @@ public final class ObjectAdapters {
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
 }
