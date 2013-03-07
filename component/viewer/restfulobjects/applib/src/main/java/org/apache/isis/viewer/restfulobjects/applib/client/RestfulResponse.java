@@ -33,6 +33,8 @@ import javax.ws.rs.core.Response.StatusType;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.errors.ErrorRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.codehaus.jackson.JsonParseException;
@@ -153,8 +155,12 @@ public class RestfulResponse<T> {
         public final static HttpStatusCode METHOD_FAILURE = new HttpStatusCode(420, new StatusTypeImpl(420, Family.CLIENT_ERROR, "Method failure"));
 
         // public static final int SC_UNPROCESSABLE_ENTITY = 422;
+        public final static HttpStatusCode VALIDATION_FAILED = new HttpStatusCode(422, new StatusTypeImpl(422, Family.CLIENT_ERROR, "Validation failed"));
+        
         // public static final int SC_LOCKED = 423;
         // public static final int SC_FAILED_DEPENDENCY = 424;
+        
+        public final static HttpStatusCode PRECONDITION_HEADER_MISSING = new HttpStatusCode(428, new StatusTypeImpl(428, Family.CLIENT_ERROR, "Precondition header missing"));
 
         public final static HttpStatusCode INTERNAL_SERVER_ERROR = new HttpStatusCode(500, Status.INTERNAL_SERVER_ERROR);
         public final static HttpStatusCode NOT_IMPLEMENTED = new HttpStatusCode(501, new StatusTypeImpl(501, Family.SERVER_ERROR, "Not implemented"));
@@ -323,6 +329,24 @@ public class RestfulResponse<T> {
         // always returns a String
         final String value = (String) metadata.getFirst(header.getName());
         return header.parse(value);
+    }
+
+    /**
+     * Convenience that recasts this response as wrapping some other
+     * representation.
+     * 
+     * <p>
+     * This would typically be as the results of a content type being an
+     * error rather than a representation returned on success.  
+     */
+    @SuppressWarnings("unchecked")
+    public <Q extends JsonRepresentation> RestfulResponse<Q> wraps(Class<Q> cls) {
+        return (RestfulResponse<Q>) this;
+    }
+
+    @Override
+    public String toString() {
+        return "RestfulResponse [httpStatusCode=" + httpStatusCode + "]";
     }
 
 }

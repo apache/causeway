@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 /**
  * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid
@@ -113,7 +114,9 @@ public interface AdapterManager extends Injectable {
      * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.
      * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version} 
      * of the {@link TypedOid oid} of the recreated adapter is the same as that of the provided {@link TypedOid oid}.
-     * If the version differs, then a {@link ConcurrencyException} is thrown. 
+     * If the version differs, then a {@link ConcurrencyException} is thrown.
+     * 
+     * @throws {@link ObjectNotFoundException} if the object does not exist.
      */
     ObjectAdapter adapterFor(TypedOid oid, ConcurrencyChecking concurrencyChecking);
 

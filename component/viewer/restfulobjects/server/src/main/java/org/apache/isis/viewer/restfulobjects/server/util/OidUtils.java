@@ -22,6 +22,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
@@ -36,23 +37,57 @@ public final class OidUtils {
     public static String getInstanceId(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
         return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(renderContext, objectAdapter);
     }
-    
-    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String domainType, final String instanceId) {
 
-        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceId);
+    // REVIEW: it's a bit hokey to join these together just to split them out again.
+    public static String joinAsOid(final String domainType, final String instanceIdEncoded) {
+        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         
-        // REVIEW: it's a bit hokey to join these together just to split them out again.
-        final String oidStr = getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
-        
-        return getObjectAdapterForUnencoded(resourceContext, oidStr);
+        return getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
     }
 
-    public static ObjectAdapter getObjectAdapter(final RendererContext resourceContext, final String oidEncodedStr) {
+    /**
+     * 
+     * @return {@code null} if not found.
+     */
+    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext, final String domainType, final String instanceId) throws ObjectNotFoundException {
+        try {
+            return getObjectAdapterElseThrowNotFound(resourceContext, domainType, instanceId);
+        } catch(ObjectNotFoundException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 
+     * @throws {@link ObjectNotFoundException} if not found
+     */
+    public static ObjectAdapter getObjectAdapterElseThrowNotFound(final RendererContext resourceContext, final String domainType, final String instanceId) throws ObjectNotFoundException {
+        final String oidStr = joinAsOid(domainType, instanceId);
+        return getObjectAdapterForUnencodedElseThrowNotFound(resourceContext, oidStr);
+    }
+
+    /**
+     * 
+     * @return {@code null} if not found.
+     */
+    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext, final String oidEncodedStr) {
+        try {
+            return getObjectAdapterElseThrowNotFound(resourceContext, oidEncodedStr);
+        } catch(ObjectNotFoundException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 
+     * @throws {@link ObjectNotFoundException} if not found
+     */
+    public static ObjectAdapter getObjectAdapterElseThrowNotFound(final RendererContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        return getObjectAdapterForUnencoded(resourceContext, oidStr);
+        return getObjectAdapterForUnencodedElseThrowNotFound(resourceContext, oidStr);
     }
 
-    private static ObjectAdapter getObjectAdapterForUnencoded(final RendererContext resourceContext, final String oidStr) {
+    private static ObjectAdapter getObjectAdapterForUnencodedElseThrowNotFound(final RendererContext resourceContext, final String oidStr) {
         final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
         return resourceContext.getAdapterManager().adapterFor(rootOid);
     }

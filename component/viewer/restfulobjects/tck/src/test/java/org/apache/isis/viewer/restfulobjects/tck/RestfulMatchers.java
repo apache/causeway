@@ -18,32 +18,27 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck;
 
-import java.io.IOException;
-
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
-import com.google.common.base.Objects;
-
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.AbstractMatcherBuilder;
-import org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.LinkMatcherBuilder;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
+import com.google.common.base.Objects;
 
-public class RepresentationMatchers {
+public class RestfulMatchers {
 
     public static <T extends JsonRepresentation> Matcher<T> isMap() {
         return new TypeSafeMatcher<T>() {
@@ -523,5 +518,43 @@ public class RepresentationMatchers {
             }
         };
     }
+
+    public static Matcher<? super MediaType> hasProfile(final String expectedMediaTypeAndProfileStr) {
+        final MediaType expectedMediaType = Header.CONTENT_TYPE.parse(expectedMediaTypeAndProfileStr);
+        final String expectedProfileIfAny = expectedMediaType.getParameters().get("profile");
+        return new TypeSafeMatcher<MediaType>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is a media type 'application/json' with a profile parameter of '" +  expectedMediaTypeAndProfileStr + '"');
+            }
+
+            @Override
+            protected boolean matchesSafely(MediaType item) {
+                
+                if (!item.isCompatible(expectedMediaType)) {
+                    return false;
+                }
+                String actualProfileIfAny = item.getParameters().get("profile");
+                return Objects.equal(expectedProfileIfAny, actualProfileIfAny);
+            }
+        };
+    }
+
+    public static Matcher<? super RestfulResponse<?>> hasStatus(final HttpStatusCode statusCode) {
+        return new TypeSafeMatcher<RestfulResponse<?>>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has status code of " + statusCode);
+            }
+
+            @Override
+            protected boolean matchesSafely(RestfulResponse<?> item) {
+                return item.getStatus() == statusCode;
+            }
+        };
+    }
+
 
 }

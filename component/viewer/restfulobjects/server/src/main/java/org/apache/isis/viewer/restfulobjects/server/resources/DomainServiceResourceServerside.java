@@ -98,7 +98,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.propertyDetails(serviceAdapter, propertyId, MemberMode.NOT_MUTATING, Caching.ONE_DAY, getResourceContext().getWhere());
+        return helper.propertyDetails(propertyId, MemberMode.NOT_MUTATING, Caching.ONE_DAY, getResourceContext().getWhere());
     }
 
     // //////////////////////////////////////////////////////////
@@ -127,10 +127,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES);
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, xIsisQueryString);
 
-        final JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(
-                xIsisQueryString != null? xIsisQueryString : getResourceContext().getQueryString());
+        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
         
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
@@ -138,20 +137,24 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         return helper.invokeActionQueryOnly(actionId, arguments, getResourceContext().getWhere());
     }
 
+
     @Override
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     // to save the client having to specify a Content-Type: application/json
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES);
+    public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 
+        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
         return helper.invokeActionIdempotent(actionId, arguments, getResourceContext().getWhere());
     }
+
 
     @Override
     @POST
@@ -159,9 +162,11 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Consumes({ MediaType.WILDCARD })
     // to save the client having to specify a Content-Type: application/json
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES);
+    public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 
+        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 

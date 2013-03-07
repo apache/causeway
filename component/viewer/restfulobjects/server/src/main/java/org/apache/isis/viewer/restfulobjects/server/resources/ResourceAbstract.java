@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,6 +51,7 @@ import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -118,6 +120,15 @@ public abstract class ResourceAbstract {
     }
 
     protected void init(final RepresentationType representationType, Where where) {
+        init(representationType, where, (String)null);
+    }
+
+    protected void init(RepresentationType representationType, Where where, InputStream arguments) {
+        final String queryString = DomainResourceHelper.asStringUtf8(arguments);
+        init(representationType, where, queryString);
+    }
+
+    protected void init(RepresentationType representationType, Where where, String queryString) {
         if (!IsisContext.inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         } 
@@ -125,7 +136,9 @@ public abstract class ResourceAbstract {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration(), where);
+        this.resourceContext = new ResourceContext(
+                representationType, httpHeaders, uriInfo, request, where, queryString, httpServletRequest, httpServletResponse, 
+                securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
     }
 
     protected ResourceContext getResourceContext() {
@@ -156,9 +169,8 @@ public abstract class ResourceAbstract {
         return getSpecificationLoader().loadSpecification(specFullName);
     }
 
-    protected ObjectAdapter getObjectAdapter(String domainType, final String instanceId) {
-
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, domainType, instanceId);
+    protected ObjectAdapter getObjectAdapterElseThrowNotFound(String domainType, final String instanceId) {
+        ObjectAdapter objectAdapter = getObjectAdapterElseNull(domainType, instanceId);
 
         if (objectAdapter == null) {
             final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceId);
@@ -167,6 +179,11 @@ public abstract class ResourceAbstract {
         return objectAdapter;
     }
 
+    protected ObjectAdapter getObjectAdapterElseNull(String domainType, final String instanceId) {
+        return OidUtils.getObjectAdapterElseNull(resourceContext, domainType, instanceId);
+    }
+
+    // REVIEW: a bit of a hack to just 'new' up the OidMarshaller...
     OidMarshaller getOidMarshaller() {
         return new OidMarshaller();
     }

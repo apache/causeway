@@ -29,7 +29,7 @@ public class UrlParserUtilsTest {
     public void oidFromLink() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/objects/OID:1");
-        final String oidFromHref = UrlParserUtils.oidFromLink(link);
+        final String oidFromHref = UrlParserUtils.encodedOidFromLink(link);
         assertEquals("OID:1", oidFromHref);
     }
 

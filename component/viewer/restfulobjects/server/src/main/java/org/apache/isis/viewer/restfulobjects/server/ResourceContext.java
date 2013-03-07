@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class ResourceContext implements RendererContext {
     private List<List<String>> followLinks;
 
     private final Where where;
+    private final String queryString;
     private JsonRepresentation readQueryStringAsMap;
 
     //////////////////////////////////////////////////////////////////
@@ -78,17 +80,24 @@ public class ResourceContext implements RendererContext {
 
     public ResourceContext(
             final RepresentationType representationType, 
-            final HttpHeaders httpHeaders, final UriInfo uriInfo, 
+            final HttpHeaders httpHeaders, 
+            final UriInfo uriInfo, 
             final Request request, 
-            final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, 
-            final SecurityContext securityContext,
-            final Localization localization, 
-            final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, 
-            final AdapterManager objectAdapterLookup, final SpecificationLoader specificationLookup, final IsisConfiguration configuration, final Where where) {
+            final Where where, 
+            final String queryStringIfAny,
+            final HttpServletRequest httpServletRequest, 
+            final HttpServletResponse httpServletResponse,
+            final SecurityContext securityContext, 
+            final Localization localization, final AuthenticationSession authenticationSession, 
+            final PersistenceSession persistenceSession, 
+            final AdapterManager objectAdapterLookup, 
+            final SpecificationLoader specificationLookup, 
+            final IsisConfiguration configuration) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
         this.request = request;
+        this.queryString = queryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
@@ -103,6 +112,7 @@ public class ResourceContext implements RendererContext {
         init(representationType);
     }
 
+    
     void init(final RepresentationType representationType) {
         ensureCompatibleAcceptHeader(representationType);
         ensureDomainModelQueryParamSupported();
@@ -151,6 +161,9 @@ public class ResourceContext implements RendererContext {
     }
 
     public String getQueryString() {
+        if(queryString != null) {
+            return queryString;
+        }
         return getHttpServletRequest().getQueryString();
     }
 

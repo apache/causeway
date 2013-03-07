@@ -46,7 +46,6 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
         return this.firstMatch(query);
     }
 
-
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ActionsEntity> subList(@Named("from") int from, @Named("to") int to) {
@@ -56,7 +55,11 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
         return list.subList(fromChecked, toChecked);
     }
 
-
-    
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "1")
+    public boolean contains(@Named("searchFor") ActionsEntity entity, @Named("from") int from, @Named("to") int to) {
+        List<ActionsEntity> list = subList(from, to);
+        return list.contains(entity);
+    }
     
 }

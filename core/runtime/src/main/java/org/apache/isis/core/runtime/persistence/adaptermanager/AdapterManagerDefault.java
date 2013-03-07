@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -296,8 +297,12 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         ObjectAdapter adapter = getAdapterFor(typedOid);
         if (adapter == null) {
             // else recreate
-            final Object pojo = pojoRecreator.recreatePojo(typedOid);
-            adapter = mapRecreatedPojo(typedOid, pojo);
+            try {
+                final Object pojo = pojoRecreator.recreatePojo(typedOid);
+                adapter = mapRecreatedPojo(typedOid, pojo);
+            } catch(RuntimeException ex) {
+                throw new ObjectNotFoundException(typedOid, ex);
+            }
         }
 
         // sync versions of original, with concurrency checking if required

@@ -18,15 +18,15 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.user.root;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasMaxAge;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasParameter;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasSubType;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasType;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isFollowableLinkToSelf;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMaxAge;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasParameter;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasSubType;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasType;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isFollowableLinkToSelf;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -47,7 +47,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRe
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.*;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
 
 public class DomainServiceTest_req_queryarg_xrofollowlinks {
 

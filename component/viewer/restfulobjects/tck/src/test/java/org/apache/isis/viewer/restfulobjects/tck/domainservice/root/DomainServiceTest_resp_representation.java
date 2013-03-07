@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;

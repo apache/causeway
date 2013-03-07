@@ -19,10 +19,10 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isMap;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.version;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasMaxAge;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasParameter;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasSubType;
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.hasType;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMaxAge;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasParameter;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasSubType;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasType;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

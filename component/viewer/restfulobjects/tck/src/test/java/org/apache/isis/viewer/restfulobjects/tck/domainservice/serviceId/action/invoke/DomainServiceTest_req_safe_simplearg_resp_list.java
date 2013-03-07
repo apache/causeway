@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RepresentationMatchers.isLink;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -35,14 +35,16 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class DomainServiceTest_safe_noarg_list {
+public class DomainServiceTest_req_safe_simplearg_resp_list {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -59,10 +61,10 @@ public class DomainServiceTest_safe_noarg_list {
     }
 
     @Test
-    public void invokeQueryOnly_noArg_usingClientFollow_returning_list() throws Exception {
+    public void usingClientFollow() throws Exception {
 
         // given
-        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "list");
+        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subList");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
 
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
@@ -70,27 +72,37 @@ public class DomainServiceTest_safe_noarg_list {
         assertThat(invokeLink, isLink(client)
                                     .rel(Rel.INVOKE)
                                     .httpMethod(RestfulHttpMethod.GET)
-                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/list/invoke"))
-                                    .arguments(JsonRepresentation.newMap())
+                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subList/invoke"))
                                     .build());
         
+        JsonRepresentation args =invokeLink.getArguments();
+        assertThat(args.size(), is(2));
+        assertThat(args, RestfulMatchers.mapHas("from"));
+        assertThat(args, RestfulMatchers.mapHas("to"));
+        
         // when
-        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink);
+        args.mapPut("from", 1);
+        args.mapPut("to", 3);
+
+        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
         
         assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
         final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
-        assertThat(listRepr.getValue().size(), is(5));
+        assertThat(listRepr.getValue().size(), is(2));
     }
 
-    
+
     @Test
-    public void invokeQueryOnly_noArg_usingResourceProxy_returning_list() throws Exception {
+    public void usingResourceProxy() throws Exception {
 
         // given, when
-        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "list", null);
+        JsonRepresentation args = JsonRepresentation.newMap();
+        args.mapPut("from", 1);
+        args.mapPut("to", 3);
+        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
         // then
@@ -100,7 +112,7 @@ public class DomainServiceTest_safe_noarg_list {
         
         final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
 
-        assertThat(listRepr.getValue().size(), is(5));
+        assertThat(listRepr.getValue().size(), is(2));
     }
 
 }

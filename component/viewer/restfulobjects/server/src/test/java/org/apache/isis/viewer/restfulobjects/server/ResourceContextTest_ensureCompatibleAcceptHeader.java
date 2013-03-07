@@ -141,7 +141,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     }
 
     private ResourceContext instantiateResourceContext(final RepresentationType representationType) {
-        return new ResourceContext(representationType, httpHeaders, null, null, httpServletRequest, null, null, null, null, null, null, null, null, null);
+        return new ResourceContext(representationType, httpHeaders, null, null, null, (String)null, httpServletRequest, null, null, null, null, null, null, null, null);
     }
 
 }

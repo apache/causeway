@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -125,7 +126,14 @@ public final class DomainResourceHelper {
                 allOk = false;
                 continue;
             }
-            final ObjectAdapter valueAdapter = objectAdapterFor(resourceContext, propertySpec, valueRepr);
+            final ObjectAdapter valueAdapter;
+            try {
+                valueAdapter = objectAdapterFor(resourceContext, propertySpec, valueRepr);
+            } catch(IllegalArgumentException ex) {
+                propertyRepr.mapPut("invalidReason", ex.getMessage());
+                allOk = false;
+                continue;
+            }
             final Consent consent = property.isAssociationValid(objectAdapter, valueAdapter);
             if (consent.isAllowed()) {
                 try {
@@ -181,7 +189,7 @@ public final class DomainResourceHelper {
         public abstract void apply(AbstractObjectMemberReprRenderer<?, ?> renderer);
     }
 
-    Response propertyDetails(final ObjectAdapter objectAdapter, final String propertyId, final MemberMode memberMode, final Caching caching, Where where) {
+    Response propertyDetails(final String propertyId, final MemberMode memberMode, final Caching caching, Where where) {
 
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(propertyId, Intent.ACCESS, where);
 
@@ -198,7 +206,7 @@ public final class DomainResourceHelper {
     // collectionDetails
     // //////////////////////////////////////////////////////////////
 
-    Response collectionDetails(final ObjectAdapter objectAdapter, final String collectionId, final MemberMode memberMode, final Caching caching, Where where) {
+    Response collectionDetails(final String collectionId, final MemberMode memberMode, final Caching caching, Where where) {
 
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(collectionId, Intent.ACCESS, where);
 
@@ -248,7 +256,7 @@ public final class DomainResourceHelper {
         return invokeActionUsingAdapters(action, arguments);
     }
 
-    Response invokeActionIdempotent(final String actionId, final InputStream body, Where where) {
+    Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments, Where where) {
 
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE, where);
 
@@ -256,22 +264,16 @@ public final class DomainResourceHelper {
         if (!actionSemantics.isIdempotentInNature()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }
-        final String bodyAsString = asStringUtf8(body);
-        final JsonRepresentation arguments = readAsMap(bodyAsString);
-
         return invokeActionUsingAdapters(action, arguments);
     }
 
-    Response invokeAction(final String actionId, final InputStream body, Where where) {
+    Response invokeAction(final String actionId, final JsonRepresentation arguments, Where where) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE, where);
 
-        final String bodyAsString = asStringUtf8(body);
-        final JsonRepresentation arguments = readAsMap(bodyAsString);
-
         return invokeActionUsingAdapters(action, arguments);
     }
 
-    Response invokeActionUsingAdapters(final ObjectAction action, final JsonRepresentation arguments) {
+    private Response invokeActionUsingAdapters(final ObjectAction action, final JsonRepresentation arguments) {
 
         final List<ObjectAdapter> argAdapters = parseArguments(action, arguments);
 
@@ -322,7 +324,7 @@ public final class DomainResourceHelper {
      * @param resourceContext
      * @param objectSpec
      *            - the {@link ObjectSpecification} to interpret the object as.
-     * @param node
+     * @param representation
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
@@ -339,17 +341,16 @@ public final class DomainResourceHelper {
 
         // reference
         if (!representation.isLink()) {
-            throw new ExpectedMapRepresentingLinkException();
+            throw new IllegalArgumentException("Expected a link (because this object's type is not a value) but found no 'href'");
         }
-        final JsonRepresentation argLink = representation.asLink();
-        final String oidFromHref = UrlParserUtils.oidFromLink(argLink);
+        final String oidFromHref = UrlParserUtils.encodedOidFromLink(representation);
         if (oidFromHref == null) {
-            throw new ExpectedMapRepresentingLinkException();
+            throw new IllegalArgumentException("Could not parse 'href' to identify the object's OID");
         }
 
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, oidFromHref);
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapterElseNull(resourceContext, oidFromHref);
         if (objectAdapter == null) {
-            throw new UnknownOidException(oidFromHref);
+            throw new IllegalArgumentException("Object not found for 'href'");
         }
         return objectAdapter;
     }
@@ -371,17 +372,6 @@ public final class DomainResourceHelper {
         return objectAdapterFor(resourceContext, spec, representation);
     }
 
-    private static class ExpectedMapRepresentingLinkException extends IllegalArgumentException {
-        private static final long serialVersionUID = 1L;
-    }
-
-    private static class UnknownOidException extends IllegalArgumentException {
-        private static final long serialVersionUID = 1L;
-
-        public UnknownOidException(final String oid) {
-            super(UrlDecoderUtils.urlDecode(oid));
-        }
-    }
 
     // ///////////////////////////////////////////////////////////////////
     // get{MemberType}ThatIsVisibleAndUsable
