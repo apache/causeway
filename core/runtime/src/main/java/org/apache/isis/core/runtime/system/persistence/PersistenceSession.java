@@ -862,9 +862,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
             @Override
             public void execute() {
-                if (adapter.getVersion() == null) {
-                    throw new ObjectPersistenceException("Object to be deleted does not have a version (maybe it should be resolved first): " + adapter);
-                }
                 final DestroyObjectCommand command = objectStore.createDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);
             }
