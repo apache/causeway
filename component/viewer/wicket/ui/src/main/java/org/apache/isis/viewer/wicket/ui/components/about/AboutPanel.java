@@ -19,14 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.about;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import java.io.InputStream;
 
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on
@@ -36,16 +36,31 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_MESSAGE = "message";
+    private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
 
     @Inject
     @Named("aboutMessage")
     private String aboutMessage;
-
-    public AboutPanel(final String id, final AboutModel model) {
-        super(id, model);
-        getModel().setObject(aboutMessage);
-        add(new MultiLineLabel(ID_MESSAGE, model.getObject()));
+    
+    /**
+     * We take care to read this only once.
+     */
+    @Inject
+    @Named("metaInfManifest")
+    private InputStream metaInfManifestIs;
+    
+    private JarManifestModel jarManifestModel;
+    
+    public AboutPanel(final String id) {
+        super(id);
+        //getModel().setObject(aboutMessage);
+        
+        if(jarManifestModel == null) {
+            jarManifestModel = new JarManifestModel(aboutMessage, metaInfManifestIs);
+        }
+        
+        //add(new MultiLineLabel(ID_MESSAGE, jarManifestModel.getAboutMessage()).setEscapeModelStrings(false));
+        add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
     }
 
 }

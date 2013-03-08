@@ -52,7 +52,6 @@ public class ExceptionModel extends ModelAbstract<Exception> {
         return mainMessage;
     }
     
-    
     public List<StackTraceDetail> getStackTrace() {
         return asStackTrace(exception);
     }

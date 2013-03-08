@@ -75,7 +75,87 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.5</version>
+                  <executions>
+                    <execution>
+                      <phase>validate</phase>
+                      <goals>
+                        <goal>maven-version</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>false</addClasspath>
+                        </manifest>                            
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Build-Host>${agent.name}</Build-Host>
+                            <Build-User>${user.name}</Build-User>
+                            <Build-Maven>Maven ${maven.version}</Build-Maven>
+                            <Build-Java>${java.version}</Build-Java>
+                            <Build-OS>${os.name}</Build-OS>
+                            <Build-Label>${project.version}</Build-Label>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+                <!-- 
+                <executions>
+                    <execution>
+                        <id>default-war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                 -->
+            </plugin>
+
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            build-helper-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.5,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>maven-version</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <dependencies>
@@ -84,17 +164,41 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
+            <exclusions>
+                <exclusion>
+                    <!-- so don't pick up transitive dependency to asm 4.0.0, which is
+                         incompatible with asm 3.3.1 as used by guice -->
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-enhancer</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
+            <exclusions>
+                <exclusion>
+                    <!-- so don't pick up transitive dependency to asm 4.0.0, which is
+                         incompatible with asm 3.3.1 as used by guice -->
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-enhancer</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <!-- objectstore/domain service/repository implementations (brings in dependency to objectstore-jdo)-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
+            <exclusions>
+                <exclusion>
+                    <!-- so don't pick up transitive dependency to asm 4.0.0, which is
+                         incompatible with asm 3.3.1 as used by guice -->
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-enhancer</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
         
         <!-- other isis components -->
         <dependency>
@@ -164,6 +268,7 @@
           <groupId>org.lazyluke</groupId>
           <artifactId>log4jdbc-remix</artifactId>
         </dependency>
+
 
         <!-- 3rd party dependency -->
         <!-- 

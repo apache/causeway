@@ -1,0 +1,99 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+ .jarManifestPanel .aboutInfo {
+    margin-left: 50px;
+    margin-right: 50px;
+    padding-top: 50px;
+}
+
+
+.jarManifestPanel .aboutMessage {
+    background:#FFFFFF;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    padding: 15px;
+    display: block;
+    text-align:center;
+    font-size:1.2em;
+}
+
+ .jarManifestPanel .manifestAttributes {
+    margin-top: 30px; 
+}
+
+.jarManifestPanel .heading {
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background-color:#F0EFEA;
+
+    display:block;
+    font-style:normal !important;
+
+    padding:1px 6px 1px 6px;
+}
+
+.jarManifestPanel .heading span {
+    display:block;
+    font-style:normal !important;
+    padding:3px 3px 3px 3px;
+    font-size: 0.8em;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+
+.jarManifestPanel .heading:hover {
+    background-color:#FFFFFF;
+    cursor: pointer;
+}
+
+.jarManifestPanel h3 {
+    font-size: larger;
+}
+
+.jarManifestPanel .manifestAttributesList .caused_by_label {
+    margin-top: 30px;
+    font-style:normal !important;
+    font-size: 0.8em;
+    text-transform:uppercase;
+    font-weight:bold;
+    color: #46423C;
+}
+
+.jarManifestPanel .manifestAttributesList .jar_name {
+    margin-top: 15px;
+    font-size: 1.2em;
+    font-weight:bold;
+    color: #46423C;
+}
+
+.jarManifestPanel .manifestAttributesList .jar_url {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-style: italic;
+    font-size: 1.0em;
+    color: #00477F;
+}
+
+.jarManifestPanel .manifestAttributesList .manifest_attribute{
+    margin-left: 30px;
+}
+ 

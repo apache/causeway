@@ -1,0 +1,215 @@
+package org.apache.isis.viewer.wicket.ui.components.about;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
+import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
+public class JarManifestModel extends ModelAbstract<JarManifestModel> {
+
+    private static final long serialVersionUID = 1L;
+
+    private static final List<String> VERSION_KEY_CANDIDATES = Arrays.asList("Implementation-Version", "Build-Time");
+    
+    private String aboutMessage;
+
+    private final List<JarManifestAttributes> manifests = Lists.newArrayList();
+
+    /**
+     * @param aboutMessage
+     * @param metaInfManifestIs provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
+     */
+    public JarManifestModel(String aboutMessage, InputStream metaInfManifestIs) {
+
+        this.aboutMessage = aboutMessage;
+        
+        Manifest manifest;
+        try {
+            manifest = new Manifest(metaInfManifestIs);
+            manifests.add(JarManifestAttributes.jarName("Web archive (war file)"));
+            manifests.add(JarManifestAttributes.jarUrl(null));
+            addAttributes(manifest, manifests);
+            
+            // append the version if able to guess
+            String versionIfAny = guessVersion(manifest); 
+            this.aboutMessage = this.aboutMessage + (versionIfAny != null? "\n\n" + versionIfAny: "");
+            
+        } catch (Exception ex) {
+            // ignore
+        } finally {
+            IoUtils.closeSafely(metaInfManifestIs);
+        }
+        
+        Enumeration<?> resEnum;
+        try {
+            resEnum = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
+        } catch (IOException e) {
+            return;
+        }
+        final List<JarManifest> jarManifests = Lists.newArrayList(); 
+        while (resEnum.hasMoreElements()) {
+            URL url = (URL)resEnum.nextElement();
+            JarManifest jarManifest = new JarManifest(url);
+            jarManifests.add(jarManifest);
+
+            InputStream is = null;
+            try {
+                is = url.openStream();
+                if (is != null) {
+                    manifest = new Manifest(is);
+                    jarManifest.addAttributesFrom(manifest);
+                }
+            } catch(Exception e3) {
+                // ignore
+            } finally {
+                IoUtils.closeSafely(is);
+            }
+        }
+        
+        Collections.sort(jarManifests);
+        
+        for (JarManifest jarManifest : jarManifests) {
+            jarManifest.addAttributesTo(manifests);
+        }
+    }
+
+    private static class JarManifest implements Comparable<JarManifest> {
+        private final List<JarManifestAttributes> attributes = Lists.newArrayList();
+
+        private final URL url;
+
+        private JarName jarName;
+        
+        public JarManifest(URL url) {
+            this.url = url;
+            jarName = asJarName(url);
+        }
+
+        void addAttributesFrom(Manifest manifest) {
+            addAttributes(manifest, attributes);
+        }
+
+        void addAttributesTo(List<JarManifestAttributes> manifests) {
+            manifests.add(JarManifestAttributes.jarName(jarName.name));
+            manifests.add(JarManifestAttributes.jarUrl(url));
+            manifests.addAll(attributes);
+        }
+
+        @Override
+        public int compareTo(JarManifest o) {
+            return jarName.compareTo(o.jarName);
+        }
+    }
+    
+    static class JarName implements Comparable<JarName>{
+        enum Type {
+            CLASSES, JAR, OTHER
+        }
+        Type type;
+        String name;
+        JarName(Type type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+        @Override
+        public int compareTo(JarName o) {
+            int x = type.compareTo(o.type);
+            if(x != 0) return x;
+            return name.compareTo(o.name);
+        }
+    }
+    
+    private static JarName asJarName(URL url) {
+        final String path = url.getPath();
+        // strip off the meta-inf
+        String strippedPath = stripSuffix(path, "/META-INF/MANIFEST.MF");
+        strippedPath = stripSuffix(strippedPath, "!");
+        
+        // split the path into parts, and reverse
+        List<String> parts = Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
+        Collections.reverse(parts);
+        
+        // searching from the end, return the jar name if possible
+        for (String part : parts) {
+            if(part.endsWith(".jar")) {
+                return new JarName(JarName.Type.JAR, part);
+            }
+        }
+        
+        // see if running in an IDE, under target*/classes; return the part prior to that. 
+        if(parts.size()>=3) {
+            if(parts.get(0).equals("classes") && parts.get(1).startsWith("target")) {
+                return new JarName(JarName.Type.CLASSES, parts.get(2));
+            }
+        }
+        
+        // otherwise, return the stripped path 
+        return new JarName(JarName.Type.OTHER, strippedPath);
+    }
+
+    public static String stripSuffix(String path, String suffix) {
+        int indexOf = path.indexOf(suffix);
+        if(indexOf != -1) {
+            path = path.substring(0, indexOf);
+        }
+        return path;
+    }
+
+    static void addAttributes(Manifest manifest, List<JarManifestAttributes> attributes) {
+        final Attributes mainAttribs = manifest.getMainAttributes();
+        Set<Entry<Object, Object>> entrySet = mainAttribs.entrySet();
+        for (Entry<Object, Object> entry : entrySet) {
+            JarManifestAttributes attribute = JarManifestAttributes.attribute(entry);
+            attributes.add(attribute);
+        }
+    }
+
+
+    private static String guessVersion(Manifest manifest) {
+        final Attributes mainAttribs = manifest.getMainAttributes();
+        Set<Entry<Object, Object>> entrySet = mainAttribs.entrySet();
+        for (String candidate : VERSION_KEY_CANDIDATES) {
+            for (Entry<Object, Object> entry : entrySet) {
+                if(candidate.equals(entry.getKey().toString())) {
+                    return entry.getValue().toString();
+                }
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    protected JarManifestModel load() {
+        return this;
+    }
+
+    @Override
+    public void setObject(JarManifestModel ex) {
+        // no-op
+    }
+
+    public String getAboutMessage() {
+        return aboutMessage;
+    }
+
+    public List<JarManifestAttributes> getDetail() {
+        return manifests;
+    }
+
+}

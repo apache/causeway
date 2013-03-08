@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.errors;
+package org.apache.isis.viewer.wicket.ui.components.about;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.wicket.MarkupContainer;
@@ -28,32 +28,32 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-public class ExceptionStackTracePanel extends Panel {
+public class JarManifestPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_MAIN_MESSAGE = "mainMessage";
+    private static final String ID_ABOUT_MESSAGE = "aboutMessage";
 
-    private static final String ID_EXCEPTION_DETAIL = "exceptionDetail";
+    private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
 
-    private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
-    private static final String ID_LINE = "stackTraceElementLine";
+    private static final String ID_MANIFEST_ATTRIBUTE = "manifestAttribute";
+    private static final String ID_LINE = "manifestAttributeLine";
 
-    private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(ExceptionStackTracePanel.class, "div-toggle.js");
+    private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(JarManifestPanel.class, "div-toggle.js");
 
-    public ExceptionStackTracePanel(String id, ExceptionModel exceptionModel) {
-        super(id, exceptionModel);
+    public JarManifestPanel(String id, JarManifestModel manifestModel) {
+        super(id, manifestModel);
         
-        add(new Label(ID_MAIN_MESSAGE, exceptionModel.getMainMessage()).setEscapeModelStrings(false));
+        add(new Label(ID_ABOUT_MESSAGE, manifestModel.getAboutMessage()).setEscapeModelStrings(false));
 
-        MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL) {
+        MarkupContainer container = new WebMarkupContainer(ID_MANIFEST_ATTRIBUTES) {
             private static final long serialVersionUID = 1L;
             @Override
             public void renderHead(IHeaderResponse response) {
                 response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
             }
         };
-        container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
+        container.add(new JarManifestListView(ID_MANIFEST_ATTRIBUTE, JarManifestPanel.ID_LINE, manifestModel.getDetail()));
         add(container);
     }
 

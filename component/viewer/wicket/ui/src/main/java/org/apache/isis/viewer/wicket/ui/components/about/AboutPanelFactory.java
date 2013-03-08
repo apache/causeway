@@ -19,17 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.about;
 
-import java.nio.charset.Charset;
-
-import com.google.common.io.Resources;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-
-import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 
 /**
  * {@link ComponentFactory} for {@link AboutPanel}.
@@ -37,7 +31,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public class AboutPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
-    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/wicket-viewer/pom.properties";
 
     public AboutPanelFactory() {
         super(ComponentType.ABOUT);
@@ -50,15 +43,7 @@ public class AboutPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new AboutPanel(id, new AboutModel(versionFromManifest()));
-    }
-
-    private static String versionFromManifest() {
-        try {
-            return Resources.toString(Resources.getResource(META_INF_POM_PROPERTIES), Charset.defaultCharset());
-        } catch (final Exception ex) {
-            return "UNKNOWN";
-        }
+        return new AboutPanel(id);
     }
 
 }

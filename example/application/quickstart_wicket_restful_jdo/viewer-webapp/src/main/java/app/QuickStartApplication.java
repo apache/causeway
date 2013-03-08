@@ -19,18 +19,33 @@
 package app;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
+import javax.servlet.ServletContext;
+
+import org.apache.commons.collections.EnumerationUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
+import com.google.inject.util.Providers;
 
 
 /**
@@ -67,14 +82,33 @@ public class QuickStartApplication extends IsisWicketApplication {
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
                 bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines("welcome.html"));
-                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("QuickStart v1.0.0");
+                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("QuickStart");
+                bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
             }
-
         };
 
         return Modules.override(isisDefaults).with(quickstartOverrides);
     }
 
+    public static class Archive {
+        private final String name;
+        private final String url;
+        
+        public Archive(String name, String url) {
+            this.name = name;
+            this.url = url;
+        }
+        
+        public String getName() {
+            return name;
+        }
+        public String getUrl() {
+            return url;
+        }
+        
+    }
+
+    
     private static String readLines(final String resourceName) {
         try {
             List<String> readLines = Resources.readLines(Resources.getResource(QuickStartApplication.class, resourceName), Charset.defaultCharset());

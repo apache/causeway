@@ -74,11 +74,12 @@ public final class IoUtils {
         return in;
     }
 
-    public static void closeSafely(final Closeable reader) {
-        if (reader != null) {
+    public static void closeSafely(final Closeable closeable) {
+        if (closeable != null) {
             try {
-                reader.close();
-            } catch (final IOException ignore) {
+                closeable.close();
+            } catch (final Exception ignore) {
+                // ignore
             }
         }
     }
