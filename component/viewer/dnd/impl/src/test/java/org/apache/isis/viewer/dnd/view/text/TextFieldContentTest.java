@@ -157,7 +157,7 @@ public class TextFieldContentTest {
     public void testAlignField() {
         
         // the following text wraps so it takes up 9 line
-        content.setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2012 Apache Software Foundation");
+        content.setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2013 Apache Software Foundation");
 
         assertEquals(9, content.getNoLinesOfContent());
 
@@ -173,7 +173,7 @@ public class TextFieldContentTest {
         lines = content.getDisplayLines();
         assertEquals(4, lines.length);
         assertEquals("to the user. ", lines[0]);
-        assertEquals("Copyright (C) 2012 ", lines[1]);
+        assertEquals("Copyright (C) 2013 ", lines[1]);
         assertEquals("Apache Software ", lines[2]);
         assertEquals("Foundation", lines[3]);
     }
