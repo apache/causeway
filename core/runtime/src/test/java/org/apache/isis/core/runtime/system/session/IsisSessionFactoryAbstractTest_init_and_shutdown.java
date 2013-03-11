@@ -86,6 +86,14 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
         public void postConstruct(int i) {}
     }
 
+    public static class DomainServiceWithSomeId {
+        public String getId() { return "someId"; }
+    }
+
+    public static class DomainServiceWithDuplicateId {
+        public String getId() { return "someId"; }
+    }
+
 
 
     @Rule
@@ -194,6 +202,13 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     @Test(expected=IllegalStateException.class)
     public void preConstruct_DomainServiceWithInvalidPreDestroyWrongNumberParams() {
         serviceList.add(new DomainServiceWithInvalidPreDestroyWrongNumberParams());
+        isfa = createIsisSessionFactoryAbstract(serviceList);
+    }
+
+    @Test(expected=IllegalStateException.class)
+    public void validate_DomainServicesWithDuplicateIds() {
+        serviceList.add(new DomainServiceWithSomeId());
+        serviceList.add(new DomainServiceWithDuplicateId());
         isfa = createIsisSessionFactoryAbstract(serviceList);
     }
 

@@ -25,8 +25,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -38,6 +40,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -49,6 +52,12 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.log4j.Logger;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimaps;
 
 /**
  * Creates an implementation of
@@ -126,6 +135,30 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
                 validatePreDestroyMethods(service, method);
             }
         }
+        
+        ListMultimap<String, Object> servicesById = ArrayListMultimap.create();
+        for (Object service : serviceList) {
+            String id = ServiceUtil.id(service);
+            servicesById.put(id, service);
+        }
+        for (Entry<String, Collection<Object>> servicesForId : servicesById.asMap().entrySet()) {
+            String serviceId = servicesForId.getKey();
+            Collection<Object> services = servicesForId.getValue();
+            if(services.size() > 1) {
+                throw new IllegalStateException("Service ids must be unique; serviceId '" + serviceId + "' is declared by domain services " + classNamesFor(services)); 
+            }
+        }
+    }
+
+    private static String classNamesFor(Collection<Object> services) {
+        StringBuilder buf = new StringBuilder();
+        for (Object service : services) {
+            if(buf.length() > 0) {
+                buf.append(", ");
+            }
+            buf.append(service.getClass().getName());
+        }
+        return buf.toString();
     }
 
     private void validatePostConstructMethods(Object service, Method method) {
