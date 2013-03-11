@@ -70,8 +70,8 @@ import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaMod
  */
 public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
-
     public static final String NAME = "datanucleus";
+    
     private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
 
     private DataNucleusApplicationComponents applicationComponents = null;
@@ -108,22 +108,27 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {
         putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
-        
-        putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-        putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test;hsqldb.sqllog=3");
-        putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
-        putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
-        
+
         putIfNotPresent(props, "datanucleus.autoCreateSchema", "true");
         putIfNotPresent(props, "datanucleus.validateSchema", "true");
         putIfNotPresent(props, "datanucleus.cache.level2.type", "none");
+
+        if(props.containsKey("datanucleus.ConnectionFactoryName")) {
+            // JNDI connection properties present; do nothing
+            return;
+        } else {
+            // use JDBC connection properties; put if not present
+            putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test;hsqldb.sqllog=3");
+            putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
+            putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
+        }
     }
 
-
     private static void putIfNotPresent(
-        final Map<String, String> props,
-        String key,
-        String value) {
+            final Map<String, String> props,
+            String key,
+            String value) {
         if(!props.containsKey(key)) {
             props.put(key, value);
         }

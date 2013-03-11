@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.commons.authentication;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Moving from runtime, so that can preserve messages between interactions that
  * correspond to the same session.
  */
-public interface MessageBroker {
+public interface MessageBroker extends Serializable {
 
     void addMessage(String message);
     List<String> getMessages();

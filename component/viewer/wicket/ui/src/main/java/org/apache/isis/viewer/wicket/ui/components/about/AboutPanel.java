@@ -53,13 +53,11 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     
     public AboutPanel(final String id) {
         super(id);
-        //getModel().setObject(aboutMessage);
         
         if(jarManifestModel == null) {
             jarManifestModel = new JarManifestModel(aboutMessage, metaInfManifestIs);
         }
         
-        //add(new MultiLineLabel(ID_MESSAGE, jarManifestModel.getAboutMessage()).setEscapeModelStrings(false));
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
     }
 
