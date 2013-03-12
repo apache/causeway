@@ -18,11 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.MediaType;
@@ -30,7 +29,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -42,14 +40,9 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceR
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.errors.ErrorRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
-
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -67,7 +60,6 @@ public class DomainServiceTest_req_safe_refarg_bad {
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
-
         serviceResource = client.getDomainServiceResource();
     }
 
@@ -86,26 +78,24 @@ public class DomainServiceTest_req_safe_refarg_bad {
         final JsonRepresentation args = invokeLink.getArguments();
         
         // when query the 'contains' action passing in the reference to the non-existent entity 
-        args.mapPut("searchFor", nonExistentEntityLink);
-        args.mapPut("from", 0);
-        args.mapPut("to", 1);
+        args.mapPut("searchFor.value", nonExistentEntityLink);
+        args.mapPut("from.value", 0);
+        args.mapPut("to.value", 1);
         
         RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
 
         // then the response is an error
         assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
 
-        assertThat(restfulResponse.getHeader(Header.WARNING), is("199 Argument 'searchFor' href does not reference a known entity"));
+        assertThat(restfulResponse.getHeader(Header.WARNING), is("'href' does not reference a known entity"));
 
-        // hmmm... what is the media type, though?  the spec doesn't say.  just assuming generic for now.
+        // hmmm... what is the media type, though?  the spec doesn't say.  testing for a generic one.
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(MediaType.APPLICATION_JSON));
 
         RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
         JsonRepresentation repr = restfulResponseOfError.getEntity();
         
-
-        
-        
+        assertThat(repr.getString("searchFor.invalidReason"), is("'href' does not reference a known entity"));
     }
 
     @Ignore("still to update according to above test...")
@@ -119,9 +109,9 @@ public class DomainServiceTest_req_safe_refarg_bad {
         // when query the 'contains' action passing in the entity 
         // (for a range where the entity is contained in the range)
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("searchFor", firstEntityLink);
-        args.mapPut("from", 0);
-        args.mapPut("to", 3);
+        args.mapPut("searchFor.value", firstEntityLink);
+        args.mapPut("from.value", 0);
+        args.mapPut("to.value", 3);
         Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "contains", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         

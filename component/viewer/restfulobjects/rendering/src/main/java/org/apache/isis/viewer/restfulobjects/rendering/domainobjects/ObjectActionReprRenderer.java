@@ -113,7 +113,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         final JsonRepresentation argMap = JsonRepresentation.newMap();
         final List<ObjectActionParameter> parameters = objectMember.getParameters();
         for (int i = 0; i < objectMember.getParameterCount(); i++) {
-            argMap.mapPut(parameters.get(i).getId(), argValueFor(i));
+            argMap.mapPut(parameters.get(i).getId() + ".value", argValueFor(i));
         }
         return argMap;
     }

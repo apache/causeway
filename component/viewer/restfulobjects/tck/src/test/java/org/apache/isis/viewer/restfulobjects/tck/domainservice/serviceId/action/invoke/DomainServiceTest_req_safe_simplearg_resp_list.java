@@ -81,8 +81,8 @@ public class DomainServiceTest_req_safe_simplearg_resp_list {
         assertThat(args, RestfulMatchers.mapHas("to"));
         
         // when
-        args.mapPut("from", 1);
-        args.mapPut("to", 3);
+        args.mapPut("from.value", 1);
+        args.mapPut("to.value", 3);
 
         final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
@@ -100,8 +100,8 @@ public class DomainServiceTest_req_safe_simplearg_resp_list {
 
         // given, when
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("from", 1);
-        args.mapPut("to", 3);
+        args.mapPut("from.value", 1);
+        args.mapPut("to.value", 3);
         Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         

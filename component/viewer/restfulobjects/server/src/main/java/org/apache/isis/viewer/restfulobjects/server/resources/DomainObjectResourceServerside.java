@@ -68,27 +68,27 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final String objectStr = DomainResourceHelper.asStringUtf8(object);
         final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
         if (!objectRepr.isMap()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
         }
 
         final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (domainTypeSpec == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
 
         final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().createTransientInstance(domainTypeSpec);
 
         final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
         if (propertiesList == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
         }
         if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
+            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
         }
 
         final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
         if (validity.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
+            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
         getResourceContext().getPersistenceSession().makePersistent(objectAdapter);
 
@@ -124,14 +124,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final String objectStr = DomainResourceHelper.asStringUtf8(object);
         final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
         if (!objectRepr.isMap()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
         }
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
 
         final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
         if (propertiesList == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
         }
 
         final IsisTransactionManager transactionManager = getResourceContext().getPersistenceSession().getTransactionManager();
@@ -139,13 +139,13 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         try {
             if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
                 transactionManager.abortTransaction();
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
+                throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
             }
 
             final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
             if (validity.isVetoed()) {
                 transactionManager.abortTransaction();
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
+                throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
             }
 
             transactionManager.endTransaction();
@@ -198,7 +198,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
         property.set(objectAdapter, argAdapter);
@@ -220,7 +220,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
         property.set(objectAdapter, null);
@@ -259,7 +259,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         if (!collection.getCollectionSemantics().isSet()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
         }
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
@@ -268,7 +268,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
         collection.addElement(objectAdapter, argAdapter);
@@ -290,7 +290,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
         }
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
@@ -299,7 +299,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
         collection.addElement(objectAdapter, argAdapter);
@@ -324,7 +324,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
         collection.removeElement(objectAdapter, argAdapter);

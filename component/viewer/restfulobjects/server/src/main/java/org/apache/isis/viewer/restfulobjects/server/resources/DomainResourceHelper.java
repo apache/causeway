@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -55,7 +54,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResul
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder.ExpectedStringRepresentingValueException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectActionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
@@ -250,7 +248,7 @@ public final class DomainResourceHelper {
 
         final ActionSemantics.Of actionSemantics = action.getSemantics();
         if (actionSemantics != ActionSemantics.Of.SAFE) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not query only", action.getId());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not query only", action.getId());
         }
 
         return invokeActionUsingAdapters(action, arguments);
@@ -262,7 +260,7 @@ public final class DomainResourceHelper {
 
         final ActionSemantics.Of actionSemantics = action.getSemantics();
         if (!actionSemantics.isIdempotentInNature()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }
         return invokeActionUsingAdapters(action, arguments);
     }
@@ -291,7 +289,7 @@ public final class DomainResourceHelper {
                 final Object arg = argAdapter.getObject();
                 final String reasonNotValid = parameter.isValid(objectAdapter, arg, null);
                 if (reasonNotValid != null) {
-                    throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
+                    throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
                 }
             }
         }
@@ -300,7 +298,7 @@ public final class DomainResourceHelper {
         final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
         final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
         if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
         }
 
         // invoke
@@ -324,33 +322,46 @@ public final class DomainResourceHelper {
      * @param resourceContext
      * @param objectSpec
      *            - the {@link ObjectSpecification} to interpret the object as.
-     * @param representation
+     * @param argRepr
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
-    private static ObjectAdapter objectAdapterFor(final RendererContext resourceContext, final ObjectSpecification objectSpec, final JsonRepresentation representation) {
+    private static ObjectAdapter objectAdapterFor(final RendererContext resourceContext, final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
 
-        if (representation == null) {
+        if (argRepr == null) {
             return null;
         }
 
         // value (encodable)
         if (objectSpec.isEncodeable()) {
-            return new JsonValueEncoder().asAdapter(objectSpec, representation);
+            return new JsonValueEncoder().asAdapter(objectSpec, argRepr);
+        }
+
+        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
+        if(argValueRepr == null) {
+            String reason = "No 'value' key";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
 
         // reference
-        if (!representation.isLink()) {
-            throw new IllegalArgumentException("Expected a link (because this object's type is not a value) but found no 'href'");
+        if (!argValueRepr.isLink()) {
+            final String reason = "Expected a link (because this object's type is not a value) but found no 'href'";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
-        final String oidFromHref = UrlParserUtils.encodedOidFromLink(representation);
+        final String oidFromHref = UrlParserUtils.encodedOidFromLink(argValueRepr);
         if (oidFromHref == null) {
-            throw new IllegalArgumentException("Could not parse 'href' to identify the object's OID");
+            final String reason = "Could not parse 'href' to identify the object's OID";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
 
         final ObjectAdapter objectAdapter = OidUtils.getObjectAdapterElseNull(resourceContext, oidFromHref);
         if (objectAdapter == null) {
-            throw new IllegalArgumentException("Object not found for 'href'");
+            final String reason = "'href' does not reference a known entity";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
         return objectAdapter;
     }
@@ -417,7 +428,7 @@ public final class DomainResourceHelper {
             final Consent usable = objectMember.isUsable(authenticationSession, objectAdapter, where);
             if (usable.isVetoed()) {
                 final String memberTypeStr = memberType.name().toLowerCase();
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "%s is not usable: '%s' (%s)", memberTypeStr, memberId, usable.getReason());
+                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_ACCEPTABLE, "%s is not usable: '%s' (%s)", memberTypeStr, memberId, usable.getReason());
             }
         }
         return objectMember;
@@ -425,7 +436,7 @@ public final class DomainResourceHelper {
 
     protected static void throwNotFoundException(final String memberId, final MemberType memberType) {
         final String memberTypeStr = memberType.name().toLowerCase();
-        throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND, "%s '%s' either does not exist or is not visible", memberTypeStr, memberId);
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "%s '%s' either does not exist or is not visible", memberTypeStr, memberId);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -448,7 +459,7 @@ public final class DomainResourceHelper {
     ObjectAdapter parseAsMapWithSingleValue(final ObjectSpecification objectSpec, final JsonRepresentation arguments) {
         final JsonRepresentation representation = arguments.getRepresentation("value");
         if (arguments.size() != 1 || representation == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
         }
 
         return objectAdapterFor(resourceContext, objectSpec, representation);
@@ -463,18 +474,22 @@ public final class DomainResourceHelper {
 
         final List<ObjectAdapter> argAdapters = Lists.newArrayList();
         final List<ObjectActionParameter> parameters = action.getParameters();
+        final StringBuilder invalidReasonBuf = new StringBuilder();
         for (int i = 0; i < argList.size(); i++) {
-            final String paramName = parameters.get(i).getName();
             final JsonRepresentation arg = argList.get(i);
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
             try {
                 final ObjectAdapter objectAdapter = objectAdapterFor(resourceContext, paramSpec, arg);
                 argAdapters.add(objectAdapter);
-            } catch (final ExpectedStringRepresentingValueException e) {
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s', argument %s should be a URL encoded string representing a value of type %s", action.getId(), paramName, resourceFor(paramSpec));
-            } catch (final ExpectedMapRepresentingLinkException e) {
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s', argument %s should be a map representing a link to reference of type %s", action.getId(), paramName, resourceFor(paramSpec));
+            } catch (final IllegalArgumentException e) {
+                if(invalidReasonBuf.length()>0) {
+                    invalidReasonBuf.append("; ");
+                }
+                invalidReasonBuf.append(e.getMessage());
             }
+        }
+        if(invalidReasonBuf.length()>0) {
+            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.VALIDATION_FAILED, arguments, invalidReasonBuf.toString());
         }
         return argAdapters;
     }
@@ -486,7 +501,9 @@ public final class DomainResourceHelper {
         for (final Entry<String, JsonRepresentation> arg : arguments.mapIterable()) {
             final String argName = arg.getKey();
             if (action.getParameterById(argName) == null) {
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s' does not have a parameter %s but an argument of that name was provided", action.getId(), argName);
+                String reason = String.format("Action '%s' does not have a parameter %s but an argument of that name was provided", action.getId(), argName);
+                arguments.mapPut("x-ro-invalidReason", reason);
+                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.VALIDATION_FAILED, reason);
             }
         }
 
@@ -497,7 +514,9 @@ public final class DomainResourceHelper {
             final String paramId = param.getId();
             final JsonRepresentation argRepr = arguments.getRepresentation(paramId);
             if (argRepr == null && !param.isOptional()) {
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s', no argument found for (mandatory) parameter '%s'", action.getId(), paramId);
+                String reason = String.format("Action '%s', no argument found for (mandatory) parameter '%s'", action.getId(), paramId);
+                arguments.mapPut("x-ro-invalidReason", reason);
+                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.VALIDATION_FAILED, reason);
             }
             argList.add(argRepr);
         }
@@ -543,15 +562,15 @@ public final class DomainResourceHelper {
         try {
             final JsonRepresentation jsonRepr = JsonMapper.instance().read(args);
             if (!jsonRepr.isMap()) {
-                throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
+                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
             }
             return jsonRepr;
         } catch (final JsonParseException e) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+            throw RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
         } catch (final JsonMappingException e) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
+            throw RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
         } catch (final IOException e) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+            throw RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
         }
     }
 
@@ -560,7 +579,7 @@ public final class DomainResourceHelper {
             final byte[] byteArray = ByteStreams.toByteArray(body);
             return new String(byteArray, Charsets.UTF_8);
         } catch (final IOException e) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not read body");
+            throw RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, e, "could not read body");
         }
     }
 

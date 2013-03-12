@@ -123,7 +123,7 @@ public class ResourceContext implements RendererContext {
     private void ensureDomainModelQueryParamSupported() {
         final DomainModel domainModel = getArg(RequestParameter.DOMAIN_MODEL);
         if(domainModel != DomainModel.FORMAL) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST,  
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,  
                                            "x-ro-domain-model of '%s' is not supported", domainModel);
         }
     }

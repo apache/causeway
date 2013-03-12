@@ -280,7 +280,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     private static String linkFromFormalArgs(final String argumentsQueryString, final String paramName) {
         final JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsQueryString);
         if (!arguments.isLink(paramName)) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName);
         }
 
         return arguments.getLink(paramName).getHref();

@@ -174,7 +174,7 @@ public abstract class ResourceAbstract {
 
         if (objectAdapter == null) {
             final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceId);
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
         }
         return objectAdapter;
     }
@@ -197,7 +197,7 @@ public abstract class ResourceAbstract {
                 return serviceAdapter;
             }
         }
-        throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
     }
 
 

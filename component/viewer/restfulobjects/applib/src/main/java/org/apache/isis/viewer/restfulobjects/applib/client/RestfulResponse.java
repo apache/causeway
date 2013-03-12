@@ -269,6 +269,10 @@ public class RestfulResponse<T> {
             return parser.valueOf(value);
         }
 
+        public String render(X message) {
+            return parser.asString(message);
+        }
+
         private static Parser<String> warningParser() {
             return new Parser<String>(){
                 private static final String PREFIX = "199 RestfulObjects ";
@@ -287,6 +291,7 @@ public class RestfulResponse<T> {
                 }
             };
         }
+
     }
 
     private final Response response;

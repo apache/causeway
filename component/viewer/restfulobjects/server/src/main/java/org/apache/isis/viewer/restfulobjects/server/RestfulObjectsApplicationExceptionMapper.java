@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server;
 import java.util.List;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -38,21 +39,26 @@ import com.google.common.collect.Lists;
 @Provider
 public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper<RestfulObjectsApplicationException> {
 
-    private static final String WARNING_HEADER_PREFIX = "199 RestfulObjects ";
-
     @Override
     public Response toResponse(final RestfulObjectsApplicationException ex) {
-        final ResponseBuilder builder = Response.status(ex.getHttpStatusCode().getJaxrsStatusType()).type(RestfulMediaType.APPLICATION_JSON_ERROR).entity(jsonFor(ex));
+        final ResponseBuilder builder = Response.status(ex.getHttpStatusCode().getJaxrsStatusType());
+        final String body = bodyFor(ex);
+        if(body != null) {
+            builder.entity(body);
+            builder.type(MediaType.APPLICATION_JSON); // generic; the spec doesn't define what the media type should be
+        } else {
+            builder.type(RestfulMediaType.APPLICATION_JSON_ERROR);
+        }
         final String message = ex.getMessage();
         if (message != null) {
-            builder.header(RestfulResponse.Header.WARNING.getName(), WARNING_HEADER_PREFIX + message);
+            builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }
         return builder.build();
     }
 
     private static class ExceptionPojo {
 
-        public static ExceptionPojo create(final Exception ex) {
+        public static ExceptionPojo create(final Throwable ex) {
             return new ExceptionPojo(ex);
         }
 
@@ -108,16 +114,20 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
 
     }
 
-    static String jsonFor(final RestfulObjectsApplicationException ex) {
-        final JsonRepresentation jsonRepresentation = ex.getJsonRepresentation();
+    static String bodyFor(final RestfulObjectsApplicationException ex) {
+        final JsonRepresentation jsonRepresentation = ex.getBody();
         if (jsonRepresentation != null) {
             return jsonRepresentation.toString();
         }
+        Throwable cause = ex.getCause();
+        if(cause == null) {
+            return null;
+        }
         try {
-            return JsonMapper.instance().write(ExceptionPojo.create(ex));
+            return JsonMapper.instance().write(ExceptionPojo.create(cause));
         } catch (final Exception e) {
             // fallback
-            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
+            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
         }
     }
 }

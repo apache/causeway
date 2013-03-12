@@ -19,18 +19,16 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
@@ -42,13 +40,9 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -58,7 +52,6 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     private RestfulClient client;
-
     private DomainServiceResource serviceResource;
 
     @Before
@@ -87,9 +80,9 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         
         // when query the 'contains' action passing in the entity 
         // (for a range where the entity is contained in the range)
-        args.mapPut("searchFor", firstEntityLink);
-        args.mapPut("from", 0);
-        args.mapPut("to", 3);
+        args.mapPut("searchFor.value", firstEntityLink);
+        args.mapPut("from.value", 0);
+        args.mapPut("to.value", 3);
         
         RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
 
@@ -114,9 +107,9 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         
         // and when query the 'contains' action for a different range which does not
         // contain the entity
-        args.mapPut("searchFor", firstEntityLink);
-        args.mapPut("from", 3);
-        args.mapPut("to", 5);
+        args.mapPut("searchFor.value", firstEntityLink);
+        args.mapPut("from.value", 3);
+        args.mapPut("to.values", 5);
         
         restfulResponse = client.followT(invokeLink, args);
 
@@ -139,9 +132,9 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         // when query the 'contains' action passing in the entity 
         // (for a range where the entity is contained in the range)
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("searchFor", firstEntityLink);
-        args.mapPut("from", 0);
-        args.mapPut("to", 3);
+        args.mapPut("searchFor.value", firstEntityLink);
+        args.mapPut("from.value", 0);
+        args.mapPut("to.value", 3);
         Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "contains", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
@@ -165,8 +158,8 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         final JsonRepresentation args = invokeLink.getArguments();
         
         // when
-        args.mapPut("from", from);
-        args.mapPut("to", to);
+        args.mapPut("from.value", from);
+        args.mapPut("to.value", to);
         
         final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         

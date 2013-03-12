@@ -71,7 +71,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
     public void entity_withMessage() throws Exception {
 
         // givens
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, "foobar");
+        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);
@@ -92,7 +92,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
     public void entity_withCause() throws Exception {
         // given
         final Exception cause = new Exception("barfoo");
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.create(HttpStatusCode.BAD_REQUEST, cause, "foobar");
+        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);

@@ -36,134 +36,146 @@ public final class JsonValueEncoder {
         private static final long serialVersionUID = 1L;
     }
 
-    public ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation representation) {
+    public ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
         if (objectSpec == null) {
-            throw new IllegalArgumentException("objectSpec cannot be null");
+            String reason = "ObjectSpec is null, cannot validate";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
         final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
         if (encodableFacet == null) {
-            throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
+            String reason = "ObjectSpec expected to have an EncodableFacet";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
-        if (representation == null) {
-            throw new IllegalArgumentException("representation cannot be null");
+        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
+        if(argValueRepr == null) {
+            String reason = "No 'value' key";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
-        if (!representation.isValue()) {
-            throw new IllegalArgumentException("representation must be of a value");
+        if (!argValueRepr.isValue()) {
+            String reason = "Representation must be of a value";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
 
         // special case handling for JSON built-ins
         if (isBoolean(objectSpec)) {
-            if (!representation.isBoolean()) {
-                throwIncompatibleException(objectSpec, representation);
+            if (!argValueRepr.isBoolean()) {
+                throwIncompatibleException(objectSpec, argRepr);
             }
-            final String argStr = "" + representation.asBoolean();
+            final String argStr = "" + argValueRepr.asBoolean();
             return encodableFacet.fromEncodedString(argStr);
         }
 
         if (isInteger(objectSpec)) {
-            if (representation.isInt()) {
-                final String argStr = "" + representation.asInt();
+            if (argValueRepr.isInt()) {
+                final String argStr = "" + argValueRepr.asInt();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // best effort
-            if (representation.isString()) {
-                final String argStr = representation.asString();
+            if (argValueRepr.isString()) {
+                final String argStr = argValueRepr.asString();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // give up
-            throwIncompatibleException(objectSpec, representation);
+            throwIncompatibleException(objectSpec, argRepr);
         }
 
         if (isLong(objectSpec)) {
-            if (!representation.isLong()) {
-                throwIncompatibleException(objectSpec, representation);
+            if (!argValueRepr.isLong()) {
+                throwIncompatibleException(objectSpec, argRepr);
             }
-            final String argStr = "" + representation.asLong();
+            final String argStr = "" + argValueRepr.asLong();
             return encodableFacet.fromEncodedString(argStr);
         }
 
         if (isBigInteger(objectSpec)) {
-            if (representation.isBigInteger()) {
-                final String argStr = "" + representation.asBigInteger();
+            if (argValueRepr.isBigInteger()) {
+                final String argStr = "" + argValueRepr.asBigInteger();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // best effort
-            if (representation.isLong()) {
-                final String argStr = "" + representation.asLong();
+            if (argValueRepr.isLong()) {
+                final String argStr = "" + argValueRepr.asLong();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isInt()) {
-                final String argStr = "" + representation.asInt();
+            if (argValueRepr.isInt()) {
+                final String argStr = "" + argValueRepr.asInt();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isString()) {
-                final String argStr = representation.asString();
+            if (argValueRepr.isString()) {
+                final String argStr = argValueRepr.asString();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // give up
-            throwIncompatibleException(objectSpec, representation);
+            throwIncompatibleException(objectSpec, argRepr);
         }
 
         if (isBigDecimal(objectSpec)) {
-            if (representation.isBigDecimal()) {
-                final String argStr = "" + representation.asBigDecimal();
+            if (argValueRepr.isBigDecimal()) {
+                final String argStr = "" + argValueRepr.asBigDecimal();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // best effort
-            if (representation.isBigInteger()) {
-                final String argStr = "" + representation.asBigInteger();
+            if (argValueRepr.isBigInteger()) {
+                final String argStr = "" + argValueRepr.asBigInteger();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isDouble()) {
-                final String argStr = "" + representation.asDouble();
+            if (argValueRepr.isDouble()) {
+                final String argStr = "" + argValueRepr.asDouble();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isLong()) {
-                final String argStr = "" + representation.asLong();
+            if (argValueRepr.isLong()) {
+                final String argStr = "" + argValueRepr.asLong();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isInt()) {
-                final String argStr = "" + representation.asInt();
+            if (argValueRepr.isInt()) {
+                final String argStr = "" + argValueRepr.asInt();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isString()) {
-                final String argStr = representation.asString();
+            if (argValueRepr.isString()) {
+                final String argStr = argValueRepr.asString();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // give up
-            throwIncompatibleException(objectSpec, representation);
+            throwIncompatibleException(objectSpec, argRepr);
         }
 
         if (isDouble(objectSpec)) {
-            if (representation.isDouble()) {
-                final String argStr = "" + representation.asDouble();
+            if (argValueRepr.isDouble()) {
+                final String argStr = "" + argValueRepr.asDouble();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // best effort
-            if (representation.isLong()) {
-                final String argStr = "" + representation.asLong();
+            if (argValueRepr.isLong()) {
+                final String argStr = "" + argValueRepr.asLong();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isInt()) {
-                final String argStr = "" + representation.asInt();
+            if (argValueRepr.isInt()) {
+                final String argStr = "" + argValueRepr.asInt();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            if (representation.isString()) {
-                final String argStr = representation.asString();
+            if (argValueRepr.isString()) {
+                final String argStr = argValueRepr.asString();
                 return encodableFacet.fromEncodedString(argStr);
             }
             // give up
-            throwIncompatibleException(objectSpec, representation);
+            throwIncompatibleException(objectSpec, argRepr);
         }
 
-        if (!representation.isString()) {
-            throw new ExpectedStringRepresentingValueException();
+        if (argValueRepr.isString()) {
+            final String argStr = argValueRepr.asString();
+            return encodableFacet.fromEncodedString(argStr);
         }
-        final String argStr = representation.asString();
-        return encodableFacet.fromEncodedString(argStr);
+        
+        final String reason = "Unable to parse value";
+        argRepr.mapPut("invalidReason", reason);
+        throw new IllegalArgumentException(reason);
     }
 
-    public Object asObject(final ObjectAdapter objectAdapter) {
+    Object asObject(final ObjectAdapter objectAdapter) {
         if (objectAdapter == null) {
             throw new IllegalArgumentException("objectAdapter cannot be null");
         }
@@ -217,8 +229,10 @@ public final class JsonValueEncoder {
         return false;
     }
 
-    private void throwIncompatibleException(final ObjectSpecification objectSpec, final JsonRepresentation representation) {
-        throw new IllegalArgumentException(String.format("representation '%s' incompatible with objectSpec '%s'", representation.toString(), objectSpec.getCorrespondingClass().getName()));
+    private void throwIncompatibleException(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
+        String reason = String.format("representation '%s' incompatible with objectSpec '%s'", argRepr.getMap("value").toString(), objectSpec.getCorrespondingClass().getName());
+        argRepr.mapPut("invalidReason", reason);
+        throw new IllegalArgumentException(reason);
     }
 
 }
