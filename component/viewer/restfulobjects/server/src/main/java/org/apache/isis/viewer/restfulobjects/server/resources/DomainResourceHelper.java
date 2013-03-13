@@ -273,36 +273,11 @@ public final class DomainResourceHelper {
 
     private Response invokeActionUsingAdapters(final ObjectAction action, final JsonRepresentation arguments) {
 
-        final List<ObjectAdapter> argAdapters = parseArguments(action, arguments);
-
-        // validate individual args
-        final List<ObjectActionParameter> parameters = action.getParameters();
-        for (int i = 0; i < parameters.size(); i++) {
-            final ObjectActionParameter parameter = parameters.get(i);
-            final ObjectAdapter argAdapter = argAdapters.get(i);
-            if (argAdapter == null) {
-                // can only happen if this is an optional parameter; nothing to
-                // do
-                continue;
-            }
-            if (argAdapter.getSpecification().containsFacet(ValueFacet.class)) {
-                final Object arg = argAdapter.getObject();
-                final String reasonNotValid = parameter.isValid(objectAdapter, arg, null);
-                if (reasonNotValid != null) {
-                    throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
-                }
-            }
-        }
-
-        // validate all args
-        final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
-        final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
-        if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
-        }
+        final List<ObjectAdapter> argAdapters = parseAndValidateArguments(action, arguments);
 
         // invoke
-        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
+        final ObjectAdapter[] argArray2 = argAdapters.toArray(new ObjectAdapter[0]);
+        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray2);
 
         // response (void)
         final ActionResultReprRenderer renderer = new ActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -465,33 +440,60 @@ public final class DomainResourceHelper {
         return objectAdapterFor(resourceContext, objectSpec, representation);
     }
 
-    private List<ObjectAdapter> parseArguments(final ObjectAction action, final JsonRepresentation arguments) {
-        return parseArguments(resourceContext, action, arguments);
-    }
-
-    public static List<ObjectAdapter> parseArguments(final RendererContext resourceContext, final ObjectAction action, final JsonRepresentation arguments) {
+    private List<ObjectAdapter> parseAndValidateArguments(final ObjectAction action, final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
         final List<ObjectAdapter> argAdapters = Lists.newArrayList();
         final List<ObjectActionParameter> parameters = action.getParameters();
         final StringBuilder invalidReasonBuf = new StringBuilder();
         for (int i = 0; i < argList.size(); i++) {
-            final JsonRepresentation arg = argList.get(i);
+            final JsonRepresentation argRepr = argList.get(i);
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
             try {
-                final ObjectAdapter objectAdapter = objectAdapterFor(resourceContext, paramSpec, arg);
-                argAdapters.add(objectAdapter);
-            } catch (final IllegalArgumentException e) {
-                if(invalidReasonBuf.length()>0) {
-                    invalidReasonBuf.append("; ");
+                final ObjectAdapter argAdapter = objectAdapterFor(resourceContext, paramSpec, argRepr);
+                argAdapters.add(argAdapter);
+
+                // validate individual arg
+                final ObjectActionParameter parameter = parameters.get(i);
+                if (argAdapter == null) {
+                    // can only happen if this is an optional parameter; nothing to
+                    // do
+                    continue;
                 }
-                invalidReasonBuf.append(e.getMessage());
+                if (argAdapter.getSpecification().containsFacet(ValueFacet.class)) {
+                    final Object argPojo = argAdapter.getObject();
+                    final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, null);
+                    if (reasonNotValid != null) {
+                        argRepr.mapPut("invalidReason", reasonNotValid);
+                        appendReasonTo(invalidReasonBuf, "Validation failed, see body for details");
+                    }
+                }
+            } catch (final IllegalArgumentException e) {
+                String reason = e.getMessage();
+                appendReasonTo(invalidReasonBuf, reason);
             }
         }
+        
+        // validate all args
+        final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
+        final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
+        if (consent.isVetoed()) {
+            arguments.mapPut("x-ro-invalidReason", consent.getReason());
+            appendReasonTo(invalidReasonBuf, "Validation failed, see body for details");
+        }
+
         if(invalidReasonBuf.length()>0) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.VALIDATION_FAILED, arguments, invalidReasonBuf.toString());
         }
+        
         return argAdapters;
+    }
+
+    private void appendReasonTo(final StringBuilder buf, String reason) {
+        if(buf.length()>0) {
+            buf.append("; ");
+        }
+        buf.append(reason);
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {

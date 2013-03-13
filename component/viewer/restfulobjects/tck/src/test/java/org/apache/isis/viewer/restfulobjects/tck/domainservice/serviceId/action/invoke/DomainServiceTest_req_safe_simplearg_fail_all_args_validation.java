@@ -19,12 +19,14 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -35,21 +37,25 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class DomainServiceTest_req_safe_noarg_resp_list {
+public class DomainServiceTest_req_safe_simplearg_fail_all_args_validation {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -69,7 +75,7 @@ public class DomainServiceTest_req_safe_noarg_resp_list {
     public void usingClientFollow() throws Exception {
 
         // given
-        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "list");
+        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subList");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
 
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
@@ -77,36 +83,51 @@ public class DomainServiceTest_req_safe_noarg_resp_list {
         assertThat(invokeLink, isLink(client)
                                     .rel(Rel.INVOKE)
                                     .httpMethod(RestfulHttpMethod.GET)
-                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/list/invoke"))
-                                    .arguments(JsonRepresentation.newMap())
+                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subList/invoke"))
                                     .build());
         
+        JsonRepresentation args =invokeLink.getArguments();
+        assertThat(args.size(), is(2));
+        assertThat(args, RestfulMatchers.mapHas("from"));
+        assertThat(args, RestfulMatchers.mapHas("to"));
+        
         // when
-        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink);
+        args.mapPut("from.value", 1);
+        args.mapPut("to.value", 0);
+
+        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        then(restfulResponse);
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
-    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
-        
-        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
-        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        
-        assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
-        final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
-        assertThat(listRepr.getValue().size(), is(5));
-    }
-
-    
     @Test
     public void usingResourceProxy() throws Exception {
 
         // given, when
-        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "list", null);
+        JsonRepresentation args = JsonRepresentation.newMap();
+        args.mapPut("from.value", 1);
+        args.mapPut("to.value", 0);
+        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
-        then(restfulResponse);
+        // then
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
+
+    private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+        assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
+        assertThat(restfulResponse.getHeader(Header.WARNING), is("Validation failed, see body for details"));
+
+        // hmmm... what is the media type, though?  the spec doesn't say.  testing for a generic one.
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(MediaType.APPLICATION_JSON));
+
+        RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
+        JsonRepresentation repr = restfulResponseOfError.getEntity();
+        
+        assertThat(repr.getString("x-ro-invalidReason"), is("'from' cannot be larger than 'to'"));
+    }
+
+
 
 }

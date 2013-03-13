@@ -18,19 +18,24 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
@@ -41,6 +46,8 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRep
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
@@ -86,23 +93,8 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         
         RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
 
-        // then the response is a scalar value of 'true'
-        ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        assertThat(actionResultRepr.getResultType(), is(ResultType.SCALAR_VALUE));
-        JsonRepresentation resultRepr = actionResultRepr.getResult();
-        assertThat(resultRepr, is(not(nullValue())));
-        
-        ScalarValueRepresentation scalarValueRepr = resultRepr.as(ScalarValueRepresentation.class);
-        
-        LinkRepresentation returnTypeLink = scalarValueRepr.getLinkWithRel(Rel.RETURN_TYPE);
-        assertThat(returnTypeLink, is(not(nullValue())));
-        assertThat(returnTypeLink, isLink(client)
-                                        .rel(Rel.RETURN_TYPE)
-                                        .href(Matchers.endsWith(":39393/domain-types/boolean"))
-                                        .returning(HttpStatusCode.OK)
-                                        .build());
-        
-        assertThat(scalarValueRepr.getValue().asBoolean(), is(true));
+        // then 
+        thenResponseIsScalarValueOf(restfulResponse, true);
         
         
         // and when query the 'contains' action for a different range which does not
@@ -113,13 +105,10 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         
         restfulResponse = client.followT(invokeLink, args);
 
-        // then the response is a scalar value of 'false'
-        actionResultRepr = restfulResponse.getEntity();
-        resultRepr = actionResultRepr.getResult();
-        
-        scalarValueRepr = resultRepr.as(ScalarValueRepresentation.class);
-        assertThat(scalarValueRepr.getValue().asBoolean(), is(false));
+        // then 
+        thenResponseIsScalarValueOf(restfulResponse, false);
     }
+
 
     
     @Test
@@ -139,16 +128,29 @@ public class DomainServiceTest_req_safe_refarg_resp_scalar {
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
         // then
-        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        JsonRepresentation resultRepr = actionResultRepr.getResult();
-        
-        assertThat(actionResultRepr.getResultType(), is(ResultType.SCALAR_VALUE));
-        ScalarValueRepresentation scalarValueRepr = resultRepr.as(ScalarValueRepresentation.class);
-
-        assertThat(scalarValueRepr.getValue().asBoolean(), is(true));
+        thenResponseIsScalarValueOf(restfulResponse, true);
     }
 
-    
+    private void thenResponseIsScalarValueOf(RestfulResponse<ActionResultRepresentation> restfulResponse, boolean value) throws JsonParseException, JsonMappingException, IOException {
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
+        ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
+        assertThat(actionResultRepr.getResultType(), is(ResultType.SCALAR_VALUE));
+        JsonRepresentation resultRepr = actionResultRepr.getResult();
+        assertThat(resultRepr, is(not(nullValue())));
+        
+        ScalarValueRepresentation scalarValueRepr = resultRepr.as(ScalarValueRepresentation.class);
+        
+        LinkRepresentation returnTypeLink = scalarValueRepr.getLinkWithRel(Rel.RETURN_TYPE);
+        assertThat(returnTypeLink, is(not(nullValue())));
+        assertThat(returnTypeLink, isLink(client)
+                                        .rel(Rel.RETURN_TYPE)
+                                        .href(Matchers.endsWith(":39393/domain-types/boolean"))
+                                        .returning(HttpStatusCode.OK)
+                                        .build());
+        
+        assertThat(scalarValueRepr.getValue().asBoolean(), is(value));
+    }
+
 
     private ListRepresentation givenSublistActionInvoked(int from, int to) throws Exception {
         final JsonRepresentation givenSubListAction = Util.givenAction(client, "ActionsEntities", "subList");

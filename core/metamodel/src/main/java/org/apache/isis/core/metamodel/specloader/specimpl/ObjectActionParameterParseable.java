@@ -77,22 +77,32 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     @Override
     public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
 
-        if (!(proposedValue instanceof String)) {
-            return null;
-        }
-        final String proposedString = (String) proposedValue;
 
-        final ObjectActionParameter objectActionParameter = getAction().getParameters().get(getNumber());
-        if (!(objectActionParameter instanceof ParseableEntryActionParameter)) {
-            return null;
-        }
-        final ParseableEntryActionParameter parameter = (ParseableEntryActionParameter) objectActionParameter;
-
+        final ObjectActionParameter parameter = getAction().getParameters().get(getNumber());
         final ObjectSpecification parameterSpecification = parameter.getSpecification();
-        final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
-        final ObjectAdapter newValue = p.parseTextEntry(null, proposedString, localization);
+        if(proposedValue == null) {
+            return null;
+        }
+        
+        ObjectAdapter proposedValueAdapter = getAdapterMap().adapterFor(proposedValue);
+        final ObjectSpecification proposedValueSpec = proposedValueAdapter.getSpecification();
+        if(proposedValueSpec.isOfType(proposedValueSpec)) {
+            // nothing to do
+        } else {
+            // try to parse
+            if (!(parameter instanceof ParseableEntryActionParameter)) {
+                return null;
+            }
+            if (!(proposedValue instanceof String)) {
+                return null;
+            }
+            final String proposedString = (String) proposedValue;
 
-        final ValidityContext<?> ic = parameter.createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(newValue), getNumber());
+            final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
+            proposedValueAdapter = p.parseTextEntry(null, proposedString, localization);
+        }
+
+        final ValidityContext<?> ic = parameter.createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(proposedValueAdapter), getNumber());
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(parameter, ic, buf);

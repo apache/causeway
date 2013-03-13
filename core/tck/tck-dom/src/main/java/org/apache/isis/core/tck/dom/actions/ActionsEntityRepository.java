@@ -24,10 +24,12 @@ import java.util.List;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
 @Named("ActionsEntities")
@@ -48,11 +50,21 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
-    public List<ActionsEntity> subList(@Named("from") int from, @Named("to") int to) {
+    public List<ActionsEntity> subList(
+            @MustSatisfy(IntegerCannotBeNegative.class)
+            @Named("from") int from, 
+            @MustSatisfy(IntegerCannotBeNegative.class)
+            @Named("to") int to) {
         List<ActionsEntity> list = list();
         int toChecked = Math.min(to, list.size());
         int fromChecked = Math.min(from, toChecked);
         return list.subList(fromChecked, toChecked);
+    }
+    public String validateSubList(final int from, final int to) {
+        if(from > to) {
+            return "'from' cannot be larger than 'to'";
+        }
+        return null;
     }
 
     @ActionSemantics(Of.SAFE)
@@ -61,5 +73,15 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
         List<ActionsEntity> list = subList(from, to);
         return list.contains(entity);
     }
-    
+
+    public static class IntegerCannotBeNegative implements Specification {
+        @Override
+        public String satisfies(Object obj) {
+            if(!(obj instanceof Integer)) {
+                return null;
+            } 
+            Integer integer = (Integer) obj;
+            return integer.intValue() < 0? "Cannot be less than zero": null;
+        }
+    }
 }

@@ -20,31 +20,29 @@ package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import java.io.IOException;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -68,7 +66,7 @@ public class DomainServiceTest_req_safe_refarg_bad {
 
         // given a reference to a non-existent entity
         LinkRepresentation nonExistentEntityLink = new LinkRepresentation()
-        .withHref("http://localhost:39393/objects/NONEXISTENT/123");
+            .withHref("http://localhost:39393/objects/NONEXISTENT/123");
         
         // and given a representation of the 'contains' action accepting a entity href
         final JsonRepresentation containsAction = Util.givenAction(client, "ActionsEntities", "contains");
@@ -84,6 +82,10 @@ public class DomainServiceTest_req_safe_refarg_bad {
         
         RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
 
+        then(args, restfulResponse);
+    }
+
+    private static void then(final JsonRepresentation args, RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
         // then the response is an error
         assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
 
@@ -95,53 +97,28 @@ public class DomainServiceTest_req_safe_refarg_bad {
         RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
         JsonRepresentation repr = restfulResponseOfError.getEntity();
         
+        assertThat(repr.getString("searchFor.value.href"), is(args.getString("searchFor.value.href")));
         assertThat(repr.getString("searchFor.invalidReason"), is("'href' does not reference a known entity"));
     }
 
-    @Ignore("still to update according to above test...")
+
     @Test
     public void usingResourceProxy() throws Exception {
 
-        // given a reference to the first entity
-        final ListRepresentation subListRepr = givenSublistActionInvoked(0, 1);
-        LinkRepresentation firstEntityLink = subListRepr.getValue().arrayGet(0).asLink();
+        // given a reference to a non-existent entity
+        LinkRepresentation nonExistentEntityLink = new LinkRepresentation()
+            .withHref("http://localhost:39393/objects/NONEXISTENT/123");
 
-        // when query the 'contains' action passing in the entity 
-        // (for a range where the entity is contained in the range)
+        // when query the 'contains' action passing in the reference to the non-existent entity 
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("searchFor.value", firstEntityLink);
+        args.mapPut("searchFor.value", nonExistentEntityLink);
         args.mapPut("from.value", 0);
         args.mapPut("to.value", 3);
         Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "contains", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
-        // then
-        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        JsonRepresentation resultRepr = actionResultRepr.getResult();
-        
-        assertThat(actionResultRepr.getResultType(), is(ResultType.SCALAR_VALUE));
-        ScalarValueRepresentation scalarValueRepr = resultRepr.as(ScalarValueRepresentation.class);
-
-        assertThat(scalarValueRepr.getValue().asBoolean(), is(true));
+        then(args, restfulResponse);
     }
 
     
-
-    private ListRepresentation givenSublistActionInvoked(int from, int to) throws Exception {
-        final JsonRepresentation givenSubListAction = Util.givenAction(client, "ActionsEntities", "subList");
-        final ObjectActionRepresentation actionRepr = givenSubListAction.as(ObjectActionRepresentation.class);
-        
-        final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        final JsonRepresentation args = invokeLink.getArguments();
-        
-        // when
-        args.mapPut("from", from);
-        args.mapPut("to", to);
-        
-        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
-        
-        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        return actionResultRepr.getResult().as(ListRepresentation.class);
-    }
-
 }

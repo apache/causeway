@@ -18,18 +18,24 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
@@ -39,6 +45,8 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
@@ -86,14 +94,8 @@ public class DomainServiceTest_req_safe_simplearg_resp_list {
 
         final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
-        // then
-        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        
-        assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
-        final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
-        assertThat(listRepr.getValue().size(), is(2));
+        then(restfulResponse);
     }
-
 
     @Test
     public void usingResourceProxy() throws Exception {
@@ -106,6 +108,11 @@ public class DomainServiceTest_req_safe_simplearg_resp_list {
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
         // then
+        then(restfulResponse);
+    }
+
+    private static void then(RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
         
         assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
