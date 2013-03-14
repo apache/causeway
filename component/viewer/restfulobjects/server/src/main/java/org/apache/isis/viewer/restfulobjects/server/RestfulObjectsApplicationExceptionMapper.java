@@ -56,6 +56,23 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
         return builder.build();
     }
 
+    static String bodyFor(final RestfulObjectsApplicationException ex) {
+        final JsonRepresentation jsonRepresentation = ex.getBody();
+        if (jsonRepresentation != null) {
+            return jsonRepresentation.toString();
+        }
+        Throwable cause = ex.getCause();
+        if(cause == null) {
+            return null;
+        }
+        try {
+            return JsonMapper.instance().write(ExceptionPojo.create(cause));
+        } catch (final Exception e) {
+            // fallback
+            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
+        }
+    }
+
     private static class ExceptionPojo {
 
         public static ExceptionPojo create(final Throwable ex) {
@@ -114,20 +131,5 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
 
     }
 
-    static String bodyFor(final RestfulObjectsApplicationException ex) {
-        final JsonRepresentation jsonRepresentation = ex.getBody();
-        if (jsonRepresentation != null) {
-            return jsonRepresentation.toString();
-        }
-        Throwable cause = ex.getCause();
-        if(cause == null) {
-            return null;
-        }
-        try {
-            return JsonMapper.instance().write(ExceptionPojo.create(cause));
-        } catch (final Exception e) {
-            // fallback
-            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
-        }
-    }
+
 }

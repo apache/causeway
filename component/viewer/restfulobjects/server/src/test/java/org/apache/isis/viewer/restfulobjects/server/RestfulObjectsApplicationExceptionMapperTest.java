@@ -57,14 +57,7 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // and then
         final String entity = (String) response.getEntity();
-        assertThat(entity, is(not(nullValue())));
-        final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
-
-        // then
-        assertThat(jsonRepr.getString("message"), is(nullValue()));
-        assertThat(jsonRepr.getArray("stackTrace"), is(not(nullValue())));
-        assertThat(jsonRepr.getArray("stackTrace").size(), is(greaterThan(0)));
-        assertThat(jsonRepr.getRepresentation("causedBy"), is(nullValue()));
+        assertThat(entity, is(nullValue()));
     }
 
     @Test
@@ -81,18 +74,14 @@ public class RestfulObjectsApplicationExceptionMapperTest {
 
         // and then
         final String entity = (String) response.getEntity();
-        assertThat(entity, is(not(nullValue())));
-        final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
-
-        // then
-        assertThat(jsonRepr.getString("message"), is(ex.getMessage()));
+        assertThat(entity, is(nullValue()));
     }
 
     @Test
-    public void entity_withCause() throws Exception {
+    public void entity_forException() throws Exception {
         // given
-        final Exception cause = new Exception("barfoo");
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
+        final Exception exception = new Exception("barfoo");
+        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, exception, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);
@@ -101,7 +90,28 @@ public class RestfulObjectsApplicationExceptionMapperTest {
         final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
 
         // then
-        assertThat(jsonRepr.getString("message"), is(ex.getMessage()));
+        assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
+        assertThat(jsonRepr.getString("message"), is("barfoo"));
+        final JsonRepresentation causedByRepr = jsonRepr.getRepresentation("causedBy");
+        assertThat(causedByRepr, is(nullValue()));
+    }
+
+    @Test
+    public void entity_forExceptionWithCause() throws Exception {
+        // given
+        final Exception cause = new Exception("bozfoz");
+        final Exception exception = new Exception("barfoo", cause);
+        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, exception, "foobar");
+
+        // when
+        final Response response = exceptionMapper.toResponse(ex);
+        final String entity = (String) response.getEntity();
+        assertThat(entity, is(not(nullValue())));
+        final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
+
+        // then
+        assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
+        assertThat(jsonRepr.getString("message"), is("barfoo"));
         final JsonRepresentation causedByRepr = jsonRepr.getRepresentation("causedBy");
         assertThat(causedByRepr, is(not(nullValue())));
         assertThat(causedByRepr.getString("message"), is(cause.getMessage()));

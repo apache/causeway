@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.spec.Specification;
@@ -83,5 +84,26 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
             Integer integer = (Integer) obj;
             return integer.intValue() < 0? "Cannot be less than zero": null;
         }
+    }
+
+
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "1")
+    public List<ActionsEntity> subListWithOptionalRange(
+            @Optional
+            @MustSatisfy(IntegerCannotBeNegative.class)
+            @Named("from") Integer from, 
+            @Optional
+            @MustSatisfy(IntegerCannotBeNegative.class)
+            @Named("to") Integer to) {
+        return subList(valueElseDefault(from, 0), valueElseDefault(to, Integer.MAX_VALUE));
+    }
+
+    public String validateSubListWithOptionalRange(final Integer from, final Integer to) {
+        return validateSubList(valueElseDefault(from, 0), valueElseDefault(to, Integer.MAX_VALUE));
+    }
+
+    private static int valueElseDefault(Integer value, int i) {
+        return value != null? value: i;
     }
 }

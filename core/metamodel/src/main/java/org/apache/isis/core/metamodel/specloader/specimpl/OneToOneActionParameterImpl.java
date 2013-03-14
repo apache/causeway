@@ -22,10 +22,18 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
 
 public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {
 
@@ -43,15 +51,6 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
         return true;
     }
 
-    /**
-     * TODO: need to be able to validate parameters individually, eg if have
-     * <tt>RegEx</tt> annotation; should delegate to the Check framework
-     * instead.
-     */
-    @Override
-    public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
-        return null;
-    }
 
     // /////////////////////////////////////////////////////////////
     // getInstance

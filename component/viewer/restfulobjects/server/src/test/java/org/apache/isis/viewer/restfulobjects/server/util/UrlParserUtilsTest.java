@@ -28,7 +28,7 @@ public class UrlParserUtilsTest {
     @Test
     public void oidFromLink() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
-        link.mapPut("href", "http://localhost/objects/OID:1");
+        link.mapPut("href", "http://localhost/objects/OID/1");
         final String oidFromHref = UrlParserUtils.encodedOidFromLink(link);
         assertEquals("OID:1", oidFromHref);
     }
@@ -36,7 +36,7 @@ public class UrlParserUtilsTest {
     @Test
     public void domainTypeFromLink() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
-        link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer");
+        link.mapPut("href", "http://localhost/domain-types/com.mycompany.myapp.Customer");
         final String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
@@ -44,7 +44,7 @@ public class UrlParserUtilsTest {
     @Test
     public void domainTypeFromLinkTrailingSlash() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
-        link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/");
+        link.mapPut("href", "http://localhost/domain-types/com.mycompany.myapp.Customer/");
         final String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
@@ -52,7 +52,7 @@ public class UrlParserUtilsTest {
     @Test
     public void domainTypeFromLinkFollowingStuff() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
-        link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/otherStuffHere");
+        link.mapPut("href", "http://localhost/domain-types/com.mycompany.myapp.Customer/otherStuffHere");
         final String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }

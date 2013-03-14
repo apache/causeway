@@ -52,6 +52,9 @@ public class MustSatisfySpecificationOnParameterFacet extends FacetAbstract impl
         }
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
         final ObjectAdapter targetNO = proposedHolder.getProposed();
+        if(targetNO == null) {
+            return null;
+        }
         final Object targetObject = targetNO.getObject();
         final ReasonBuffer buf = new ReasonBuffer();
         for (final Specification specification : specifications) {

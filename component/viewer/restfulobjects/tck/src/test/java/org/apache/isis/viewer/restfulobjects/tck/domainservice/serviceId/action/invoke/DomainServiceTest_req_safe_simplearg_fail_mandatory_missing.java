@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -31,23 +32,31 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class DomainServiceTest_req_safe_refarg_bad {
+public class DomainServiceTest_req_safe_simplearg_fail_mandatory_missing {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -59,55 +68,56 @@ public class DomainServiceTest_req_safe_refarg_bad {
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
+
         serviceResource = client.getDomainServiceResource();
     }
-
+    
     @Test
     public void usingClientFollow() throws Exception {
 
-        // given a reference to a non-existent entity
-        LinkRepresentation nonExistentEntityLink = new LinkRepresentation()
-            .withHref("http://localhost:39393/objects/NONEXISTENT/123");
-        
-        // and given a representation of the 'contains' action accepting a entity href
-        final JsonRepresentation containsAction = Util.givenAction(client, "ActionsEntities", "contains");
-        final ObjectActionRepresentation containsActionRepr = containsAction.as(ObjectActionRepresentation.class);
-        
-        final LinkRepresentation invokeLink = containsActionRepr.getInvoke();
-        final JsonRepresentation args = invokeLink.getArguments();
-        
-        // when query the 'contains' action passing in the reference to the non-existent entity 
-        args.mapPut("searchFor.value", nonExistentEntityLink);
-        args.mapPut("from.value", 0);
-        args.mapPut("to.value", 1);
-        
-        RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
+        // given
+        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subList");
+        final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
 
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
+
+        assertThat(invokeLink, isLink(client)
+                                    .rel(Rel.INVOKE)
+                                    .httpMethod(RestfulHttpMethod.GET)
+                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subList/invoke"))
+                                    .build());
+        
+        JsonRepresentation args =invokeLink.getArguments();
+        assertThat(args.size(), is(2));
+        assertThat(args, RestfulMatchers.mapHas("from"));
+        assertThat(args, RestfulMatchers.mapHas("to"));
+        
+        // when
+        args.mapPut("from.value", (Integer)null);
+        args.mapPut("to.value", 0);
+
+        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
+        
         // then
-        then(args, restfulResponse);
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
+    @Ignore("to write")
     @Test
     public void usingResourceProxy() throws Exception {
 
-        // given a reference to a non-existent entity
-        LinkRepresentation nonExistentEntityLink = new LinkRepresentation()
-            .withHref("http://localhost:39393/objects/NONEXISTENT/123");
-
-        // when query the 'contains' action passing in the reference to the non-existent entity 
+        // given, when
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("searchFor.value", nonExistentEntityLink);
-        args.mapPut("from.value", 0);
-        args.mapPut("to.value", 3);
-        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "contains", UrlEncodingUtils.urlEncode(args));
+        args.mapPut("from.value", 1);
+        args.mapPut("to.value", 0);
+        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
         // then
-        then(args, restfulResponse);
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
-    private static void then(final JsonRepresentation args, RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
-        // then the response is an error
+    private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
         assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
         assertThat(restfulResponse.getHeader(Header.WARNING), is("Validation failed, see body for details"));
 
@@ -117,10 +127,11 @@ public class DomainServiceTest_req_safe_refarg_bad {
         RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
         JsonRepresentation repr = restfulResponseOfError.getEntity();
         
-        assertThat(repr.getString("searchFor.value.href"), is(args.getString("searchFor.value.href")));
-        assertThat(repr.getString("searchFor.invalidReason"), is("'href' does not reference a known entity"));
+        assertThat(repr.getString("from.invalidReason"), is("Mandatory"));
+        // TODO: really ought to be null, but ObjectActionImpl.isProposedArgumentSetValidResultSet also checks that each argument is valid
+        assertThat(repr.getString("x-ro-invalidReason"), is("Mandatory")); 
     }
 
 
-    
+
 }

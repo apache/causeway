@@ -445,7 +445,7 @@ public final class DomainResourceHelper {
 
         final List<ObjectAdapter> argAdapters = Lists.newArrayList();
         final List<ObjectActionParameter> parameters = action.getParameters();
-        final StringBuilder invalidReasonBuf = new StringBuilder();
+        boolean valid = true;
         for (int i = 0; i < argList.size(); i++) {
             final JsonRepresentation argRepr = argList.get(i);
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
@@ -455,22 +455,15 @@ public final class DomainResourceHelper {
 
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.get(i);
-                if (argAdapter == null) {
-                    // can only happen if this is an optional parameter; nothing to
-                    // do
-                    continue;
-                }
-                if (argAdapter.getSpecification().containsFacet(ValueFacet.class)) {
-                    final Object argPojo = argAdapter.getObject();
-                    final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, null);
-                    if (reasonNotValid != null) {
-                        argRepr.mapPut("invalidReason", reasonNotValid);
-                        appendReasonTo(invalidReasonBuf, "Validation failed, see body for details");
-                    }
+                final Object argPojo = argAdapter!=null?argAdapter.getObject():null;
+                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, null);
+                if (reasonNotValid != null) {
+                    argRepr.mapPut("invalidReason", reasonNotValid);
+                    valid = false;
                 }
             } catch (final IllegalArgumentException e) {
-                String reason = e.getMessage();
-                appendReasonTo(invalidReasonBuf, reason);
+                argAdapters.add(null);
+                valid = false;
             }
         }
         
@@ -479,21 +472,14 @@ public final class DomainResourceHelper {
         final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
-            appendReasonTo(invalidReasonBuf, "Validation failed, see body for details");
+            valid = false;
         }
 
-        if(invalidReasonBuf.length()>0) {
-            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.VALIDATION_FAILED, arguments, invalidReasonBuf.toString());
+        if(!valid) {
+            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.VALIDATION_FAILED, arguments, "Validation failed, see body for details");
         }
         
         return argAdapters;
-    }
-
-    private void appendReasonTo(final StringBuilder buf, String reason) {
-        if(buf.length()>0) {
-            buf.append("; ");
-        }
-        buf.append(reason);
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {

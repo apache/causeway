@@ -48,11 +48,14 @@ public final class JsonValueEncoder {
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
-        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
-        if(argValueRepr == null) {
+        if(!argRepr.mapHas("value")) {
             String reason = "No 'value' key";
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
+        }
+        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
+        if(argValueRepr == null) {
+            return null;
         }
         if (!argValueRepr.isValue()) {
             String reason = "Representation must be of a value";

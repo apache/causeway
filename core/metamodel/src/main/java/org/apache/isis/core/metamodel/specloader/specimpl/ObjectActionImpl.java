@@ -379,9 +379,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         final InteractionResultSet resultSet = new InteractionResultSet();
         final List<ObjectActionParameter> actionParameters = getParameters();
         if (proposedArguments != null) {
-            // TODO: doesn't seem to be used...
-            // ObjectAdapter[] params = realParameters(object,
-            // proposedArguments);
             for (int i = 0; i < proposedArguments.length; i++) {
                 final ValidityContext<?> ic = actionParameters.get(i).createProposedArgumentInteractionContext(getAuthenticationSession(), invocationMethod, object, proposedArguments, i);
                 InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);

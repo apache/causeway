@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
@@ -44,9 +46,12 @@ import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -305,6 +310,66 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     protected AuthenticationSession getAuthenticationSession() {
         return getAuthenticationSessionProvider().getAuthenticationSession();
+    }
+
+    
+    
+    // /////////////////////////////////////////////////////////////
+    // Validation
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
+        
+        ObjectAdapter proposedValueAdapter = null;
+        ObjectSpecification proposedValueSpec;
+        if(proposedValue != null) {
+            proposedValueAdapter = getAdapterMap().adapterFor(proposedValue);
+            proposedValueSpec = proposedValueAdapter.getSpecification();
+            if(!proposedValueSpec.isOfType(proposedValueSpec)) {
+                proposedValueAdapter = doCoerceProposedValue(adapter, proposedValue, localization);
+            }
+            
+            // check has been coerced into correct type; otherwise give up
+            if(proposedValueAdapter == null) {
+                return null;
+            }
+            proposedValueSpec = proposedValueAdapter.getSpecification();
+            if(!proposedValueSpec.isOfType(proposedValueSpec)) {
+                return null;
+            }
+        }
+        
+
+        final ValidityContext<?> ic = createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(proposedValueAdapter), getNumber());
+
+        final InteractionResultSet buf = new InteractionResultSet();
+        InteractionUtils.isValidResultSet(this, ic, buf);
+        if (buf.isVetoed()) {
+            return buf.getInteractionResult().getReason();
+        }
+        return null;
+
+    }
+
+    /**
+     * Optional hook for parsing.
+     */
+    protected ObjectAdapter doCoerceProposedValue(ObjectAdapter adapter, Object proposedValue, final Localization localization) {
+        return null;
+    }
+
+    /**
+     * TODO: this is not ideal, because we can only populate the array for
+     * single argument, rather than the entire argument set. Instead, we ought
+     * to do this in two passes, one to build up the argument set as a single
+     * unit, and then validate each in turn.
+     */
+    private ObjectAdapter[] arguments(final ObjectAdapter proposedValue) {
+        final int parameterCount = getAction().getParameterCount();
+        final ObjectAdapter[] arguments = new ObjectAdapter[parameterCount];
+        arguments[getNumber()] = proposedValue;
+        return arguments;
     }
 
     // /////////////////////////////////////////////////////////////

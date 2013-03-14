@@ -67,67 +67,24 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         final TypicalLengthFacet facet = getFacet(TypicalLengthFacet.class);
         return facet.value();
     }
-
-    /**
-     * Invoked when tab away, disables the OK button.
-     * 
-     * <p>
-     * Assumed to be invoked {@link InteractionInvocationMethod#BY_USER by user}.
-     */
-    @Override
-    public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
-
-
-        final ObjectActionParameter parameter = getAction().getParameters().get(getNumber());
-        final ObjectSpecification parameterSpecification = parameter.getSpecification();
-        if(proposedValue == null) {
+    
+    protected ObjectAdapter doCoerceProposedValue(ObjectAdapter adapter, Object proposedValue, final Localization localization) {
+        // try to parse
+        if (!(proposedValue instanceof String)) {
             return null;
         }
-        
-        ObjectAdapter proposedValueAdapter = getAdapterMap().adapterFor(proposedValue);
-        final ObjectSpecification proposedValueSpec = proposedValueAdapter.getSpecification();
-        if(proposedValueSpec.isOfType(proposedValueSpec)) {
-            // nothing to do
-        } else {
-            // try to parse
-            if (!(parameter instanceof ParseableEntryActionParameter)) {
-                return null;
-            }
-            if (!(proposedValue instanceof String)) {
-                return null;
-            }
-            final String proposedString = (String) proposedValue;
+        final String proposedString = (String) proposedValue;
 
-            final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
-            proposedValueAdapter = p.parseTextEntry(null, proposedString, localization);
+        final ObjectSpecification parameterSpecification = getSpecification();
+        final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
+        try {
+            final ObjectAdapter parsedAdapter = p.parseTextEntry(null, proposedString, localization);
+            return parsedAdapter;
+        } catch(Exception ex) {
+            return null;
         }
-
-        final ValidityContext<?> ic = parameter.createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(proposedValueAdapter), getNumber());
-
-        final InteractionResultSet buf = new InteractionResultSet();
-        InteractionUtils.isValidResultSet(parameter, ic, buf);
-        if (buf.isVetoed()) {
-            return buf.getInteractionResult().getReason();
-        }
-        return null;
-
     }
 
-    /**
-     * TODO: this is not ideal, because we can only populate the array for
-     * single argument, rather than the entire argument set. Instead, we ought
-     * to do this in two passes, one to build up the argument set as a single
-     * unit, and then validate each in turn.
-     * 
-     * @param proposedValue
-     * @return
-     */
-    private ObjectAdapter[] arguments(final ObjectAdapter proposedValue) {
-        final int parameterCount = getAction().getParameterCount();
-        final ObjectAdapter[] arguments = new ObjectAdapter[parameterCount];
-        arguments[getNumber()] = proposedValue;
-        return arguments;
-    }
 
     // /////////////////////////////////////////////////////////////
     // getInstance

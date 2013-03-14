@@ -30,17 +30,13 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.errors.ErrorRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 public class RestfulResponse<T> {
