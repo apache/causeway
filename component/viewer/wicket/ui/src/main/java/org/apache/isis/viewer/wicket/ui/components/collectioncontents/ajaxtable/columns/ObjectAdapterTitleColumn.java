@@ -33,9 +33,15 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
+    private final RenderingHint renderingHint;
 
-    public ObjectAdapterTitleColumn() {
-        super("Object"); // i18n
+    private static String columnName(RenderingHint renderingHint) {
+        return (renderingHint.isInParentedTableTitleColumn()? "Related ":"") + "Object";
+    }
+
+    public ObjectAdapterTitleColumn(RenderingHint renderingHint) {
+        super(columnName(renderingHint)); // i18n
+        this.renderingHint = renderingHint;
     }
 
     @Override
@@ -47,7 +53,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
         final ObjectAdapter adapter = rowModel.getObject();
         final EntityModel model = new EntityModel(adapter);
-        model.setRenderingHint(RenderingHint.ULTRA_COMPACT);
+        model.setRenderingHint(renderingHint);
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
         return componentFactory.createComponent(id, model);
     }

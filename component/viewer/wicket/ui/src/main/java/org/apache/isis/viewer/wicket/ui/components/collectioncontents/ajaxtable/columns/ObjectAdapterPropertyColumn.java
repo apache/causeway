@@ -72,7 +72,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         final PropertyMemento pm = new PropertyMemento(property);
         final ScalarModel scalarModel = model.getPropertyModel(pm);
 
-        scalarModel.setRenderingHint(RenderingHint.COMPACT);
+        scalarModel.setRenderingHint(RenderingHint.PROPERTY_COLUMN);
         scalarModel.toViewMode();
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

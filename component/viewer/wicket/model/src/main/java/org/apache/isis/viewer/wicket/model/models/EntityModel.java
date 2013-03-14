@@ -89,26 +89,32 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public enum RenderingHint {
         REGULAR,
-        COMPACT,
-        /**
-         * icon only
-         */
-        ULTRA_COMPACT;
-
-        public boolean isCompactOrUltraCompact() {
-            return isCompact() || isUltraCompact();
-        }
+        PROPERTY_COLUMN,
+        PARENTED_TITLE_COLUMN,
+        STANDALONE_TITLE_COLUMN;
 
         public boolean isRegular() {
             return this == REGULAR;
         }
 
-        public boolean isCompact() {
-            return this == COMPACT;
+        public boolean isInTablePropertyColumn() {
+            return this == PROPERTY_COLUMN;
         }
 
-        public boolean isUltraCompact() {
-            return this == ULTRA_COMPACT;
+        public boolean isInTable() {
+            return isInTablePropertyColumn() || isInTableTitleColumn();
+        }
+
+        public boolean isInTableTitleColumn() {
+            return isInParentedTableTitleColumn() || isInStandaloneTableTitleColumn();
+        }
+
+        public boolean isInParentedTableTitleColumn() {
+            return this == PARENTED_TITLE_COLUMN;
+        }
+
+        public boolean isInStandaloneTableTitleColumn() {
+            return this == STANDALONE_TITLE_COLUMN;
         }
     }
 

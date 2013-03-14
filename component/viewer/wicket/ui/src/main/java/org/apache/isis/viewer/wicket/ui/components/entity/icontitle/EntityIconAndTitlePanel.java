@@ -115,8 +115,11 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = model.getObject();
          if (adapter != null) {
             String titleString = adapter.titleString();
-            if(model.getRenderingHint().isUltraCompact()) {
-                return abbreviated(titleString, getSettings().getMaxTitleLengthInTables());
+            if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
+                return abbreviated(titleString, getSettings().getTitleLengthInStandaloneTables());
+            }
+            if(model.getRenderingHint().isInParentedTableTitleColumn()) {
+                return abbreviated(titleString, getSettings().getTitleLengthInParentedTables());
             }
             return titleString;
         } else {

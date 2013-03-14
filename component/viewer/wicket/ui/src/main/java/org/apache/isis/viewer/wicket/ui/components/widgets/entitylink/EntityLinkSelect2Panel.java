@@ -387,7 +387,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     
     private boolean isEditableWithEitherAutoCompleteOrChoices() {
         // never doesn't apply in compact rendering contexts (ie tables)
-        if(getEntityModel().getRenderingHint().isCompactOrUltraCompact()) {
+        if(getEntityModel().getRenderingHint().isInTable()) {
             return false;
         }
         // doesn't apply if not editable, either

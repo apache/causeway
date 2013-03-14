@@ -92,7 +92,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         public abstract Where getWhere();
 
         private static Rendering renderingFor(RenderingHint renderingHint) {
-            return renderingHint.isCompactOrUltraCompact()? Rendering.COMPACT: Rendering.REGULAR;
+            return renderingHint.isInTable()? Rendering.COMPACT: Rendering.REGULAR;
         }
     }
 

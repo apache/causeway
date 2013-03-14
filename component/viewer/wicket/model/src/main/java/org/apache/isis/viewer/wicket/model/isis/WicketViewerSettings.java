@@ -22,5 +22,7 @@ package org.apache.isis.viewer.wicket.model.isis;
 
 public interface WicketViewerSettings {
 
-    public int getMaxTitleLengthInTables();
+    public int getTitleLengthInStandaloneTables();
+
+    public int getTitleLengthInParentedTables();
 }

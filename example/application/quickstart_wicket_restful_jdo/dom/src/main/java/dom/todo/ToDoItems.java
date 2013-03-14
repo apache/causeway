@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 import org.joda.time.LocalDate;
@@ -97,6 +98,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // {{ newToDo  (action)
     @MemberOrder(sequence = "3")
     public ToDoItem newToDo(
+            @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation
             @Named("Description") String description, 
             @Named("Category") Category category,
             @Named("Due by") LocalDate dueBy) {

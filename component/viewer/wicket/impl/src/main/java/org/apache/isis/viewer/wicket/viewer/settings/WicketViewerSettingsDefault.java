@@ -28,11 +28,26 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 @Singleton
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
-    public int getMaxTitleLengthInTables() {
-        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInTables", 12);
-    }
-
     IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
+
+    @Override
+    public int getTitleLengthInStandaloneTables() {
+        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInStandaloneTables", getMaxTitleLengthInTables());
+    }
+
+    @Override
+    public int getTitleLengthInParentedTables() {
+        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInParentedTables", getMaxTitleLengthInTables());
+    }
+    
+    /**
+     * fallback...
+     */
+    private int getMaxTitleLengthInTables() {
+        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInTables", 12);
+    }
+
+
 }
