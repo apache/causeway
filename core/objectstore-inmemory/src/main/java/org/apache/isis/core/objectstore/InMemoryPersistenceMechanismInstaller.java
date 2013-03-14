@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactoryAbstract;
-import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactoryAbstract.Mode;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;

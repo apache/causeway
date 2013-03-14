@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.example.metamodel.namefile.facets.NameFileFacetFactory;
 
 public class NameFileFacetFactoryFeatureTypesTest {
 

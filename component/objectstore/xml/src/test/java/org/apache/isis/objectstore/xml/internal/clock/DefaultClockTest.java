@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.objectstore.xml.internal.clock.DefaultClock;
 
 public class DefaultClockTest {
     

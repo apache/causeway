@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import org.apache.isis.core.runtime.system.DeploymentType;
-
 import com.google.common.base.Optional;
+
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public final class OptionValidatorUserAndPasswordCombo implements OptionValidator {
 

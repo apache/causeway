@@ -19,7 +19,6 @@
 
 package org.apache.isis.example.metamodel.namefile.facets;
 
-import org.apache.isis.example.metamodel.namefile.facets.NameFileFacetFactory;
 import org.junit.Test;
 
 public class NameFileFacetFactoryInstantiationTest {

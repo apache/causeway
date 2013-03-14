@@ -22,12 +22,12 @@ package org.apache.isis.viewer.dnd.viewer.view.configurable;
 import junit.framework.Assert;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.dnd.drawing.Location;

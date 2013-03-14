@@ -25,8 +25,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.junit.Test;
 
 public class LinkRepresentationTest_equals {

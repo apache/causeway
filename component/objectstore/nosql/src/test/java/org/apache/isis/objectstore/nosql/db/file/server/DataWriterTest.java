@@ -33,10 +33,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.objectstore.nosql.db.file.server.DataFileWriter;
-import org.apache.isis.objectstore.nosql.db.file.server.FileContent;
-import org.apache.isis.objectstore.nosql.db.file.server.Util;
-
 public class DataWriterTest {
 
     private static final String TARGET_DIRECTORY = "target/test/";

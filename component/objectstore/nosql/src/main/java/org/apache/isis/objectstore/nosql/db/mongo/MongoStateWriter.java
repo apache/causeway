@@ -21,18 +21,19 @@ package org.apache.isis.objectstore.nosql.db.mongo;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.nosql.db.StateWriter;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 
 public class MongoStateWriter implements StateWriter {
     

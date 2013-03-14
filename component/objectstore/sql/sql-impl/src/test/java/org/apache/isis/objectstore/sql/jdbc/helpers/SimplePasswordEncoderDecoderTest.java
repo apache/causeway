@@ -19,7 +19,6 @@ package org.apache.isis.objectstore.sql.jdbc.helpers;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
-import org.apache.isis.objectstore.sql.jdbc.helpers.SimplePasswordEncoderDecoder;
 import org.junit.Assert;
 import org.junit.Test;
 

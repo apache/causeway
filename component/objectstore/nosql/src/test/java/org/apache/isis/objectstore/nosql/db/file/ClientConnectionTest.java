@@ -31,12 +31,9 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.objectstore.nosql.db.file.ClientConnection;
-import org.apache.isis.objectstore.nosql.db.file.RemotingException;
 
 public class ClientConnectionTest {
 

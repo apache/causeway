@@ -34,9 +34,6 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.runtime.authentication.standard.NoAuthenticatorException;
 
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticatorsTest {

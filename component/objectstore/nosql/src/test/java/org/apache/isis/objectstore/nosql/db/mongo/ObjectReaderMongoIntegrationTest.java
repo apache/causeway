@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,20 +43,16 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
 import org.apache.isis.core.tck.dom.refs.ReferencingEntity;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.objectstore.nosql.ObjectReader;
 import org.apache.isis.objectstore.nosql.db.StateReader;
-import org.apache.isis.objectstore.nosql.db.mongo.MongoPersistorMechanismInstaller;
 import org.apache.isis.objectstore.nosql.encryption.DataEncryption;
 import org.apache.isis.objectstore.nosql.versions.VersionCreator;
 

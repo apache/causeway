@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

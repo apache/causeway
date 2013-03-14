@@ -35,9 +35,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.runtime.authentication.standard.RandomCodeGenerator;
 
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticationTest {

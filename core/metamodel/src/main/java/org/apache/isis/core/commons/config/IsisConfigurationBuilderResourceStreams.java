@@ -24,14 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 
 /**
  * Adapter for {@link IsisConfigurationBuilder}, loading the specified

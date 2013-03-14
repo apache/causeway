@@ -32,6 +32,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.clock.Clock;
@@ -61,13 +69,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be

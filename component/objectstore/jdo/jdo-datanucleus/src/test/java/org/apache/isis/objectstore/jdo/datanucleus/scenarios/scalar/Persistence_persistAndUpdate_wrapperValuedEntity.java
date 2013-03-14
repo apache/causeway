@@ -27,10 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
-import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntityRepository;
 import org.apache.isis.core.tck.dom.scalars.WrapperValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.WrapperValuedEntityRepository;
 import org.apache.isis.objectstore.jdo.datanucleus.Utils;

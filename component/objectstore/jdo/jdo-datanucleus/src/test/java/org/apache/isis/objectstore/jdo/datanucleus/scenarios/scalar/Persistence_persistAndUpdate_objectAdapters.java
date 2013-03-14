@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.scenarios.scalar;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

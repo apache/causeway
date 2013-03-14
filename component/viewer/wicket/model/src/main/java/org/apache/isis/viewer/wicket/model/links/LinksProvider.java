@@ -20,8 +20,9 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.wicket.markup.html.link.Link;
+
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 /**
  * For models - such as {@link EntityCollectionModel} - that can provide an

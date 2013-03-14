@@ -21,13 +21,14 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.viewer.wicket.model.util.Strings;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.viewer.wicket.model.util.Strings;
 
 public enum PageParameterNames {
 

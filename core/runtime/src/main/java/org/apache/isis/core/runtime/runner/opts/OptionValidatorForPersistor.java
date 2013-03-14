@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
+import com.google.common.base.Optional;
+
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.system.DeploymentType;
-
-import com.google.common.base.Optional;
 
 public final class OptionValidatorForPersistor implements OptionValidator {
     private final OptionHandlerPersistor optionHandlerPersistor;

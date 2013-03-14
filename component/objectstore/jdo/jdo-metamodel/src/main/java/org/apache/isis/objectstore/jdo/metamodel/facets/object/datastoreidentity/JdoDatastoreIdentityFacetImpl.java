@@ -19,7 +19,6 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 

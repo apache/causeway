@@ -29,7 +29,6 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjectsDefault;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {

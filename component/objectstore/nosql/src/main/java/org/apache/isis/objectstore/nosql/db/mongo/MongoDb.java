@@ -23,6 +23,16 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.MongoException;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -33,15 +43,6 @@ import org.apache.isis.objectstore.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.objectstore.nosql.db.StateReader;
 import org.apache.isis.objectstore.nosql.db.StateWriter;
 import org.apache.isis.objectstore.nosql.keys.KeyCreatorDefault;
-import org.apache.log4j.Logger;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
 public class MongoDb implements NoSqlDataDatabase {
 

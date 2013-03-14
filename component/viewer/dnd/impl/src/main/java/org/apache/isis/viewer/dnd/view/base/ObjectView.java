@@ -21,7 +21,6 @@ package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -34,11 +33,8 @@ import org.apache.isis.viewer.dnd.view.DragEvent;
 import org.apache.isis.viewer.dnd.view.DragStart;
 import org.apache.isis.viewer.dnd.view.Placement;
 import org.apache.isis.viewer.dnd.view.Toolkit;
-import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
-import org.apache.isis.viewer.dnd.view.Workspace;
-import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
 public abstract class ObjectView extends AbstractView {
 

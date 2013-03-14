@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.util.Strings;
 
 /**

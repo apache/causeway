@@ -30,11 +30,11 @@ public final class IsisActions {
     }
 
     public static <T> Action returnEach(final T... values) {
-        return ReturnEachAction.returnEach(values);
+        return JMockActions.returnEach(values);
     }
 
     public static Action returnArgument(final int i) {
-        return ReturnArgumentJMockAction.returnArgument(i);
+        return JMockActions.returnArgument(i);
     }
 
 

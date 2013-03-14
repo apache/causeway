@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import static org.junit.Assert.assertSame;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.junit.Test;

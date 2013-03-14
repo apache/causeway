@@ -22,17 +22,15 @@ import java.io.File;
 import java.io.IOException;
 
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.unittestsupport.files.Files;
 import org.apache.isis.core.unittestsupport.files.Files.Deleter;
 import org.apache.isis.core.unittestsupport.files.Files.Recursion;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

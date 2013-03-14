@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.members.resolve;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;

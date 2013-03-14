@@ -26,9 +26,6 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -40,7 +37,6 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 
 public class IsisWicketApplication_Defaults {
 

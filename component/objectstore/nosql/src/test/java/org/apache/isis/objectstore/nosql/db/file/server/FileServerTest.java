@@ -42,9 +42,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.lang.IoUtils;
-import org.apache.isis.objectstore.nosql.db.file.server.FileServerProcessor;
-import org.apache.isis.objectstore.nosql.db.file.server.ServerConnection;
-import org.apache.isis.objectstore.nosql.db.file.server.Util;
 
 public class FileServerTest {
     private FileServerProcessor server;

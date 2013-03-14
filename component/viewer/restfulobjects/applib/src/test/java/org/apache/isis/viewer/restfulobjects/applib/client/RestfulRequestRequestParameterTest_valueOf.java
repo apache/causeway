@@ -24,7 +24,6 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.junit.Before;
 import org.junit.Test;

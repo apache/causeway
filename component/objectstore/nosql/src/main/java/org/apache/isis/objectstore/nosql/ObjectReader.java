@@ -22,6 +22,8 @@ package org.apache.isis.objectstore.nosql;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -43,7 +45,6 @@ import org.apache.isis.objectstore.nosql.db.StateReader;
 import org.apache.isis.objectstore.nosql.encryption.DataEncryption;
 import org.apache.isis.objectstore.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.objectstore.nosql.versions.VersionCreator;
-import org.apache.log4j.Logger;
 
 public class ObjectReader {
 

@@ -28,12 +28,13 @@ import javax.jdo.identity.IntIdentity;
 import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.StringIdentity;
 
+import org.datanucleus.identity.OID;
+
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.datanucleus.identity.OID;
 
 public final class JdoObjectIdSerializer {
     

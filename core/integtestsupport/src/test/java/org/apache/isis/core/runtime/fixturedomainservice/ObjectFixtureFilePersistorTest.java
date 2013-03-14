@@ -20,7 +20,8 @@
 package org.apache.isis.core.runtime.fixturedomainservice;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
 import java.io.StringReader;
@@ -45,8 +46,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.runtime.fixturedomainservice.FixtureException;
-import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureFilePersistor;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
 import org.apache.isis.core.tck.dom.refs.ReferencingEntity;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;

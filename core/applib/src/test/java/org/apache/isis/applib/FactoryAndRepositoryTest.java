@@ -29,25 +29,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMock.class)
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
 public class FactoryAndRepositoryTest {
-    
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+
     public static class TestDomainObject {
     }
 
+    @Mock
     private DomainObjectContainer container;
+    
     private AbstractFactoryAndRepository object;
-    private Mockery context;
 
     @Before
     public void setUp() throws Exception {
-        context = new Mockery();
         container = context.mock(DomainObjectContainer.class);
         object = new AbstractFactoryAndRepository() {
         };
@@ -63,7 +68,7 @@ public class FactoryAndRepositoryTest {
     public void testInformUser() throws Exception {
         context.checking(new Expectations() {
             {
-                one(container).informUser("message");
+                oneOf(container).informUser("message");
             }
         });
 
@@ -74,7 +79,7 @@ public class FactoryAndRepositoryTest {
     public void testWarnUser() throws Exception {
         context.checking(new Expectations() {
             {
-                one(container).warnUser("message");
+                oneOf(container).warnUser("message");
             }
         });
 
@@ -85,7 +90,7 @@ public class FactoryAndRepositoryTest {
     public void testRaiseError() throws Exception {
         context.checking(new Expectations() {
             {
-                one(container).raiseError("message");
+                oneOf(container).raiseError("message");
             }
         });
 
@@ -101,7 +106,7 @@ public class FactoryAndRepositoryTest {
 
         context.checking(new Expectations() {
             {
-                one(container).allInstances(TestDomainObject.class);
+                oneOf(container).allInstances(TestDomainObject.class);
                 will(returnValue(list));
             }
         });

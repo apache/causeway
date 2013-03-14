@@ -30,7 +30,6 @@ import java.util.List;
 import javax.ws.rs.core.CacheControl;
 
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.junit.Test;
 

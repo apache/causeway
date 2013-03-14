@@ -27,12 +27,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Maps;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Maps;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
     

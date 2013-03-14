@@ -28,8 +28,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
-import org.apache.isis.core.webserver.WebServerConstants;
 import org.apache.isis.core.webserver.WebServer.StartupMode;
+import org.apache.isis.core.webserver.WebServerConstants;
 
 public final class OptionHandlerStartupMode implements OptionHandler {
 

@@ -28,6 +28,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
@@ -52,7 +54,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.log4j.Logger;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 

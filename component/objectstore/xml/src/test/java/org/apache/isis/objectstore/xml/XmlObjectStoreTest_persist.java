@@ -26,7 +26,6 @@ import org.apache.isis.core.integtestsupport.tck.ObjectStoreContractTest_persist
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.unittestsupport.files.Files;
 import org.apache.isis.core.unittestsupport.files.Files.Recursion;
-import org.apache.isis.objectstore.xml.XmlPersistenceMechanismInstaller;
 
 public class XmlObjectStoreTest_persist extends ObjectStoreContractTest_persist {
 

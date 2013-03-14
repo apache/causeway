@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.publish;
 
-import java.util.UUID;
-
 import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**

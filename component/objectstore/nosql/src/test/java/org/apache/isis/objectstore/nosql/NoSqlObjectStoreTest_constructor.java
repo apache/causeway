@@ -30,16 +30,14 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.objectstore.nosql.NoSqlIdentifierGenerator;
-import org.apache.isis.objectstore.nosql.NoSqlObjectStore;
 import org.apache.isis.objectstore.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.objectstore.nosql.encryption.DataEncryption;
 import org.apache.isis.objectstore.nosql.versions.VersionCreator;

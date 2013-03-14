@@ -22,10 +22,8 @@ package org.apache.isis.core.metamodel.services;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**

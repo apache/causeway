@@ -13,12 +13,12 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.apache.isis.core.commons.lang.IoUtils;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 

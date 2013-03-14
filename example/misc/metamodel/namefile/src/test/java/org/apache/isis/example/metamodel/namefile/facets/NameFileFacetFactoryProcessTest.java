@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.example.metamodel.namefile.facets.NameFileFacet;
-import org.apache.isis.example.metamodel.namefile.facets.NameFileFacetFactory;
 
 @RunWith(JMock.class)
 public class NameFileFacetFactoryProcessTest {

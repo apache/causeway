@@ -18,11 +18,11 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
-import org.apache.isis.applib.annotation.Hidden;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
+
+import org.apache.isis.applib.annotation.Hidden;
 
 /**
  * An specific implementation of {@link ExceptionRecognizer} that looks for an

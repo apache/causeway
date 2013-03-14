@@ -18,13 +18,14 @@
  */
 package org.apache.isis.security.shiro.util;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.security.shiro.util.Util;
 import org.junit.Test;
 
 public class UtilTest_parse {

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.unittestsupport.value;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;

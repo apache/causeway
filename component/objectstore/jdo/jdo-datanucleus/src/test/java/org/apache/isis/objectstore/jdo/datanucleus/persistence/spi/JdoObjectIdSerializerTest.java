@@ -24,15 +24,15 @@ import static org.junit.Assert.assertThat;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.datanucleus.identity.OIDImpl;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
-import org.datanucleus.identity.OIDImpl;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class JdoObjectIdSerializerTest {
 

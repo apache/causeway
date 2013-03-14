@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.objectstore.InMemoryObjectStore;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;

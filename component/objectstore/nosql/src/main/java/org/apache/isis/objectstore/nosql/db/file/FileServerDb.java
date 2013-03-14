@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -36,7 +38,6 @@ import org.apache.isis.objectstore.nosql.NoSqlCommandContext;
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 import org.apache.isis.objectstore.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.objectstore.nosql.db.StateReader;
-import org.apache.log4j.Logger;
 
 public class FileServerDb implements NoSqlDataDatabase {
 

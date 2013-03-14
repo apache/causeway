@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.
 
 import java.util.List;
 
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -30,7 +32,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
-import org.apache.wicket.model.IModel;
 
 /**
  * Provides a list of links for selecting other views that support

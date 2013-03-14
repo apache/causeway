@@ -20,8 +20,6 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
 import java.util.List;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
 import junit.framework.Assert;
@@ -33,10 +31,6 @@ import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAnnotation;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetAnnotation;
 
 
 public class GivenAuditableAnnotationFacetFactoryTest extends

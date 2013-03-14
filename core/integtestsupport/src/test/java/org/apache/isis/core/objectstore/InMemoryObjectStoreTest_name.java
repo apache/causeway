@@ -21,7 +21,6 @@ package org.apache.isis.core.objectstore;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.isis.core.objectstore.InMemoryObjectStore;
 import org.junit.Before;
 import org.junit.Test;
 

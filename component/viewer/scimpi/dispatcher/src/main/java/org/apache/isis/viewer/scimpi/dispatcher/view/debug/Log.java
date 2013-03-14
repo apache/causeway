@@ -19,9 +19,10 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
-import org.apache.log4j.Logger;
 
 public class Log extends AbstractElementProcessor {
 

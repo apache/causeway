@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
 public interface MetaModelValidator extends SpecificationLoaderSpiAware, ApplicationScopedComponent {

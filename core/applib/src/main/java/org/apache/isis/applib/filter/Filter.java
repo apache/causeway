@@ -19,7 +19,6 @@
 
 package org.apache.isis.applib.filter;
 
-import com.google.common.base.Predicate;
 
 /**
  * For use by repository implementations to allow a set of objects returned by a

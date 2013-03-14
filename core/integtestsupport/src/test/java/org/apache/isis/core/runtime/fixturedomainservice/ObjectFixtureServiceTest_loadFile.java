@@ -38,8 +38,6 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
-import org.apache.isis.core.tck.dom.movies.Person;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;

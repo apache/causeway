@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,8 +41,6 @@ import org.apache.isis.objectstore.sql.ObjectMapping;
 import org.apache.isis.objectstore.sql.ObjectMappingLookup;
 import org.apache.isis.objectstore.sql.VersionMapping;
 import org.apache.isis.objectstore.sql.mapping.FieldMapping;
-
-import com.google.common.collect.Lists;
 
 /**
  * Used to map 1-to-many collections by creating, in the child table, 1 column

@@ -2,10 +2,10 @@ package org.apache.isis.viewer.wicket.ui.errors;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 public class ExceptionModel extends ModelAbstract<Exception> {
 

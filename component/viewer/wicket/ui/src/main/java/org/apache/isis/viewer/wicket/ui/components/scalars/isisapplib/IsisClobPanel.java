@@ -23,14 +23,15 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import com.google.common.base.Charsets;
+
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.StringResourceStream;
 
-import com.google.common.base.Charsets;
+import org.apache.isis.applib.value.Clob;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * Panel for rendering scalars of type {@link Clob Isis' applib.Clob}.

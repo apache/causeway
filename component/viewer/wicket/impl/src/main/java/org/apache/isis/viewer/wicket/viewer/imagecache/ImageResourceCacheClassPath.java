@@ -27,14 +27,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import com.google.common.collect.Maps;
+import com.google.inject.Singleton;
+
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
 /**
  * Caches images loaded up the <tt>images</tt> package (using the {@link Images}

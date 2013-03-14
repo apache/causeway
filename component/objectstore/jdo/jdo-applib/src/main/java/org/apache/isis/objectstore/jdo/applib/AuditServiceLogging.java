@@ -18,8 +18,9 @@
  */
 package org.apache.isis.objectstore.jdo.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.applib.annotation.Hidden;
 
 
 @SuppressWarnings("deprecation")

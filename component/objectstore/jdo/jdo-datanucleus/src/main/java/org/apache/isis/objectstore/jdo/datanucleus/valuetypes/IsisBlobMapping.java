@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
-import org.apache.isis.applib.value.Blob;
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ClassNameConstants;
 import org.datanucleus.NucleusContext;
@@ -27,6 +26,8 @@ import org.datanucleus.store.ExecutionContext;
 import org.datanucleus.store.mapped.DatastoreContainerObject;
 import org.datanucleus.store.mapped.MappedStoreManager;
 import org.datanucleus.store.mapped.mapping.SingleFieldMultiMapping;
+
+import org.apache.isis.applib.value.Blob;
 
 public class IsisBlobMapping extends SingleFieldMultiMapping {
 

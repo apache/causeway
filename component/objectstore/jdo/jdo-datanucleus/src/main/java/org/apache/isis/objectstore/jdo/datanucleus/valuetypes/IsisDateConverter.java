@@ -18,8 +18,9 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
-import org.apache.isis.applib.value.Date;
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.isis.applib.value.Date;
 
 public class IsisDateConverter implements TypeConverter<Date, Long>{
 

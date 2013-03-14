@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.example.metamodel.namefile.facets.NameFileFacet;
 
 @RunWith(JMock.class)
 public class NameFileFacetValueTest {

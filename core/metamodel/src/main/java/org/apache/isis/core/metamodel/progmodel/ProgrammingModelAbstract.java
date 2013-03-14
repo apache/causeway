@@ -22,14 +22,13 @@ package org.apache.isis.core.metamodel.progmodel;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-
-import com.google.common.collect.Lists;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 

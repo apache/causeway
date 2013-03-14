@@ -36,7 +36,6 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.objectstore.nosql.db.mongo.MongoStateWriter;
 
 public class MongoStateWriterIntegrationTest {
 

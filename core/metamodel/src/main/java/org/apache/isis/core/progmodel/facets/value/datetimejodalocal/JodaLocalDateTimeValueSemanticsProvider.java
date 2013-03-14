@@ -21,12 +21,13 @@ package org.apache.isis.core.progmodel.facets.value.datetimejodalocal;
 
 import java.util.Date;
 
+import org.joda.time.LocalDateTime;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-import org.joda.time.LocalDateTime;
 
 public class JodaLocalDateTimeValueSemanticsProvider extends JodaLocalDateTimeValueSemanticsProviderAbstract<LocalDateTime> {
 

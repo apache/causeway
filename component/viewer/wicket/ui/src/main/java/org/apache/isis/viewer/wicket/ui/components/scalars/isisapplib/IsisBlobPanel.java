@@ -22,10 +22,11 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import java.util.List;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.ByteArrayResource;
+
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * Panel for rendering scalars of type {@link Blob Isis' applib.Blob}.

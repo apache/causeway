@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -44,7 +44,6 @@ import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthen
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthenticatorConstants;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authentication.exploration.MultiUserExplorationSession;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 

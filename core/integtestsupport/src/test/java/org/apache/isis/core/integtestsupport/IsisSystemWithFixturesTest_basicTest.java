@@ -25,7 +25,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.tck.dom.scalars.JdkValuedEntity;
 
 public class IsisSystemWithFixturesTest_basicTest {

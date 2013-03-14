@@ -26,16 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.progmodel.app.IsisMetaModel;
-import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.tool.mavenplugin.util.ClassRealms;
-import org.apache.isis.tool.mavenplugin.util.ClassWorlds;
-import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
-import org.apache.isis.tool.mavenplugin.util.Log4j;
-import org.apache.isis.tool.mavenplugin.util.MavenProjects;
-import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -51,8 +44,16 @@ import org.codehaus.classworlds.ClassWorld;
 import org.codehaus.classworlds.DuplicateRealmException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.progmodel.app.IsisMetaModel;
+import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.tool.mavenplugin.util.ClassRealms;
+import org.apache.isis.tool.mavenplugin.util.ClassWorlds;
+import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
+import org.apache.isis.tool.mavenplugin.util.Log4j;
+import org.apache.isis.tool.mavenplugin.util.MavenProjects;
+import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
 
 /**
  * 

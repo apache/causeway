@@ -24,7 +24,6 @@ package org.apache.isis.objectstore.sql;
 
 import java.util.Properties;
 
-import org.apache.isis.objectstore.sql.SqlObjectStore;
 import org.apache.isis.objectstore.sql.common.SqlIntegrationTestData;
 
 public class PostgreSqlIntegrationTest extends SqlIntegrationTestData {

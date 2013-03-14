@@ -21,12 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 
 import java.io.InputStream;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on

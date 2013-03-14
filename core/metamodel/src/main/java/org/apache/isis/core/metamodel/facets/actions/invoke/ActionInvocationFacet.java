@@ -22,12 +22,10 @@ package org.apache.isis.core.metamodel.facets.actions.invoke;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * Represents the mechanism by which the action should be invoked.

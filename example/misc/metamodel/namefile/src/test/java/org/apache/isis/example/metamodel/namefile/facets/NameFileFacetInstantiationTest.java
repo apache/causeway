@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.example.metamodel.namefile.facets.NameFileFacet;
 
 public class NameFileFacetInstantiationTest {
 

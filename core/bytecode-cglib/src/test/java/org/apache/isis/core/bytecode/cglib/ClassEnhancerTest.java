@@ -36,7 +36,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.bytecode.cglib.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;

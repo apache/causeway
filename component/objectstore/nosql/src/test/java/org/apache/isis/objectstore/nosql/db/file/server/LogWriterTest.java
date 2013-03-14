@@ -34,11 +34,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.apache.isis.objectstore.nosql.db.file.server.DataFileWriter;
-import org.apache.isis.objectstore.nosql.db.file.server.FileContent;
-import org.apache.isis.objectstore.nosql.db.file.server.LogWriter;
-import org.apache.isis.objectstore.nosql.db.file.server.Util;
-
 public class LogWriterTest {
 
     private LogWriter logger;

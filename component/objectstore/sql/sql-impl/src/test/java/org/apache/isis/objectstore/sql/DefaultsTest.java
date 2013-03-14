@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.objectstore.sql.Defaults;
 
 public class DefaultsTest {
     @Test

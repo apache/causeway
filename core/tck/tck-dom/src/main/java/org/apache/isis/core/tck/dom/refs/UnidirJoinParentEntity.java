@@ -26,7 +26,6 @@ import java.util.Set;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Join;
-import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;

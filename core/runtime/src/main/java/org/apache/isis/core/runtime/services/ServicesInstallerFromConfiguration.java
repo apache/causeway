@@ -23,6 +23,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -31,9 +35,6 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 public class ServicesInstallerFromConfiguration extends InstallerAbstract implements ServicesInstaller {
 

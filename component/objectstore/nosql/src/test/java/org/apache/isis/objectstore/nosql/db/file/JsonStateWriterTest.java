@@ -23,14 +23,14 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.objectstore.nosql.db.StateWriter;
-import org.apache.isis.objectstore.nosql.db.file.JsonStateWriter;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class JsonStateWriterTest {
 

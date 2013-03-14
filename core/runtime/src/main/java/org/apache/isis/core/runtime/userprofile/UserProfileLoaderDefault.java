@@ -31,9 +31,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 /**
  * Acts like a bridge, loading the profile from the underlying store.

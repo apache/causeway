@@ -1286,13 +1286,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.jmock</groupId>
                 <artifactId>jmock</artifactId>
-                <version>2.5.1</version>
+                <version>2.6.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.jmock</groupId>
                 <artifactId>jmock-junit4</artifactId>
-                <version>2.5.1</version>
+                <version>2.6.0</version>
                 <exclusions>
                     <exclusion>
 		        <!-- for dependency convergence -->
@@ -1306,7 +1306,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.jmock</groupId>
                 <artifactId>jmock-legacy</artifactId>
-                <version>2.5.1</version>
+                <version>2.6.0</version>
                 <exclusions>
                 	<exclusion>
                 		<groupId>cglib</groupId>
@@ -1318,6 +1318,12 @@ ${license.additional-notes}
                 	</exclusion>
                 </exclusions>
             </dependency>
+
+           <dependency>
+               <groupId>org.picocontainer</groupId>
+               <artifactId>picocontainer</artifactId>
+               <version>2.14.1</version>
+           </dependency>
 
             <!-- Testing libraries (scope=test) -->
             <dependency>

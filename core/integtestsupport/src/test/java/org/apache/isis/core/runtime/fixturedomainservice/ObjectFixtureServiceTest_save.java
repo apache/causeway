@@ -33,7 +33,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;

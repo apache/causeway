@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.persistence.adapter;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -46,7 +48,6 @@ import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.log4j.Logger;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 

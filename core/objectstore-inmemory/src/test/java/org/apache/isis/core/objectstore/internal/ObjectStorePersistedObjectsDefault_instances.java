@@ -31,8 +31,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.objectstore.internal.ObjectStoreInstances;
-import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjectsDefault;
 
 @RunWith(JMock.class)
 public class ObjectStorePersistedObjectsDefault_instances {

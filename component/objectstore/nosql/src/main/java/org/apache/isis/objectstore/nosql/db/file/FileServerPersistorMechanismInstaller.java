@@ -21,9 +21,6 @@ package org.apache.isis.objectstore.nosql.db.file;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.objectstore.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.objectstore.nosql.db.NoSqlPersistorMechanismInstaller;
 

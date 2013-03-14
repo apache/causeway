@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
@@ -37,6 +36,8 @@ import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.StringContains;
 import org.hamcrest.core.StringEndsWith;
 import org.hamcrest.core.StringStartsWith;
+
+import org.apache.isis.core.commons.lang.StringUtils;
 
 /**
  * Hamcrest {@link Matcher} implementations.

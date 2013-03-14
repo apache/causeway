@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
 
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 
 public class DefaultPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
 

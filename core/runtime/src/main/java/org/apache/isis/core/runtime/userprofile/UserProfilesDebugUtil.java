@@ -25,8 +25,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
 
 /**
  * Introduced in order to remove the dependency between {@link UserProfile} and

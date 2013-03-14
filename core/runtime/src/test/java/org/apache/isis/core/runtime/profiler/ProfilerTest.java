@@ -21,8 +21,6 @@ package org.apache.isis.core.runtime.profiler;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.runtime.profiler.Profiler;
-
 public class ProfilerTest extends TestCase {
     public static void main(final String[] args) {
         junit.textui.TestRunner.run(ProfilerTest.class);

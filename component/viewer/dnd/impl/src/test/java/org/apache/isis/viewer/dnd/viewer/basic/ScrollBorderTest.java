@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;

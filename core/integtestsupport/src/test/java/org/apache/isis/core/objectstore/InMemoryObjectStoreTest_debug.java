@@ -22,13 +22,13 @@ package org.apache.isis.core.objectstore;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.objectstore.InMemoryObjectStore;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class InMemoryObjectStoreTest_debug {
 

@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 
 public class ObjectTypeDerivedFromClassNameFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

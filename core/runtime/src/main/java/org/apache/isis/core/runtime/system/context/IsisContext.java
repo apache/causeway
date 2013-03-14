@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.runtime.system.context;
 
-import java.lang.reflect.Method;
 import java.util.List;
-
-import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 
@@ -36,8 +33,6 @@ import org.apache.isis.core.commons.debug.DebugList;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;

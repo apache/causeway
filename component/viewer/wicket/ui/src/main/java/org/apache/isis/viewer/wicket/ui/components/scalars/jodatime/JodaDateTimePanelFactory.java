@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
+import org.apache.wicket.Component;
+import org.joda.time.DateTime;
+
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-import org.apache.wicket.Component;
-import org.joda.time.DateTime;
 
 /**
  * {@link ComponentFactory} for {@link JodaLocalDatePanel}.

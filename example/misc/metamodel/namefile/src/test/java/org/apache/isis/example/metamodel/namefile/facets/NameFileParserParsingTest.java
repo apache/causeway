@@ -22,7 +22,6 @@ package org.apache.isis.example.metamodel.namefile.facets;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.example.metamodel.namefile.facets.NameFileParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

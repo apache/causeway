@@ -19,7 +19,6 @@
 
 package org.apache.isis.example.metamodel.namefile.facets;
 
-import org.apache.isis.example.metamodel.namefile.facets.NameFileParser;
 import org.junit.Test;
 
 public class NameFileParserInstantiationTest {

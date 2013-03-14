@@ -21,9 +21,9 @@ package org.apache.isis.applib.services.exceprecog;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Hidden;
-
 import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.Hidden;
 
 /**
  * Convenience implementation of {@link ExceptionRecognizer} that loops through a list of

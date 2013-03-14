@@ -22,6 +22,8 @@ package dom.todo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
@@ -35,7 +37,6 @@ import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.applib.annotation.Resolve.Type;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
-import org.joda.time.LocalDate;
 
 @ObjectType("TODO")
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")

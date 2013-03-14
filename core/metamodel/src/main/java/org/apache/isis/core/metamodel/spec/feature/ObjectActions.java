@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
-
-import com.google.common.collect.Lists;
 
 public final class ObjectActions {
 

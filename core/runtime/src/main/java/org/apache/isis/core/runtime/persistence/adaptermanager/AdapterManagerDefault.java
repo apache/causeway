@@ -27,6 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -60,7 +62,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.log4j.Logger;
 
 public class AdapterManagerDefault implements AdapterManagerSpi {
 

@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.objectstore.nosql.db.StateReader;
-import org.apache.isis.objectstore.nosql.db.file.JsonStateReader;
 
 public class JsonStateReaderTest {
 

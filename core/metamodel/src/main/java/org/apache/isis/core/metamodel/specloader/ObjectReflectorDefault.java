@@ -81,6 +81,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpeci
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 /**
  * Builds the meta-model.

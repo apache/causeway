@@ -47,8 +47,6 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.core.tck.dom.sqlos.SqlDomainObjectRepository;
 import org.apache.isis.core.tck.dom.sqlos.data.SimpleClass;

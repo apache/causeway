@@ -1,7 +1,8 @@
 package org.apache.isis.applib.services.publish;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.w3c.dom.Document;
+
+import org.apache.isis.applib.annotation.Programmatic;
 
 public interface EventSerializer {
 

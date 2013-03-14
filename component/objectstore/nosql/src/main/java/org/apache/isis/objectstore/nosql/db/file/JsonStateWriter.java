@@ -21,15 +21,16 @@ package org.apache.isis.objectstore.nosql.db.file;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 import org.apache.isis.objectstore.nosql.db.StateWriter;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.common.collect.Lists;
 
 public class JsonStateWriter implements StateWriter {
 

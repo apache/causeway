@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 import java.awt.Graphics2D;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;

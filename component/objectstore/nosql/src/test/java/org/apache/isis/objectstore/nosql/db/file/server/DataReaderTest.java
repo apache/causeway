@@ -31,10 +31,6 @@ import java.io.FileWriter;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.apache.isis.objectstore.nosql.db.file.server.DataFileReader;
-import org.apache.isis.objectstore.nosql.db.file.server.FileServerException;
-import org.apache.isis.objectstore.nosql.db.file.server.Util;
-
 public class DataReaderTest {
 
     private DataFileReader reader;

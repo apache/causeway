@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -42,11 +43,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.objectstore.xml.XmlObjectStore;
-import org.apache.isis.objectstore.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.xml.internal.clock.DefaultClock;
 
 public class XmlObjectStoreTest_toRefactor {

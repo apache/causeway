@@ -19,7 +19,6 @@
 
 package org.apache.isis.objectstore.xml.internal.clock;
 
-import org.apache.isis.objectstore.xml.internal.clock.Clock;
 
 public class TestClock implements Clock {
     long time = 0;

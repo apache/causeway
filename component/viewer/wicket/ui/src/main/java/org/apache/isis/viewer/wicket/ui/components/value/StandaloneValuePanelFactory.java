@@ -19,12 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.value;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 /**
  * {@link ComponentFactory} for rendering standalone values..

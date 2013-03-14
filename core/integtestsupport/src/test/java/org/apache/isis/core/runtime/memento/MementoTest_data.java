@@ -28,9 +28,6 @@ import org.junit.Test;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.runtime.memento.Data;
-import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.core.runtime.memento.ObjectData;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.tck.dom.scalars.WrapperValuedEntity;
 

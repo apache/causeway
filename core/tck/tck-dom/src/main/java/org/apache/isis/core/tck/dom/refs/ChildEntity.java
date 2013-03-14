@@ -21,8 +21,6 @@ package org.apache.isis.core.tck.dom.refs;
 
 import java.util.List;
 
-import javax.jdo.annotations.IdentityType;
-
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;

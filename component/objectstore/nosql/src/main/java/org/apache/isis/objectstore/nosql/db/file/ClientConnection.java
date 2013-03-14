@@ -29,7 +29,6 @@ import java.io.PrintWriter;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;

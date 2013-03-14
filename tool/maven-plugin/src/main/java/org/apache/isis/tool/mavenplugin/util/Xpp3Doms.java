@@ -1,8 +1,8 @@
 package org.apache.isis.tool.mavenplugin.util;
 
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-
 import com.google.common.base.Function;
+
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 public final class Xpp3Doms {
     

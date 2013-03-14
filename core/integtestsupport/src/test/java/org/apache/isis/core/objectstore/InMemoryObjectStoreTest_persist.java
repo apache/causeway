@@ -21,7 +21,6 @@ package org.apache.isis.core.objectstore;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures.Listener;
 import org.apache.isis.core.integtestsupport.tck.ObjectStoreContractTest_persist;
-import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 
 public class InMemoryObjectStoreTest_persist extends ObjectStoreContractTest_persist {

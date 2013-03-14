@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.profilestore.xml.internal.UserProfileContentWriter;
 
 public class UserProfileContentWriterTest {
 

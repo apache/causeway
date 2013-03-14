@@ -22,6 +22,16 @@ package org.apache.isis.core.integtestsupport;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -42,8 +52,8 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.tck.dom.refs.AggregatedEntity;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
@@ -54,15 +64,6 @@ import org.apache.isis.core.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.WrapperValuedEntity;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-
-import com.google.common.collect.Lists;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.

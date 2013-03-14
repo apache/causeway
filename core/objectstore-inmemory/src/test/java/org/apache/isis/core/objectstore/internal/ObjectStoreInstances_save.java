@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.objectstore.internal.ObjectStoreInstances;
 
 /**
  * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and

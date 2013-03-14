@@ -20,7 +20,6 @@
 package org.apache.isis.core.progmodel.facets.members.resolve;
 
 import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacetAbstract;
 

@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;

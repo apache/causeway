@@ -21,7 +21,6 @@ package org.apache.isis.viewer.scimpi.dispatcher.context;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeSet;
 

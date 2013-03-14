@@ -23,6 +23,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -55,9 +58,6 @@ import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class IsisSystemDefault extends IsisSystemAbstract {
 

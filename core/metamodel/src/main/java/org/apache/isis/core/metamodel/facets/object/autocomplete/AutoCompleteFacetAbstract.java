@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,8 +34,8 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 

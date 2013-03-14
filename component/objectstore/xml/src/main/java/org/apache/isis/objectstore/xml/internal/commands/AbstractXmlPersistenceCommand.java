@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
 import org.apache.isis.objectstore.xml.internal.data.DataManager;
 import org.apache.isis.objectstore.xml.internal.data.ObjectData;
-import org.apache.isis.objectstore.xml.internal.version.FileVersion;
 
 abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract {
     private static final Logger LOG = Logger.getLogger(AbstractXmlPersistenceCommand.class);

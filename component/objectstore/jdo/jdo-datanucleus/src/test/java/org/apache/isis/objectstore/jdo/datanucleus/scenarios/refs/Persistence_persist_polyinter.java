@@ -29,9 +29,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.tck.dom.refs.PolyClassChildEntity;
-import org.apache.isis.core.tck.dom.refs.PolyClassParentEntity;
-import org.apache.isis.core.tck.dom.refs.PolyClassParentEntityRepository;
 import org.apache.isis.core.tck.dom.refs.PolyInterface;
 import org.apache.isis.core.tck.dom.refs.PolyInterfaceParentEntity;
 import org.apache.isis.core.tck.dom.refs.PolyInterfaceParentEntityRepository;

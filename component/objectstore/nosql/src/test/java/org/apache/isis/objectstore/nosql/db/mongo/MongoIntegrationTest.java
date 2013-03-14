@@ -39,8 +39,6 @@ import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.objectstore.nosql.db.mongo.MongoDb;
-import org.apache.isis.objectstore.nosql.db.mongo.MongoPersistorMechanismInstaller;
 import org.apache.isis.objectstore.nosql.keys.KeyCreatorDefault;
 
 public class MongoIntegrationTest {

@@ -31,8 +31,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
-import org.apache.isis.objectstore.xml.internal.data.ObjectData;
-import org.apache.isis.objectstore.xml.internal.data.ObjectDataVector;
 import org.apache.isis.objectstore.xml.internal.version.FileVersion;
 
 public class ObjectDataVectorTest {

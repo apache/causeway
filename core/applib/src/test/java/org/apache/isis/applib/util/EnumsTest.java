@@ -25,7 +25,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.util.Enums;
 
 public class EnumsTest {
 

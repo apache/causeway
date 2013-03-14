@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.exceprecog;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 
 /**
  * Convenience implementation of {@link ExceptionRecognizer} that provides some

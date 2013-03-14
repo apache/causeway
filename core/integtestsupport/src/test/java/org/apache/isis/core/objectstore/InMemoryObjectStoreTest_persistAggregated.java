@@ -23,9 +23,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures.Listener;
-import org.apache.isis.core.integtestsupport.tck.ObjectStoreContractTest_persist;
-import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.tck.dom.refs.ReferencingEntity;
 

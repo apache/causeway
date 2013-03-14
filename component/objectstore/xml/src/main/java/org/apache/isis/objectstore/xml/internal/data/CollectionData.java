@@ -21,7 +21,6 @@ package org.apache.isis.objectstore.xml.internal.data;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.objectstore.xml.internal.version.FileVersion;
 
 /**
  * A logical collection of elements of a specified type

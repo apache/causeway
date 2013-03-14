@@ -19,16 +19,18 @@
 
 package org.apache.isis.core.progmodel.facets.value;
 
-import static org.apache.isis.core.unittestsupport.jmocking.ReturnArgumentJMockAction.returnArgument;
-import static org.hamcrest.CoreMatchers.*;
+import static org.apache.isis.core.unittestsupport.jmocking.JMockActions.returnArgument;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Locale;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
@@ -50,7 +52,6 @@ import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsi
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-import org.apache.isis.core.unittestsupport.jmock.auto.Mock;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

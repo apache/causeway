@@ -74,6 +74,11 @@
            </dependency>
 
            <dependency>
+               <groupId>org.picocontainer</groupId>
+               <artifactId>picocontainer</artifactId>
+           </dependency>
+
+           <dependency>
                <groupId>org.jmock</groupId>
                <artifactId>jmock</artifactId>
            </dependency>

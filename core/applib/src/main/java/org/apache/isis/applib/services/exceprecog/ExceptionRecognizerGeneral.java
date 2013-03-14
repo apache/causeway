@@ -20,12 +20,12 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Hidden;
-
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
+
+import org.apache.isis.applib.annotation.Hidden;
 
 /**
  * A general purpose implementation of {@link ExceptionRecognizer} that looks 

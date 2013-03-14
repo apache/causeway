@@ -19,24 +19,19 @@
 package org.apache.isis.objectstore.jdo.datanucleus.scenarios.refs;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.tck.dom.refs.UnidirReferencedEntity;
 import org.apache.isis.core.tck.dom.refs.UnidirReferencedEntityRepository;
 import org.apache.isis.core.tck.dom.refs.UnidirReferencingEntity;
 import org.apache.isis.core.tck.dom.refs.UnidirReferencingEntityRepository;
 import org.apache.isis.objectstore.jdo.datanucleus.Utils;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class Persistence_update_using_domMethodCalls {
 

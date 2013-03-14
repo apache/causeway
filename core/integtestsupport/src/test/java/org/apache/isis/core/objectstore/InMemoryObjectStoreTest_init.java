@@ -25,7 +25,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
-import org.apache.isis.core.objectstore.InMemoryObjectStore;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class InMemoryObjectStoreTest_init {

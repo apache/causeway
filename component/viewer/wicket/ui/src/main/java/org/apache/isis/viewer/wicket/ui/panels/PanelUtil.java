@@ -18,12 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
+import com.google.common.base.Strings;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import com.google.common.base.Strings;
+import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 public final class PanelUtil {
 

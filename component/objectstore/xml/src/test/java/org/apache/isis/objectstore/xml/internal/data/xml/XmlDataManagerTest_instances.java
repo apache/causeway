@@ -42,8 +42,6 @@ import org.apache.isis.objectstore.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.xml.internal.clock.DefaultClock;
 import org.apache.isis.objectstore.xml.internal.data.ObjectData;
 import org.apache.isis.objectstore.xml.internal.data.ObjectDataVector;
-import org.apache.isis.objectstore.xml.internal.data.xml.Utils;
-import org.apache.isis.objectstore.xml.internal.data.xml.XmlDataManager;
 import org.apache.isis.objectstore.xml.internal.version.FileVersion;
 
 public class XmlDataManagerTest_instances {

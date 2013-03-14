@@ -21,7 +21,6 @@ package org.apache.isis.objectstore.jdo.datanucleus.scenarios.refs;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -33,8 +32,6 @@ import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.tck.dom.refs.BidirWithSetChildEntity;
 import org.apache.isis.core.tck.dom.refs.BidirWithSetParentEntity;
 import org.apache.isis.core.tck.dom.refs.BidirWithSetParentEntityRepository;
-import org.apache.isis.core.tck.dom.refs.ParentEntity;
-import org.apache.isis.core.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.objectstore.jdo.datanucleus.Utils;
 
 public class Persistence_persist_bidirWithSetParent {

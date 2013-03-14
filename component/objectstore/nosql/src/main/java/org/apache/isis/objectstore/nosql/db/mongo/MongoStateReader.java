@@ -22,15 +22,16 @@ package org.apache.isis.objectstore.nosql.db.mongo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.objectstore.nosql.db.StateReader;
-import org.apache.log4j.Logger;
-
 import com.mongodb.BasicDBList;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+
+import org.apache.log4j.Logger;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.objectstore.nosql.db.StateReader;
 
 public class MongoStateReader implements StateReader {
     

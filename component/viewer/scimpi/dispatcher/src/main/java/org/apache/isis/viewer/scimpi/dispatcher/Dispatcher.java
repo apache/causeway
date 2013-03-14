@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +33,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TimeZone;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -55,9 +60,9 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Debug;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugAction;
+import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugHtmlWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUserAction;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugHtmlWriter;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.LogAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.RemoveAction;
@@ -71,11 +76,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.SimpleEncoder;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.TagProcessingException;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 public class Dispatcher {
     private static final String SHOW_UNSHOWN_MESSAGES = ConfigurationConstants.ROOT + "scimpi.show-unshown-messages";

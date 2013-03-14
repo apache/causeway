@@ -25,20 +25,14 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.annotation.PublishedObject.PayloadFactory;
-import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -61,7 +55,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.IsisObjectStoreLogge
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -74,12 +67,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 
 /**
  * An abstract implementation of {@link PersistenceMechanismInstaller} that will

@@ -27,10 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacetAnnotation;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.ParentedFacetDerivedFromJdoEmbeddedOnlyAnnotation;
 
 
 public class GivenJdoEmbeddedOnlyAnnotationFacetFactoryTest extends
