@@ -50,7 +50,10 @@ public class ActionLink extends AbstractElementProcessor {
         final String scopeSegment = scope == null ? "" : "&amp;" + SCOPE + "=" + scope;
         final String confirm = request.getOptionalProperty(CONFIRM);
         final String completionMessage = request.getOptionalProperty(MESSAGE);
+        final String idName = request.getOptionalProperty(ID, method);
+        final String className = request.getOptionalProperty(CLASS);
 
+        
         // TODO need a mechanism for globally dealing with encoding; then use
         // the new encode method
         final String confirmSegment = confirm == null ? "" : "&amp;" + "_" + CONFIRM + "=" + URLEncoder.encode(confirm);
@@ -82,7 +85,7 @@ public class ActionLink extends AbstractElementProcessor {
         }
 
         if (MethodsUtils.isVisibleAndUsable(object, action, where)) {
-            writeLink(request, target, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, resultOverride, scopeSegment,
+            writeLink(request, idName, className, target, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, resultOverride, scopeSegment,
                     confirmSegment, messageSegment, context, action, parameters, text);
         }
         request.popBlockContent();
@@ -90,6 +93,8 @@ public class ActionLink extends AbstractElementProcessor {
 
     public static void writeLink(
             final Request request,
+            final String idName,
+            final String className,
             final String objectId,
             final String version,
             final String method,
@@ -111,12 +116,14 @@ public class ActionLink extends AbstractElementProcessor {
             parameterSegment += "&param" + (i + 1) + "=" + parameters[i];
         }
 
+        final String idSegment = idName == null ? "" : ("id=\"" + idName + "\" ");
+        final String classSegment = "class=\"" + (className == null ? "action in-line" : className) + "\"";
         final String interactionParamters = context.encodedInteractionParameters();
         final String forwardResultSegment = forwardResultTo == null ? "" : "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
         final String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + "_" + RESULT_OVERRIDE + "=" + resultOverride;
         final String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
         final String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
-        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version
+        request.appendHtml("<a " + idSegment + classSegment + " href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version
                 + "&amp;" + "_" + METHOD + "=" + method + resultOverrideSegment + forwardResultSegment + forwardVoidSegment + resultNameSegment
                 + parameterSegment + scopeSegment + confirmSegment + messageSegment + interactionParamters + "\">");
         request.appendHtml(text);

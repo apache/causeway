@@ -173,14 +173,28 @@ public class DebugAction implements Action {
         });
         final Function<ObjectSpecification, String> className = ObjectSpecification.FUNCTION_FULLY_QUALIFIED_CLASS_NAME;
         final List<String> fullIdentifierList = Lists.newArrayList(Collections2.transform(specs, className));
+        
         for (final String fullIdentifier : fullIdentifierList) {
             final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
             if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
                 continue;
             }
             final String name = spec.getIdentifier().toClassIdentityString();
-            context.getWriter().append("# " + spec.getShortIdentifier() + "\n");
-            context.getWriter().append("" + name + ":roles\n");
+            boolean isAbstract = spec.isAbstract();
+            context.getWriter().append("### " + spec.getShortIdentifier() + (isAbstract ? " (abstract)" : "") + " ###\n");
+            context.getWriter().append((isAbstract ? "#" : "") + name + ":roles\n\n");
+        }
+        context.getWriter().append("\n\n");
+        
+        for (final String fullIdentifier : fullIdentifierList) {
+            final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
+            if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
+                continue;
+            }
+            final String name = spec.getIdentifier().toClassIdentityString();
+            boolean isAbstract = spec.isAbstract();
+            context.getWriter().append("### " + spec.getShortIdentifier() + (isAbstract ? " (abstract)" : "") + " ###\n");
+            context.getWriter().append((isAbstract ? "#" : "") + name + ":roles\n");
             for (final ObjectAssociation assoc : spec.getAssociations()) {
                 context.getWriter().append("#" + name + "#" + assoc.getId() + ":roles\n");
                 // context.getWriter().append("#" + name + ".property." +

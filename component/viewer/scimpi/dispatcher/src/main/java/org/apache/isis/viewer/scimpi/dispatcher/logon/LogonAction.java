@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.logon;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.profiles.Localization;
@@ -27,8 +28,10 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
@@ -42,18 +45,21 @@ import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 
-// TODO this should work like EditAction so that logon page is repopulated
 public class LogonAction implements Action {
 
     @Override
     public void process(final RequestContext context) throws IOException {
-        final String username = context.getParameter("username");
-        final String password = context.getParameter("password");
+        String username = context.getParameter("username");
+        String password = context.getParameter("password");
         final String actualFormId = context.getParameter("_" + FORM_ID);
         final String expectedFormId = context.getParameter(LOGON_FORM_ID);
         boolean isDomainLogon = expectedFormId != null && expectedFormId.equals(actualFormId);
         boolean isValid;
 
+        if (username == null || password == null) {
+            context.redirectTo("/");
+            return;
+        }
         AuthenticationSession session = null;
         if (username.length() == 0 || password.length() == 0) {
             isValid = false;
@@ -61,17 +67,18 @@ public class LogonAction implements Action {
             if (isDomainLogon) {
                 final String objectId = context.getParameter(LOGON_OBJECT);
                 final String scope = context.getParameter(LOGON_SCOPE);
-                final String methodName = context.getParameter(LOGON_METHOD);
+                final String loginMethodName = context.getParameter(LOGON_METHOD);
+                final String roleFieldName = context.getParameter(PREFIX + "roles-field");
                 String resultName = context.getParameter(LOGON_RESULT_NAME);
                 resultName = resultName == null ? "_" + USER : resultName;
 
                 final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
-                final ObjectAction action = MethodsUtils.findAction(object, methodName);
-                final int parameterCount = action.getParameterCount();
+                final ObjectAction loginAction = MethodsUtils.findAction(object, loginMethodName);
+                final int parameterCount = loginAction.getParameterCount();
                 final ObjectAdapter[] parameters = new ObjectAdapter[parameterCount];
-                List<ObjectActionParameter> parameters2 = action.getParameters();
+                List<ObjectActionParameter> parameters2 = loginAction.getParameters();
                 if (parameters.length != 2) {
-                    throw new ScimpiException("Expected two parameters for the log-on method: " + methodName);
+                    throw new ScimpiException("Expected two parameters for the log-on method: " + loginMethodName);
                 }
 
                 Localization localization = IsisContext.getLocalization(); 
@@ -79,9 +86,25 @@ public class LogonAction implements Action {
                 parameters[0] = facet.parseTextEntry(null, username, localization);
                 facet = parameters2.get(1).getSpecification().getFacet(ParseableFacet.class);
                 parameters[1] = facet.parseTextEntry(null, password, localization);
-                final ObjectAdapter result = action.execute(object, parameters);
+                final ObjectAdapter result = loginAction.execute(object, parameters);
                 isValid = result != null;
                 if (isValid) {
+                    ObjectSpecification specification = result.getSpecification();
+                    ObjectAssociation association = specification.getAssociation(roleFieldName);
+                    if (association == null) {
+                        throw new ScimpiException("Expected a role name field called: " + roleFieldName);
+                    }
+                    ObjectAdapter role = association.get(result);
+                    List<String> roles = new ArrayList<String>();
+                    if (role != null) {
+                        String[] split = role.titleString().split("\\|");
+                        for (String r : split) {
+                            roles.add(r);
+                        }
+                    }
+                    //String domainRoleName = role == null ? "" : role.titleString(); 
+                    
+                    
                     Scope scope2 = scope == null ? Scope.SESSION : RequestContext.scope(scope);
                     final String resultId = context.mapObject(result, scope2);
                     context.addVariable(resultName, resultId, scope);
@@ -91,10 +114,15 @@ public class LogonAction implements Action {
                     context.clearVariable(LOGON_METHOD, Scope.SESSION);
                     context.clearVariable(LOGON_RESULT_NAME, Scope.SESSION);
                     context.clearVariable(LOGON_SCOPE, Scope.SESSION);
-                    context.clearVariable(PREFIX + "isis-user", Scope.SESSION);
+                    context.clearVariable(PREFIX + "roles-field", Scope.SESSION);
+ //                   context.clearVariable(PREFIX + "isis-user", Scope.SESSION);
                     context.clearVariable(LOGON_FORM_ID, Scope.SESSION);
+
+                    session = new DomainSession(result.titleString(), roles);
+                } else {
+                    session = context.getSession();
                 }
-                session = context.getSession();
+                
             } else {
                 session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
                 isValid = session != null;
