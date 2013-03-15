@@ -27,6 +27,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -41,23 +42,48 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
     private transient PageParameters current;
     
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
-        final PageParameters pageParameters = bookmarkableModel.asPageParameters();
+        final PageParameters candidatePP = bookmarkableModel.asPageParameters();
         
         // ignore if doesn't provide a page type for subsequent disambiguation
-        PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(pageParameters, PageType.class);
+        PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(candidatePP, PageType.class);
         if(pageType==null) {
             return;
         }
         
         // ignore if doesn't provide a title for rendering
-        if(PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters)==null) {
+        String candidateTitle = PageParameterNames.PAGE_TITLE.getStringFrom(candidatePP);
+        if(candidateTitle==null) {
             return;
         }
-
-        if(!list.contains(pageParameters)) {
-            list.add(pageParameters);
+        
+        // look to see if exists already; if found then then update title if need be.
+        // the convoluted logic here is because we remove the temporarily remove the title
+        // in order to do the check.
+        final String pageTitleKey = PageParameterNames.PAGE_TITLE.toString();
+        try {
+            // temporarily remove to do comparison
+            candidatePP.remove(pageTitleKey);
+            
+            for (PageParameters eachPP : list) {
+                String pageTitle = PageParameterNames.PAGE_TITLE.getStringFrom(eachPP);
+                try {
+                    eachPP.remove(pageTitleKey);
+                    if(eachPP.equals(candidatePP)) {
+                       pageTitle = candidateTitle; // update the existing
+                       current = eachPP;
+                       return;
+                    }
+                } finally {
+                    eachPP.add(PageParameterNames.PAGE_TITLE.toString(), pageTitle);
+                }
+            }
+        } finally {
+            PageParameterNames.PAGE_TITLE.addStringTo(candidatePP, candidateTitle);
         }
-        current = pageParameters;
+        
+        // if get here, then didn't find.
+        list.add(candidatePP);
+        current = candidatePP;
     }
 
     @Override
