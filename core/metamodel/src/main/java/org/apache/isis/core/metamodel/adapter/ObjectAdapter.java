@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -51,10 +52,22 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
     Object getObject();
 
     /**
-     * Returns the title to display this object with, which is usually got from
+     * Returns the title to display this object with, usually obtained from
      * the wrapped {@link #getObject() domain object}.
+     * 
+     * @deprecated - use {@link #titleString(ObjectAdapter)}
      */
+    @Deprecated
     String titleString();
+
+    /**
+     * Returns the title to display this object with, rendered within the context
+     * of some other adapter.
+     * 
+     * <p>
+     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter, org.apache.isis.applib.profiles.Localization)
+     */
+    String titleString(ObjectAdapter contextAdapter);
 
     /**
      * Return an {@link Instance} of the specified {@link Specification} with

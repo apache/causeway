@@ -378,15 +378,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
+    public String getTitle(final ObjectAdapter targetAdapter, final Localization localization) {
+        return getTitle(null, targetAdapter, localization);
+    }
+
+    @Override
+    public String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, Localization localization) {
         if (titleFacet != null) {
-            final String titleString = titleFacet.title(adapter, localization);
+            final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter, localization);
             if (titleString != null && !titleString.equals("")) {
                 return titleString;
             }
         }
         return (this.isService() ? "" : "Untitled ") + getSingularName();
     }
+
 
     @Override
     public String getIconName(final ObjectAdapter reference) {
@@ -1002,5 +1008,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
     }
+
 
 }

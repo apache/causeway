@@ -26,55 +26,45 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
 
-@RunWith(JMock.class)
-public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private final Mockery context = new JUnit4Mockery();
-    private ObjectAdapter objectAdapter;
-
+    @ClassUnderTest
     private TitleAnnotationFacetFactory facetFactory;
 
+    @Mock
+    private ObjectAdapter mockObjectAdapter;
+    @Mock
     private SpecificationLoader mockSpecificationLookup;
+    @Mock
     private AdapterManager mockAdapterMap;
+    @Mock
     private LocalizationProvider mockLocalizationProvider;
 
     @Before
-    @Override
     public void setUp() throws Exception {
-        super.setUp();
 
-        mockSpecificationLookup = context.mock(SpecificationLoader.class);
-        mockAdapterMap = context.mock(AdapterManager.class);
-        mockLocalizationProvider = context.mock(LocalizationProvider.class);
-
-        objectAdapter = context.mock(ObjectAdapter.class);
-
-        facetFactory = new TitleAnnotationFacetFactory();
+        facetFactory = context.getClassUnderTest();
         facetFactory.setAdapterManager(mockAdapterMap);
         facetFactory.setSpecificationLookup(mockSpecificationLookup);
         facetFactory.setLocalizationProvider(mockLocalizationProvider);
@@ -109,13 +99,13 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
+        Assert.assertNotNull(facet);
+        Assert.assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
         final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;
 
         final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
-            assertEquals(titleMethods.get(i), titleFacetViaTitleAnnotation.getComponents().get(i).getMethod());
+            Assert.assertEquals(titleMethods.get(i), titleFacetViaTitleAnnotation.getComponents().get(i).getMethod());
         }
     }
 
@@ -144,26 +134,26 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessClassContext(Customer2.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
+        Assert.assertNotNull(facet);
+        Assert.assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
         final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;
 
         final List<Method> titleMethods = Arrays.asList(Customer2.class.getMethod("titleElement1"), Customer2.class.getMethod("titleElement3"), Customer2.class.getMethod("titleElement2"));
 
         final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
-            assertEquals(titleMethods.get(i), components.get(i).getMethod());
+            Assert.assertEquals(titleMethods.get(i), components.get(i).getMethod());
         }
 
         final Customer2 customer = new Customer2();
 
         context.checking(new Expectations() {
             {
-                allowing(objectAdapter).getObject();
+                allowing(mockObjectAdapter).getObject();
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(objectAdapter, mockLocalizationProvider.getLocalization());
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProvider.getLocalization());
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 
@@ -175,7 +165,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessClassContext(Customer3.class, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(TitleFacet.class));
+        Assert.assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
 
     public static class Customer4 {
@@ -234,11 +224,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         context.checking(new Expectations() {
             {
-                allowing(objectAdapter).getObject();
+                allowing(mockObjectAdapter).getObject();
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(objectAdapter, mockLocalizationProvider.getLocalization());
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProvider.getLocalization());
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 
@@ -255,44 +245,5 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
     }
 
-    @Test
-    public void hiddenFacetAnnotationInferredFromTitleAnnotation() throws Exception {
-
-        final Method propertyMethod = findMethod(Customer5.class, "titleProperty");
-        
-        facetFactory.process(new ProcessMethodContext(Customer5.class, propertyMethod, methodRemover, facetedMethod));
-
-        final Customer5 customer = new Customer5();
-
-        context.checking(new Expectations() {
-            {
-                allowing(objectAdapter).getObject();
-                will(returnValue(customer));
-            }
-        });
-        final HiddenFacet facet = facetedMethod.getFacet(HiddenFacet.class);
-        assertNotNull(facet);
-        assertThat(facet.where(), is(Where.ALL_TABLES));
-    }
-
-
-    @Test
-    public void hiddenFacetAnnotationNotInferredIfTitleAnnotationNotPresent() throws Exception {
-
-        final Method propertyMethod = findMethod(Customer5.class, "otherProperty");
-        
-        facetFactory.process(new ProcessMethodContext(Customer5.class, propertyMethod, methodRemover, facetedMethod));
-
-        final Customer5 customer = new Customer5();
-
-        context.checking(new Expectations() {
-            {
-                allowing(objectAdapter).getObject();
-                will(returnValue(customer));
-            }
-        });
-        final HiddenFacet facet = facetedMethod.getFacet(HiddenFacet.class);
-        assertNull(facet);
-    }
     
 }

@@ -23,12 +23,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -96,46 +98,15 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ObjectAdapter owningAdapter, final Localization localization) {
-        final StringBuilder stringBuilder = new StringBuilder();
-
-        try {
-            for (final TitleComponent component : this.components) {
-                String title = null;
-                final Object titlePart = AdapterInvokeUtils.invoke(component.getMethod(), owningAdapter);
-                if (titlePart != null) {
-                    // use either titleFacet...
-                    title = titleOf(titlePart);
-                    if (Strings.isNullOrEmpty(title)) {
-                        // or the toString() otherwise
-                        title = titlePart.toString().trim();
-                    }
-                }
-                if (Strings.isNullOrEmpty(title)) {
-                    continue;
-                }
-                stringBuilder.append(component.getPrepend());
-                stringBuilder.append(abbreviated(title, component.abbreviateTo));
-                stringBuilder.append(component.getAppend());
-            }
-
-            return stringBuilder.toString().trim();
-        } catch (final RuntimeException ex) {
-            LOG.warn("Title failure", ex);
-            return "Failed Title";
-        }
+    public String title(final ObjectAdapter targetAdapter, final Localization localization) {
+        return title(null, targetAdapter, localization);
     }
 
-    private String titleOf(final Object domainObject) {
-        final ObjectAdapter adapter = adapterManager.adapterFor(domainObject);
+    private String titleOf(final ObjectAdapter adapter) {
         if (adapter == null) {
             return null;
         }
-        final ObjectSpecification returnSpec = adapter.getSpecification();
-        if (!returnSpec.containsFacet(TitleFacet.class)) {
-            return null;
-        }
-        return returnSpec.getTitle(adapter, localizationProvider.getLocalization());
+        return adapter.titleString(null);
     }
 
     public List<TitleComponent> getComponents() {
@@ -146,4 +117,41 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
 
+    @Override
+    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter, Localization localization) {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        try {
+            for (final TitleComponent component : this.components) {
+                final Object titlePart = AdapterInvokeUtils.invoke(component.getMethod(), targetAdapter);
+                if (titlePart == null) {
+                    continue;
+                } 
+                // ignore context, if provided
+                final ObjectAdapter titlePartAdapter = adapterManager.adapterFor(titlePart);
+                if(Objects.equal(contextAdapter, titlePartAdapter)) {
+                    continue;
+                } 
+                String title = titleOf(titlePartAdapter);
+                if (Strings.isNullOrEmpty(title)) {
+                    // ... use the toString() otherwise
+                    // (mostly for benefit of testing...)
+                    title = titlePart.toString().trim();
+                }
+                if(StringUtils.isNullOrEmpty(title)) {
+                    continue;
+                }
+                if(stringBuilder.length() > 0) {
+                    stringBuilder.append(component.getPrepend());
+                }
+                stringBuilder.append(abbreviated(title, component.abbreviateTo));
+                stringBuilder.append(component.getAppend());
+            }
+
+            return stringBuilder.toString().trim();
+        } catch (final RuntimeException ex) {
+            LOG.warn("Title failure", ex);
+            return "Failed Title";
+        }
+    }
 }

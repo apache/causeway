@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -33,15 +34,15 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
-    private final RenderingHint renderingHint;
+    private final ObjectAdapterMemento parentAdapterMementoIfAny;
 
-    private static String columnName(RenderingHint renderingHint) {
-        return (renderingHint.isInParentedTableTitleColumn()? "Related ":"") + "Object";
+    private static String columnName(ObjectAdapterMemento parentAdapterMementoIfAny) {
+        return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
     }
 
-    public ObjectAdapterTitleColumn(RenderingHint renderingHint) {
-        super(columnName(renderingHint)); // i18n
-        this.renderingHint = renderingHint;
+    public ObjectAdapterTitleColumn(ObjectAdapterMemento parentAdapterMementoIfAny) {
+        super(columnName(parentAdapterMementoIfAny)); // i18n
+        this.parentAdapterMementoIfAny = parentAdapterMementoIfAny;
     }
 
     @Override
@@ -53,7 +54,8 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
         final ObjectAdapter adapter = rowModel.getObject();
         final EntityModel model = new EntityModel(adapter);
-        model.setRenderingHint(renderingHint);
+        model.setRenderingHint(parentAdapterMementoIfAny != null? RenderingHint.PARENTED_TITLE_COLUMN: RenderingHint.STANDALONE_TITLE_COLUMN);
+        model.setContextAdapterIfAny(parentAdapterMementoIfAny);
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
         return componentFactory.createComponent(id, model);
     }

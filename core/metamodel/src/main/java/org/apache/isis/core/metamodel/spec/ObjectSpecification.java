@@ -63,9 +63,6 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
  * subclasses, which in turn reference their superclass) they need be created
  * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
- * 
- * <p>
- * REVIEW: why is there no Help method for classes?
  */
 public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {
 
@@ -169,8 +166,20 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * <p>
      * Corresponds to the {@link TitleFacet#value()) value} of
      * {@link TitleFacet}; is not necessarily immutable.
+     * 
+     * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter, Localization)}
      */
+    @Deprecated
     String getTitle(ObjectAdapter adapter, Localization localization);
+
+    /**
+     * Returns the title to display of target adapter, rendered within the context
+     * of some other adapter (if any).
+     * 
+     * <p>
+     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter, org.apache.isis.applib.profiles.Localization)
+     */
+    String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, Localization localization);
 
     /**
      * Returns the name of an icon to use for the specified object.
@@ -323,6 +332,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     boolean isService();
 
     public void markAsService();
+
 
 
 

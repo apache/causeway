@@ -189,7 +189,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     protected void loadConfigurationResource(final IsisConfigurationDefault configuration, final String configurationResource, final NotFoundPolicy notFoundPolicy) {
         try {
             final PropertiesReader propertiesReader = loadConfigurationResource(resourceStreamSource, configurationResource);
-            LOG.info("loading properies from " + configurationResource);
+            LOG.info("loading properties from " + configurationResource);
             configuration.add(propertiesReader.getProperties());
             configurationResourcesFound.add(configurationResource);
             return;

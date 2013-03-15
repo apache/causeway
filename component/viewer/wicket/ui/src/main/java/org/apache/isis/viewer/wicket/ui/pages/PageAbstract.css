@@ -326,6 +326,10 @@ form fieldset .okButton {
 	margin:0px;
 	padding:0px;
 }
+.myBlockContainer fieldset:not(:first-child) {
+    margin-top: 30px
+}
+
 
 .myBlockContainer legend {
 	color:#423D37;

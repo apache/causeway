@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
@@ -89,7 +90,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         List<ObjectAction> bulkActions = determineBulkActions();
 
         addToggleboxColumnIfRequired(columns, bulkActions);
-        addTitleColumn(columns, model.isParented()? RenderingHint.PARENTED_TITLE_COLUMN: RenderingHint.STANDALONE_TITLE_COLUMN);
+        addTitleColumn(columns, model.getParentObjectAdapterMemento());
         addPropertyColumnsIfRequired(columns);
         addSelectedButtonIfRequired(columns);
 
@@ -154,8 +155,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
 
 
-    private static void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, RenderingHint renderingHint) {
-        columns.add(new ObjectAdapterTitleColumn(renderingHint));
+    private static void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny) {
+        columns.add(new ObjectAdapterTitleColumn(parentAdapterMementoIfAny));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {

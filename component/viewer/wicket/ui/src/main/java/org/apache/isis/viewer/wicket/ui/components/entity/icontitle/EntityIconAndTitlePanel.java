@@ -30,7 +30,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -114,7 +116,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
          if (adapter != null) {
-            String titleString = adapter.titleString();
+            String titleString = adapter.titleString(getContextAdapterIfAny());
             if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
                 return abbreviated(titleString, getSettings().getTitleLengthInStandaloneTables());
             }
@@ -125,6 +127,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         } else {
             return "(no object)";
         }
+    }
+
+    public ObjectAdapter getContextAdapterIfAny() {
+        EntityModel model = getModel();
+        ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
+        return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null;
     }
     
     static String abbreviated(final String str, final int maxLength) {

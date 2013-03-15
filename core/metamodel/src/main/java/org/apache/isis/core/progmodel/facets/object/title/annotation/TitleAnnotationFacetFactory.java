@@ -32,14 +32,10 @@ import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
@@ -51,7 +47,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     private LocalizationProvider localizationProvider;
 
     public TitleAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_AND_PROPERTIES);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     /**
@@ -80,25 +76,6 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         }
         final List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
         FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterManager, localizationProvider));
-    }
-
-    /**
-     * Any property annotated with <tt>Title</tt> is hidden by default in tables.
-     */
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        if(facetHolder.containsFacet(HiddenFacet.class)) {
-            // don't overwrite any facet already installed
-            return;
-        }
-        // otherwise, install hidden facet if this property annotated with @Title
-        final Title annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Title.class);
-        FacetUtil.addFacet(create(annotation, facetHolder));
-    }
-
-    private Facet create(final Title annotation, final FacetHolder holder) {
-        return annotation != null ? new HiddenFacetInTablesInferredFromTitleAnnotation(holder) : null;
     }
 
 

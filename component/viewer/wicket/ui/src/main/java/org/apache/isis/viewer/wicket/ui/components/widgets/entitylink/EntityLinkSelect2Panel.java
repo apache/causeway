@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -337,6 +338,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private void addOrReplaceIconAndTitle(ObjectAdapter pendingOrCurrentAdapter) {
         final EntityModel entityModelForLink = new EntityModel(pendingOrCurrentAdapter);
+        entityModelForLink.setContextAdapterIfAny(getEntityModel().getContextAdapterIfAny());
         entityModelForLink.setRenderingHint(getEntityModel().getRenderingHint());
         final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
         final Component component = componentFactory.createComponent(entityModelForLink);

@@ -301,6 +301,18 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         this.renderingHint = renderingHint;
     }
 
+    public ObjectAdapterMemento getContextAdapterIfAny() {
+        return contextAdapterIfAny;
+    }
+    
+    /**
+     * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
+     * provides a context adapter to obtain the title.
+     */
+    public void setContextAdapterIfAny(ObjectAdapterMemento contextAdapterIfAny) {
+        this.contextAdapterIfAny = contextAdapterIfAny;
+    }
+    
     public Mode getMode() {
         return mode;
     }
@@ -440,6 +452,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
     
     private final PendingModel pendingModel;
+    private ObjectAdapterMemento contextAdapterIfAny;
 
     public ObjectAdapter getPendingElseCurrentAdapter() {
         return pendingModel.getPendingElseCurrentAdapter();
@@ -469,6 +482,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 
 

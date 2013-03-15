@@ -57,6 +57,14 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         return parser.displayTitleOf(object, localization);
     }
 
+    @Override
+    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter, Localization localization) {
+        return title(targetAdapter, localization);
+    }
+
+    /**
+     * not API
+     */
     public String title(final ObjectAdapter adapter, final String usingMask) {
         if (adapter == null) {
             return null;
@@ -69,6 +77,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         return parser.displayTitleOf(object, usingMask);
     }
 
+
     // //////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////
@@ -79,5 +88,6 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     public ServicesInjector getDependencyInjector() {
         return dependencyInjector;
     }
+
 
 }

@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
@@ -371,15 +372,20 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      */
     @Override
     public String titleString() {
+        return titleString(null);
+    }
+
+    @Override
+    public String titleString(ObjectAdapter contextAdapterIfAny) {
         if (getSpecification().isParentedOrFreeCollection()) {
             final CollectionFacet facet = getSpecification().getFacet(CollectionFacet.class);
             return collectionTitleString(facet);
         } else {
-            return objectTitleString();
+            return objectTitleString(contextAdapterIfAny);
         }
     }
 
-    private String objectTitleString() {
+    private String objectTitleString(ObjectAdapter contextAdapterIfAny) {
         if (isNew()) {
             return "";
         } 
@@ -387,19 +393,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return (String) getObject();
         }
         final ObjectSpecification specification = getSpecification();
-        String title = specification.getTitle(this, localization);
-        
-        // looking at the implementation of the preceding code, this can never happen;
-        // and removing it means we can get rid of the dependency on PersistenceSession.
-        
-//        if (title == null) {
-//            if (resolveState.isGhost()) {
-//                if (LOG.isInfoEnabled()) {
-//                    LOG.info("attempting to use unresolved object; resolving it immediately: oid=" + this.getOid());
-//                }
-//                getPersistenceSession().resolveImmediately(this);
-//            }
-//        }
+        String title = specification.getTitle(contextAdapterIfAny, this, localization);
         
         if (title == null) {
             title = getDefaultTitle();
@@ -551,5 +545,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
+
+
 
 }

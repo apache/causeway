@@ -90,25 +90,6 @@ public class QuickStartApplication extends IsisWicketApplication {
         return Modules.override(isisDefaults).with(quickstartOverrides);
     }
 
-    public static class Archive {
-        private final String name;
-        private final String url;
-        
-        public Archive(String name, String url) {
-            this.name = name;
-            this.url = url;
-        }
-        
-        public String getName() {
-            return name;
-        }
-        public String getUrl() {
-            return url;
-        }
-        
-    }
-
-    
     private static String readLines(final String resourceName) {
         try {
             List<String> readLines = Resources.readLines(Resources.getResource(QuickStartApplication.class, resourceName), Charset.defaultCharset());

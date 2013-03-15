@@ -264,7 +264,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String getTitle(final ObjectAdapter adapter, final Localization localization) {
+    public String getTitle(final ObjectAdapter targetAdapter, final Localization localization) {
+        return getTitle(null, targetAdapter, localization);
+    }
+
+    @Override
+    public String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, Localization localization) {
         return title;
     }
 
@@ -481,6 +486,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public List<ObjectAction> getObjectActions(List<ActionType> requestedTypes, Contributed contributed, Filter<ObjectAction> filter) {
         return null;
     }
+
 
 
 }
