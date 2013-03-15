@@ -45,6 +45,7 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
 
 public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -54,8 +55,10 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     @Mock
     private ObjectAdapter mockObjectAdapter;
+    @Allowing
     @Mock
     private SpecificationLoader mockSpecificationLookup;
+    @Allowing
     @Mock
     private AdapterManager mockAdapterMap;
     @Mock
@@ -67,12 +70,9 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         facetFactory = context.getClassUnderTest();
         facetFactory.setAdapterManager(mockAdapterMap);
         facetFactory.setSpecificationLookup(mockSpecificationLookup);
-        facetFactory.setLocalizationProvider(mockLocalizationProvider);
 
         context.checking(new Expectations() {
             {
-                allowing(mockAdapterMap);
-                allowing(mockSpecificationLookup);
                 allowing(mockLocalizationProvider).getLocalization();
                 will(returnValue(new LocalizationDefault()));
             }

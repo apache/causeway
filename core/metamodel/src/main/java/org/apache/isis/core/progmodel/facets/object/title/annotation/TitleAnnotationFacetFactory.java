@@ -41,10 +41,9 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, LocalizationProviderAware {
+public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
     private AdapterManager adapterManager;
-    private LocalizationProvider localizationProvider;
 
     public TitleAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -75,7 +74,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
             return;
         }
         final List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterManager, localizationProvider));
+        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterManager));
     }
 
 
@@ -133,13 +132,8 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         private static List<String> componentsFor(final String sequence) {
             return Lists.newArrayList(Splitter.on('.').split(sequence));
         }
-
     }
 
-    @Override
-    public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
-        this.localizationProvider = localizationProvider;
-    }
 
     @Override
     public void setAdapterManager(final AdapterManager adapterMap) {

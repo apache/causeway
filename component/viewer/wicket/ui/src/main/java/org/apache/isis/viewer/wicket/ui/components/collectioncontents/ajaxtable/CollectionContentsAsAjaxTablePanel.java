@@ -197,7 +197,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
                     return true;
                 }
                 final ObjectSpecification assocSpec = association.getSpecification();
-                final boolean associationSpecIsOfParentSpec = assocSpec.isOfType(parentSpec);
+                final boolean associationSpecIsOfParentSpec = parentSpec.isOfType(assocSpec);
                 final boolean isVisible = !associationSpecIsOfParentSpec;
                 return isVisible;
             }

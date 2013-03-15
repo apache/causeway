@@ -96,7 +96,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final List<Method> methods = Arrays.asList(NormalDomainObject.class.getMethod("titleElement1"), NormalDomainObject.class.getMethod("titleElement2"), NormalDomainObject.class.getMethod("titleElement3"));
 
         final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager, mockLocalizationProvider);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
         context.checking(new Expectations() {
@@ -124,7 +124,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, MethodScope.OBJECT, Title.class);
 
         final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager, mockLocalizationProvider);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {
             {

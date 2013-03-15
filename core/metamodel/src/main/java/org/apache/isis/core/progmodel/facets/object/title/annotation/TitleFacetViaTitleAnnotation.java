@@ -31,7 +31,6 @@ import org.apache.log4j.Logger;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
@@ -45,7 +44,6 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
     private final AdapterManager adapterManager;
-    private final LocalizationProvider localizationProvider;
 
     public static class TitleComponent {
         public static final Function<? super Method, ? extends TitleComponent> FROM_METHOD = new Function<Method, TitleComponent>() {
@@ -90,11 +88,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         }
     }
 
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterManager, final LocalizationProvider localizationProvider) {
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
         this.components = components;
         this.adapterManager = adapterManager;
-        this.localizationProvider = localizationProvider;
     }
 
     @Override
@@ -141,9 +138,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                 if(StringUtils.isNullOrEmpty(title)) {
                     continue;
                 }
-                if(stringBuilder.length() > 0) {
-                    stringBuilder.append(component.getPrepend());
-                }
+                stringBuilder.append(component.getPrepend());
                 stringBuilder.append(abbreviated(title, component.abbreviateTo));
                 stringBuilder.append(component.getAppend());
             }
