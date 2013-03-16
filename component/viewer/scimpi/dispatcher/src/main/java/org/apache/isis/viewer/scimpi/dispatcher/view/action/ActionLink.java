@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import java.net.URLEncoder;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -63,7 +64,6 @@ public class ActionLink extends AbstractElementProcessor {
         final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
         final String version = context.mapVersion(object);
         final ObjectAction action = MethodsUtils.findAction(object, method);
-        objectId = request.getContext().mapObject(object, Scope.REQUEST);
 
         final ActionContent parameterBlock = new ActionContent(action);
         request.setBlockContent(parameterBlock);
@@ -81,7 +81,7 @@ public class ActionLink extends AbstractElementProcessor {
                 resultOverride = parameters[0];
             }
         } else {
-            target = objectId;
+            target =  StringEscapeUtils.escapeHtml(request.getContext().mapObject(object, Scope.INTERACTION));
         }
 
         if (MethodsUtils.isVisibleAndUsable(object, action, where)) {

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
 import org.apache.log4j.Logger;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -103,7 +104,7 @@ public class ActionButton extends AbstractElementProcessor {
 
         if (MethodsUtils.isVisibleAndUsable(object, action, where) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
-            write(request, target, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
+            write(request, target, action, parameters, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, completionMessage, resultOverride, idName, className);
         }
 
         if (showMessage) {
@@ -144,7 +145,6 @@ public class ActionButton extends AbstractElementProcessor {
             final ObjectAdapter object,
             final ObjectAction action,
             final String[] parameters,
-            final String objectId,
             final String version,
             String forwardResultTo,
             String forwardVoidTo,
@@ -181,13 +181,14 @@ public class ActionButton extends AbstractElementProcessor {
          * Form.createForm(request, buttonTitle, fields, hiddenFields, false);
          */
 
+        final String objectId = context.mapObject(object, Scope.INTERACTION);
         final String idSegment = idName == null ? "" : ("id=\"" + idName + "\" ");
         final String classSegment = "class=\"" + (className == null ? "action in-line" : className) + "\"";
         request.appendHtml("\n<form " + idSegment + classSegment + " action=\"action.app\" method=\"post\">\n");
         if (objectId == null) {
             request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + context.getVariable(RequestContext.RESULT) + "\" />\n");
         } else {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" + objectId + "\" />\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + OBJECT + "\" value=\"" +  StringEscapeUtils.escapeHtml(objectId) + "\" />\n");
         }
         request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + VERSION + "\" value=\"" + version + "\" />\n");
         if (scope != null) {

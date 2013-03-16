@@ -161,7 +161,7 @@ public class Methods extends AbstractElementProcessor {
             } else {
                 final String version = request.getContext().mapVersion(adapter);
                 if (action.getParameterCount() == 0 || (action.isContributed() && action.getParameterCount() == 1)) {
-                    ActionButton.write(request, adapter, action, parameters, objectId, version, "_generic." + Dispatcher.EXTENSION, null, null, null, null, null, null, null, null, null);
+                    ActionButton.write(request, adapter, action, parameters, version, "_generic." + Dispatcher.EXTENSION, null, null, null, null, null, null, null, null, null);
                 } else if (showForms) {
                     final CreateFormParameter params = new CreateFormParameter();
                     params.objectId = objectId;
