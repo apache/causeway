@@ -48,7 +48,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnClass() {
 
         final NamedAnnotationOnTypeFacetFactory facetFactory = new NamedAnnotationOnTypeFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         @Named("some name")
         class Customer {
@@ -56,7 +56,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         
         expectNoMethodsRemoved();
         
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -69,7 +69,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnProperty() {
 
         final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -82,7 +82,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -93,7 +93,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     public void testNamedAnnotationPickedUpOnCollection() {
         final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -106,7 +106,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -117,7 +117,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     public void testNamedAnnotationPickedUpOnAction() {
         final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -129,7 +129,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -141,7 +141,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnActionParameter() {
 
         final NamedAnnotationOnParameterFacetFactory facetFactory = new NamedAnnotationOnParameterFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")

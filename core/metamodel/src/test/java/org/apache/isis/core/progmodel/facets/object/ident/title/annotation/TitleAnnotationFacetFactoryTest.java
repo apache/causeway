@@ -57,19 +57,18 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     private ObjectAdapter mockObjectAdapter;
     @Allowing
     @Mock
-    private SpecificationLoader mockSpecificationLookup;
-    @Allowing
-    @Mock
     private AdapterManager mockAdapterMap;
     @Mock
     private LocalizationProvider mockLocalizationProvider;
 
     @Before
     public void setUp() throws Exception {
+        
+        context.allowing(mockSpecificationLoaderSpi);
 
         facetFactory = context.getClassUnderTest();
         facetFactory.setAdapterManager(mockAdapterMap);
-        facetFactory.setSpecificationLookup(mockSpecificationLookup);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         context.checking(new Expectations() {
             {
@@ -96,7 +95,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     @Test
     public void testTitleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         Assert.assertNotNull(facet);
@@ -131,7 +130,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
-        facetFactory.process(new ProcessClassContext(Customer2.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer2.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         Assert.assertNotNull(facet);
@@ -163,7 +162,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Test
     public void testNoExplicitTitleAnnotations() {
 
-        facetFactory.process(new ProcessClassContext(Customer3.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer3.class, mockMethodRemover, facetedMethod));
 
         Assert.assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
@@ -215,7 +214,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
-        facetFactory.process(new ProcessClassContext(Customer4.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer4.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;

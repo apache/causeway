@@ -38,15 +38,15 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 public class ObjectTypeDerivedFromClassNameFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Mock
-    private ClassSubstitutor classSubstitutor;
+    private ClassSubstitutor mockClassSubstitutor;
 
     private ObjectTypeDerivedFromClassNameFacetFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
         facetFactory = new ObjectTypeDerivedFromClassNameFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        facetFactory.setClassSubstitutor(classSubstitutor);
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setClassSubstitutor(mockClassSubstitutor);
     }
 
     static class Customer {
@@ -62,12 +62,12 @@ public class ObjectTypeDerivedFromClassNameFacetFactoryTest extends AbstractFace
         expectNoMethodsRemoved();
         context.checking(new Expectations() {
             {
-                one(classSubstitutor).getClass(CustomerAsManufacturedByCglibByteCodeEnhancer.class);
+                one(mockClassSubstitutor).getClass(CustomerAsManufacturedByCglibByteCodeEnhancer.class);
                 will(returnValue(Customer.class));
             }
         });
         
-        facetFactory.process(new ProcessClassContext(CustomerAsManufacturedByCglibByteCodeEnhancer.class, methodRemover, facetHolderImpl));
+        facetFactory.process(new ProcessClassContext(CustomerAsManufacturedByCglibByteCodeEnhancer.class, mockMethodRemover, facetHolderImpl));
 
         final ObjectSpecIdFacet facet = facetHolderImpl.getFacet(ObjectSpecIdFacet.class);
         

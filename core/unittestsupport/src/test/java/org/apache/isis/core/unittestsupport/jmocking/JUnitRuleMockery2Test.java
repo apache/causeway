@@ -22,6 +22,6 @@ public class JUnitRuleMockery2Test {
                 one(collaborator).doOtherStuff();
             }
         });
-        new Collaborating(collaborator).collaborateWithCollaborator();
+        new CollaboratingUsingConstructorInjection(collaborator).collaborateWithCollaborator();
     }
 }

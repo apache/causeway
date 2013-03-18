@@ -16,7 +16,7 @@ public class JUnitRuleMockery2Test_autoWiring_sadCase_noClassUnderTest {
 
     // @ClassUnderTest
 	@SuppressWarnings("unused")
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @Test(expected=IllegalStateException.class)
     public void cannotFindClassUnderTest() {

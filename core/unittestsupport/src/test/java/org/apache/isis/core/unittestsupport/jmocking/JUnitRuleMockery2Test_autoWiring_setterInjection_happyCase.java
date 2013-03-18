@@ -1,5 +1,10 @@
 package org.apache.isis.core.unittestsupport.jmocking;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -7,28 +12,26 @@ import org.junit.Test;
 
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.One;
 
-public class JUnitRuleMockery2Test_mockAnnotatedWithOne_happyCase {
+public class JUnitRuleMockery2Test_autoWiring_setterInjection_happyCase {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @One
     @Mock
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private CollaboratingUsingConstructorInjection collaborating;
+	private CollaboratingUsingSetterInjection collaborating;
 
     @Before
 	public void setUp() throws Exception {
-    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+    	collaborating = context.getClassUnderTest();
 	}
     
     @Test
-    public void invocationOnCollaboratorIsIgnored() {
-    	collaborating.collaborateWithCollaborator();
+    public void wiring() {
+    	assertThat(collaborating.collaborator, is(not(nullValue())));
     }
 
 

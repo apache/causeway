@@ -19,7 +19,7 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithIgnoring {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @Before
 	public void setUp() throws Exception {

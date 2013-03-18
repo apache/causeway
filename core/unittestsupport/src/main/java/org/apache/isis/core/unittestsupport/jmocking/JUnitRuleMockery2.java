@@ -40,6 +40,8 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
 
 
 /**
@@ -132,7 +134,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
     }
 
 	private final MyMockomatic mockomatic = new MyMockomatic(this);
-	private final DefaultPicoContainer container = new DefaultPicoContainer();
+	private final MutablePicoContainer container = new PicoBuilder().withConstructorInjection().withSetterInjection().build();
 	private Class<?> cutType;
 
     private JUnitRuleMockery2() {

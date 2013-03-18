@@ -24,7 +24,7 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithNever_sadCase {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @Before
 	public void setUp() throws Exception {

@@ -17,10 +17,10 @@ public class JUnitRuleMockery2Test_autoWiring_sadCase_twoClassesUnderTest {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @ClassUnderTest
-	private Collaborating anotherCollaborating;
+	private CollaboratingUsingConstructorInjection anotherCollaborating;
 
     @Ignore("This isn't actually possible to test, because the test is actually thrown by the rule, which is further up the callstack than the test method")
     @Test(expected=AssertionError.class)

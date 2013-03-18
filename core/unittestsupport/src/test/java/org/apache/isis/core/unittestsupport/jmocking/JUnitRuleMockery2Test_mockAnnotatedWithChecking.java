@@ -28,11 +28,11 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithChecking {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @Before
 	public void setUp() throws Exception {
-    	collaborating = (Collaborating) context.getClassUnderTest();
+    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
 	}
     
     @Test

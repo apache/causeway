@@ -20,11 +20,11 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithOne_sadCase {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @Before
 	public void setUp() throws Exception {
-    	collaborating = (Collaborating) context.getClassUnderTest();
+    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
 	}
     
     @Ignore("This isn't actually possible to test, because the test is actually thrown by the rule, which is further up the callstack than the test method")    @Test(expected=AssertionError.class)

@@ -1,9 +1,9 @@
 package org.apache.isis.core.unittestsupport.jmocking;
 
-public class Collaborating {
+public class CollaboratingUsingConstructorInjection {
     final Collaborator collaborator;
 
-    public Collaborating(final Collaborator collaborator) {
+    public CollaboratingUsingConstructorInjection(final Collaborator collaborator) {
         this.collaborator = collaborator;
     }
 

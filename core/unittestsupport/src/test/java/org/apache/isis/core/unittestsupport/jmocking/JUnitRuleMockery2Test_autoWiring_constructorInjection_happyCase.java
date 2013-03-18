@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-public class JUnitRuleMockery2Test_autoWiring_happyCase {
+public class JUnitRuleMockery2Test_autoWiring_constructorInjection_happyCase {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -22,11 +22,11 @@ public class JUnitRuleMockery2Test_autoWiring_happyCase {
     private Collaborator collaborator;
 
     @ClassUnderTest
-	private Collaborating collaborating;
+	private CollaboratingUsingConstructorInjection collaborating;
 
     @Before
 	public void setUp() throws Exception {
-    	collaborating = (Collaborating) context.getClassUnderTest();
+    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
 	}
     
     @Test

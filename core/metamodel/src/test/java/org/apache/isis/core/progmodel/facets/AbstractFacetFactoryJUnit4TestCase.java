@@ -48,22 +48,22 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    protected SpecificationLoaderSpi reflector;
+    protected SpecificationLoaderSpi mockSpecificationLoaderSpi;
     @Mock
-    protected MethodRemover methodRemover;
+    protected MethodRemover mockMethodRemover;
     @Mock
-    protected FacetHolder facetHolder;
+    protected FacetHolder mockFacetHolder;
 
     protected FacetHolder facetHolderImpl;
 
     @Mock
-    protected ObjectSpecification objSpec;
+    protected ObjectSpecification mockObjSpec;
     @Mock
-    protected OneToOneAssociation oneToOneAssociation;
+    protected OneToOneAssociation mockOneToOneAssociation;
     @Mock
-    protected OneToManyAssociation oneToManyAssociation;
+    protected OneToManyAssociation mockOneToManyAssociation;
     @Mock
-    protected OneToOneActionParameter actionParameter;
+    protected OneToOneActionParameter mockOneToOneActionParameter;
 
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
@@ -103,7 +103,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     }
 
     protected void expectNoMethodsRemoved() {
-        context.never(methodRemover);
+        context.never(mockMethodRemover);
     }
 
 }
