@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.List;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -33,6 +34,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 import com.google.common.collect.Lists;
 
+@Path("/") // FIXME: workaround for TomEE
 @Provider
 public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper<RestfulObjectsApplicationException> {
 

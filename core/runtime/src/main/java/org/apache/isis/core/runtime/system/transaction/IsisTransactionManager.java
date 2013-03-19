@@ -53,15 +53,14 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
-
     private static final Logger LOG = Logger.getLogger(IsisTransactionManager.class);
 
-    private final EnlistedObjectDirtying objectPersistor;
-    private final TransactionalResource transactionalResource;
+    private final PersistenceSession persistenceSession;
 
     private int transactionLevel;
     
@@ -81,23 +80,21 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     private IsisTransaction transaction;
 
+    private final TransactionalResource transactionalResource;
+
 
     // ////////////////////////////////////////////////////////////////
     // constructor
     // ////////////////////////////////////////////////////////////////
 
-    public IsisTransactionManager(final EnlistedObjectDirtying objectPersistor, final TransactionalResource objectStore, final ServicesInjectorSpi servicesInjectorSpi) {
-        this.objectPersistor = objectPersistor;
-        this.transactionalResource = objectStore;
+    public IsisTransactionManager(final PersistenceSession persistenceSession, final TransactionalResource transactionalResource, final ServicesInjectorSpi servicesInjectorSpi) {
+        this.persistenceSession = persistenceSession;
+        this.transactionalResource = transactionalResource;
         
         this.auditingService = (AuditingService) servicesInjectorSpi.lookupService(AuditingService.class);
         this.publishingService = getPublishingServiceIfAny(servicesInjectorSpi);
     }
     
-    
-    public TransactionalResource getTransactionalResource() {
-        return transactionalResource;
-    }
     
     // ////////////////////////////////////////////////////////////////
     // open, close
@@ -246,7 +243,9 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * {@link #getTransaction()}.
      */
     protected final IsisTransaction createTransaction() {
-        return this.transaction = createTransaction(createMessageBroker(), createUpdateNotifier());
+        org.apache.isis.core.commons.authentication.MessageBroker messageBroker = createMessageBroker();
+        UpdateNotifier updateNotifier = createUpdateNotifier();
+        return this.transaction = createTransaction(messageBroker, updateNotifier, transactionalResource);
     }
 
 
@@ -254,15 +253,16 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * The provided {@link MessageBroker} and {@link UpdateNotifier} are
      * obtained from the hook methods ( {@link #createMessageBroker()} and
      * {@link #createUpdateNotifier()}).
+     * @param transactionalResource 
      * 
      * @see #createMessageBroker()
      * @see #createUpdateNotifier()
      */
-    protected IsisTransaction createTransaction(final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
+    private IsisTransaction createTransaction(final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, TransactionalResource transactionalResource) {
         ensureThatArg(messageBroker, is(not(nullValue())));
         ensureThatArg(updateNotifier, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, updateNotifier, getTransactionalResource(), auditingService, publishingService);
+        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, auditingService, publishingService);
     }
     
 
@@ -295,7 +295,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
 
         if (getTransaction() != null) {
-            objectPersistor.objectChangedAllDirty();
+            persistenceSession.objectChangedAllDirty();
             getTransaction().flush();
         }
         return false;
@@ -363,7 +363,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 }
 
                 try {
-                    objectPersistor.objectChangedAllDirty();
+                    persistenceSession.objectChangedAllDirty();
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;

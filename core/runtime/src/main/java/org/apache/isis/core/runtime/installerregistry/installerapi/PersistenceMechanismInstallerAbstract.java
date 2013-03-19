@@ -64,7 +64,6 @@ import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefaul
 import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 
@@ -148,7 +147,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final PersistenceSession persistenceSession = 
                 new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
         
-        final IsisTransactionManager transactionManager = createTransactionManager(servicesInjector, persistenceSession, objectStore);
+        final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore, servicesInjector);
         
         ensureThatArg(persistenceSession, is(not(nullValue())));
         ensureThatArg(transactionManager, is(not(nullValue())));
@@ -192,8 +191,8 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * <p>
      * By default returns a {@link IsisTransactionManager}.
      */
-    protected IsisTransactionManager createTransactionManager(ServicesInjectorSpi servicesInjectorSpi, final EnlistedObjectDirtying enlistedObjectDirtying, final TransactionalResource transactionalResource) {
-        return new IsisTransactionManager(enlistedObjectDirtying, transactionalResource, servicesInjectorSpi);
+    protected IsisTransactionManager createTransactionManager(final PersistenceSession persistenceSession, final TransactionalResource transactionalResource, ServicesInjectorSpi servicesInjectorSpi) {
+        return new IsisTransactionManager(persistenceSession, transactionalResource,  servicesInjectorSpi);
     }
 
 

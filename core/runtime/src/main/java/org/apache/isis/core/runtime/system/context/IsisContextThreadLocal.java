@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.runtime.system.context;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -30,10 +31,10 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
- * Basic multi-user implementation of Isis that stores a set of components for
+ * Multi-user implementation of {@link IsisContext} that stores a set of components for
  * each thread in use.
  */
-public class IsisContextThreadLocal extends IsisContextMultiUser {
+public class IsisContextThreadLocal extends IsisContext {
 
     private static final Logger LOG = Logger.getLogger(IsisContextThreadLocal.class);
 
@@ -41,11 +42,21 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         return new IsisContextThreadLocal(sessionFactory);
     }
 
-    private final Map<Thread, IsisSession> sessionsByThread = new HashMap<Thread, IsisSession>();
+    private final Map<Thread, IsisSession> sessionsByThread = Maps.newHashMap();
+
+    
+    // //////////////////////////////////////////////
+    // Constructor
+    // //////////////////////////////////////////////
 
     protected IsisContextThreadLocal(final IsisSessionFactory sessionFactory) {
-        super(sessionFactory);
+        this(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE, sessionFactory);
     }
+
+    protected IsisContextThreadLocal(final ContextReplacePolicy contextReplacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
+        super(contextReplacePolicy, sessionClosePolicy, sessionFactory);
+    }
+
 
     // /////////////////////////////////////////////////////////
     // Session

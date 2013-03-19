@@ -38,7 +38,8 @@ import org.apache.isis.core.runtime.system.Splash;
 public abstract class DeploymentTypeAbstract extends DeploymentType {
 
     public DeploymentTypeAbstract(final String name, final DeploymentCategory category) {
-        super(name, category, new IsisContextForWicket.WicketContextCategory(), null, Splash.NO_SHOW);
+        //super(name, category, new IsisContextForWicket.WicketContextCategory(), null, Splash.NO_SHOW);
+        super(name, category, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
     }
 
 }

@@ -269,6 +269,12 @@
         <dependency>
           <groupId>org.lazyluke</groupId>
           <artifactId>log4jdbc-remix</artifactId>
+          <exclusions>
+            <exclusion>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-api</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
 
 
