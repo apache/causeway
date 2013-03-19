@@ -17,10 +17,16 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<swf:page-title>Edit <swf:title-string /></swf:page-title>
-<swf:template file="../page-template.shtml" />
+<swf:page-title>Page Not Accessible</swf:page-title>
+<swf:template  file="./error-template.shtml" />
 
-<h2>Edit <swf:title /></h2>
-<swf:edit button-title="Save Changes" title="" />
-
-
+<div id="content" class="error">
+	<h1>error 403... page not accessible...</h1>
+	
+	<p><strong>${_security-error}</strong></p>
+	<p><strong>${_security-context}</strong></p>
+	
+	<swf:print-authorization-clause />
+	
+	<p><small>${_security-identifier:optional}:${_security-roles}</small></p>
+</div>

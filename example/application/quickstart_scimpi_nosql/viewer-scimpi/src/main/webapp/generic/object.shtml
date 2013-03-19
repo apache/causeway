@@ -18,10 +18,9 @@
   under the License.
 -->
 <swf:page-title><swf:title-string /></swf:page-title>
-<swf:template  file="../scimpi/style/template.shtml" />
+<swf:template file="../page-template.shtml" />
 
-<h2><swf:title /></h2>
-<swf:long-form link="_generic.shtml" title="" />
+<swf:long-form link="_generic.shtml" />
 
 <swf:methods />
 

@@ -17,6 +17,6 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<swf:page-title>ToDo App</swf:page-title>
+<swf:page-title>Web App</swf:page-title>
 
-<swf:template  file="scimpi/style/template.shtml" />
+<swf:template file="./page-template.shtml" />

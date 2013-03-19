@@ -18,9 +18,8 @@
   under the License.
 -->
 <swf:page-title><swf:element-type /> Listing</swf:page-title>
-<swf:template  file="../scimpi/style/template.shtml" />
+<swf:template file="../page-template.shtml" />
 
-<h2>${title}</h2>
-<swf:table xxtitle="My Little Table" xxxno-columns="7" xxheader="no"  footer="yes" link="_generic.shtml" />
+<swf:table title="${title}" no-columns="4" footer="yes" link="_generic.shtml" />
  
 

@@ -25,33 +25,37 @@
 
 
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.shtml</welcome-file>
     </welcome-file-list>
     
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/security_403.shtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/server_500.shtml</location>
+    </error-page>
+ 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/notfound_404.shtml</location>
+    </error-page>
+
     <context-param>
         <param-name>deploymentType</param-name>
-        <!-- 
-        <param-value>SERVER</param-value>
-         -->
+        <!-- change value to SERVER when deploying outside of development -->
         <param-value>SERVER_EXPLORATION</param-value>
     </context-param>
 
-    
-    
-    <!--
-    -
-    -
-    - config common to all viewer(s)
-    -
-    -
-    -->
     
     <!-- bootstrap the Isis metamodel and runtime -->
     <listener>
         <listener-class>org.apache.isis.core.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
-    <!-- which (optional) configuration file(s) to load -->
+    <!-- optional configuration file(s) to load -->
     <context-param>
         <param-name>isis.viewers</param-name>
         <param-value>scimpi</param-value>
@@ -147,15 +151,29 @@
 
 
     <!--
-    -
-    -
-    - config specific to the scimpi-viewer
-    -
-    -
+    - scimpi-viewer config
     -->
     <servlet>
         <servlet-name>ScimpiDispatcher</servlet-name>
         <servlet-class>org.apache.isis.viewer.scimpi.servlet.DispatcherServlet</servlet-class>
+        <!--
+            The username and password parameters set up the webapp so that the user does not need to log in.
+            This section should be removed if the webapp need the user to login before doing
+            things with the application.  
+        -->
+		<init-param>
+			<param-name>username</param-name>
+		    <param-value>webapp</param-value>
+		</init-param>
+		<init-param>
+		    <param-name>password</param-name>
+		    <param-value>pass</param-value>
+		</init-param>
+ 		<init-param>
+            <param-name>config</param-name>
+            <param-value>config.xml</param-value>
+        </init-param>
+
         <init-param>
              <param-name>view</param-name>
              <param-value>login.shtml</param-value>

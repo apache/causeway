@@ -17,10 +17,11 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<swf:page-title>Edit <swf:title-string /></swf:page-title>
-<swf:template file="../page-template.shtml" />
+<swf:page-title>Action <swf:action-name method="${_method}"/></swf:page-title>
+<swf:template file="./debug-template.shtml" />
 
-<h2>Edit <swf:title /></h2>
-<swf:edit button-title="Save Changes" title="" />
+<h2>${title}</h2>
+<swf:action-form method="${_method}" view="object.shtml" ${_cancel-to:optional}/>
+
 
 

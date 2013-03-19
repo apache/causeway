@@ -1,0 +1,158 @@
+/*
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+*/
+body {
+	margin: 0 0 10px;
+	min-width: 550px;
+	line-height: 1.4em;
+	
+	font-size: 10pt;
+	font-family: "Lucida Grande", Helvetica, Arial, Verdana, Sans-Serif;
+	background-color:  white;
+	background-image: url("images/background.png");
+	color: #000000;
+}
+
+#banner {
+	background-color: maroon;
+	color: white;
+	padding: 1em;
+	
+	font-size: 160% 
+}
+
+#content {
+	padding: 1em;
+}
+
+#menu {
+	margin-bottom: 1em;
+}
+
+h1 {
+	padding-bottom: 0.4em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+
+	font-size: 160%;
+	border-bottom: 6px solid gray; 
+}
+h2 {
+	xxmargin-top: 1em;
+	xxmargin-bottom: 1em;
+	xxxpadding: 16px 0 4px 10px;
+	font-size: 130%;
+	xxxbackground-color: #5755D9;
+	font-weight: bold;
+	xxxcolor: white;
+}
+h3 {
+	font-size: 140%;
+	border-top: 1px solid gray;
+	padding-top: 12px;
+	margin-bottom: 2em; 
+}
+.debug table {
+	margin-bottom: 2em;
+}
+th.subtitle Context{
+	font-size: 110%;
+	font-weight: bold;
+	background-color: #9795ff;
+	color: white;
+	padding: 16px 0 6px 4px
+}
+th.subtitle em {
+	font-weight: normal;
+}
+tdiv.title {
+	font-size: 140%;
+	padding-bottom: 1em;
+}
+div.debug .generic {
+	margin-left:  14em;
+}
+div.debug div.field {
+	border-top: 1px dotted gray;
+}
+div.debug span.value {
+	display: inline-block;
+	padding-top:0.5em;
+}
+small {
+	font-size: 60%;	
+}
+.debug .form {
+	padding-top: 2em;
+}
+.debug .form .title {
+	padding-bottom: 1em;
+}
+.debug span.field  {
+	display: inline-block;
+	width: 80%;
+}
+img.small-icon {
+	color:#FFBEFA;
+	font-size:50%;
+	height:1em;
+	letter-spacing:-1px;
+	padding-right:3px;
+}
+.action {
+	padding-bottom: 1em;
+}
+div.debug.object {
+	background-color: #f8f8f8;
+	padding: 10px 0;
+	border: 1px dotted #ccc;
+	border-radius: 10px; 
+}
+div.debug.object > * {
+	padding: 0 20px;
+}
+div.debug.object h2 {
+	margin-bottom: 1em;
+}
+div.debug.object div.actions {
+	border-top: 1px dotted #ccc;
+	padding-top: 1em;
+	margin-top: 2em;
+}
+form.action {
+	padding: 0;
+}
+.action {
+	padding-bottom: 1em;
+}
+.field > .required {
+	border: 1px solid red;
+}
+
+.field > .required {
+	border: 1px solid red;
+}
+
+.error {
+	color:red;
+	font-size: 80%;
+}
+a.help-link {
+	display: none;
+}
+

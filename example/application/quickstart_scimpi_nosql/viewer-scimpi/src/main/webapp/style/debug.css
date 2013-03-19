@@ -1,0 +1,193 @@
+/*
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+*/
+
+/*
+  Error Page
+*/
+#banner.error .title {
+	color: #f44;
+}
+div.error p {
+	width: 60%;
+	min-width: 400px;
+}
+p.error-links {
+	margin: 30px 0;
+}
+p.error-links a {
+	margin-right: 20px;
+	font-weight: bold;
+	/*
+	padding: 6px 18px;
+	border: 1px solid #888;
+	color: white;
+	border-radius: 3px;
+	*/
+}
+#error-dump {
+	border: 1px solid #888;
+	background-color: #f2f0FF;
+	border-radius: 9px;
+	padding: 10px;
+}
+#error-dump h1 {
+	color: #f44;
+	margin-top: 0;
+}
+#footer #debug {
+	font-size: 75%;
+}
+div#dev-help {
+	border: 1px dotted #800;
+	border-radius: 6px;
+	margin: 35px 10px 10px 10px;
+	padding: 20px;
+	box-shadow: 0px 0px 20px #DDD;
+	background-color: #fffffd;
+}
+
+pre {
+	font-family: monospace;
+}
+pre.debug {
+	margin-top: 2em;
+}
+div.debug .generic {
+	margin-left:  14em;
+}
+div.debug div.field {<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	
+	border-top: 1px dotted gray;
+}
+div.debug span.value {
+	display: inline-block;
+	padding-top:0.3em;
+}
+small {
+	font-size: 60%;	
+}
+.debug h2 {
+	color: #666;
+	margin-top: 0;
+	margin-bottom: 1.2em;
+}
+.debug h4 {
+	color: #666;
+	margin-top: 1.2em;
+	margin-bottom: 0.3em;
+	font-size: 110%;
+	font-weight: bold;
+}
+.debug pre {
+	margin-bottom: 10px;
+}
+.debug .form {
+	padding-top: 1em;
+}
+.debug .form .title {
+	padding-bottom: 1em;
+}
+.debug div.field {
+	padding-top: 0.3em;
+}
+.debug span.label {
+	padding-top: 0.3em;
+	display: inline-block;
+	width: 20%;
+	vertical-align: top;
+	font-weight: bold;
+	color: #ccc;
+}
+.debug table {
+	min-width: 600px;
+	width: 100%;
+	border-bottom: 1px solid black;
+	margin-bottom: 1.4em;
+}
+#dev-help .debug table {
+	margin-bottom: 1em;
+}
+.debug table th {
+	xxxbackground-color: #efe;
+}
+.debug table td:first-child {
+	width: 20%;
+}
+.debug table td, 
+.debug table th {
+	border-right: 1px solid #eee;
+	padding: 2px 4px;
+	padding-left: 10px;
+	overflow-x: auto;
+	max-width: 600px;
+}
+.debug td {
+	border-top: 1px dotted green;
+}
+.debug th.title {
+	font-size: 90%;
+	font-weight: bold;
+	background-color: #5755D9;
+	color: white;
+	padding: 6px 0 7px 10px
+}
+.debug th.subtitle {
+	font-size: 82%;
+	font-weight: bold;
+	background-color: #9795ff;
+	color: white;
+	padding: 3px 0 4px 10px
+}
+.debug th.subtitle em {
+	font-weight: normal;
+}
+.debug tr.odd {
+	background-color: #F9F9F9; 
+}
+.debug tr.even {
+	background-color: #F5FFF5; 
+}
+.debug tr.end-line td {
+	border-top: 7px solid #575757;
+}
+
+
+img.small-icon {
+	color:#FFBEFA;
+	font-size:50%;
+	height:1em;
+	letter-spacing:-1px;
+	padding-right:3px;
+}
+
+/*
+.error {
+	color:red;
+	font-size: 80%;
+}
+*/
+a.help-link {
+	display: none;
+}
+
+
+div.fixes > *  {
+	margin-bottom: 1em;
+}

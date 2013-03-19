@@ -17,10 +17,17 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<swf:page-title>Edit <swf:title-string /></swf:page-title>
-<swf:template file="../page-template.shtml" />
+<swf:page-title>Page Not Found</swf:page-title>
+<swf:template  file="./error-template.shtml" />
 
-<h2>Edit <swf:title /></h2>
-<swf:edit button-title="Save Changes" title="" />
-
-
+<div id="content" class="error">
+	<h1>Error 404... page not found...</h1>
+	
+	<p>The page that you requested could not be found. Use the link below to return to main page so that you can continue. If this 
+	appears to be a real problem then use the link below to get in touch with the developers.</p>
+	 
+	<p class="error-links">
+		<a href="${_context}/index.shtml">Return to application</a>
+		<a id="message" href="mailto:support@domain?subject=Page%20not%20accessible%20${_error-ref:optional}">send feedback</a>
+	</p>
+</div>

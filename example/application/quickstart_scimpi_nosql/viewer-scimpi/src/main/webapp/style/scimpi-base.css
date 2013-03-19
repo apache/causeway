@@ -1,0 +1,302 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+div {
+		xxxborder: 1px dotted red; 
+}
+
+body {	
+	font-family: Trebuchet, Arial, Sans-Serif;
+	color: #444;
+	font-size: small;
+	line-height: 120%;
+	margin-bottom: 90px;
+}
+body#login {
+}
+p {
+	margin: 0.5em 0 1.5em 0;
+	line-height: 150%;
+}
+strong {
+	font-weight: bold;
+}
+em {
+	font-style: italic;
+}
+a:ACTIVE,
+a:LINK,
+a:VISITED {
+	color: blue;
+	text-decoration: none;
+}
+a:HOVER {
+	text-decoration: underline;
+}
+div.title a:HOVER,
+a.button:HOVER  {
+	text-decoration: none;
+}
+em {
+	font-style: italic;
+}
+h1 {
+	font-weight: bold;
+	font-size: 120%;
+	letter-spacing: 2px;
+	margin: 2em 0 0.8em 0;
+	color: #333;
+	text-shadow: 2px 2px 3px #bbb;
+}
+h2,
+table caption, 
+form div.title,
+div.form div.title {
+	font-weight: bold;
+	font-size: 120%;
+	margin: 2em 0 0.8em 0;
+	color: #333;
+	text-shadow: 2px 2px 3px #bbb;
+}
+h3 {
+	font-weight: bold;
+	margin: 1em 0 0.5em 0;
+	color: #333;
+}
+
+
+#banner {
+	border-bottom: 2px #abf solid;
+	height: 55px;
+	
+	background: #f8fcfe; /* Old browsers */
+	background: -moz-linear-gradient(top,  #f8fcfe 0%, #edf8fd 50%, #e4f4fa 51%, #c4e9fa 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8fcfe), color-stop(50%,#edf8fd), color-stop(51%,#e4f4fa), color-stop(100%,#c4e9fa)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f8fcfe 0%,#edf8fd 50%,#e4f4fa 51%,#c4e9fa 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f8fcfe 0%,#edf8fd 50%,#e4f4fa 51%,#c4e9fa 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f8fcfe 0%,#edf8fd 50%,#e4f4fa 51%,#c4e9fa 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f8fcfe 0%,#edf8fd 50%,#e4f4fa 51%,#c4e9fa 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8fcfe', endColorstr='#c4e9fa',GradientType=0 ); /* IE6-9 */
+}
+#banner img.logo {
+	position: absolute;
+	top: 2px;
+	left: 20px;
+	height: 53px;		
+}
+#banner .title {
+	position: absolute;
+	top: 21px;
+	left: 90px;
+	font-size: 200%;
+	letter-spacing: 2px;
+	text-shadow: 1px 1px 3px #888;
+}
+#banner .title a:link,
+#banner .title a:visited,
+#banner .title a:active {
+	color: #4188fe;
+}
+#banner img.scimpi {
+	position: absolute;
+	top: 0;
+	right: 20px;
+	height: 56px;		
+}
+#banner div.user {
+	position: absolute;
+	top: 32px;
+	right: 193px;
+}
+#content {
+	margin: 20px;
+	xxmargin-bottom: 200px;
+	xxmin-height: 600px;
+	position: relative;
+}
+#content.error {
+	margin: 40px;
+}
+#content.logon {
+	width: 300px;
+	margin: 70px auto 0 auto;
+	padding-left: 110px;
+}
+#side {
+	xxxposition: absolute;
+	display: inline-block;
+	width: 220px;
+}
+#side h2,
+#side h3 {
+	margin: 2em 0 1em 0;
+	color: #888;
+	text-shadow: 2px 2px 3px #ccc;
+}
+#main {
+	display: inline-block;
+	vertical-align: top;
+	xxxposition: absolute;
+	xxxleft: 220px;
+	xxxtop: 0;
+}
+#footer {
+	position: fixed;
+	bottom: 0;
+	border-top: 2px #999 solid;
+	padding: 6px 20px;
+	width: 100%;
+	xxxbackground-color: #f6f6f6; 
+	font-size: 80%
+		
+	background: #e2e2e2; /* Old browsers */
+	background: -moz-linear-gradient(top,  #e2e2e2 0%, #fcfcfc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e2e2e2), color-stop(100%,#fcfcfc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #e2e2e2 0%,#fcfcfc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #e2e2e2 0%,#fcfcfc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #e2e2e2 0%,#fcfcfc 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #e2e2e2 0%,#fcfcfc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fcfcfc',GradientType=0 ); /* IE6-9 */
+}
+#footer p {
+	margin: 0;
+}
+div.feedback {
+	border: 1px solid #dd9;
+	background-color: #ffd;
+	box-shadow: 2px 2px 7px #ccc;
+	padding: 9px 20px;
+	color: #333;
+}
+/* 
+	Tables
+ */
+th {
+	xxxfont-weight: bold;
+	font-size: 80%;
+	color: #aaa;
+	text-transform: uppercase;
+}
+th, td {
+	padding: 8px 16px;
+}
+thead th {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 0px;
+}
+tfoot th {
+	border-top: 1px solid #ccc;
+	padding-top: 0px;
+}
+td.controls a.button {
+	padding-right: 6px;
+	font-size: 85%;
+}
+
+/*
+	Form
+*/
+div.form {
+	margin-bottom: 4em; 
+}
+div.form div.title {
+	border-bottom: 1px dotted #ccc;
+	padding-bottom: 12px;
+}
+form div.field,
+div.form div.field {
+	margin-bottom: 10px;
+} 
+form label,
+div.form span.label {
+	xxxdisplay: inline-block;
+	vertical-align: top;
+	width: 180px;
+	display: inline-block;
+	font-size: 80%;
+	color: #aaa;
+	text-transform: uppercase;
+}
+div.form span.value {
+	xxxdisplay: inline-block;	
+}
+div.form div.field table {
+	display: inline-block;
+	margin-top: -0.4em;
+}
+div.form div.field table caption {
+	display: none;
+}
+div.form div.field table th {
+	font-size: 80%;
+	color: #aaa;
+	border-bottom: none;
+	padding-bottom: 0;
+}
+div.form div.field table th,
+div.form div.field table td {
+	padding-left: 0;
+}
+form input,
+#side a {
+	display: inline-block;
+	padding: 6px 6px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	font-size: 85%;
+}
+form input.required {
+	background-color: #fffff3;
+}
+form input.button,
+#side a.button {
+	color: #222;
+	padding: 6px 16px;
+	text-shadow: 1px 1px 3px white;
+		
+	background: #e4f5fc; /* Old browsers */
+	background: -moz-linear-gradient(top,  #e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e4f5fc), color-stop(50%,#bfe8f9), color-stop(51%,#9fd8ef), color-stop(100%,#2ab0ed)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4f5fc', endColorstr='#2ab0ed',GradientType=0 ); /* IE6-9 */
+}
+form div.errors {
+	margin: 6px 0;
+	xxfont-size: 80%;
+	color: #f48;
+	font-style: italic;
+}
+form.full div.errors {
+	margin: -9px 0 6px 180px;
+}
+form div.field span.error {
+	margin-left: 8px;
+	font-size: 80%;
+	color: #f48;
+}
+form.full input.button {
+	margin-left: 180px;
+}
+
+div.action {
+	margin: 8px 0;
+}

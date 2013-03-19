@@ -20,25 +20,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Web App. - Log On</title>
+	<title>${title}</title>
 	<link rel="stylesheet" title="Style 1" href="${_context}/style/reset.css" type="text/css" media="all" />
 	<link rel="stylesheet" title="Style 1" href="${_context}/style/scimpi-base.css" type="text/css" media="all" />
+	<link rel="stylesheet" title="Style 1" href="${_context}/style/debug.css" type="text/css" media="all" />
 	
 	<script src="${_context}/scripts/jquery-1.7.2.min.js" ></script>
-	<script src="${_context}/scripts/jquery-ui-1.8.20.custom.min.js" ></script>
-	<script src="${_context}/scripts/scimpi.js" ></script>
 </head>
 
-<body id="login">
-	<div id="banner">
-		<img class="logo" src="images/logo.png" />
-		<div class="title"><a href="/">Web App</a></div>
-		<img class="scimpi" src="images/scimpi-logo.png" />
+<body>
+	<div id="banner" class="error">
+		<a href="/"><img class="logo" src="${_context}/images/logo.png" /></a>
+		<div class="title"><a href="/">Web App Error</a></div>
+		<img class="scimpi" src="${_context}/images/scimpi-logo.png" />
 	</div>
-	<div id="content" class="logon">
-	    <swf:feedback />
-	    <h1>Log In</h1>
-		<swf:logon class="action" view="/"  />
+	<swf:content />
+
+	<div id="footer">
+		<div id="debug">
+			<p>Debug <a target="debug" href="${_context}/debug/debug.shtml">system</a>
+			<swf:when variable-exists="_result"> | <a target="debug" href="${_context}/debug/object.shtml?_result=${_result:optional}">object</a></swf:when></p>
+			<p><strong>Template used:</strong> ${_directory}${_this}</p>
+			<p><strong>Request:</strong> ${_base}</p>
+		</div>
 	</div>
 	
 </body>

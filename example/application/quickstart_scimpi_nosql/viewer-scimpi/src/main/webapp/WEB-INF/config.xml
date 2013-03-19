@@ -17,10 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<swf:page-title>Edit <swf:title-string /></swf:page-title>
-<swf:template file="../page-template.shtml" />
+<config>
+    <actions>
+    </actions>
 
-<h2>Edit <swf:title /></h2>
-<swf:edit button-title="Save Changes" title="" />
-
-
+    <processors>
+    </processors>
+</config>

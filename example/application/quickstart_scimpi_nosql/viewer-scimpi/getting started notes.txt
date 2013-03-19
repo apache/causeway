@@ -1,0 +1,182 @@
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#  
+#         http://www.apache.org/licenses/LICENSE-2.0
+#         
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+
+
+#################################################################################
+#
+# specify system components.
+#
+# The values correspond to the named components in the installer-registry.properties file
+# in the org.apache.isis.runtimes.dflt:runtime JAR (in the org.apache.isis.runtimes.dflt.runtime package)
+#
+# Although all configuration could reside in isis.properties, the recommendation is
+# to split out into component specific files:
+# 
+#    xxx_yyy.properties files
+#
+# where
+#    * xxx is the component type, and
+#    * yyy is the component name.
+#
+# For example, persistor_sql.properties holds configuration information specific to the
+#
+#
+# If the components are changed, also remember to edit pom.xml (further comments can be 
+# found in the persistor_xxx.properties files)
+#
+#################################################################################
+
+#
+# configure the persistor (object store) to use
+#
+# * in-memory   requires no additional configuration, but stores object in-memory.
+#               Only suitable for prototyping
+# * datanucleus uses JDO DataNucleus to persist objects to relational database.
+#               for objectstore-specific properties, see persistor_datanucleus.properties   
+# * fileserver  uses a simple FileServer to persist objects as JSON documents.  It requires the fileserver component to be running
+#               for objectstore-specific properties, see persistor_fileserver.properties 
+# * mongodb     uses MongoDB to be persist objects as JSON documents.  It requires MongoDB to be installed and running
+#               for objectstore-specific properties, see persistor_fileserver.properties  
+# * sql         uses an RDBMS to persist objects as table rows.  
+#               for objectstore-specific properties, see persistor_sql.properties
+# * xml         uses the XML ObjectStore to be persist objects to a set of XML files.  Only suitable for prototyping.
+#               for objectstore-specific properties, see persistor_xml.properties 
+#
+# NOTE:
+# * if using non-naive implementations of services, edit isis.services (below) and 
+# * if necessary, update the pom.xml to reference appropriate objstore-xxx module
+# * for sql and datanucleus objectstores, update the pom.xml to reference appropriate JDBC driver
+# 
+
+isis.persistor=in-memory
+#isis.persistor=fileserver
+#isis.persistor=mongodb
+
+
+#
+# configure authentication mechanism to use (to logon to the system)
+# note:
+# - authentication is disabled if running in exploration mode
+# - the Scimpi viewer allows access to anonymous users
+#
+ 
+# default is file in SERVER mode, none in SERVER_EXPLORATION.  Configure in web.xml 
+#isis.authentication=file
+
+
+#
+# configure authorization mechanism to use
+#
+# The authorization mechanism define each users' permissions to view/edit object properties 
+# or collections, and to view/invoke object actions
+#
+# configuring this component automatically refines the metamodel (installing a facet factory
+# which vetoes access as required)
+#
+
+# default is file in SERVER mode, none in SERVER_EXPLORATION.  Configure in web.xml 
+#isis.authorization=file
+
+
+
+#
+# configure the user profile store to use.
+# 
+# the user profile store is supported by some viewers as a way to store 
+# user-specific settings (eg colours, themes etc)
+# 
+isis.user-profile-store=in-memory
+
+
+
+
+#################################################################################
+#
+# MetaModel
+#
+# The metamodel typically does not require additional configuration, although
+# the system components (defined above) may refine the metamodel for their needs.
+#
+#################################################################################
+
+
+#
+# additional programming model facets
+#
+
+#isis.reflector.facets.include=
+#isis.reflector.facets.exclude=
+
+# normally these facets would be installed by virtue of configuring the JDO object store
+# need to be configured manually if running some other object store only because the
+# JDO enhancer is still configured to run on the DOM project.
+isis.reflector.facets.include=\
+	org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory,\
+	org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory
+
+#
+# metamodel validator
+#
+
+#isis.reflector.validator=
+
+
+
+#################################################################################
+#
+# Application Services and fixtures
+#
+#################################################################################
+
+#
+# Specify the domain services.
+# 
+# These are the most important configuration properties in the system, as they define
+# the set of the classes for Isis to instantiate as domain service singletons.
+# From these domain service instances the rest of the metamodel is discovered, while the 
+# end-user gains access to other domain objects by invoking the actions of the domain services.
+#
+# The implementations depend on the configured (see isis.persistor above) 
+#
+
+
+# if using the in-memory, XML, SQL, fileserver or mongo object stores:
+isis.services.prefix = dom
+isis.services = todo.ToDoItems
+
+
+# if using the DataNucleus object store
+# (with support for JDO's audit service, and installing fixtures using a domain service)
+#isis.services.prefix = 
+#isis.services = objstore.jdo.todo.ToDoItemsJdo,\
+#                fixture.todo.ToDoItemsFixturesService,\
+#                dom.audit.AuditServiceDemo
+
+
+
+
+
+#
+# Specify the (optional) test fixtures
+#
+# Fixtures are used to seed the object store with an initial set of data.  For the 
+# in-memory object store, the fixtures are installed on every run.  For other
+# object stores, they are used only when the object store is first initialized.
+#
+isis.fixtures.prefix= fixture
+isis.fixtures= todo.ToDoItemsFixture
+

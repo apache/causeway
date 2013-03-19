@@ -18,7 +18,7 @@
   under the License.
 -->
 <swf:page-title>Action <swf:action-name method="${_method}"/></swf:page-title>
-<swf:template  file="../scimpi/style/template.shtml" />
+<swf:template file="../page-template.shtml" />
 
 <swf:action-form method="${_method}" view="_generic.shtml" ${_cancel-to:optional}/>
 
