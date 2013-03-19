@@ -155,18 +155,10 @@
             <param-name>applicationClassName</param-name>
             <param-value>app.QuickStartApplication</param-value>
         </init-param>
-        <init-param>
-            <param-name>GOOGLE_MAPS_API_KEY</param-name>
-            <param-value>AIzaSyDdSqWOwFXOG6VDe8EAuig5UXfPL4reukU</param-value>
-        </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>WicketFilter</filter-name>
         <url-pattern>/wicket/*</url-pattern>
-        <!-- 
-        <url-pattern>/*</url-pattern>
-         -->
     </filter-mapping>
 
 
@@ -254,7 +246,8 @@
 
 
     <!-- 
-    uncomment to use JNDI rather than JDBC
+    uncomment to use container-managed datasource;
+    for both container-managed (JTA) and non-container-managed transactions
      -->
      <!-- 
     <resource-ref>
@@ -264,6 +257,19 @@
         <res-auth>Container</res-auth>
     </resource-ref>
       -->
+
+    <!--
+    uncomment to use container-managed datasource
+    with container-managed transactions (JTA).
+    -->
+    <!-- 
+    <resource-ref>
+        <description>db</description>
+        <res-ref-name>jdbc/quickstart-nontx</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+     -->
   
 
 </web-app>

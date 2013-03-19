@@ -54,12 +54,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     private static final Logger LOG = Logger.getLogger(WebRequestCycleForIsis.class);
 
-      private AuthenticatedWebSessionForIsis getWebSession() {
-          return (AuthenticatedWebSessionForIsis) WebSession.get();
-      }
+    private AuthenticatedWebSessionForIsis getWebSession() {
+        return (AuthenticatedWebSessionForIsis) WebSession.get();
+    }
 
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
+        
         final AuthenticatedWebSessionForIsis wicketSession = getWebSession();
         if (wicketSession == null) {
             return;
