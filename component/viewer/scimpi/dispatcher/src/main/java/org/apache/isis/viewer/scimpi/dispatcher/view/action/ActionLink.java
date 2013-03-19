@@ -23,8 +23,13 @@ import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -73,6 +78,7 @@ public class ActionLink extends AbstractElementProcessor {
         
         final String[] parameters = parameterBlock.getParameters();
         final String target;
+        /*
         if (action.isContributed()) {
             System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
             parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
@@ -83,8 +89,42 @@ public class ActionLink extends AbstractElementProcessor {
         } else {
             target =  StringEscapeUtils.escapeHtml(request.getContext().mapObject(object, Scope.INTERACTION));
         }
+         */
+        
+        final ObjectAdapter[] objectParameters;
+        
+        // TODO copied from ActionButton
+        //final ObjectAdapter target;
+        if (action.isContributed()) {
+            objectParameters= null;
+            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
+            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
+         //   target =  action.realTarget(object);
+            target =  request.getContext().mapObject(action.realTarget(object), Scope.REQUEST);
+            if (!action.hasReturn() && resultOverride == null) {
+                resultOverride = parameters[0];
+            }
+        } else {
+            objectParameters = new ObjectAdapter[parameters.length];
+            // target = object;
+            target =  StringEscapeUtils.escapeHtml(request.getContext().mapObject(object, Scope.INTERACTION));
+            int i = 0;
+            for (final ObjectActionParameter spec : action.getParameters()) {
+                final ObjectSpecification type = spec.getSpecification();
+                if (parameters[i] == null) {
+                    objectParameters[i] = null;
+                } else if (type.getFacet(ParseableFacet.class) != null) {
+                    final ParseableFacet facet = type.getFacet(ParseableFacet.class);
+                    Localization localization = IsisContext.getLocalization(); 
+                    objectParameters[i] = facet.parseTextEntry(null, parameters[i], localization); 
+                } else {
+                    objectParameters[i] = MethodsUtils.findObject(request.getContext(), parameters[i]);
+                }
+                i++;
+            }
+        }
 
-        if (MethodsUtils.isVisibleAndUsable(object, action, where)) {
+        if (MethodsUtils.isVisibleAndUsable(object, action, where)  && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             writeLink(request, idName, className, target, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, resultOverride, scopeSegment,
                     confirmSegment, messageSegment, context, action, parameters, text);
         }
