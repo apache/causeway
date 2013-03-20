@@ -37,11 +37,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
  * change has been made to provide more flexibility in setting up the
  * <tt>IsisContext</tt> lookup.
  * 
- * 
- * implementation can be created, specifying in turn a custom
- * {@link ContextCategory} (also now a regular class) can be specified, allowing
- * different was of setting up the .
- * 
  * <p>
  * To use this capability:
  * <ul>
@@ -118,8 +113,6 @@ public class DeploymentType implements DeploymentCategoryProvider {
                 debug.appendln("Show splash", splash);
                 debug.appendln();
                 debug.appendln("Name", friendlyName());
-                debug.appendln("Can specify object store", canSpecifyObjectStore());
-                debug.appendln("Can install fixtures", canInstallFixtures());
                 debug.appendln("Should monitor", shouldMonitor());
             }
 
@@ -142,39 +135,6 @@ public class DeploymentType implements DeploymentCategoryProvider {
      */
     public boolean canSpecifyViewers(final List<String> viewers) {
         return contextCategory.canSpecifyViewers(viewers);
-    }
-
-    /**
-     * Whether the list of connector names provided is compatible with this
-     * {@link DeploymentType}.
-     * 
-     * <p>
-     * Only a {@link #CLIENT} may have connectors.
-     */
-    public boolean canSpecifyConnectors(final List<String> connectors) {
-        return connectors.size() == 0 || this == CLIENT;
-    }
-
-    /**
-     * Whether specifying an object store is compatible with this
-     * {@link DeploymentType}.
-     * 
-     * <p>
-     * Only a {@link #CLIENT} may NOT have an object store.
-     */
-    public boolean canSpecifyObjectStore() {
-        return this != CLIENT;
-    }
-
-    /**
-     * Whether specifying fixtures is compatible with this
-     * {@link DeploymentType}.
-     * 
-     * <p>
-     * Only a {@link #CLIENT} may NOT have an object store.
-     */
-    public boolean canInstallFixtures() {
-        return this != CLIENT;
     }
 
     public boolean shouldShowSplash() {
@@ -224,6 +184,5 @@ public class DeploymentType implements DeploymentCategoryProvider {
     public String toString() {
         return name();
     }
-
 
 }

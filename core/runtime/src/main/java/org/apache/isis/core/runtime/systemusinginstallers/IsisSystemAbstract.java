@@ -79,11 +79,6 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
 
     @Override
     protected void installFixturesIfRequired() throws IsisSystemException {
-        // some deployment types (eg CLIENT) do not support installing fixtures
-        // instead, any fixtures should be installed when server boots up.
-        if (!getDeploymentType().canInstallFixtures()) {
-            return;
-        }
 
         fixtureInstaller = obtainFixturesInstaller();
         if (isNoop(fixtureInstaller)) {

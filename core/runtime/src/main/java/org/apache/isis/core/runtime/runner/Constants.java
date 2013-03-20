@@ -36,7 +36,6 @@ public final class Constants {
     public static final String TYPE_EXPLORATION = DeploymentType.EXPLORATION.friendlyName();
     public static final String TYPE_PROTOTYPE = DeploymentType.PROTOTYPE.friendlyName();
     public static final String TYPE_SINGLE_USER = DeploymentType.SINGLE_USER.friendlyName();
-    public static final String TYPE_CLIENT = DeploymentType.CLIENT.friendlyName();
     public static final String TYPE_SERVER_EXPLORATION = DeploymentType.SERVER_EXPLORATION.friendlyName();
     public static final String TYPE_SERVER_PROTOTYPE = DeploymentType.SERVER_PROTOTYPE.friendlyName();
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();

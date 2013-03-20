@@ -60,7 +60,6 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerVerbose;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerVersion;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerViewer;
 import org.apache.isis.core.runtime.runner.opts.OptionValidator;
-import org.apache.isis.core.runtime.runner.opts.OptionValidatorForPersistor;
 import org.apache.isis.core.runtime.runner.opts.OptionValidatorForViewers;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -274,7 +273,6 @@ public class IsisRunner {
 
         // validators
         addValidator(new OptionValidatorForViewers(optionHandlerViewer));
-        addValidator(new OptionValidatorForPersistor(optionHandlerPersistor));
 
         return optionHandlerViewer;
     }
