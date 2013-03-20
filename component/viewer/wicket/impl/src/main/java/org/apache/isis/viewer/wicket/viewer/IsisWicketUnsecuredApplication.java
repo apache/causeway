@@ -151,11 +151,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     private DeploymentType determineDeploymentType() {
-        if(usesDevelopmentConfig()) {
-            return new WicketServerPrototype();
-        } else {
-            return new WicketServer();
-        }
+        return usesDevelopmentConfig() ? new WicketServerPrototype() : new WicketServer();
     }
 
     private IsisConfigurationBuilder createConfigBuilder(ServletContext servletContext) {

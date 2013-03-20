@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
-import org.apache.wicket.Application;
-
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.ContextCategory;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -28,17 +26,12 @@ import org.apache.isis.core.runtime.system.Splash;
 
 /**
  * Simple adapter for Isis' {@link DeploymentType} class, specifying that the
- * {@link IsisContextForWicket.WicketContextCategory} is used as the
+ * {@link ContextCategory#THREADLOCAL} is used as the
  * {@link ContextCategory}.
- * 
- * <p>
- * TODO: should somehow tie this in with Wicket's own
- * {@link Application#getConfigurationType() configuration mode}.
  */
 public abstract class DeploymentTypeAbstract extends DeploymentType {
 
     public DeploymentTypeAbstract(final String name, final DeploymentCategory category) {
-        //super(name, category, new IsisContextForWicket.WicketContextCategory(), null, Splash.NO_SHOW);
         super(name, category, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
     }
 

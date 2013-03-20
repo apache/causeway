@@ -58,7 +58,6 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     private AuthenticationSession authenticationSession;
-    private int threadUsages;
 
     public AuthenticatedWebSessionForIsis(final Request request) {
         super(Ensure.ensureThatArg(request, is(not(nullValue(Request.class)))));
@@ -95,39 +94,9 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         return (WebClientInfo) super.getClientInfo();
     }
 
-    // /////////////////////////////////////////////////////////
-    // Thread counting
-    // /////////////////////////////////////////////////////////
-
-    /**
-     * Capture fact that this session is currently being used by a thread.
-     * 
-     * <p>
-     * There could be several concurrent requests all of which will use the same
-     * Session; for example to obtain img resources for entities. This counter
-     * keeps track of one of these threadUsages, when it gets back down to zero
-     * then we can close the thread.
-     * @return 
-     * 
-     * @see #deregisterUseByThread()
-     */
-    public int registerUseByThread() {
-        threadUsages++;
-        return getThreadUsage();
-    }
-
-    /**
-     * @see #registerUseByThread()
-     * @return whether the session is no longer used by any threadUsages.
-     */
-    public boolean deregisterUseByThread() {
-        threadUsages--;
-        return threadUsages <= 0;
-    }
-
-    public int getThreadUsage() {
-        return threadUsages;
-    }
+    // /////////////////////////////////////////////////
+    // Dependencies
+    // /////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
         return IsisContext.getAuthenticationManager();

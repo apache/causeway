@@ -65,9 +65,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         if (wicketSession == null) {
             return;
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("thread usage: " + wicketSession.getThreadUsage());
-        }
         final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
         if (authenticationSession == null) {
             return;
