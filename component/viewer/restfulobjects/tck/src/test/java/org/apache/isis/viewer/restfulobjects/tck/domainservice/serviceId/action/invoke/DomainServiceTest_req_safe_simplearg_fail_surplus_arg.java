@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -42,14 +43,16 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class DomainServiceTest_req_safe_arg_bad_malformed {
+public class DomainServiceTest_req_safe_simplearg_fail_surplus_arg {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -61,15 +64,15 @@ public class DomainServiceTest_req_safe_arg_bad_malformed {
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
+
         serviceResource = client.getDomainServiceResource();
     }
-
-
+    
     @Test
-    public void usingClientFollow_whenImplicitlySetToNull() throws Exception {
+    public void usingClientFollow() throws Exception {
 
         // given
-        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subListWithOptionalRange");
+        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subList");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
 
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
@@ -77,42 +80,56 @@ public class DomainServiceTest_req_safe_arg_bad_malformed {
         assertThat(invokeLink, isLink(client)
                                     .rel(Rel.INVOKE)
                                     .httpMethod(RestfulHttpMethod.GET)
-                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subListWithOptionalRange/invoke"))
+                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subList/invoke"))
                                     .build());
         
+        JsonRepresentation args =invokeLink.getArguments();
+        assertThat(args.size(), is(2));
+        assertThat(args, RestfulMatchers.mapHas("from"));
+        assertThat(args, RestfulMatchers.mapHas("to"));
+        
         // when
-        JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("from", JsonRepresentation.newMap());
-        args.mapPut("to.value", (Integer)null);
+        args = JsonRepresentation.newMap();
+        args.mapPut("from.value", 0);
+        args.mapPut("to.value", 1);
+        args.mapPut("nonExistent.value", 2);
+        assertThat(args.size(), is(3));
 
         final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        then(restfulResponse);
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
-    
+
     @Test
-    public void usingResourceProxy_whenExplicitSetToNull() throws Exception {
+    public void usingResourceProxy() throws Exception {
 
         // given, when
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("from", JsonRepresentation.newMap());
-        args.mapPut("to.value", (Integer)null);
+        args.mapPut("from.value", 0);
+        args.mapPut("to.value", 1);
+        args.mapPut("nonExistent.value", 2);
+        assertThat(args.size(), is(3));
 
-        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subListWithOptionalRange", UrlEncodingUtils.urlEncode(args));
+        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
         // then
-        then(restfulResponse);
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
-    
-    private static void then(RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
-        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(MediaType.APPLICATION_JSON));
-        final JsonRepresentation errorRepr = restfulResponse.wraps(JsonRepresentation.class).getEntity();
+    private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+        assertThat(restfulResponse, hasStatus(HttpStatusCode.BAD_REQUEST));
+        assertThat(restfulResponse.getHeader(Header.WARNING), is("Argument 'nonExistent' found but no such parameter"));
 
-        assertThat(errorRepr.getString("from.invalidReason"), is("No 'value' key"));
+        // hmmm... what is the media type, though?  the spec doesn't say.  testing for a generic one.
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(MediaType.APPLICATION_JSON));
+
+        RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
+        JsonRepresentation repr = restfulResponseOfError.getEntity();
+        
+        assertThat(repr.getString("x-ro-invalidReason"), is("Argument 'nonExistent' found but no such parameter")); 
     }
 
 }

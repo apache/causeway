@@ -189,7 +189,7 @@ public final class DomainResourceHelper {
 
     Response propertyDetails(final String propertyId, final MemberMode memberMode, final Caching caching, Where where) {
 
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(propertyId, Intent.ACCESS, where);
+        final OneToOneAssociation property = getPropertyThatIsVisibleForIntent(propertyId, Intent.ACCESS, where);
 
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(resourceContext, null, null, JsonRepresentation.newMap());
 
@@ -206,7 +206,7 @@ public final class DomainResourceHelper {
 
     Response collectionDetails(final String collectionId, final MemberMode memberMode, final Caching caching, Where where) {
 
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(collectionId, Intent.ACCESS, where);
+        final OneToManyAssociation collection = getCollectionThatIsVisibleForIntent(collectionId, Intent.ACCESS, where);
 
         final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(resourceContext, null, null, JsonRepresentation.newMap());
 
@@ -222,7 +222,7 @@ public final class DomainResourceHelper {
     // //////////////////////////////////////////////////////////////
 
     Response actionPrompt(final String actionId, Where where) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.ACCESS, where);
+        final ObjectAction action = getObjectActionThatIsVisibleForIntent(actionId, Intent.ACCESS, where);
 
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(resourceContext, null, null, JsonRepresentation.newMap());
 
@@ -244,7 +244,7 @@ public final class DomainResourceHelper {
     }
 
     Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments, Where where) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.ACCESS, where);
+        final ObjectAction action = getObjectActionThatIsVisibleForIntent(actionId, Intent.MUTATE, where);
 
         final ActionSemantics.Of actionSemantics = action.getSemantics();
         if (actionSemantics != ActionSemantics.Of.SAFE) {
@@ -256,7 +256,7 @@ public final class DomainResourceHelper {
 
     Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments, Where where) {
 
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE, where);
+        final ObjectAction action = getObjectActionThatIsVisibleForIntent(actionId, Intent.MUTATE, where);
 
         final ActionSemantics.Of actionSemantics = action.getSemantics();
         if (!actionSemantics.isIdempotentInNature()) {
@@ -266,7 +266,7 @@ public final class DomainResourceHelper {
     }
 
     Response invokeAction(final String actionId, final JsonRepresentation arguments, Where where) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE, where);
+        final ObjectAction action = getObjectActionThatIsVisibleForIntent(actionId, Intent.MUTATE, where);
 
         return invokeActionUsingAdapters(action, arguments);
     }
@@ -363,37 +363,37 @@ public final class DomainResourceHelper {
     // get{MemberType}ThatIsVisibleAndUsable
     // ///////////////////////////////////////////////////////////////////
 
-    protected OneToOneAssociation getPropertyThatIsVisibleAndUsable(final String propertyId, final Intent intent, Where where) {
+    protected OneToOneAssociation getPropertyThatIsVisibleForIntent(final String propertyId, final Intent intent, Where where) {
 
         final ObjectAssociation association = objectAdapter.getSpecification().getAssociation(propertyId);
         if (association == null || !association.isOneToOneAssociation()) {
             throwNotFoundException(propertyId, MemberType.PROPERTY);
         }
         final OneToOneAssociation property = (OneToOneAssociation) association;
-        return memberThatIsVisibleAndUsable(property, MemberType.PROPERTY, intent, where);
+        return memberThatIsVisibleForIntent(property, MemberType.PROPERTY, intent, where);
     }
 
-    protected OneToManyAssociation getCollectionThatIsVisibleAndUsable(final String collectionId, final Intent intent, Where where) {
+    protected OneToManyAssociation getCollectionThatIsVisibleForIntent(final String collectionId, final Intent intent, Where where) {
 
         final ObjectAssociation association = objectAdapter.getSpecification().getAssociation(collectionId);
         if (association == null || !association.isOneToManyAssociation()) {
             throwNotFoundException(collectionId, MemberType.COLLECTION);
         }
         final OneToManyAssociation collection = (OneToManyAssociation) association;
-        return memberThatIsVisibleAndUsable(collection, MemberType.COLLECTION, intent, where);
+        return memberThatIsVisibleForIntent(collection, MemberType.COLLECTION, intent, where);
     }
 
-    protected ObjectAction getObjectActionThatIsVisibleAndUsable(final String actionId, final Intent intent, Where where) {
+    protected ObjectAction getObjectActionThatIsVisibleForIntent(final String actionId, final Intent intent, Where where) {
 
         final ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
         if (action == null) {
             throwNotFoundException(actionId, MemberType.ACTION);
         }
 
-        return memberThatIsVisibleAndUsable(action, MemberType.ACTION, intent, where);
+        return memberThatIsVisibleForIntent(action, MemberType.ACTION, intent, where);
     }
 
-    protected <T extends ObjectMember> T memberThatIsVisibleAndUsable(final T objectMember, final MemberType memberType, final Intent intent, Where where) {
+    protected <T extends ObjectMember> T memberThatIsVisibleForIntent(final T objectMember, final MemberType memberType, final Intent intent, Where where) {
         final String memberId = objectMember.getId();
         final AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
         if (objectMember.isVisible(authenticationSession, objectAdapter, where).isVetoed()) {
@@ -402,8 +402,7 @@ public final class DomainResourceHelper {
         if (intent.isMutate()) {
             final Consent usable = objectMember.isUsable(authenticationSession, objectAdapter, where);
             if (usable.isVetoed()) {
-                final String memberTypeStr = memberType.name().toLowerCase();
-                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_ACCEPTABLE, "%s is not usable: '%s' (%s)", memberTypeStr, memberId, usable.getReason());
+                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.FORBIDDEN, usable.getReason());
             }
         }
         return objectMember;
@@ -427,7 +426,6 @@ public final class DomainResourceHelper {
      */
     ObjectAdapter parseAsMapWithSingleValue(final ObjectSpecification objectSpec, final String bodyAsString) {
         final JsonRepresentation arguments = readAsMap(bodyAsString);
-
         return parseAsMapWithSingleValue(objectSpec, arguments);
     }
 
@@ -489,9 +487,9 @@ public final class DomainResourceHelper {
         for (final Entry<String, JsonRepresentation> arg : arguments.mapIterable()) {
             final String argName = arg.getKey();
             if (action.getParameterById(argName) == null) {
-                String reason = String.format("Action '%s' does not have a parameter %s but an argument of that name was provided", action.getId(), argName);
+                String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPut("x-ro-invalidReason", reason);
-                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.VALIDATION_FAILED, reason);
+                throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, arguments, reason);
             }
         }
 
@@ -502,9 +500,9 @@ public final class DomainResourceHelper {
             final String paramId = param.getId();
             final JsonRepresentation argRepr = arguments.getRepresentation(paramId);
             if (argRepr == null && !param.isOptional()) {
-                String reason = String.format("Action '%s', no argument found for (mandatory) parameter '%s'", action.getId(), paramId);
+                String reason = String.format("No argument found for (mandatory) parameter '%s'", paramId);
                 arguments.mapPut("x-ro-invalidReason", reason);
-                throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.VALIDATION_FAILED, reason);
+                throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, arguments, reason);
             }
             argList.add(argRepr);
         }

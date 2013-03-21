@@ -42,35 +42,33 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
     @Override
     public Response toResponse(final RestfulObjectsApplicationException ex) {
         final ResponseBuilder builder = Response.status(ex.getHttpStatusCode().getJaxrsStatusType());
-        final String body = bodyFor(ex);
-        if(body != null) {
+
+        // body and content-type
+        final JsonRepresentation bodyRepr = ex.getBody();
+        final Throwable cause = ex.getCause();
+        if (bodyRepr != null) {
+            final String body = bodyRepr.toString();
             builder.entity(body);
             builder.type(MediaType.APPLICATION_JSON); // generic; the spec doesn't define what the media type should be
-        } else {
+        } else if(cause == null) {
+            builder.type(MediaType.APPLICATION_JSON); // generic; the spec doesn't define what the media type should be
+        } else { 
+            String body;
+            try {
+                body = JsonMapper.instance().write(ExceptionPojo.create(cause));
+            } catch (final Exception e) {
+                // fallback
+                body = "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
+            }
+            builder.entity(body);
             builder.type(RestfulMediaType.APPLICATION_JSON_ERROR);
         }
+
         final String message = ex.getMessage();
         if (message != null) {
             builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }
         return builder.build();
-    }
-
-    static String bodyFor(final RestfulObjectsApplicationException ex) {
-        final JsonRepresentation jsonRepresentation = ex.getBody();
-        if (jsonRepresentation != null) {
-            return jsonRepresentation.toString();
-        }
-        Throwable cause = ex.getCause();
-        if(cause == null) {
-            return null;
-        }
-        try {
-            return JsonMapper.instance().write(ExceptionPojo.create(cause));
-        } catch (final Exception e) {
-            // fallback
-            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
-        }
     }
 
     private static class ExceptionPojo {

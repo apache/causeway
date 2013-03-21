@@ -189,7 +189,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(propertyId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleForIntent(propertyId, Intent.MUTATE, getResourceContext().getWhere());
 
         final ObjectSpecification propertySpec = property.getSpecification();
         final String bodyAsString = DomainResourceHelper.asStringUtf8(body);
@@ -216,7 +216,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(propertyId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleForIntent(propertyId, Intent.MUTATE, getResourceContext().getWhere());
 
         final Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
@@ -256,7 +256,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         if (!collection.getCollectionSemantics().isSet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
@@ -287,7 +287,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
@@ -317,7 +317,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(collectionId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, getResourceContext().getQueryString());

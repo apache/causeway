@@ -47,6 +47,11 @@ public final class LinkRepresentation extends JsonRepresentation {
         asObjectNode().put("rel", rel);
         return this;
     }
+    
+    public LinkRepresentation withRel(Rel rel) {
+        return withRel(rel.getName());
+    }
+
 
     public String getHref() {
         return asObjectNode().path("href").getTextValue();
@@ -160,5 +165,6 @@ public final class LinkRepresentation extends JsonRepresentation {
     public String toString() {
         return "Link [rel=" + getRel() + ", href=" + getHref() + ", method=" + getHttpMethod() + ", type=" + getType() + "]";
     }
+
 
 }

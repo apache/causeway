@@ -867,12 +867,9 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return;
-        }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), new POJONode(value));
+        node.put(path.getTail(), value != null? new POJONode(value): NullNode.getInstance() );
     }
 
     public void mapPut(final String key, final JsonRepresentation value) {

@@ -49,14 +49,14 @@ public class BusRulesEntityRepository extends AbstractEntityRepository<BusRulesE
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
-    public BusRulesEntity visibleAndInvocableAction(int id) {
+    public BusRulesEntity visibleAndInvocableAction(@Named("id") int id) {
         return this.findById(id);
     }
 
     @Disabled
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
-    public BusRulesEntity visibleButNotInvocableAction(int id) {
+    public BusRulesEntity visibleButNotInvocableAction(@Named("id") int id) {
         return this.findById(id);
     }
 

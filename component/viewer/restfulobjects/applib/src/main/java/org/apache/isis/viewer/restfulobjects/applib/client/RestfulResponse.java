@@ -124,7 +124,7 @@ public class RestfulResponse<T> {
         public final static HttpStatusCode UNAUTHORIZED = new HttpStatusCode(401, Status.UNAUTHORIZED);
 
         // public static final int SC_PAYMENT_REQUIRED = 402;
-        // public static final int SC_FORBIDDEN = 403;
+        public static final HttpStatusCode FORBIDDEN = new HttpStatusCode(403, Status.FORBIDDEN);
 
         public final static HttpStatusCode NOT_FOUND = new HttpStatusCode(404, Status.NOT_FOUND);
         public final static HttpStatusCode METHOD_NOT_ALLOWED = new HttpStatusCode(405, new StatusTypeImpl(405, Family.CLIENT_ERROR, "Method not allowed"));

@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action.invoke;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,6 +33,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -42,6 +44,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
@@ -49,7 +52,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class DomainServiceTest_req_safe_arg_bad_malformed {
+public class ZzzToDo_DomainServiceTest_req_nonidempotent_fail_method_not_allowed {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -61,14 +64,15 @@ public class DomainServiceTest_req_safe_arg_bad_malformed {
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
+
         serviceResource = client.getDomainServiceResource();
     }
-
-
+    
+    @Ignore("to write - copied from req_safe")
     @Test
-    public void usingClientFollow_whenImplicitlySetToNull() throws Exception {
+    public void usingClientFollow() throws Exception {
 
-        // given
+        // given, when
         final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "subListWithOptionalRange");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
 
@@ -79,40 +83,30 @@ public class DomainServiceTest_req_safe_arg_bad_malformed {
                                     .httpMethod(RestfulHttpMethod.GET)
                                     .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/subListWithOptionalRange/invoke"))
                                     .build());
+
+        invokeLink.withMethod(RestfulHttpMethod.POST);
         
         // when
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("from", JsonRepresentation.newMap());
-        args.mapPut("to.value", (Integer)null);
+        args = JsonRepresentation.newMap();
+        args.mapPut("id.value", 123);
 
         final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        then(restfulResponse);
+        thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
     
-    @Test
-    public void usingResourceProxy_whenExplicitSetToNull() throws Exception {
+    // not possible to test using resourceProxy
 
-        // given, when
-        JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("from", JsonRepresentation.newMap());
-        args.mapPut("to.value", (Integer)null);
 
-        Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subListWithOptionalRange", UrlEncodingUtils.urlEncode(args));
-        RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
-        
-        // then
-        then(restfulResponse);
-    }
+    private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+        assertThat(restfulResponse, hasStatus(HttpStatusCode.METHOD_NOT_ALLOWED));
+        assertThat(restfulResponse.getHeader(Header.WARNING), is("object is immutable")); // not a good message, but as per spec
 
-    
-    private static void then(RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+        // hmmm... what is the media type, though?  the spec doesn't say.  testing for a generic one.
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(MediaType.APPLICATION_JSON));
-        final JsonRepresentation errorRepr = restfulResponse.wraps(JsonRepresentation.class).getEntity();
-
-        assertThat(errorRepr.getString("from.invalidReason"), is("No 'value' key"));
     }
 
 }

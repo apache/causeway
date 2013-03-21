@@ -21,7 +21,6 @@ package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId.action
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -30,31 +29,28 @@ import java.io.IOException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class DomainServiceTest_req_safe_simplearg_fail_mandatory_missing {
 
@@ -93,8 +89,10 @@ public class DomainServiceTest_req_safe_simplearg_fail_mandatory_missing {
         assertThat(args, RestfulMatchers.mapHas("to"));
         
         // when
-        args.mapPut("from.value", (Integer)null);
+        args = JsonRepresentation.newMap();
+        // nothing for 'from'
         args.mapPut("to.value", 0);
+        assertThat(args.size(), is(1));
 
         final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink, args);
         
@@ -102,13 +100,13 @@ public class DomainServiceTest_req_safe_simplearg_fail_mandatory_missing {
         thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
-    @Ignore("to write")
+
     @Test
     public void usingResourceProxy() throws Exception {
 
         // given, when
         JsonRepresentation args = JsonRepresentation.newMap();
-        args.mapPut("from.value", 1);
+        // nothing for 'from'
         args.mapPut("to.value", 0);
         Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "subList", UrlEncodingUtils.urlEncode(args));
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
@@ -118,8 +116,8 @@ public class DomainServiceTest_req_safe_simplearg_fail_mandatory_missing {
     }
 
     private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
-        assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
-        assertThat(restfulResponse.getHeader(Header.WARNING), is("Validation failed, see body for details"));
+        assertThat(restfulResponse, hasStatus(HttpStatusCode.BAD_REQUEST));
+        assertThat(restfulResponse.getHeader(Header.WARNING), is("No argument found for (mandatory) parameter 'from'"));
 
         // hmmm... what is the media type, though?  the spec doesn't say.  testing for a generic one.
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(MediaType.APPLICATION_JSON));
@@ -127,9 +125,7 @@ public class DomainServiceTest_req_safe_simplearg_fail_mandatory_missing {
         RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
         JsonRepresentation repr = restfulResponseOfError.getEntity();
         
-        assertThat(repr.getString("from.invalidReason"), is("Mandatory"));
-        // TODO: really ought to be null, but ObjectActionImpl.isProposedArgumentSetValidResultSet also checks that each argument is valid
-        assertThat(repr.getString("x-ro-invalidReason"), is("Mandatory")); 
+        assertThat(repr.getString("x-ro-invalidReason"), is("No argument found for (mandatory) parameter 'from'")); 
     }
 
 

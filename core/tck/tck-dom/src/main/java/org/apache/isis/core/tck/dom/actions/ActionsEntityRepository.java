@@ -43,7 +43,7 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
-    public ActionsEntity findById(int id) {
+    public ActionsEntity findById(@Named("id") int id) {
         final Query<ActionsEntity> query = 
                 new QueryDefault<ActionsEntity>(ActionsEntity.class, ActionsEntity.class.getName() + "#pk", "id", id);
         return this.firstMatch(query);
