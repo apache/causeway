@@ -1118,6 +1118,15 @@ ${license.additional-notes}
                 <version>1.3</version>
             </dependency>
 
+
+            <!--  Other Common Utils -->
+            <dependency>
+                 <groupId>org.reflections</groupId>
+                 <artifactId>reflections</artifactId>
+                 <version>0.9.8</version>
+            </dependency>
+     
+
             <!-- Google Guava (collections and commons) -->
             <dependency>
                 <groupId>com.google.guava</groupId>

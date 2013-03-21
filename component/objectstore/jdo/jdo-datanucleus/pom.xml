@@ -58,6 +58,12 @@
 			<artifactId>isis-objectstore-jdo-metamodel</artifactId>
 		</dependency>
 		
+        <!--  for the RegisterEntities service -->
+        <dependency>
+             <groupId>org.reflections</groupId>
+             <artifactId>reflections</artifactId>
+        </dependency>
+
        <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
