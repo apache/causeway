@@ -321,6 +321,7 @@
 
 
             <!-- 3rd party extensions -->
+
             <!--
             GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
             <dependency>
@@ -331,6 +332,17 @@
                 <scope>import</scope>
             </dependency>
             -->
+            
+            <!-- 
+            ActiveMQ/RA Publishing Service:
+            uncomment to use https://github.com/danhaywood/isis-publishingservice-activemq-ra
+            <dependency>
+            <groupId>com.danhaywood.isis.publishingservice</groupId>
+                <artifactId>danhaywood-isis-publishingservice-activemq-ra</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+             -->
+            
 
         </dependencies>
     </dependencyManagement>

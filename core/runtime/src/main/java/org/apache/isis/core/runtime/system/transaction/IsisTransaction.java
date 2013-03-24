@@ -191,6 +191,8 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private final UUID guid;
 
+    private int eventSequence;
+
     public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
@@ -204,6 +206,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.publishingService = publishingService;
         
         this.guid = UUID.randomUUID();
+        this.eventSequence = 0;
 
         this.state = State.IN_PROGRESS;
 
@@ -220,6 +223,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     public final UUID getGuid() {
         return guid;
     }
+    
     
     // ////////////////////////////////////////////////////////////////
     // State
@@ -409,7 +413,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                 return;
             } 
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            final EventMetadata metadata = new EventMetadata(getGuid(), currentUser, currentTimestampEpoch);
+            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation);
         } finally {
             ActionInvocationFacet.currentInvocation.set(null);
@@ -423,7 +427,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                 continue;
             }
             final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
-            final EventMetadata metadata = new EventMetadata(getGuid(), currentUser, currentTimestampEpoch);
+            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch);
 
             publishingService.publishObject(payloadFactory, metadata, changedAdapter);
         }
@@ -433,6 +437,14 @@ public class IsisTransaction implements TransactionScopedComponent {
         return Clock.getTime();
     }
 
+    private EventMetadata newEventMetadata(final String currentUser, final long currentTimestampEpoch) {
+        return new EventMetadata(getGuid(), nextEventSequence(), currentUser, currentTimestampEpoch);
+    }
+
+    private int nextEventSequence() {
+        return eventSequence++;
+    }
+    
     private void auditChangedProperty(final String currentUser, final long currentTimestampEpoch, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();

@@ -26,7 +26,7 @@ public interface EventSerializer {
         @Programmatic
         @Override
         public Object serialize(EventMetadata metadata, EventPayload payload) {
-            return "PUBLISHED: \n    metadata: " + metadata.getGuid() + ":" + metadata.getUser() + ":" + metadata.getTimestamp() + ":    payload:s\n"+ payload.toString();
+            return "PUBLISHED: \n    metadata: " + metadata.getId() + ":" + metadata.getUser() + ":" + metadata.getTimestamp() + ":    payload:s\n"+ payload.toString();
         }
     }
 

@@ -286,6 +286,15 @@
             <artifactId>danhaywood-isis-wicket-gmap3-ui</artifactId>
         </dependency>
          -->
+         
+        <!-- 
+        ActiveMQ/RA Publishing Service:
+        uncomment to use https://github.com/danhaywood/isis-publishingservice-activemq-ra
+        <dependency>
+            <groupId>com.danhaywood.isis.publishingservice</groupId>
+            <artifactId>danhaywood-isis-publishingservice-activemq-ra</artifactId>
+        </dependency>
+         -->
 
     </dependencies>
 

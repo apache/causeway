@@ -404,7 +404,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     /**
      * by complete flag, then due by date, then description
      */
-    // exclude from the framework's metamodel
     @Override
     public int compareTo(final ToDoItem other) {
         if (isComplete() && !other.isComplete()) {

@@ -57,7 +57,9 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
         final JsonRepresentation eventRepr = JsonRepresentation.newMap();
         final JsonRepresentation metadataRepr = JsonRepresentation.newMap();
         eventRepr.mapPut("metadata", metadataRepr);
-        metadataRepr.mapPut("guid", metadata.getGuid());
+        metadataRepr.mapPut("id", metadata.getId());
+        metadataRepr.mapPut("transactionId", metadata.getTransactionId());
+        metadataRepr.mapPut("sequence", metadata.getSequence());
         metadataRepr.mapPut("user", metadata.getUser());
         metadataRepr.mapPut("timestamp", metadata.getTimestamp());
         eventRepr.mapPut("payload", payloadRepr);
