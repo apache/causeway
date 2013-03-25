@@ -24,6 +24,9 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.identity.ByteIdentity;
 import javax.jdo.identity.IntIdentity;
 import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.StringIdentity;
@@ -35,6 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public final class JdoObjectIdSerializer {
     
@@ -91,27 +96,49 @@ public final class JdoObjectIdSerializer {
     private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "B");
     
     public static Object toJdoObjectId(RootOid oid) {
-    	String idStr = oid.getIdentifier();
+
+        String idStr = oid.getIdentifier();
         final int colonIdx = idStr.indexOf(SEPARATOR);
         final String keyStr = idStr.substring(colonIdx+1);
         
         final String firstPart = idStr.substring(0, colonIdx);
 
-        if("s".equals(firstPart)) {
-        	return new StringIdentity(objectTypeClassFor(oid), keyStr);
-        }
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
+        JdoPersistenceCapableFacet facet = spec.getFacet(JdoPersistenceCapableFacet.class);
+        if(facet != null && facet.getIdentityType() == IdentityType.APPLICATION) {
 
-        if("i".equals(firstPart)) {
-        	return new IntIdentity(objectTypeClassFor(oid), keyStr);
-        }
+            if("s".equals(firstPart)) {
+                return keyStr;
+            }
+            if("i".equals(firstPart)) {
+                return Integer.parseInt(keyStr);
+            }
+            if("l".equals(firstPart)) {
+                return Long.parseLong(keyStr);
+            }
+            if("b".equals(firstPart)) {
+                return Byte.parseByte(keyStr);
+            }
+            
+        } else {
 
-        if("l".equals(firstPart)) {
-        	return new LongIdentity(objectTypeClassFor(oid), keyStr);
+            if("s".equals(firstPart)) {
+                return new StringIdentity(objectTypeClassFor(oid), keyStr);
+            }
+            if("i".equals(firstPart)) {
+                return new IntIdentity(objectTypeClassFor(oid), keyStr);
+            }
+            if("l".equals(firstPart)) {
+                return new LongIdentity(objectTypeClassFor(oid), keyStr);
+            }
+            if("b".equals(firstPart)) {
+                return new ByteIdentity(objectTypeClassFor(oid), keyStr);
+            }
+
         }
+        
 
         if(dnPrefixes.contains(firstPart)) {
-            ObjectSpecId objectSpecId = oid.getObjectSpecId();
-            ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
 			return keyStr + "[OID]" + spec.getFullIdentifier(); 
         }
         
