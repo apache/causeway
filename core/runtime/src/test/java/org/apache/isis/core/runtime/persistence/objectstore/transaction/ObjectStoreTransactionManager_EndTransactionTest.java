@@ -146,7 +146,8 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
                 one(mockObjectStore).startTransaction();
                 inSequence(transactionOrdering);
 
-                one(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // flushed twice, once before publishing, once after
+                exactly(2).of(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(transactionOrdering);
 
                 one(mockObjectStore).endTransaction();

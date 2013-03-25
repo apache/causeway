@@ -16,12 +16,14 @@ public class EventMetadata {
     private final int sequence;
     private final String user;
     private final long timestamp;
+    private final String title;
     
-    public EventMetadata(UUID transactionId, int sequence, String user, long timestamp) {
+    public EventMetadata(UUID transactionId, int sequence, String user, long timestamp, String title) {
         this.transactionId = transactionId;
         this.sequence = sequence;
         this.user = user;
         this.timestamp = timestamp;
+        this.title = title;
     }
     
     /**
@@ -62,11 +64,19 @@ public class EventMetadata {
     
     /**
      * Returns a string that concatenates the {@link #getTransactionId()} and the
-     * {@link #getSequence()} with a <tt>:</tt>.
+     * {@link #getSequence()} with a period (<tt>.</tt>).
      */
     public String getId() {
-        return getTransactionId() + ":" + getSequence();
+        return getTransactionId() + "." + getSequence();
     }
+    
+    /**
+     * A user-friendly title for this event.
+     */
+    public String getTitle() {
+        return title;
+    }
+
     
     @Override
     public String toString() {

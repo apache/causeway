@@ -229,17 +229,21 @@ public class PersistenceSessionObjectStoreTest {
         final Sequence tran = context.sequence("tran");
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).startTransaction();
+                oneOf(mockObjectStore).startTransaction();
                 inSequence(tran);
 
-                one(mockObjectStore).createDestroyObjectCommand(persistentAdapter);
+                oneOf(mockObjectStore).createDestroyObjectCommand(persistentAdapter);
                 inSequence(tran);
                 will(returnValue(destroyObjectCommand));
                 
-                one(mockObjectStore).execute(with(IsisMatchers.listContaining((PersistenceCommand)destroyObjectCommand)));
+                oneOf(mockObjectStore).execute(with(IsisMatchers.listContaining((PersistenceCommand)destroyObjectCommand)));
                 inSequence(tran);
 
-                one(mockObjectStore).endTransaction();
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                inSequence(tran);
+
+                oneOf(mockObjectStore).endTransaction();
                 inSequence(tran);
             }
 
@@ -256,13 +260,16 @@ public class PersistenceSessionObjectStoreTest {
         final Sequence tran = context.sequence("tran");
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).startTransaction();
+                oneOf(mockObjectStore).startTransaction();
                 inSequence(tran);
-                one(mockPersistAlgorithm).makePersistent(transientAdapter, persistenceSession);
+                oneOf(mockPersistAlgorithm).makePersistent(transientAdapter, persistenceSession);
                 inSequence(tran);
-                one(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(tran);
-                one(mockObjectStore).endTransaction();
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                inSequence(tran);
+                oneOf(mockObjectStore).endTransaction();
                 inSequence(tran);
             }
         });

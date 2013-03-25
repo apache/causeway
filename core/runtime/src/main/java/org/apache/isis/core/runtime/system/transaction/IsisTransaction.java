@@ -37,6 +37,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.net.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -413,7 +414,12 @@ public class IsisTransaction implements TransactionScopedComponent {
                 return;
             } 
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch);
+            
+            final RootOid adapterOid = (RootOid) currentInvocation.getTarget().getOid();
+            final String oidStr = getOidMarshaller().marshal(adapterOid);
+            final String title = oidStr + ": " + currentInvocation.getAction().getIdentifier().toNameParmsIdentityString();
+            
+            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch, title);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation);
         } finally {
             ActionInvocationFacet.currentInvocation.set(null);
@@ -427,7 +433,12 @@ public class IsisTransaction implements TransactionScopedComponent {
                 continue;
             }
             final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
-            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch);
+
+            final RootOid adapterOid = (RootOid) changedAdapter.getOid();
+            final String oidStr = getOidMarshaller().marshal(adapterOid);
+            final String title = oidStr;
+
+            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch, title);
 
             publishingService.publishObject(payloadFactory, metadata, changedAdapter);
         }
@@ -437,8 +448,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         return Clock.getTime();
     }
 
-    private EventMetadata newEventMetadata(final String currentUser, final long currentTimestampEpoch) {
-        return new EventMetadata(getGuid(), nextEventSequence(), currentUser, currentTimestampEpoch);
+    private EventMetadata newEventMetadata(final String currentUser, final long currentTimestampEpoch, String title) {
+        return new EventMetadata(getGuid(), nextEventSequence(), currentUser, currentTimestampEpoch, title);
     }
 
     private int nextEventSequence() {
@@ -494,8 +505,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         try {
             doAudit(getChangedObjectProperties());
             doFlush();
-            setState(State.COMMITTED);
             doPublish(getChangedObjects());
+            doFlush();
+            setState(State.COMMITTED);
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
@@ -839,6 +851,11 @@ public class IsisTransaction implements TransactionScopedComponent {
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+
 
     
 }

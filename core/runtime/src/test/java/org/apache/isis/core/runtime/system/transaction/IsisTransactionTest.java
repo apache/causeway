@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 import java.util.Collections;
 
 import org.apache.log4j.Level;
@@ -204,7 +206,9 @@ public class IsisTransactionTest {
 
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command, command2)));
+                oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command, command2)));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -221,7 +225,9 @@ public class IsisTransactionTest {
 
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
+                oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -239,7 +245,9 @@ public class IsisTransactionTest {
 
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
+                oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -257,7 +265,9 @@ public class IsisTransactionTest {
 
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2, command3)));
+                oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2, command3)));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -276,7 +286,9 @@ public class IsisTransactionTest {
 
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2)));
+                oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2)));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -291,7 +303,9 @@ public class IsisTransactionTest {
     public void commit_testNoCommands() throws Exception {
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+                oneOf(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
 
@@ -317,7 +331,9 @@ public class IsisTransactionTest {
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyCommitedTransaction() throws Exception {
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+                oneOf(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
 
@@ -330,7 +346,9 @@ public class IsisTransactionTest {
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyCommitedTransaction() throws Exception {
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+                oneOf(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
+                // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         transaction.commit();

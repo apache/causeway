@@ -29,24 +29,24 @@ public class PublishingServiceWithDefaultPayloadFactories {
     }
 
     public void publishObject(
-            final PublishedObject.PayloadFactory annotatedPayloadFactoryIfAny, 
+            final PublishedObject.PayloadFactory payloadFactoryIfAny, 
             final EventMetadata metadata, 
             final ObjectAdapter changedAdapter) {
         final PublishedObject.PayloadFactory payloadFactoryToUse = 
-                annotatedPayloadFactoryIfAny != null
-                ? annotatedPayloadFactoryIfAny
+                payloadFactoryIfAny != null
+                ? payloadFactoryIfAny
                 : defaultObjectPayloadFactory;
         final EventPayload payload = payloadFactoryToUse.payloadFor(ObjectAdapterUtils.unwrapObject(changedAdapter));
         publishingService.publish(metadata, payload);
     }
 
     public void publishAction(
-            final PublishedAction.PayloadFactory annotatedPayloadFactoryIfAny, 
+            final PublishedAction.PayloadFactory payloadFactoryIfAny, 
             final EventMetadata metadata, 
             final CurrentInvocation currentInvocation) {
         final PublishedAction.PayloadFactory payloadFactoryToUse = 
-                annotatedPayloadFactoryIfAny != null
-                ? annotatedPayloadFactoryIfAny
+                payloadFactoryIfAny != null
+                ? payloadFactoryIfAny
                 : defaultActionPayloadFactory;
         final EventPayload payload = payloadFactoryToUse.payloadFor(
                 currentInvocation.getAction().getIdentifier(),
