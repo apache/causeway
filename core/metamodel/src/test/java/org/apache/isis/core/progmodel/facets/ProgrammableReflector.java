@@ -127,7 +127,7 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     }
 
     @Override
-    public void setServiceClasses(final List<Class<?>> serviceClasses) {
+    public void setServices(final List<Object> services) {
         throw new NotYetImplementedException();
     }
 

@@ -30,9 +30,9 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
 
 
     /**
-     * Specify the classes of the services to pro-actively prime the cache.
+     * Specify the services to pro-actively prime the cache, and to initialize them also.
      */
-    void setServiceClasses(List<Class<?>> serviceClasses);
+    void setServices(List<Object> services);
 
     /**
      * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 

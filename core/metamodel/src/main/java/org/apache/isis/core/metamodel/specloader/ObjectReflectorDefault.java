@@ -23,6 +23,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,6 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -46,6 +51,7 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
@@ -170,9 +176,9 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final MemberLayoutArranger memberLayoutArranger;
 
     /**
-     * Priming cache, optionally {@link #setServiceClasses(List) injected}.
+     * Priming cache, optionally {@link #setServices(List) injected}.
      */
-    private List<Class<?>> serviceClasses = Lists.newArrayList();
+    private List<Object> services = Lists.newArrayList();
 
     private final MetaModelValidator metaModelValidator;
 
@@ -228,7 +234,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     /**
      * Initializes and wires up, and primes the cache based on any service
-     * classes that may have been {@link #setServiceClasses(List) injected}.
+     * classes that may have been {@link #setServices(List) injected}.
      */
     @Override
     public void init() {
@@ -269,6 +275,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         facetProcessor.init();
         metaModelValidator.init();
 
+        initServices(configuration);
+
         primeCache();
         
         ValidationFailures validationFailures = new ValidationFailures();
@@ -295,7 +303,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      * referenced specifications until we can find no more.
      */
     private void primeCache() {
-        for (final Class<?> serviceClass : serviceClasses) {
+        for (final Class<?> serviceClass : getServiceClasses()) {
             internalLoadSpecification(serviceClass);
         }
         loadAllSpecifications();
@@ -329,9 +337,85 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     @Override
     public void shutdown() {
         LOG.info("shutting down " + this);
+
+        shutdownServices();
+
         getCache().clear();
         facetDecoratorSet.shutdown();
     }
+
+    
+    // /////////////////////////////////////////////////////////////
+    // init services, destroy services
+    // /////////////////////////////////////////////////////////////
+
+    protected void initServices(IsisConfiguration configuration) {
+        final List<Object> services = getServices();
+        Map<String, String> props = configuration.asMap();
+        LOG.info("calling @PostConstruct on all domain services");
+        for (Object service : services) {
+            callPostConstructIfExists(service, props);
+        }
+    }
+
+    private void callPostConstructIfExists(Object service, Map<String, String> props) {
+        LOG.debug("looking for @PostConstruct methods on " + service.getClass().getName());
+        Method[] methods = service.getClass().getMethods();
+        boolean found = false;
+        for (Method method : methods) {
+            PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
+            if(postConstruct == null) {
+                continue;
+            }
+            found = true;
+            LOG.info("... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
+
+            final int numParams = method.getParameterTypes().length;
+            
+            // unlike shutdown, we don't swallow exceptions; would rather fail early
+            if(numParams == 0) {
+                InvokeUtils.invoke(method, service);
+            } else {
+                InvokeUtils.invoke(method, service, new Object[]{props});
+            }
+        }
+        if(!found) {
+            LOG.info("... found no @PostConstruct methods on " + service.getClass().getName());
+        }
+    }
+
+
+    protected void shutdownServices() {
+        final List<Object> services = getServices();
+        LOG.info("calling @PreDestroy on all domain services");
+        for (Object service : services) {
+            callPreDestroyIfExists(service);
+        }
+    }
+
+    private void callPreDestroyIfExists(Object service) {
+        LOG.debug("looking for @PreDestroy methods on " + service.getClass().getName());
+        final Method[] methods = service.getClass().getMethods();
+        boolean found = false;
+        for (Method method : methods) {
+            final PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
+            if(preDestroy == null) {
+                continue;
+            }
+            found = true;
+            LOG.info("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
+            try {
+                InvokeUtils.invoke(method, service);
+            } catch(Exception ex) {
+                // do nothing
+                LOG.warn("... @PreDestroy method threw exception - continuing anyway", ex);
+            }
+        }
+        if(!found) {
+            LOG.info("... found no @PreDestroy methods on " + service.getClass().getName());
+        }
+    }
+
 
     // /////////////////////////////////////////////////////////////
     // install, load, allSpecifications, lookup
@@ -611,12 +695,21 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     // ////////////////////////////////////////////////////////////////////
 
     public List<Class<?>> getServiceClasses() {
+        List<Class<?>> serviceClasses = Lists.transform(services, new Function<Object, Class<?>>(){
+            public Class<?> apply(Object o) {
+                return o.getClass();
+            }
+        });
         return Collections.unmodifiableList(serviceClasses);
     }
 
+    private List<Object> getServices() {
+        return services;
+    }
+    
     @Override
-    public void setServiceClasses(final List<Class<?>> serviceClasses) {
-        this.serviceClasses = serviceClasses;
+    public void setServices(final List<Object> services) {
+        this.services = services;
     }
 
     // ////////////////////////////////////////////////////////////////////
