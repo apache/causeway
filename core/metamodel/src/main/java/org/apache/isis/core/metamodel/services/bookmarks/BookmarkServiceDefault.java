@@ -35,6 +35,11 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     @NotInServiceMenu
     public Object lookup(BookmarkHolder bookmarkHolder) {
         Bookmark bookmark = bookmarkHolder.bookmark();
+        return lookup(bookmark);
+    }
+
+    @Hidden
+    public Object lookup(Bookmark bookmark) {
         Object lookup = domainObjectServices.lookup(bookmark);
         return lookup;
     }

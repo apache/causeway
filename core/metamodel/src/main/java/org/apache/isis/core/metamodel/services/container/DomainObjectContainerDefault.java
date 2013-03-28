@@ -33,7 +33,6 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
-import org.apache.isis.applib.services.exceprecog.RecognizedException;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -450,7 +449,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     
     private final ExceptionRecognizer recognizer = 
             new ExceptionRecognizerComposite(
-                    new ExceptionRecognizerForType(RecognizedException.class),
                     new ExceptionRecognizerForConcurrencyException()
                 );
     

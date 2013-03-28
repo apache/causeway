@@ -29,6 +29,9 @@ public interface BookmarkService {
     Object lookup(BookmarkHolder bookmarkHolder);
 
     @Hidden
+    Object lookup(Bookmark bookmarkHolder);
+
+    @Hidden
     Bookmark bookmarkFor(Object domainObject);
     
 }

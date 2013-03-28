@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package dom.audit;
+package org.apache.isis.objectstore.jdo.applib.service.audit;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.objectstore.jdo.applib.AuditService;
 
-public class AuditServiceDemo extends AbstractFactoryAndRepository  implements AuditService {
+public class AuditingServiceJdo extends AbstractFactoryAndRepository  implements AuditService {
     
     public List<AuditEntry> list() {
         return allInstances(AuditEntry.class);

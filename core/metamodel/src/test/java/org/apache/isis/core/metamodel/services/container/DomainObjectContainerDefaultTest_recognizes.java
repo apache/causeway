@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.exceprecog.RecognizedException;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -37,12 +36,6 @@ public class DomainObjectContainerDefaultTest_recognizes {
     @Test
     public void whenConcurrencyException_is_recognized() throws Exception {
         ex = new ConcurrencyException("foo", RootOidDefault.create(ObjectSpecId.of("CUS"), "123"));
-        assertThat(container.recognize(ex), is(not(nullValue())));
-    }
-
-    @Test
-    public void whenRecognizedException_is_recognized() throws Exception {
-        ex = new RecognizedException("foo");
         assertThat(container.recognize(ex), is(not(nullValue())));
     }
 
