@@ -59,12 +59,9 @@
                 <module>component/profilestore/sql</module>
         
                 <module>component/security/file</module>
-                <module>component/security/ldap</module>
-                <module>component/security/sql</module>
                 <module>component/security/shiro</module>
         
                 <module>component/viewer/dnd</module>
-                <module>component/viewer/html</module>
                 <module>component/viewer/scimpi</module>
                 <module>component/viewer/wicket</module>
                 <module>component/viewer/restfulobjects</module>
@@ -72,7 +69,6 @@
                 <module>component/viewer/junit</module>
         
                 <module>example/application/claims</module>
-                <module>example/application/quickstart_html_sql</module>
                 <module>example/application/quickstart_scimpi_nosql</module>
                 <module>example/application/quickstart_dnd_junit_bdd</module>
                 <module>example/application/quickstart_wicket_restful_jdo</module>
