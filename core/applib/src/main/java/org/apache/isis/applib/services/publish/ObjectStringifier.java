@@ -2,7 +2,7 @@ package org.apache.isis.applib.services.publish;
 
 
 /**
- * To optionally configure the way that {@link EventPayloadForChangedObject} and {@link EventPayloadForActionInvocation}
+ * To optionally configure the way that {@link EventPayloadForObjectChanged} and {@link EventPayloadForActionInvocation}
  * create the <tt>toString()</tt> form of their contents.
  */
 public interface ObjectStringifier {

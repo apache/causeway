@@ -46,6 +46,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -419,7 +420,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String oidStr = getOidMarshaller().marshal(adapterOid);
             final String title = oidStr + ": " + currentInvocation.getAction().getIdentifier().toNameParmsIdentityString();
             
-            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch, title);
+            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, currentTimestampEpoch, title);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation);
         } finally {
             ActionInvocationFacet.currentInvocation.set(null);
@@ -438,7 +439,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String oidStr = getOidMarshaller().marshal(adapterOid);
             final String title = oidStr;
 
-            final EventMetadata metadata = newEventMetadata(currentUser, currentTimestampEpoch, title);
+            final EventMetadata metadata = newEventMetadata(EventType.OBJECT_CHANGED, currentUser, currentTimestampEpoch, title);
 
             publishingService.publishObject(payloadFactory, metadata, changedAdapter);
         }
@@ -448,8 +449,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         return Clock.getTime();
     }
 
-    private EventMetadata newEventMetadata(final String currentUser, final long currentTimestampEpoch, String title) {
-        return new EventMetadata(getGuid(), nextEventSequence(), currentUser, currentTimestampEpoch, title);
+    private EventMetadata newEventMetadata(EventType eventType, final String currentUser, final long currentTimestampEpoch, String title) {
+        return new EventMetadata(getGuid(), nextEventSequence(), eventType, currentUser, currentTimestampEpoch, title);
     }
 
     private int nextEventSequence() {

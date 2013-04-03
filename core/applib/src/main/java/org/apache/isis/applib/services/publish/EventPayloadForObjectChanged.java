@@ -11,17 +11,17 @@ import org.apache.isis.applib.annotation.Programmatic;
  * <tt>RestfulObjectsSpecEventSerializer</tt>.
  */
 @NotPersistable
-public class EventPayloadForChangedObject<T> implements EventPayload {
+public class EventPayloadForObjectChanged<T> implements EventPayload {
     
     private final T changed;
     private ObjectStringifier stringifier = new ObjectStringifier.Simple();
 
-    public EventPayloadForChangedObject(T changed) {
+    public EventPayloadForObjectChanged(T changed) {
         this.changed = changed;
     }
 
     @Programmatic
-    public EventPayloadForChangedObject<T> with(ObjectStringifier stringifier) {
+    public EventPayloadForObjectChanged<T> with(ObjectStringifier stringifier) {
         this.stringifier = stringifier;
         return this;
     }
@@ -32,6 +32,6 @@ public class EventPayloadForChangedObject<T> implements EventPayload {
     
     @Override
     public String toString() {
-        return "CHANGED_OBJECT:"+ stringifier.toString(changed);
+        return EventType.OBJECT_CHANGED + ":"+ stringifier.toString(changed);
     }
 }

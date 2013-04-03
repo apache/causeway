@@ -16,7 +16,7 @@ public class EventMetadataTest_getId {
         String user = "fred";
         long timestamp = 1364120978631L;
         String title = "some title";
-        EventMetadata eventMetadata = new EventMetadata(transactionId, sequence, user, timestamp, title);
+        EventMetadata eventMetadata = new EventMetadata(transactionId, sequence, EventType.ACTION_INVOCATION, user, timestamp, title);
         
         assertThat(eventMetadata.getTransactionId(), is(UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766")));
         assertThat(eventMetadata.getSequence(), is(2));
@@ -24,6 +24,7 @@ public class EventMetadataTest_getId {
         assertThat(eventMetadata.getTimestamp(), is(1364120978631L));
         assertThat(eventMetadata.getId(), is("1bd8e5d4-2d67-4395-b5e8-d74acd766766.2"));
         assertThat(eventMetadata.getTitle(), is("some title"));
+        assertThat(eventMetadata.getEventType(), is(EventType.ACTION_INVOCATION));
     }
 
 }

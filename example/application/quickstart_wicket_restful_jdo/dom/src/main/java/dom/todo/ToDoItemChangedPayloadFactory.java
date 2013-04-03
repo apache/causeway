@@ -2,11 +2,11 @@ package dom.todo;
 
 import org.apache.isis.applib.annotation.PublishedObject.PayloadFactory;
 import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.EventPayloadForChangedObject;
+import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
 
 public class ToDoItemChangedPayloadFactory implements PayloadFactory{
 
-    public static class ToDoItemPayload extends EventPayloadForChangedObject<ToDoItem> {
+    public static class ToDoItemPayload extends EventPayloadForObjectChanged<ToDoItem> {
 
         public ToDoItemPayload(ToDoItem changed) {
             super(changed);

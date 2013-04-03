@@ -30,7 +30,7 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
         this.arguments = arguments != null? arguments: Collections.emptyList();
         this.result = result;
     }
-    
+
     @Programmatic
     public EventPayloadForActionInvocation<T> with(ObjectStringifier stringifier) {
         this.stringifier = stringifier;
@@ -129,7 +129,7 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
-        buf.append("ACTION:").append(getActionName());
+        buf.append(EventType.ACTION_INVOCATION + ":").append(getActionName());
         buf.append("\n    target=").append(stringifier.toString(target));
         buf.append("\n      args=[");
         for (Object arg : arguments) {
@@ -140,4 +140,5 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
         buf.append("\n    result=").append(stringifiedResult != null ? stringifiedResult : "void");
         return buf.toString();
     }
+
 }

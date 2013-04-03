@@ -5,8 +5,10 @@ import java.util.List;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
@@ -31,6 +33,7 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
         publishedEvent.setId(metadata.getId());
         publishedEvent.setTransactionId(metadata.getTransactionId().toString());
         publishedEvent.setSequence(metadata.getSequence());
+        publishedEvent.setEventType(metadata.getEventType());
         publishedEvent.setTimestamp(metadata.getTimestamp());
         publishedEvent.setUser(metadata.getUser());
         publishedEvent.setTitle(metadata.getTitle());
@@ -46,18 +49,24 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
                         "state", PublishedEvent.State.QUEUED));
     }
 
-    @ActionSemantics(Of.IDEMPOTENT)
+    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="2")
-    public PublishedEvent processed(PublishedEvent publishedEvent) {
-        publishedEvent.setState(State.PROCESSED);
-        return publishedEvent;
+    public List<PublishedEvent> processedEvents() {
+        return allMatches(
+                new QueryDefault<PublishedEvent>(PublishedEvent.class, 
+                        "publishedevent_of_state", 
+                        "state", PublishedEvent.State.PROCESSED));
     }
 
-    @ActionSemantics(Of.IDEMPOTENT)
+    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="3")
-    public PublishedEvent reQueue(PublishedEvent publishedEvent) {
-        publishedEvent.setState(State.QUEUED);
-        return publishedEvent;
+    public void purgeProcessed() {
+        // REVIEW: this is not particularly performant.
+        // much better would be to go direct to the JDO API.
+        List<PublishedEvent> processedEvents = processedEvents();
+        for (PublishedEvent publishedEvent : processedEvents) {
+            publishedEvent.delete();
+        }
     }
 
     @Hidden

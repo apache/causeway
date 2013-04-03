@@ -3,13 +3,19 @@ package org.apache.isis.objectstore.jdo.applib.service.publish;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
 
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.services.publish.EventType;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.APPLICATION)
 @javax.jdo.annotations.Queries( {
@@ -17,9 +23,6 @@ import org.apache.isis.applib.annotation.Where;
             name="publishedevent_of_state", language="JDOQL",  
             value="SELECT FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent WHERE state == :state ORDER BY timestamp")
 })
-//@javax.jdo.annotations.Indices({
-//    @javax.jdo.annotations.Index(members={"timestamp,transactionId,sequence"})
-//})
 @Immutable
 public class PublishedEvent {
 
@@ -104,16 +107,48 @@ public class PublishedEvent {
     // }}
 
 
-    // {{ User (property)
-    private String user;
+    // {{ EventType (property)
+    private EventType eventType;
 
     @MemberOrder(sequence = "3")
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(final EventType eventType) {
+        this.eventType = eventType;
+    }
+    // }}
+
+    
+    // {{ User (property)
+    private String user;
+    
+    @MemberOrder(sequence = "4")
     public String getUser() {
         return user;
     }
-
+    
     public void setUser(final String user) {
         this.user = user;
+    }
+    // }}
+    
+    
+    // {{ State (property)
+    private State state;
+
+    @MemberOrder(sequence = "5")
+    public State getState() {
+        return state;
+    }
+
+    public void setState(final State state) {
+        this.state = state;
+    }
+    private PublishedEvent setStateAndReturn(State state) {
+        setState(state);
+        return this;
     }
     // }}
 
@@ -124,7 +159,7 @@ public class PublishedEvent {
 
     @MultiLine(numberOfLines=20)
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(sequence = "5")
+    @MemberOrder(sequence = "6")
     public String getSerializedForm() {
         return serializedForm;
     }
@@ -134,17 +169,37 @@ public class PublishedEvent {
     }
     // }}
 
-    // {{ State (property)
-    private State state;
-
-    @MemberOrder(sequence = "4")
-    public State getState() {
-        return state;
+    @Bulk
+    @ActionSemantics(Of.IDEMPOTENT)
+    @MemberOrder(sequence="10")
+    public PublishedEvent processed() {
+        return setStateAndReturn(State.PROCESSED);
     }
 
-    public void setState(final State state) {
-        this.state = state;
+
+    @Bulk
+    @ActionSemantics(Of.IDEMPOTENT)
+    @MemberOrder(sequence="11")
+    public PublishedEvent reQueue() {
+        return setStateAndReturn(State.QUEUED);
+    }
+
+    @Bulk
+    @MemberOrder(sequence="12")
+    public void delete() {
+        container.removeIfNotAlready(this);
+    }
+    
+
+    // {{ injected: DomainObjectContainer
+    private DomainObjectContainer container;
+
+    public void setDomainObjectContainer(final DomainObjectContainer container) {
+        this.container = container;
     }
     // }}
+
+
+
 
 }

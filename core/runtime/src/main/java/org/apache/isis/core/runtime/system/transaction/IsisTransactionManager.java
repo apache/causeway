@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
-import org.apache.isis.applib.services.publish.EventPayloadForChangedObject;
+import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
 import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishingService;
@@ -461,7 +461,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return new PublishedObject.PayloadFactory() {
             @Override
             public EventPayload payloadFor(final Object changedObject) {
-                return new EventPayloadForChangedObject(changedObject)
+                return new EventPayloadForObjectChanged<Object>(changedObject)
                             .with(objectStringifier());
             }
 
@@ -472,7 +472,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return new PublishedAction.PayloadFactory(){
             @Override
             public EventPayload payloadFor(Identifier actionIdentifier, Object target, List<Object> arguments, Object result) {
-                return new EventPayloadForActionInvocation(
+                return new EventPayloadForActionInvocation<Object>(
                         actionIdentifier, 
                         target, 
                         arguments, 

@@ -17,13 +17,15 @@ public class EventMetadata {
     private final String user;
     private final long timestamp;
     private final String title;
+    private final EventType eventType;
     
-    public EventMetadata(UUID transactionId, int sequence, String user, long timestamp, String title) {
+    public EventMetadata(UUID transactionId, int sequence, EventType eventType, String user, long timestamp, String title) {
         this.transactionId = transactionId;
         this.sequence = sequence;
         this.user = user;
         this.timestamp = timestamp;
         this.title = title;
+        this.eventType = eventType;
     }
     
     /**
@@ -77,6 +79,9 @@ public class EventMetadata {
         return title;
     }
 
+    public EventType getEventType() {
+        return eventType;
+    }
     
     @Override
     public String toString() {
