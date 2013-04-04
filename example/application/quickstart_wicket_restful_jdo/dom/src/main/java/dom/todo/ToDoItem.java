@@ -260,6 +260,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // }}
 
     // {{ notYetCompleted (action)
+    @PublishedAction
     @MemberOrder(sequence = "2")
     public ToDoItem notYetCompleted() {
         setComplete(false);

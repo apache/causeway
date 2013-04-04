@@ -8,6 +8,7 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.publish.EventMetadata;
@@ -20,6 +21,7 @@ import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent.Sta
  * An implementation of {@link PublishingService} that persists events as
  * entities into a JDO-backed database.
  */
+@Named("Integration")
 public class PublishingServiceJdo extends AbstractService implements PublishingService {
 
     private EventSerializer eventSerializer;

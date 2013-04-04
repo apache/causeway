@@ -22,7 +22,7 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
     private final T target;
     private final List<? extends Object> arguments;
     private final Object result;
-    private ObjectStringifier stringifier = new ObjectStringifier.Simple();
+    private ObjectStringifier stringifier;
 
     public EventPayloadForActionInvocation(final Identifier actionIdentifier, final T target, final List<? extends Object> arguments, final Object result) {
         this.target = target;
@@ -31,10 +31,12 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
         this.result = result;
     }
 
+    /**
+     * Injected by Isis runtime immediately after instantiation.
+     */
     @Programmatic
-    public EventPayloadForActionInvocation<T> with(ObjectStringifier stringifier) {
+    public void withStringifier(ObjectStringifier stringifier) {
         this.stringifier = stringifier;
-        return this;
     }
 
 
@@ -128,6 +130,10 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
     
     @Override
     public String toString() {
+        if(stringifier == null) {
+            throw new IllegalStateException("ObjectStringifier has not been injected");
+        }
+
         final StringBuilder buf = new StringBuilder();
         buf.append(EventType.ACTION_INVOCATION + ":").append(getActionName());
         buf.append("\n    target=").append(stringifier.toString(target));

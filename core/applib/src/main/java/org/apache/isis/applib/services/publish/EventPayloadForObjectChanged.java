@@ -14,24 +14,36 @@ import org.apache.isis.applib.annotation.Programmatic;
 public class EventPayloadForObjectChanged<T> implements EventPayload {
     
     private final T changed;
-    private ObjectStringifier stringifier = new ObjectStringifier.Simple();
+    private ObjectStringifier stringifier;
 
     public EventPayloadForObjectChanged(T changed) {
         this.changed = changed;
     }
 
+    /**
+     * Injected by Isis runtime immediately after instantiation.
+     */
     @Programmatic
-    public EventPayloadForObjectChanged<T> with(ObjectStringifier stringifier) {
+    public void withStringifier(ObjectStringifier stringifier) {
         this.stringifier = stringifier;
-        return this;
     }
 
     public T getChanged() {
         return changed;
     }
-    
+
+    public String getClassName() {
+        if(stringifier == null) {
+            throw new IllegalStateException("ObjectStringifier has not been injected");
+        }
+        return stringifier.classNameOf(changed);
+    }
+
     @Override
     public String toString() {
+        if(stringifier == null) {
+            throw new IllegalStateException("ObjectStringifier has not been injected");
+        }
         return EventType.OBJECT_CHANGED + ":"+ stringifier.toString(changed);
     }
 }

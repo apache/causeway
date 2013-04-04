@@ -1,5 +1,7 @@
 package org.apache.isis.applib.services.publish;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 
 
 
@@ -24,5 +26,11 @@ package org.apache.isis.applib.services.publish;
  * @see EventMetadata
  */
 public interface EventPayload {
+
+    /**
+     * Injected by Isis runtime immediately after instantiation.
+     */
+    @Programmatic
+    void withStringifier(ObjectStringifier stringifier);
 
 }

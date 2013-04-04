@@ -47,6 +47,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
+import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -55,12 +56,14 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -421,7 +424,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String title = oidStr + ": " + currentInvocation.getAction().getIdentifier().toNameParmsIdentityString();
             
             final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, currentTimestampEpoch, title);
-            publishingService.publishAction(payloadFactory, metadata, currentInvocation);
+            publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             ActionInvocationFacet.currentInvocation.set(null);
         }
@@ -441,8 +444,36 @@ public class IsisTransaction implements TransactionScopedComponent {
 
             final EventMetadata metadata = newEventMetadata(EventType.OBJECT_CHANGED, currentUser, currentTimestampEpoch, title);
 
-            publishingService.publishObject(payloadFactory, metadata, changedAdapter);
+            publishingService.publishObject(payloadFactory, metadata, changedAdapter, objectStringifier());
         }
+    }
+
+    protected ObjectStringifier objectStringifier() {
+        if(objectStringifier == null) {
+            // lazily created; is threadsafe so no need to guard against race conditions
+            objectStringifier = new ObjectStringifier() {
+                @Override
+                public String toString(Object object) {
+                    if(object == null) {
+                        return null;
+                    }
+                    final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+                    Oid oid = adapter.getOid();
+                    return oid != null? oid.enString(getOidMarshaller()): encodedValueOf(adapter);
+                }
+                private String encodedValueOf(ObjectAdapter adapter) {
+                    EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
+                    return facet != null? facet.toEncodedString(adapter): adapter.toString();
+                }
+                @Override
+                public String classNameOf(Object object) {
+                    final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+                    final String className = adapter.getSpecification().getFullIdentifier();
+                    return className;
+                }
+            };
+        }
+        return objectStringifier;
     }
 
     private static long currentTimestampEpoch() {
@@ -786,6 +817,9 @@ public class IsisTransaction implements TransactionScopedComponent {
    
     private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();
     private final Set<ObjectAdapter> changedObjects = Sets.newLinkedHashSet();
+
+
+    private ObjectStringifier objectStringifier;
     
 
     /**

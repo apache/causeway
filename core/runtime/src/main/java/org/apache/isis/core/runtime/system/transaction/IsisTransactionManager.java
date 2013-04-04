@@ -47,6 +47,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -461,10 +462,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return new PublishedObject.PayloadFactory() {
             @Override
             public EventPayload payloadFor(final Object changedObject) {
-                return new EventPayloadForObjectChanged<Object>(changedObject)
-                            .with(objectStringifier());
+                return new EventPayloadForObjectChanged<Object>(changedObject);
             }
-
         };
     }
 
@@ -476,29 +475,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
                         actionIdentifier, 
                         target, 
                         arguments, 
-                        result).with(objectStringifier());
+                        result);
             }
         };
     }
-
-    protected ObjectStringifier objectStringifier() {
-        return new ObjectStringifier() {
-            @Override
-            public String toString(Object object) {
-                if(object == null) {
-                    return null;
-                }
-                final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
-                Oid oid = adapter.getOid();
-                return oid != null? oid.enString(IsisContext.getOidMarshaller()): encodedValueOf(adapter);
-            }
-            private String encodedValueOf(ObjectAdapter adapter) {
-                EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
-                return facet != null? facet.toEncodedString(adapter): adapter.toString();
-            }
-        };
-    }
-
 
 
     // //////////////////////////////////////////////////////////////
@@ -584,6 +564,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
     
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 
 }

@@ -1,16 +1,13 @@
 package org.apache.isis.applib.services.publish;
 
+import org.apache.isis.applib.annotation.PublishedObject.PayloadFactory;
+
 
 /**
- * To optionally configure the way that {@link EventPayloadForObjectChanged} and {@link EventPayloadForActionInvocation}
- * create the <tt>toString()</tt> form of their contents.
+ * Decouples the {@link PayloadFactory payload} {@link org.apache.isis.applib.annotation.PublishedAction.PayloadFactory factory}
+ * implementations from the framework for obtaining an string form (OID) and the class name of objects.
  */
 public interface ObjectStringifier {
+    public String classNameOf(Object object);
     public String toString(Object object);
-    static class Simple implements ObjectStringifier {
-        @Override
-        public String toString(Object object) {
-            return object != null? object.toString(): null;
-        }
-    }
 }

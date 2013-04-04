@@ -4,6 +4,7 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet.CurrentInvocation;
@@ -31,19 +32,22 @@ public class PublishingServiceWithDefaultPayloadFactories {
     public void publishObject(
             final PublishedObject.PayloadFactory payloadFactoryIfAny, 
             final EventMetadata metadata, 
-            final ObjectAdapter changedAdapter) {
+            final ObjectAdapter changedAdapter, 
+            final ObjectStringifier stringifier) {
         final PublishedObject.PayloadFactory payloadFactoryToUse = 
                 payloadFactoryIfAny != null
                 ? payloadFactoryIfAny
                 : defaultObjectPayloadFactory;
         final EventPayload payload = payloadFactoryToUse.payloadFor(ObjectAdapterUtils.unwrapObject(changedAdapter));
+        payload.withStringifier(stringifier);
         publishingService.publish(metadata, payload);
     }
 
     public void publishAction(
             final PublishedAction.PayloadFactory payloadFactoryIfAny, 
             final EventMetadata metadata, 
-            final CurrentInvocation currentInvocation) {
+            final CurrentInvocation currentInvocation, 
+            final ObjectStringifier stringifier) {
         final PublishedAction.PayloadFactory payloadFactoryToUse = 
                 payloadFactoryIfAny != null
                 ? payloadFactoryIfAny
@@ -53,7 +57,7 @@ public class PublishingServiceWithDefaultPayloadFactories {
                 ObjectAdapterUtils.unwrapObject(currentInvocation.getTarget()), 
                 ObjectAdapterUtils.unwrapObjects(currentInvocation.getParameters()), 
                 ObjectAdapterUtils.unwrapObject(currentInvocation.getResult()));
-        
+        payload.withStringifier(stringifier);
         publishingService.publish(metadata, payload);
     }
 }
