@@ -730,3 +730,30 @@ colors
 #00477F - dark blue
 #F0EFEA - bookmark background
 */
+
+
+
+/* veil */
+
+#veil {
+    display: none;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index=99999;
+	height: 100%;
+	width: 100%;
+	background: rgb(210, 240, 243) transparent;
+	background-color:rgba(210, 240, 243,0.5);
+}
+
+#veil div.imgHolder {
+	display: relative;
+}
+
+#veil img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 7em;
+} 

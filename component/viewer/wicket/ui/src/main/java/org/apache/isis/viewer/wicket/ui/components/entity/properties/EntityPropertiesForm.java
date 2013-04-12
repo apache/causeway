@@ -25,6 +25,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -189,6 +191,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
                 toEditMode(target);
             }
+            
         };
         add(editButton);
 
@@ -340,6 +343,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         };
         add(cancelButton);
 
+        okButton.setOutputMarkupPlaceholderTag(true);
         editButton.setOutputMarkupPlaceholderTag(true);
         cancelButton.setOutputMarkupPlaceholderTag(true);
         

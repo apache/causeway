@@ -86,6 +86,7 @@ public abstract class PageAbstract extends WebPage {
     public static final String ID_ABOUT_LINK = "aboutLink";
 
     private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
+    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
 
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
@@ -168,6 +169,7 @@ public abstract class PageAbstract extends WebPage {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS)));
+        response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS)));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if (!StringUtils.isEmpty(feedbackMsg)) {

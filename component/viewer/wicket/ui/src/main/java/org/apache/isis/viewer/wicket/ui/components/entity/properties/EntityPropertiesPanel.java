@@ -34,7 +34,6 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_PROPERTIES = "entityProperties";
-    
 
     private EntityPropertiesForm form;
 

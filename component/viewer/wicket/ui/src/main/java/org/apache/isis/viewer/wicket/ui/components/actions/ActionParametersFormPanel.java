@@ -27,10 +27,16 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -43,6 +49,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -71,7 +78,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         add(new ActionParameterForm("inputForm", getModel()));
     }
 
-    class ActionParameterForm extends Form<ObjectAdapter> {
+    class ActionParameterForm extends Form<ObjectAdapter>  {
 
         private static final long serialVersionUID = 1L;
 
@@ -80,6 +87,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         public ActionParameterForm(final String id, final ActionModel actionModel) {
             super(id, actionModel);
 
+            setOutputMarkupId(true); // for ajax button
+            
             addParameters();
 
             FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
@@ -114,16 +123,19 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             }
         }
 
+
         private void addOkButton() {
-            add(new Button(ID_OK_BUTTON) {
+            Button okButton = new Button(ID_OK_BUTTON) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public void onSubmit() {
                     actionExecutor.executeActionAndProcessResults(ActionParameterForm.this);
                 };
-            });
+            };
+            add(okButton);
         }
+
 
         private List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
             final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, Mementos.fromActionParameter());
@@ -132,5 +144,4 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             return Lists.newArrayList(parameterMementoList);
         }
     }
-
 }
