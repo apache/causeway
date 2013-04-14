@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.selector.links;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -238,12 +239,17 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
 
     private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {
         final List<ComponentFactory> componentFactories = getComponentFactoryRegistry().findComponentFactories(componentType, model);
-        return Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+        ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {
                 return input != ignoreFactory;
             }
         }));
+        return ordered(otherFactories);
+    }
+
+    protected List<ComponentFactory> ordered(List<ComponentFactory> otherFactories) {
+        return otherFactories;
     }
 
     @Override

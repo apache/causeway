@@ -19,6 +19,7 @@
 
 package fixture.todo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.isis.applib.clock.Clock;
@@ -37,12 +38,8 @@ public class ToDoItemsFixture extends AbstractFixture {
 
         removeAllToDosForCurrentUser();
 
-        createToDoItemForCurrentUser("Buy milk", Category.Domestic, daysFromToday(0));
-        createToDoItemForCurrentUser("Buy stamps", Category.Domestic, daysFromToday(0));
-        createToDoItemForCurrentUser("Pick up laundry", Category.Other, daysFromToday(6));
-        createToDoItemForCurrentUser("Write blog post", Category.Professional, null);
-        createToDoItemForCurrentUser("Organize brown bag", Category.Professional, daysFromToday(14));
-
+        installFor(getContainer().getUser().getName());
+        
         getContainer().flush();
     }
 
@@ -50,11 +47,11 @@ public class ToDoItemsFixture extends AbstractFixture {
 
         removeAllToDosFor(user);
 
-        createToDoItemForUser("Buy milk", Category.Domestic, user, daysFromToday(0));
-        createToDoItemForUser("Buy stamps", Category.Domestic, user, daysFromToday(0));
-        createToDoItemForUser("Pick up laundry", Category.Other, user, daysFromToday(6));
-        createToDoItemForUser("Write blog post", Category.Professional, user, null);
-        createToDoItemForUser("Organize brown bag", Category.Professional, user, daysFromToday(14));
+        createToDoItemForUser("Buy milk", Category.Domestic, user, daysFromToday(0), new BigDecimal("1.50"));
+        createToDoItemForUser("Buy stamps", Category.Domestic, user, daysFromToday(0), new BigDecimal("10.00"));
+        createToDoItemForUser("Pick up laundry", Category.Other, user, daysFromToday(6), new BigDecimal("7.50"));
+        createToDoItemForUser("Write blog post", Category.Professional, user, null, null);
+        createToDoItemForUser("Organize brown bag", Category.Professional, user, daysFromToday(14), null);
 
         getContainer().flush();
     }
@@ -75,12 +72,8 @@ public class ToDoItemsFixture extends AbstractFixture {
         }
     }
 
-    private ToDoItem createToDoItemForCurrentUser(final String description, final Category category, final LocalDate dueBy) {
-        return toDoItems.newToDo(description, category, dueBy);
-    }
-
-    private ToDoItem createToDoItemForUser(final String description, final Category category, String user, final LocalDate dueBy) {
-        return toDoItems.newToDo(description, category, user, dueBy);
+    private ToDoItem createToDoItemForUser(final String description, final Category category, String user, final LocalDate dueBy, final BigDecimal cost) {
+        return toDoItems.newToDo(description, category, user, dueBy, cost);
     }
 
     private static LocalDate daysFromToday(final int i) {

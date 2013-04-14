@@ -18,11 +18,13 @@
  */
 package dom.todo;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
@@ -189,6 +191,23 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.complete = complete;
     }
 
+    
+    // {{ Cost (property)
+    private BigDecimal cost;
+
+    @Column(scale = 4)
+    @Optional
+    @MemberOrder(sequence = "4.1")
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(final BigDecimal cost) {
+        this.cost = cost;
+    }
+    // }}
+
+
     // {{ Notes (property)
     private String notes;
 
@@ -348,8 +367,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
             ToDoItem.Category category, 
             @Named("Due by") 
             @Optional
-            LocalDate dueBy) {
-        return toDoItems.newToDo(description, category, dueBy);
+            LocalDate dueBy,
+            @Named("Cost") 
+            @Optional
+            BigDecimal cost) {
+        return toDoItems.newToDo(description, category, dueBy, cost);
     }
     public String default0Duplicate() {
         return getDescription() + " - Copy";

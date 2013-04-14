@@ -286,6 +286,17 @@
             <artifactId>danhaywood-isis-wicket-gmap3-ui</artifactId>
         </dependency>
          -->
+        <!-- 
+        WICKEDCHARTS: uncomment to use https://github.com/danhaywood/isis-wicket-wickedcharts
+        <dependency>
+            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <artifactId>danhaywood-isis-wicket-wickedcharts-scalarchart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <artifactId>danhaywood-isis-wicket-wickedcharts-summarycharts</artifactId>
+        </dependency>
+         -->
          
     </dependencies>
 

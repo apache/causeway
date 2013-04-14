@@ -19,7 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.wicket.model.IModel;
 
@@ -68,13 +71,39 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
                 }
             }
         }
+        int ajaxTableIdx = findAjaxTable(componentFactories);
+        if(ajaxTableIdx>=0) {
+            return ajaxTableIdx;
+        }
+        return 0;
+    }
+
+    @Override
+    protected List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
+        return orderAjaxTableToEnd(componentFactories);
+    }
+
+    static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
+        int ajaxTableIdx = findAjaxTable(componentFactories);
+        if(ajaxTableIdx>=0) {
+            List<ComponentFactory> orderedFactories = Lists.newArrayList(componentFactories);
+            ComponentFactory ajaxTableFactory = orderedFactories.remove(ajaxTableIdx);
+            orderedFactories.add(ajaxTableFactory);
+            return orderedFactories;
+        } else {
+            return componentFactories;
+        }
+    }
+    
+    private static int findAjaxTable(List<ComponentFactory> componentFactories) {
         for(int i=0; i<componentFactories.size(); i++) {
             if(componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
                 return i;
             }
         }
-        return 0;
+        return -1;
     }
+
 
     private static boolean hasResolveEagerlyFacet(IModel<?> model) {
         if(!(model instanceof EntityCollectionModel)) {

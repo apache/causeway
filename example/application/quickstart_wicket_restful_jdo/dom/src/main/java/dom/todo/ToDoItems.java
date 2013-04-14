@@ -18,8 +18,15 @@
  */
 package dom.todo;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.base.Objects;
+
+import dom.todo.ToDoItem.Category;
+
+import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -28,15 +35,11 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
-import org.joda.time.LocalDate;
-
-import com.google.common.base.Objects;
-
-import dom.todo.ToDoItem.Category;
 
 @Named("ToDos")
 public class ToDoItems extends AbstractFactoryAndRepository {
@@ -101,9 +104,12 @@ public class ToDoItems extends AbstractFactoryAndRepository {
             @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation
             @Named("Description") String description, 
             @Named("Category") Category category,
-            @Named("Due by") LocalDate dueBy) {
+            @Optional
+            @Named("Due by") LocalDate dueBy,
+            @Optional
+            @Named("Cost") BigDecimal cost) {
         final String ownedBy = currentUserName();
-        return newToDo(description, category, ownedBy, dueBy);
+        return newToDo(description, category, ownedBy, dueBy, cost);
     }
     public LocalDate default2NewToDo() {
         return new LocalDate(Clock.getTime()).plusDays(14);
@@ -136,15 +142,17 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // {{ newToDo  (hidden)
     @Hidden // for use by fixtures
     public ToDoItem newToDo(
-            String description, 
-            Category category, 
-            String userName,
-            LocalDate dueBy) {
+            final String description, 
+            final Category category, 
+            final String userName,
+            final LocalDate dueBy, 
+            final BigDecimal cost) {
         final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
         toDoItem.setOwnedBy(userName);
         toDoItem.setDueBy(dueBy);
+        toDoItem.setCost(cost);
 
         // 
         // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3        

@@ -37,6 +37,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.CollectionContentsAsIconsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsDropDownSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.collections.EntityCollectionsPanelFactory;
@@ -159,7 +160,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // top-level
         componentFactories.add(new EntityCombinedPanelFactory());
-//        componentFactories.add(new EntityTabbedPanelFactory());
         
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
@@ -170,9 +170,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
         componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
-        // componentFactories.add(new CollectionContentsAsSimpleTableFactory());
+        
         // // work-in-progress
-        componentFactories.add(new CollectionContentsAsIconsPanelFactory());
+        // componentFactories.add(new CollectionContentsAsIconsPanelFactory());
+        
+        componentFactories.add(new CollectionContentsAsSummaryFactory());
     }
 
     protected void addComponentFactoriesForEntityCollection(final ComponentFactoryList componentFactories) {

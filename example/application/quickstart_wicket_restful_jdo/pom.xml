@@ -332,17 +332,17 @@
                 <scope>import</scope>
             </dependency>
             -->
-            
-            <!-- 
-            ActiveMQ/RA Publishing Service:
-            uncomment to use https://github.com/danhaywood/isis-publishingservice-activemq-ra
+
+            <!--
+            WICKEDCHARTS: uncomment to use https://github.com/danhaywood/isis-wicket-wickedcharts
             <dependency>
-            <groupId>com.danhaywood.isis.publishingservice</groupId>
-                <artifactId>danhaywood-isis-publishingservice-activemq-ra</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+                <artifactId>danhaywood-isis-wicket-wickedcharts</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
-             -->
-            
+            -->
 
         </dependencies>
     </dependencyManagement>

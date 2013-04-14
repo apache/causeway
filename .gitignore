@@ -11,6 +11,9 @@ logs/
 .idea
 *.iml
 
+JArchitectOut/
+*.jdproj
+
 component/objectstore/sql/sql-tests-common/hsql-db/
 component/objectstore/sql/sql-tests-common/xml/
 component/objectstore/xml/tmp/objects/
