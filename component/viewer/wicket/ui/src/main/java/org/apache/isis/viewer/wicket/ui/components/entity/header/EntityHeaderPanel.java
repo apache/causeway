@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contrib
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -108,7 +109,6 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
 
             if(!topLevelActions.isEmpty()) {
                 final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), topLevelActions, linkFactory);
-                // TODO: i18n
                 final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
                 this.addOrReplace(cssMenuPanel);
@@ -124,7 +124,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
         final List<ObjectAction> topLevelActions = Lists.newArrayList();
         
         addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-        if(IsisContext.getDeploymentType().isPrototyping()) {
+        if(getDeploymentType().isPrototyping()) {
             addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions);
             addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
         }
@@ -189,6 +189,11 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
 
     protected ImageResourceCache getImageCache() {
         return imageCache;
+    }
+
+
+    protected DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
     }
 
 

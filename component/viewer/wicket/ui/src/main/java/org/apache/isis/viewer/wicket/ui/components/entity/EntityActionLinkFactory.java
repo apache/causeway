@@ -20,13 +20,18 @@
 package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -61,9 +66,24 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
         final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
+        //action
         final String label = ObjectActions.nameFor(action);
 
-        return new LinkAndLabel(link, label);
+        // check visibility and whether enabled
+        final AuthenticationSession session = getAuthenticationSession();
+
+        final Consent visibility = action.isVisible(session, adapter, Where.OBJECT_FORMS);
+        if (visibility.isVetoed()) {
+            return null;
+        }
+
+        final Consent usability = action.isUsable(session, adapter, Where.OBJECT_FORMS);
+        final String disabledReasonIfAny = usability.getReason();
+        if(disabledReasonIfAny != null) {
+            link.setEnabled(false);
+        }
+
+        return new LinkAndLabel(link, label, disabledReasonIfAny);
     }
 
     private AbstractLink createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
@@ -105,14 +125,17 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    public IsisContext getIsisContext() {
+    protected IsisContext getIsisContext() {
         return IsisContext.getInstance();
     }
 
-    public PersistenceSession getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
     // ///////////////////////////////////////////////////////////////////
     // Convenience

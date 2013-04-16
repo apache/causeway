@@ -31,6 +31,7 @@ import org.apache.wicket.Component;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -77,6 +78,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapters.toMemento()));
             }
 
+            @Override
+            public String getName(EntityCollectionModel model) {
+                PluralFacet facet = model.getTypeOfSpecification().getFacet(PluralFacet.class);
+                return facet.value();
+            }
+
         },
         /**
          * A collection of an entity (eg Order/OrderDetail).
@@ -106,11 +113,18 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 // no-op
                 throw new UnsupportedOperationException();
             }
+
+            @Override
+            public String getName(EntityCollectionModel model) {
+                return model.getCollectionMemento().getName();
+            }
         };
 
         abstract List<ObjectAdapter> load(EntityCollectionModel entityCollectionModel);
 
         abstract void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list);
+
+        public abstract String getName(EntityCollectionModel entityCollectionModel);
     }
 
     /**
@@ -222,10 +236,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      * {@link #isParented() is parented}.)
      * 
      * <p>
-     * Will returns <tt>null</tt> otherwise.
+     * If {@link #isStandalone()}, returns the {@link PluralFacet} of the {@link #getTypeOfSpecification() specification}
+     * (eg 'Customers').
      */
     public String getName() {
-        return getCollectionMemento().getName();
+        return type.getName(this);
     }
 
     @Override

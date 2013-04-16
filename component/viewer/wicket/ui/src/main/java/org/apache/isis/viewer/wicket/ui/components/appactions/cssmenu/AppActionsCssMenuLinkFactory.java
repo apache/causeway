@@ -49,7 +49,7 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
         final String actionLabel = ObjectActions.nameFor(action);
 
-        return new LinkAndLabel(link, actionLabel);
+        return new LinkAndLabel(link, actionLabel, null);
     }
 
     

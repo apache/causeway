@@ -109,6 +109,10 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                 final AbstractLink link = linkAndLabel.getLink();
                         
                 Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
+                String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
+                if(disabledReasonIfAny != null) {
+                    viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
+                }
                 viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);
                 item.addOrReplace(link);

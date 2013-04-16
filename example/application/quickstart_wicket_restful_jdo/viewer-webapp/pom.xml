@@ -297,6 +297,13 @@
             <artifactId>danhaywood-isis-wicket-wickedcharts-summarycharts</artifactId>
         </dependency>
          -->
+        <!-- 
+        EXCEL: uncomment to use https://github.com/danhaywood/isis-wicket-excel
+        <dependency>
+            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <artifactId>danhaywood-isis-wicket-excel</artifactId>
+        </dependency>
+         -->
          
     </dependencies>
 

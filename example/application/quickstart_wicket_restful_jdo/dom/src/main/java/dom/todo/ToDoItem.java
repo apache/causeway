@@ -321,6 +321,12 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         getDependencies().add(toDoItem);
         return this;
     }
+    public String disableAdd(final ToDoItem toDoItem) {
+        if(isComplete()) {
+            return "Cannot add dependencies for items that are complete";
+        }
+        return null;
+    }
     public String validateAdd(final ToDoItem toDoItem) {
         if(getDependencies().contains(toDoItem)) {
             return "Already a dependency";
@@ -339,6 +345,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return this;
     }
     public String disableRemove(final ToDoItem toDoItem) {
+        if(isComplete()) {
+            return "Cannot remove dependencies for items that are complete";
+        }
         return getDependencies().isEmpty()? "No dependencies to remove": null;
     }
     public String validateRemove(final ToDoItem toDoItem) {

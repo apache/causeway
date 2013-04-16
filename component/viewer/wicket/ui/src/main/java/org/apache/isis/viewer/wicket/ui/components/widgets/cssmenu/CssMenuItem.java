@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -290,11 +291,11 @@ public class CssMenuItem implements Serializable {
     }
 
     // //////////////////////////////////////////////////////////////
-    // Build wicket components from the menu item.
+    // dependencies
     // //////////////////////////////////////////////////////////////
 
     protected AuthenticationSession getAuthenticationSession() {
-        return ((AuthenticationSessionProvider) Application.get()).getAuthenticationSession();
+        return IsisContext.getAuthenticationSession();
     }
 
 }

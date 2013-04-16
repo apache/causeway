@@ -28,10 +28,12 @@ public class LinkAndLabel implements Serializable {
     
     private final AbstractLink link;
     private final String label;
+    private final String disabledReasonIfAny;
 
-    public LinkAndLabel(final AbstractLink link, final String label) {
+    public LinkAndLabel(final AbstractLink link, final String label, String disabledReasonIfAny) {
         this.link = link;
         this.label = label;
+        this.disabledReasonIfAny = disabledReasonIfAny;
     }
 
     public AbstractLink getLink() {
@@ -40,5 +42,9 @@ public class LinkAndLabel implements Serializable {
 
     public String getLabel() {
         return label;
+    }
+ 
+    public String getDisabledReasonIfAny() {
+        return disabledReasonIfAny;
     }
 }

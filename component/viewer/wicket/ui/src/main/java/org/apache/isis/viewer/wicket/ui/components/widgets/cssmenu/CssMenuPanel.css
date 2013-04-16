@@ -266,12 +266,10 @@
 	text-decoration: underline;
 }
 
-.entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover
-	{
+.entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover {
 	color: #000;
 	background-color:#FFFFFF;
 }
-
 
 .additionalLinkList {
 	float:right;
@@ -280,27 +278,45 @@
 	list-style:none;
 }
 
-	.additionalLinkList li {
-		float:left;
-		margin-right:10px;
-	}
-	
-	.additionalLinkList li a {
-	    background-color: #F0EFEA;
-	    border-radius: 4px 4px 4px 4px;
-	    color: #46423C;
-	    display: block;
-	    float: left;
-	    font-size: 0.85em;
-	    font-weight: bold;
-	    height: 30px;
-	    line-height: 30px;
-	    padding: 0 10px;
-	    text-decoration: none;
-	    text-transform: uppercase;
-	}
-	
-	.additionalLinkList li a:hover {
-		background-color:#20B5C2;
-		color:#FFFFFF;
-	}
+.additionalLinkList li {
+	float:left;
+	margin-right:10px;
+}
+
+.additionalLinkList li em {
+    font-style: normal;
+}
+
+.additionalLinkList li a,
+.additionalLinkList li em {
+    background-color: #F0EFEA;
+    border-radius: 4px 4px 4px 4px;
+    display: block;
+    float: left;
+    font-size: 0.85em;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.additionalLinkList li a {
+    color: #46423C;
+}
+
+.additionalLinkList li em {
+    color: grey;
+}
+
+.additionalLinkList li a:hover {
+	background-color:#20B5C2;
+	color:#FFFFFF;
+}
+
+.additionalLinkList li em:hover {
+    color: grey;
+    background-color:#FFFFFF;
+    cursor: default;
+}

@@ -88,8 +88,8 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
         return Lists.transform(userActions, new Function<ObjectAction, LinkAndLabel>(){
 
             @Override
-            public LinkAndLabel apply(ObjectAction arg0) {
-                return linkFactory.newLink(adapterMemento, arg0, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK);
+            public LinkAndLabel apply(ObjectAction objectAction) {
+                return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK);
             }});
     }
 
