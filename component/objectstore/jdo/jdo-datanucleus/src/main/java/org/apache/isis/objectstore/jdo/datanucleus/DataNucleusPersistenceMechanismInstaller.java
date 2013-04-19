@@ -177,27 +177,17 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
-        addJdoFacetFactoriesTo(programmingModel);
-        addDataNucleusFacetFactoriesTo(programmingModel);
-    }
-
-    private void addJdoFacetFactoriesTo(ProgrammingModel baseProgrammingModel) {
-        baseProgrammingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
-        baseProgrammingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
-        baseProgrammingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
-
-        baseProgrammingModel.addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
-        baseProgrammingModel.addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
-
-        baseProgrammingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
+        programmingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
+        programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
+        programmingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
         
-        baseProgrammingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
-        baseProgrammingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);
-    }
-
-    private void addDataNucleusFacetFactoriesTo(ProgrammingModel baseProgrammingModel) {
-        baseProgrammingModel.addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
-        baseProgrammingModel.addFactory(RemoveJdoPrefixedMethodsFacetFactory.class);
+        programmingModel.addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
+        programmingModel.addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
+        
+        programmingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
+        
+        programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
+        programmingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);
     }
 
     @Override

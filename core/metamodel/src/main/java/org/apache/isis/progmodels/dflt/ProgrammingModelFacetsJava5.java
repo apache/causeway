@@ -21,6 +21,7 @@ package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableMarkerInterfaceFacetFactory;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
@@ -93,6 +94,7 @@ import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLa
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.SyntheticMethodFilteringFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskAnnotationForTypeFacetFactory;
@@ -218,7 +220,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
         addFactory(RemoveGetClassMethodFacetFactory.class);
         addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);
+        
+        // come what may, we have to ignore the PersistenceCapable supertype.
         addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
+        // so we may as well also just ignore any 'jdo' prefixed methods here also.
+        addFactory(RemoveJdoPrefixedMethodsFacetFactory.class);
 
         // must be before any other FacetFactories that install
         // MandatoryFacet.class facets

@@ -458,9 +458,18 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
             return;
         }
 
-        // REVIEW: is this possible?
+        refreshRoot(adapter);
+    }
+
+    /**
+     * Not API; provides the ability to force a reload (refresh in JDO terms)
+     * of the domain object wrapped in the {@link ObjectAdapter}.
+     */
+    public void refreshRoot(final ObjectAdapter adapter) {
+        
         final Object domainObject = adapter.getObject();
 		if (domainObject == null) {
+		    // REVIEW: is this possible?
             throw new ObjectNotFoundException(adapter.getOid());
         }
 
