@@ -44,6 +44,6 @@ public class EventPayloadForObjectChanged<T> implements EventPayload {
         if(stringifier == null) {
             throw new IllegalStateException("ObjectStringifier has not been injected");
         }
-        return EventType.OBJECT_CHANGED + ":"+ stringifier.toString(changed);
+        return stringifier.toString(changed);
     }
 }

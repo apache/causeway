@@ -135,7 +135,7 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
         }
 
         final StringBuilder buf = new StringBuilder();
-        buf.append(EventType.ACTION_INVOCATION + ":").append(getActionName());
+        buf.append(getActionName());
         buf.append("\n    target=").append(stringifier.toString(target));
         buf.append("\n      args=[");
         for (Object arg : arguments) {

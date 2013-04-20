@@ -119,7 +119,14 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableEnsureFrameworksInAgreement(event));
+
+        withLogging(Phase.PRE, event, new RunnableAbstract(event){
+            @Override
+            protected void doRun() {
+                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                synchronizer.preDeleteProcessingFor(pojo, CalledFrom.EVENT_PREDELETE);
+            }
+        });
     }
 
     @Override

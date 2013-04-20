@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.PublishingService;
 
 /**
- * Indicates that changes to the object's (properties) should be published.
+ * Indicates that changes to an object should be published.
  * 
  * <p>
  * Requires that an implementation of the {@link PublishingService} is registered with the framework.
@@ -39,9 +39,15 @@ import org.apache.isis.applib.services.publish.PublishingService;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PublishedObject {
     
+    public enum ChangeKind {
+        CREATE,
+        UPDATE,
+        DELETE
+    }
+    
     public interface PayloadFactory {
         @Programmatic
-        public EventPayload payloadFor(Object changedObject);
+        public EventPayload payloadFor(Object changedObject, ChangeKind changeKind);
     }
     
     Class<? extends PayloadFactory> value() default PayloadFactory.class;

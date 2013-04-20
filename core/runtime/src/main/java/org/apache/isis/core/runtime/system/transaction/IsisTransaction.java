@@ -32,17 +32,19 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.net.MediaType;
 
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.EventMetadata;
@@ -74,6 +76,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction.AdapterAndProperty;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction.PreAndPostValues;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -175,7 +179,6 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private static final Logger LOG = Logger.getLogger(IsisTransaction.class);
 
-
     private final TransactionalResource objectStore;
     private final List<PersistenceCommand> commands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
@@ -196,6 +199,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private final UUID guid;
 
+
     private int eventSequence;
 
     public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
@@ -209,7 +213,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.updateNotifier = updateNotifier;
         this.auditingService = auditingService;
         this.publishingService = publishingService;
-        
+
+
         this.guid = UUID.randomUUID();
         this.eventSequence = 0;
 
@@ -386,28 +391,19 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         // else
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-        final long currentTimestampEpoch = currentTimestampEpoch();
+        final long currentTimestampEpoch = currentTimestamp();
         for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
             auditChangedProperty(currentUser, currentTimestampEpoch, auditEntry);
         }
     }
 
-    protected void doPublish(final Set<ObjectAdapter> changedAdapters) {
+
+    protected void publishActionIfRequired(final String currentUser, final long currentTimestampEpoch) {
+
         if(publishingService == null) {
             return;
         }
 
-        // else
-        final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-        final long currentTimestampEpoch = currentTimestampEpoch();
-        
-        publishActionIfRequired(currentUser, currentTimestampEpoch);
-        publishedChangedObjects(changedAdapters, currentUser, currentTimestampEpoch);
-    }
-
-    protected void publishActionIfRequired(final String currentUser, final long currentTimestampEpoch) {
-        // TODO: need some transaction handling here
-        
         try {
             final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
             if(currentInvocation == null) {
@@ -426,26 +422,45 @@ public class IsisTransaction implements TransactionScopedComponent {
             final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, currentTimestampEpoch, title);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
+            // ensures that cannot publish this action more than once
             ActionInvocationFacet.currentInvocation.set(null);
         }
     }
 
-    protected void publishedChangedObjects(final Set<ObjectAdapter> changedAdapters, final String currentUser, final long currentTimestampEpoch) {
-        for (final ObjectAdapter changedAdapter : changedAdapters) {
-            final PublishedObjectFacet publishedObjectFacet = changedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+    protected void publishedChangedObjectsIfRequired(final String currentUser, final long currentTimestampEpoch) {
+        if(publishingService == null) {
+            return;
+        }
+        
+        for (final ObjectAdapter enlistedAdapter : changeKindByEnlistedAdapter.keySet()) {
+            final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
+            final PublishedObjectFacet publishedObjectFacet = enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
             if(publishedObjectFacet == null) {
                 continue;
             }
             final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
-
-            final RootOid adapterOid = (RootOid) changedAdapter.getOid();
+        
+            final RootOid adapterOid = (RootOid) enlistedAdapter.getOid();
             final String oidStr = getOidMarshaller().marshal(adapterOid);
             final String title = oidStr;
-
-            final EventMetadata metadata = newEventMetadata(EventType.OBJECT_CHANGED, currentUser, currentTimestampEpoch, title);
-
-            publishingService.publishObject(payloadFactory, metadata, changedAdapter, objectStringifier());
+        
+            final EventMetadata metadata = newEventMetadata(eventTypeFor(changeKind), currentUser, currentTimestampEpoch, title);
+        
+            publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
+    }
+
+    private static EventType eventTypeFor(ChangeKind changeKind) {
+        if(changeKind == ChangeKind.UPDATE) {
+            return EventType.OBJECT_UPDATED;
+        }
+        if(changeKind == ChangeKind.CREATE) {
+            return EventType.OBJECT_CREATED;
+        }
+        if(changeKind == ChangeKind.DELETE) {
+            return EventType.OBJECT_DELETED;
+        }
+        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
     }
 
     protected ObjectStringifier objectStringifier() {
@@ -476,7 +491,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         return objectStringifier;
     }
 
-    private static long currentTimestampEpoch() {
+    private static long currentTimestamp() {
         return Clock.getTime();
     }
 
@@ -534,11 +549,19 @@ public class IsisTransaction implements TransactionScopedComponent {
             return;
         }
         
+
         try {
             doAudit(getChangedObjectProperties());
+            
+            final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
+            final long endTimestamp = currentTimestamp();
+            
+            publishActionIfRequired(currentUser, endTimestamp);
             doFlush();
-            doPublish(getChangedObjects());
+            
+            publishedChangedObjectsIfRequired(currentUser, endTimestamp);
             doFlush();
+            
             setState(State.COMMITTED);
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
@@ -766,7 +789,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             return referencedAdapter == null ? null : referencedAdapter.getObject();
         }
     }
-   
+
     
     ////////////////////////////////////////////////////////////////////////
     // Auditing/Publishing object tracking
@@ -815,51 +838,92 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
     
    
+    private final Map<ObjectAdapter,ChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
     private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();
-    private final Set<ObjectAdapter> changedObjects = Sets.newLinkedHashSet();
-
 
     private ObjectStringifier objectStringifier;
-    
+
+
 
     /**
-     * For object stores to record the current values of an {@link ObjectAdapter} that has enlisted
-     * into the transaction, prior to updating its values.
+     * Auditing and publishing support: for object stores to enlist an object that has just been created, 
+     * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value. 
      * 
      * <p>
-     * The values of the {@link ObjectAdapter} after being updated are captured when the
-     * audit entries are requested, in {@link #getChangedObjectProperties()}.
+     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()},
+     * which returns the pre- and post- values for each {@link ObjectAdapter} in a map. 
      * 
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void auditDirty(ObjectAdapter adapter) {
+    public void enlistCreated(ObjectAdapter adapter) {
+        enlist(adapter, ChangeKind.CREATE);
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
-            changedObjectProperty(adapter, property);
+            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
+            PreAndPostValues papv = PreAndPostValues.pre("[NEW]");
+            changedObjectProperties.put(aap, papv);
         }
     }
-    
-    private void changedObjectProperty(ObjectAdapter adapter, ObjectAssociation property) {
-        final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-        PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-        changedObjectProperties.put(aap, papv);
-        changedObjects.add(adapter);
+
+    /**
+     * Auditing and publishing support: for object stores to enlist an object that is about to be updated, 
+     * capturing the pre-modification values of the properties of the {@link ObjectAdapter}.
+     * 
+     * <p>
+     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()},
+     * which returns the pre- and post- values for each {@link ObjectAdapter} in a map. 
+     * 
+     * <p>
+     * Supported by the JDO object store; check documentation for support in other objectstores.
+     */
+    public void enlistUpdating(ObjectAdapter adapter) {
+        enlist(adapter, ChangeKind.UPDATE);
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
+            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
+            PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
+            changedObjectProperties.put(aap, papv);
+        }
+    }
+
+    /**
+     * Auditing and publishing support: for object stores to enlist an object that is about to be deleted, 
+     * capturing the pre-deletion value of the properties of the {@link ObjectAdapter}. 
+     * 
+     * <p>
+     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()}.
+     * In the case of deleted objects, a dummy value <tt>'[DELETED]'</tt> is used as the post-modification value. 
+     * 
+     * <p>
+     * Supported by the JDO object store; check documentation for support in other objectstores.
+     */
+    public void enlistDeleting(ObjectAdapter adapter) {
+        enlist(adapter, ChangeKind.DELETE);
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
+            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
+            PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
+            changedObjectProperties.put(aap, papv);
+        }
     }
 
 
+    private void enlist(ObjectAdapter adapter, ChangeKind changeKind) {
+        changeKindByEnlistedAdapter.put(adapter, changeKind);
+    }
+    
+    
     /**
      * Returns the pre- and post-values of all {@link ObjectAdapter}s that were enlisted and dirtied
      * in this transaction.
      * 
      * <p>
-     * This requires that the object store called {@link #auditDirty(ObjectAdapter)} for each object being
+     * This requires that the object store called {@link #enlistUpdating(ObjectAdapter)} for each object being
      * enlisted.
      * 
      * <p>
-     * Supported by the JDO object store (since it calls {@link #auditDirty(ObjectAdapter)}); 
+     * Supported by the JDO object store (since it calls {@link #enlistUpdating(ObjectAdapter)}); 
      * check documentation for support in other object stores.
      */
-    public Set<Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
+    private Set<Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
         updatePostValues(changedObjectProperties.entrySet());
 
         return Collections.unmodifiableSet(Sets.filter(changedObjectProperties.entrySet(), PreAndPostValues.CHANGED));
@@ -869,13 +933,15 @@ public class IsisTransaction implements TransactionScopedComponent {
         for (Entry<AdapterAndProperty, PreAndPostValues> entry : entrySet) {
             final AdapterAndProperty aap = entry.getKey();
             final PreAndPostValues papv = entry.getValue();
-            
-            papv.setPost(aap.getPropertyValue());
+            ObjectAdapter adapter = aap.getAdapter();
+            if(adapter.isDestroyed()) {
+                // don't touch the object!!!
+                // JDO, for example, will complain otherwise...
+                papv.setPost("[DELETED]");
+            } else {
+                papv.setPost(aap.getPropertyValue());
+            }
         }
-    }
-
-    private Set<ObjectAdapter> getChangedObjects() {
-        return changedObjects;
     }
 
     
@@ -890,6 +956,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     protected OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
+
 
 
     

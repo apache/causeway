@@ -50,6 +50,7 @@ import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 
 public class FrameworkSynchronizer {
 
@@ -62,7 +63,7 @@ public class FrameworkSynchronizer {
      * Just used for logging.
      */
     public enum CalledFrom {
-        EVENT_LOAD, EVENT_STORE, EVENT_PREDIRTY, OS_QUERY, OS_RESOLVE, OS_LAZILYLOADED
+        EVENT_LOAD, EVENT_STORE, EVENT_PREDIRTY, OS_QUERY, OS_RESOLVE, OS_LAZILYLOADED, EVENT_PREDELETE
     }
 
 
@@ -131,13 +132,21 @@ public class FrameworkSynchronizer {
                 
                 Class<? extends CallbackFacet> callbackFacetClass;
                 if (isisOid.isTransient()) {
+                    // persisting
                     final RootOid persistentOid = getOidGenerator().createPersistent(pojo, isisOid);
                     
                     getPersistenceSession().remapAsPersistent(adapter, persistentOid);
 
                     callbackFacetClass = PersistedCallbackFacet.class;
+                    
+                    final IsisTransaction transaction = getCurrentTransaction();
+                    transaction.enlistCreated(adapter);
                 } else {
+                    // updating
                     callbackFacetClass = UpdatedCallbackFacet.class;
+                    
+                    // no need to call transaction.enlist(..); 
+                    // already called in preDirty and the post value is captured lazily
                 }
                 
                 Utils.clearDirtyFor(adapter);
@@ -146,6 +155,7 @@ public class FrameworkSynchronizer {
                 adapter.setVersion(versionIfAny);
                 CallbackUtils.callCallback(adapter, callbackFacetClass);
 
+                
                 ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
@@ -155,9 +165,7 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                final IsisTransaction transaction = getCurrentTransaction();
                 ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-                
                 if (adapter == null) {
                     // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
                     // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
@@ -180,7 +188,8 @@ public class FrameworkSynchronizer {
                     // hasn't yet executed, so thinks that the adapter is still transient. 
                     return;
                 }
-                transaction.auditDirty(adapter);
+                final IsisTransaction transaction = getCurrentTransaction();
+                transaction.enlistUpdating(adapter);
 
                 ensureRootObject(pojo);
                 ensureFrameworksInAgreement(pojo);
@@ -202,6 +211,22 @@ public class FrameworkSynchronizer {
                 return adapter;
             }
         }, calledFrom);
+    }
+
+    
+    public void preDeleteProcessingFor(final PersistenceCapable pojo, final CalledFrom calledFrom) {
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                
+                final IsisTransaction transaction = getCurrentTransaction();
+                transaction.enlistDeleting(adapter);
+
+                ensureFrameworksInAgreement(pojo);
+            }
+        }, calledFrom);
+        
     }
 
     // /////////////////////////////////////////////////////////
@@ -244,7 +269,7 @@ public class FrameworkSynchronizer {
 
 
     // /////////////////////////////////////////////////////////
-    // Helpers
+    // More Helpers...
     // /////////////////////////////////////////////////////////
 
     void ensureFrameworksInAgreement(final PersistenceCapable pojo) {
@@ -348,6 +373,8 @@ public class FrameworkSynchronizer {
     protected DataNucleusObjectStore getObjectStore() {
         return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
+
+
 
 
 }

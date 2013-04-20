@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.audit.AuditingService;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
@@ -461,7 +462,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     protected PublishedObject.PayloadFactory newDefaultObjectPayloadFactory() {
         return new PublishedObject.PayloadFactory() {
             @Override
-            public EventPayload payloadFor(final Object changedObject) {
+            public EventPayload payloadFor(final Object changedObject, ChangeKind changeKind) {
                 return new EventPayloadForObjectChanged<Object>(changedObject);
             }
         };
