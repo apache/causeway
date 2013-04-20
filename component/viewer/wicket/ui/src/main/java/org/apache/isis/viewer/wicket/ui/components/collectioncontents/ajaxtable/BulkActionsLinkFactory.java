@@ -24,10 +24,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -42,6 +41,8 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 final class BulkActionsLinkFactory implements CssMenuLinkFactory {
     private static final long serialVersionUID = 1L;
     private final EntityCollectionModel model;
+    
+    @SuppressWarnings("unused")
     private final DataTable<ObjectAdapter,String> dataTable;
 
     BulkActionsLinkFactory(EntityCollectionModel model, DataTable<ObjectAdapter,String> dataTable) {
@@ -52,12 +53,12 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
     @Override
     public LinkAndLabel newLink(final ObjectAdapterMemento serviceAdapterMemento, final ObjectAction objectAction, final String linkId) {
         final ActionMemento actionMemento = new ActionMemento(objectAction);
-        AbstractLink link = new AjaxLink<Void>(linkId) {
-
+        final AbstractLink link = new Link<Object>(linkId) {
+            
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick() {
                 final ObjectAction objectAction = actionMemento.getAction();
                 
                 for(ObjectAdapterMemento entityAdapterMemento: model.getToggleMementosList()) {
@@ -81,13 +82,10 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
                             return;
                         }
                         objectAction.execute(entityAdapter, new ObjectAdapter[]{});
-                    }                        
+                    }
                 }
                 model.clearToggleMementosList();
                 model.setObject(persistentAdaptersWithin(model.getObject()));
-                
-                target.add(this); // for jgrowl
-                target.add(dataTable);
             }
 
             private List<ObjectAdapter> persistentAdaptersWithin(List<ObjectAdapter> adapters) {
@@ -98,6 +96,7 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
                     }
                 }));
             }
+
         };
         link.add(new JGrowlBehaviour());
         return new LinkAndLabel(link, objectAction.getName(), null);
