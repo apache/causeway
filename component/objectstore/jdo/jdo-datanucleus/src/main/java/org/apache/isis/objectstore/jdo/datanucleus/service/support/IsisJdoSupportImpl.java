@@ -22,7 +22,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     @Override
     public <T> T refresh(T domainObject) {
         DataNucleusObjectStore objectStore = (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
-        ObjectAdapter adapter = getAdapterManager().getAdapterFor(domainObject);
+        ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         objectStore.refreshRoot(adapter);
         return domainObject;
     }
