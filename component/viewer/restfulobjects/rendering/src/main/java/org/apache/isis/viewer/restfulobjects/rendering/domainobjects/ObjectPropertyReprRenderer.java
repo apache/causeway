@@ -142,9 +142,10 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
         final List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
-            // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
-            // final ObjectSpecification choiceSpec = objectMember.getSpecification();
-            final ObjectSpecification choiceSpec = objectAdapter.getSpecification();
+            // REVIEW: for some reason I had this to use the spec of the adapter, rather than of the member
+            // this fails to ToDoItem$Category (at least)
+            //final ObjectSpecification choiceSpec = objectAdapter.getSpecification();
+            final ObjectSpecification choiceSpec = objectMember.getSpecification();
             list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, choiceSpec));
         }
         return list;
