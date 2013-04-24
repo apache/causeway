@@ -51,6 +51,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.AbstractObjectMemberReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
@@ -251,7 +252,7 @@ public final class DomainResourceHelper {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not query only", action.getId());
         }
 
-        return invokeActionUsingAdapters(action, arguments);
+        return invokeActionUsingAdapters(action, arguments, SelfLink.INCLUDED);
     }
 
     Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments, Where where) {
@@ -262,16 +263,16 @@ public final class DomainResourceHelper {
         if (!actionSemantics.isIdempotentInNature()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }
-        return invokeActionUsingAdapters(action, arguments);
+        return invokeActionUsingAdapters(action, arguments, SelfLink.EXCLUDED);
     }
 
     Response invokeAction(final String actionId, final JsonRepresentation arguments, Where where) {
         final ObjectAction action = getObjectActionThatIsVisibleForIntent(actionId, Intent.MUTATE, where);
 
-        return invokeActionUsingAdapters(action, arguments);
+        return invokeActionUsingAdapters(action, arguments, SelfLink.EXCLUDED);
     }
 
-    private Response invokeActionUsingAdapters(final ObjectAction action, final JsonRepresentation arguments) {
+    private Response invokeActionUsingAdapters(final ObjectAction action, final JsonRepresentation arguments, SelfLink selfLink) {
 
         final List<ObjectAdapter> argAdapters = parseAndValidateArguments(action, arguments);
 
@@ -280,7 +281,7 @@ public final class DomainResourceHelper {
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray2);
 
         // response (void)
-        final ActionResultReprRenderer renderer = new ActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        final ActionResultReprRenderer renderer = new ActionResultReprRenderer(resourceContext, null, selfLink, JsonRepresentation.newMap());
 
         renderer.with(new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter)).using(adapterLinkTo);
 

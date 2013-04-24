@@ -19,6 +19,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Collection;
 import java.util.Map;
 
+import org.codehaus.jackson.node.NullNode;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -41,9 +43,16 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     private ObjectAction action;
     private JsonRepresentation arguments;
     private ObjectAdapter returnedAdapter;
+    private final SelfLink selfLink;
 
-    public ActionResultReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
+
+    public enum SelfLink {
+        INCLUDED, EXCLUDED
+    }
+
+    public ActionResultReprRenderer(final RendererContext rendererContext, final LinkFollowSpecs linkFollower, final SelfLink selfLink, final JsonRepresentation representation) {
+        super(rendererContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
+        this.selfLink = selfLink;
     }
 
     @Override
@@ -81,7 +90,11 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         if (!resultType.isVoid()) {
             putResultType(representation, resultType);
-            representation.mapPut("result", result);
+            if(returnedAdapter != null) {
+                representation.mapPut("result", result);
+            } else {
+                representation.mapPut("result", NullNode.getInstance());
+            }
         }
     }
 
@@ -98,12 +111,14 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         if (collectionFacet != null) {
             // collection
 
-            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
-
-            final ListReprRenderer renderer = new ListReprRenderer(rendererContext, null, result);
-            renderer.with(collectionAdapters).withReturnType(action.getReturnType()).withElementType(returnedAdapter.getElementSpecification());
-
-            renderer.render();
+            if(returnedAdapter != null) {
+                final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
+    
+                final ListReprRenderer renderer = new ListReprRenderer(rendererContext, null, result);
+                renderer.with(collectionAdapters).withReturnType(action.getReturnType()).withElementType(returnedAdapter.getElementSpecification());
+    
+                renderer.render();
+            }
             return ResultType.LIST;
         }
 
@@ -111,21 +126,25 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         if (encodableFacet != null) {
             // scalar
 
-            final ScalarValueReprRenderer renderer = new ScalarValueReprRenderer(rendererContext, null, result);
-            renderer.with(returnedAdapter).withReturnType(action.getReturnType());
-
-            renderer.render();
+            if(returnedAdapter != null) {
+                final ScalarValueReprRenderer renderer = new ScalarValueReprRenderer(rendererContext, null, result);
+                renderer.with(returnedAdapter).withReturnType(action.getReturnType());
+    
+                renderer.render();
+            }
             return ResultType.SCALAR_VALUE;
 
         }
 
         {
             // object
-            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, result);
-
-            renderer.with(returnedAdapter).includesSelf();
-
-            renderer.render();
+            if(returnedAdapter != null) {
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, result);
+                
+                renderer.with(returnedAdapter).includesSelf();
+                
+                renderer.render();
+            }
             return ResultType.DOMAIN_OBJECT;
         }
     }
@@ -134,10 +153,14 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         representation.mapPut("resulttype", resultType.getValue());
     }
 
-    private JsonRepresentation representationWithSelfFor(final ObjectAction action, final JsonRepresentation bodyArgs) {
+    private void representationWithSelfFor(final ObjectAction action, final JsonRepresentation bodyArgs) {
         final JsonRepresentation links = JsonRepresentation.newArray();
         representation.mapPut("links", links);
 
+        if(selfLink == SelfLink.EXCLUDED) {
+            return;
+        }
+        
         final LinkBuilder selfLinkBuilder = adapterLinkTo.memberBuilder(Rel.SELF, MemberType.ACTION, action, RepresentationType.ACTION_RESULT, "invoke");
 
         // TODO: remove duplication with AbstractObjectMember#addLinkTo
@@ -152,7 +175,6 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         links.arrayAdd(selfLink);
         selfLink.mapPut("args", bodyArgs);
-        return representation;
     }
 
 }

@@ -21,7 +21,10 @@ package org.apache.isis.viewer.restfulobjects.tck;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.core.Response;
 

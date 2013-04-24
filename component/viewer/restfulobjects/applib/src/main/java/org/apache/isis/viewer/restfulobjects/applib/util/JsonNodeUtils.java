@@ -26,6 +26,8 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
 import com.google.common.base.Charsets;
 
 public class JsonNodeUtils {
@@ -35,6 +37,12 @@ public class JsonNodeUtils {
 
     public static InputStream asInputStream(final JsonNode jsonNode) {
         final String jsonStr = jsonNode.toString();
+        final byte[] bytes = jsonStr.getBytes(Charsets.UTF_8);
+        return new ByteArrayInputStream(bytes);
+    }
+
+    public static InputStream asInputStream(final JsonRepresentation jsonRepresentation) {
+        final String jsonStr = jsonRepresentation.toString();
         final byte[] bytes = jsonStr.getBytes(Charsets.UTF_8);
         return new ByteArrayInputStream(bytes);
     }

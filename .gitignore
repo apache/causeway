@@ -33,3 +33,6 @@ hs_err_pid*.log
 
 pom.xml.tag
 pom.xml.releaseBackup
+
+*.jdproj
+JArchitectOut/

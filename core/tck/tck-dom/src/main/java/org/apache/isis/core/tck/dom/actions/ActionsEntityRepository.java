@@ -28,8 +28,6 @@ import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
@@ -44,9 +42,24 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public ActionsEntity findById(@Named("id") int id) {
-        final Query<ActionsEntity> query = 
-                new QueryDefault<ActionsEntity>(ActionsEntity.class, ActionsEntity.class.getName() + "#pk", "id", id);
-        return this.firstMatch(query);
+        return findByIdIfAny(id);
+    }
+
+    @ActionSemantics(Of.IDEMPOTENT)
+    @MemberOrder(sequence = "1")
+    public ActionsEntity findByIdIdempotent(@Named("id") int id) {
+        return findByIdIfAny(id);
+    }
+
+    @ActionSemantics(Of.NON_IDEMPOTENT)
+    @MemberOrder(sequence = "1")
+    public ActionsEntity findByIdNotIdempotent(@Named("id") int id) {
+        return findByIdIfAny(id);
+    }
+
+    private ActionsEntity findByIdIfAny(int id) {
+        List<ActionsEntity> subList = subList(id, id+1);
+        return subList.isEmpty()?null:subList.get(0);
     }
 
     @ActionSemantics(Of.SAFE)

@@ -782,12 +782,8 @@ public class JsonRepresentation {
         final Function<JsonNode, ?> transformer = representationInstantiatorFor(requiredType);
         final ArrayNode arrayNode = (ArrayNode) jsonNode;
         final Iterator<JsonNode> iterator = arrayNode.iterator();
-        final Function<JsonNode, T> typedTransformer = asT(transformer); // necessary
-                                                                         // to
-                                                                         // do
-                                                                         // in
-                                                                         // two
-                                                                         // steps
+        // necessary to do in two steps
+        final Function<JsonNode, T> typedTransformer = asT(transformer); 
         return Iterators.transform(iterator, typedTransformer);
     }
 
@@ -797,12 +793,12 @@ public class JsonRepresentation {
     }
 
     public JsonRepresentation arrayGet(final int i) {
-        ensureIsAnArrayAtLeastAsLargeAs(i);
+        ensureIsAnArrayAtLeastAsLargeAs(i+1);
         return new JsonRepresentation(jsonNode.get(i));
     }
 
     public void arraySetElementAt(final int i, final JsonRepresentation objectRepr) {
-        ensureIsAnArrayAtLeastAsLargeAs(i);
+        ensureIsAnArrayAtLeastAsLargeAs(i+1);
         if (objectRepr.isArray()) {
             throw new IllegalArgumentException("Representation being set cannot be an array");
         }
@@ -815,8 +811,8 @@ public class JsonRepresentation {
         if (!jsonNode.isArray()) {
             throw new IllegalStateException("Is not an array");
         }
-        if (i >= size()) {
-            throw new IndexOutOfBoundsException("array has " + size() + " elements");
+        if (i > size()) {
+            throw new IndexOutOfBoundsException("array has only " + size() + " elements");
         }
     }
 

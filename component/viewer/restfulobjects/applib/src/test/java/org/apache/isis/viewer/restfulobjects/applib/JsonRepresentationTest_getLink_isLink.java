@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -94,4 +95,25 @@ public class JsonRepresentationTest_getLink_isLink {
             assertThat(e.getMessage(), is("'aSubList' is an array that does not represent a link"));
         }
     }
+
+    @Test
+    public void withPredicate() throws JsonParseException, JsonMappingException, IOException {
+
+        // given
+        link = new LinkRepresentation().withRel(Rel.SELF).withHref("http://foo/bar").withMethod(RestfulHttpMethod.GET);
+        JsonRepresentation linkListRepr = JsonRepresentation.newArray();
+        linkListRepr.arrayAdd(link);
+
+        jsonRepresentation = JsonRepresentation.newMap();
+        jsonRepresentation.mapPut("links", linkListRepr);
+        
+        // when, then
+        assertThat(jsonRepresentation.isLink("links[rel=self]"), is(true));
+        assertThat(jsonRepresentation.getLink("links[rel=self]"), is(not(nullValue())));
+
+        assertThat(jsonRepresentation.isLink("links[rel=other]"), is(false));
+        assertThat(jsonRepresentation.getLink("links[rel=other]"), is(nullValue()));
+    }
+
+
 }

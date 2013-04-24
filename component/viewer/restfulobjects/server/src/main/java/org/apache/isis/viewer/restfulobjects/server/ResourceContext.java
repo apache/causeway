@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -114,6 +115,8 @@ public class ResourceContext implements RendererContext {
 
     
     void init(final RepresentationType representationType) {
+        getQueryStringAsJsonRepr(); // force it to be cached
+        
         ensureCompatibleAcceptHeader(representationType);
         ensureDomainModelQueryParamSupported();
         
@@ -168,11 +171,47 @@ public class ResourceContext implements RendererContext {
     }
 
     public JsonRepresentation getQueryStringAsJsonRepr() {
+        
         if (readQueryStringAsMap == null) {
-            readQueryStringAsMap = DomainResourceHelper.readQueryStringAsMap(getQueryString());
+            readQueryStringAsMap = requestArgsAsMap();
         }
         return readQueryStringAsMap;
     }
+
+    protected JsonRepresentation requestArgsAsMap() {
+        @SuppressWarnings("unchecked")
+        final Map<String,String[]> params = httpServletRequest.getParameterMap();
+
+        if(simpleQueryArgs(params)) {
+            // try to process regular params and build up JSON repr 
+            final JsonRepresentation map = JsonRepresentation.newMap();
+            for(String paramName: params.keySet()) {
+                String paramValue = params.get(paramName)[0];
+                try {
+                    int paramValueAsInt = Integer.parseInt(paramValue);
+                    map.mapPut(paramName+".value", paramValueAsInt);
+                } catch(Exception ex) {
+                    map.mapPut(paramName+".value", paramValue);
+                }
+            }
+            return map;
+        } else {
+            return DomainResourceHelper.readQueryStringAsMap(getQueryString());
+        }
+    }
+
+    private static boolean simpleQueryArgs(Map<String, String[]> params) {
+        if(params.isEmpty()) {
+            return false;
+        }
+        for(String paramName: params.keySet()) {
+            if("x-isis-querystring".equals(paramName) || paramName.startsWith("{")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public <Q> Q getArg(final RequestParameter<Q> requestParameter) {
         final JsonRepresentation queryStringJsonRepr = getQueryStringAsJsonRepr();

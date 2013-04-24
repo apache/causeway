@@ -49,7 +49,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_whenList_thenRepresentation_ok {
+public class Get_whenList_thenRepresentation_ok_andResponseHeaders_ContentType_andContentLength_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -88,17 +88,6 @@ public class Get_whenList_thenRepresentation_ok {
         then(restfulResponse);
     }
 
-    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
-        
-        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
-        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
-        
-        assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
-        final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
-        assertThat(listRepr.getValue().size(), is(5));
-    }
-
-    
     @Test
     public void usingResourceProxy() throws Exception {
 
@@ -109,4 +98,15 @@ public class Get_whenList_thenRepresentation_ok {
         then(restfulResponse);
     }
 
+    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+        
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(2245));
+        
+        final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
+        
+        assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
+        final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
+        assertThat(listRepr.getValue().size(), is(5));
+    }
 }
