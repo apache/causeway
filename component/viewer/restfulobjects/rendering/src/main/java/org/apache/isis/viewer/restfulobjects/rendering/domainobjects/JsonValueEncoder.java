@@ -21,6 +21,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.codehaus.jackson.node.NullNode;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -178,7 +180,71 @@ public final class JsonValueEncoder {
         throw new IllegalArgumentException(reason);
     }
 
-    Object asObject(final ObjectAdapter objectAdapter) {
+    static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr) {
+
+        // special case handling for JSON built-ins 
+        // (at least so far as json.org defines them).
+        Object value;
+        String format = null; // as defined by RO spec
+        String xIsisFormat = null; // isis-specific support
+        if (isBoolean(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            xIsisFormat = "boolean";
+        } else if (isByte(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            xIsisFormat = "byte";
+        } else if (isChar(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            xIsisFormat = "char";
+        } else if (isShort(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            xIsisFormat = "short";
+        } else if (isInteger(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            format = "int";
+            xIsisFormat = "int";
+        } else if (isLong(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            format = "int";
+            xIsisFormat = "long";
+        } else if (isBigInteger(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            format = "int";
+            xIsisFormat = "biginteger";
+        } else if (isFloat(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            format = "decimal";
+            xIsisFormat = "float";
+        } else if (isDouble(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            format = "decimal";
+            xIsisFormat = "double";
+        } else if (isBigDecimal(objectSpec)) {
+            value = asValueElseNull(objectAdapter);
+            format = "decimal";
+            xIsisFormat = "bigdecimal";
+        } else {
+            final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
+            if (encodableFacet == null) {
+                throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
+            }
+            value = objectAdapter != null? encodableFacet.toEncodedString(objectAdapter): NullNode.getInstance();
+        }
+        
+        repr.mapPut("value", value);
+        if(format != null) {
+            repr.mapPut("format", format);
+        }
+        if(xIsisFormat != null) {
+            repr.mapPut("x-isis-format", xIsisFormat);
+        }
+    }
+
+    private static Object asValueElseNull(ObjectAdapter objectAdapter) {
+        return objectAdapter != null? objectAdapter.getObject(): NullNode.getInstance();
+    }
+
+    static Object asObject(final ObjectAdapter objectAdapter) {
         if (objectAdapter == null) {
             throw new IllegalArgumentException("objectAdapter cannot be null");
         }
@@ -198,31 +264,47 @@ public final class JsonValueEncoder {
         return encodableFacet.toEncodedString(objectAdapter);
     }
 
-    private boolean isBoolean(final ObjectSpecification objectSpec) {
+    private static boolean isBoolean(final ObjectSpecification objectSpec) {
         return hasCorrespondingClass(objectSpec, boolean.class, Boolean.class);
     }
 
-    private boolean isInteger(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, int.class, Integer.class);
+    private static boolean isByte(final ObjectSpecification objectSpec) {
+        return hasCorrespondingClass(objectSpec, byte.class, Byte.class);
+    }
+    
+    private static boolean isChar(final ObjectSpecification objectSpec) {
+        return hasCorrespondingClass(objectSpec, char.class, Character.class);
+    }
+    
+    private static boolean isShort(final ObjectSpecification objectSpec) {
+        return hasCorrespondingClass(objectSpec, short.class, Short.class);
     }
 
-    private boolean isLong(final ObjectSpecification objectSpec) {
+    private static boolean isInteger(final ObjectSpecification objectSpec) {
+        return hasCorrespondingClass(objectSpec, int.class, Integer.class);
+    }
+    
+    private static boolean isLong(final ObjectSpecification objectSpec) {
         return hasCorrespondingClass(objectSpec, long.class, Long.class);
     }
 
-    private boolean isBigInteger(final ObjectSpecification objectSpec) {
+    private static boolean isBigInteger(final ObjectSpecification objectSpec) {
         return hasCorrespondingClass(objectSpec, BigInteger.class);
     }
-
-    private boolean isDouble(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, double.class, Double.class);
+    
+    private static boolean isFloat(final ObjectSpecification objectSpec) {
+        return hasCorrespondingClass(objectSpec, float.class, Float.class);
     }
 
-    private boolean isBigDecimal(final ObjectSpecification objectSpec) {
+    private static boolean isDouble(final ObjectSpecification objectSpec) {
+        return hasCorrespondingClass(objectSpec, double.class, Double.class);
+    }
+    
+    private static boolean isBigDecimal(final ObjectSpecification objectSpec) {
         return hasCorrespondingClass(objectSpec, BigDecimal.class);
     }
 
-    private boolean hasCorrespondingClass(final ObjectSpecification objectSpec, final Class<?>... candidates) {
+    private static boolean hasCorrespondingClass(final ObjectSpecification objectSpec, final Class<?>... candidates) {
         final Class<?> specClass = objectSpec.getCorrespondingClass();
         for (final Class<?> candidate : candidates) {
             if (specClass == candidate) {
@@ -237,5 +319,6 @@ public final class JsonValueEncoder {
         argRepr.mapPut("invalidReason", reason);
         throw new IllegalArgumentException(reason);
     }
+
 
 }

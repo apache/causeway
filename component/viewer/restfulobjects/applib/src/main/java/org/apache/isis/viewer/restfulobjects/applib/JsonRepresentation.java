@@ -400,6 +400,72 @@ public class JsonRepresentation {
     }
 
     // ///////////////////////////////////////////////////////////////////////
+    // isNumber
+    // ///////////////////////////////////////////////////////////////////////
+
+    public boolean isNumber(final String path) {
+        return isNumber(getNode(path));
+    }
+
+    public boolean isNumber() {
+        return isNumber(asJsonNode());
+    }
+
+    private boolean isNumber(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isNumber();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getShort, asShort
+    // ///////////////////////////////////////////////////////////////////////
+
+    public Short getShort(final String path) {
+        final JsonNode node = getNode(path);
+        return getShort(path, node);
+    }
+    
+    public Short asShort() {
+        return getShort(null, asJsonNode());
+    }
+    
+    private Short getShort(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "an short");
+        if (!node.isNumber()) {
+            // there is no node.isShort()
+            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
+        }
+        return node.getNumberValue().shortValue();
+    }
+    
+    // ///////////////////////////////////////////////////////////////////////
+    // getByte, asByte
+    // ///////////////////////////////////////////////////////////////////////
+    
+    public Byte getByte(final String path) {
+        final JsonNode node = getNode(path);
+        return getByte(path, node);
+    }
+    
+    public Byte asByte() {
+        return getByte(null, asJsonNode());
+    }
+    
+    private Byte getByte(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "an byte");
+        if (!node.isNumber()) {
+            // there is no node.isByte()
+            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
+        }
+        return node.getNumberValue().byteValue();
+    }
+    
+    // ///////////////////////////////////////////////////////////////////////
     // isLong, getLong, asLong
     // ///////////////////////////////////////////////////////////////////////
 

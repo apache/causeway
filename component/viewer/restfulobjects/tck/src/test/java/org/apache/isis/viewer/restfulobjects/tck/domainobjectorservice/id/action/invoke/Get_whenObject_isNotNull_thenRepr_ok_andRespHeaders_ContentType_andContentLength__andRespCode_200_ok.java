@@ -1,8 +1,9 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -11,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -25,6 +25,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
@@ -34,7 +35,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class Get_whenObject_isNotNull_thenRepresentation_ok_andResponseHeaders_ContentType_andContentLength_ok {
+public class Get_whenObject_isNotNull_thenRepr_ok_andRespHeaders_ContentType_andContentLength__andRespCode_200_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -87,8 +88,9 @@ public class Get_whenObject_isNotNull_thenRepresentation_ok_andResponseHeaders_C
 
     private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
         
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(3335));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(3248));
         
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
 

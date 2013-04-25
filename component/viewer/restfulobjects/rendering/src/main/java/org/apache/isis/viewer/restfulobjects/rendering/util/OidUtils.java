@@ -51,7 +51,7 @@ public final class OidUtils {
         if(!(oid instanceof RootOid)) {
             throw new IllegalArgumentException("objectAdapter must be a root adapter");
         }
-        return oid != null ? oid.enString(getOidMarshaller()) : null;
+        return oid != null ? oid.enStringNoVersion(getOidMarshaller()) : null;
     }
 
     private static OidMarshaller getOidMarshaller() {

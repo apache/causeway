@@ -18,6 +18,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 
+import org.codehaus.jackson.node.NullNode;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -325,6 +327,25 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     // ///////////////////////////////////////////////////////////////////
     //
     // ///////////////////////////////////////////////////////////////////
+
+    public static void appendValueAndFormatOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec, JsonRepresentation repr) {
+
+        final ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
+        if (valueFacet != null) {
+            JsonValueEncoder.appendValueAndFormat(objectSpec, objectAdapter, repr);
+            return;
+        }
+
+        if(objectAdapter == null) {
+            repr.mapPut("value", NullNode.getInstance());
+        } else {
+            final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
+            final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
+            JsonRepresentation ref = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
+            repr.mapPut("value", ref);
+        }
+
+    }
 
     public static Object valueOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
         final ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);

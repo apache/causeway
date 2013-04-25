@@ -61,18 +61,8 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // ///////////////////////////////////////////////////
 
     private void addValue() {
-        representation.mapPut("value", valueOrRefRepr());
-    }
-
-    private Object valueOrRefRepr() {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
-        if (valueAdapter == null) {
-            return NullNode.getInstance();
-        }
-        // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
-        // final ObjectSpecification valueSpec = objectMember.getSpecification();
-        ObjectSpecification valueSpec = valueAdapter.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(rendererContext, valueAdapter, valueSpec);
+        DomainObjectReprRenderer.appendValueAndFormatOrRef(rendererContext, valueAdapter, valueAdapter.getSpecification(), representation);
     }
 
     // ///////////////////////////////////////////////////

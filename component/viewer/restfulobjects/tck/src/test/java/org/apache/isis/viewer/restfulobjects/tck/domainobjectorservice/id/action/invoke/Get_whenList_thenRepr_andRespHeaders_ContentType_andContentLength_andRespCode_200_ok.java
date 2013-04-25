@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.actio
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -35,6 +36,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
@@ -49,7 +51,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_whenList_thenRepresentation_ok_andResponseHeaders_ContentType_andContentLength_ok {
+public class Get_whenList_thenRepr_andRespHeaders_ContentType_andContentLength_andRespCode_200_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -100,8 +102,9 @@ public class Get_whenList_thenRepresentation_ok_andResponseHeaders_ContentType_a
 
     private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
         
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(2245));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(2090));
         
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
         

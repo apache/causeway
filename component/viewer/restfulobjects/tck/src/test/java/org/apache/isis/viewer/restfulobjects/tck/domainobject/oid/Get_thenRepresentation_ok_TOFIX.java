@@ -20,7 +20,9 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -47,11 +49,16 @@ import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectMemberRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
@@ -73,41 +80,56 @@ public class Get_thenRepresentation_ok_TOFIX {
         client = new RestfulClient(webServer.getBase());
     }
 
-    @Ignore("to fix")
     @Test
-    public void returnsDomainObjectRepresentation() throws Exception {
+    public void withPrimitiveProperties() throws Exception {
 
         // given
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
         // when
-        final Response domainObjectResp = domainObjectResource.object("OID","6");
-        final RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
-        assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+        final Response jaxrsResponse = domainObjectResource.object("PRMV","29");
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(jaxrsResponse);
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
 
         // then
-        final DomainObjectRepresentation domainObjectRepr = domainObjectJsonResp.getEntity();
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_OBJECT));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(6226));
+
+        final DomainObjectRepresentation domainObjectRepr = restfulResponse.getEntity();
         assertThat(domainObjectRepr, is(not(nullValue())));
-    }
 
-    @Ignore("to fix")
-    @Test
-    public void domainObjectRepresentationForPersistentObject_hasSelfAndOid() throws Exception {
+        // and then has title
+        assertThat(domainObjectRepr.getTitle(), is("Primitive Valued Entity #0")); // running in-memory
+        
+        // and then extensions
+        assertThat(domainObjectRepr.getExtensions().getString("oid"), is("PRMV:29"));
+        assertThat(domainObjectRepr.getExtensions().getBoolean("isService"), is(false));
+        assertThat(domainObjectRepr.getExtensions().getBoolean("isPersistent"), is(true));
 
-        // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","32");
-
-        // then
+        // and then has links
         final LinkRepresentation self = domainObjectRepr.getSelf();
-        assertThat(self, isLink().rel(Rel.SELF).href(matches(".+objects/OID/32")).httpMethod(RestfulHttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
-        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), isLink().href(matches(".+" + BidirWithSetChildEntity.class.getName())).httpMethod(RestfulHttpMethod.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+        assertThat(self, isLink()
+                            .rel(Rel.SELF)
+                            .href(matches(".+\\/objects\\/PRMV\\/29"))
+                            .httpMethod(RestfulHttpMethod.GET)
+                            .type(RepresentationType.DOMAIN_OBJECT.getMediaType()));
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
+                        isLink()
+                            .href(matches(".+\\/domain-types\\/PRMV"))
+                            .httpMethod(RestfulHttpMethod.GET)
+                            .type(RepresentationType.DOMAIN_TYPE.getMediaType()));
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.MODIFY), 
+                        isLink()
+                            .href(matches(".+\\/objects\\/PRMV\\/29"))
+                            .httpMethod(RestfulHttpMethod.PUT)
+                            .type(RepresentationType.DOMAIN_OBJECT.getMediaType()));
 
-        assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
-        assertThat(domainObjectRepr.getOid(), is("OID:32"));
-
-        // no icon
-        final LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
-        assertThat(selfIcon, is(nullValue()));
+        // and then members
+        DomainObjectMemberRepresentation property = domainObjectRepr.getProperty("byteProperty");
+        assertThat(property.getMemberType(), is("property"));
+        Byte byteValue = property.getRepresentation("value").as(ScalarValueRepresentation.class).asByte();
+        assertThat(byteValue, is((byte)0));
     }
 
     @Ignore("to fix")
