@@ -41,8 +41,8 @@
                 <plugins>
                     <plugin>
                         <groupId>org.datanucleus</groupId>
-                        <artifactId>maven-datanucleus-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <artifactId>datanucleus-maven-plugin</artifactId>
+                        <version>3.2.0-release</version>
                         <configuration>
                             <fork>false</fork>
                             <verbose>true</verbose>
@@ -75,10 +75,10 @@
                                                     org.datanucleus
                                                 </groupId>
                                                 <artifactId>
-                                                    maven-datanucleus-plugin
+                                                    datanucleus-maven-plugin
                                                 </artifactId>
                                                 <versionRange>
-                                                    [3.0.2,)
+                                                    [3.2.0-release,)
                                                 </versionRange>
                                                 <goals>
                                                     <goal>enhance</goal>

@@ -75,17 +75,19 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     private static final Logger LOG = Logger.getLogger(DataNucleusPersistenceMechanismInstaller.class);
 
     public static final String NAME = "datanucleus";
-    
+
     private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
+
+    private static final String JAVAX_JDO_PERSISTENCE_MANAGER_FACTORY_CLASS = "javax.jdo.PersistenceManagerFactoryClass";
+    private static final String PERSISTENCE_MANAGER_FACTORY_CLASS_FOR_ISIS = "org.apache.isis.objectstore.jdo.datanucleus.JDOPersistenceManagerFactoryForIsis";
 
     private DataNucleusApplicationComponents applicationComponents = null;
 
-    
     public DataNucleusPersistenceMechanismInstaller() {
         super(NAME);
     }
 
-    
+
     ////////////////////////////////////////////////////////////////////////
     // createObjectStore
     ////////////////////////////////////////////////////////////////////////
@@ -105,13 +107,19 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         final Map<String, String> props = dataNucleusConfig.asMap();
         addDataNucleusPropertiesIfRequired(props);
         
+        // 
+        final String pmfClassName = props.get(JAVAX_JDO_PERSISTENCE_MANAGER_FACTORY_CLASS);
+        if(!PERSISTENCE_MANAGER_FACTORY_CLASS_FOR_ISIS.equals(pmfClassName)) {
+            throw new IllegalArgumentException(JAVAX_JDO_PERSISTENCE_MANAGER_FACTORY_CLASS + " must be set to " + PERSISTENCE_MANAGER_FACTORY_CLASS_FOR_ISIS);
+        }
+        
         applicationComponents = new DataNucleusApplicationComponents(props, getSpecificationLoader().allSpecifications());
     }
 
 
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {
-        putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
+        putIfNotPresent(props, JAVAX_JDO_PERSISTENCE_MANAGER_FACTORY_CLASS, PERSISTENCE_MANAGER_FACTORY_CLASS_FOR_ISIS);
 
         putIfNotPresent(props, "datanucleus.autoCreateSchema", "true");
         putIfNotPresent(props, "datanucleus.validateSchema", "true");

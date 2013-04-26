@@ -18,7 +18,7 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
-import org.datanucleus.store.mapped.mapping.ObjectAsLongMapping;
+import org.datanucleus.store.rdbms.mapping.java.ObjectAsLongMapping;
 
 import org.apache.isis.applib.value.DateTime;
 

@@ -29,6 +29,8 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
+import javax.jdo.FetchGroup;
+import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.spi.PersistenceCapable;
@@ -391,7 +393,10 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         try {
             final Class<?> cls = clsOf(rootOid);
             final Object jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(rootOid);
-            result = getPersistenceManager().getObjectById(cls, jdoObjectId);
+            final PersistenceManager pm = getPersistenceManager();
+            FetchPlan fetchPlan = pm.getFetchPlan();
+            fetchPlan.addGroup(FetchGroup.DEFAULT);
+            result = pm.getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
             throw e;
         }

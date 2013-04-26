@@ -18,14 +18,17 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ClassNameConstants;
+import org.datanucleus.ExecutionContext;
 import org.datanucleus.NucleusContext;
 import org.datanucleus.metadata.AbstractMemberMetaData;
-import org.datanucleus.store.ExecutionContext;
-import org.datanucleus.store.mapped.DatastoreContainerObject;
-import org.datanucleus.store.mapped.MappedStoreManager;
-import org.datanucleus.store.mapped.mapping.SingleFieldMultiMapping;
+import org.datanucleus.store.rdbms.RDBMSStoreManager;
+import org.datanucleus.store.rdbms.mapping.java.SingleFieldMultiMapping;
+import org.datanucleus.store.rdbms.table.Table;
 
 import org.apache.isis.applib.value.Clob;
 
@@ -39,23 +42,23 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
         return org.apache.isis.applib.value.Clob.class;
     }
 
-    public void initialize(AbstractMemberMetaData mmd, DatastoreContainerObject container, ClassLoaderResolver clr)
+    public void initialize(AbstractMemberMetaData mmd, Table container, ClassLoaderResolver clr)
     {
         super.initialize(mmd, container, clr);
-        addDatastoreFields();
+        addColumns();
     }
 
-    public void initialize(MappedStoreManager storeMgr, String type)
+    public void initialize(RDBMSStoreManager storeMgr, String type)
     {
         super.initialize(storeMgr, type);
-        addDatastoreFields();
+        addColumns();
     }
 
-    protected void addDatastoreFields()
+    protected void addColumns()
     {
-        addDatastoreField(ClassNameConstants.JAVA_LANG_STRING); // name
-        addDatastoreField(ClassNameConstants.JAVA_LANG_STRING); // mime type
-        addDatastoreField(ClassNameConstants.JAVA_LANG_CHARACTER_ARRAY); // chars
+        addColumns(ClassNameConstants.JAVA_LANG_STRING); // name
+        addColumns(ClassNameConstants.JAVA_LANG_STRING); // mime type
+        addColumns(ClassNameConstants.JAVA_LANG_CHARACTER_ARRAY); // chars
     }
 
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
@@ -69,7 +72,7 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
         throw new IndexOutOfBoundsException();
     }
 
-    public void setObject(ExecutionContext ec, Object preparedStmt, int[] exprIndex, Object value)
+    public void setObject(ExecutionContext ec, PreparedStatement preparedStmt, int[] exprIndex, Object value)
     {
         Clob clob = ((Clob)value);
         if (clob == null) {
@@ -83,7 +86,7 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
         }
     }
     
-    public Object getObject(ExecutionContext ec, Object resultSet, int[] exprIndex)
+    public Object getObject(ExecutionContext ec, ResultSet resultSet, int[] exprIndex)
     {
         try
         {

@@ -112,14 +112,6 @@ th, td {
                   </li>
                   </ul>
               </li>
-              <li>Domain classes (demo audit functionality) (in <tt>dom</tt> module)</a>
-                <ul>
-                  <li><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/dom/src/main/java/dom/audit/AuditEntry.java"><tt>AuditEntry</tt></a> domain entity
-                  </li>
-                  <li><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/dom/src/main/java/dom/audit/AuditServiceDemo.java"><tt>AuditService</tt></a> domain service (repository/factory)
-                  </li>
-                </ul>
-              </li>
               <li>Fixture classes (in <tt>fixture</tt> module)</a>
                 <ul>
                   <li><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/fixture/src/main/java/fixture/todo/ToDoItemsFixture.java"><tt>ToDoItemsFixture</tt></a> example fixture data (since configured for in-memory HSQLDB)
@@ -144,7 +136,8 @@ th, td {
               </li>
               <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/viewer-webapp/src/main/webapp/WEB-INF/isis.properties">WEB-INF/isis.properties</a></tt> (in <tt>viewer-webapp</tt> module)</a>
                 <ul>
-                  <li><tt>isis.services</tt> - specifies the three domain services (<tt>ToDoItemsJdo</tt>, <tt>AuditServiceDemo</tt> and <tt>ToDoItemsFixtureService</tt>) 
+                  <li><tt>isis.services</tt> - specifies the two domain services described above (<tt>ToDoItemsJdo</tt> and <tt>ToDoItemsFixtureService</tt>), appearing on the menu bar in the Wicket viewer, 
+                  along with a number of hidden framework-provided domain services demonstrating Isis' support for publishing, auditing and customizable error handling 
                   </li>
                   <li><tt>isis.persistor</tt> - specifies to use the JDO object store
                   </li>
@@ -177,7 +170,7 @@ th, td {
               </li>
               <li>Assuming you are using a persistent data store, then remove the <tt>ToDoItemsFixtureService</tt> from the <tt>isis.properties</tt> file (<tt>isis.services</tt> key).  Alternatively you could keep but refactor to provide a similar service for your own application's domain.    
               </li>
-              <li>Decide if you require the audit service.  If you don't, then remove the <tt>AuditDemoService</tt> from the <tt>isis.properties</tt> file (<tt>isis.services</tt> key).  If you do, then refactor the <tt>AuditServiceDemo</tt> according to your requirements (the only requirement is that it implements <tt>org.apache.isis.objectstore.jdo.applib.AuditService</tt>) 
+              <li>Replace (or remove) the publishing and auditing service implementations.
               </li>
               <li>If you want the wicket viewer but NOT the restful objects viewer, then remove/comment out the <tt>ResteasyBootstrap</tt>, <tt>IsisSessionFilterForRestfulObjects</tt>, <tt>RestfulObjectsRestEasyDispatcher</tt> from <tt>web.xml</tt>
               </li>

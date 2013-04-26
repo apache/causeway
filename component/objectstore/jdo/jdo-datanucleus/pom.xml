@@ -81,10 +81,6 @@
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-enhancer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
         <dependency>

@@ -24,6 +24,7 @@ component/security/sql/hsql-db/
 # log files
 datanucleus.log
 isis.log
+hs_err_pid*.log
 
 # Package Files #
 *.jar
