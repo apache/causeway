@@ -203,19 +203,24 @@ public class CssMenuItem implements Serializable {
      */
     public Builder newSubMenuItem(final ObjectAdapterMemento targetAdapterMemento, final ObjectAction objectAction, final CssMenuLinkFactory cssMenuLinkFactory) {
 
-        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK);
-        final AbstractLink link = linkAndLabel.getLink();
-        final String actionLabel = linkAndLabel.getLabel();
-
-        // check visibility and whether enabled
+        // check visibility
         final AuthenticationSession session = getAuthenticationSession();
-
         final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
         final Consent visibility = objectAction.isVisible(session, adapter, where);
         if (visibility.isVetoed()) {
             return null;
         }
 
+        // build the link
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK);
+        if(linkAndLabel==null) {
+            // can only get a null if invisible, so this should not happen given guard above
+            return null;
+        }
+        final AbstractLink link = linkAndLabel.getLink();
+        final String actionLabel = linkAndLabel.getLabel();
+
+        // check whether enabled
         final Consent usability = objectAction.isUsable(session, adapter, where);
         final String reasonDisabledIfAny = usability.getReason();
 
