@@ -89,7 +89,6 @@ public final class OidUtils {
 
     private static ObjectAdapter getObjectAdapterForUnencodedElseThrowNotFound(final RendererContext resourceContext, final String oidStr) {
         final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
-        //return resourceContext.getAdapterManager().adapterFor(rootOid);
         return resourceContext.getPersistenceSession().loadObject(rootOid);
     }
 
