@@ -37,7 +37,7 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
      * Populated only for domain objects, not for domain services.
      */
     public String getDomainType() {
-        return getString("instanceId");
+        return getString("domainType");
     }
 
     /**

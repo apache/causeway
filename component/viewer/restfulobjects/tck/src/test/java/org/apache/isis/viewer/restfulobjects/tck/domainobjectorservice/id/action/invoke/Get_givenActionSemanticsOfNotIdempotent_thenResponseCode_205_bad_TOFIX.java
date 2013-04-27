@@ -52,7 +52,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class Get_givenActionSemanticsOfNotIdempotent_thenResponseCode_205_bad_TODO {
+public class Get_givenActionSemanticsOfNotIdempotent_thenResponseCode_205_bad_TOFIX {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();

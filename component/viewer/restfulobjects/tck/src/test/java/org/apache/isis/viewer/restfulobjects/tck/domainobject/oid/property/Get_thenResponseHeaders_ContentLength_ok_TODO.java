@@ -18,13 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
 
+import org.junit.Before;
+import org.junit.Rule;
+
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class Get_thenResponseHeaders_ContentLength_ok_TODO {
 
@@ -37,24 +36,6 @@ public class Get_thenResponseHeaders_ContentLength_ok_TODO {
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-    }
-
-    @Ignore
-    @Test
-    public void noCaching() throws Exception {
-
-    }
-    
-    @Ignore
-    @Test
-    public void shortTermCaching() throws Exception {
-        
-    }
-    
-    @Ignore
-    @Test
-    public void longTermCaching() throws Exception {
-        
     }
 
 

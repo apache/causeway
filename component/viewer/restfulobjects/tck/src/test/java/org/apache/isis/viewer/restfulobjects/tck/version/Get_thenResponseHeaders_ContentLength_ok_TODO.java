@@ -38,24 +38,4 @@ public class Get_thenResponseHeaders_ContentLength_ok_TODO {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
     }
-
-    @Ignore
-    @Test
-    public void noCaching() throws Exception {
-
-    }
-    
-    @Ignore
-    @Test
-    public void shortTermCaching() throws Exception {
-        
-    }
-    
-    @Ignore
-    @Test
-    public void longTermCaching() throws Exception {
-        
-    }
-
-
 }

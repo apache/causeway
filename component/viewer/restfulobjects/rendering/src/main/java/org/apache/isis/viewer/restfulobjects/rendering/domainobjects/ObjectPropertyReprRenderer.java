@@ -62,7 +62,11 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
     private void addValue() {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
-        DomainObjectReprRenderer.appendValueAndFormatOrRef(rendererContext, valueAdapter, valueAdapter.getSpecification(), representation);
+        
+        // use the runtime type if we have a value, else the compile time type of the member otherwise
+        final ObjectSpecification specification = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
+        
+        DomainObjectReprRenderer.appendValueAndFormatOrRef(rendererContext, valueAdapter, specification, representation);
     }
 
     // ///////////////////////////////////////////////////

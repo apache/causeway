@@ -35,7 +35,17 @@ public class WrapperValuedEntityFixture extends AbstractFixture {
     }
 
     private WrapperValuedEntity createEntity() {
-        return wrapperValuesEntityRepository.newEntity();
+        final WrapperValuedEntity wve = wrapperValuesEntityRepository.newEntity();
+        wve.setBooleanProperty(true);
+        wve.setByteProperty((byte)123);
+        wve.setShortProperty((short)32123);
+        wve.setCharacterProperty('a');
+        wve.setIntegerProperty(987654321);
+        wve.setLongProperty(2345678901234567890L);
+        wve.setFloatProperty(12345678901234567890.1234567890F);
+        wve.setDoubleProperty(12345678901234567890.1234567890);
+
+        return wve;
     }
 
     private WrapperValuedEntityRepository wrapperValuesEntityRepository;

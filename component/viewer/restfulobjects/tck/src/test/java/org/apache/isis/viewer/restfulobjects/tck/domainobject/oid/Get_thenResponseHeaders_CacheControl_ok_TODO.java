@@ -18,13 +18,29 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
-import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Response;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.CacheControlMatcherBuilder;
 
 public class Get_thenResponseHeaders_CacheControl_ok_TODO {
 
@@ -33,29 +49,63 @@ public class Get_thenResponseHeaders_CacheControl_ok_TODO {
 
     protected RestfulClient client;
 
+    private DomainObjectResource domainObjectResource;
+
     @Before
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-    }
-
-    @Ignore
-    @Test
-    public void noCaching() throws Exception {
-
-    }
-    
-    @Ignore
-    @Test
-    public void shortTermCaching() throws Exception {
-        
-    }
-    
-    @Ignore
-    @Test
-    public void longTermCaching() throws Exception {
+        domainObjectResource = client.getDomainObjectResource();
         
     }
 
+    @Ignore("TODO")
+    @Test
+    public void givenNotCached_whenUsingClientFollow() throws Exception {
+
+        // todo... same as test below
+    }
+
+    
+    @Test
+    public void givenNotCached_whenUsingResourceProxy() throws Exception {
+
+        // when
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = Util.domainObjectJaxrsResponse(client, "PrimitiveValuedEntities");
+
+        // then
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        
+        final CacheControl expected = new CacheControl();
+        expected.setNoCache(true);
+        assertThat(restfulResponse.getHeader(Header.CACHE_CONTROL), isCacheControl().withNoCache().build());
+    }
+
+    
+    @Ignore("TODO")
+    @Test
+    public void givenShortTermCached_whenUsingClientFollow() throws Exception {
+    }
+
+    @Ignore("TODO")
+    @Test
+    public void givenShortTermCached_whenUsingResourceProxy() throws Exception {
+    }
+
+
+    @Ignore("TODO")
+    @Test
+    public void givenLongTermCached_whenUsingClientFollow() throws Exception {
+    }
+
+    @Ignore("TODO")
+    @Test
+    public void givenLongTermCached_whenUsingResourceProxy() throws Exception {
+    }
+
+
+    private CacheControlMatcherBuilder isCacheControl() {
+        return new RestfulMatchers.CacheControlMatcherBuilder();
+    }
 
 }

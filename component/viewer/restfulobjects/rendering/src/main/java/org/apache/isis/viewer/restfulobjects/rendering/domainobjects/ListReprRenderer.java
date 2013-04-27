@@ -33,6 +33,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     private Collection<ObjectAdapter> objectAdapters;
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
+    private Rel elementRel;
 
     public ListReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.LIST, representation);
@@ -47,6 +48,11 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     @Override
     public ListReprRenderer with(final Collection<ObjectAdapter> objectAdapters) {
         this.objectAdapters = objectAdapters;
+        return this;
+    }
+
+    public ListReprRenderer withElementRel(Rel elementRel) {
+        this.elementRel = elementRel;
         return this;
     }
 
@@ -84,7 +90,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
             if (specification.isHidden()) {
                 continue;
             }
-            final JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
+            final JsonRepresentation linkToObject = linkTo.with(adapter).builder(elementRel).build();
             values.arrayAdd(linkToObject);
 
             final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("value");

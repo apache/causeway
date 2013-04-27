@@ -114,7 +114,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             if(returnedAdapter != null) {
                 final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
     
-                final ListReprRenderer renderer = new ListReprRenderer(rendererContext, null, result);
+                final ListReprRenderer renderer = new ListReprRenderer(rendererContext, null, result).withElementRel(Rel.ELEMENT);
                 renderer.with(collectionAdapters).withReturnType(action.getReturnType()).withElementType(returnedAdapter.getElementSpecification());
     
                 renderer.render();

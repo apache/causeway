@@ -39,23 +39,5 @@ public class Put_thenResponseHeaders_ContentLength_ok_TODO {
         client = new RestfulClient(webServer.getBase());
     }
 
-    @Ignore
-    @Test
-    public void noCaching() throws Exception {
-
-    }
-    
-    @Ignore
-    @Test
-    public void shortTermCaching() throws Exception {
-        
-    }
-    
-    @Ignore
-    @Test
-    public void longTermCaching() throws Exception {
-        
-    }
-
 
 }

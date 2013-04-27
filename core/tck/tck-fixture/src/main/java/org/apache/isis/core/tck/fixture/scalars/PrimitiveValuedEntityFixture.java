@@ -35,7 +35,16 @@ public class PrimitiveValuedEntityFixture extends AbstractFixture {
     }
 
     private PrimitiveValuedEntity createEntity() {
-        return primitiveValuesEntityRepository.newEntity();
+        final PrimitiveValuedEntity pve = primitiveValuesEntityRepository.newEntity();
+        pve.setBooleanProperty(true);
+        pve.setByteProperty((byte)123);
+        pve.setShortProperty((short)32123);
+        pve.setCharProperty('a');
+        pve.setIntProperty(987654321);
+        pve.setLongProperty(2345678901234567890L);
+        pve.setFloatProperty(12345678901234567890.1234567890F);
+        pve.setDoubleProperty(12345678901234567890.1234567890);
+        return pve;
     }
 
     private PrimitiveValuedEntityRepository primitiveValuesEntityRepository;

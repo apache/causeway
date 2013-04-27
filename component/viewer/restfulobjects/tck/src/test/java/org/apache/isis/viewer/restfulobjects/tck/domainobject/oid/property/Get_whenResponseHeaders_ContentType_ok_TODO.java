@@ -39,23 +39,4 @@ public class Get_whenResponseHeaders_ContentType_ok_TODO {
         client = new RestfulClient(webServer.getBase());
     }
 
-    @Ignore
-    @Test
-    public void noCaching() throws Exception {
-
-    }
-    
-    @Ignore
-    @Test
-    public void shortTermCaching() throws Exception {
-        
-    }
-    
-    @Ignore
-    @Test
-    public void longTermCaching() throws Exception {
-        
-    }
-
-
 }

@@ -183,11 +183,6 @@ public abstract class ResourceAbstract {
         return OidUtils.getObjectAdapterElseNull(resourceContext, domainType, instanceId);
     }
 
-    // REVIEW: a bit of a hack to just 'new' up the OidMarshaller...
-    OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
-    }
-
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
@@ -265,6 +260,10 @@ public abstract class ResourceAbstract {
 
     protected Localization getLocalization() {
         return IsisContext.getLocalization();
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
     }
 
     // //////////////////////////////////////////////////////////////

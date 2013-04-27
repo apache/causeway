@@ -52,4 +52,15 @@ public class DomainObjectMemberRepresentation extends DomainRepresentation  {
         return getString("disabledReason");
     }
 
+    public String getFormat() {
+        return getString("format");
+    }
+
+    /**
+     * Isis-specific extension; not part of the RO API;
+     */
+    public String getXIsisFormat() {
+        return getString("x-isis-format");
+    }
+
 }

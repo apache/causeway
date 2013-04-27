@@ -257,6 +257,40 @@ public class JsonRepresentation {
     }
 
     // ///////////////////////////////////////////////////////////////////////
+    // isNumber
+    // ///////////////////////////////////////////////////////////////////////
+
+    public boolean isNumber(final String path) {
+        return isNumber(getNode(path));
+    }
+
+    public boolean isNumber() {
+        return isNumber(asJsonNode());
+    }
+
+    private boolean isNumber(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isNumber();
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////////
+    // isIntegralNumber
+    // ///////////////////////////////////////////////////////////////////////
+
+    public boolean isIntegralNumber(final String path) {
+        return isIntegralNumber(getNode(path));
+    }
+
+    public boolean isIntegralNumber() {
+        return isIntegralNumber(asJsonNode());
+    }
+
+    private boolean isIntegralNumber(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isIntegralNumber();
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////////
     // isBoolean, getBoolean, asBoolean
     // ///////////////////////////////////////////////////////////////////////
 
@@ -272,10 +306,16 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && node.isBoolean();
     }
 
+    /**
+     * Use {@link #isBoolean(String)} to check first, if required.
+     */
     public Boolean getBoolean(final String path) {
         return getBoolean(path, getNode(path));
     }
 
+    /**
+     * Use {@link #isBoolean()} to check first, if required.
+     */
     public Boolean asBoolean() {
         return getBoolean(null, asJsonNode());
     }
@@ -289,6 +329,262 @@ public class JsonRepresentation {
             throw new IllegalArgumentException(formatExMsg(path, "is not a boolean"));
         }
         return node.getBooleanValue();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getByte, asByte
+    // ///////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Use {@link #isIntegralNumber(String)} to test if number (it is not possible to check if a byte, however).
+     */
+    public Byte getByte(final String path) {
+        final JsonNode node = getNode(path);
+        return getByte(path, node);
+    }
+    
+    /**
+     * Use {@link #isIntegralNumber()} to test if number (it is not possible to check if a byte, however).
+     */
+    public Byte asByte() {
+        return getByte(null, asJsonNode());
+    }
+    
+    private Byte getByte(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "an byte");
+        if (!node.isNumber()) {
+            // there is no node.isByte()
+            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
+        }
+        return node.getNumberValue().byteValue();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getShort, asShort
+    // ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * Use {@link #isIntegralNumber(String)} to check if number (it is not possible to check if a short, however).
+     */
+    public Short getShort(final String path) {
+        final JsonNode node = getNode(path);
+        return getShort(path, node);
+    }
+
+    /**
+     * Use {@link #isIntegralNumber()} to check if number (it is not possible to check if a short, however).
+     */
+    public Short asShort() {
+        return getShort(null, asJsonNode());
+    }
+    
+    private Short getShort(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "an short");
+        if (!node.isNumber()) {
+            // there is no node.isShort()
+            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
+        }
+        return node.getNumberValue().shortValue();
+    }
+    
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getChar, asChar
+    // ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * Use {@link #isString(String)} to check if string (it is not possible to check if a character, however).
+     */
+    public Character getChar(final String path) {
+        final JsonNode node = getNode(path);
+        return getChar(path, node);
+    }
+
+    /**
+     * Use {@link #isString()} to check if string (it is not possible to check if a character, however).
+     */
+    public Character asChar() {
+        return getChar(null, asJsonNode());
+    }
+    
+    private Character getChar(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "an short");
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not textual"));
+        }
+        final String textValue = node.getTextValue();
+        if(textValue == null || textValue.length() == 0) {
+            return null;
+        }
+        return textValue.charAt(0);
+    }
+    
+
+    // ///////////////////////////////////////////////////////////////////////
+    // isInt, getInt, asInt
+    // ///////////////////////////////////////////////////////////////////////
+
+    public boolean isInt(final String path) {
+        return isInt(getNode(path));
+    }
+
+    public boolean isInt() {
+        return isInt(asJsonNode());
+    }
+
+    private boolean isInt(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isInt();
+    }
+
+    /**
+     * Use {@link #isInt(String)} to check first, if required.
+     */
+    public Integer getInt(final String path) {
+        final JsonNode node = getNode(path);
+        return getInt(path, node);
+    }
+
+    /**
+     * Use {@link #isInt()} to check first, if required.
+     */
+    public Integer asInt() {
+        return getInt(null, asJsonNode());
+    }
+
+    private Integer getInt(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "an int");
+        if (!node.isInt()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not an int"));
+        }
+        return node.getIntValue();
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////////
+    // isLong, getLong, asLong
+    // ///////////////////////////////////////////////////////////////////////
+
+    public boolean isLong(final String path) {
+        return isLong(getNode(path));
+    }
+
+    public boolean isLong() {
+        return isLong(asJsonNode());
+    }
+
+    private boolean isLong(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isLong();
+    }
+
+    /**
+     * Use {@link #isLong(String)} to check first, if required.
+     */
+    public Long getLong(final String path) {
+        final JsonNode node = getNode(path);
+        return getLong(path, node);
+    }
+
+    /**
+     * Use {@link #isLong()} to check first, if required.
+     */
+    public Long asLong() {
+        return getLong(null, asJsonNode());
+    }
+
+    private Long getLong(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a long");
+        if (!node.isLong()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a long"));
+        }
+        return node.getLongValue();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getFloat, asFloat
+    // ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * Use {@link #isNumber(String)} to test if number (it is not possible to check if a float, however).
+     */
+    public Float getFloat(final String path) {
+        final JsonNode node = getNode(path);
+        return getFloat(path, node);
+    }
+    
+    /**
+     * Use {@link #isNumber()} to test if number (it is not possible to check if a float, however).
+     */
+    public Float asFloat() {
+        return getFloat(null, asJsonNode());
+    }
+    
+    private Float getFloat(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a float");
+        if (!node.isNumber()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
+        }
+        return node.getNumberValue().floatValue();
+    }
+    
+
+    // ///////////////////////////////////////////////////////////////////////
+    // isDouble, getDouble, asDouble
+    // ///////////////////////////////////////////////////////////////////////
+
+    public boolean isDouble(final String path) {
+        return isDouble(getNode(path));
+    }
+
+    public boolean isDouble() {
+        return isDouble(asJsonNode());
+    }
+
+    private boolean isDouble(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isDouble();
+    }
+
+    /**
+     * Use {@link #isDouble(String)} to check first, if required.
+     */
+    public Double getDouble(final String path) {
+        final JsonNode node = getNode(path);
+        return getDouble(path, node);
+    }
+
+    /**
+     * Use {@link #isDouble()} to check first, if required.
+     */
+    public Double asDouble() {
+        return getDouble(null, asJsonNode());
+    }
+
+    private Double getDouble(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a double");
+        if (!node.isDouble()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a double"));
+        }
+        return node.getDoubleValue();
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -307,11 +603,17 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && node.isBigInteger();
     }
 
+    /**
+     * Use {@link #isBigInteger(String)} to check first, if required.
+     */
     public BigInteger getBigInteger(final String path) {
         final JsonNode node = getNode(path);
         return getBigInteger(path, node);
     }
 
+    /**
+     * Use {@link #isBigInteger()} to check first, if required.
+     */
     public BigInteger asBigInteger() {
         return getBigInteger(null, asJsonNode());
     }
@@ -343,11 +645,17 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && node.isBigDecimal();
     }
 
+    /**
+     * Use {@link #isBigDecimal(String)} to check first, if required.
+     */
     public BigDecimal getBigDecimal(final String path) {
         final JsonNode node = getNode(path);
         return getBigDecimal(path, node);
     }
 
+    /**
+     * Use {@link #isBigDecimal()} to check first, if required.
+     */
     public BigDecimal asBigDecimal() {
         return getBigDecimal(null, asJsonNode());
     }
@@ -363,179 +671,6 @@ public class JsonRepresentation {
         return node.getDecimalValue();
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isInt, getInt, asInt
-    // ///////////////////////////////////////////////////////////////////////
-
-    public boolean isInt(final String path) {
-        return isInt(getNode(path));
-    }
-
-    public boolean isInt() {
-        return isInt(asJsonNode());
-    }
-
-    private boolean isInt(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isInt();
-    }
-
-    public Integer getInt(final String path) {
-        final JsonNode node = getNode(path);
-        return getInt(path, node);
-    }
-
-    public Integer asInt() {
-        return getInt(null, asJsonNode());
-    }
-
-    private Integer getInt(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "an int");
-        if (!node.isInt()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not an int"));
-        }
-        return node.getIntValue();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isNumber
-    // ///////////////////////////////////////////////////////////////////////
-
-    public boolean isNumber(final String path) {
-        return isNumber(getNode(path));
-    }
-
-    public boolean isNumber() {
-        return isNumber(asJsonNode());
-    }
-
-    private boolean isNumber(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isNumber();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // getShort, asShort
-    // ///////////////////////////////////////////////////////////////////////
-
-    public Short getShort(final String path) {
-        final JsonNode node = getNode(path);
-        return getShort(path, node);
-    }
-    
-    public Short asShort() {
-        return getShort(null, asJsonNode());
-    }
-    
-    private Short getShort(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "an short");
-        if (!node.isNumber()) {
-            // there is no node.isShort()
-            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
-        }
-        return node.getNumberValue().shortValue();
-    }
-    
-    // ///////////////////////////////////////////////////////////////////////
-    // getByte, asByte
-    // ///////////////////////////////////////////////////////////////////////
-    
-    public Byte getByte(final String path) {
-        final JsonNode node = getNode(path);
-        return getByte(path, node);
-    }
-    
-    public Byte asByte() {
-        return getByte(null, asJsonNode());
-    }
-    
-    private Byte getByte(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "an byte");
-        if (!node.isNumber()) {
-            // there is no node.isByte()
-            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
-        }
-        return node.getNumberValue().byteValue();
-    }
-    
-    // ///////////////////////////////////////////////////////////////////////
-    // isLong, getLong, asLong
-    // ///////////////////////////////////////////////////////////////////////
-
-    public boolean isLong(final String path) {
-        return isLong(getNode(path));
-    }
-
-    public boolean isLong() {
-        return isLong(asJsonNode());
-    }
-
-    private boolean isLong(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isLong();
-    }
-
-    public Long getLong(final String path) {
-        final JsonNode node = getNode(path);
-        return getLong(path, node);
-    }
-
-    public Long asLong() {
-        return getLong(null, asJsonNode());
-    }
-
-    private Long getLong(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a long");
-        if (!node.isLong()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a long"));
-        }
-        return node.getLongValue();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // isDouble, getDouble, asDouble
-    // ///////////////////////////////////////////////////////////////////////
-
-    public boolean isDouble(final String path) {
-        return isDouble(getNode(path));
-    }
-
-    public boolean isDouble() {
-        return isDouble(asJsonNode());
-    }
-
-    private boolean isDouble(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isDouble();
-    }
-
-    public Double getDouble(final String path) {
-        final JsonNode node = getNode(path);
-        return getDouble(path, node);
-    }
-
-    public Double asDouble() {
-        return getDouble(null, asJsonNode());
-    }
-
-    private Double getDouble(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a double");
-        if (!node.isDouble()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a double"));
-        }
-        return node.getDoubleValue();
-    }
 
     // ///////////////////////////////////////////////////////////////////////
     // getString, isString, asString
@@ -553,11 +688,17 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && node.isTextual();
     }
 
+    /**
+     * Use {@link #isString(String)} to check first, if required.
+     */
     public String getString(final String path) {
         final JsonNode node = getNode(path);
         return getString(path, node);
     }
 
+    /**
+     * Use {@link #isString()} to check first, if required.
+     */
     public String asString() {
         return getString(null, asJsonNode());
     }
@@ -605,10 +746,16 @@ public class JsonRepresentation {
         return true;
     }
 
+    /**
+     * Use {@link #isLink(String)} to check first, if required.
+     */
     public LinkRepresentation getLink(final String path) {
         return getLink(path, getNode(path));
     }
 
+    /**
+     * Use {@link #isLink()} to check first, if required.
+     */
     public LinkRepresentation asLink() {
         return getLink(null, asJsonNode());
     }
@@ -662,11 +809,23 @@ public class JsonRepresentation {
      * wrapped node has <tt>null</tt> value (ie
      * {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there
      * was no node with the provided path.
+     * 
+     * <p>
+     * Use {@link #isNull(String)} to check first, if required.
      */
     public JsonRepresentation getNull(final String path) {
         return getNull(path, getNode(path));
     }
 
+    /**
+     * Either returns a {@link JsonRepresentation} that indicates that the
+     * wrapped node has <tt>null</tt> value (ie
+     * {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there
+     * was no node with the provided path.
+     *
+     * <p>
+     * Use {@link #isNull()} to check first, if required.
+     */
     public JsonRepresentation asNull() {
         return getNull(null, asJsonNode());
     }

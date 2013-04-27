@@ -21,7 +21,9 @@ import java.util.List;
 import org.codehaus.jackson.node.NullNode;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -133,11 +135,19 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         }
 
-        // serviceId
+        // serviceId or instance Id
         if (!mode.representsArguments()) {
             final boolean isService = objectAdapter.getSpecification().isService();
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
+            } else {
+                final String domainType = getDomainType();
+                final String instanceId = getInstanceId();
+                if(domainType != null) {
+                    representation.mapPut("domainType", domainType);
+                    representation.mapPut("instanceId", instanceId);
+                    
+                }
             }
         }
 

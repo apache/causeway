@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.*;
@@ -27,10 +28,12 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
@@ -42,16 +45,18 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_whenList_thenRepr_andRespHeaders_ContentType_andContentLength_andRespCode_200_ok {
+public class Get_whenList_thenRepresentation_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -68,48 +73,39 @@ public class Get_whenList_thenRepr_andRespHeaders_ContentType_andContentLength_a
     }
 
     @Test
-    public void usingClientFollow() throws Exception {
-
-        // given
-        final JsonRepresentation givenAction = Util.givenAction(client, "ActionsEntities", "list");
-        final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-
-        final LinkRepresentation invokeLink = actionRepr.getInvoke();
-
-        assertThat(invokeLink, isLink(client)
-                                    .rel(Rel.INVOKE)
-                                    .httpMethod(RestfulHttpMethod.GET)
-                                    .href(Matchers.endsWith(":39393/services/ActionsEntities/actions/list/invoke"))
-                                    .arguments(JsonRepresentation.newMap())
-                                    .build());
-        
-        // when
-        final RestfulResponse<ActionResultRepresentation> restfulResponse = client.followT(invokeLink);
-        
-        // then
-        then(restfulResponse);
-    }
-
-    @Test
     public void usingResourceProxy() throws Exception {
 
         // given, when
         Response response = serviceResource.invokeActionQueryOnly("ActionsEntities", "list", null);
         RestfulResponse<ActionResultRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
-        then(restfulResponse);
-    }
-
-    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
-        
+        // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
-        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(2090));
         
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
         
         assertThat(actionResultRepr.getResultType(), is(ResultType.LIST));
         final ListRepresentation listRepr = actionResultRepr.getResult().as(ListRepresentation.class);
+
+        // then list value
+        assertThat(listRepr.getValue(), is(not(nullValue())));
         assertThat(listRepr.getValue().size(), is(5));
+
+        final JsonRepresentation domainObjectLinkRepr = listRepr.getValue().arrayGet(0);
+
+        assertThat(domainObjectLinkRepr, is(not(nullValue())));
+        assertThat(domainObjectLinkRepr, isLink()
+                .rel(Rel.ELEMENT)
+                .title("Untitled Actions Entity")
+                .httpMethod(RestfulHttpMethod.GET)
+                .href(matches("http://localhost:\\d+/objects/RTNE/67"))
+                .type(RepresentationType.DOMAIN_OBJECT.getMediaType())
+                .arguments(JsonRepresentation.newMap())
+                .build());
+
+        // then list link element-type
+        assertThat(listRepr.getLinks(), is(not(nullValue())));
+        final LinkRepresentation elementTypeLink = listRepr.getLinkWithRel(Rel.ELEMENT_TYPE);
+        assertThat(elementTypeLink, is(not(nullValue())));
     }
 }

@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -90,7 +91,7 @@ public class Get_whenObject_isNotNull_thenRepr_ok_andRespHeaders_ContentType_and
         
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(3248));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(IsisMatchers.greaterThan(1000)));
         
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
 
@@ -98,29 +99,14 @@ public class Get_whenObject_isNotNull_thenRepr_ok_andRespHeaders_ContentType_and
         final DomainObjectRepresentation objRepr = actionResultRepr.getResult().as(DomainObjectRepresentation.class);
         
         assertThat(objRepr.getMembers(), is(not(nullValue())));
-        assertThat(objRepr.getMembers().size(), is(greaterThan(0)));
+        assertThat(objRepr.getMembers().size(), is(IsisMatchers.greaterThan(0)));
         
         assertThat(objRepr.getTitle(), is(not(nullValue())));
         
         assertThat(objRepr.getLinks(), is(not(nullValue())));
-        assertThat(objRepr.getMembers().size(), is(greaterThan(0)));
+        assertThat(objRepr.getMembers().size(), is(IsisMatchers.greaterThan(0)));
         
         assertThat(objRepr.getExtensions(), is(not(nullValue())));
-    }
-
-    private static Matcher<Integer> greaterThan(final int i) {
-        return new TypeSafeMatcher<Integer>() {
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("greater than " + i);
-            }
-
-            @Override
-            protected boolean matchesSafely(Integer item) {
-                return item > i;
-            }
-        };
     }
 
     

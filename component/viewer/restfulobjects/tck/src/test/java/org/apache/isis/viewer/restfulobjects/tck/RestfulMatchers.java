@@ -31,6 +31,9 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.CacheControlMatcherBuilder;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.LinkMatcherBuilder;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -141,7 +144,7 @@ public class RestfulMatchers {
         return new LinkMatcherBuilder(null);
     }
 
-    public static abstract class AbstractMatcherBuilder<T extends JsonRepresentation> {
+    public static abstract class AbstractMatcherBuilder<T> {
         protected RestfulClient client;
 
         public AbstractMatcherBuilder() {
@@ -169,6 +172,8 @@ public class RestfulMatchers {
         private String typeParameterValue;
         private String selfHref;
         private JsonRepresentation arguments;
+        private String title;
+        private Matcher<String> titleMatcher;
 
         private LinkMatcherBuilder(final RestfulClient client) {
             super(client);
@@ -209,6 +214,16 @@ public class RestfulMatchers {
             return this;
         }
 
+        public LinkMatcherBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public LinkMatcherBuilder title(Matcher<String> titleMatcher) {
+            this.titleMatcher = titleMatcher;
+            return this;
+        }
+        
         public LinkMatcherBuilder typeParameter(final String typeParameterName, final String typeParameterValue) {
             this.typeParameterName = typeParameterName;
             this.typeParameterValue = typeParameterValue;
@@ -267,6 +282,13 @@ public class RestfulMatchers {
                         description.appendText(" with href ");
                         hrefMatcher.describeTo(description);
                     }
+                    if (title != null) {
+                        description.appendText(" with title '").appendText(title).appendText("'");
+                    }
+                    if (titleMatcher != null) {
+                        description.appendText(" with title ");
+                        titleMatcher.describeTo(description);
+                    }
                     if (httpMethod != null) {
                         description.appendText(" with method '").appendValue(httpMethod).appendText("'");
                     }
@@ -323,6 +345,12 @@ public class RestfulMatchers {
                         return false;
                     }
                     if (hrefMatcher != null && !hrefMatcher.matches(link.getHref())) {
+                        return false;
+                    }
+                    if (title != null && !title.equals(link.getTitle())) {
+                        return false;
+                    }
+                    if (titleMatcher != null && !titleMatcher.matches(link.getTitle())) {
                         return false;
                     }
                     if (httpMethod != null && !httpMethod.equals(link.getHttpMethod())) {
@@ -390,6 +418,7 @@ public class RestfulMatchers {
                 }
             };
         }
+
 
 
     }
@@ -556,5 +585,40 @@ public class RestfulMatchers {
         };
     }
 
+    
+    public static class CacheControlMatcherBuilder extends AbstractMatcherBuilder<CacheControl> {
 
+        private Boolean noCache;
+
+        @Override
+        public Matcher<CacheControl> build() {
+            return new TypeSafeMatcher<CacheControl>() {
+
+                @Override
+                public void describeTo(Description description) {
+                    description.appendText("is a CacheControl header ");
+                    if(noCache != null) {
+                        description.appendText("with " + (noCache?"no":"") + " cache");
+                    }
+                }
+
+                @Override
+                protected boolean matchesSafely(CacheControl item) {
+                    if(noCache != null) {
+                        if(item.isNoCache() != noCache) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            };
+        }
+
+        public CacheControlMatcherBuilder withNoCache() {
+            noCache = true;
+            return this;
+        }
+        
+    }
+   
 }

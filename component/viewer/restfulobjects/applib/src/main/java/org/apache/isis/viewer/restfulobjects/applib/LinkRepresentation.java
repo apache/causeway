@@ -104,7 +104,7 @@ public final class LinkRepresentation extends JsonRepresentation {
      */
     public JsonRepresentation getArguments() {
         final JsonNode arguments = asObjectNode().get("arguments");
-        if (arguments.isNull()) {
+        if (arguments == null || arguments.isNull()) {
             return JsonRepresentation.newMap();
         }
         return new JsonRepresentation(arguments);
