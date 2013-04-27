@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
@@ -15,20 +15,16 @@ import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class Get_whenDoesntExistOid_thenResponseCode_404_TODO {
+public class Get_whenDoesntExistOid_thenResponseCode_404 {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     protected RestfulClient client;
-
-    private DomainObjectRepresentation domainObjectRepr;
 
     @Before
     public void setUp() throws Exception {
@@ -41,7 +37,7 @@ public class Get_whenDoesntExistOid_thenResponseCode_404_TODO {
 
         // given
         final LinkRepresentation link = Util.domainObjectLink(client, "PrimitiveValuedEntities");
-        link.mapPut("href", "http://localhost:39393/objects/PRMV/nonExistent");
+        link.withHref("http://localhost:39393/objects/PRMV/nonExistent");
         
         // when
         final RestfulResponse<JsonRepresentation> restfulResp = client.follow(link);

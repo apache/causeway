@@ -8,6 +8,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public class EventSerializerRendererContext implements RendererContext {
@@ -31,8 +32,13 @@ public class EventSerializerRendererContext implements RendererContext {
     }
 
     @Override
+    public PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    @Override
     public AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+        return getPersistenceSession().getAdapterManager();
     }
 
     @Override
@@ -49,5 +55,6 @@ public class EventSerializerRendererContext implements RendererContext {
     public Localization getLocalization() {
         return IsisContext.getLocalization();
     }
+
 
 }

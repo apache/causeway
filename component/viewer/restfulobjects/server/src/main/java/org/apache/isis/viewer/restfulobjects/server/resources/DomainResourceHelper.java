@@ -366,31 +366,55 @@ public final class DomainResourceHelper {
 
     protected OneToOneAssociation getPropertyThatIsVisibleForIntent(final String propertyId, final Intent intent, Where where) {
 
-        final ObjectAssociation association = objectAdapter.getSpecification().getAssociation(propertyId);
+        final ObjectAssociation association;
+        try {
+            final ObjectSpecification specification = objectAdapter.getSpecification();
+            association = specification.getAssociation(propertyId);
+        } catch(Exception ex) {
+            // fall through
+            throwNotFoundException(propertyId, MemberType.PROPERTY);
+            return null; // to keep compiler happy.
+        }
+
         if (association == null || !association.isOneToOneAssociation()) {
             throwNotFoundException(propertyId, MemberType.PROPERTY);
         }
+        
         final OneToOneAssociation property = (OneToOneAssociation) association;
         return memberThatIsVisibleForIntent(property, MemberType.PROPERTY, intent, where);
     }
 
     protected OneToManyAssociation getCollectionThatIsVisibleForIntent(final String collectionId, final Intent intent, Where where) {
 
-        final ObjectAssociation association = objectAdapter.getSpecification().getAssociation(collectionId);
+        final ObjectAssociation association;
+        try {
+            final ObjectSpecification specification = objectAdapter.getSpecification();
+            association = specification.getAssociation(collectionId);
+        } catch(Exception ex) {
+            // fall through
+            throwNotFoundException(collectionId, MemberType.COLLECTION);
+            return null; // to keep compiler happy.
+        }
         if (association == null || !association.isOneToManyAssociation()) {
             throwNotFoundException(collectionId, MemberType.COLLECTION);
-        }
+        } 
         final OneToManyAssociation collection = (OneToManyAssociation) association;
         return memberThatIsVisibleForIntent(collection, MemberType.COLLECTION, intent, where);
     }
 
     protected ObjectAction getObjectActionThatIsVisibleForIntent(final String actionId, final Intent intent, Where where) {
 
-        final ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
+        final ObjectAction action;
+        try {
+            final ObjectSpecification specification = objectAdapter.getSpecification();
+            action = specification.getObjectAction(actionId);
+        } catch(Exception ex) {
+            throwNotFoundException(actionId, MemberType.ACTION);
+            return null; // to keep compiler happy.
+        }
         if (action == null) {
             throwNotFoundException(actionId, MemberType.ACTION);
-        }
-
+        } 
         return memberThatIsVisibleForIntent(action, MemberType.ACTION, intent, where);
     }
 
