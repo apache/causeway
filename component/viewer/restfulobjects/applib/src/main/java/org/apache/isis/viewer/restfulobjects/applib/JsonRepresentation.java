@@ -272,15 +272,36 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && node.isNumber();
     }
 
+    public Number asNumber() {
+        return getNumber(null, asJsonNode());
+    }
+
+    private Number getNumber(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a number");
+        if (!node.isNumber()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
+        }
+        return node.getNumberValue();
+    }
+
 
     // ///////////////////////////////////////////////////////////////////////
-    // isIntegralNumber
+    // isIntegralNumber, getIntegralNumber, asIntegralNumber
     // ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * Is a long, an int or a {@link BigInteger}.
+     */
     public boolean isIntegralNumber(final String path) {
         return isIntegralNumber(getNode(path));
     }
 
+    /**
+     * Is a long, an int or a {@link BigInteger}.
+     */
     public boolean isIntegralNumber() {
         return isIntegralNumber(asJsonNode());
     }
@@ -1377,6 +1398,7 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
 
 
 }

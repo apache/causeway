@@ -310,7 +310,7 @@ public final class DomainResourceHelper {
 
         // value (encodable)
         if (objectSpec.isEncodeable()) {
-            return new JsonValueEncoder().asAdapter(objectSpec, argRepr);
+            return JsonValueEncoder.asAdapter(objectSpec, argRepr);
         }
 
         final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");

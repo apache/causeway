@@ -31,7 +31,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
 
 public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ObjectAdapter> {
 
-    private final JsonValueEncoder jsonValueEncoder = new JsonValueEncoder();
     private ObjectSpecification returnType;
 
     ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
@@ -55,7 +54,7 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         if (facet == null) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
         }
-        final Object value = jsonValueEncoder.asObject(objectAdapter);
+        final Object value = JsonValueEncoder.asObject(objectAdapter);
 
         representation.mapPut("value", value);
         return this;

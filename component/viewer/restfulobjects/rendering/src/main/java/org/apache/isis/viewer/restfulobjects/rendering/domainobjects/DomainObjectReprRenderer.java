@@ -360,7 +360,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     public static Object valueOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
         final ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
-            return new JsonValueEncoder().asObject(objectAdapter);
+            return JsonValueEncoder.asObject(objectAdapter);
         }
         final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
         final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());

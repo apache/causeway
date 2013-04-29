@@ -63,18 +63,17 @@ public class JsonValueEncoderTest_asAdapter {
         objectAdapter = context.mock(ObjectAdapter.class);
 
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
-        jsonValueEncoder = new JsonValueEncoder();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenSpecIsNull() throws Exception {
-        jsonValueEncoder.asAdapter(null, representation);
+        JsonValueEncoder.asAdapter(null, representation);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenReprIsNull() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        jsonValueEncoder.asAdapter(objectSpec, null);
+        JsonValueEncoder.asAdapter(objectSpec, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -308,7 +307,7 @@ public class JsonValueEncoderTest_asAdapter {
         });
 
         // when
-        final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
+        final ObjectAdapter adapter = JsonValueEncoder.asAdapter(objectSpec, representation);
 
         // then
         assertSame(objectAdapter, adapter);

@@ -20,12 +20,23 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.codehaus.jackson.node.NullNode;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 /**
@@ -34,11 +45,251 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
  */
 public final class JsonValueEncoder {
 
+    private JsonValueEncoder(){}
+
+    
     public static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
     }
 
-    public ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
+    public static abstract class JsonValueConverter {
+
+        private final String format;
+        private final String xIsisFormat;
+        private final Class<?>[] classes;
+
+        public JsonValueConverter(String format, String xIsisFormat, Class<?>... classes) {
+            this.format = format;
+            this.xIsisFormat = xIsisFormat;
+            this.classes = classes;
+        }
+
+        public List<ObjectSpecId> getSpecIds() {
+            return Lists.newArrayList(Iterables.transform(Arrays.asList(classes), new Function<Class<?>, ObjectSpecId>() {
+                public ObjectSpecId apply(Class<?> cls) {
+                    return new ObjectSpecId(cls.getName());
+                }
+            }));
+        }
+        
+        /**
+         * The value, otherwise <tt>null</tt>.
+         */
+        public abstract ObjectAdapter asAdapter(JsonRepresentation repr);
+        
+        public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+            append(repr, objectAdapter, format, xIsisFormat);
+        }
+
+        public Object asObject(ObjectAdapter objectAdapter) {
+            return objectAdapter.getObject();
+        }
+        
+        
+
+
+    }
+    
+    private static Map<ObjectSpecId, JsonValueConverter> converterBySpec = Maps.newLinkedHashMap();
+    
+    private static void putConverter(JsonValueConverter jvc) {
+        final List<ObjectSpecId> specIds = jvc.getSpecIds();
+        for (ObjectSpecId specId : specIds) {
+            converterBySpec.put(specId, jvc);
+        }
+    }
+
+    static {
+        putConverter(new JsonValueConverter(null, "boolean", boolean.class, Boolean.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isBoolean()) {
+                    return adapterFor(repr.asBoolean());
+                } 
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter(null, "byte", byte.class, Byte.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isNumber()) {
+                    return adapterFor(repr.asNumber().byteValue());
+                }
+                if (repr.isInt()) {
+                    return adapterFor((byte)(int)repr.asInt());
+                }
+                if (repr.isLong()) {
+                    return adapterFor((byte)(long)repr.asLong());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger().byteValue());
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter(null, "short", short.class, Short.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isNumber()) {
+                    return adapterFor(repr.asNumber().shortValue());
+                }
+                if (repr.isInt()) {
+                    return adapterFor((short)(int)repr.asInt());
+                }
+                if (repr.isLong()) {
+                    return adapterFor((short)(long)repr.asLong());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger().shortValue());
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter("int", "int", int.class, Integer.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isInt()) {
+                    return adapterFor(repr.asInt());
+                }
+                if (repr.isLong()) {
+                    return adapterFor((int)(long)repr.asLong());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger().intValue());
+                }
+                if (repr.isNumber()) {
+                    return adapterFor(repr.asNumber().intValue());
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter("int", "long", long.class, Long.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isLong()) {
+                    return adapterFor(repr.asLong());
+                }
+                if (repr.isInt()) {
+                    return adapterFor(repr.asInt());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger().longValue());
+                }
+                if (repr.isNumber()) {
+                    return adapterFor(repr.asNumber().longValue());
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter("decimal", "float", float.class, Float.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isDouble()) {
+                    return adapterFor((float)(double)repr.asDouble());
+                }
+                if (repr.isNumber()) {
+                    return adapterFor(repr.asNumber().floatValue());
+                }
+                if (repr.isLong()) {
+                    return adapterFor((float)repr.asLong());
+                }
+                if (repr.isInt()) {
+                    return adapterFor((float)repr.asInt());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger().floatValue());
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter("decimal", "double", double.class, Double.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isDouble()) {
+                    return adapterFor(repr.asDouble());
+                }
+                if (repr.isLong()) {
+                    return adapterFor((double)repr.asLong());
+                }
+                if (repr.isInt()) {
+                    return adapterFor((double)repr.asInt());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger().doubleValue());
+                }
+                if (repr.isBigDecimal()) {
+                    return adapterFor(repr.asBigDecimal().doubleValue());
+                }
+                if (repr.isNumber()) {
+                    return adapterFor(repr.asNumber().doubleValue());
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter(null, "char", char.class, Character.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String str = repr.asString();
+                    if(str != null && str.length()>0) {
+                        return adapterFor(str.charAt(0));
+                    }
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter("int", "biginteger", BigInteger.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isBigInteger()) {
+                    return adapterFor(repr.asBigInteger());
+                }
+                if (repr.isLong()) {
+                    return adapterFor(BigInteger.valueOf(repr.asLong()));
+                }
+                if (repr.isInt()) {
+                    return adapterFor(BigInteger.valueOf(repr.asInt()));
+                }
+                if (repr.isNumber()) {
+                    return adapterFor(BigInteger.valueOf(repr.asNumber().longValue()));
+                }
+                return null;
+            }
+        });
+        
+        putConverter(new JsonValueConverter("decimal", "bigdecimal", BigDecimal.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                // TODO: if inferring a BigDecimal, need to get the scale from somewhere...
+                if (repr.isBigDecimal()) {
+                    return adapterFor(repr.asBigDecimal());
+                }
+                if (repr.isBigInteger()) {
+                    return adapterFor(new BigDecimal(repr.asBigInteger()));
+                }
+                if (repr.isDouble()) {
+                    return adapterFor(BigDecimal.valueOf(repr.asDouble()));
+                }
+                if (repr.isLong()) {
+                    return adapterFor(BigDecimal.valueOf(repr.asLong()));
+                }
+                if (repr.isInt()) {
+                    return adapterFor(BigDecimal.valueOf(repr.asInt()));
+                }
+                return null;
+            }
+        });
+    }
+
+    public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
         if (objectSpec == null) {
             String reason = "ObjectSpec is null, cannot validate";
             argRepr.mapPut("invalidReason", reason);
@@ -50,6 +301,7 @@ public final class JsonValueEncoder {
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
+        
         if(!argRepr.mapHas("value")) {
             String reason = "No 'value' key";
             argRepr.mapPut("invalidReason", reason);
@@ -65,172 +317,72 @@ public final class JsonValueEncoder {
             throw new IllegalArgumentException(reason);
         }
 
-        // special case handling for JSON built-ins
-        if (isBoolean(objectSpec)) {
-            if (!argValueRepr.isBoolean()) {
-                throwIncompatibleException(objectSpec, argRepr);
-            }
-            final String argStr = "" + argValueRepr.asBoolean();
-            return encodableFacet.fromEncodedString(argStr);
-        }
-
-        if (isInteger(objectSpec)) {
-            if (argValueRepr.isInt()) {
-                final String argStr = "" + argValueRepr.asInt();
-                return encodableFacet.fromEncodedString(argStr);
-            }
+        final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
+        if(jvc == null) {
             // best effort
             if (argValueRepr.isString()) {
                 final String argStr = argValueRepr.asString();
                 return encodableFacet.fromEncodedString(argStr);
             }
-            // give up
-            throwIncompatibleException(objectSpec, argRepr);
+
+            final String reason = "Unable to parse value";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
         }
 
-        if (isLong(objectSpec)) {
-            if (!argValueRepr.isLong()) {
-                throwIncompatibleException(objectSpec, argRepr);
-            }
-            final String argStr = "" + argValueRepr.asLong();
-            return encodableFacet.fromEncodedString(argStr);
+        final ObjectAdapter asAdapter = jvc.asAdapter(argValueRepr);
+        if(asAdapter != null) {
+            return asAdapter;
         }
-
-        if (isBigInteger(objectSpec)) {
-            if (argValueRepr.isBigInteger()) {
-                final String argStr = "" + argValueRepr.asBigInteger();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            // best effort
-            if (argValueRepr.isLong()) {
-                final String argStr = "" + argValueRepr.asLong();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isInt()) {
-                final String argStr = "" + argValueRepr.asInt();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isString()) {
-                final String argStr = argValueRepr.asString();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            // give up
-            throwIncompatibleException(objectSpec, argRepr);
-        }
-
-        if (isBigDecimal(objectSpec)) {
-            if (argValueRepr.isBigDecimal()) {
-                final String argStr = "" + argValueRepr.asBigDecimal();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            // best effort
-            if (argValueRepr.isBigInteger()) {
-                final String argStr = "" + argValueRepr.asBigInteger();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isDouble()) {
-                final String argStr = "" + argValueRepr.asDouble();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isLong()) {
-                final String argStr = "" + argValueRepr.asLong();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isInt()) {
-                final String argStr = "" + argValueRepr.asInt();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isString()) {
-                final String argStr = argValueRepr.asString();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            // give up
-            throwIncompatibleException(objectSpec, argRepr);
-        }
-
-        if (isDouble(objectSpec)) {
-            if (argValueRepr.isDouble()) {
-                final String argStr = "" + argValueRepr.asDouble();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            // best effort
-            if (argValueRepr.isLong()) {
-                final String argStr = "" + argValueRepr.asLong();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isInt()) {
-                final String argStr = "" + argValueRepr.asInt();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            if (argValueRepr.isString()) {
-                final String argStr = argValueRepr.asString();
-                return encodableFacet.fromEncodedString(argStr);
-            }
-            // give up
-            throwIncompatibleException(objectSpec, argRepr);
-        }
-
+        
+        // last attempt
         if (argValueRepr.isString()) {
             final String argStr = argValueRepr.asString();
             return encodableFacet.fromEncodedString(argStr);
         }
-        
-        final String reason = "Unable to parse value";
+
+        final String reason = "Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier();
         argRepr.mapPut("invalidReason", reason);
         throw new IllegalArgumentException(reason);
     }
 
-    static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr) {
+    public static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr) {
 
-        // special case handling for JSON built-ins 
-        // (at least so far as json.org defines them).
-        Object value;
-        String format = null; // as defined by RO spec
-        String xIsisFormat = null; // isis-specific support
-        if (isBoolean(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            xIsisFormat = "boolean";
-        } else if (isByte(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            xIsisFormat = "byte";
-        } else if (isChar(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            xIsisFormat = "char";
-        } else if (isShort(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            xIsisFormat = "short";
-        } else if (isInteger(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            format = "int";
-            xIsisFormat = "int";
-        } else if (isLong(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            format = "int";
-            xIsisFormat = "long";
-        } else if (isBigInteger(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            format = "int";
-            xIsisFormat = "biginteger";
-        } else if (isFloat(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            format = "decimal";
-            xIsisFormat = "float";
-        } else if (isDouble(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            format = "decimal";
-            xIsisFormat = "double";
-        } else if (isBigDecimal(objectSpec)) {
-            value = asValueElseNull(objectAdapter);
-            format = "decimal";
-            xIsisFormat = "bigdecimal";
+        final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
+        if(jvc != null) {
+            jvc.appendValueAndFormat(objectAdapter, repr);
         } else {
             final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
             if (encodableFacet == null) {
                 throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
             }
-            value = objectAdapter != null? encodableFacet.toEncodedString(objectAdapter): NullNode.getInstance();
+            Object value = objectAdapter != null? encodableFacet.toEncodedString(objectAdapter): NullNode.getInstance();
+            append(repr, value, "decimal", "bigdecimal");
         }
+    }
+    
+    public static Object asObject(final ObjectAdapter objectAdapter) {
+        if (objectAdapter == null) {
+            throw new IllegalArgumentException("objectAdapter cannot be null");
+        }
+        final ObjectSpecification objectSpec = objectAdapter.getSpecification();
+
+        final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
+        if(jvc != null) {
+            return jvc.asObject(objectAdapter);
+        } 
         
+        // else
+        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
+        if (encodableFacet == null) {
+            throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
+        }
+        return encodableFacet.toEncodedString(objectAdapter);
+    }
+
+    
+
+    private static void append(JsonRepresentation repr, Object value, String format, String xIsisFormat) {
         repr.mapPut("value", value);
         if(format != null) {
             repr.mapPut("format", format);
@@ -240,85 +392,22 @@ public final class JsonValueEncoder {
         }
     }
 
-    private static Object asValueElseNull(ObjectAdapter objectAdapter) {
+    private static void append(JsonRepresentation repr, ObjectAdapter value, String format, String xIsisFormat) {
+        append(repr, unwrap(value), format, xIsisFormat);
+    }
+    
+    private static Object unwrap(ObjectAdapter objectAdapter) {
         return objectAdapter != null? objectAdapter.getObject(): NullNode.getInstance();
     }
 
-    static Object asObject(final ObjectAdapter objectAdapter) {
-        if (objectAdapter == null) {
-            throw new IllegalArgumentException("objectAdapter cannot be null");
-        }
-        final ObjectSpecification objectSpec = objectAdapter.getSpecification();
 
-        // special case handling for JSON built-ins (at least so far as json.org
-        // defines them).
-        if (isBoolean(objectSpec) || isInteger(objectSpec) || isLong(objectSpec) || isBigInteger(objectSpec) || isDouble(objectSpec) || isBigDecimal(objectSpec)) {
-            // simply return
-            return objectAdapter.getObject();
-        }
 
-        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-        if (encodableFacet == null) {
-            throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
-        }
-        return encodableFacet.toEncodedString(objectAdapter);
-    }
-
-    private static boolean isBoolean(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, boolean.class, Boolean.class);
-    }
-
-    private static boolean isByte(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, byte.class, Byte.class);
+    private static ObjectAdapter adapterFor(Object value) {
+        return getAdapterManager().adapterFor(value);
     }
     
-    private static boolean isChar(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, char.class, Character.class);
+    public static AdapterManager getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
     }
-    
-    private static boolean isShort(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, short.class, Short.class);
-    }
-
-    private static boolean isInteger(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, int.class, Integer.class);
-    }
-    
-    private static boolean isLong(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, long.class, Long.class);
-    }
-
-    private static boolean isBigInteger(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, BigInteger.class);
-    }
-    
-    private static boolean isFloat(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, float.class, Float.class);
-    }
-
-    private static boolean isDouble(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, double.class, Double.class);
-    }
-    
-    private static boolean isBigDecimal(final ObjectSpecification objectSpec) {
-        return hasCorrespondingClass(objectSpec, BigDecimal.class);
-    }
-
-    private static boolean hasCorrespondingClass(final ObjectSpecification objectSpec, final Class<?>... candidates) {
-        final Class<?> specClass = objectSpec.getCorrespondingClass();
-        for (final Class<?> candidate : candidates) {
-            if (specClass == candidate) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void throwIncompatibleException(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
-        String reason = String.format("representation '%s' incompatible with objectSpec '%s'", argRepr.getMap("value").toString(), objectSpec.getCorrespondingClass().getName());
-        argRepr.mapPut("invalidReason", reason);
-        throw new IllegalArgumentException(reason);
-    }
-
 
 }

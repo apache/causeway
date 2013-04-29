@@ -61,7 +61,6 @@ public class Get_givenEntityWithJodaProperties_thenRepresentation_ok_TODO {
         client = new RestfulClient(webServer.getBase());
     }
 
-    @Ignore("TODO")
     @Test
     public void thenMembers() throws Exception {
 
