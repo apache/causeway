@@ -35,7 +35,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 import com.google.common.collect.Lists;
 
-@Path("/") // FIXME: workaround for TomEE
+//@Path("/") // FIXME: workaround for TomEE ... but breaks the RestEasy TCK tests so commented out:-(
 @Provider
 public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper<RestfulObjectsApplicationException> {
 

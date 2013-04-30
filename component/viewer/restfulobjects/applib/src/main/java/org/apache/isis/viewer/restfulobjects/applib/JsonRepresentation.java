@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,8 @@ import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.NullNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.node.POJONode;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -312,35 +315,87 @@ public class JsonRepresentation {
 
 
     // ///////////////////////////////////////////////////////////////////////
-    // isBoolean, getBoolean, asBoolean
+    // getDate, asDate
     // ///////////////////////////////////////////////////////////////////////
 
+    public final static DateTimeFormatter yyyyMMdd = DateTimeFormat.forPattern("yyyy-MM-dd");
+
+    public java.util.Date getDate(final String path) {
+        return getDate(path, getNode(path));
+    }
+
+    public java.util.Date asDate() {
+        return getDate(null, asJsonNode());
+    }
+
+    private java.util.Date getDate(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a date");
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a date"));
+        }
+        final String textValue = node.getTextValue();
+        return new java.util.Date(yyyyMMdd.parseMillis(textValue));
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getDate, asDate
+    // ///////////////////////////////////////////////////////////////////////
+
+    public final static DateTimeFormatter yyyyMMddTHHmmssZ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+
+    public java.util.Date getDateTime(final String path) {
+        return getDateTime(path, getNode(path));
+    }
+
+    public java.util.Date asDateTime() {
+        return getDateTime(null, asJsonNode());
+    }
+
+    private java.util.Date getDateTime(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a date-time");
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a date-time"));
+        }
+        final String textValue = node.getTextValue();
+        return new java.util.Date(yyyyMMddTHHmmssZ.parseMillis(textValue));
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // isBoolean, getBoolean, asBoolean
+    // ///////////////////////////////////////////////////////////////////////
+    
     public boolean isBoolean(final String path) {
         return isBoolean(getNode(path));
     }
-
+    
     public boolean isBoolean() {
         return isBoolean(asJsonNode());
     }
-
+    
     private boolean isBoolean(final JsonNode node) {
         return !representsNull(node) && node.isValueNode() && node.isBoolean();
     }
-
+    
     /**
      * Use {@link #isBoolean(String)} to check first, if required.
      */
     public Boolean getBoolean(final String path) {
         return getBoolean(path, getNode(path));
     }
-
+    
     /**
      * Use {@link #isBoolean()} to check first, if required.
      */
     public Boolean asBoolean() {
         return getBoolean(null, asJsonNode());
     }
-
+    
     private Boolean getBoolean(final String path, final JsonNode node) {
         if (representsNull(node)) {
             return null;
@@ -351,7 +406,7 @@ public class JsonRepresentation {
         }
         return node.getBooleanValue();
     }
-
+    
     // ///////////////////////////////////////////////////////////////////////
     // getByte, asByte
     // ///////////////////////////////////////////////////////////////////////

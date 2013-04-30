@@ -40,7 +40,7 @@ public class JodaValuedEntityFixture extends AbstractFixture {
     private JodaValuedEntity createEntity() {
         final JodaValuedEntity jve = jodaValuesEntityRepository.newEntity();
         jve.setLocalDateProperty(new LocalDate(2008,3,21));
-        jve.setLocalDateTimeProperty(new LocalDateTime(2009, 4, 29, 13, 45, 22, 213));
+        jve.setLocalDateTimeProperty(new LocalDateTime(2009, 4, 29, 13, 45, 22));
         return jve;
     }
 

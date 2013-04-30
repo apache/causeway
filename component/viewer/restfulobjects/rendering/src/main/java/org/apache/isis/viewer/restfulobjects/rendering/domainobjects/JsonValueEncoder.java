@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.codehaus.jackson.node.NullNode;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -54,8 +59,8 @@ public final class JsonValueEncoder {
 
     public static abstract class JsonValueConverter {
 
-        private final String format;
-        private final String xIsisFormat;
+        protected final String format;
+        protected final String xIsisFormat;
         private final Class<?>[] classes;
 
         public JsonValueConverter(String format, String xIsisFormat, Class<?>... classes) {
@@ -84,10 +89,6 @@ public final class JsonValueEncoder {
         public Object asObject(ObjectAdapter objectAdapter) {
             return objectAdapter.getObject();
         }
-        
-        
-
-
     }
     
     private static Map<ObjectSpecId, JsonValueConverter> converterBySpec = Maps.newLinkedHashMap();
@@ -287,7 +288,60 @@ public final class JsonValueEncoder {
                 return null;
             }
         });
+
+        putConverter(new JsonValueConverter("date", "jodalocaldate", LocalDate.class){
+
+            final DateTimeFormatter yyyyMMdd = JsonRepresentation.yyyyMMdd;
+
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    try {
+                        final Date parsedDate = yyyyMMdd.parseDateTime(dateStr).toDate();
+                        return adapterFor(parsedDate);
+                    } catch (IllegalArgumentException ex) {
+                        // fall through
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final LocalDate date = (LocalDate) unwrap(objectAdapter);
+                final String dateStr = yyyyMMdd.print(date.toDateTimeAtStartOfDay());
+                append(repr, dateStr, format, xIsisFormat);
+            }
+        });
+
+        putConverter(new JsonValueConverter("date-time", "jodalocaldatetime", LocalDateTime.class){
+            final DateTimeFormatter yyyyMMddHHmmss = JsonRepresentation.yyyyMMddTHHmmssZ;
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    try {
+                        final Date parsedDate = yyyyMMddHHmmss.parseDateTime(dateStr).toDate();
+                        return adapterFor(parsedDate);
+                    } catch (IllegalArgumentException ex) {
+                        // fall through
+                    }
+                }
+                return null;
+            }
+    
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final LocalDateTime date = (LocalDateTime) unwrap(objectAdapter);
+                final String dateStr = yyyyMMddHHmmss.print(date.toDateTime());
+                append(repr, dateStr, format, xIsisFormat);
+            }
+        });
+        
     }
+
+
 
     public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
         if (objectSpec == null) {
