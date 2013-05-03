@@ -47,6 +47,9 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_NAME = "scalarName";
+    
+    protected static final String ID_SCALAR_VALUE = "scalarValue";
+
     private static final String ID_FEEDBACK = "feedback";
 
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
@@ -64,9 +67,17 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return textField;
     }
 
+    protected AbstractTextComponent<T> createTextFieldForRegular() {
+        return createTextField(ID_SCALAR_VALUE);
+    }
+
+    protected TextField<T> createTextField(final String id) {
+        return new TextField<T>(id, new TextFieldValueModel<T>(this), cls);
+    }
+
     @Override
     protected FormComponentLabel addComponentForRegular() {
-        textField = createTextField();
+        textField = createTextFieldForRegular();
         textField.setOutputMarkupId(true);
 
         addStandardSemantics();
@@ -100,7 +111,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         // parsing, not wicket
     }
 
-    protected abstract AbstractTextComponent<T> createTextField();
 
 
     private FormComponentLabel createFormComponentLabel() {
@@ -133,10 +143,14 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void setTextFieldSizeIfSpecified(AbstractTextComponent<T> textField) {
         final Integer size = determineSize();
         if (size != null) {
-            textField.add(new AttributeModifier("size", Model.of("" + size)));
+            setTextFieldSize(textField, size);
         }
     }
 
+    protected void setTextFieldSize(AbstractTextComponent<T> textField, int size) {
+        textField.add(new AttributeModifier("size", Model.of("" + size)));
+    }
+    
     @SuppressWarnings("unchecked")
     protected Integer determineSize() {
         return firstValueOf(getModel(), TypicalLengthFacet.class, MaxLengthFacet.class);
@@ -155,6 +169,9 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#COMPACT compact} format.
+     * 
+     * <p>
+     * This default implementation uses a {@link Label}, however it may be overridden if required.
      */
     @Override
     protected Component addComponentForCompact() {

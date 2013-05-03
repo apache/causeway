@@ -22,23 +22,18 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 import java.sql.Date;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Date java.sql.Date}.
  */
-public class JavaSqlDatePanel extends ScalarPanelTextFieldParseableAbstract {
+public class JavaSqlDatePanel extends ScalarPanelTextFieldDatePickerAbstract<java.sql.Date> {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public JavaSqlDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
-    }
-
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
+        super(id, scalarModel, java.sql.Date.class, 
+            new DateConverterForJavaSqlDate("dd-MM-yyyy"));
     }
 
 }

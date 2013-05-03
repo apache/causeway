@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
-import java.util.Date;
-
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -32,20 +30,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldD
 public class JodaLocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<LocalDateTime> {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public JodaLocalDateTimePanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
-    }
-
-    @Override
-    protected Date asDate(LocalDateTime pojo) {
-        return pojo.toDateTime().toDate();
-    }
-
-    @Override
-    protected LocalDateTime asPojo(Date date) {
-        return new LocalDateTime(date.getTime());
+        super(id, scalarModel, LocalDateTime.class, new DateConverterForJodaLocalDateTime("dd-MM-yyyy", "dd-MM-yyyy HH:mm"));
     }
 
 }

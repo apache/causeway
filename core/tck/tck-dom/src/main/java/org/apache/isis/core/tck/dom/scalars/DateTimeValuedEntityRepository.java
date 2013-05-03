@@ -17,20 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
+package org.apache.isis.core.tck.dom.scalars;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
-/**
- * Panel for rendering scalars of type {@link DateTime Isis' applib.DateTime}.
- */
-public class IsisDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<org.apache.isis.applib.value.DateTime> {
+@Named("DateTimeValuedEntities")
+@ObjectType("DateTimeValuedEntities")
+public class DateTimeValuedEntityRepository extends AbstractEntityRepository<DateTimeValuedEntity> {
 
-    private static final long serialVersionUID = 1L;
+    public DateTimeValuedEntityRepository() {
+        super(DateTimeValuedEntity.class, "DateTimeValuedEntities");
+    }
 
-    public IsisDateTimePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, org.apache.isis.applib.value.DateTime.class, new DateConverterForApplibDateTime("dd-MM-yyyy", "dd-MM-yyyy HH:mm"));
+    /**
+     * Required to discover the DateTimeValueEntity type.
+     */
+    @Override
+    @MemberOrder(sequence = "2")
+    public DateTimeValuedEntity newEntity() {
+        return super.newEntity();
     }
 
 }

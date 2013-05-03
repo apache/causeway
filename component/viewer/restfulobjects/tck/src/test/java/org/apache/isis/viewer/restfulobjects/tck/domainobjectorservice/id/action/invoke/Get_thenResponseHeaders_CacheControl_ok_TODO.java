@@ -39,4 +39,13 @@ public class Get_thenResponseHeaders_CacheControl_ok_TODO {
         client = new RestfulClient(webServer.getBase());
     }
 
+    
+    @Ignore("TODO")
+    @Test
+    public void xxx() throws Exception {
+        
+        // 2.13
+        // Cache-Control, also Pragma, Date, Expires
+        
+    }
 }

@@ -19,14 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.Date;
+import java.io.Serializable;
 
-import org.apache.wicket.datetime.PatternDateConverter;
-import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -37,51 +36,19 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public abstract class ScalarPanelTextFieldDatePickerAbstract<T> extends ScalarPanelTextFieldAbstract<java.util.Date> {
+public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializable> extends ScalarPanelTextFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String DATE_PATTERN = "dd-MM-yyyy"; // TODO: yui calendar does not seem to understand 'dd-MMM-yyyy' (interprets as dd-MM-yyyy)
-    
-    private final String idScalarValue;
+    private final DateConverter<T> converter;
 
-    public ScalarPanelTextFieldDatePickerAbstract(final String id, String idScalarValue, final ScalarModel scalarModel) {
-        super(id, scalarModel, java.util.Date.class);
-        this.idScalarValue = idScalarValue;
+    public ScalarPanelTextFieldDatePickerAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls, DateConverter<T> converter) {
+        super(id, scalarModel, cls);
+        this.converter = converter;
     }
-
-    protected abstract java.util.Date asDate(final T pojo);
-    protected abstract T asPojo(final java.util.Date date);
-
-    @Override
-    protected AbstractTextComponent<java.util.Date> createTextField() {
-        final TextField<java.util.Date> textField = DateTextField.withConverter(idScalarValue, new Model<java.util.Date>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public java.util.Date getObject() {
-                final ObjectAdapter adapter = getModel().getObject();
-                if (adapter == null) {
-                    return null;
-                }
-                @SuppressWarnings("unchecked")
-                final T pojo = (T) adapter.getObject();
-                final java.util.Date date = asDate(pojo);
-                return date;
-            }
-
-            @Override
-            public void setObject(final java.util.Date date) {
-                if(date == null) {
-                    getModel().setObject(null);
-                    return;
-                }
-                final T pojo = asPojo(date);
-                final ObjectAdapter adapter = adapterFor(pojo);
-                getModel().setObject(adapter);
-            }
-        }, new PatternDateConverter(DATE_PATTERN, true));
-        return textField;
+    
+    protected TextField<T> createTextField(final String id) {
+        return new TextFieldWithDateConverter<T>(id, new TextFieldValueModel<T>(this), cls, converter);
     }
 
     @Override
@@ -96,6 +63,10 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T> extends ScalarPa
             {
                 return "${calendar}.cfg.setProperty(\"navigator\",true,false); ${calendar}.render();";
             }
+            @Override
+            protected String getDatePattern() {
+                return converter.getDatePattern(getLocale());
+            }
         };
         datePicker.setShowOnFieldClick(true);
         datePicker.setAutoHide(true);
@@ -104,16 +75,28 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T> extends ScalarPa
         addObjectAdapterValidator();
     }
 
-    private void addObjectAdapterValidator() {
-        final AbstractTextComponent<Date> textField = getTextField();
+    protected Component addComponentForCompact() {
+        final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
+        final IModel<T> model = textField.getModel();
+        final T object = (T) model.getObject();
+        model.setObject(object);
+        
+        textField.setEnabled(false);
+        setTextFieldSize(textField, converter.getDateTimePattern(getLocale()).length());
+        
+        addOrReplace(textField);
+        return textField;
+    }
 
-        textField.add(new IValidator<java.util.Date>() {
+    private void addObjectAdapterValidator() {
+        final AbstractTextComponent<T> textField = getTextField();
+
+        textField.add(new IValidator<T>() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void validate(final IValidatable<java.util.Date> validatable) {
-                final java.util.Date proposedValue = validatable.getValue();
-                final T proposed = asPojo(proposedValue);
+            public void validate(final IValidatable<T> validatable) {
+                final T proposed = validatable.getValue();
                 final ObjectAdapter proposedAdapter = adapterFor(proposed);
                 String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {

@@ -34,7 +34,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extends ScalarPanelTextFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public ScalarPanelTextFieldNumeric(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel, cls);
@@ -43,27 +42,17 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
     @Override
     protected void addSemantics() {
         super.addSemantics();
-        
     }
 
     @Override
-    protected AbstractTextComponent<T> createTextField() {
+    protected AbstractTextComponent<T> createTextFieldForRegular() {
         return createTextField(ID_SCALAR_VALUE);
     }
 
-    /**
-     * Helper method for subtypes.
-     */
-    protected TextField<T> createTextField(final String id) {
-        return new TextField<T>(id, new TextFieldValueModel<T>(this), cls);
-    }
-
-    //@SuppressWarnings("unchecked")
     protected Component addComponentForCompact() {
         final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
         final IModel<T> model = textField.getModel();
         final T object = (T) model.getObject();
-        //model.setObject((T) (object != null? object.getObject(): null));
         model.setObject(object);
         
         textField.setEnabled(false);

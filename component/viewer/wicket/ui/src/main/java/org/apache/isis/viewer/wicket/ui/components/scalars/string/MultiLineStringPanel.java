@@ -45,7 +45,7 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextField() {
+    protected AbstractTextComponent<String> createTextFieldForRegular() {
         final TextArea<String> textField = new TextArea<String>(idTextField, new Model<String>() {
             private static final long serialVersionUID = 1L;
 

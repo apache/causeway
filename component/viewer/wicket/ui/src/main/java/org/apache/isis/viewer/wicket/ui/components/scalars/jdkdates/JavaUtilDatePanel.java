@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
-import java.util.Date;
+
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
@@ -30,20 +30,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldD
 public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<java.util.Date> {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public JavaUtilDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
-    }
-
-    @Override
-    protected Date asDate(Date pojo) {
-        return pojo;
-    }
-
-    @Override
-    protected Date asPojo(Date date) {
-        return date;
+        super(id, scalarModel, java.util.Date.class, new DateConverterForJavaUtilDate("dd-MM-yyyy", "dd-MM-yyyy HH:mm"));
     }
 
 }

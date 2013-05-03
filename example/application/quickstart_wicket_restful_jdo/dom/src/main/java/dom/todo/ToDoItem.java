@@ -79,6 +79,7 @@ import com.google.common.collect.Lists;
             value="SELECT FROM dom.todo.ToDoItem WHERE ownedBy == :ownedBy && description.indexOf(:description) >= 0")
 })
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
+@javax.jdo.annotations.Unique(name="ToDoItem_description_must_be_unique", members={"ownedBy","description"})
 @ObjectType("TODO")
 @Audited
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
@@ -111,7 +112,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // {{ Description
     private String description;
 
-    @javax.jdo.annotations.Unique(name="ToDoItem_description_must_be_unique")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     // words, spaces and selected punctuation
     @MemberOrder(sequence = "1")
@@ -510,7 +510,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
 
     // {{ injected: DomainObjectContainer
-    @SuppressWarnings("unused")
     private DomainObjectContainer container;
 
     public void setDomainObjectContainer(final DomainObjectContainer container) {
