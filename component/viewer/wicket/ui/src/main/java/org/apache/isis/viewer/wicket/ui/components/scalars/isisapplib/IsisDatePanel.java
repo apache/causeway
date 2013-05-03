@@ -31,7 +31,10 @@ public class IsisDatePanel extends ScalarPanelTextFieldDatePickerAbstract<org.ap
     private static final long serialVersionUID = 1L;
 
     public IsisDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, org.apache.isis.applib.value.Date.class, new DateConverterForApplibDate("dd-MM-yyyy"));
+        super(id, scalarModel, org.apache.isis.applib.value.Date.class);
+        init(new DateConverterForApplibDate(getSettings()));
     }
+
+    
 
 }

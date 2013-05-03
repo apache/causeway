@@ -4,12 +4,18 @@ import java.util.Locale;
 
 import org.joda.time.LocalDate;
 
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+
 public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<LocalDate> {
     
     private static final long serialVersionUID = 1L;
 
-    public DateConverterForJodaLocalDate(String datePattern) {
-        super(LocalDate.class, datePattern, datePattern);
+    public DateConverterForJodaLocalDate(WicketViewerSettings settings) {
+        this(settings.getDatePattern(), settings.getDatePickerPattern());
+    }
+    
+    private DateConverterForJodaLocalDate(String datePattern, String datePickerPattern) {
+        super(LocalDate.class, datePattern, datePattern, datePickerPattern);
     }
 
     @Override

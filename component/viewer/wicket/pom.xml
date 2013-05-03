@@ -40,9 +40,10 @@
         <siteBaseDir>.</siteBaseDir>
         <relativeUrl />
 
-        <wicket.version>6.5.0</wicket.version>
-        <wicketstuff.version>6.4.0</wicketstuff.version>
-        <wicket-select2.version>2.1</wicket-select2.version>
+        <wicket.version>6.7.0</wicket.version>
+        <wicket-jquery-ui.version>6.7.0</wicket-jquery-ui.version>
+        <wicketstuff.version>6.7.0</wicketstuff.version>
+        <wicket-select2.version>2.2.2</wicket-select2.version>
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -136,8 +137,6 @@
 			</dependency>
 
 
-
-			<!-- isis core -->
 
 			<!-- Wicket -->
 			<dependency>
@@ -238,6 +237,23 @@
 				</exclusions>
 			</dependency>
 
+
+            <!-- Wicket-JQuery-UI -->
+            <dependency>
+                <groupId>com.googlecode.wicket-jquery-ui</groupId>
+                <artifactId>wicket-jquery-ui-core</artifactId>
+                <version>${wicket-jquery-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.wicket-jquery-ui</groupId>
+                <artifactId>wicket-jquery-ui</artifactId>
+                <version>${wicket-jquery-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.wicket-jquery-ui</groupId>
+                <artifactId>wicket-jquery-ui-plugins</artifactId>
+                <version>${wicket-jquery-ui.version}</version>
+            </dependency>
 
             <!-- Wicket-Select2 -->
 			<dependency>

@@ -32,8 +32,8 @@ public class JavaSqlDatePanel extends ScalarPanelTextFieldDatePickerAbstract<jav
     private static final long serialVersionUID = 1L;
 
     public JavaSqlDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, java.sql.Date.class, 
-            new DateConverterForJavaSqlDate("dd-MM-yyyy"));
+        super(id, scalarModel, java.sql.Date.class);
+        init(new DateConverterForJavaSqlDate(getSettings()));
     }
 
 }

@@ -32,7 +32,8 @@ public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<ja
     private static final long serialVersionUID = 1L;
 
     public JavaUtilDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, java.util.Date.class, new DateConverterForJavaUtilDate("dd-MM-yyyy", "dd-MM-yyyy HH:mm"));
+        super(id, scalarModel, java.util.Date.class);
+        init(new DateConverterForJavaUtilDate(getSettings()));
     }
 
 }

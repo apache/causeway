@@ -9,8 +9,8 @@ public abstract class DateConverterForJodaAbstract<T> extends DateConverterAbstr
     
     private static final long serialVersionUID = 1L;
     
-    protected DateConverterForJodaAbstract(Class<T> cls, String datePattern, String dateTimePattern) {
-        super(cls, datePattern, dateTimePattern);
+    protected DateConverterForJodaAbstract(Class<T> cls, String datePattern, String dateTimePattern, String datePickerPattern) {
+        super(cls, datePattern, dateTimePattern, datePickerPattern);
     }
 
     protected DateTimeFormatter getFormatterForDatePattern() {

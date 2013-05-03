@@ -32,7 +32,8 @@ public class JodaLocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<L
     private static final long serialVersionUID = 1L;
 
     public JodaLocalDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, LocalDate.class, new DateConverterForJodaLocalDate("dd-MM-yyyy"));
+        super(id, scalarModel, LocalDate.class); 
+        init(new DateConverterForJodaLocalDate(getSettings()));
     }
 
 }

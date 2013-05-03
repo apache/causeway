@@ -30,7 +30,8 @@ public class IsisDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<or
     private static final long serialVersionUID = 1L;
 
     public IsisDateTimePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, org.apache.isis.applib.value.DateTime.class, new DateConverterForApplibDateTime("dd-MM-yyyy", "dd-MM-yyyy HH:mm"));
+        super(id, scalarModel, org.apache.isis.applib.value.DateTime.class); 
+        init(new DateConverterForApplibDateTime(getSettings()));
     }
 
 }

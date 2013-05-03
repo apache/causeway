@@ -30,12 +30,10 @@ import com.vaynberg.wicket.select2.Select2Choice;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;

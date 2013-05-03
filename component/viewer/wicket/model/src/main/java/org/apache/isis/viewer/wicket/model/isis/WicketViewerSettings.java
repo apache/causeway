@@ -22,7 +22,13 @@ package org.apache.isis.viewer.wicket.model.isis;
 
 public interface WicketViewerSettings {
 
-    public int getTitleLengthInStandaloneTables();
+    public int getMaxTitleLengthInStandaloneTables();
 
-    public int getTitleLengthInParentedTables();
+    public int getMaxTitleLengthInParentedTables();
+
+    public String getDatePattern();
+    public String getDateTimePattern();
+    public String getDatePickerPattern();
+
+
 }

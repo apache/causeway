@@ -24,6 +24,7 @@ import com.google.inject.Singleton;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldWithDatePicker;
 
 @Singleton
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
@@ -32,22 +33,57 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
         return IsisContext.getConfiguration();
     }
 
+    /**
+     * The maximum length that a title of an object will be shown when rendered in a standalone table;
+     * will be truncated beyond this (with ellipses to indicate the truncation). 
+     */
     @Override
-    public int getTitleLengthInStandaloneTables() {
+    public int getMaxTitleLengthInStandaloneTables() {
         return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInStandaloneTables", getMaxTitleLengthInTables());
     }
 
+    /**
+     * The maximum length that a title of an object will be shown when rendered in a parented table;
+     * will be truncated beyond this (with ellipses to indicate the truncation). 
+     */
     @Override
-    public int getTitleLengthInParentedTables() {
+    public int getMaxTitleLengthInParentedTables() {
         return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInParentedTables", getMaxTitleLengthInTables());
     }
-    
+
     /**
-     * fallback...
+     * Fallback for either {@link #getMaxTitleLengthInParentedTables()} and {@link #getMaxTitleLengthInParentedTables()}
      */
     private int getMaxTitleLengthInTables() {
         return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInTables", 12);
     }
 
+    /**
+     * The pattern used for rendering and parsing dates.
+     */
+    @Override
+    public String getDatePattern() {
+        return getConfiguration().getString("isis.viewer.wicket.datePattern", "dd-MM-yyyy");
+    }
 
+    /**
+     * The pattern used for rendering and parsing date/times.
+     */
+    @Override
+    public String getDateTimePattern() {
+        return getConfiguration().getString("isis.viewer.wicket.dateTimePattern", "dd-MM-yyyy HH:mm");
+    }
+
+    /**
+     * The pattern used for rendering dates chosen by the {@link TextFieldWithDatePicker}.
+     * 
+     * <p>
+     * This pattern is different from {@link #getDatePattern()} because it is interpreted by a
+     * <a href="http://jqueryui.com/datepicker/">JQuery UI DatePicker</a> component, rather
+     * than by Java code. 
+     */
+    @Override
+    public String getDatePickerPattern() {
+        return getConfiguration().getString("isis.viewer.wicket.datePickerPattern", "dd-mm-yy");
+    }
 }

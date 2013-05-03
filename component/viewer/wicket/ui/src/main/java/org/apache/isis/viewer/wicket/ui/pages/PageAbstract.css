@@ -16,6 +16,78 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+ 
+ 
+/*
+colors
+------
+
+#E4E4DB - page background
+
+#00477F   rich blue
+          h1,h2,h3 {color}
+          a {color}
+
+#20B5C2 - light blue
+          .ok {background-color}
+          .links{color}
+
+#40C0CB - highlight blue
+          .a:hover {background-color}
+
+#F0EFEA   light (bookmark background)
+          .select2-choice {background-color}
+
+#407098   muted blue
+          th {color}
+
+
+#454545   dark brown/grey
+          body {color}
+
+#413D37   dark brown/banner
+          legend {color}
+
+#E4E4DB   very pale beige
+.cancel {background-color}
+
+#46423C   dark brown
+          .cancel {color}
+
+#888      medium grey
+          p.disabled {color}
+
+#F0EFEA   very light grey
+          p.disabled {background-color}
+
+#E3E3D9   light grey
+          body {background-color}
+
+
+#BF0B0B - jgrowl error
+
+
+
+#46413B   dark brown
+          .scalarName {color}
+
+#7F7F7F   (medium grey)
+          .select2-choice {color}
+
+#46423C - dark (writing?)
+
+
+#CCCBC7   (medium)
+          input[disabled]  {border-top}
+
+#EEEEEE   light grey
+          th{background}
+
+#FFFFFF   white
+          .ok {color}
+
+*/
+ 
 /********** ID's **********/
 
 #header {
@@ -720,16 +792,6 @@ div#jGrowl div.jGrowl-closer {
  font-size: small;
 }
 
-/*
-colors
-#413D37 - dark banner
-#46423C - dark (writing?)
-#E4E4DB - page background
-#20B5C2 - accent
-#BF0B0B - jgrowl error
-#00477F - dark blue
-#F0EFEA - bookmark background
-*/
 
 
 

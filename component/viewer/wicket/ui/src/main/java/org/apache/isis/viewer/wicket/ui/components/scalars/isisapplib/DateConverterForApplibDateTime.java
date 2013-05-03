@@ -2,6 +2,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import java.util.Locale;
 
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverterAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaUtilDate;
 
@@ -11,11 +12,11 @@ public class DateConverterForApplibDateTime extends DateConverterAbstract<org.ap
     
     private final DateConverterForJavaUtilDate converter;
     
-    public DateConverterForApplibDateTime(String datePattern, String dateTimePattern) {
-        super(org.apache.isis.applib.value.DateTime.class, datePattern, dateTimePattern);
-        converter = new DateConverterForJavaUtilDate(datePattern, dateTimePattern);
+    public DateConverterForApplibDateTime(WicketViewerSettings settings) {
+        super(org.apache.isis.applib.value.DateTime.class, null, null, null); // not used
+        converter = new DateConverterForJavaUtilDate(settings);
     }
-    
+
     @Override
     protected org.apache.isis.applib.value.DateTime doConvertToObject(String value, Locale locale) {
         final java.util.Date javaUtilDate = converter.convertToObject(value, locale);

@@ -21,8 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
+import com.google.inject.Inject;
+
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
@@ -31,50 +32,44 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializable> extends ScalarPanelTextFieldAbstract<T> {
+public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializable> extends ScalarPanelTextFieldAbstract<T>  {
 
     private static final long serialVersionUID = 1L;
 
-    private final DateConverter<T> converter;
+    private DateConverter<T> converter;
 
-    public ScalarPanelTextFieldDatePickerAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls, DateConverter<T> converter) {
+    public ScalarPanelTextFieldDatePickerAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel, cls);
+    }
+
+    /**
+     * Expected to be in subclasses' constructor.
+     * 
+     * <p>
+     * Is not passed into constructor only to allow subclass to read from injected {@link #getSettings()}.
+     */
+    protected void init(DateConverter<T> converter) {
         this.converter = converter;
     }
     
     protected TextField<T> createTextField(final String id) {
-        return new TextFieldWithDateConverter<T>(id, new TextFieldValueModel<T>(this), cls, converter);
+        return new TextFieldWithDatePicker<T>(id, new TextFieldValueModel<T>(this), cls, converter);
     }
 
     @Override
     protected void addSemantics() {
         super.addSemantics();
 
-        final DatePicker datePicker = new DatePicker(){
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected String getAdditionalJavaScript()
-            {
-                return "${calendar}.cfg.setProperty(\"navigator\",true,false); ${calendar}.render();";
-            }
-            @Override
-            protected String getDatePattern() {
-                return converter.getDatePattern(getLocale());
-            }
-        };
-        datePicker.setShowOnFieldClick(true);
-        datePicker.setAutoHide(true);
-        getTextField().add(datePicker);
-
         addObjectAdapterValidator();
     }
 
+    
     protected Component addComponentForCompact() {
         final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
         final IModel<T> model = textField.getModel();
@@ -108,7 +103,26 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         });
     }
 
+    
+    protected String getDatePattern() {
+        return getSettings().getDatePattern();
+    }
+    protected String getDateTimePattern() {
+        return getSettings().getDateTimePattern();
+    }
+    protected String getDatePickerPattern() {
+        return getSettings().getDatePickerPattern();
+    }
+    
+    @Inject
+    private WicketViewerSettings settings;
+    protected WicketViewerSettings getSettings() {
+        return settings;
+    }
+
     private ObjectAdapter adapterFor(final Object pojo) {
         return getAdapterManager().adapterFor(pojo);
     }
+    
+    
 }
