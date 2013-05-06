@@ -26,12 +26,12 @@ public interface AuditingService {
     public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
     
     
-    public static class Stdout implements AuditingService {
+    public static class Stderr implements AuditingService {
 
         @Hidden
         public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
             String auditMessage = objectType + ":" + identifier + " by " + user + ": " + preValue + " -> " + postValue;
-            System.out.println(auditMessage);
+            System.err.println(auditMessage);
         }
     }
 
