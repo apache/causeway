@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.Defaults;
@@ -104,6 +106,19 @@ public abstract class Clock {
         return new Date(getTime());
     }
 
+    public static LocalDate getTimeAsLocalDate() {
+        return new LocalDate(getTime(), Defaults.getTimeZone());
+    }
+
+    public static LocalDateTime getTimeAsLocalDateTime() {
+        return new LocalDateTime(getTime(), Defaults.getTimeZone());
+    }
+
+    /**
+     * Returns the {@link #getTime() time} as a Joda {@link DateTime},
+     * using the {@link Defaults#getTimeZone() timezone} as
+     * {@link Defaults#setTimeZone(org.joda.time.DateTimeZone) currently set}.
+     */
     public static DateTime getTimeAsDateTime() {
         return new DateTime(getTime(), Defaults.getTimeZone());
     }
