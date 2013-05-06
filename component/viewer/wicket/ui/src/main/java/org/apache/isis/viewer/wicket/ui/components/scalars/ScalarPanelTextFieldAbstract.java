@@ -72,7 +72,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     protected TextField<T> createTextField(final String id) {
-        return new TextField<T>(id, new TextFieldValueModel<T>(this), cls);
+        return new TextField<T>(id, newTextFieldValueModel(), cls);
+    }
+
+    protected TextFieldValueModel<T> newTextFieldValueModel() {
+        return new TextFieldValueModel<T>(this);
     }
 
     @Override

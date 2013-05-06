@@ -60,8 +60,21 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     public void setLocale(final Locale l) {
-        // TODO Auto-generated method stub
 
+    }
+
+    // //////////////////////////////////////////////////////////////////
+    // Parser
+    // //////////////////////////////////////////////////////////////////
+    
+    @Override
+    public Integer getLength() {
+        return 18;
+    }
+
+    @Override
+    public Integer getScale() {
+        return 2;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -119,5 +132,6 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     public String toString() {
         return "BigDecimalValueSemanticsProvider: " + format;
     }
+
 
 }

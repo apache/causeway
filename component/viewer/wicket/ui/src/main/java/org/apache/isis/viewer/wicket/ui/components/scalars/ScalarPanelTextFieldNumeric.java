@@ -23,7 +23,6 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

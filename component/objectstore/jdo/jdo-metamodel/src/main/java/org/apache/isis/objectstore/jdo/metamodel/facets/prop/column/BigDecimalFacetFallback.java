@@ -16,15 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.progmodel.facets.value.bigdecimal;
+package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
-public interface BigDecimalValueFacet extends Facet {
 
-    Integer getLength();
-    
-    Integer getScale();
+public class BigDecimalFacetFallback extends FacetAbstract implements BigDecimalValueFacet {
 
+    static final int DEFAULT_LENGTH = 18;
+    static final int DEFAULT_SCALE = 2;
+
+    public static Class<? extends Facet> type() {
+        return BigDecimalValueFacet.class;
+    }
+
+    public BigDecimalFacetFallback(final FacetHolder holder) {
+        super(BigDecimalFacetFallback.type(), holder, Derivation.NOT_DERIVED);
+    }
+
+    @Override
+    public Integer getLength() {
+        return DEFAULT_LENGTH;
+    }
+
+    @Override
+    public Integer getScale() {
+        return DEFAULT_SCALE;
+    }
 }

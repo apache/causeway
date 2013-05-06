@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -171,6 +172,22 @@ public class ScalarModel extends EntityModel {
                 final OneToOneAssociation property = propertyMemento.getProperty();
                 return property.getDescription();
             }
+
+            @Override
+            public Integer getLength(ScalarModel scalarModel) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty();
+                final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
+                return facet != null? facet.getLength(): null;
+            }
+            
+            @Override
+            public Integer getScale(ScalarModel scalarModel) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty();
+                final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
+                return facet != null? facet.getScale(): null;
+            }
         },
         PARAMETER {
             @Override
@@ -267,6 +284,22 @@ public class ScalarModel extends EntityModel {
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
                 return actionParameter.getDescription();
             }
+
+            @Override
+            public Integer getLength(ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
+                return facet != null? facet.getLength(): null;
+            }
+            
+            @Override
+            public Integer getScale(ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
+                return facet != null? facet.getScale(): null;
+            }
         };
 
         private static List<ObjectAdapter> choicesAsList(final ObjectAdapter[] choices) {
@@ -307,6 +340,9 @@ public class ScalarModel extends EntityModel {
         public abstract String getDescribedAs(ScalarModel scalarModel);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
+
+        public abstract Integer getLength(ScalarModel scalarModel);
+        public abstract Integer getScale(ScalarModel scalarModel);
     }
 
     private final Kind kind;
@@ -484,6 +520,14 @@ public class ScalarModel extends EntityModel {
 
     public boolean hasChoices() {
         return kind.hasChoices(this);
+    }
+
+    public Integer getScale() {
+        return kind.getScale(this);
+    }
+
+    public int getLength() {
+        return kind.getLength(this);
     }
 
 }
