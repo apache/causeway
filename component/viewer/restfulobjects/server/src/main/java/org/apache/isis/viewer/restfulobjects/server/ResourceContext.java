@@ -163,6 +163,14 @@ public class ResourceContext implements RendererContext {
         return httpHeaders;
     }
 
+    /**
+     * The {@link HttpServletRequest#getQueryString() query string}, cached
+     * after first call.
+     * 
+     * <p>
+     * Note that this can return non-null for <tt>PUT</tt>s as well as <tt>GET</tt>s.
+     * It will only have been URL encoded for the latter; the caller should handle both cases.
+     */
     public String getQueryString() {
         if(queryString != null) {
             return queryString;

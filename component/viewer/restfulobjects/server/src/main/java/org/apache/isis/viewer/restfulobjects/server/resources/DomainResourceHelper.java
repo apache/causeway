@@ -550,7 +550,15 @@ public final class DomainResourceHelper {
         if (queryStringTrimmed.isEmpty()) {
             return JsonRepresentation.newMap();
         }
-        final String queryStringUrlDecoded = UrlEncodingUtils.urlDecode(queryStringTrimmed);
+        
+        String queryStringUrlDecoded; 
+        try {
+            // this is a bit hacky...
+            queryStringUrlDecoded = UrlEncodingUtils.urlDecode(queryStringTrimmed); 
+        } catch(Exception ex) {
+            queryStringUrlDecoded = queryStringTrimmed;
+        }
+                     
         if (queryStringUrlDecoded.isEmpty()) {
             return JsonRepresentation.newMap();
         }

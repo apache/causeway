@@ -28,6 +28,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -56,8 +58,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeActionRes
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
-
-import com.google.common.base.Strings;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation

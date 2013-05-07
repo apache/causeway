@@ -119,4 +119,12 @@ public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEnt
     private static int valueElseDefault(Integer value, int i) {
         return value != null? value: i;
     }
+    
+    @ActionSemantics(Of.IDEMPOTENT)
+    @MemberOrder(sequence = "90")
+    public String concatenate(@Named("str1") String str1, @Named("str2") String str2) {
+        return str1 + str2;
+    }
+
+
 }
