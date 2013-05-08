@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.Session;
 
 import org.apache.isis.applib.annotation.Where;
@@ -43,6 +45,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -57,7 +61,7 @@ import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  */
-public class ScalarModel extends EntityModel {
+public class ScalarModel extends EntityModel implements LinksProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -346,8 +350,9 @@ public class ScalarModel extends EntityModel {
     }
 
     private final Kind kind;
+    
     private final ObjectAdapterMemento parentObjectAdapterMemento;
-
+    
 
     /**
      * Populated only if {@link #getKind()} is {@link Kind#PARAMETER}
@@ -389,6 +394,10 @@ public class ScalarModel extends EntityModel {
 
         setObject(parentObjectAdapterMemento);
         setMode(Mode.VIEW);
+    }
+
+    public ObjectAdapterMemento getParentObjectAdapterMemento() {
+        return parentObjectAdapterMemento;
     }
 
     protected void setObject(final ObjectAdapterMemento parentObjectAdapterMemento) {
@@ -529,5 +538,20 @@ public class ScalarModel extends EntityModel {
     public int getLength() {
         return kind.getLength(this);
     }
+
+    /**
+     * Additional links to render (if any)
+     */
+    private List<LinkAndLabel> entityActions = Lists.newArrayList();
+
+    public void addEntityActions(List<LinkAndLabel> entityActions) {
+        this.entityActions.addAll(entityActions);
+    }
+
+    @Override
+    public List<LinkAndLabel> getLinks() {
+        return Collections.unmodifiableList(entityActions);
+    }
+
 
 }

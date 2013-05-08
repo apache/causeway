@@ -116,8 +116,8 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
 
         final OneToManyAssociation collection = 
                 entityCollectionModel.getCollectionMemento().getCollection();
-        RenderFacet resolveFacet = collection.getFacet(RenderFacet.class);
-        return resolveFacet != null && resolveFacet.value() == Type.EAGERLY;
+        RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
+        return renderFacet != null && renderFacet.value() == Type.EAGERLY;
     }
 
 

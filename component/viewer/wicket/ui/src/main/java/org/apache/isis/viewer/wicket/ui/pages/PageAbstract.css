@@ -819,3 +819,11 @@ div#jGrowl div.jGrowl-closer {
     display: block;
     margin-top: 7em;
 } 
+
+
+/* action buttons in properties */
+
+.properties .property .additionalLinkList {
+    float:none;
+    margin-top: 10px;
+}

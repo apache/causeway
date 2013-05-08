@@ -74,14 +74,15 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
         return collectionModel;
     }
 
-    private static List<LinkAndLabel> entityActions(EntityModel entityModel, OneToManyAssociation otma) {
+    // TODO: move to a utility class, since also called outside this class...
+    public static List<LinkAndLabel> entityActions(EntityModel entityModel, ObjectAssociation association) {
         final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
         
         @SuppressWarnings("unchecked")
         final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED,
-                Filters.and(memberOrderOf(otma), dynamicallyVisibleFor(adapter)));
+                Filters.and(memberOrderOf(association), dynamicallyVisibleFor(adapter)));
         
         final CssMenuLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
 
@@ -93,12 +94,14 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
             }});
     }
 
+    // TODO: move to a utility class, since also called outside this class...
     private static Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
         final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
         AuthenticationSession authSession = asa.getAuthenticationSession();
         return ObjectActionFilters.dynamicallyVisible(authSession, adapter, Where.ANYWHERE);
     }
 
+    // TODO: move to a utility class, since also called outside this class...
     private static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
         final String collectionName = association.getName();
         final String collectionId = association.getId();
