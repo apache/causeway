@@ -55,7 +55,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
 
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-    private static final String ID_FEEDBACK = "feedback";
 
     private static final String ID_SCALAR_NAME = "scalarName";
 
@@ -124,9 +123,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
                     }
                     scalarModel.setObject(pending.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
                 }
-
             }
-
         };
     }
 
@@ -181,7 +178,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
             protected String getDisplayText(ObjectAdapterMemento choice) {
                 
                 final ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                return objectAdapter.titleString();
+                return objectAdapter.titleString(null);
             }
 
             @Override
@@ -210,16 +207,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
             }
 
         };
-        return new Select2Choice<ObjectAdapterMemento>(id, modelObject, provider) {
-
-            private static final long serialVersionUID = 1L;
-            
-//            @Override
-//            protected void convertInput() {
-//                super.convertInput();
-//                modelObject.setObject(getConvertedInput());
-//            }
-        };
+        return new Select2Choice<ObjectAdapterMemento>(id, modelObject, provider);
     }
 
     @Override
