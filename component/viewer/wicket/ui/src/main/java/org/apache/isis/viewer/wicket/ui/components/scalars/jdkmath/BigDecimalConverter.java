@@ -14,9 +14,10 @@ final class BigDecimalConverter implements IConverter<BigDecimal> {
     }
 
     @Override
-    public BigDecimal convertToObject(String value, Locale locale) {
+    public BigDecimal convertToObject(String valueStr, Locale locale) {
         try {
-            return new BigDecimal(value).setScale(scale);
+            final BigDecimal value = new BigDecimal(valueStr);
+            return scale != null? value.setScale(scale): value;
         } catch (Exception e) {
             return null;
         }

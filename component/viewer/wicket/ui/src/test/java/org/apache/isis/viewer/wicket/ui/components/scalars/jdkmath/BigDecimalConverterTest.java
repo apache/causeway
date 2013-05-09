@@ -32,5 +32,15 @@ public class BigDecimalConverterTest {
         Assert.assertEquals(bd_123_45_scale4, actual);
     }
     
+    @Test
+    public void test_scaleNull() {
+        final BigDecimal actual = new BigDecimalConverter(null).convertToObject("123.45", null);
+        Assert.assertEquals(bd_123_4500_scale2, actual);
+        Assert.assertEquals(bd_123_45_scale2, actual);
+        
+        Assert.assertNotEquals(bd_123_4500_scale4, actual);
+        Assert.assertNotEquals(bd_123_45_scale4, actual);
+    }
+    
 
 }
