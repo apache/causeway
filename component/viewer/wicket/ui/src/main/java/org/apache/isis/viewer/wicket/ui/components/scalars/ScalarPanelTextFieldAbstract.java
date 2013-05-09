@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -34,7 +35,11 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -98,14 +103,13 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
         
-        addFeedbackTo(labelIfRegular);
+        addFeedbackTo(labelIfRegular, textField);
+        addAdditionalLinksTo(labelIfRegular);
+        
         return labelIfRegular;
     }
-
-    protected void addFeedbackTo(MarkupContainer markupContainer) {
-        // 6.0.0
-        markupContainer.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, textField));
-    }
+    
+    
 
     /**
      * Optional hook method

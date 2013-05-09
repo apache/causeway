@@ -20,11 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.Where;
@@ -99,7 +97,11 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         final ObjectAdapter contextAdapter = entityModel.getObject();
 
-        final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, contextAdapter, ActionModel.SingleResultsMode.REDIRECT);
+        // use NO concurrency checking because the link is rendered on the entity page.
+        // REVIEW: is this good enough.  On the one hand we need it because otherwise a change done by this user basically prevents all actions from working
+        // on the other hand, if a change were made by some other user, then this user would want to know...
+        // perhaps the generated bookmarks need to subscribe to the EntityModel that backs the page?
+        final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, contextAdapter, ActionModel.SingleResultsMode.REDIRECT, ConcurrencyChecking.NO_CHECK);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }

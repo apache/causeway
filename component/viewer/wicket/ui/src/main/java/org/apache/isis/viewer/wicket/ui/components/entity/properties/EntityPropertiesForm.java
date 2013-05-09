@@ -94,7 +94,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         buildGui();
         
-        // add any concurrency exception that might have been propogated into the entity model 
+        // add any concurrency exception that might have been propagated into the entity model 
         // as a result of a previous action invocation
         final String concurrencyExceptionIfAny = entityModel.getAndClearConcurrencyExceptionIfAny();
         if(concurrencyExceptionIfAny != null) {

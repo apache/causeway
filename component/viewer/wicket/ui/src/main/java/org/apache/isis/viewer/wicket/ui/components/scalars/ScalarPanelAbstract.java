@@ -19,18 +19,31 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -43,7 +56,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
-
+    
+    private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
+    private static final String ID_FEEDBACK = "feedback";
 
     public enum Rendering {
         /**
@@ -169,7 +184,35 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected abstract Component addComponentForCompact();
 
+    protected void addFeedbackTo(MarkupContainer markupContainer, Component component) {
+        markupContainer.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, component));
+    }
     
+    protected void addAdditionalLinksTo(final FormComponentLabel labelIfRegular) {
+        final List<LinkAndLabel> entityActions;
+        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY) {
+            final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
+            final EntityModel parentEntityModel = new EntityModel(parentMemento);
+            entityActions = EntityActionUtil.entityActions(parentEntityModel, scalarModel.getPropertyMemento().getProperty());
+        } else {
+            entityActions = null;
+        }
+        addAdditionalLinks(labelIfRegular, entityActions);
+    }
+
+
+    
+    private void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
+        if(links == null || links.isEmpty()) {
+            Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
+            return;
+        }
+        links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
+        
+        final WebMarkupContainer views = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
+        markupContainer.addOrReplace(views);
+    }
+
     /**
      * Optional hook.
      */

@@ -483,9 +483,4 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return IsisContext.getSpecificationLoader();
     }
 
-
-
-
-
-
 }

@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -45,8 +46,10 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
@@ -89,38 +92,53 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         LinksProvider linksProvider = (LinksProvider) model;
         List<LinkAndLabel> links = linksProvider.getLinks();
         
-        final WebMarkupContainer views = new WebMarkupContainer(ID_ADDITIONAL_LINKS);
-        
-        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
-        
-        views.addOrReplace(container);
-        views.setOutputMarkupId(true);
-        
-        this.setOutputMarkupId(true);
-        
-        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, links) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(ListItem<LinkAndLabel> item) {
-                final LinkAndLabel linkAndLabel = item.getModelObject();
-                
-                final AbstractLink link = linkAndLabel.getLink();
-                        
-                Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
-                String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
-                if(disabledReasonIfAny != null) {
-                    viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
-                }
-                viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
-                link.addOrReplace(viewTitleLabel);
-                item.addOrReplace(link);
-            }
-        };
-        container.addOrReplace(listView);
-        addOrReplace(views);
+        addAdditionalLinks(this, links);
     }
+
+    protected void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
+        if(links == null || links.isEmpty()) {
+            Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
+            return;
+        }
+        links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
+        
+        final WebMarkupContainer views = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
+        markupContainer.addOrReplace(views);
+    }
+
+//    protected void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
+//        final WebMarkupContainer views = new WebMarkupContainer(ID_ADDITIONAL_LINKS);
+//        
+//        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
+//        
+//        views.addOrReplace(container);
+//        views.setOutputMarkupId(true);
+//        
+//        this.setOutputMarkupId(true);
+//        
+//        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, links) {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            protected void populateItem(ListItem<LinkAndLabel> item) {
+//                final LinkAndLabel linkAndLabel = item.getModelObject();
+//                
+//                final AbstractLink link = linkAndLabel.getLink();
+//                        
+//                Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
+//                String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
+//                if(disabledReasonIfAny != null) {
+//                    viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
+//                }
+//                viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
+//                link.addOrReplace(viewTitleLabel);
+//                item.addOrReplace(link);
+//            }
+//        };
+//        container.addOrReplace(listView);
+//        markupContainer.addOrReplace(views);
+//    }
 
     private void addUnderlyingViews(final String underlyingIdPrefix, final T model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);

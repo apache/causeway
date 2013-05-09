@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -42,7 +43,6 @@ public class BooleanPanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
-    private static final String ID_FEEDBACK = "feedback";
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -76,11 +76,14 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         addOrReplace(labelIfRegular);
         
-        labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, checkBox));
+        addFeedbackTo(labelIfRegular, checkBox);
+        addAdditionalLinksTo(labelIfRegular);
 
         return labelIfRegular;
     }
-    
+
+
+
 
     /**
      * Mandatory hook method to build the component to render the model when in

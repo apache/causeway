@@ -106,10 +106,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * Factory method for creating {@link PageParameters}.
      * 
      * see {@link #ActionModel(PageParameters)}
+     * @param concurrencyChecking TODO
      */
-    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode) {
+    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode, ConcurrencyChecking concurrencyChecking) {
         
-        final PageParameters pageParameters = createPageParameters(adapter, objectAction, singleResultsMode);
+        final PageParameters pageParameters = createPageParameters(adapter, objectAction, singleResultsMode, concurrencyChecking);
 
         final String actionTitle = objectAction.getName();
         PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionTitle);
@@ -121,13 +122,15 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return pageParameters;
     }
 
-    private static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode) {
+    private static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode, ConcurrencyChecking concurrencyChecking) {
         final PageParameters pageParameters = new PageParameters();
 
         PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ACTION);
         PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addEnumTo(pageParameters, singleResultsMode);
 
-        final String oidStr = adapter.getOid().enString(getOidMarshaller());
+        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
+                adapter.getOid().enString(getOidMarshaller()):
+                adapter.getOid().enStringNoVersion(getOidMarshaller());
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
         final ActionType actionType = objectAction.getType();
@@ -147,8 +150,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     public PageParameters asPageParameters() {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getActionMemento().getAction();
-        final PageParameters pageParameters = createPageParameters(adapter, objectAction, SingleResultsMode.REDIRECT);
-
+        final PageParameters pageParameters = createPageParameters(adapter, objectAction, SingleResultsMode.REDIRECT, ConcurrencyChecking.CHECK);
 
         // capture argument values and build up a title
         final StringBuilder buf = new StringBuilder();

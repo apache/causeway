@@ -93,10 +93,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
         
-        if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
-        }
-
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
@@ -107,7 +103,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         addOrReplace(labelIfRegular);
         
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
+        addFeedbackTo(labelIfRegular, entityLink);
+        addAdditionalLinksTo(labelIfRegular);
         
         addStandardSemantics();
         addSemantics();
@@ -172,8 +169,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         labelIfCompact.add(entityLink);
         
         addOrReplace(labelIfCompact);
-        
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, entityLink));
         
         return labelIfCompact;
     }

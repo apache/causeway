@@ -71,21 +71,22 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final FileUploadField fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
         
-        final FormComponentLabel scalarIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, fileUploadField);
-        scalarIfRegular.add(fileUploadField);
+        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, fileUploadField);
+        labelIfRegular.add(fileUploadField);
     
         final Label scalarUploadLabel = new Label(ID_SCALAR_IF_REGULAR_UPLOAD, "Upload");
-        scalarIfRegular.add(scalarUploadLabel);
+        labelIfRegular.add(scalarUploadLabel);
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
-        scalarIfRegular.add(scalarName);
+        labelIfRegular.add(scalarName);
         
-        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegular);
-        scalarIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, fileUploadField));
+        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, labelIfRegular);
         
-        addOrReplace(scalarIfRegular);
+        addOrReplace(labelIfRegular);
+        addFeedbackTo(labelIfRegular, fileUploadField);
+        addAdditionalLinksTo(labelIfRegular);
         
-        return scalarIfRegular;
+        return labelIfRegular;
     }
 
     @Override

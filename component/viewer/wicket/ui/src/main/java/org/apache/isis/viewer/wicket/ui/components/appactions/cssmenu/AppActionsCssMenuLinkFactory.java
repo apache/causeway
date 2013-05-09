@@ -42,7 +42,7 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
 
     @Override
     public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
-        final PageParameters pageParameters = ActionModel.createPageParameters(adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), action, null, ActionModel.SingleResultsMode.REDIRECT);
+        final PageParameters pageParameters = ActionModel.createPageParameters(adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), action, null, ActionModel.SingleResultsMode.REDIRECT, ConcurrencyChecking.NO_CHECK);
 
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
 

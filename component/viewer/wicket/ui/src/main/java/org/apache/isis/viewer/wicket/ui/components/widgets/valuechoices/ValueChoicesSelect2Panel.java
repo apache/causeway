@@ -82,9 +82,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
         if(getModel().isRequired()) {
             labelIfRegular.add(new CssClassAppender("mandatory"));
         }
+        
         addOrReplace(labelIfRegular);
-
-        labelIfRegular.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, valueField));
+        addFeedbackTo(labelIfRegular, valueField);
+        addAdditionalLinksTo(labelIfRegular);
+        
         return labelIfRegular;
     }
 

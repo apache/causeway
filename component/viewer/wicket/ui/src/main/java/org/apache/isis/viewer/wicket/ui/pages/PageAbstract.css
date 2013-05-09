@@ -825,5 +825,10 @@ div#jGrowl div.jGrowl-closer {
 
 .properties .property .additionalLinkList {
     float:none;
-    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.properties .property .isisBlobPanel .additionalLinkList {
+    padding-top: 0px;
 }

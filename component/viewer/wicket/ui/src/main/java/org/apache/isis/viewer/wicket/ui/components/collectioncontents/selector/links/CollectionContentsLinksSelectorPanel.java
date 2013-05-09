@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;

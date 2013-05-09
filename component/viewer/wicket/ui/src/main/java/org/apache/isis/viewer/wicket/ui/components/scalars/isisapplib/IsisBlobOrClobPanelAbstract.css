@@ -36,7 +36,7 @@
     font-size: 0.9em;
 }
 
-.isisBlobPanel .scalarValue span.uploadFile input {
+.isisBlobPanel .scalarValue .uploadFile input {
 	display: none;
 }
 
@@ -50,7 +50,8 @@
 .isisBlobPanel .scalarValue a:hover span.downloadTitle,
 .isisBlobPanel .scalarValue span.uploadTitle:hover,
 .isisBlobPanel .scalarValue a:hover span.clearTitle {
-	background-color:#E3E3D9;
+	background-color:#40C0CB;
+	color: white;
     text-decoration:none;
     cursor: pointer;
 }
@@ -67,4 +68,19 @@
    text-align: center;
    background-color: #DDD;
    cursor:pointer;
+}
+
+
+
+.isisBlobPanel .scalarValue {
+	height: 30px;
+	line-height: 30px;
+}
+
+.isisBlobPanel .scalarValue span.uploadTitle,
+.isisBlobPanel .scalarValue span.downloadTitle,
+.isisBlobPanel .scalarValue span.clearTitle {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-weight: bold;
 }
