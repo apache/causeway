@@ -79,7 +79,7 @@ public class CssMenuBuilder {
 
     private void addMenuItems(final CssMenuItem parent, final List<ObjectAction> actions) {
         addMenuItemsForActionsOfType(parent, actions, ActionType.USER);
-        if (isPrototyping()) {
+        if ( isExploring() || isPrototyping()) {
             addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION);
             addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE);
         }
@@ -88,6 +88,9 @@ public class CssMenuBuilder {
         }
     }
 
+    public boolean isExploring() {
+        return IsisContext.getDeploymentType().isExploring();
+    }
     public boolean isPrototyping() {
         return IsisContext.getDeploymentType().isPrototyping();
     }

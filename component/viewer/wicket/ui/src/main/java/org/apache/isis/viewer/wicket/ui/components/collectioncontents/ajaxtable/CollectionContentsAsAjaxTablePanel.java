@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -149,8 +150,39 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         final ObjectSpecification typeSpec = model.getTypeOfSpecification();
         
         List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        
+        if ( isExploring() || isPrototyping()) {
+            List<ObjectAction> explorationActions = typeSpec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            List<ObjectAction> prototypeActions = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            objectActions.addAll(explorationActions);
+            objectActions.addAll(prototypeActions);
+        }
+        if (isDebugMode()) {
+            List<ObjectAction> debugActions = typeSpec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            objectActions.addAll(debugActions);
+        }
+
         List<ObjectAction> flattenedActions = ObjectActions.flattenedActions(objectActions);
+        
         return Lists.newArrayList(Iterables.filter(flattenedActions, BULK));
+    }
+
+    
+    public boolean isExploring() {
+        return IsisContext.getDeploymentType().isExploring();
+    }
+    public boolean isPrototyping() {
+        return IsisContext.getDeploymentType().isPrototyping();
+    }
+
+    /**
+     * Protected so can be overridden in testing if required.
+     */
+    protected boolean isDebugMode() {
+        // TODO: need to figure out how to switch into debug mode;
+        // probably call a Debug toggle page, and stuff into
+        // Session.getMetaData()
+        return true;
     }
 
 
