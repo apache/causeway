@@ -53,7 +53,7 @@ public class EntityPage extends PageAbstract {
         this.model = new EntityModel(pageParameters);
         addChildComponents(model);
         
-        bookmarkIfBookmarkable(model);
+        bookmarkPage(model);
         addBookmarkedPages();
     }
 
@@ -71,18 +71,10 @@ public class EntityPage extends PageAbstract {
         model.setException(exIfAny);
         addChildComponents(model);
         
-        bookmarkIfBookmarkable(model);
+        bookmarkPage(model);
         addBookmarkedPages();
     }
 
-    protected void bookmarkIfBookmarkable(EntityModel model) {
-        final ObjectSpecId specId = model.getObjectAdapterMemento().getObjectSpecId();
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
-        final BookmarkPolicyFacet facet = objectSpec.getFacet(BookmarkPolicyFacet.class);
-        if(facet != null && facet.value() == BookmarkPolicy.ROOT) {
-            bookmarkPage(model);
-        }
-    }
 
 
     /**

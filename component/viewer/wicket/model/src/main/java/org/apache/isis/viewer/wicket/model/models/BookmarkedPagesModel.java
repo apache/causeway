@@ -30,8 +30,10 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -39,14 +41,20 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 
-public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> implements Iterable<PageParameters>{
+public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> implements Iterable<PageParameters>{
 
     private static final long serialVersionUID = 1L;
     
-    private List<PageParameters> list = Lists.newArrayList();
+    private List<BookmarkTreeNode> rootNodes = Lists.newArrayList();
     private transient PageParameters current;
     
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
+        if(bookmarkableModel.hasRootPolicy()) {
+            bookmarkRoot(bookmarkableModel);
+        }
+    }
+
+    protected void bookmarkRoot(final BookmarkableModel<?> bookmarkableModel) {
         final PageParameters candidatePP = bookmarkableModel.asPageParameters();
         
         // ignore if doesn't provide a page type for subsequent disambiguation
@@ -61,15 +69,16 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
             return;
         }
         
-        // look to see if exists already; if found then then update title if need be.
-        // the convoluted logic here is because we remove the temporarily remove the title
+        // look to see if exists already; if found then update title if need be.
+        // the convoluted logic here is because we temporarily remove the title
         // in order to do the check.
         final String pageTitleKey = PageParameterNames.PAGE_TITLE.toString();
         try {
             // temporarily remove to do comparison
             candidatePP.remove(pageTitleKey);
             
-            for (PageParameters eachPP : list) {
+            for (BookmarkTreeNode eachNode : rootNodes) {
+                PageParameters eachPP = eachNode.pageParameters;
                 String pageTitle = PageParameterNames.PAGE_TITLE.getStringFrom(eachPP);
                 try {
                     eachPP.remove(pageTitleKey);
@@ -87,13 +96,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
         }
         
         // if get here, then didn't find.
-        list.add(candidatePP);
-        Collections.sort(list, new Comparator<PageParameters>() {
+        rootNodes.add(new BookmarkTreeNode(bookmarkableModel));
+        Collections.sort(rootNodes, new Comparator<BookmarkTreeNode>() {
 
             @Override
-            public int compare(PageParameters o1, PageParameters o2) {
-                PageType pageType1 = PageParameterNames.PAGE_TYPE.getEnumFrom(o1, PageType.class);
-                PageType pageType2 = PageParameterNames.PAGE_TYPE.getEnumFrom(o2, PageType.class);
+            public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
+                PageType pageType1 = PageParameterNames.PAGE_TYPE.getEnumFrom(o1.pageParameters, PageType.class);
+                PageType pageType2 = PageParameterNames.PAGE_TYPE.getEnumFrom(o2.pageParameters, PageType.class);
                 
                 final int pageTypeComparison = pageType1.compareTo(pageType2);
                 if(pageTypeComparison != 0) {
@@ -102,16 +111,16 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
                 
                 if(pageType1 == PageType.ENTITY) {
                     // sort by entity type
-                    final String className1 = classNameOf(o1);
-                    final String className2 = classNameOf(o2);
+                    final String className1 = classNameOf(o1.pageParameters);
+                    final String className2 = classNameOf(o2.pageParameters);
                     
                     final int classNameComparison = className1.compareTo(className2);
                     if(classNameComparison != 0) {
                         return classNameComparison;
                     }
                 }
-                String title1 = PageParameterNames.PAGE_TITLE.getStringFrom(o1);
-                String title2 = PageParameterNames.PAGE_TITLE.getStringFrom(o2);
+                String title1 = PageParameterNames.PAGE_TITLE.getStringFrom(o1.pageParameters);
+                String title2 = PageParameterNames.PAGE_TITLE.getStringFrom(o2.pageParameters);
                 return title1.compareTo(title2);
             }
 
@@ -128,13 +137,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
 
     
     @Override
-    protected List<PageParameters> load() {
-        return list;
+    protected List<BookmarkTreeNode> load() {
+        return rootNodes;
     }
 
     @Override
     public Iterator<PageParameters> iterator() {
-        return Iterators.unmodifiableIterator(list.iterator());
+        return Iterators.unmodifiableIterator(Iterators.transform(rootNodes.iterator(), BookmarkTreeNode.AS_PAGE_PARAMETERS));
     }
     
     public boolean isCurrent(PageParameters pageParameters) {
@@ -154,11 +163,11 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
     }
 
     public void clear() {
-        list.clear();
+        rootNodes.clear();
     }
 
     public boolean isEmpty() {
-        return list.isEmpty();
+        return rootNodes.isEmpty();
     }
 
     

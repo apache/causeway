@@ -27,12 +27,14 @@ import com.google.common.collect.Maps;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -168,17 +170,26 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
         return getOidMarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
     }
-    
 
 
-    // //////////////////////////////////////////////////////////
-    // asPageParameters
-    // //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    // BookmarkableModel
+    //////////////////////////////////////////////////
 
     @Override
     public PageParameters asPageParameters() {
         return createPageParameters(getObject());
     }
+
+
+    public boolean hasRootPolicy() {
+        final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
+        final BookmarkPolicyFacet facet = objectSpec.getFacet(BookmarkPolicyFacet.class);
+        return facet != null && facet.value() == BookmarkPolicy.ROOT;
+    }
+
+
 
     // //////////////////////////////////////////////////////////
     // ObjectAdapterMemento, typeOfSpecification

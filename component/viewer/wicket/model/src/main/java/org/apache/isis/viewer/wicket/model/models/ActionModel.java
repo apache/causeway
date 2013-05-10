@@ -94,6 +94,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         SELECT
     }
 
+    
+    //////////////////////////////////////////////////
+    // Factory methods
+    //////////////////////////////////////////////////
+
     public static ActionModel create(final ObjectAdapterMemento targetAdapter, final ActionMemento action, final Mode mode, final SingleResultsMode singleResultsMode) {
         return new ActionModel(targetAdapter, action, mode, singleResultsMode);
     }
@@ -147,6 +152,53 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return pageParameters;
     }
 
+
+    public static Entry<Integer, String> parse(final String paramContext) {
+        final Pattern compile = Pattern.compile("([^=]+)=(.+)");
+        final Matcher matcher = compile.matcher(paramContext);
+        if (!matcher.matches()) {
+            return null;
+        }
+
+        final int paramNum;
+        try {
+            paramNum = Integer.parseInt(matcher.group(1));
+        } catch (final Exception e) {
+            // ignore
+            return null;
+        }
+
+        final String oidStr;
+        try {
+            oidStr = matcher.group(2);
+        } catch (final Exception e) {
+            return null;
+        }
+
+        return new Map.Entry<Integer, String>() {
+
+            @Override
+            public Integer getKey() {
+                return paramNum;
+            }
+
+            @Override
+            public String getValue() {
+                return oidStr;
+            }
+
+            @Override
+            public String setValue(final String value) {
+                return null;
+            }
+        };
+    }
+
+    //////////////////////////////////////////////////
+    // BookmarkableModel
+    //////////////////////////////////////////////////
+
+
     public PageParameters asPageParameters() {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getActionMemento().getAction();
@@ -169,6 +221,17 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
         return pageParameters;
     }
+
+
+    @Override
+    public boolean hasRootPolicy() {
+        return true;
+    }
+
+    //////////////////////////////////////////////////
+    // helpers
+    //////////////////////////////////////////////////
+
     
     private static String titleOf(ObjectAdapter argumentAdapter) {
         return argumentAdapter!=null?argumentAdapter.titleString():"";
@@ -356,46 +419,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         argumentModel.setObject(argumentAdapter);
     }
 
-    public static Entry<Integer, String> parse(final String paramContext) {
-        final Pattern compile = Pattern.compile("([^=]+)=(.+)");
-        final Matcher matcher = compile.matcher(paramContext);
-        if (!matcher.matches()) {
-            return null;
-        }
-
-        final int paramNum;
-        try {
-            paramNum = Integer.parseInt(matcher.group(1));
-        } catch (final Exception e) {
-            // ignore
-            return null;
-        }
-
-        final String oidStr;
-        try {
-            oidStr = matcher.group(2);
-        } catch (final Exception e) {
-            return null;
-        }
-
-        return new Map.Entry<Integer, String>() {
-
-            @Override
-            public Integer getKey() {
-                return paramNum;
-            }
-
-            @Override
-            public String getValue() {
-                return oidStr;
-            }
-
-            @Override
-            public String setValue(final String value) {
-                return null;
-            }
-        };
-    }
 
     public ScalarModel getArgumentModel(final ActionParameterMemento apm) {
         ScalarModel scalarModel = arguments.get(apm.getNumber());
@@ -524,6 +547,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     public boolean hasSafeActionSemantics() {
         return getActionMemento().getAction().getSemantics() == ActionSemantics.Of.SAFE;
     }
+
     
     
     //////////////////////////////////////////////////

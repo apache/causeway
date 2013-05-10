@@ -37,5 +37,7 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
      * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.
      */
     public abstract PageParameters asPageParameters();
+
+    public abstract boolean hasRootPolicy();
     
 }
