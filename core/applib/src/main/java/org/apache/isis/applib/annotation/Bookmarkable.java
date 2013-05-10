@@ -37,5 +37,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Bookmarkable {
     
-    BookmarkPolicy value() default BookmarkPolicy.ROOT;  
+    BookmarkPolicy value() default BookmarkPolicy.AS_ROOT;  
 }

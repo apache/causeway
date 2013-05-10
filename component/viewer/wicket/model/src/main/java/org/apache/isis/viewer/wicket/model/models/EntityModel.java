@@ -82,7 +82,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
         
         PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ENTITY);
-        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, adapter.titleString());
+        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, adapter.titleString(null));
 
         return pageParameters;
     }
@@ -139,7 +139,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
      * {@link ConcurrencyException}, if any, that might have occurred previously
      */
     private ConcurrencyException concurrencyException;
-    private ConcurrencyChecking loadingHint;
 
     // //////////////////////////////////////////////////////////
     // constructors
@@ -182,11 +181,23 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 
-    public boolean hasRootPolicy() {
+    public boolean hasAsRootPolicy() {
+        return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
+    }
+
+    public boolean hasAsChildPolicy() {
+        return hasBookmarkPolicy(BookmarkPolicy.AS_CHILD);
+    }
+
+    private boolean hasBookmarkPolicy(final BookmarkPolicy policy) {
+        final BookmarkPolicyFacet facet = getBookmarkPolicyFacetIfAny();
+        return facet != null && facet.value() == policy;
+    }
+    
+    private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
         final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
-        final BookmarkPolicyFacet facet = objectSpec.getFacet(BookmarkPolicyFacet.class);
-        return facet != null && facet.value() == BookmarkPolicy.ROOT;
+        return objectSpec.getFacet(BookmarkPolicyFacet.class);
     }
 
 

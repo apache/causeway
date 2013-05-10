@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,18 +29,14 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 
-public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> implements Iterable<PageParameters>{
+public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> {
+
+    private static final BookmarkTreeNodeComparator COMPARATOR = new BookmarkTreeNodeComparator();
 
     private static final long serialVersionUID = 1L;
     
@@ -49,103 +44,59 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
     private transient PageParameters current;
     
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
-        if(bookmarkableModel.hasRootPolicy()) {
-            bookmarkRoot(bookmarkableModel);
+
+        final PageParameters candidatePP = bookmarkableModel.getPageParameters();
+        if(!isValidParameters(candidatePP)) {
+            return;
         }
+
+        boolean foundInGraph = false;
+        for (BookmarkTreeNode eachNode : rootNodes) {
+            if(eachNode.matchAndUpdateTitle(bookmarkableModel)) {
+                current = candidatePP;
+                foundInGraph = true;
+            }
+        }
+
+        if(!foundInGraph && bookmarkableModel.hasAsRootPolicy()) {
+            rootNodes.add(BookmarkTreeNode.newRoot(bookmarkableModel));
+            Collections.sort(rootNodes, COMPARATOR);
+            current = candidatePP;
+        }
+
+        return;
     }
 
-    protected void bookmarkRoot(final BookmarkableModel<?> bookmarkableModel) {
-        final PageParameters candidatePP = bookmarkableModel.asPageParameters();
-        
+
+    /**
+     * @return whether the {@link PageParameters} contain all required fields.
+     */
+    private static boolean isValidParameters(final PageParameters candidatePP) {
+
         // ignore if doesn't provide a page type for subsequent disambiguation
         PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(candidatePP, PageType.class);
         if(pageType==null) {
-            return;
+            return false;
         }
         
         // ignore if doesn't provide a title for rendering
         String candidateTitle = PageParameterNames.PAGE_TITLE.getStringFrom(candidatePP);
         if(candidateTitle==null) {
-            return;
+            return false;
         }
         
-        // look to see if exists already; if found then update title if need be.
-        // the convoluted logic here is because we temporarily remove the title
-        // in order to do the check.
-        final String pageTitleKey = PageParameterNames.PAGE_TITLE.toString();
-        try {
-            // temporarily remove to do comparison
-            candidatePP.remove(pageTitleKey);
-            
-            for (BookmarkTreeNode eachNode : rootNodes) {
-                PageParameters eachPP = eachNode.pageParameters;
-                String pageTitle = PageParameterNames.PAGE_TITLE.getStringFrom(eachPP);
-                try {
-                    eachPP.remove(pageTitleKey);
-                    if(eachPP.equals(candidatePP)) {
-                       pageTitle = candidateTitle; // update the existing
-                       current = eachPP;
-                       return;
-                    }
-                } finally {
-                    eachPP.add(PageParameterNames.PAGE_TITLE.toString(), pageTitle);
-                }
-            }
-        } finally {
-            PageParameterNames.PAGE_TITLE.addStringTo(candidatePP, candidateTitle);
-        }
-        
-        // if get here, then didn't find.
-        rootNodes.add(new BookmarkTreeNode(bookmarkableModel));
-        Collections.sort(rootNodes, new Comparator<BookmarkTreeNode>() {
-
-            @Override
-            public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
-                PageType pageType1 = PageParameterNames.PAGE_TYPE.getEnumFrom(o1.pageParameters, PageType.class);
-                PageType pageType2 = PageParameterNames.PAGE_TYPE.getEnumFrom(o2.pageParameters, PageType.class);
-                
-                final int pageTypeComparison = pageType1.compareTo(pageType2);
-                if(pageTypeComparison != 0) {
-                    return pageTypeComparison;
-                }
-                
-                if(pageType1 == PageType.ENTITY) {
-                    // sort by entity type
-                    final String className1 = classNameOf(o1.pageParameters);
-                    final String className2 = classNameOf(o2.pageParameters);
-                    
-                    final int classNameComparison = className1.compareTo(className2);
-                    if(classNameComparison != 0) {
-                        return classNameComparison;
-                    }
-                }
-                String title1 = PageParameterNames.PAGE_TITLE.getStringFrom(o1.pageParameters);
-                String title2 = PageParameterNames.PAGE_TITLE.getStringFrom(o2.pageParameters);
-                return title1.compareTo(title2);
-            }
-
-            private String classNameOf(PageParameters o1) {
-                String oidStr1 = PageParameterNames.OBJECT_OID.getStringFrom(o1);
-                RootOid oid1 = getOidMarshaller().unmarshal(oidStr1, RootOid.class);
-                ObjectSpecId objectSpecId1 = oid1.getObjectSpecId();
-                final String className1 = getSpecificationLoader().lookupBySpecId(objectSpecId1).getIdentifier().getClassName();
-                return className1;
-            }
-        });
-        current = candidatePP;
-    }
-
-    
-    @Override
-    protected List<BookmarkTreeNode> load() {
-        return rootNodes;
+        return true;
     }
 
     @Override
-    public Iterator<PageParameters> iterator() {
-        return Iterators.unmodifiableIterator(Iterators.transform(rootNodes.iterator(), BookmarkTreeNode.AS_PAGE_PARAMETERS));
+    protected List<BookmarkTreeNode> load() {
+        List<BookmarkTreeNode> depthFirstGraph = Lists.newArrayList();
+        for (BookmarkTreeNode rootNode : rootNodes) {
+            rootNode.appendGraphTo(depthFirstGraph);
+        }
+        return depthFirstGraph;
     }
-    
+
     public boolean isCurrent(PageParameters pageParameters) {
         return Objects.equal(current, pageParameters);
     }
@@ -170,18 +121,5 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         return rootNodes.isEmpty();
     }
 
-    
-
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-    
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-    
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
 
 }

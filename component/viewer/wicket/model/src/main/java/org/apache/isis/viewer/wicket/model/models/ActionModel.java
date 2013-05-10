@@ -216,7 +216,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             buf.append(abbreviated(titleOf(argumentAdapter), 8));
         }
 
-        final String actionTitle = adapter.titleString() + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        final String actionTitle = adapter.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
         PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionTitle);
 
         return pageParameters;
@@ -224,17 +224,22 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
 
     @Override
-    public boolean hasRootPolicy() {
+    public boolean hasAsRootPolicy() {
         return true;
     }
 
+    @Override
+    public boolean hasAsChildPolicy() {
+        return false;
+    }
+    
     //////////////////////////////////////////////////
     // helpers
     //////////////////////////////////////////////////
 
     
     private static String titleOf(ObjectAdapter argumentAdapter) {
-        return argumentAdapter!=null?argumentAdapter.titleString():"";
+        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
     }
     
     private static String abbreviated(final String str, final int maxLength) {

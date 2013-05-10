@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+
 public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
 
     private static final long serialVersionUID = 1L;
@@ -33,11 +35,32 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
         super(t);
     }
 
+    
+    private PageParameters cachedPageParameters;
+    
     /**
      * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.
+     * 
+     * <p>
+     * Delegates to {@link #asPageParameters()}, and caches for performance.
      */
-    public abstract PageParameters asPageParameters();
+    public PageParameters getPageParameters() {
+        if(cachedPageParameters == null) {
+            cachedPageParameters = asPageParameters();
+        }
+        return cachedPageParameters;
+    }
+    
+    /**
+     * Generally, should use {@link #getPageParameters()}, since this is cached
+     * and {@link PageParameters} could be a bit expensive to compute
+     * (since they include the object's 
+     * {@link ObjectAdapter#titleString(ObjectAdapter) title}).
+     */
+    protected abstract PageParameters asPageParameters();
 
-    public abstract boolean hasRootPolicy();
+    public abstract boolean hasAsRootPolicy();
+    
+    public abstract boolean hasAsChildPolicy();
     
 }

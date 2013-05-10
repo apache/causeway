@@ -19,11 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 
-import java.util.List;
-
 import com.google.inject.Inject;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.interaction.resizable.ResizableBehavior;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,7 +32,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -47,10 +42,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -77,32 +72,6 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     public BookmarkedPagesPanel(final String id, final BookmarkedPagesModel bookmarkedPagesModel) {
         super(id, bookmarkedPagesModel);
         buildGui();
-        
-//        Options options = new Options();
-//        
-//        add(new ResizableBehavior("#panel") {
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            public void onResizeStop(AjaxRequestTarget target, int top, int left, int width, int height) {
-//                return;
-//            }
-//            
-//            @Override
-//            public void onResizeStart(AjaxRequestTarget target, int top, int left, int width, int height) {
-//                return;
-//            }
-//            
-//            @Override
-//            public boolean isResizeStopEventEnabled() {
-//                return false;
-//            }
-//            
-//            @Override
-//            public boolean isResizeStartEventEnabled() {
-//                return false;
-//            }
-//        });
     }
 
     private void buildGui() {
@@ -157,6 +126,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 if(bookmarkedPagesModel.isCurrent(pageParameters)) {
                     item.add(new CssClassAppender("currentBookmark"));
                 }
+                item.add(new CssClassAppender("bookmarkDepth" + rootNode.getDepth()));
             }
         };
         container.add(listView);

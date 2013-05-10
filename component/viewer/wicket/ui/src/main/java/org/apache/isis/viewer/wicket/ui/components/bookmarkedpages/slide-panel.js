@@ -19,21 +19,22 @@
 $(document).ready(function(){
  
     var showBookmarks = function(){
-        $('#panel').stop().animate(
+        $('#bookmarkedPagesSlidingDiv').stop().animate(
             {width:"400px", opacity:0.95}, 250, 
             function() {
                 $('.content').fadeIn('125');
             });
         $('.showPanelTab').animate({opacity: 0.5});
     };
+
     var hideBookmarks = function(){
         $('.content').fadeOut('125', 
             function() { 
-                $('#panel').stop().animate({width:"0", opacity:0.1}, 125);
+                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0.1}, 125);
             });
          $('.showPanelTab').animate({opacity: 1.0});
      };
 
     $('.showPanelTab').mouseenter(showBookmarks);
-    $('#panel').mouseleave(hideBookmarks);
+    $('#bookmarkedPagesSlidingDiv').mouseleave(hideBookmarks);
 });

@@ -112,7 +112,7 @@
     font-weight:bold;
 }
 
-#panel {
+#bookmarkedPagesSlidingDiv {
     border-radius: 0px 8px 8px 0px;
     position:fixed;
     left:0px;
@@ -122,9 +122,29 @@
     width:0;/*new line*/
     z-index: 1;
 }
-#panel .content {
+#bookmarkedPagesSlidingDiv .content {
     width:290px;
     margin-left:30px;
     
     display: none;
+}
+
+
+.bookmarkDepth0 {
+    padding-left: 0px;	
+}
+.bookmarkDepth1 {
+    padding-left: 20px;  
+}
+.bookmarkDepth2 {
+    padding-left: 40px;  
+}
+.bookmarkDepth3 {
+    padding-left: 60px;  
+}
+.bookmarkDepth4 {
+    padding-left: 80px;  
+}
+.bookmarkDepth5 {
+    padding-left: 100px;  
 }

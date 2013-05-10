@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 
 public class ObjectAssociationFilters {
 
@@ -43,6 +44,17 @@ public class ObjectAssociationFilters {
         }
     };
 
+    /**
+     * Filters only fields that are for reference properties (ie 1:1 associations)
+     */
+    public final static Filter<ObjectAssociation> REFERENCE_PROPERTIES = new Filter<ObjectAssociation>() {
+        @Override
+        public boolean accept(final ObjectAssociation association) {
+            return association.isOneToOneAssociation() && 
+                   !association.getSpecification().containsDoOpFacet(ValueFacet.class);
+        }
+    };
+    
     /**
      * Filters only fields that are for properties (ie 1:1 associations)
      */

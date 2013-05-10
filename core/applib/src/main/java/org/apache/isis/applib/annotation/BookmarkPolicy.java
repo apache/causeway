@@ -4,7 +4,7 @@ public enum BookmarkPolicy {
     /**
      * Can be bookmarked, and is a top-level 'root' (or parent) bookmark.
      */
-    ROOT,
+    AS_ROOT,
     /**
      * Can be bookmarked, but only as a child or some other parent/root bookmark
      */
