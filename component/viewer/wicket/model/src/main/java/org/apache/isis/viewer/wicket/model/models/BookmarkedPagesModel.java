@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,9 +29,12 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
 
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
@@ -83,9 +88,45 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
         
         // if get here, then didn't find.
         list.add(candidatePP);
+        Collections.sort(list, new Comparator<PageParameters>() {
+
+            @Override
+            public int compare(PageParameters o1, PageParameters o2) {
+                PageType pageType1 = PageParameterNames.PAGE_TYPE.getEnumFrom(o1, PageType.class);
+                PageType pageType2 = PageParameterNames.PAGE_TYPE.getEnumFrom(o2, PageType.class);
+                
+                final int pageTypeComparison = pageType1.compareTo(pageType2);
+                if(pageTypeComparison != 0) {
+                    return pageTypeComparison;
+                }
+                
+                if(pageType1 == PageType.ENTITY) {
+                    // sort by entity type
+                    final String className1 = classNameOf(o1);
+                    final String className2 = classNameOf(o2);
+                    
+                    final int classNameComparison = className1.compareTo(className2);
+                    if(classNameComparison != 0) {
+                        return classNameComparison;
+                    }
+                }
+                String title1 = PageParameterNames.PAGE_TITLE.getStringFrom(o1);
+                String title2 = PageParameterNames.PAGE_TITLE.getStringFrom(o2);
+                return title1.compareTo(title2);
+            }
+
+            private String classNameOf(PageParameters o1) {
+                String oidStr1 = PageParameterNames.OBJECT_OID.getStringFrom(o1);
+                RootOid oid1 = getOidMarshaller().unmarshal(oidStr1, RootOid.class);
+                ObjectSpecId objectSpecId1 = oid1.getObjectSpecId();
+                final String className1 = getSpecificationLoader().lookupBySpecId(objectSpecId1).getIdentifier().getClassName();
+                return className1;
+            }
+        });
         current = candidatePP;
     }
 
+    
     @Override
     protected List<PageParameters> load() {
         return list;
@@ -118,6 +159,20 @@ public class BookmarkedPagesModel extends ModelAbstract<List<PageParameters>> im
 
     public boolean isEmpty() {
         return list.isEmpty();
+    }
+
+    
+
+    //////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////
+    
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+    
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
     }
 
 }

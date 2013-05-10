@@ -521,6 +521,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
     }
     
+    public boolean hasSafeActionSemantics() {
+        return getActionMemento().getAction().getSemantics() == ActionSemantics.Of.SAFE;
+    }
+    
+    
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
@@ -529,9 +534,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return IsisContext.getOidMarshaller();
     }
 
-    public boolean hasSafeActionSemantics() {
-        return getActionMemento().getAction().getSemantics() == ActionSemantics.Of.SAFE;
-    }
 
 
 }

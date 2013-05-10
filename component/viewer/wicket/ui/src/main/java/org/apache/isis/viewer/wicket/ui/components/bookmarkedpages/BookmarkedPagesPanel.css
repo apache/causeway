@@ -21,30 +21,30 @@
 	font-size: 0.7em;
 	text-transform:uppercase;
 	font-weight:bold;
-	float:left;
 	width:100%;
 	margin-bottom:5px;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList {
-	display: inline;
+    margin-top:30px;
+	
 }
 
 .bookmarkedPagesPanel .bookmarkedPageItem {
-    display: inline;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 .bookmarkedPagesPanel span.bookmarkedPageImageAndTitle {
     margin-right: 5px;
     margin-bottom:5px;
-    float:left;
 
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     background-color:#F0EFEA;
 
-    padding:1px 6px 1px 6px;
+    padding:10px 10px 3px 10px;
 }
 
 .bookmarkedPagesPanel span.bookmarkedPageImageAndTitle:hover {
@@ -52,21 +52,21 @@
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList a img.bookmarkedPageImage {
-    float:left;
+    /*float:left;*/
     background-color: transparent;
     width: 16px;
     height: 16px;
-    padding:3px 0px 0px 3px;
+    /*padding:3px 0px 0px 3px;*/
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList span.bookmarkedPageTitle {
-	float:left;
-	display:block;
 	font-style:normal !important;
-    padding:3px 0px 0px 3px;
+    
+    vertical-align: top;
+    padding-left: 5px;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesList a span.bookmarkedPageTitle {
+.bookmarkedPagesPanel span.bookmarkedPageTitle {
 	background-color:#F0EFEA;
 }
 
@@ -76,20 +76,55 @@
 }
 
 .bookmarkedPagesPanel .clearBookmarks {
-	display: inline;
 	color: rgb(128,0,0);
 }
 
 .bookmarkedPagesPanel .clearBookmarks {
-	background: url('images/icon_clear.png') no-repeat center center transparent !important;
 	border-radius: 4px 4px 4px 4px;
 	color: #46413B;
 	display: block;
-	float: left;
 	font-style: normal !important;
-	margin-bottom: 5px;
+	margin-top: 30px;
+	margin-bottom: 10px;
 	margin-right: 5px;
-    padding:3px 8px 3px 8px;
-	text-indent: -999em;
+	margin-left: 10px;
 }
 
+.bookmarkedPagesPanel .currentBookmark span.bookmarkedPageImageAndTitle,
+.bookmarkedPagesPanel .currentBookmark span.bookmarkedPageTitle {
+    background-color:#FFFFFF;
+}
+
+
+.showPanelTab {
+    border-radius: 0px 8px 8px 0px;
+	width:10px;
+    height:720px;
+    position:fixed;
+    left:0px;
+    top:120px;
+    display:block;
+    cursor:pointer;
+    background-color: #40C0CB;
+    z-index: 2;
+    
+    text-transform:uppercase;
+    font-weight:bold;
+}
+
+#panel {
+    border-radius: 0px 8px 8px 0px;
+    position:fixed;
+    left:0px;
+    top:80px;
+    background-color:#F0EFEA;
+    height:800px;
+    width:0;/*new line*/
+    z-index: 1;
+}
+#panel .content {
+    width:290px;
+    margin-left:30px;
+    
+    display: none;
+}

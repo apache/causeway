@@ -112,3 +112,7 @@ a span.ViewLinkItem.table {
 .linksSelectorPanel .link-selector-panel-invisible {
 	display:none;
 }
+
+.linksSelectorPanel ul.additionalLinkList {
+	margin-bottom:10px;
+}

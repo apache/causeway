@@ -128,7 +128,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                 final ObjectAdapter titlePartAdapter = adapterManager.adapterFor(titlePart);
                 if(Objects.equal(contextAdapter, titlePartAdapter)) {
                     continue;
-                } 
+                }
                 String title = titleOf(titlePartAdapter);
                 if (Strings.isNullOrEmpty(title)) {
                     // ... use the toString() otherwise

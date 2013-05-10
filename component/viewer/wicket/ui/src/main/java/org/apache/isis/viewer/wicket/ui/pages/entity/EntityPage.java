@@ -23,9 +23,13 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -49,7 +53,7 @@ public class EntityPage extends PageAbstract {
         this.model = new EntityModel(pageParameters);
         addChildComponents(model);
         
-        bookmarkPage(model);
+        bookmarkIfBookmarkable(model);
         addBookmarkedPages();
     }
 
@@ -67,8 +71,17 @@ public class EntityPage extends PageAbstract {
         model.setException(exIfAny);
         addChildComponents(model);
         
-        bookmarkPage(model);
+        bookmarkIfBookmarkable(model);
         addBookmarkedPages();
+    }
+
+    protected void bookmarkIfBookmarkable(EntityModel model) {
+        final ObjectSpecId specId = model.getObjectAdapterMemento().getObjectSpecId();
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
+        final BookmarkPolicyFacet facet = objectSpec.getFacet(BookmarkPolicyFacet.class);
+        if(facet != null && facet.value() == BookmarkPolicy.ROOT) {
+            bookmarkPage(model);
+        }
     }
 
 

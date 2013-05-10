@@ -44,7 +44,7 @@ public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
         super.tearDown();
     }
 
-    public void testImmutableAnnotationPickedUpOnClassAndDefaultsToAlways() {
+    public void testAggregatedAnnotationPickedUpOnClass() {
         @Aggregated
         class Customer {
         }

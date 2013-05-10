@@ -64,6 +64,7 @@ import org.apache.isis.core.progmodel.facets.members.order.MemberOrderAnnotation
 import org.apache.isis.core.progmodel.facets.members.resolve.RenderOrResolveAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.autocomplete.annotation.AutoCompleteAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.bookmarkable.annotation.BookmarkableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bounded.annotation.BoundedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bounded.markerifc.BoundedMarkerInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.create.CreatedCallbackFacetFactory;
@@ -303,6 +304,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MemberGroupsAnnotationElseFallbackFacetFactory.class);
         
         addFactory(AggregatedAnnotationFacetFactory.class);
+        addFactory(BookmarkableAnnotationFacetFactory.class);
         addFactory(BoundedAnnotationFacetFactory.class);
         addFactory(BoundedMarkerInterfaceFacetFactory.class);
         addFactory(DebugAnnotationFacetFactory.class);

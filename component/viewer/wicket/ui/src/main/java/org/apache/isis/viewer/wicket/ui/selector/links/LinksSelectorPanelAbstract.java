@@ -60,10 +60,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     private static final int MAX_NUM_UNDERLYING_VIEWS = 10;
 
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
-    private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     public static final String ID_ADDITIONAL_LINK = "additionalLink";
-    private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
-    private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
 
     private static final String ID_VIEWS = "views";
     private static final String ID_VIEW_LIST = "viewList";

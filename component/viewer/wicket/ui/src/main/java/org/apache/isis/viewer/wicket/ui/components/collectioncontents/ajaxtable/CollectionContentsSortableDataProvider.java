@@ -66,4 +66,5 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         model.detach();
     }
 
+    
 }
