@@ -28,7 +28,7 @@ div.entityHeaderPanel .iconAndTitle{
 }
 
 div.entityHeaderPanel .actions {
-	float: right;
+	float: left;
     padding:0em 0em;
 }
 

@@ -29,9 +29,15 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
@@ -54,10 +60,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
-import org.joda.time.LocalDate;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
@@ -85,6 +87,7 @@ import com.google.common.collect.Lists;
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete")
 @MemberGroups({"General", "Detail"})
+@Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
 	private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
@@ -106,9 +109,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         }
         return buf.toString();
     }
-
     // }}
 
+    
     // {{ Description
     private String description;
 
@@ -123,6 +126,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.description = description;
     }
     // }}
+
 
     // {{ DueBy (property)
     @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
@@ -149,6 +153,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     // }}
 
+    
     // {{ Category
     private Category category;
 
@@ -162,6 +167,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     // }}
 
+    
     // {{ OwnedBy (property)
     private String ownedBy;
 
@@ -177,7 +183,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     // }}
 
-    // {{ Complete (property)
+    // {{ Complete (property), Done (action), Undo (action)
     private boolean complete;
 
     @Disabled
@@ -191,11 +197,39 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.complete = complete;
     }
 
-    
-    // {{ Cost (property)
+
+    @Named("Done")
+    @PublishedAction
+    @Bulk
+    @MemberOrder(name="complete", sequence = "1")
+    public ToDoItem completed() {
+        setComplete(true);
+        return this;
+    }
+    // disable action dependent on state of object
+    public String disableCompleted() {
+        return complete ? "Already completed" : null;
+    }
+
+
+    @Named("Undo")
+    @PublishedAction
+    @MemberOrder(name="complete", sequence = "2")
+    public ToDoItem notYetCompleted() {
+        setComplete(false);
+        return this;
+    }
+    // disable action dependent on state of object
+    public String disableNotYetCompleted() {
+        return !complete ? "Not yet completed" : null;
+    }
+    // }}
+
+
+    // {{ Cost (property), updateCost (action)
     private BigDecimal cost;
 
-    @Column(scale = 4)
+    @Column(scale = 2)
     @Optional
     @MemberOrder(sequence = "4.1")
     public BigDecimal getCost() {
@@ -204,6 +238,17 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     public void setCost(final BigDecimal cost) {
         this.cost = cost;
+    }
+    
+    @Named("Update")
+    @MemberOrder(name="cost", sequence = "1")
+    public ToDoItem updateCost(@Named("New cost") final BigDecimal cost) {
+        setCost(cost);
+        return this;
+    }
+    // provide a default value
+    public BigDecimal default0UpdateCost() {
+        return getCost();
     }
     // }}
 
@@ -224,7 +269,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     // }}
 
-    
 
     // {{ Attachment (property)
     private Blob attachment;
@@ -258,44 +302,13 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
         return version;
     }
+    // hide property (imperatively, based on state of object)
     public boolean hideVersionSequence() {
         return !(this instanceof PersistenceCapable);
     }
     // }}
 
-    // {{ completed (action)
-    @PublishedAction
-    @Bulk
-    @MemberOrder(sequence = "1")
-    public ToDoItem completed() {
-        setComplete(true);
-        return this;
-    }
 
-    // disable action dependent on state of object
-    public String disableCompleted() {
-        return complete ? "Already completed" : null;
-    }
-    // }}
-
-    // {{ notYetCompleted (action)
-    @PublishedAction
-    @MemberOrder(sequence = "2")
-    public ToDoItem notYetCompleted() {
-        setComplete(false);
-        return this;
-    }
-
-
-    // disable action dependent on state of object
-    public String disableNotYetCompleted() {
-        return !complete ? "Not yet completed" : null;
-    }
-    // }}
-
-    
-    
-    
     // {{ dependencies (Collection)
     @javax.jdo.annotations.Persistent(table="TODO_DEPENDENCIES")
     @javax.jdo.annotations.Join(column="DEPENDING_TODO_ID")
@@ -327,6 +340,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         }
         return null;
     }
+    // validate the provided argument prior to invoking action
     public String validateAdd(final ToDoItem toDoItem) {
         if(getDependencies().contains(toDoItem)) {
             return "Already a dependency";
@@ -344,18 +358,21 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         getDependencies().remove(toDoItem);
         return this;
     }
+    // disable action dependent on state of object
     public String disableRemove(final ToDoItem toDoItem) {
         if(isComplete()) {
             return "Cannot remove dependencies for items that are complete";
         }
         return getDependencies().isEmpty()? "No dependencies to remove": null;
     }
+    // validate the provided argument prior to invoking action
     public String validateRemove(final ToDoItem toDoItem) {
         if(!getDependencies().contains(toDoItem)) {
             return "Not a dependency";
         }
         return null;
     }
+    // provide a drop-down
     public List<ToDoItem> choices0Remove() {
         return Lists.newArrayList(getDependencies());
     }
@@ -406,10 +423,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // }}
 
 
-    
     // {{ isDue (programmatic)
-    @Programmatic
-    // excluded from the framework's metamodel
+    @Programmatic // excluded from the framework's metamodel
     public boolean isDue() {
         if (getDueBy() == null) {
             return false;
@@ -434,7 +449,10 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     // {{ compareTo (programmatic)
     /**
-     * by complete flag, then due by date, then description
+     * by complete flag, then due by date, then description.
+     * 
+     * <p>
+     * Required because {@link #getDependencies()} is of type {@link SortedSet}. 
      */
     @Override
     public int compareTo(final ToDoItem other) {
@@ -512,7 +530,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // {{ injected: DomainObjectContainer
     private DomainObjectContainer container;
 
-    public void setDomainObjectContainer(final DomainObjectContainer container) {
+    public void injectDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
     }
     // }}
@@ -539,5 +557,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //        this.location = location;
 //    }
 //    // }}
+
 
 }

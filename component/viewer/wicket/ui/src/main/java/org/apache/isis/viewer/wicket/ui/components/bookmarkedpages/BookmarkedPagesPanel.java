@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -57,6 +58,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     
     private static final String ID_BOOKMARK_LIST = "bookmarkList";
     private static final String ID_BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
+    private static final String ID_CLEAR_BOOKMARK_LINK = "clearBookmarkLink";
     private static final String ID_BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
     private static final String ID_BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
     
@@ -89,17 +91,58 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
         final BookmarkedPagesModel bookmarkedPagesModel = getModel();
 
+        final AjaxLink<Void> clearAllBookmarksLink = new AjaxLink<Void>(CLEAR_BOOKMARKS){
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                BookmarkedPagesPanel.this.getModel().clear();
+                setEnabled(false);
+                target.add(container, this);
+            }
+        };
+        clearAllBookmarksLink.setOutputMarkupId(true);
+        add(clearAllBookmarksLink);
+        clearAllBookmarksLink.setOutputMarkupId(true);
+
+        if(getModel().isEmpty()) {
+            clearAllBookmarksLink.setVisible(false);
+        }
+
+
         final ListView<BookmarkTreeNode> listView = new ListView<BookmarkTreeNode>(ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<BookmarkTreeNode> item) {
-                final BookmarkTreeNode rootNode = item.getModelObject();
-                final PageParameters pageParameters = rootNode.getPageParameters();
+                final BookmarkTreeNode node = item.getModelObject();
+                final PageParameters pageParameters = node.getPageParameters();
                 
                 final PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(pageParameters, PageType.class);
                 final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
+
+                final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
+
+                    private static final long serialVersionUID = 1L;
+                    
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        bookmarkedPagesModel.remove(node);
+                        if(bookmarkedPagesModel.isEmpty()) {
+                            permanentlyHide(CLEAR_BOOKMARKS);
+                        }
+                        target.add(container, clearAllBookmarksLink);
+                    }
+                    
+                };
+                if(node.getDepth() == 0) {
+                    clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
+                } else {
+                    clearBookmarkLink.setEnabled(true);
+                }
+                item.add(clearBookmarkLink);
                 
                 final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
 
@@ -126,28 +169,11 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 if(bookmarkedPagesModel.isCurrent(pageParameters)) {
                     item.add(new CssClassAppender("currentBookmark"));
                 }
-                item.add(new CssClassAppender("bookmarkDepth" + rootNode.getDepth()));
+                item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
             }
         };
         container.add(listView);
-        
-        if(!getModel().isEmpty()) {
-            final AjaxLink<Void> ajaxLink = new AjaxLink<Void>(CLEAR_BOOKMARKS){
-    
-                private static final long serialVersionUID = 1L;
-    
-                @Override
-                public void onClick(AjaxRequestTarget target) {
-                    BookmarkedPagesPanel.this.getModel().clear();
-                    setEnabled(false);
-                    target.add(container, this);
-                }
-            };
-            ajaxLink.setOutputMarkupId(true);
-            add(ajaxLink);
-        } else {
-            permanentlyHide(CLEAR_BOOKMARKS);
-        }
+
 
     }
     

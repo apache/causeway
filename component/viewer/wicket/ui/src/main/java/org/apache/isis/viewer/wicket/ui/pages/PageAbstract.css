@@ -384,7 +384,7 @@ form fieldset .okButton {
 
 .myBlockContainer {
 	background-color:#FFFFFF;
-	padding:20px;
+	padding:10px;
 	border-radius:4px;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -621,6 +621,7 @@ div.scalarPanel {
 }
 
 
+
 .actionPage .select2-container .select2-choice,
 .entityPage .select2-container .select2-choice {
     -webkit-border-radius: 4px;
@@ -628,11 +629,15 @@ div.scalarPanel {
     border-radius: 4px;
 	height: 20px;
     line-height: 20px;
-    font-size:11px;
 	color:#7F7F7F;
 	background:#FFFFFF none;
 	border:1px solid #F0EFEA;
 	border-top:1px solid #CCCBC7;
+}
+
+.actionPage .select2-container .select2-choice span,
+.entityPage .select2-container .select2-choice span {
+    font-size:13px;
 }
 
 .actionPage .select2-container.select2-drop-above .select2-choice,

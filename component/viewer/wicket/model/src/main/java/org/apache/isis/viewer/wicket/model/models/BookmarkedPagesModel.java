@@ -122,4 +122,9 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
     }
 
 
+    public void remove(BookmarkTreeNode rootNode) {
+        this.rootNodes.remove(rootNode);
+    }
+
+
 }

@@ -74,7 +74,7 @@ public abstract class PageAbstract extends WebPage {
 
     private static final long serialVersionUID = 1L;
     
-    private static final String ID_BOOKMARKED_PAGES = "breadcrumbs";
+    private static final String ID_BOOKMARKED_PAGES = "bookmarks";
     private static final String ID_HOME_PAGE_LINK = "homePageLink";
     private static final String ID_APPLICATION_NAME = "applicationName";
     private static final String ID_USER_NAME = "userName";

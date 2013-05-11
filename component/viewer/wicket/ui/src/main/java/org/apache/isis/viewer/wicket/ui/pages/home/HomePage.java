@@ -35,6 +35,7 @@ public class HomePage extends PageAbstract {
 
     public HomePage() {
         super(new PageParameters(), ComponentType.WELCOME);
+        addBookmarkedPages();
         addChildComponents(null);
     }
 
