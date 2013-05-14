@@ -30,9 +30,9 @@
     <packaging>pom</packaging>
 
 	<properties>
-        <isis.version>1.1.1-SNAPSHOT</isis.version>
-		<isis-objectstore-jdo.version>1.0.1-SNAPSHOT</isis-objectstore-jdo.version>
-		<isis-viewer-wicket.version>1.1.1-SNAPSHOT</isis-viewer-wicket.version>
+        <isis.version>1.2.0-SNAPSHOT</isis.version>
+		<isis-objectstore-jdo.version>1.1.0-SNAPSHOT</isis-objectstore-jdo.version>
+		<isis-viewer-wicket.version>1.2.0-SNAPSHOT</isis-viewer-wicket.version>
 		<isis-viewer-restfulobjects.version>2.0.0-SNAPSHOT</isis-viewer-restfulobjects.version>
 		<isis-security-shiro.version>1.1.1-SNAPSHOT</isis-security-shiro.version>
 

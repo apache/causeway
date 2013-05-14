@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.2.0-SNAPSHOT</version>
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
@@ -19,13 +19,8 @@
 	<url>http://maven.apache.org</url>
 
 	<prerequisites>
-		<maven>2.0.9</maven>
+		<maven>3.0.4</maven>
 	</prerequisites>
-
-	<properties>
-		<isis-parent.enforcer.validate>false</isis-parent.enforcer.validate>
-		<mavenVersion>2.0.9</mavenVersion>
-	</properties>
 
 	<build>
 		<pluginManagement>
@@ -56,7 +51,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.2</version>
 				<configuration>
 				      <goalPrefix>configurator</goalPrefix>
 				    </configuration>
@@ -109,43 +103,183 @@
 		    <artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
+
+        <!-- 
+        all the plethora of exclusions in the following dependencies
+        are to ensure dependency convergence.
+        
+        In some cases, what would have been a transitive dependency
+        is added as a direct dependency in order that it's divergent dependency
+        can be excluded.
+        
+        It's all a bit of a pigs' ear...
+        -->
+
 		<dependency>
 		      <groupId>org.apache.maven</groupId>
 		      <artifactId>maven-plugin-api</artifactId>
-		      <version>3.0</version>
+		      <version>3.0.5</version>
 	    </dependency>
-
-		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-utils</artifactId>
-			<version>3.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-annotations</artifactId>
-			<version>3.1</version>
+			<version>3.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-artifact</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model-builder</artifactId>
+            <version>3.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-settings</artifactId>
+            <version>3.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-artifact</artifactId>
-			<version>${mavenVersion}</version>
+			<version>3.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-project</artifactId>
-			<version>${mavenVersion}</version>
+			<version>3.0-alpha-2</version>
+            <exclusions>
+                <!-- for dependency convergence -->
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-model</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-compat</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-container-default</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-interpolation</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
+        
 		<dependency>
 			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-core</artifactId>
-			<version>${mavenVersion}</version>
+			<artifactId>maven-compat</artifactId>
+			<version>3.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
+        
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-container-default</artifactId>
+			<version>1.5.5</version>
+            <exclusions>
+                <exclusion>
+        			<groupId>org.codehaus.plexus</groupId>
+        			<artifactId>plexus-classworlds</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
+		</dependency>
+        
+		<dependency>
+            <groupId>org.sonatype.plexus</groupId>
+            <artifactId>plexus-sec-dispatcher</artifactId>
+            <version>1.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-utils</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-toolchain</artifactId>
-			<version>${mavenVersion}</version>
+			<version>3.0-alpha-2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-compat</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 
 		<dependency>

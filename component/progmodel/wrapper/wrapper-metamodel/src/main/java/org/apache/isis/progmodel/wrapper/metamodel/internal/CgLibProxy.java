@@ -55,7 +55,8 @@ public class CgLibProxy<T> {
             interfaces.remove(Factory.class); // if there.
             interfaces.add(WrapperObject.class);
 
-            return (T) Enhancer.create(origSuperclass, interfaces.toArray(new Class[] {}), new InvocationHandlerMethodInterceptor(handler));
+            InvocationHandlerMethodInterceptor interceptor = new InvocationHandlerMethodInterceptor(handler);
+            return (T) Enhancer.create(origSuperclass, interfaces.toArray(new Class[] {}), interceptor);
         }
 
         final Class<T> clazz = (Class<T>) toProxy.getClass();

@@ -40,6 +40,8 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -82,6 +84,7 @@ public class Get_thenRepresentation_ok {
                                     .type(RepresentationType.USER.getMediaType())
                                     .returning(HttpStatusCode.OK)
                                     );
+        
         assertThat(repr.getUp(), isLink(client)
                                     .rel(Rel.UP)
                                     .href(endsWith(":39393/"))

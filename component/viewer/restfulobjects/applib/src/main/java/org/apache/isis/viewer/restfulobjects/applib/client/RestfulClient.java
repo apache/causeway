@@ -23,7 +23,11 @@ import java.net.URI;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.jboss.resteasy.client.ClientExecutor;
+import org.jboss.resteasy.client.ClientRequestFactory;
+import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -33,9 +37,6 @@ import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResour
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequestFactory;
-import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
 
 public class RestfulClient {
 
@@ -50,7 +51,7 @@ public class RestfulClient {
     private final ClientRequestFactory clientRequestFactory;
 
     public RestfulClient(final URI baseUri) {
-        this(baseUri, new ApacheHttpClientExecutor(new HttpClient()));
+        this(baseUri, new ApacheHttpClient4Executor(new DefaultHttpClient()));
     }
 
     public RestfulClient(final URI baseUri, final ClientExecutor clientExecutor) {

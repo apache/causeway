@@ -101,8 +101,8 @@
         </dependency>
 
 		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
 		</dependency>
 
 		<dependency>

@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <isis.version>1.1.1-SNAPSHOT</isis.version>
+        <isis.version>1.2.0-SNAPSHOT</isis.version>
     </properties>
     
     <build>
@@ -58,12 +58,12 @@
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0</version>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0</version>
             <exclusions>
                 <exclusion>
                     <!-- for dependency convergence -->
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-legacy</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0</version>
         </dependency>
 
     </dependencies>

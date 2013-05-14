@@ -156,8 +156,7 @@
             <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
             <exclusions>
                 <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0, which is
-                         incompatible with asm 3.3.1 as used by guice -->
+                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
                     <groupId>org.datanucleus</groupId>
                     <artifactId>datanucleus-enhancer</artifactId>
                 </exclusion>
@@ -168,8 +167,7 @@
             <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
             <exclusions>
                 <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0, which is
-                         incompatible with asm 3.3.1 as used by guice -->
+                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
                     <groupId>org.datanucleus</groupId>
                     <artifactId>datanucleus-enhancer</artifactId>
                 </exclusion>
@@ -182,8 +180,7 @@
             <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
             <exclusions>
                 <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0, which is
-                         incompatible with asm 3.3.1 as used by guice -->
+                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
                     <groupId>org.datanucleus</groupId>
                     <artifactId>datanucleus-enhancer</artifactId>
                 </exclusion>

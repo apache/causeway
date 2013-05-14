@@ -294,6 +294,7 @@ public class RestfulResponse<T> {
     private final Response response;
     private final HttpStatusCode httpStatusCode;
     private final Class<T> returnType;
+    private T entity;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static RestfulResponse<JsonRepresentation> of(final Response response) {
@@ -319,7 +320,10 @@ public class RestfulResponse<T> {
     }
 
     public T getEntity() throws JsonParseException, JsonMappingException, IOException {
-        return JsonMapper.instance().read(response, returnType);
+        if(entity == null) {
+            entity = JsonMapper.instance().read(response, returnType);
+        }
+        return entity;
     }
 
     public <V> V getHeader(final Header<V> header) {

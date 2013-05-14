@@ -20,7 +20,7 @@
     </parent>
 
     <groupId>org.apache.isis.core</groupId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     
     <artifactId>isis</artifactId>
     <packaging>pom</packaging>
@@ -165,10 +165,18 @@ the MIT license [1].
             <name>Jeroen van der Wal</name>
             <email>jeroen@stromboli.it</email>
             <roles>
-                <role>pmc</role>
                 <role>committer</role>
             </roles>
-            <timezone>+3</timezone>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>madytyoo</id>
+            <name>Maurizio Taverna</name>
+            <email>tavernamaurizio@gmail.com</email>
+            <roles>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
         </developer>
         <developer>
             <id>mnour</id>
@@ -827,6 +835,41 @@ the MIT license [1].
                     </configuration>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>1.2</version>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <version>[2.2.1,)</version>
+                            </requireMavenVersion>
+                            <requireJavaVersion>
+                                <version>[1.6.0-11,)</version>
+                            </requireJavaVersion>
+                            <requirePluginVersions>
+                                <message>All plugin versions must be
+                                    defined!</message>
+                                <banLatest>true</banLatest>
+                                <banRelease>true</banRelease>
+                            </requirePluginVersions>
+                            <DependencyConvergence />
+                        </rules>
+                    </configuration>
+                    <!-- goal:enforce supposedly binds to phase:validate, 
+                        but explicit binding seems to be required -->
+                    <executions>
+                        <execution>
+                            <id>validate-enforce</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+
             </plugins>
         </pluginManagement>
 
@@ -836,6 +879,11 @@ the MIT license [1].
             and deploy plugins are automatically included because they provide the default 
             bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -933,13 +981,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -948,14 +996,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -964,14 +1012,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -980,12 +1028,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -994,26 +1042,26 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-javassist</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
 
             <!-- isis-webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
 
             <!-- isis-integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
@@ -1021,24 +1069,24 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-profilestore</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1047,17 +1095,17 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-dom</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-fixture</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1066,14 +1114,14 @@ ${license.additional-notes}
             <dependency>
 	    		<groupId>joda-time</groupId>
 	    		<artifactId>joda-time</artifactId>
-	            <version>2.1</version>
+	            <version>2.2</version>
             </dependency>
 
             <!-- Logging -->
 	        <dependency>
 	            <groupId>org.slf4j</groupId>
 	            <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.2</version>
+                <version>1.7.5</version>
 	        </dependency>
             <dependency>
                 <groupId>log4j</groupId>
@@ -1090,7 +1138,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
-                <version>1.1.1</version>
+                <version>1.1.2</version>
             </dependency>
             <dependency>
                 <groupId>commons-collections</groupId>
@@ -1110,7 +1158,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.7</version>
+                <version>1.8</version>
             </dependency>
             <dependency>
                 <groupId>commons-jxpath</groupId>
@@ -1131,7 +1179,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>13.0.1</version>
+                <version>14.0.1</version>
             </dependency>
 
             <!-- Google Guice (dependency injection) -->
@@ -1228,7 +1276,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-jaxrs</artifactId>
-                <version>2.3.5.Final</version>
+                <version>2.3.6.Final</version>
                 <exclusions>
                     <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
                     <exclusion>
@@ -1331,7 +1379,7 @@ ${license.additional-notes}
            <dependency>
                <groupId>org.picocontainer</groupId>
                <artifactId>picocontainer</artifactId>
-               <version>2.14.1</version>
+               <version>2.14.3</version>
            </dependency>
 
             <!-- Testing libraries (scope=test) -->
@@ -1719,66 +1767,6 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
-        
-        <!--  provide ability to switch off enforcer plugin -->
-  		<profile>
-  			<id>enforcer-validate</id>
-  			<activation>
-  				<property>
-  					<!-- set by default -->
-  					<name>isis.enforcer.validate</name>
-  					<value>true</value>
-  				</property>
-  			</activation>
-  			<build>
-  				<pluginManagement>
-  					<plugins>
-		                <plugin>
-		                    <groupId>org.apache.maven.plugins</groupId>
-		                    <artifactId>maven-enforcer-plugin</artifactId>
-		                    <version>1.0.1</version>
-		                    <configuration>
-		                        <rules>
-		                            <requireMavenVersion>
-		                                <version>[2.2.1,)</version>
-		                            </requireMavenVersion>
-		                            <requireJavaVersion>
-		                                <version>[1.6.0-11,)</version>
-		                            </requireJavaVersion>
-		                            <requirePluginVersions>
-		                                <message>All plugin versions must be
-		                                    defined!</message>
-		                                <banLatest>true</banLatest>
-		                                <banRelease>true</banRelease>
-		                            </requirePluginVersions>
-		                            <DependencyConvergence />
-		                        </rules>
-		                    </configuration>
-		                    <!-- goal:enforce supposedly binds to phase:validate, 
-		                        but explicit binding seems to be required -->
-		                    <executions>
-		                        <execution>
-		                            <id>validate-enforce</id>
-		                            <phase>validate</phase>
-		                            <goals>
-		                                <goal>enforce</goal>
-		                            </goals>
-		                        </execution>
-		                    </executions>
-        		        </plugin>
-					</plugins>
-  				
-  				</pluginManagement>
-  				<plugins>
-		            <plugin>
-		                <groupId>org.apache.maven.plugins</groupId>
-		                <artifactId>maven-enforcer-plugin</artifactId>
-		            </plugin>
-  				</plugins>
-  			</build>
-			
-		</profile>
-        
     </profiles>
 
     <modules>
@@ -1799,7 +1787,6 @@ ${license.additional-notes}
 
         <module>tck</module>
     </modules>
-
 
 </project>
 

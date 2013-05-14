@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck;
 
+import java.io.IOException;
+
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
@@ -31,9 +33,12 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.AbstractMatcherBuilder;
 import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.CacheControlMatcherBuilder;
 import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.LinkMatcherBuilder;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -390,34 +395,43 @@ public class RestfulMatchers {
                     }
 
                     // assertions based on provided criteria
-                    if (statusCode != null) {
-                        if (jsonResp.getStatus() != statusCode) {
-                            return false;
+                    try {
+                        if (statusCode != null) {
+                            if (jsonResp.getStatus() != statusCode) {
+                                return false;
+                            }
                         }
-                    }
-                    if (selfHref != null) {
-                        JsonRepresentation entity;
+                        if (selfHref != null) {
+                            JsonRepresentation entity;
+                            try {
+                                entity = jsonResp.getEntity();
+                            } catch (Exception e) {
+                                return false;
+                            }
+                            if(entity == null) {
+                                return false;
+                            }
+                            LinkRepresentation selfLink = entity.getLink("links[rel=self]");
+                            if(selfLink == null) {
+                                return false;
+                            }
+                            if (!selfLink.getHref().equals(selfHref)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    } finally {
+                        // flush any pending response
                         try {
-                            entity = jsonResp.getEntity();
+                            jsonResp.getEntity();
                         } catch (Exception e) {
-                            return false;
-                        }
-                        if(entity == null) {
-                            return false;
-                        }
-                        LinkRepresentation selfLink = entity.getLink("links[rel=self]");
-                        if(selfLink == null) {
-                            return false;
-                        }
-                        if (!selfLink.getHref().equals(selfHref)) {
-                            return false;
+                            // ignore
                         }
                     }
-
-                    return true;
                 }
             };
         }
+
 
 
 
