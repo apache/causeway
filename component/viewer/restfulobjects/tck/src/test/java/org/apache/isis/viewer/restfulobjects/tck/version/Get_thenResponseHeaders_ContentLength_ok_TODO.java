@@ -18,13 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.version;
 
+import org.junit.Before;
+import org.junit.Rule;
+
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class Get_thenResponseHeaders_ContentLength_ok_TODO {
 

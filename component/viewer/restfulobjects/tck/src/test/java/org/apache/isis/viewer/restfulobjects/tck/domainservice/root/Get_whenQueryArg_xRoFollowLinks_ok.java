@@ -19,16 +19,17 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -38,15 +39,9 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class Get_whenQueryArg_xRoFollowLinks_ok {
 

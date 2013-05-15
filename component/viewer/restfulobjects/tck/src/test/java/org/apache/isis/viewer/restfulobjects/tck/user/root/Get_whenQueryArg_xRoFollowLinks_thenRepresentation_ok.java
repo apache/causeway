@@ -23,7 +23,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.IOException;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -33,11 +35,6 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Reques
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class Get_whenQueryArg_xRoFollowLinks_thenRepresentation_ok {
 
