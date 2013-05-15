@@ -291,7 +291,7 @@ the MIT license [1].
 	                        <exclude>**/*.svg</exclude>
 	                        <exclude>**/*.json</exclude>
 	                        <exclude>**/*.min.js</exclude>
-
+                            
 	                        <exclude>**/*.ucd</exclude>
 	                        <exclude>**/*.ucls</exclude>
 
@@ -299,6 +299,7 @@ the MIT license [1].
 	                        <exclude>**/test.data</exclude>
 
 	                        <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
+	                        <exclude>**/datanucleus.log</exclude>
 	                    </excludes>
 	                    <licenses>
 	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">

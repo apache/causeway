@@ -47,6 +47,7 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.IsisInstallerRegistry;
@@ -199,7 +200,17 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     @Override
     public TemplateImageLoaderInstaller templateImageLoaderInstaller(final String requested) {
-        return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY, SystemConstants.IMAGE_LOADER_DEFAULT);
+        final boolean onGae = onGae(); 
+        return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY, !onGae?SystemConstants.IMAGE_LOADER_DEFAULT:SystemConstants.IMAGE_LOADER_GAE);
+    }
+
+    private static boolean onGae() {
+        try {
+            final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass("com.google.appengine.api.utils.SystemProperty");
+            return cls != null;
+        } catch(Exception ex) {
+            return false;
+        }
     }
 
     @Override

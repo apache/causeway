@@ -165,9 +165,13 @@ public final class SystemConstants {
      */
     public static final String IMAGE_LOADER_KEY = ConfigurationConstants.ROOT + TemplateImageLoaderInstaller.TYPE;
     /**
-     * Default for {@link #IMAGE_LOADER_KEY}
+     * Default for {@link #IMAGE_LOADER_KEY} and not running on Google App Engine.
      */
     public static final String IMAGE_LOADER_DEFAULT = "awt";
+    /**
+     * Default if running on Google App Engine.
+     */
+    public static final String IMAGE_LOADER_GAE = "gae";
 
 
     /**

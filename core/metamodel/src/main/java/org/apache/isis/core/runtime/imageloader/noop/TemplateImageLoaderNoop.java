@@ -17,8 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.unittestsupport.jmocking;
+package org.apache.isis.core.runtime.imageloader.noop;
 
-public interface Collaborator {
-    public void doOtherStuff();
+import org.apache.isis.core.runtime.imageloader.TemplateImage;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+
+public class TemplateImageLoaderNoop implements TemplateImageLoader {
+
+    @Override
+    public TemplateImage getTemplateImage(final String name) {
+        return null;
+    }
+
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public void shutdown() {
+    }
+
 }
