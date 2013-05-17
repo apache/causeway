@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.awt.Canvas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -200,17 +201,22 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     @Override
     public TemplateImageLoaderInstaller templateImageLoaderInstaller(final String requested) {
-        final boolean onGae = onGae(); 
-        return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY, !onGae?SystemConstants.IMAGE_LOADER_DEFAULT:SystemConstants.IMAGE_LOADER_GAE);
+        try {
+            if(requested == null) {
+                // fail early if the default (which uses AWT) cannot be used.
+                // this is a workaround to force the fallback of Noop; ie for Google App Engine.
+                @SuppressWarnings("unused")
+                Canvas canvas = new java.awt.Canvas();
+            }
+            return templateImageLoaderInstaller(requested, SystemConstants.IMAGE_LOADER_DEFAULT);
+        } catch (NoClassDefFoundError e) {
+            // to support running on Google App Engine
+            return templateImageLoaderInstaller(requested, SystemConstants.IMAGE_LOADER_NOOP);
+        }
     }
 
-    private static boolean onGae() {
-        try {
-            final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass("com.google.appengine.api.utils.SystemProperty");
-            return cls != null;
-        } catch(Exception ex) {
-            return false;
-        }
+    private TemplateImageLoaderInstaller templateImageLoaderInstaller(final String requested, final String fallback) {
+        return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY, fallback);
     }
 
     @Override
