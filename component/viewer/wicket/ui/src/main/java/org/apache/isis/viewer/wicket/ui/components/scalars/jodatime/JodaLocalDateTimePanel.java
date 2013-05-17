@@ -33,7 +33,7 @@ public class JodaLocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
 
     public JodaLocalDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDateTime.class);
-        init(new DateConverterForJodaLocalDateTime(getSettings()));
+        init(new DateConverterForJodaLocalDateTime(getSettings(), getAdjustBy()));
     }
 
 }

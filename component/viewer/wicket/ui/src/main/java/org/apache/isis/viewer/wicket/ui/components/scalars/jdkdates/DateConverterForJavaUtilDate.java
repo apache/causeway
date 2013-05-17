@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -27,21 +29,21 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 public class DateConverterForJavaUtilDate extends DateConverterForJavaAbstract<java.util.Date> {
     private static final long serialVersionUID = 1L;
     
-    public DateConverterForJavaUtilDate(WicketViewerSettings settings) {
-        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDatePickerPattern());
+    public DateConverterForJavaUtilDate(WicketViewerSettings settings, int adjustBy) {
+        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDatePickerPattern(), adjustBy);
     }
-    public DateConverterForJavaUtilDate(String datePattern, String dateTimePattern, String datePickerPattern) {
-        super(java.util.Date.class, datePattern, dateTimePattern, datePickerPattern);
+    public DateConverterForJavaUtilDate(String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
+        super(java.util.Date.class, datePattern, dateTimePattern, datePickerPattern, adjustBy);
     }
     
 
     @Override
     protected java.util.Date doConvertToObject(String value, Locale locale) {
         try {
-            return newSimpleDateFormatUsingDateTimePattern().parse(value);
+            return addDays(newSimpleDateFormatUsingDateTimePattern().parse(value), 0-adjustBy);
         } catch (ParseException e) {
             try {
-                return newSimpleDateFormatUsingDatePattern().parse(value);
+                return addDays(newSimpleDateFormatUsingDatePattern().parse(value), 0-adjustBy);
             } catch (ParseException ex) {
                 return null;
             }
@@ -50,7 +52,15 @@ public class DateConverterForJavaUtilDate extends DateConverterForJavaAbstract<j
 
     @Override
     protected String doConvertToString(java.util.Date value, Locale locale) {
-        return newSimpleDateFormatUsingDateTimePattern().format(value);
+        return newSimpleDateFormatUsingDateTimePattern().format(addDays(value, adjustBy));
+    }
+
+    private static Date addDays(java.util.Date value, final int days) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(value);
+        cal.add(Calendar.DATE, days);
+        final Date adjusted = cal.getTime();
+        return adjusted;
     }
 
 }

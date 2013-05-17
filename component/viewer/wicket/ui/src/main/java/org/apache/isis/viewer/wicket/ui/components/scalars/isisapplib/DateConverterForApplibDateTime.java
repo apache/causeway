@@ -30,9 +30,9 @@ public class DateConverterForApplibDateTime extends DateConverterAbstract<org.ap
     
     private final DateConverterForJavaUtilDate converter;
     
-    public DateConverterForApplibDateTime(WicketViewerSettings settings) {
-        super(org.apache.isis.applib.value.DateTime.class, null, null, null); // not used
-        converter = new DateConverterForJavaUtilDate(settings);
+    public DateConverterForApplibDateTime(WicketViewerSettings settings, int adjustBy) {
+        super(org.apache.isis.applib.value.DateTime.class, null, null, null, adjustBy); // not used
+        converter = new DateConverterForJavaUtilDate(settings, adjustBy);
     }
 
     @Override

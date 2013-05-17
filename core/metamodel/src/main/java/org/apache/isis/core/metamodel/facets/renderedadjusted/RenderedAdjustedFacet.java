@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
+package org.apache.isis.core.metamodel.facets.renderedadjusted;
 
-import org.joda.time.LocalDate;
-
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 
 /**
- * Panel for rendering scalars of type {@link LocalDate}.
+ * The amount to adjust a date by when rendered.
+ * 
+ * <p>
+ * Intended to be used by the viewer as a rendering hint.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to the
+ * <tt>@RenderedAdjusted</tt> annotation.
  */
-public class JodaLocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<LocalDate> {
+public interface RenderedAdjustedFacet extends SingleIntValueFacet {
 
-    private static final long serialVersionUID = 1L;
-
-    public JodaLocalDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, LocalDate.class); 
-        init(new DateConverterForJodaLocalDate(getSettings(), getAdjustBy()));
-    }
+    @Override
+    public int value();
 
 }

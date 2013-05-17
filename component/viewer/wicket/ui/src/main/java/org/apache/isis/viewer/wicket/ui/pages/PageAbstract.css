@@ -94,6 +94,7 @@ colors
 	width: 73%;
 	float: left;
 	height: 60px;
+	margin-left: 5px;
 	background: transparent url("images/logo.png") left center no-repeat;
 }
 
@@ -125,6 +126,7 @@ colors
 	display: inline-block;
 	float: right;
 	text-align: right;
+    margin-right: 5px;
 }
 #header h1 {
 	margin: 10px 10px 10px 0px;
@@ -212,6 +214,7 @@ colors
 #applicationActions {
     padding-left: 10px;
     height:40px;
+    margin-left: 10px;
 }
 
 #applicationActions .menuh {

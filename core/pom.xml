@@ -50,9 +50,6 @@
         <!-- relative to core/pom.xml -->
         <coreBaseRelDir>.</coreBaseRelDir>
 
-        <!-- to disable enforcer plugin via profile, if required -->
-		<isis.enforcer.validate>true</isis.enforcer.validate>
-        
         <!-- used by docbkx-maven-plugin for DocBook guide; 
              override as required -->
         <docbkxGuideTitle>Apache Isis Core</docbkxGuideTitle>
@@ -75,8 +72,7 @@
 
         <projectUrl>${project.url}</projectUrl>
 
-		<license.additional-notes>In addition, Isis includes a copy of JQuery core.  This is licensed under
-the MIT license [1].
+		<license.additional-notes>In addition, Isis includes a copy of JQuery core and JQuery UI.  These are both licensed under the MIT license [1].
 
 [1] http://jquery.org/license/</license.additional-notes>        
     </properties>
@@ -316,6 +312,14 @@ the MIT license [1].
 	                        <notes />
 	                        <patterns>
 	                          <pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
+	                        </patterns>
+	                      </license>
+	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+	                        <licenseFamilyCategory>JQRYUI</licenseFamilyCategory>
+	                        <licenseFamilyName>MIT  </licenseFamilyName>
+	                        <notes />
+	                        <patterns>
+	                          <pattern>jQuery Foundation and other contributors Licensed MIT</pattern>
 	                        </patterns>
 	                      </license>
 	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">

@@ -135,6 +135,7 @@ import org.apache.isis.core.progmodel.facets.param.mandatory.annotation.Optional
 import org.apache.isis.core.progmodel.facets.param.mandatory.dflt.MandatoryDefaultForParametersFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.multiline.annotation.MultiLineAnnotationOnParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.named.annotation.NamedAnnotationOnParameterFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.TypicalLengthAnnotationOnParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.typicallen.fromtype.TypicalLengthFacetForParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.validate.maskannot.MaskAnnotationForParameterFacetFactory;
@@ -154,6 +155,7 @@ import org.apache.isis.core.progmodel.facets.properties.modify.PropertyModifyFac
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetAndClearFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation.NotPersistedAnnotationForPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.typicallen.fromtype.TypicalLengthFacetForPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateDefaultFacetFactory;
@@ -393,6 +395,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(TypicalLengthAnnotationOnTypeFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnPropertyFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnParameterFacetFactory.class);
+        addFactory(RenderedAsDayBeforeAnnotationOnPropertyFacetFactory.class);
+        addFactory(RenderedAsDayBeforeAnnotationOnParameterFacetFactory.class);
 
         // built-in value types for Java language
         addFactory(BooleanPrimitiveValueTypeFacetFactory.class);

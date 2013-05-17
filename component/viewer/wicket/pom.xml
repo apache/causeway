@@ -81,6 +81,9 @@
 	                        <exclude>**/.classpath</exclude>
 	                        <exclude>**/.settings/**</exclude>
                             <exclude>**/*.pdn</exclude>
+                            
+                            <!-- not released code, so excluded -->
+                            <exclude>jquery-ui/**</exclude>
 	                    </excludes>
                     </configuration>
 	            </plugin>

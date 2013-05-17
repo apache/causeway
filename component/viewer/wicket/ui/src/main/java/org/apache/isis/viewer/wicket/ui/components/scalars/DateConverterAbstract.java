@@ -30,11 +30,15 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     protected final String dateTimePattern;
     protected final String datePickerPattern;
 
-    protected DateConverterAbstract(Class<T> cls, String datePattern, String dateTimePattern, String datePickerPattern) {
+    protected final int adjustBy;
+    
+
+    protected DateConverterAbstract(Class<T> cls, String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
         this.cls = cls;
         this.datePattern = datePattern;
         this.dateTimePattern = dateTimePattern;
         this.datePickerPattern = datePickerPattern;
+        this.adjustBy = adjustBy;
     }
 
     @Override

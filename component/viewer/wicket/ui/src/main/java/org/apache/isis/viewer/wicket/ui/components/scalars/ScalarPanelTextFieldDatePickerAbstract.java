@@ -32,6 +32,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -57,7 +58,12 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     protected void init(DateConverter<T> converter) {
         this.converter = converter;
     }
-    
+
+    protected int getAdjustBy() {
+        final RenderedAdjustedFacet facet = getModel().getFacet(RenderedAdjustedFacet.class);
+        return facet != null? facet.value(): 0;
+    }
+
     protected TextField<T> createTextField(final String id) {
         return new TextFieldWithDatePicker<T>(id, new TextFieldValueModel<T>(this), cls, converter);
     }

@@ -17,23 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
+package org.apache.isis.core.progmodel.facets.properties.renderedasdaybefore.annotation;
 
-import org.joda.time.LocalDate;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.renderedadjusted.RenderedAdjustedFacetAbstract;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+public class RenderedAsDayBeforeFacetAnnotationOnProperty extends RenderedAdjustedFacetAbstract {
 
-/**
- * Panel for rendering scalars of type {@link LocalDate}.
- */
-public class JodaLocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<LocalDate> {
+    private static final int ADJUST_BY = -1;
 
-    private static final long serialVersionUID = 1L;
+    public RenderedAsDayBeforeFacetAnnotationOnProperty(final FacetHolder holder) {
+        super(holder, false);
+    }
 
-    public JodaLocalDatePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, LocalDate.class); 
-        init(new DateConverterForJodaLocalDate(getSettings(), getAdjustBy()));
+    @Override
+    public int value() {
+        return ADJUST_BY;
     }
 
 }

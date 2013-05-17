@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -27,18 +29,18 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<java.sql.Date> {
     private static final long serialVersionUID = 1L;
     
-    public DateConverterForJavaSqlDate(WicketViewerSettings settings) {
-        this(settings.getDatePattern(), settings.getDatePickerPattern());
+    public DateConverterForJavaSqlDate(WicketViewerSettings settings, int adjustBy) {
+        this(settings.getDatePattern(), settings.getDatePickerPattern(), adjustBy);
     }
 
-    private DateConverterForJavaSqlDate(String datePattern, String datePickerPattern) {
-        super(java.sql.Date.class, datePattern, datePattern, datePickerPattern);
+    private DateConverterForJavaSqlDate(String datePattern, String datePickerPattern, int adjustBy) {
+        super(java.sql.Date.class, datePattern, datePattern, datePickerPattern, adjustBy);
     }
 
     @Override
     protected java.sql.Date doConvertToObject(String value, Locale locale) {
         try {
-            final java.util.Date parsedJavaUtilDate = newSimpleDateFormatUsingDatePattern().parse(value);
+            final java.util.Date parsedJavaUtilDate = addDays(newSimpleDateFormatUsingDatePattern().parse(value), 0-adjustBy);
             return new java.sql.Date(parsedJavaUtilDate.getTime());
         } catch (ParseException e) {
             return null;
@@ -47,7 +49,15 @@ public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<ja
 
     @Override
     protected String doConvertToString(java.sql.Date value, Locale locale) {
-        return newSimpleDateFormatUsingDatePattern().format(value);
+        return newSimpleDateFormatUsingDatePattern().format(addDays(value, adjustBy));
+    }
+
+    private static Date addDays(java.util.Date value, final int days) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(value);
+        cal.add(Calendar.DATE, days);
+        final Date adjusted = cal.getTime();
+        return adjusted;
     }
 
     

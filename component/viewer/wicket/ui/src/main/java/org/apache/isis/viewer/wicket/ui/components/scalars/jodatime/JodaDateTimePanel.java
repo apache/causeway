@@ -34,6 +34,6 @@ public class JodaDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<Da
 
     public JodaDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, DateTime.class);
-        init(new DateConverterForJodaDateTime(getSettings()));
+        init(new DateConverterForJodaDateTime(getSettings(), getAdjustBy()));
     }
 }

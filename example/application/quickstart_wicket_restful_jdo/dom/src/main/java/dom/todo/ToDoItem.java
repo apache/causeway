@@ -54,6 +54,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderedAsDayBefore;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
@@ -559,4 +560,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //    // }}
 
 
+    
+    public ToDoItem updateDueBy(
+            //@RenderedAdjusted
+            LocalDate dueBy) {
+        setDueBy(dueBy);
+        return this;
+    }
 }

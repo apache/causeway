@@ -28,21 +28,21 @@ public class DateConverterForJodaLocalDateTime extends DateConverterForJodaAbstr
 
     private static final long serialVersionUID = 1L;
 
-    public DateConverterForJodaLocalDateTime(WicketViewerSettings settings) {
-        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDatePickerPattern());
+    public DateConverterForJodaLocalDateTime(WicketViewerSettings settings, int adjustBy) {
+        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDatePickerPattern(), adjustBy);
     }
 
-    private DateConverterForJodaLocalDateTime(String datePattern, String dateTimePattern, String datePickerPattern) {
-        super(LocalDateTime.class, datePattern, dateTimePattern, datePickerPattern);
+    private DateConverterForJodaLocalDateTime(String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
+        super(LocalDateTime.class, datePattern, dateTimePattern, datePickerPattern, adjustBy);
     }
 
     @Override
     protected LocalDateTime doConvertToObject(String value, Locale locale) {
         try {
-            return getFormatterForDateTimePattern().parseLocalDateTime(value);
+            return getFormatterForDateTimePattern().parseLocalDateTime(value).minusDays(adjustBy);
         } catch(IllegalArgumentException ex) {
             try {
-                return getFormatterForDatePattern().parseLocalDateTime(value);
+                return getFormatterForDatePattern().parseLocalDateTime(value).minusDays(adjustBy);
             } catch(IllegalArgumentException ex2) {
                 return null;
             }
@@ -51,7 +51,7 @@ public class DateConverterForJodaLocalDateTime extends DateConverterForJodaAbstr
 
     @Override
     protected String doConvertToString(LocalDateTime value, Locale locale) {
-        return value.toString(getFormatterForDatePattern());
+        return value.plusDays(adjustBy).toString(getFormatterForDateTimePattern());
     }
 
 

@@ -30,13 +30,13 @@ public class DateConverterForApplibDate extends DateConverterAbstract<org.apache
     
     private final DateConverterForJavaUtilDate converter;
     
-    public DateConverterForApplibDate(WicketViewerSettings settings) {
-        this(settings.getDatePattern(), settings.getDatePickerPattern());
+    public DateConverterForApplibDate(WicketViewerSettings settings, int adjustBy) {
+        this(settings.getDatePattern(), settings.getDatePickerPattern(), adjustBy);
     }
 
-    private DateConverterForApplibDate(String datePattern, String datePickerPattern) {
-        super(org.apache.isis.applib.value.Date.class, null, null, null); // not used
-        converter = new DateConverterForJavaUtilDate(datePattern, datePattern, datePickerPattern);
+    private DateConverterForApplibDate(String datePattern, String datePickerPattern, int adjustBy) {
+        super(org.apache.isis.applib.value.Date.class, null, null, null, adjustBy); // not used
+        converter = new DateConverterForJavaUtilDate(datePattern, datePattern, datePickerPattern, adjustBy);
     }
     
     @Override

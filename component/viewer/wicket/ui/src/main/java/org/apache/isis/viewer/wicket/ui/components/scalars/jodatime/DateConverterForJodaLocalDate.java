@@ -28,18 +28,19 @@ public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<
     
     private static final long serialVersionUID = 1L;
 
-    public DateConverterForJodaLocalDate(WicketViewerSettings settings) {
-        this(settings.getDatePattern(), settings.getDatePickerPattern());
+    public DateConverterForJodaLocalDate(WicketViewerSettings settings, int adjustBy) {
+        this(settings.getDatePattern(), settings.getDatePickerPattern(), adjustBy);
     }
     
-    private DateConverterForJodaLocalDate(String datePattern, String datePickerPattern) {
-        super(LocalDate.class, datePattern, datePattern, datePickerPattern);
+    private DateConverterForJodaLocalDate(String datePattern, String datePickerPattern, int adjustBy) {
+        super(LocalDate.class, datePattern, datePattern, datePickerPattern, adjustBy);
     }
 
     @Override
     protected LocalDate doConvertToObject(String value, Locale locale) {
         try {
-            return getFormatterForDatePattern().parseLocalDate(value);
+            final LocalDate dt = getFormatterForDatePattern().parseLocalDate(value);
+            return dt.minusDays(adjustBy);
         } catch(IllegalArgumentException ex) {
             return null;
         }
@@ -47,7 +48,7 @@ public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<
 
     @Override
     protected String doConvertToString(LocalDate value, Locale locale) {
-        return value.toString(getFormatterForDatePattern());
+        return value.plusDays(adjustBy).toString(getFormatterForDatePattern());
     }
 
 }
