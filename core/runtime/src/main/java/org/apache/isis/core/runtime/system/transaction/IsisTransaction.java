@@ -860,6 +860,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         enlist(adapter, ChangeKind.CREATE);
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
+            if(property.isNotPersisted()) {
+                continue;
+            }
             PreAndPostValues papv = PreAndPostValues.pre("[NEW]");
             changedObjectProperties.put(aap, papv);
         }
@@ -880,6 +883,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         enlist(adapter, ChangeKind.UPDATE);
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
+            if(property.isNotPersisted()) {
+                continue;
+            }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             changedObjectProperties.put(aap, papv);
         }
@@ -900,6 +906,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         enlist(adapter, ChangeKind.DELETE);
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
+            if(property.isNotPersisted()) {
+                continue;
+            }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             changedObjectProperties.put(aap, papv);
         }

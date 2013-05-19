@@ -319,7 +319,7 @@ public abstract class AbstractContainedObject {
      * 
      * @uml.property name="container"
      */
-    public final void setContainer(final DomainObjectContainer container) {
+    public void setContainer(final DomainObjectContainer container) {
         this.container = container;
     }
     // }}
