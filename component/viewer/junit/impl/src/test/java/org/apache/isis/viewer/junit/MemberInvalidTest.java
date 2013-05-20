@@ -26,6 +26,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
@@ -33,7 +34,6 @@ import org.apache.isis.core.progmodel.facets.collections.validate.CollectionVali
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot.MaxLengthFacetAnnotationForProperty;
 import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForProperty;
-import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 
 public class MemberInvalidTest extends AbstractTest {

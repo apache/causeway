@@ -27,8 +27,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.PropertyAccessEvent;
-import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionAdapter;
-import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
+import org.apache.isis.applib.services.wrapper.listeners.InteractionAdapter;
+import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 
 public class InteractionListenerTest extends AbstractTest {

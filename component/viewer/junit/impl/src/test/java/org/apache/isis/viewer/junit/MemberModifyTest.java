@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.apache.isis.progmodel.wrapper.applib.InvalidException;
+import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 

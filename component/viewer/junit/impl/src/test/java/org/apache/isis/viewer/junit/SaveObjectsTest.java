@@ -27,9 +27,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
-import org.apache.isis.progmodel.wrapper.applib.InvalidException;
-import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 
 public class SaveObjectsTest extends AbstractTest {

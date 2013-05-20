@@ -26,9 +26,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.DisabledFacetForCollectionDerivedFromImmutable;
 import org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable.DisabledFacetForPropertyDerivedFromImmutable;
-import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 
 public class ObjectImmutableTest extends AbstractTest {
 

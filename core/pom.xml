@@ -1055,7 +1055,7 @@ ${license.additional-notes}
                 <version>1.2.0-SNAPSHOT</version>
             </dependency>
 
-            <!-- isis-webserver -->
+            <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
@@ -1069,6 +1069,14 @@ ${license.additional-notes}
                 <version>1.2.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
+
+            <!-- wrapper service -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-wrapper</artifactId>
+                <version>1.2.0-SNAPSHOT</version>
+            </dependency>
+
 
             <!-- default implementations of components -->
             <dependency>
@@ -1789,6 +1797,8 @@ ${license.additional-notes}
 
         <module>unittestsupport</module>
         <module>integtestsupport</module>
+
+        <module>wrapper</module>
 
         <module>tck</module>
     </modules>

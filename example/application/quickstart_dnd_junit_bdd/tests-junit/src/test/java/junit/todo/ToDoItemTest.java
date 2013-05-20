@@ -30,7 +30,7 @@ import fixture.todo.ToDoItemsFixture;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.progmodel.wrapper.applib.DisabledException;
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 

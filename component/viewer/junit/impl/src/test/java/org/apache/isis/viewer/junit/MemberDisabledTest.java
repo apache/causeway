@@ -28,9 +28,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetAnnotation;
 import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
-import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 
 public class MemberDisabledTest extends AbstractTest {

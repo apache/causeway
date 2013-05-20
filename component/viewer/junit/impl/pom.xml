@@ -67,8 +67,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.progmodel</groupId>
-            <artifactId>isis-progmodel-wrapper-metamodel</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
         </dependency>
 
         <dependency>
