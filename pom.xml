@@ -65,7 +65,6 @@
                 <module>component/viewer/wicket</module>
                 <module>component/viewer/restfulobjects</module>
                 <module>component/viewer/bdd</module>
-                <module>component/viewer/junit</module>
         
                 <module>example/application/claims</module>
                 <module>example/application/quickstart_scimpi_nosql</module>

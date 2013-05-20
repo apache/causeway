@@ -28,11 +28,11 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
+import org.apache.isis.core.integtestsupport.legacy.ConfigDir;
+import org.apache.isis.core.integtestsupport.legacy.IsisTestRunner;
+import org.apache.isis.core.integtestsupport.legacy.Service;
+import org.apache.isis.core.integtestsupport.legacy.Services;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
-import org.apache.isis.viewer.junit.ConfigDir;
-import org.apache.isis.viewer.junit.IsisTestRunner;
-import org.apache.isis.viewer.junit.Service;
-import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
 @ConfigDir("../viewer-dnd/config") // acts as default, but can be overridden by annotations

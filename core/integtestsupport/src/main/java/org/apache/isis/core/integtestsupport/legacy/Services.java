@@ -17,31 +17,17 @@
  *  under the License.
  */
 
-package junit.todo;
+package org.apache.isis.core.integtestsupport.legacy;
 
-import junit.AbstractTest;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.core.integtestsupport.legacy.Fixture;
-import org.apache.isis.core.integtestsupport.legacy.Fixtures;
-import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
-import org.apache.isis.core.tck.fixture.scalars.PrimitiveValuedEntityFixture;
-
-@Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
-public class ScalarEntityTest extends AbstractTest {
-
-    private PrimitiveValuedEntity firstItem;
-
-    @Override
-    @Before
-    public void setUp() {
-        firstItem = wrapped(primitivesEntityRepository.list().get(0));
-    }
-
-    @Test
-    public void dummy() {
-    }
-
+@Target(ElementType.TYPE)
+@Inherited
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Services {
+    Service[] value();
 }

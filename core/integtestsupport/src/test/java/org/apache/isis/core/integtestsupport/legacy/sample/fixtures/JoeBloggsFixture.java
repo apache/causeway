@@ -17,31 +17,14 @@
  *  under the License.
  */
 
-package junit.todo;
+package org.apache.isis.core.integtestsupport.legacy.sample.fixtures;
 
-import junit.AbstractTest;
+import org.apache.isis.applib.fixtures.LogonFixture;
 
-import org.junit.Before;
-import org.junit.Test;
+public class JoeBloggsFixture extends LogonFixture {
 
-import org.apache.isis.core.integtestsupport.legacy.Fixture;
-import org.apache.isis.core.integtestsupport.legacy.Fixtures;
-import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
-import org.apache.isis.core.tck.fixture.scalars.PrimitiveValuedEntityFixture;
-
-@Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
-public class ScalarEntityTest extends AbstractTest {
-
-    private PrimitiveValuedEntity firstItem;
-
-    @Override
-    @Before
-    public void setUp() {
-        firstItem = wrapped(primitivesEntityRepository.list().get(0));
-    }
-
-    @Test
-    public void dummy() {
+    public JoeBloggsFixture() {
+        super("jbloggs");
     }
 
 }

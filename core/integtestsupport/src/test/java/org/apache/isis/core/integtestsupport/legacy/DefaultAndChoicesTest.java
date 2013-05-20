@@ -17,28 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.example.claims.junit;
+package org.apache.isis.core.integtestsupport.legacy;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.core.integtestsupport.legacy.Fixture;
-import org.apache.isis.core.integtestsupport.legacy.Fixtures;
-import org.apache.isis.example.application.claims.dom.claim.Claim;
-import org.apache.isis.example.application.claims.fixture.ClaimsFixture;
-
-@Fixtures({ @Fixture(ClaimsFixture.class) })
-public class NewClaimTest extends AbstractTest {
+public class DefaultAndChoicesTest extends AbstractTest {
 
     @Test
-    public void whenCreateNewClaimDefaultsOk() throws Exception {
-        final Claim newClaim = claimRepository.newClaim(tomEmployee);
-        assertThat(newClaim.getDescription(), is("enter a description here"));
-        assertThat(newClaim.getStatus(), is("New"));
-        assertThat(newClaim.getApprover(), is(tomEmployee.getDefaultApprover()));
-        assertThat(newClaim.getItems().size(), is(0));
+    public void defaults() {
+        final Object[] defaultPlaceOrder = custJsWO.defaultPlaceOrder();
+        assertThat(defaultPlaceOrder.length, is(2));
+    }
+
+    @Ignore("not yet tested")
+    @Test
+    public void choicesDefaults() {
+        // not tested.
     }
 
 }

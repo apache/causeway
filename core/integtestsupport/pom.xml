@@ -119,6 +119,13 @@
 			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
+        <!-- isis testing -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
 	</dependencies>
 </project>

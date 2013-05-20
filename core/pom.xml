@@ -1346,7 +1346,7 @@ ${license.additional-notes}
                 </exclusions>
             </dependency>
 
-            <!-- Testing libraries (not scope=test because used by isis-viewer-junit) -->
+            <!-- Testing libraries (not scope=test because used by isis-core-integtest) -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>

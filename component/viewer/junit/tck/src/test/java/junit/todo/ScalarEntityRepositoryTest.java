@@ -31,10 +31,10 @@ import junit.AbstractTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.apache.isis.core.integtestsupport.legacy.Fixture;
+import org.apache.isis.core.integtestsupport.legacy.Fixtures;
 import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.core.tck.fixture.scalars.PrimitiveValuedEntityFixture;
-import org.apache.isis.viewer.junit.Fixture;
-import org.apache.isis.viewer.junit.Fixtures;
 
 @Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
 public class ScalarEntityRepositoryTest extends AbstractTest {

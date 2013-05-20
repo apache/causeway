@@ -28,11 +28,11 @@ import java.util.List;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.DisabledException;
+import org.apache.isis.core.integtestsupport.legacy.Fixture;
+import org.apache.isis.core.integtestsupport.legacy.Fixtures;
 import org.apache.isis.example.application.claims.dom.claim.Approver;
 import org.apache.isis.example.application.claims.dom.claim.Claim;
 import org.apache.isis.example.application.claims.fixture.ClaimsFixture;
-import org.apache.isis.viewer.junit.Fixture;
-import org.apache.isis.viewer.junit.Fixtures;
 
 @Fixtures({ @Fixture(ClaimsFixture.class) })
 public class ClaimSubmitTest extends AbstractTest {

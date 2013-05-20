@@ -74,11 +74,15 @@
             <artifactId>isis-core-security</artifactId>
         </dependency>
 
-        <!-- isis viewers -->
+        <!-- isis testing -->
         <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-junit-impl</artifactId>
-            <version>${isis-viewer-junit.version}</version>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-integtestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         

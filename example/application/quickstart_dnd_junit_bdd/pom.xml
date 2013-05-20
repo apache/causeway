@@ -39,7 +39,6 @@
         <isis-profilestore-xml.version>1.0.0-SNAPSHOT</isis-profilestore-xml.version>
         <isis-viewer-bdd.version>1.0.0-SNAPSHOT</isis-viewer-bdd.version>
         <isis-viewer-dnd.version>1.0.0-SNAPSHOT</isis-viewer-dnd.version>
-        <isis-viewer-junit.version>1.0.0-SNAPSHOT</isis-viewer-junit.version>
         <isis-security-file.version>1.0.1-SNAPSHOT</isis-security-file.version>
     </properties>
     
@@ -186,14 +185,6 @@
                 <groupId>org.apache.isis.profilestore</groupId>
                 <artifactId>isis-profilestore-xml</artifactId>
                 <version>${isis-profilestore-xml.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-junit</artifactId>
-                <version>${isis-viewer-junit.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

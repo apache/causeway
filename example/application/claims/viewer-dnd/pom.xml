@@ -76,7 +76,6 @@
             <artifactId>isis-core-metamodel</artifactId>
         </dependency>
 
-		<!-- isis default runtime -->
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-webserver</artifactId>
@@ -104,6 +103,17 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-integtestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
         
@@ -113,12 +123,6 @@
 			<artifactId>isis-viewer-dnd-impl</artifactId>
 		</dependency>
         
-        <!-- JUnit Viewer dependencies -->
-        <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-junit-impl</artifactId>
-            <scope>test</scope>
-        </dependency>
 
 	</dependencies>
 

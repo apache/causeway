@@ -34,8 +34,8 @@ import fixture.todo.ToDoItemsFixture;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.junit.Fixture;
-import org.apache.isis.viewer.junit.Fixtures;
+import org.apache.isis.core.integtestsupport.legacy.Fixture;
+import org.apache.isis.core.integtestsupport.legacy.Fixtures;
 
 @Fixtures({ @Fixture(ToDoItemsFixture.class), @Fixture(LogonAsSvenFixture.class) })
 public class ToDoItemRepositoryTest extends AbstractTest {
