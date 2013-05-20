@@ -55,7 +55,6 @@
                 <module>component/progmodel/groovy</module>
         
                 <module>component/profilestore/xml</module>
-                <module>component/profilestore/sql</module>
         
                 <module>component/security/file</module>
                 <module>component/security/shiro</module>
