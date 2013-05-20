@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.apache.isis.viewer.junit.sample.domain.Product;
@@ -39,7 +40,7 @@ import org.apache.isis.viewer.junit.sample.service.ProductRepository;
 
 @RunWith(IsisTestRunner.class)
 @Fixtures({ @Fixture(CountriesFixture.class), @Fixture(ProductsFixture.class), @Fixture(CustomersFixture.class), @Fixture(CustomerOrdersFixture.class) })
-@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class), @Service(OrderRepository.class) })
+@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class), @Service(OrderRepository.class), @Service(WrapperFactoryDefault.class) })
 public abstract class AbstractTest {
 
     protected Customer custJsDO;

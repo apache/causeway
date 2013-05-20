@@ -17,13 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.ActionArgumentEvent;
 import org.apache.isis.applib.events.ActionInvocationEvent;
 import org.apache.isis.applib.events.ActionUsabilityEvent;
@@ -52,6 +54,9 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.wrapper.internal.InteractionEventDispatcher;
+import org.apache.isis.core.wrapper.internal.InteractionEventDispatcherTypeSafe;
+import org.apache.isis.core.wrapper.internal.Proxy;
 
 public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware, SpecificationLoaderAware, AdapterManagerAware, ObjectPersistorAware {
 
@@ -195,7 +200,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     // /////////////////////////////////////////////////////////////
-    // Views
+    // Wrapped
     // /////////////////////////////////////////////////////////////
 
     @Override
@@ -248,21 +253,25 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     // Listeners
     // /////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
+    @Programmatic
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
+    @Programmatic
     @Override
     public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
 
+    @Programmatic
     @Override
     public void setObjectPersistor(final ObjectPersistor objectPersistor) {
         this.objectPersistor = objectPersistor;

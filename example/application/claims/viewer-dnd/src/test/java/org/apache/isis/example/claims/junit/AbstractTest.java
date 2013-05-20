@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.example.application.claims.dom.claim.ClaimRepository;
 import org.apache.isis.example.application.claims.dom.employee.Employee;
 import org.apache.isis.example.application.claims.dom.employee.EmployeeRepository;
@@ -34,7 +35,7 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@Services({ @Service(ClaimRepository.class), @Service(EmployeeRepository.class) })
+@Services({ @Service(ClaimRepository.class), @Service(EmployeeRepository.class), @Service(WrapperFactoryDefault.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;

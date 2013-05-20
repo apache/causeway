@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 public interface SpecificationLoaderAware {
 
+    @Programmatic
     public void setSpecificationLookup(final SpecificationLoader specificationLookup);
 
 }

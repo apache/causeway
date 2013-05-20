@@ -17,15 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
-import org.objenesis.ObjenesisHelper;
+import org.apache.isis.applib.events.InteractionEvent;
 
-class ObjenesisClassInstantiatorCE implements IClassInstantiatorCE {
+public interface InteractionEventDispatcher {
 
-    @Override
-    public Object newInstance(final Class<?> clazz) throws InstantiationException {
-        return ObjenesisHelper.newInstance(clazz);
-    }
+    void dispatch(InteractionEvent interactionEvent);
 
 }

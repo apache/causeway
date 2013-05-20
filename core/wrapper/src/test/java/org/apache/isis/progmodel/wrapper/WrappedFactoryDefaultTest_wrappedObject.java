@@ -37,7 +37,7 @@ import org.apache.isis.core.tck.dom.claimapp.employees.EmployeeRepository;
 import org.apache.isis.core.tck.dom.claimapp.employees.EmployeeRepositoryImpl;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
 public class WrappedFactoryDefaultTest_wrappedObject {
 

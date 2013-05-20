@@ -19,9 +19,12 @@
 
 package org.apache.isis.core.metamodel.adapter.mgr;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 
 public interface AdapterManagerAware {
 
+    @Programmatic
     public void setAdapterManager(final AdapterManager adapterManager);
 
 }

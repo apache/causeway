@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal.util;
+package org.apache.isis.core.wrapper.internal.util;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;

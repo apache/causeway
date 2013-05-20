@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.commons.authentication;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 public interface AuthenticationSessionProviderAware {
 
+    @Programmatic
     public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider);
 
 }

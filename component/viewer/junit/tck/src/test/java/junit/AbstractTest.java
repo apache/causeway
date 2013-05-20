@@ -27,6 +27,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntityRepository;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.viewer.junit.ConfigDir;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
@@ -34,7 +35,7 @@ import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
 @ConfigDir("../../viewer/dnd-tck/src/main/resources")
-@Services({ @Service(PrimitiveValuedEntityRepository.class) })
+@Services({ @Service(PrimitiveValuedEntityRepository.class), @Service(WrapperFactoryDefault.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;

@@ -17,12 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
-import org.apache.isis.applib.events.InteractionEvent;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
-public interface InteractionEventDispatcher {
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 
-    void dispatch(InteractionEvent interactionEvent);
+public class InvocationHandlerMethodInterceptor implements MethodInterceptor {
+    private final InvocationHandler handler;
 
+    InvocationHandlerMethodInterceptor(final InvocationHandler handler) {
+        this.handler = handler;
+    }
+
+    @Override
+    public Object intercept(final Object obj, final Method method, final Object[] args, final MethodProxy proxy) throws Throwable {
+        return handler.invoke(obj, method, args);
+    }
 }

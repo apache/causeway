@@ -22,6 +22,7 @@ package org.apache.isis.applib.services.wrapper;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 
@@ -58,6 +59,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * <p>
  * An exception will be thrown if any other methods are thrown.
  */
+@Hidden
 public interface WrapperFactory {
 
     /**
@@ -79,6 +81,7 @@ public interface WrapperFactory {
      * 
      * @see #addInteractionListener(InteractionListener)
      */
+    @Programmatic
     <T> T wrap(T domainObject);
 
     /**
@@ -89,6 +92,7 @@ public interface WrapperFactory {
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
      */
+    @Programmatic
     <T> T wrap(T domainObject, ExecutionMode mode);
 
     /**
@@ -99,12 +103,14 @@ public interface WrapperFactory {
      *            - object that might or might not be a wrapper.
      * @return
      */
+    @Programmatic
     <T> boolean isWrapper(T possibleWrapper);
 
     /**
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
      */
+    @Programmatic
     List<InteractionListener> getListeners();
 
     /**
@@ -120,6 +126,7 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
+    @Programmatic
     public boolean addInteractionListener(InteractionListener listener);
 
     /**
@@ -135,8 +142,10 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
+    @Programmatic
     public boolean removeInteractionListener(InteractionListener listener);
 
+    @Programmatic
     public void notifyListeners(InteractionEvent ev);
 
 }

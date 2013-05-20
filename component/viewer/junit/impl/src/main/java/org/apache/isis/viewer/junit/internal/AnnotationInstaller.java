@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.junit.internal;
 
+import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -79,7 +80,7 @@ public class AnnotationInstaller {
         if (annotation != null) {
             return addPersistorRepresentedBy(annotation);
         } else {
-            return new InMemoryPersistenceMechanismInstallerWithinJunit();
+            return new InMemoryPersistenceMechanismInstaller();
         }
 
     }

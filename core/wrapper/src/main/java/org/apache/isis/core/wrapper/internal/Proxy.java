@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

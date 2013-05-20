@@ -17,21 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.junit.internal;
+package org.apache.isis.core.wrapper.internal;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
-import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
+import java.lang.reflect.InvocationHandler;
 
-public class InMemoryPersistenceMechanismInstallerWithinJunit extends InMemoryPersistenceMechanismInstaller {
+public interface IProxyFactory<T> {
+    T createProxy(Class<T> toProxyClass, InvocationHandler handler);
 
-    /**
-     * Returns a {@link DomainObjectContainerHeadlessViewer}.
-     */
-    @Override
-    public DomainObjectContainer createContainer(final IsisConfiguration configuration) {
-        return new DomainObjectContainerWrapperFactory();
-    }
-
+    T createProxy(T toProxy, InvocationHandler handler);
 }

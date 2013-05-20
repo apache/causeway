@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

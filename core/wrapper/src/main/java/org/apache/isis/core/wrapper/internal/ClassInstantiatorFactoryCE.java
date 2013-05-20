@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
 /**
  * Factory returning a {@link IClassInstantiatorCE}for the current JVM

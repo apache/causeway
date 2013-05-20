@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 public interface ObjectPersistorAware {
 
+    @Programmatic
     public void setObjectPersistor(final ObjectPersistor objectPersistor);
 
 }

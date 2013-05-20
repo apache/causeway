@@ -17,12 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
-import java.lang.reflect.InvocationHandler;
+import org.objenesis.ObjenesisHelper;
 
-public interface IProxyFactory<T> {
-    T createProxy(Class<T> toProxyClass, InvocationHandler handler);
+class ObjenesisClassInstantiatorCE implements IClassInstantiatorCE {
 
-    T createProxy(T toProxy, InvocationHandler handler);
+    @Override
+    public Object newInstance(final Class<?> clazz) throws InstantiationException {
+        return ObjenesisHelper.newInstance(clazz);
+    }
+
 }

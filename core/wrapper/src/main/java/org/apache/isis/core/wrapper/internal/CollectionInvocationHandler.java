@@ -17,27 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper.metamodel.internal;
+package org.apache.isis.core.wrapper.internal;
 
 import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {
+class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHandler<T, R> {
 
-    public MapInvocationHandler(final C collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public CollectionInvocationHandler(final R collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
         super(collectionToProxy, collectionName, handler, otma);
 
         try {
-            intercept(getMethod(collectionToProxy, "containsKey", Object.class));
-            intercept(getMethod(collectionToProxy, "containsValue", Object.class));
+            intercept(getMethod(collectionToProxy, "contains", Object.class));
             intercept(getMethod(collectionToProxy, "size"));
             intercept(getMethod(collectionToProxy, "isEmpty"));
-            veto(getMethod(collectionToProxy, "put", Object.class, Object.class));
+            if (collectionToProxy instanceof List) {
+                intercept(getMethod(collectionToProxy, "get", int.class));
+            }
+            veto(getMethod(collectionToProxy, "add", Object.class));
             veto(getMethod(collectionToProxy, "remove", Object.class));
-            veto(getMethod(collectionToProxy, "putAll", Map.class));
+            veto(getMethod(collectionToProxy, "addAll", Collection.class));
+            veto(getMethod(collectionToProxy, "removeAll", Collection.class));
+            veto(getMethod(collectionToProxy, "retainAll", Collection.class));
             veto(getMethod(collectionToProxy, "clear"));
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF

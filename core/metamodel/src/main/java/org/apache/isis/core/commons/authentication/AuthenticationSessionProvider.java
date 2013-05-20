@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.commons.authentication;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.Injectable;
 
 public interface AuthenticationSessionProvider extends Injectable {
