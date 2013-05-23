@@ -22,6 +22,6 @@ $(document).ready(function() {
     };
     
     $('.buttons .okButton').click(showVeil);
-    $('.buttons .ok').click(showVeil);*/
+    $('.buttons .ok').click(showVeil);
     $('.cssSubMenuItemsPanel .cssSubMenuItem a').click(showVeil);
 });
