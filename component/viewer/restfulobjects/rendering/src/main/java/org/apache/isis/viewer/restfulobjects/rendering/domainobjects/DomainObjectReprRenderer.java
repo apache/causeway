@@ -20,11 +20,13 @@ import java.util.List;
 
 import org.codehaus.jackson.node.NullNode;
 
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -130,7 +132,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // title
         if (!mode.representsArguments()) {
-            final String title = objectAdapter.titleString();
+            final String title = objectAdapter.titleString(null);
             representation.mapPut("title", title);
 
         }
@@ -352,6 +354,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
             final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
             JsonRepresentation ref = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
+            
             repr.mapPut("value", ref);
         }
 

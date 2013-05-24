@@ -19,10 +19,13 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -66,14 +69,22 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         if (valueAdapter == null) {
             return;
         }
+        
+        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
+        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY;
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
         final List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            final LinkBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
+            if(eagerlyRender) {
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
+                renderer.with(elementAdapter);
+                valueLinkBuilder.withValue(renderer.render());
+            }
 
-            list.add(newBuilder.build());
+            list.add(valueLinkBuilder.build());
         }
 
         representation.mapPut("value", list);
