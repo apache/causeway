@@ -18,6 +18,7 @@
  */
 package integtests;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -36,13 +37,13 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 public class ToDoItemIntegTest extends AbstractIntegTest {
 
     @Test
-    public void t01_findNotYetCompleted() throws Exception {
+    public void t010_findNotYetCompleted() throws Exception {
         final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         assertThat(all.size(), is(5));
     }
 
     @Test
-    public void t02_update() throws Exception {
+    public void t020_updateDescription() throws Exception {
         // given
         final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         final ToDoItem toDoItem = wrap(all.get(0));
@@ -58,27 +59,39 @@ public class ToDoItemIntegTest extends AbstractIntegTest {
 
 
     @Test
-    public void t03_complete() throws Exception {
+    public void t030_complete_and_notYetComplete() throws Exception {
         // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
+        List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         final ToDoItem toDoItem = wrap(all.get(0));
         
         assertThat(toDoItem.getDescription(), is("Buy milk and butter"));
         assertThat(toDoItem.isComplete(), is(false));
+        assertThat(container.titleOf(toDoItem), is("foo"));
         
         // when
         toDoItem.completed();
         
         // then
         assertThat(toDoItem.isComplete(), is(true));
+        assertThat(container.titleOf(toDoItem), is("foo"));
 
-        final List<ToDoItem> all2 = wrap(toDoItems).notYetComplete();
-        assertThat(all2.size(), is(4));
+        all = wrap(toDoItems).notYetComplete();
+        assertThat(all.size(), is(4));
+        
+        // and when
+        toDoItem.notYetCompleted();
+        
+        // then
+        assertThat(toDoItem.isComplete(), is(false));
+        assertThat(container.titleOf(toDoItem), is("foo"));
+
+        all = wrap(toDoItems).notYetComplete();
+        assertThat(all.size(), is(5));
     }
 
 
     @Test
-    public void t04_cannotCompleteAndObjectAlreadyCompleted() throws Exception {
+    public void t040_cannotCompleteAndObjectAlreadyCompleted() throws Exception {
         // given
         final List<ToDoItem> all = wrap(toDoItems).notYetComplete(); // 4 left
         final ToDoItem toDoItem = wrap(all.get(0));
@@ -92,6 +105,9 @@ public class ToDoItemIntegTest extends AbstractIntegTest {
         } catch(DisabledException ex) {
             assertThat(ex.getMessage(), is("Already completed"));
         }
+        
+        // reset
+        toDoItem.notYetCompleted();
     }
 
 }

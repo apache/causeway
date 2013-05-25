@@ -146,6 +146,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return getDelegate();
         }
 
+        // workaround for JDO-enhanced..
+        if(method.getName().startsWith("jdo")) {
+            return delegate(method, args);
+        }
+
         final ObjectMember objectMember = locateAndCheckMember(method);
         final List<Facet> imperativeFacets = getImperativeFacets(objectMember, method);
 
@@ -578,6 +583,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private ObjectMember locateAndCheckMember(final Method method) {
         final ObjectSpecificationDefault objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
         final ObjectMember member = objectSpecificationDefault.getMember(method);
+        
         if (member == null) {
             final String methodName = method.getName();
             throw new UnsupportedOperationException("Method '" + methodName + "' being invoked does not correspond to any of the object's fields or actions.");

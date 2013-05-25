@@ -31,6 +31,7 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -44,6 +45,7 @@ public class AbstractIntegTest {
 
     protected ToDoItems toDoItems;
     protected WrapperFactory wrapperFactory;
+    protected DomainObjectContainer container;
     
     @Rule
     public IsisSystemForTestRule rule = new IsisSystemForTestRule();
@@ -62,6 +64,7 @@ public class AbstractIntegTest {
     public void init() {
         toDoItems = getIsft().getService(ToDoItemsJdo.class);
         wrapperFactory = getIsft().getService(WrapperFactoryDefault.class);
+        container = getIsft().container;
     }
 
     protected <T> T wrap(T obj) {
@@ -85,6 +88,7 @@ public class AbstractIntegTest {
             withLoggingAt(Level.INFO);
             with(testConfiguration());
             with(new DataNucleusPersistenceMechanismInstaller());
+            
             withServices(
                     new ToDoItemsJdo(),
                     new WrapperFactoryDefault(),
