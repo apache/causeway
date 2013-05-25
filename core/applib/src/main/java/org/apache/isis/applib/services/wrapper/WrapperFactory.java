@@ -78,8 +78,6 @@ public interface WrapperFactory {
      * <p>
      * If the object has (see {@link #isWrapper(Object)} already been wrapped),
      * then should just return the object back unchanged.
-     * 
-     * @see #addInteractionListener(InteractionListener)
      */
     @Programmatic
     <T> T wrap(T domainObject);
@@ -95,6 +93,18 @@ public interface WrapperFactory {
     @Programmatic
     <T> T wrap(T domainObject, ExecutionMode mode);
 
+
+    /**
+     * Obtains the underlying domain object, if wrapped.
+     * 
+     * <p>
+     * If the object {@link #isWrapper(Object) is not wrapped}, then
+     * should just return the obejct back unchanged.
+     */
+    @Programmatic
+    <T> T unwrap(T possibleWrappedDomainObject);
+
+    
     /**
      * Whether the supplied object has been wrapped.
      * 
@@ -104,7 +114,7 @@ public interface WrapperFactory {
      * @return
      */
     @Programmatic
-    <T> boolean isWrapper(T possibleWrapper);
+    <T> boolean isWrapper(T possibleWrappedDomainObject);
 
     /**
      * All {@link InteractionListener}s that have been registered using

@@ -22,11 +22,12 @@ import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 import objstore.jdo.todo.ToDoItemsJdo;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -36,6 +37,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
@@ -46,9 +49,15 @@ public class AbstractIntegTest {
     protected ToDoItems toDoItems;
     protected WrapperFactory wrapperFactory;
     protected DomainObjectContainer container;
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
     
     @Rule
-    public IsisSystemForTestRule rule = new IsisSystemForTestRule();
+    public IsisSystemForTestRule bootstrapIsis = new IsisSystemForTestRule();
+
+    @Rule
+    public ExpectedException expectedExceptions = ExpectedException.none();
 
     /**
      * Same running system returned for all tests, set up with {@link ToDoItemsFixture}.
@@ -57,7 +66,7 @@ public class AbstractIntegTest {
      * The database is NOT reset between tests.
      */
     public IsisSystemForTest getIsft() {
-        return rule.getIsisSystemForTest();
+        return bootstrapIsis.getIsisSystemForTest();
     }
 
     @Before
@@ -71,6 +80,10 @@ public class AbstractIntegTest {
         return wrapperFactory.wrap(obj);
     }
 
+    protected <T> T unwrap(T obj) {
+        return wrapperFactory.unwrap(obj);
+    }
+
 
     ////////////////////////////////////////////////////////////////
     // Boilerplate
@@ -78,7 +91,7 @@ public class AbstractIntegTest {
     
     @BeforeClass
     public static void initClass() {
-        BasicConfigurator.configure();
+        PropertyConfigurator.configure("logging.properties");
     }
     
     private static class ToDoIntegTestBuilder extends IsisSystemForTest.Builder {

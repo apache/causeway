@@ -200,7 +200,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     // /////////////////////////////////////////////////////////////
-    // Wrapped
+    // wrap and unwrap
     // /////////////////////////////////////////////////////////////
 
     @Override
@@ -217,8 +217,19 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     @Override
-    public boolean isWrapper(final Object possibleWrapper) {
-        return possibleWrapper instanceof WrapperObject;
+    public boolean isWrapper(final Object possibleWrappedDomainObject) {
+        return possibleWrappedDomainObject instanceof WrapperObject;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    @Programmatic
+    public <T> T unwrap(T possibleWrappedDomainObject) {
+        if(isWrapper(possibleWrappedDomainObject)) {
+            WrapperObject wrapperObject = (WrapperObject) possibleWrappedDomainObject;
+            return (T) wrapperObject.wrapped();
+        } 
+        return possibleWrappedDomainObject;
     }
 
     // /////////////////////////////////////////////////////////////
@@ -276,5 +287,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     public void setObjectPersistor(final ObjectPersistor objectPersistor) {
         this.objectPersistor = objectPersistor;
     }
+
+
 
 }
