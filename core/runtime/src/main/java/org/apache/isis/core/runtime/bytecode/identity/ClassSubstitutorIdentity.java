@@ -24,6 +24,8 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 public class ClassSubstitutorIdentity extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorIdentity() {
+        
+
     }
 
 }

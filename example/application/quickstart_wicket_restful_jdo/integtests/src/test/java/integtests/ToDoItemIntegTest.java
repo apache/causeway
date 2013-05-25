@@ -49,12 +49,14 @@ public class ToDoItemIntegTest extends AbstractIntegTest {
         final ToDoItem toDoItem = wrap(all.get(0));
         
         assertThat(toDoItem.getDescription(), is("Buy milk"));
+        assertThat(container.titleOf(toDoItem), is("Buy milk due by 2013-05-25"));
         
         // when
         toDoItem.setDescription("Buy milk and butter");
         
         // then
         assertThat(toDoItem.getDescription(), is("Buy milk and butter"));
+        assertThat(container.titleOf(toDoItem), is("Buy milk and butter due by 2013-05-25"));
     }
 
 
@@ -66,14 +68,14 @@ public class ToDoItemIntegTest extends AbstractIntegTest {
         
         assertThat(toDoItem.getDescription(), is("Buy milk and butter"));
         assertThat(toDoItem.isComplete(), is(false));
-        assertThat(container.titleOf(toDoItem), is("foo"));
+        assertThat(container.titleOf(toDoItem), is("Buy milk and butter due by 2013-05-25"));
         
         // when
         toDoItem.completed();
         
         // then
         assertThat(toDoItem.isComplete(), is(true));
-        assertThat(container.titleOf(toDoItem), is("foo"));
+        assertThat(container.titleOf(toDoItem), is("Buy milk and butter - Completed!"));
 
         all = wrap(toDoItems).notYetComplete();
         assertThat(all.size(), is(4));
@@ -83,7 +85,7 @@ public class ToDoItemIntegTest extends AbstractIntegTest {
         
         // then
         assertThat(toDoItem.isComplete(), is(false));
-        assertThat(container.titleOf(toDoItem), is("foo"));
+        assertThat(container.titleOf(toDoItem), is("Buy milk and butter due by 2013-05-25"));
 
         all = wrap(toDoItems).notYetComplete();
         assertThat(all.size(), is(5));

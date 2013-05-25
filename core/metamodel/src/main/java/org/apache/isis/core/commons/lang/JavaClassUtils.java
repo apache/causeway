@@ -144,6 +144,15 @@ public final class JavaClassUtils {
         return false;
     }
 
+    public static boolean directlyImplements(final Class<?> cls, final String interfaceTypeName) {
+        try {
+            final Class<?> interfaceType = Thread.currentThread().getContextClassLoader().loadClass(interfaceTypeName);
+            return directlyImplements(cls, interfaceType);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static boolean isStatic(final Method method) {
         return Modifier.isStatic(method.getModifiers());
     }

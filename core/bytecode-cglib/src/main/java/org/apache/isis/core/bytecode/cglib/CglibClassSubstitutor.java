@@ -26,9 +26,6 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
 
     public CglibClassSubstitutor() {
-        ignore(net.sf.cglib.proxy.Factory.class);
-        ignore(net.sf.cglib.proxy.MethodProxy.class);
-        ignore(net.sf.cglib.proxy.Callback.class);
     }
 
     /**

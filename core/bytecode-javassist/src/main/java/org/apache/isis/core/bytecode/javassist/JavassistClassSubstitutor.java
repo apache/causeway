@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 public class JavassistClassSubstitutor extends ClassSubstitutorAbstract {
 
     public JavassistClassSubstitutor() {
-        ignore(javassist.util.proxy.ProxyObject.class);
-        ignore(javassist.util.proxy.MethodHandler.class);
+        ignore("javassist.util.proxy.ProxyObject");
+        ignore("javassist.util.proxy.MethodHandler");
     }
 
     /**

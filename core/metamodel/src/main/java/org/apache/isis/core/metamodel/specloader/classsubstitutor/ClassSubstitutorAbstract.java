@@ -19,21 +19,33 @@
 
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
-    private final Set<Class<?>> classesToIgnore = new HashSet<Class<?>>();
+    private final Set<Class<?>> classesToIgnore = Sets.newHashSet();
+    private final Set<String> classNamesToIgnore = Sets.newHashSet();
 
     /**
      * Will implicitly ignore the {@link DomainObjectContainer}.
      */
     public ClassSubstitutorAbstract() {
         ignore(DomainObjectContainer.class);
+        
+        // ignore cglib
+        ignore("net.sf.cglib.proxy.Factory");
+        ignore("net.sf.cglib.proxy.MethodProxy");
+        ignore("net.sf.cglib.proxy.Callback");
+
+        // ignore javassist
+        ignore("javassist.util.proxy.ProxyObject");
+        ignore("javassist.util.proxy.MethodHandler");
+
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -74,11 +86,12 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         return cls;
     }
 
+    
     private boolean shouldIgnore(final Class<?> cls) {
         if (cls.isArray()) {
             return shouldIgnore(cls.getComponentType());
         }
-        return classesToIgnore.contains(cls);
+        return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
     }
 
     // ////////////////////////////////////////////////////////////////////
@@ -93,9 +106,14 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         return classesToIgnore.add(q);
     }
 
-    public Set<Class<?>> getIgnoredClasses() {
-        return Collections.unmodifiableSet(classesToIgnore);
+    /**
+     * For any classes registered as ignored, {@link #getClass(Class)} will
+     * return <tt>null</tt>.
+     */
+    protected boolean ignore(final String className) {
+        return classNamesToIgnore.add(className);
     }
+
 
     // ////////////////////////////////////////////////////////////////////
     // injectInto

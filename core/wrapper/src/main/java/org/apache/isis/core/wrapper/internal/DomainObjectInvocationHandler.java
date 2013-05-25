@@ -129,11 +129,22 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
+        // workaround for JDO-enhanced..
+        if(isJdoMethod(method)) {
+            return delegate(method, args);
+        }
+
+        if(isInjectMethod(method)) {
+            return delegate(method, args);
+        }
+
         final ObjectAdapter targetAdapter = getAdapterManager().getAdapterFor(getDelegate());
 
         if (isTitleMethod(method)) {
             return handleTitleMethod(method, args, targetAdapter);
         }
+
+
 
         final ObjectSpecification targetNoSpec = targetAdapter.getSpecification();
 
@@ -144,11 +155,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (isUnderlyingMethod(method)) {
             return getDelegate();
-        }
-
-        // workaround for JDO-enhanced..
-        if(method.getName().startsWith("jdo")) {
-            return delegate(method, args);
         }
 
         final ObjectMember objectMember = locateAndCheckMember(method);
@@ -233,6 +239,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
     }
 
+    private boolean isJdoMethod(final Method method) {
+        return methodStartsWith(method, "jdo");
+    }
+
+    private boolean isInjectMethod(final Method method) {
+        return methodStartsWith(method, "inject");
+    }
+
+    private boolean methodStartsWith(final Method method, final String prefix) {
+        return method.getName().startsWith(prefix);
+    }
+    
     public List<Facet> getImperativeFacets(final ObjectMember objectMember, final Method method) {
         final List<Facet> imperativeFacets = objectMember.getFacets(new Filter<Facet>() {
             @Override

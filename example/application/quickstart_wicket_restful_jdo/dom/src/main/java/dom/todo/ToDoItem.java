@@ -101,10 +101,10 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         final TitleBuffer buf = new TitleBuffer();
         buf.append(getDescription());
         if (isComplete()) {
-            buf.append(" - Completed!");
+            buf.append("- Completed!");
         } else {
             if (getDueBy() != null) {
-                buf.append(" due by ", getDueBy());
+                buf.append(" due by", getDueBy());
             }
         }
         return buf.toString();
