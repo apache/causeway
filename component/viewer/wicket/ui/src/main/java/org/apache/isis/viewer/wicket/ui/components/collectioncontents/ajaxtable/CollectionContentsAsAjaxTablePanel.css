@@ -151,6 +151,7 @@
 
 .collectionContentsAsAjaxTablePanel .actions {
 	margin-top: -1px;
+    margin-bottom: -10px;
     float: left;
     padding:0em 0em;
 }

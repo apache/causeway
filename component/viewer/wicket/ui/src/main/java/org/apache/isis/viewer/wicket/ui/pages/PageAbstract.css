@@ -190,10 +190,6 @@ colors
 
 /********** CLASSes **********/
 
-.clear {
-    clear: both;
-}
-
 .feedbackPanel li {
 	list-style: none;	
 }
