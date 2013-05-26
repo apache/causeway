@@ -25,7 +25,7 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>quickstart_wicket_restful_jdo-viewer-webapp</artifactId>
+    <artifactId>quickstart_wicket_restful_jdo-webapp</artifactId>
     <name>Quickstart Wicket/Restful/JDO Webapp</name>
 
     <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
