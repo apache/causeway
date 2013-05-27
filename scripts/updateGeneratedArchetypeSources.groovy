@@ -128,8 +128,10 @@ def pomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
     mkp.yield(pomXml)
 }
 
+
 def pomTempFile = File.createTempFile("temp",".xml")
-pomTempFile.text = indentXml(pomSmb.toString())
+def indentedXml = indentXml(pomSmb.toString())
+pomTempFile.text = indentedXml
 def pomXmlText = stripXmlPragma(pomTempFile)
 
 
@@ -229,7 +231,7 @@ String indentXml(xml) {
     transformer.setOutputProperty(OutputKeys.INDENT, 'yes')
     StreamResult result = new StreamResult(new StringWriter())
     transformer.transform(new StreamSource(new ByteArrayInputStream(xml.toString().bytes)), result)
-    return result.writer.toString()
+    return result.writer.toString().replaceAll("\\?><", "\\?>\n<")
 }
 
 String stripXmlPragma(File file) {

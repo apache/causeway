@@ -21,6 +21,7 @@
  */
 package objstore.jdo.todo;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -36,7 +37,7 @@ public class ToDoItemsJdo extends ToDoItems {
 
     // {{ notYetComplete (action)
     @Override
-    public List<ToDoItem> notYetComplete() {
+    protected List<ToDoItem> doNotYetComplete() {
         return allMatches(
                 new QueryDefault<ToDoItem>(ToDoItem.class, 
                         "todo_notYetComplete", 
@@ -46,7 +47,7 @@ public class ToDoItemsJdo extends ToDoItems {
 
     // {{ done (action)
     @Override
-    public List<ToDoItem> complete() {
+    protected List<ToDoItem> doComplete() {
         return allMatches(
                 new QueryDefault<ToDoItem>(ToDoItem.class, 
                         "todo_complete", 
