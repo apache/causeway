@@ -20,12 +20,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
@@ -64,11 +69,40 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
         
         // use the runtime type if we have a value, else the compile time type of the member otherwise
-        final ObjectSpecification specification = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
+        final ObjectSpecification spec = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
         
-        DomainObjectReprRenderer.appendValueAndFormatOrRef(rendererContext, valueAdapter, specification, representation);
+        final ValueFacet valueFacet = spec.getFacet(ValueFacet.class);
+        if (valueFacet != null) {
+            JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation);
+            return;
+        }
+
+        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
+        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
+
+        if(valueAdapter == null) {
+            representation.mapPut("value", NullNode.getInstance());
+        } else {
+            final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
+            final String title = titleFacet.title(valueAdapter, rendererContext.getLocalization());
+            
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, valueAdapter).withTitle(title);
+            if(eagerlyRender) {
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, getLinkFollowSpecs(), JsonRepresentation.newMap());
+                renderer.with(valueAdapter);
+                if(mode.isEventSerialization()) {
+                    renderer.asEventSerialization();
+                }
+
+                valueLinkBuilder.withValue(renderer.render());
+            }
+
+            representation.mapPut("value", valueLinkBuilder.build());
+        }
     }
 
+
+    
     // ///////////////////////////////////////////////////
     // details link
     // ///////////////////////////////////////////////////

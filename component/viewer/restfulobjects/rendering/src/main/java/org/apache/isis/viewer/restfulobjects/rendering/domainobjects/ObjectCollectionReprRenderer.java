@@ -48,10 +48,12 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         // id and memberType are rendered eagerly
 
         renderMemberContent();
-        if (mode.isStandalone() || mode.isMutated() || !objectAdapter.representsPersistent()) {
+        if (mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.representsPersistent()) {
             addValue();
         }
-        putDisabledReasonIfDisabled();
+        if(!mode.isEventSerialization()) {
+            putDisabledReasonIfDisabled();
+        }
 
         if (mode.isStandalone() || mode.isMutated()) {
             addExtensionsIsisProprietaryChangedObjects();
@@ -71,7 +73,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         }
         
         final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
-        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY;
+        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
         final List<JsonRepresentation> list = Lists.newArrayList();
@@ -81,6 +83,10 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
                 renderer.with(elementAdapter);
+                if(mode.isEventSerialization()) {
+                    renderer.asEventSerialization();
+                }
+
                 valueLinkBuilder.withValue(renderer.render());
             }
 
@@ -147,5 +153,6 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
         getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());
     }
+
 
 }

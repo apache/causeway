@@ -20,11 +20,14 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 
 public interface RendererContext {
 
@@ -41,5 +44,15 @@ public interface RendererContext {
     public Where getWhere();
     
     public Localization getLocalization();
+    
+    /**
+     * To avoid infinite loops when {@link Render.Type#EAGERLY eagerly} rendering graphs
+     * of objects as {@link DomainObjectReprRenderer#asEventSerialization() events}.
+     * 
+     * <p>
+     * @param objectAdapter - the object proposed to be rendered eagerly 
+     * @return whether this adapter has already been rendered (implying the caller should not render the value).
+     */
+    public boolean canEagerlyRender(ObjectAdapter objectAdapter);
 
 }

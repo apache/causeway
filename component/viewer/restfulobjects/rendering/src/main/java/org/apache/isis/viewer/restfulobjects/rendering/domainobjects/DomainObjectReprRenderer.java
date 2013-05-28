@@ -89,6 +89,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         public boolean checkVisibility() {
             return checkVisibility;
         }
+
+        public boolean isEventSerialization() {
+            return this == EVENT_SERIALIZATION;
+        }
     }
 
     private ObjectAdapterLinkTo linkToBuilder;
@@ -164,7 +168,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (!mode.representsArguments()) {
             // update/persist
             addPersistLinkIfTransientAndPersistable();
-            addUpdatePropertiesLinkIfPersistentAndNotService();
+            addUpdatePropertiesLinkIfRequired();
 
             // extensions
             final boolean isService = objectAdapter.getSpecification().isService();
@@ -217,7 +221,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
         addAssociations(objectAdapter, members, associations);
 
-        if (!mode.representsArguments()) {
+        if (!mode.representsArguments() && !mode.isEventSerialization()) {
             final List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
             addActions(objectAdapter, actions, members);
         }
@@ -245,6 +249,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 if (mode.representsArguments()) {
                     renderer.asArguments();
                 }
+                if(mode.isEventSerialization()) {
+                    renderer.asEventSerialization();
+                }
 
                 members.mapPut(assoc.getId(), renderer.render());
             }
@@ -259,6 +266,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollower, collection.getId(), JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
+                if(mode.isEventSerialization()) {
+                    renderer.asEventSerialization();
+                }
 
                 members.mapPut(assoc.getId(), renderer.render());
             }
@@ -320,7 +330,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
 
-    private void addUpdatePropertiesLinkIfPersistentAndNotService() {
+    private void addUpdatePropertiesLinkIfRequired() {
+        if(mode.isEventSerialization()) {
+            return;
+        }
         if (!objectAdapter.representsPersistent()) {
             return;
         }
@@ -339,26 +352,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     // ///////////////////////////////////////////////////////////////////
     //
     // ///////////////////////////////////////////////////////////////////
-
-    public static void appendValueAndFormatOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec, JsonRepresentation repr) {
-
-        final ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
-        if (valueFacet != null) {
-            JsonValueEncoder.appendValueAndFormat(objectSpec, objectAdapter, repr);
-            return;
-        }
-
-        if(objectAdapter == null) {
-            repr.mapPut("value", NullNode.getInstance());
-        } else {
-            final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
-            final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
-            JsonRepresentation ref = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
-            
-            repr.mapPut("value", ref);
-        }
-
-    }
 
     public static Object valueOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
         final ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);

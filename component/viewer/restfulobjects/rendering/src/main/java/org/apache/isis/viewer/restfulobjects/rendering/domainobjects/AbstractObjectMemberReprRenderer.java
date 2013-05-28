@@ -16,7 +16,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import javax.ws.rs.core.MediaType;
+import org.codehaus.jackson.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,12 +30,11 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.codehaus.jackson.node.NullNode;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
     protected enum Mode {
-        INLINE, FOLLOWED, STANDALONE, MUTATED, ARGUMENTS;
+        INLINE, FOLLOWED, STANDALONE, MUTATED, ARGUMENTS, EVENT_SERIALIZATION;
 
         public boolean isInline() {
             return this == INLINE;
@@ -55,6 +54,10 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
         public boolean isArguments() {
             return this == ARGUMENTS;
+        }
+        
+        public boolean isEventSerialization() {
+            return this == EVENT_SERIALIZATION;
         }
     }
 
@@ -110,6 +113,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      */
     public R asStandalone() {
         mode = Mode.STANDALONE;
+        return cast(this);
+    }
+
+    public R asEventSerialization() {
+        mode = Mode.EVENT_SERIALIZATION;
         return cast(this);
     }
 

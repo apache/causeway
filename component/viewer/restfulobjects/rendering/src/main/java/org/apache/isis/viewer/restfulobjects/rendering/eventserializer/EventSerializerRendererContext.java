@@ -20,11 +20,17 @@ package org.apache.isis.viewer.restfulobjects.rendering.eventserializer;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
@@ -74,5 +80,12 @@ public class EventSerializerRendererContext implements RendererContext {
         return IsisContext.getLocalization();
     }
 
+    private Set<Oid> rendered = Sets.newHashSet();
+    @Override
+    public boolean canEagerlyRender(ObjectAdapter objectAdapter) {
+        final Oid oid = objectAdapter.getOid();
+        return rendered.add(oid);
+    }
+    
 
 }

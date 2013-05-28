@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -51,6 +53,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class ResourceContext implements RendererContext {
 
@@ -281,6 +284,12 @@ public class ResourceContext implements RendererContext {
         return where;
     }
 
+    private Set<Oid> rendered = Sets.newHashSet();
+    @Override
+    public boolean canEagerlyRender(ObjectAdapter objectAdapter) {
+        final Oid oid = objectAdapter.getOid();
+        return rendered.add(oid);
+    }
 
     //////////////////////////////////////////////////////////////////
     //
@@ -289,5 +298,7 @@ public class ResourceContext implements RendererContext {
     public String urlFor(final String url) {
         return getUriInfo().getBaseUri().toString() + url;
     }
+
+
 
 }
