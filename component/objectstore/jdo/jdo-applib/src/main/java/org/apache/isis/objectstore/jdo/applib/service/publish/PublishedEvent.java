@@ -19,6 +19,7 @@
 
 package org.apache.isis.objectstore.jdo.applib.service.publish;
 
+
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -171,20 +172,37 @@ public class PublishedEvent {
 
     
     // {{ SerializedForm (property)
-    @javax.jdo.annotations.Column(length=4000)
-    private String serializedForm;
 
+    @javax.jdo.annotations.NotPersistent
     @MultiLine(numberOfLines=20)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(sequence = "6")
     public String getSerializedForm() {
-        return serializedForm;
+        return IoUtils.fromUtf8ZippedBytes("serializedForm", getSerializedFormZipped());
     }
 
-    public void setSerializedForm(final String propertyName) {
-        this.serializedForm = propertyName;
+    public void setSerializedForm(final String serializedForm) {
+        final byte[] zippedBytes = IoUtils.toUtf8ZippedBytes("serializedForm", serializedForm);
+        setSerializedFormZipped(zippedBytes);
     }
     // }}
+
+
+    // {{ SerializedFormZipped (property)
+    @javax.jdo.annotations.Column
+    private byte[] serializedFormZipped;
+
+    @Programmatic // ignored by Isis
+    public byte[] getSerializedFormZipped() {
+        return serializedFormZipped;
+    }
+
+    public void setSerializedFormZipped(final byte[] serializedFormZipped) {
+        this.serializedFormZipped = serializedFormZipped;
+    }
+    // }}
+
+
 
     @Bulk
     @ActionSemantics(Of.IDEMPOTENT)
