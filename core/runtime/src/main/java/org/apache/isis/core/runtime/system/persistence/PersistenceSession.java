@@ -239,10 +239,23 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             LOG.debug("closing " + this);
         }
 
-        objectStore.close();
+        try {
+            objectStore.close();
+        } catch(RuntimeException ex) {
+            // ignore
+        }
 
-        adapterManager.close();
-        objectFactory.close();
+        try {
+            adapterManager.close();
+        } catch(RuntimeException ex) {
+            // ignore
+        }
+        
+        try {
+            objectFactory.close();
+        } catch(RuntimeException ex) {
+            // ignore
+        }
 
         setState(State.CLOSED);
     }

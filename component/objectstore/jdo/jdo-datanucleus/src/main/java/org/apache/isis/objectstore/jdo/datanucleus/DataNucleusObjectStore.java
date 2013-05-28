@@ -174,17 +174,21 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         ensureOpened();
         ensureThatState(persistenceManager, is(notNullValue()));
 
-        final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
-        if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
-            if(currentTransaction.getState().canCommit()) {
-                getTransactionManager().endTransaction();
-            } else if(currentTransaction.getState().canAbort()) {
-                getTransactionManager().abortTransaction();
+        try {
+            final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
+            if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
+                if(currentTransaction.getState().canCommit()) {
+                    getTransactionManager().endTransaction();
+                } else if(currentTransaction.getState().canAbort()) {
+                    getTransactionManager().abortTransaction();
+                }
             }
+        } finally {
+            // make sure release everything ok.
+            persistenceManager.close();
+            state = State.CLOSED;
         }
 
-        persistenceManager.close();
-        state = State.CLOSED;
     }
 
     private PersistenceManager openSession() {
