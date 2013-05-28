@@ -309,9 +309,14 @@ public final class JsonValueEncoder {
 
             @Override
             public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final LocalDate date = (LocalDate) unwrap(objectAdapter);
-                final String dateStr = yyyyMMdd.print(date.toDateTimeAtStartOfDay());
-                append(repr, dateStr, format, xIsisFormat);
+                final Object obj = unwrap(objectAdapter);
+                if(obj instanceof LocalDate) {
+                    final LocalDate date = (LocalDate) obj;
+                    final String dateStr = yyyyMMdd.print(date.toDateTimeAtStartOfDay());
+                    append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
             }
         });
 
@@ -330,15 +335,19 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
-    
+
             @Override
             public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final LocalDateTime date = (LocalDateTime) unwrap(objectAdapter);
-                final String dateStr = yyyyMMddHHmmss.print(date.toDateTime());
-                append(repr, dateStr, format, xIsisFormat);
+                final Object obj = unwrap(objectAdapter); 
+                if(obj instanceof LocalDateTime) {
+                    final LocalDateTime date = (LocalDateTime) obj;
+                    final String dateStr = yyyyMMddHHmmss.print(date.toDateTime());
+                    append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
             }
         });
-        
     }
 
 
