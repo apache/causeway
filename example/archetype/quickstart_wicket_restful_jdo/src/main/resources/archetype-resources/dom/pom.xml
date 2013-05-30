@@ -32,8 +32,8 @@
 		<plugins>
             <plugin>
                 <groupId>org.datanucleus</groupId>
-                <artifactId>maven-datanucleus-plugin</artifactId>
-                <version>3.1.1</version>
+                <artifactId>datanucleus-maven-plugin</artifactId>
+                <version>3.2.0-release</version>
                 <configuration>
                 	<fork>false</fork>
                     <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
@@ -63,8 +63,8 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>org.datanucleus</groupId>
-										<artifactId>maven-datanucleus-plugin</artifactId>
-										<versionRange>[3.0.2,)</versionRange>
+										<artifactId>datanucleus-maven-plugin</artifactId>
+										<versionRange>[3.2.0-release,)</versionRange>
 										<goals>
 											<goal>enhance</goal>
 										</goals>
@@ -104,10 +104,6 @@
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-enhancer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
         
@@ -133,13 +129,7 @@
                 <dependency>
                     <groupId>org.datanucleus</groupId>
                     <artifactId>datanucleus-core</artifactId>
-                    <version>(3.0.99, 3.1.99)</version>
-                    <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                    <version>(3.0.99, 3.1.99)</version>
+                    <version>(3.1.99, 3.2.99)</version>
                     <scope>runtime</scope>
                 </dependency>
             </dependencies>

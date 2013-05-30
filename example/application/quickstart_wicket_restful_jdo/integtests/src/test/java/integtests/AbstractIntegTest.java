@@ -44,7 +44,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
-public class AbstractIntegTest {
+public abstract class AbstractIntegTest {
 
     protected ToDoItems toDoItems;
     protected WrapperFactory wrapperFactory;

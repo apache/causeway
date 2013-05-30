@@ -29,6 +29,23 @@
 	<artifactId>quickstart_wicket_restful_jdo-integtests</artifactId>
 	<name>Quickstart Wicket/Restful/JDO Integration Tests</name>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <includes>
+                            <include>**/*.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*Abstract*.java</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 	<dependencies>
 	
 		<!-- other modules in this project -->
