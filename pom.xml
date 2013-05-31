@@ -79,7 +79,6 @@
                 <module>example/misc/metamodel/jsr303</module>
          -->        
         
-                <module>site-skin</module>
                 <module>tool/maven-plugin</module>
             </modules>
         </profile>
