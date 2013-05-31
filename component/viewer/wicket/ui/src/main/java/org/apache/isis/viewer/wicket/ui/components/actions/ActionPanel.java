@@ -332,9 +332,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                     // panel.setRedirect(true); // no longer required, http://mail-archives.apache.org/mod_mbox/wicket-users/201103.mbox/%3CAANLkTin3NmEBaMY9CF8diXA+wTMamQPc2O+tWvG_HCiW@mail.gmail.com%3E
                     panel.setResponsePage(entityPage);
                     
-                } else if (singleResultsMode == ActionModel.SingleResultsMode.SELECT) {
-                    panel.hideAll();
-                    actionModel.getSelectionHandler().onSelected(panel, actualAdapter);
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.INLINE) {
                     final ComponentType componentType = ComponentType.ENTITY;
                     panel.hideAllBut(componentType);
@@ -362,10 +359,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
             private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
-                final SelectionHandler selectionHandler = panel.getModel().getSelectionHandler();
-                if (selectionHandler != null) {
-                    collectionModel.setSelectionHandler(selectionHandler);
-                }
                 final ComponentFactoryRegistry componentFactoryRegistry = panel.getComponentFactoryRegistry();
                 componentFactoryRegistry.addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
 

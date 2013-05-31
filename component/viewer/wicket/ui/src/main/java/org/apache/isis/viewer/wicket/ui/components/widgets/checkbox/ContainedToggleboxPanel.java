@@ -28,6 +28,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -59,7 +60,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                ContainedToggleboxPanel.this.onSubmit();
+                ContainedToggleboxPanel.this.onSubmit(target);
             }
         };
         form.add(checkbox);
@@ -73,6 +74,15 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     /**
      * Hook method for (typically anonymous) subclasses to override.
      */
-    public void onSubmit() {
+    public void onSubmit(AjaxRequestTarget target) {
+    }
+
+    /**
+     * Programmatic toggling. 
+     * @param target 
+     */
+    public void toggle(AjaxRequestTarget target) {
+        checkbox.setModelObject(!checkbox.getModelObject());
+        onSubmit(target);
     }
 }

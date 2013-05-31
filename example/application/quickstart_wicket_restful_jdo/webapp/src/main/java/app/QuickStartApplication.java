@@ -20,32 +20,27 @@ package app;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
-import javax.servlet.ServletContext;
-
-import org.apache.commons.collections.EnumerationUtils;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Providers;
+
+import org.apache.wicket.Session;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.http.WebRequest;
+
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
+import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 
 
 /**
@@ -69,6 +64,33 @@ public class QuickStartApplication extends IsisWicketApplication {
 
     private static final long serialVersionUID = 1L;
 
+//
+// uncomment for a (slightly hacky) way of allowing logins using ?user=sven&pass=pass
+//
+// for demos only, obvious
+    
+//    @Override
+//    public Session newSession(final Request request, final Response response) {
+//        AuthenticatedWebSessionForIsis s = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
+//        final org.apache.wicket.util.string.StringValue user = request.getRequestParameters().getParameterValue("user");
+//        final org.apache.wicket.util.string.StringValue password = request.getRequestParameters().getParameterValue("pass");
+//        s.signIn(user.toString(), password.toString());
+//        return s;
+//    }
+//
+//    @Override
+//    public WebRequest newWebRequest(HttpServletRequest servletRequest, String filterPath) {
+//        try {
+//            String uname = servletRequest.getParameter("user");
+//            if (uname != null) {
+//                servletRequest.getSession().invalidate();
+//            }
+//        } catch (Exception e) {
+//        }
+//        WebRequest request = super.newWebRequest(servletRequest, filterPath);
+//        return request;
+//    }
+    
     @Override
     protected Module newIsisWicketModule() {
         final Module isisDefaults = super.newIsisWicketModule();

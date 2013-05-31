@@ -53,7 +53,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterSelectColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
@@ -92,7 +91,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         addToggleboxColumnIfRequired(columns, bulkActions);
         addTitleColumn(columns, model.getParentObjectAdapterMemento());
         addPropertyColumnsIfRequired(columns);
-        addSelectedButtonIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new MyAjaxFallbackDefaultDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
@@ -192,9 +190,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
         final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
-        if (getModel().hasSelectionHandler()) {
-            return;
-        }
 
         final ObjectSpecification parentSpecIfAny = 
                 getModel().isParented() 
@@ -233,15 +228,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
                 return isVisible;
             }
         };
-    }
-
-    private void addSelectedButtonIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
-        if (!getModel().hasSelectionHandler()) {
-            return;
-        }
-        final SelectionHandler handler = getModel().getSelectionHandler();
-
-        columns.add(new ObjectAdapterSelectColumn(Model.of(""), handler));
     }
 
     private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final ObjectAssociation property) {

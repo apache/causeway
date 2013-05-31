@@ -62,7 +62,8 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
                 final ObjectAction objectAction = actionMemento.getAction();
                 
                 for(ObjectAdapterMemento entityAdapterMemento: model.getToggleMementosList()) {
-                    final ObjectAdapter entityAdapter = entityAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                    // REVIEW: have disabled concurrency checking here...
+                    final ObjectAdapter entityAdapter = entityAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
                     int numParameters = objectAction.getParameterCount();
                     if(objectAction.isContributed()) {

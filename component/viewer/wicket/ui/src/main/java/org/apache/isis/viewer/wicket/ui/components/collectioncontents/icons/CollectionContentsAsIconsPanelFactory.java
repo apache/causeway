@@ -49,10 +49,6 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
         }
 
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        if (entityCollectionModel.hasSelectionHandler()) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-
         final ObjectSpecification typeOfSpec = entityCollectionModel.getTypeOfSpecification();
         if (typeOfSpec.getFacet(IconFacet.class) == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;

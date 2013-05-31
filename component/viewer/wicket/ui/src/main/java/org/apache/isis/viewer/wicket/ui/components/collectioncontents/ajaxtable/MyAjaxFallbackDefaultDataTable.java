@@ -40,7 +40,7 @@ public class MyAjaxFallbackDefaultDataTable<T, S> extends DataTable<T, S>
         super(id, columns, dataProvider, rowsPerPage);
         setOutputMarkupId(true);
         setVersioned(false);
-        addTopToolbar(new AjaxFallbackHeadersToolbar<S>(this, dataProvider));
+        addTopToolbar(new MyAjaxFallbackHeadersToolbar<S>(this, dataProvider));
         addBottomToolbar(new AjaxNavigationToolbar(this));
         addBottomToolbar(new NoRecordsToolbar(this));
     }

@@ -214,6 +214,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Named("Undo")
     @PublishedAction
+    @Bulk
     @MemberOrder(name="complete", sequence = "2")
     public ToDoItem notYetCompleted() {
         setComplete(false);
@@ -559,11 +560,4 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //    // }}
 
 
-    
-    public ToDoItem updateDueBy(
-            //@RenderedAdjusted
-            LocalDate dueBy) {
-        setDueBy(dueBy);
-        return this;
-    }
 }

@@ -182,8 +182,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      */
     private CollectionMemento collectionMemento;
 
-    private SelectionHandler selectionHandler;
-
     private final int pageSize;
 
     /**
@@ -273,25 +271,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      */
     public CollectionMemento getCollectionMemento() {
         return collectionMemento;
-    }
-
-    /**
-     * The {@link SelectionHandler}, if any.
-     * 
-     * <p>
-     * If specified, then view {@link Component}s are expected to render the
-     * collection so that one of the entities can be selected.
-     */
-    public SelectionHandler getSelectionHandler() {
-        return selectionHandler;
-    }
-
-    public void setSelectionHandler(final SelectionHandler selectionHandler) {
-        this.selectionHandler = selectionHandler;
-    }
-
-    public boolean hasSelectionHandler() {
-        return getSelectionHandler() != null;
     }
 
     @SuppressWarnings("unchecked")

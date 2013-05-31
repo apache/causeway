@@ -87,11 +87,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         /**
          * Redirect to <tt>EntityPage</tt>.
          */
-        REDIRECT,
-        /**
-         * Select, ie call the provided {@link SelectionHandler}.
-         */
-        SELECT
+        REDIRECT
     }
 
     
@@ -287,7 +283,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private Mode actionMode;
     private final SingleResultsMode singleResultsMode;
 
-    private SelectionHandler selectionHandler;
     private NoResultsHandler noResultsHandler;
 
     /**
@@ -499,22 +494,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return arguments;
     }
 
-    /**
-     * The {@link SelectionHandler}, if any.
-     * 
-     * <p>
-     * If specified, then
-     * {@link EntityCollectionModel#setSelectionHandler(SelectionHandler)
-     * propogated} if the results is a {@link EntityCollectionModel collection},
-     * or used directly if the results is an {@link EntityModel}.
-     */
-    public SelectionHandler getSelectionHandler() {
-        return selectionHandler;
-    }
-
-    public void setSelectionHandler(final SelectionHandler selectionHandler) {
-        this.selectionHandler = selectionHandler;
-    }
 
     /**
      * The {@link NoResultsHandler}, if any,

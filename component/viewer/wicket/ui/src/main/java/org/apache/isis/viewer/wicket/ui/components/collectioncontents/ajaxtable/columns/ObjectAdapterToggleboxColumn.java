@@ -19,12 +19,20 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 
 public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAdapter> {
@@ -37,17 +45,38 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
         super("");
         this.handler = handler;
     }
-
+    
     @Override
-    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
-        cellItem.add(new ContainedToggleboxPanel(componentId) {
+    public Component getHeader(String componentId) {
+        
+        final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
-            public void onSubmit() {
-                final IModel<ObjectAdapter> o = rowModel;
-                final ObjectAdapter selectedAdapter = o.getObject();
+            public void onSubmit(AjaxRequestTarget target) {
+                for (ContainedToggleboxPanel toggle : rowToggles) {
+                    toggle.toggle(target);
+                    target.add(toggle);
+                }
+            }
+        };
+        return toggle; 
+    }
+
+    private final List<ContainedToggleboxPanel> rowToggles = Lists.newArrayList(); 
+            
+    @Override
+    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
+        final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void onSubmit(AjaxRequestTarget target) {
+                final EntityModel o = (EntityModel) rowModel;
+                final ObjectAdapter selectedAdapter = o.load(ConcurrencyChecking.NO_CHECK);
                 handler.onSelected(this, selectedAdapter);
             }
-        });
+        };
+        rowToggles.add(toggle);
+        toggle.setOutputMarkupId(true);
+        cellItem.add(toggle);
     }
 }
