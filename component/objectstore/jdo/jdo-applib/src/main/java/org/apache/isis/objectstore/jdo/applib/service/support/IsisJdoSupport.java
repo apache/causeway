@@ -46,5 +46,6 @@ public interface IsisJdoSupport {
     @Programmatic
     <T> T refresh(T domainObject);
     
+    @Programmatic
     PersistenceManager getJdoPersistenceManager();
 }

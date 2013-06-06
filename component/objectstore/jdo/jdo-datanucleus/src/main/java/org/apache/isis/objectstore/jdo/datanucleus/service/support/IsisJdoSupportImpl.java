@@ -22,6 +22,7 @@ package org.apache.isis.objectstore.jdo.datanucleus.service.support;
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -57,6 +58,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
         return getPersistenceSession().getServicesInjector();
     }
 
+    @Programmatic
     @Override
     public PersistenceManager getJdoPersistenceManager() {
         return getObjectStore().getPersistenceManager();
