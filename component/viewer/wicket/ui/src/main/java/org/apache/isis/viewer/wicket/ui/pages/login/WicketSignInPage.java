@@ -23,16 +23,21 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
+import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
@@ -41,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
-public final class WicketSignInPage extends SignInPage {
+public class WicketSignInPage extends WebPage {
     
     private static final long serialVersionUID = 1L;
 
@@ -91,6 +96,7 @@ public final class WicketSignInPage extends SignInPage {
     public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         addPageTitle(parameters);
         addApplicationName();
+        addSignInPanel();
         
         if(exceptionModel != null) {
             add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
@@ -107,6 +113,18 @@ public final class WicketSignInPage extends SignInPage {
         add(new Label(ID_APPLICATION_NAME, applicationName));
     }
 
+    protected SignInPanel addSignInPanel() {
+        final boolean suppressRememberMe = getConfiguration().getBoolean("isis.viewer.wicket.suppressRememberMe", false);
+        final boolean rememberMe = !suppressRememberMe;
+        return addSignInPanel(rememberMe);
+    }
+
+    private SignInPanel addSignInPanel(boolean rememberMe) {
+        final SignInPanel signInPanel = new SignInPanel("signInPanel", rememberMe);
+        add(signInPanel);
+        return signInPanel;
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -120,6 +138,13 @@ public final class WicketSignInPage extends SignInPage {
         }
     }
 
-   
+ 
+    // ///////////////////////////////////////////////////
+    // System components
+    // ///////////////////////////////////////////////////
+
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
 
 }
