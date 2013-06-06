@@ -14,24 +14,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.bidir;
+package org.apache.isis.core.unittestsupport.sortedsets;
 
-import java.lang.reflect.Field;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-class StringUtils {
+import javax.jdo.annotations.PersistenceCapable;
 
-    public static String capitalize(final String str) {
-        if (str == null || str.length() == 0) {
-            return str;
-        }
-        if (str.length() == 1) {
-            return str.toUpperCase();
-        }
-        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
+@PersistenceCapable
+public class SomeDomainObject {
 
-    public static String methodNamed(final String methodPrefix, final Field field) {
-        return methodPrefix + capitalize(field.getName());
-    }
+
+    private SortedSet<SomeDomainObject> someSortedSet = new TreeSet<SomeDomainObject>();
+
+    //private Set<SomeDomainObject> someSet = new HashSet<SomeDomainObject>();
+    
+    //private List<SomeDomainObject> someList = new ArrayList<SomeDomainObject>();
+
 
 }

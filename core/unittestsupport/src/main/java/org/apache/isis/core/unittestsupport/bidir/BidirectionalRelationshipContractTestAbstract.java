@@ -20,79 +20,38 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Set;
 
-import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
-import com.google.common.io.ByteStreams;
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 
-public abstract class BidirectionalRelationshipContractTestAbstract implements Instantiators {
+import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
+import org.apache.isis.core.unittestsupport.utils.CollectUtils;
+import org.apache.isis.core.unittestsupport.utils.ReflectUtils;
+import org.apache.isis.core.unittestsupport.utils.StringUtils;
 
-    private final Reflections reflections;
+public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
+
     private final InstantiatorMap instantiatorMap;
-    private IndentPrinter out;
     
     protected BidirectionalRelationshipContractTestAbstract(
             final String packagePrefix, 
             ImmutableMap<Class<?>,Instantiator> instantiatorsByClass) {
-        reflections = new Reflections(packagePrefix);
+        super(packagePrefix);
         instantiatorMap = new InstantiatorMap(instantiatorsByClass);
-        out = new IndentPrinter(new PrintWriter(ByteStreams.nullOutputStream()));
     }
 
-    public Instantiators withLoggingTo(Writer out) {
-        this.out = new IndentPrinter(out);
-        return this;
-    }
-    
-    public Instantiators withLoggingTo(PrintStream out) {
-        this.out = new IndentPrinter(new PrintWriter(out));
-        return this;
-    }
-
-    @Test
-    public void searchAndTest() throws Exception {
-        
-        Set<Class<?>> entityTypes =
-                Sets.newTreeSet(new Comparator<Class<?>>() {
-
-                    @Override
-                    public int compare(Class<?> o1, Class<?> o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
-        entityTypes.addAll(reflections.getTypesAnnotatedWith(PersistenceCapable.class));
-        
-        for (Class<?> entityType : entityTypes) {
-            out.println(entityType.getName());
-            out.incrementIndent();
-            try {
-                process(entityType);
-            } finally {
-                out.decrementIndent();
-            }
-        }
-        out.println("DONE");
-        out.flush();
-    }
-
-    private void process(Class<?> entityType) {
+    @Override
+    protected void applyContractTest(Class<?> entityType) {
         final Set<Field> mappedByFields = Reflections.getAllFields(entityType, ReflectUtils.persistentMappedBy);
         for (Field mappedByField : mappedByFields) {
             final Parent p = new Parent();

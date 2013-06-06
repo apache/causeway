@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.bidir;
+package org.apache.isis.core.unittestsupport.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,7 +25,7 @@ import javax.jdo.annotations.Persistent;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 
-class ReflectUtils {
+public class ReflectUtils {
 
     public static <T> Predicate<Field> withTypeAssignableFrom(final Class<T> type) {
         return new Predicate<Field>() {
@@ -62,14 +62,14 @@ class ReflectUtils {
         };
     }
 
-    static final Predicate<? super Field> persistentMappedBy = new Predicate<Field>() {
+    public static final Predicate<? super Field> persistentMappedBy = new Predicate<Field>() {
         public boolean apply(Field f) {
             final Persistent annotation = f.getAnnotation(Persistent.class);
             return annotation!=null && !Strings.isNullOrEmpty(annotation.mappedBy());
         }
     };
 
-    static Predicate<? super Method> withEntityParameter() {
+    public static Predicate<? super Method> withEntityParameter() {
         return new Predicate<Method>() {
             public boolean apply(Method m) {
                 final Class<?> parameterType = m.getParameterTypes()[0];
