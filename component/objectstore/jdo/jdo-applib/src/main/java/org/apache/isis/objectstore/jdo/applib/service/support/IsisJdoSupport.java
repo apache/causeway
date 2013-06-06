@@ -19,6 +19,8 @@
 
 package org.apache.isis.objectstore.jdo.applib.service.support;
 
+import javax.jdo.PersistenceManager;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -43,4 +45,6 @@ public interface IsisJdoSupport {
      */
     @Programmatic
     <T> T refresh(T domainObject);
+    
+    PersistenceManager getJdoPersistenceManager();
 }
