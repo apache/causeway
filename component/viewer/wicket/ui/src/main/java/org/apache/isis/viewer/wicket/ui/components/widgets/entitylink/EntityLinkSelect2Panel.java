@@ -27,6 +27,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
+import com.vaynberg.wicket.select2.Settings;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.Component;
@@ -208,7 +209,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             
         };
         autoCompleteField = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model, provider);
-        autoCompleteField.getSettings().setMinimumInputLength(MIN_INPUT_LENGTH);
+        final Settings settings = autoCompleteField.getSettings();
+        settings.setMinimumInputLength(MIN_INPUT_LENGTH);
         addOrReplace(autoCompleteField);
         
         // no need for link, since can see in drop-down
