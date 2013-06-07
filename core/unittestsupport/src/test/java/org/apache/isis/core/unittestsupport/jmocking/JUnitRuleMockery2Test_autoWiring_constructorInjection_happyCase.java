@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.jmock.auto.Mock;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -43,10 +42,11 @@ public class JUnitRuleMockery2Test_autoWiring_constructorInjection_happyCase {
     @ClassUnderTest
 	private CollaboratingUsingConstructorInjection collaborating;
 
-    @Before
-	public void setUp() throws Exception {
-    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
-	}
+    // no longer necessary :-)
+//    @Before
+//	public void setUp() throws Exception {
+//    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+//	}
     
     @Test
     public void wiring() {

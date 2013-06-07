@@ -40,10 +40,11 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithNever_happyCase {
     @ClassUnderTest
 	private CollaboratingUsingConstructorInjection collaborating;
 
-    @Before
-	public void setUp() throws Exception {
-    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
-	}
+    // no longer necessary :-)
+//    @Before
+//	public void setUp() throws Exception {
+//    	collaborating = (CollaboratingUsingConstructorInjection) context.getClassUnderTest();
+//	}
     
     @Test
     public void invocationOnCollaboratorIsIgnored() {

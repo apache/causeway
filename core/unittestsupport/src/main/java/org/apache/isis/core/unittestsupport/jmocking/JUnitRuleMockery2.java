@@ -150,17 +150,26 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                 assertIsSatisfied();
             }
 
-            private void prepare(final Object target) {
+            private void prepare(final Object target) throws IllegalAccessException {
                 final List<Field> allFields = AllDeclaredFields.in(target.getClass());
                 assertOnlyOneJMockContextIn(allFields);
                 List<Object> mocks = fillInAutoMocks(target, allFields);
-                cutType = locateClassUnderTestIfAny(allFields);
-                if(cutType != null) {
-	                for (Object mock : mocks) {
-	                	container.addComponent(mock);
-	                }
-	                container.addComponent(cutType);
+                Field cutField = locateClassUnderTestFieldIfAny(allFields);
+                if (cutField != null) {
+                    cutType = cutField.getType();
+                    for (Object mock : mocks) {
+                        container.addComponent(mock);
+                    }
+                    container.addComponent(cutType);
+                    
+                    final Object cut = container.getComponent(cutType);
+                    cutField.setAccessible(true);
+                    cutField.set(target, cut);
+
+                } else {
+                    cutType = null;
                 }
+                
             }
 
             private void assertOnlyOneJMockContextIn(final List<Field> allFields) {
@@ -175,7 +184,8 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                 }
             }
 
-            private Class<?> locateClassUnderTestIfAny(final List<Field> allFields) {
+
+            protected Field locateClassUnderTestFieldIfAny(final List<Field> allFields) {
                 Field cutField = null;
                 for (final Field field : allFields) {
                 	if(field.getAnnotation(ClassUnderTest.class) != null) {
@@ -185,7 +195,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                         cutField = field;
                     }
                 }
-                return cutField != null? cutField.getType(): null;
+                return cutField;
             }
 
             private List<Object> fillInAutoMocks(final Object target, final List<Field> allFields) {
