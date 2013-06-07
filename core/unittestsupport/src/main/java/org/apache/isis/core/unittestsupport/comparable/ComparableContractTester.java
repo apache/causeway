@@ -33,14 +33,23 @@ public class ComparableContractTester<T extends Comparable<T>> {
             T item3 = orderedTuple.get(2);
             T item4 = orderedTuple.get(3);
 
-            assertThat(item1.compareTo(item2), is(Matchers.lessThan(0)));
-            assertThat(item2.compareTo(item1), is(Matchers.greaterThan(0)));
+            assertThat(desc(item1, "<", item2), item1.compareTo(item2), is(Matchers.lessThan(0)));
+            assertThat(desc(item2, ">", item1), item2.compareTo(item1), is(Matchers.greaterThan(0)));
             
-            assertThat(item2.compareTo(item3), is(0));
+            assertThat(desc(item2, "==", item3), item2.compareTo(item3), is(0));
+            assertThat(desc(item3, "==", item2), item3.compareTo(item2), is(0));
             
-            assertThat(item3.compareTo(item4), is(Matchers.lessThan(0)));
-            assertThat(item4.compareTo(item3), is(Matchers.greaterThan(0)));
+            assertThat(desc(item3, "<", item4), item3.compareTo(item4), is(Matchers.lessThan(0)));
+            assertThat(desc(item4, ">", item3), item4.compareTo(item3), is(Matchers.greaterThan(0)));
         }
+    }
+
+    protected static String desc(Object item1, final String op, Object item2) {
+        return nullSafe(item1) + op + nullSafe(item2);
+    }
+
+    private static String nullSafe(Object item) {
+        return item != null? item.toString(): "null";
     }
 
     /**
