@@ -18,6 +18,44 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
 
-public class Get_thenResponseCode_200_ok_TODO {
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
+import javax.ws.rs.core.Response;
+
+import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
+import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+public class Get_thenResponseCode_200_ok_TODO {
+	@Rule
+    public IsisWebServerRule webServerRule = new IsisWebServerRule();
+
+    protected RestfulClient client;
+    private DomainObjectResource domainObjectResource;
+
+    @Before
+    public void setUp() throws Exception {
+        final WebServer webServer = webServerRule.getWebServer();
+        client = new RestfulClient(webServer.getBase());
+        domainObjectResource = client.getDomainObjectResource();
+    }
+
+
+    @Test
+    public void propertyDetails() throws Exception {
+
+        // when
+        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "invisibleCollection");
+        final RestfulResponse<ObjectPropertyRepresentation> collectionJsonResp = RestfulResponse.ofT(collectionResp);
+        assertThat(collectionJsonResp.getStatus(), is(HttpStatusCode.OK));
+
+    }
 }
