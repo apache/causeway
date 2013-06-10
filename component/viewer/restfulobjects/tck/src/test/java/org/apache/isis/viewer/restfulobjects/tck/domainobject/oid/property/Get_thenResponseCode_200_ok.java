@@ -16,7 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
+package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
+
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,7 +35,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_thenResponseCode_200_ok_TODO {
+public class Get_thenResponseCode_200_ok {
+
 	@Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
@@ -53,9 +55,9 @@ public class Get_thenResponseCode_200_ok_TODO {
     public void propertyDetails() throws Exception {
 
         // when
-        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "invisibleCollection");
-        final RestfulResponse<ObjectPropertyRepresentation> collectionJsonResp = RestfulResponse.ofT(collectionResp);
-        assertThat(collectionJsonResp.getStatus(), is(HttpStatusCode.OK));
+        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","58", "anInt");
+        final RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.ofT(idPropertyResp);
+        assertThat(idPropertyJsonResp.getStatus(), is(HttpStatusCode.OK));
 
     }
 }
