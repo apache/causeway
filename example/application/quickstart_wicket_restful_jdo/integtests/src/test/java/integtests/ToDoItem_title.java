@@ -64,13 +64,13 @@ public class ToDoItem_title extends AbstractIntegTest {
     public void includesDescription() throws Exception {
 
         // given
-        assertThat(container.titleOf(toDoItem), containsString("Buy milk due by"));
+        assertThat(container.titleOf(toDoItem), containsString("Buy bread due by"));
 
         // when
-        unwrap(toDoItem).setDescription("Buy milk and butter");
+        unwrap(toDoItem).setDescription("Buy bread and butter");
         
         // then
-        assertThat(container.titleOf(toDoItem), containsString("Buy milk and butter due by"));
+        assertThat(container.titleOf(toDoItem), containsString("Buy bread and butter due by"));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ToDoItem_title extends AbstractIntegTest {
 
         // then
         assertThat(container.titleOf(toDoItem), not(containsString("due by")));
-        assertThat(container.titleOf(toDoItem), containsString("Buy milk - Completed!"));
+        assertThat(container.titleOf(toDoItem), containsString("Buy bread - Completed!"));
     }
 
 }

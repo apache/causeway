@@ -19,6 +19,7 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -31,6 +32,7 @@ import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
 
@@ -54,6 +56,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
@@ -90,13 +93,10 @@ import org.apache.isis.applib.value.Blob;
 @Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
-	private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
+    // //////////////////////////////////////
+    // Identification in the UI
+    // //////////////////////////////////////
 
-    public static enum Category {
-        Professional, Domestic, Other;
-    }
-
-    // {{ Identification on the UI
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(getDescription());
@@ -109,14 +109,15 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         }
         return buf.toString();
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Description (property)
+    // //////////////////////////////////////
     
-    // {{ Description
     private String description;
 
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-    // words, spaces and selected punctuation
+    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
+    // only words, spaces and selected punctuation accepted
     @MemberOrder(sequence = "1")
     public String getDescription() {
         return description;
@@ -125,10 +126,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void setDescription(final String description) {
         this.description = description;
     }
-    // }}
 
+    // //////////////////////////////////////
+    // DueBy (property)
+    // //////////////////////////////////////
 
-    // {{ DueBy (property)
     @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     private LocalDate dueBy;
 
@@ -151,10 +153,15 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         }
         return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
     }
-    // }}
 
-    
-    // {{ Category
+    // //////////////////////////////////////
+    // Category (property)
+    // //////////////////////////////////////
+
+    public static enum Category {
+        Professional, Domestic, Other;
+    }
+
     private Category category;
 
     @MemberOrder(sequence = "2")
@@ -165,10 +172,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void setCategory(final Category category) {
         this.category = category;
     }
-    // }}
 
+    // //////////////////////////////////////
+    // OwnedBy (property)
+    // //////////////////////////////////////
     
-    // {{ OwnedBy (property)
     private String ownedBy;
 
     @Hidden
@@ -181,9 +189,12 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.ownedBy = ownedBy;
     }
 
-    // }}
 
-    // {{ Complete (property), Done (action), Undo (action)
+    // //////////////////////////////////////
+    // Complete (property), 
+    // Done (action), Undo (action)
+    // //////////////////////////////////////
+
     private boolean complete;
 
     @Disabled
@@ -196,7 +207,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void setComplete(final boolean complete) {
         this.complete = complete;
     }
-
 
     @Named("Done")
     @PublishedAction
@@ -211,7 +221,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return complete ? "Already completed" : null;
     }
 
-
     @Named("Undo")
     @PublishedAction
     @Bulk
@@ -224,10 +233,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public String disableNotYetCompleted() {
         return !complete ? "Not yet completed" : null;
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Cost (property), UpdateCost (action)
+    // //////////////////////////////////////
 
-    // {{ Cost (property), updateCost (action)
     private BigDecimal cost;
 
     @Column(scale = 2)
@@ -251,10 +261,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public BigDecimal default0UpdateCost() {
         return getCost();
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Notes (property)
+    // //////////////////////////////////////
 
-    // {{ Notes (property)
     private String notes;
 
     @Hidden(where=Where.ALL_TABLES)
@@ -268,10 +279,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void setNotes(final String notes) {
         this.notes = notes;
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Attachment (property)
+    // //////////////////////////////////////
 
-    // {{ Attachment (property)
     private Blob attachment;
 
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
@@ -285,12 +297,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void setAttachment(final Blob attachment) {
         this.attachment = attachment;
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Version (derived property)
+    // //////////////////////////////////////
 
-
-
-    // {{ Version (derived property)
     @Hidden(where=Where.ALL_TABLES)
     @Disabled
     @MemberOrder(name="Detail", sequence = "99")
@@ -307,15 +318,28 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public boolean hideVersionSequence() {
         return !(this instanceof PersistenceCapable);
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Dependencies (collection), 
+    // Add (action), Remove (action)
+    // //////////////////////////////////////
 
-    // {{ dependencies (Collection)
+    // overrides the natural ordering
+    public static class DependenciesComparator implements Comparator<ToDoItem> {
+        @Override
+        public int compare(ToDoItem p, ToDoItem q) {
+            return ORDERING_BY_DESCRIPTION
+                    .compound(Ordering.<ToDoItem>natural())
+                    .compare(p, q);
+        }
+    }
+
     @javax.jdo.annotations.Persistent(table="TODO_DEPENDENCIES")
     @javax.jdo.annotations.Join(column="DEPENDING_TODO_ID")
     @javax.jdo.annotations.Element(column="DEPENDENT_TODO_ID")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
+    @SortedBy(DependenciesComparator.class)
     @Disabled
     @MemberOrder(sequence = "1")
     @Render(Type.EAGERLY)
@@ -326,9 +350,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void setDependencies(final SortedSet<ToDoItem> dependencies) {
         this.dependencies = dependencies;
     }
-    // }}
 
-    // {{ add (action)
     @PublishedAction
     @MemberOrder(name="dependencies", sequence = "3")
     public ToDoItem add(final ToDoItem toDoItem) {
@@ -351,9 +373,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         }
         return null;
     }
-    // }}
 
-    // {{ remove (action)
     @MemberOrder(name="dependencies", sequence = "4")
     public ToDoItem remove(final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
@@ -377,10 +397,24 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public List<ToDoItem> choices0Remove() {
         return Lists.newArrayList(getDependencies());
     }
-    // }}
 
 
-    // {{ clone (action)
+    // //////////////////////////////////////
+    // SimilarItems (derived collection)
+    // //////////////////////////////////////
+
+    
+    @MemberOrder(sequence = "5")
+    @NotPersisted
+    @Render(Type.LAZILY)
+    public List<ToDoItem> getSimilarItems() {
+        return toDoItems.similarTo(this);
+    }
+
+    // //////////////////////////////////////
+    // Clone (action)
+    // //////////////////////////////////////
+
     @Named("Clone")
     // the name of the action in the UI
     @MemberOrder(sequence = "3")
@@ -409,10 +443,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public LocalDate default2Duplicate() {
         return getDueBy();
     }
-    // }}
 
-    
-    // {{ delete (action)
+    // //////////////////////////////////////
+    // Delete (action)
+    // //////////////////////////////////////
+
     @Bulk
     @MemberOrder(sequence = "4")
     public List<ToDoItem> delete() {
@@ -421,10 +456,13 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         // invalid to return 'this' (cannot render a deleted object)
         return toDoItems.notYetComplete(); 
     }
-    // }}
 
+    // //////////////////////////////////////
+    // Programmatic Helpers
+    // //////////////////////////////////////
 
-    // {{ isDue (programmatic)
+    private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
+
     @Programmatic // excluded from the framework's metamodel
     public boolean isDue() {
         if (getDueBy() == null) {
@@ -433,57 +471,14 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return !isMoreThanOneWeekInPast(getDueBy());
     }
 
-    // }}
-
-
-    // {{ SimilarItems (derived collection)
-    @MemberOrder(sequence = "5")
-    @NotPersisted
-    @Render(Type.LAZILY)
-    public List<ToDoItem> getSimilarItems() {
-        return toDoItems.similarTo(this);
-    }
-
-    // }}
-
-
-
-    // {{ compareTo (programmatic)
-    /**
-     * by complete flag, then due by date, then description.
-     * 
-     * <p>
-     * Required because {@link #getDependencies()} is of type {@link SortedSet}. 
-     */
-    @Override
-    public int compareTo(final ToDoItem other) {
-        if (isComplete() && !other.isComplete()) {
-            return +1;
-        }
-        if (!isComplete() && other.isComplete()) {
-            return -1;
-        }
-        if (getDueBy() == null && other.getDueBy() != null) {
-            return +1;
-        }
-        if (getDueBy() != null && other.getDueBy() == null) {
-            return -1;
-        }
-        if (getDueBy() == null && other.getDueBy() == null || getDueBy().equals(this.getDueBy())) {
-            return getDescription().compareTo(other.getDescription());
-        }
-        return getDueBy().compareTo(getDueBy());
-    }
-    // }}
-
-    // {{ helpers
     private static boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
         return dueBy.toDateTimeAtStartOfDay().getMillis() < Clock.getTime() - ONE_WEEK_IN_MILLIS;
     }
 
-    // }}
+    // //////////////////////////////////////
+    // Filters (static methods)
+    // //////////////////////////////////////
 
-    // {{ filters (programmatic)
     @SuppressWarnings("unchecked")
     public static Filter<ToDoItem> thoseDue() {
         return Filters.and(Filters.not(thoseComplete()), new Filter<ToDoItem>() {
@@ -524,28 +519,84 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
         };
     }
-    // }}
 
+    // //////////////////////////////////////
+    // toString
+    // //////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("description", getDescription())
+                .add("complete", isComplete())
+                .add("dueBy", getDueBy())
+                .add("ownedBy", getOwnedBy())
+                .toString();
+    }
+        
+    // //////////////////////////////////////
+    // compareTo
+    // //////////////////////////////////////
+
+    /**
+     * by complete flag, then due by date, then description.
+     * 
+     * <p>
+     * Required because {@link #getDependencies()} is of type {@link SortedSet}. 
+     */
+    @Override
+    public int compareTo(final ToDoItem other) {
+        return ORDERING_BY_COMPLETE
+                .compound(ORDERING_BY_DUE_BY)
+                .compound(ORDERING_BY_DESCRIPTION)
+                .compare(this, other);
+    }
     
+    private final static Ordering<ToDoItem> ORDERING_BY_COMPLETE = new Ordering<ToDoItem>() {
+        public int compare(final ToDoItem p, final ToDoItem q) {
+            return Ordering.natural().nullsFirst().compare(p.isComplete(), q.isComplete());
+        }
+    };
+    private final static Ordering<ToDoItem> ORDERING_BY_DUE_BY = new Ordering<ToDoItem>() {
+        public int compare(final ToDoItem p, final ToDoItem q) {
+            return Ordering.natural().nullsFirst().compare(p.getDueBy(), q.getDueBy());
+        }
+    };
+    private final static Ordering<ToDoItem> ORDERING_BY_DESCRIPTION = new Ordering<ToDoItem>() {
+        public int compare(final ToDoItem p, final ToDoItem q) {
+            return Ordering.natural().nullsFirst().compare(p.getDescription(), q.getDescription());
+        }
+    };
+    private final static Ordering<ToDoItem> ORDERING_BY_CATEGORY = new Ordering<ToDoItem>() {
+        public int compare(final ToDoItem p, final ToDoItem q) {
+            return Ordering.natural().nullsFirst().compare(p.getCategory(), q.getCategory());
+        }
+    };
 
-    // {{ injected: DomainObjectContainer
+    // //////////////////////////////////////
+    // Injected
+    // //////////////////////////////////////
+
     private DomainObjectContainer container;
 
     public void injectDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
     }
-    // }}
 
-    // {{ injected: ToDoItems
     private ToDoItems toDoItems;
 
     public void injectToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
-    // }}
 
-// GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3    
-//    // {{
+    
+    // //////////////////////////////////////
+    // Extensions
+    // //////////////////////////////////////
+
+    
+// GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
+//
 //    @Persistent
 //    private Location location;
 //    
@@ -557,7 +608,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //    public void setLocation(Location location) {
 //        this.location = location;
 //    }
-//    // }}
 
 
 }

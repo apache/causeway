@@ -20,7 +20,9 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
@@ -28,8 +30,10 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -95,7 +99,14 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection();
                 final ObjectAdapter collectionAsAdapter = collection.get(adapter);
 
-                final Iterable<Object> objectList = asIterable(collectionAsAdapter);
+                final List<Object> objectList = asIterable(collectionAsAdapter);
+
+                final Class<? extends Comparator<?>> sortedBy = entityCollectionModel.sortedBy;
+                if(sortedBy != null) {
+                    @SuppressWarnings("unchecked")
+                    final Comparator<Object> comparator = (Comparator<Object>) InstanceUtil.createInstance(sortedBy);
+                    Collections.sort(objectList, comparator);
+                }
 
                 final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapters.fromPojo());
                 final List<ObjectAdapter> adapterList = Lists.newArrayList(adapterIterable);
@@ -104,8 +115,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             }
 
             @SuppressWarnings("unchecked")
-            private Iterable<Object> asIterable(final ObjectAdapter collectionAsAdapter) {
-                return (Iterable<Object>) collectionAsAdapter.getObject();
+            private List<Object> asIterable(final ObjectAdapter collectionAsAdapter) {
+                final Iterable<Object> objects = (Iterable<Object>) collectionAsAdapter.getObject();
+                return Lists.newArrayList(objects);
             }
 
             @Override
@@ -189,6 +201,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      */
     private List<LinkAndLabel> entityActions = Lists.newArrayList();
 
+    /**
+     * Optionally populated only if {@link Type#PARENTED}.
+     */
+    private Class<? extends Comparator<?>> sortedBy;
+
     private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList, final int pageSize) {
         this.type = Type.STANDALONE;
         this.typeOf = typeOf;
@@ -211,6 +228,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         this.parentObjectAdapterMemento = parentAdapterMemento;
         this.collectionMemento = new CollectionMemento(collection);
         this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
+        final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
+        this.sortedBy = sortedByFacet != null?sortedByFacet.value(): null;
     }
 
     private static int pageSize(final PagedFacet pagedFacet, final int defaultPageSize) {

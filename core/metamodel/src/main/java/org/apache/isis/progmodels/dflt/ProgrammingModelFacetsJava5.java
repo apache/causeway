@@ -46,6 +46,7 @@ import org.apache.isis.core.progmodel.facets.collections.collection.CollectionFa
 import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddRemoveAndValidateFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation.NotPersistedAnnotationForCollectionFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.sortedby.SortedByAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfAnnotationForCollectionsFacetFactory;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsAnnotationOnMemberFacetFactory;
@@ -257,6 +258,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(CollectionAccessorFacetFactory.class);
         addFactory(CollectionClearFacetFactory.class);
         addFactory(CollectionAddRemoveAndValidateFacetFactory.class);
+        addFactory(SortedByAnnotationFacetFactory.class);
 
         // actions
         addFactory(ActionInvocationFacetFactory.class);

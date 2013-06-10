@@ -27,32 +27,28 @@ import java.util.List;
 
 import dom.todo.ToDoItem;
 
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ToDoItems_finders extends AbstractIntegTest {
 
-    @Test
-    public void t010_notYetCompleted() throws Exception {
-        
-        // when
-        final List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
-        
-        // then
-        assertThat(notYetCompleteItems.size(), is(5));
-    }
+    private int notYetCompletedSize;
+    private int completedSize;
 
-    @Test
-    public void t020_complete() throws Exception {
-        
-        // when
+    @Before
+    public void setUp() throws Exception {
+        final List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
         final List<ToDoItem> completedItems = wrap(toDoItems).complete();
         
-        // then
-        assertThat(completedItems.size(), is(0));
+        notYetCompletedSize = notYetCompleteItems.size();
+        completedSize = completedItems.size();
+        
+        assertThat(notYetCompletedSize, is(Matchers.greaterThan(5)));
     }
 
     @Test
-    public void t030_complete_and_notYetComplete() throws Exception {
+    public void complete_and_notYetComplete() throws Exception {
         
         // given
         List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
@@ -62,15 +58,15 @@ public class ToDoItems_finders extends AbstractIntegTest {
         toDoItem.completed();
         
         // then
-        assertThat(wrap(toDoItems).notYetComplete().size(), is(4));
-        assertThat(wrap(toDoItems).complete().size(), is(1));
+        assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize-1));
+        assertThat(wrap(toDoItems).complete().size(), is(completedSize+1));
         
         // and when
         toDoItem.notYetCompleted();
         
         // then
-        assertThat(wrap(toDoItems).notYetComplete().size(), is(5));
-        assertThat(wrap(toDoItems).complete().size(), is(0));
+        assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize));
+        assertThat(wrap(toDoItems).complete().size(), is(completedSize));
     }
 
 

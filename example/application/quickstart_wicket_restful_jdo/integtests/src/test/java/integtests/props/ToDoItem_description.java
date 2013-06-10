@@ -55,13 +55,13 @@ public class ToDoItem_description extends AbstractIntegTest {
     public void happyCase() throws Exception {
         
         // given
-        assertThat(toDoItem.getDescription(), is("Buy milk"));
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
         
         // when
-        toDoItem.setDescription("Buy milk and butter");
+        toDoItem.setDescription("Buy bread and butter");
         
         // then
-        assertThat(toDoItem.getDescription(), is("Buy milk and butter"));
+        assertThat(toDoItem.getDescription(), is("Buy bread and butter"));
     }
 
 

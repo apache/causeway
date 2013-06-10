@@ -44,7 +44,10 @@ import org.apache.isis.applib.filter.Filter;
 @Named("ToDos")
 public class ToDoItems extends AbstractFactoryAndRepository {
 
-    // {{ Id, iconName
+    // //////////////////////////////////////
+    // Identification in the UI
+    // //////////////////////////////////////
+
     @Override
     public String getId() {
         return "toDoItems";
@@ -53,9 +56,11 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     public String iconName() {
         return "ToDoItem";
     }
-    // }}
 
-    // {{ notYetComplete (action)
+    // //////////////////////////////////////
+    // NotYetComplete(action)
+    // //////////////////////////////////////
+    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
@@ -74,9 +79,11 @@ public class ToDoItems extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}
-
-    // {{ complete (action)
+    
+    // //////////////////////////////////////
+    // Complete(action)
+    // //////////////////////////////////////
+    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     public List<ToDoItem> complete() {
@@ -95,10 +102,11 @@ public class ToDoItems extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}
 
-    
-    // {{ newToDo  (action)
+    // //////////////////////////////////////
+    // NewToDo(action)
+    // //////////////////////////////////////
+
     @MemberOrder(sequence = "3")
     public ToDoItem newToDo(
             @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation
@@ -114,10 +122,11 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     public LocalDate default2NewToDo() {
         return new LocalDate(Clock.getTime()).plusDays(14);
     }
-    // }}
 
+    // //////////////////////////////////////
+    // AllToDos(action)
+    // //////////////////////////////////////
 
-    // {{ allToDos (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "4")
     public List<ToDoItem> allToDos() {
@@ -136,11 +145,43 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         }
         return items;
     }
-    // }}
 
+    // //////////////////////////////////////
+    // SimilarTo (action)
+    // //////////////////////////////////////
+    
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "5")
+    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem t) {
+                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
+            }
+        });
+    }
 
-    // {{ newToDo  (hidden)
-    @Hidden // for use by fixtures
+    // //////////////////////////////////////
+    // AutoComplete
+    // //////////////////////////////////////
+
+    @Hidden // only for autoComplete
+    public List<ToDoItem> autoComplete(final String description) {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(final ToDoItem t) {
+                return ownedByCurrentUser(t) && t.getDescription().contains(description);
+            }
+
+        });
+    }
+
+    // //////////////////////////////////////
+    // Programmatic Helpers
+    // //////////////////////////////////////
+
+    @Programmatic // for use by fixtures
     public ToDoItem newToDo(
             final String description, 
             final Category category, 
@@ -167,46 +208,14 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     private static double random(double from, double to) {
         return Math.random() * (to-from) + from;
     }
-    // }}
-
 
     
-    // {{ similarTo (action)
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "5")
-    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(ToDoItem t) {
-                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
-            }
-        });
-    }
-    // }}
-    
-    
-    // {{ autoComplete (hidden)
-    @Hidden
-    public List<ToDoItem> autoComplete(final String description) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && t.getDescription().contains(description);
-            }
-
-        });
-    }
-    // }}
-
-    // {{ helpers
     protected boolean ownedByCurrentUser(final ToDoItem t) {
         return Objects.equal(t.getOwnedBy(), currentUserName());
     }
     protected String currentUserName() {
         return getContainer().getUser().getName();
     }
-    // }}
 
 
 }
