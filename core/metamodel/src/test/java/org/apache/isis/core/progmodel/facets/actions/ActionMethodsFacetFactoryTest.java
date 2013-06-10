@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstrac
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -67,6 +68,8 @@ import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HiddenFac
 import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.param.choices.methodnum.ActionParameterChoicesFacetFactory;
@@ -715,6 +718,40 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     }
 
+    
+    public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
+        final ActionParameterAutoCompleteFacetFactory facetFactory = new ActionParameterAutoCompleteFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+        reflector.setLoadSpecificationStringReturn(voidSpec);
+
+        class Customer {
+            @SuppressWarnings("unused")
+            public void someAction(final int x, final long y) {
+            }
+
+            @SuppressWarnings("unused")
+            public List<Integer> autoComplete0SomeAction(String searchArg) {
+                return Collections.emptyList();
+            }
+        }
+
+        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
+        final Method autoComplete0Method = findMethod(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
+
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetHolderWithParms));
+
+        final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterAutoCompleteFacet.class);
+        assertNotNull(facet0);
+        assertTrue(facet0 instanceof ActionParameterAutoCompleteFacetViaMethod);
+        final ActionParameterAutoCompleteFacetViaMethod actionAutoCompleteFacetViaMethod0 = (ActionParameterAutoCompleteFacetViaMethod) facet0;
+        assertEquals(autoComplete0Method, actionAutoCompleteFacetViaMethod0.getMethods().get(0));
+
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(autoComplete0Method));
+    }
+
+    
     public void testActionsPickedUpFromSuperclass() {
         final ActionInvocationFacetFactory facetFactory = new ActionInvocationFacetFactory();
         facetFactory.setSpecificationLookup(reflector);

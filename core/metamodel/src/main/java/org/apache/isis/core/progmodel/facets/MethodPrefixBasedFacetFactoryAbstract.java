@@ -71,8 +71,9 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
                 List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
                 for (ObjectAction objectAction : objectActions) {
                     for (String prefix : prefixes) {
-                        if (objectAction.getId().startsWith(prefix)) {
-                            validationFailures.add("%s#%s has prefix %s, has probably been orphaned.  If not an orphan, then rename and use @Named annotation", objectSpec.getIdentifier().getClassName(), objectAction.getId(), prefix);
+                        final String actionId = objectAction.getId();
+                        if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
+                            validationFailures.add("%s#%s has prefix %s, has probably been orphaned.  If not an orphan, then rename and use @Named annotation", objectSpec.getIdentifier().getClassName(), actionId, prefix);
                         }
                     }
                 }

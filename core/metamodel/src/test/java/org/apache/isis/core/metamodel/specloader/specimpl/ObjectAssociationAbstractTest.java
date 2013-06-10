@@ -124,6 +124,17 @@ public class ObjectAssociationAbstractTest {
                 // TODO Auto-generated method stub
                 return false;
             }
+
+            @Override
+            public boolean hasAutoComplete() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
+                return null;
+            }
         };
     }
 

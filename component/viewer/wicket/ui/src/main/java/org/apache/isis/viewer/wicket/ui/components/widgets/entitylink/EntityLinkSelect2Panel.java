@@ -194,10 +194,14 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             return;
         }
         
-        final ChoiceProvider<ObjectAdapterMemento> provider = 
-                hasChoices() 
-                    ? providerForChoices(getEntityModel()) 
-                    : providerForAutoComplete(getEntityModel());
+        final ChoiceProvider<ObjectAdapterMemento> provider;
+        if (hasChoices()) {
+            provider = providerForChoices(getEntityModel());
+        } else if(hasParamOrPropertyAutoComplete()) {
+            provider = providerForParamOrPropertyAutoComplete(getEntityModel());
+        } else {
+            provider = providerForObjectAutoComplete(getEntityModel());
+        }
 
         final ModelAbstract<ObjectAdapterMemento> model = new ModelAbstract<ObjectAdapterMemento>(){
             private static final long serialVersionUID = 1L;
@@ -260,7 +264,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     /**
      * @param entityModel - serializable, referenced by the AutoCompletionChoicesProvider below 
      */
-    private static ChoiceProvider<ObjectAdapterMemento> providerForAutoComplete(final EntityModel entityModel) {
+    private static ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete(final EntityModel entityModel) {
         return new ObjectAdapterMementoProviderAbstract() {
 
             private static final long serialVersionUID = 1L;
@@ -276,6 +280,29 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         };
     }
 
+    private static ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete(final EntityModel entityModel) {
+        return new ObjectAdapterMementoProviderAbstract() {
+            
+            private static final long serialVersionUID = 1L;
+            
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                final ScalarModel scalarModel = (ScalarModel) entityModel;
+                final boolean hasAutoComplete = scalarModel.hasAutoComplete();
+                if(!hasAutoComplete) {
+                    return null;
+                }
+                final List<ObjectAdapter> autoCompleteChoices = scalarModel.getAutoComplete(term);
+                if(autoCompleteChoices.isEmpty()) {
+                    return null;
+                }
+                // take a copy otherwise is only lazily evaluated
+                return Lists.newArrayList(Lists.transform(autoCompleteChoices, Mementos.fromAdapter()));
+            }
+            
+        };
+    }
+    
     /**
      * @param entityModel - serializable, referenced by the AutoCompletionChoicesProvider below 
      */
@@ -396,7 +423,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         if(getEntityModel().isViewMode()) {
             return false;
         }
-        return hasChoices() || hasAutoComplete();
+        return hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
     }
 
     private boolean hasChoices() {
@@ -408,7 +435,30 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         return scalarModel.hasChoices();
     }
 
-    private boolean hasAutoComplete() {
+    private boolean hasParamOrPropertyAutoComplete() {
+        final EntityModel entityModel = getEntityModel();
+        if (!(entityModel instanceof ScalarModel)) {
+            return false;
+        } 
+        final ScalarModel scalarModel = (ScalarModel) entityModel;
+        return scalarModel.hasAutoComplete();
+    }
+
+    private boolean hasObjectAutoComplete() {
+
+        // on property/param
+        final EntityModel entityModel = getEntityModel();
+        if (!(entityModel instanceof ScalarModel)) {
+            return false;
+        } 
+        final ScalarModel scalarModel = (ScalarModel) entityModel;
+        boolean hasAutoComplete = scalarModel.hasAutoComplete();
+        if(hasAutoComplete) {
+            return true;
+        }
+
+        
+        // else on underlying type
         final ObjectSpecification typeOfSpecification = getEntityModel().getTypeOfSpecification();
         final AutoCompleteFacet autoCompleteFacet = 
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;

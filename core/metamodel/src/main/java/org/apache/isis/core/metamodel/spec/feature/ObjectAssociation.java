@@ -42,16 +42,27 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public void toDefault(ObjectAdapter target);
 
     /**
+     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * method) for the association.
+     */
+    public boolean hasChoices();
+    /**
      * Returns a list of possible references/values for this field, which the
      * user can choose from.
      */
     public ObjectAdapter[] getChoices(ObjectAdapter object);
 
+
     /**
-     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * Whether there are any auto-complete provided (eg <tt>autoCompleteXxx</tt> supporting
      * method) for the association.
      */
-    public boolean hasChoices();
+    public boolean hasAutoComplete();
+    /**
+     * Returns a list of possible references/values for this field, which the
+     * user can choose from, based on the provided search argument.
+     */
+    public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg);
 
     /**
      * Returns true if calculated from other data in the object, that is, should

@@ -208,7 +208,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     }
 
     // /////////////////////////////////////////////////////////////
-    // options (choices)
+    // choices & autoComplete
     // /////////////////////////////////////////////////////////////
 
     @Override
@@ -219,6 +219,17 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     @Override
     public boolean hasChoices() {
         return false;
+    }
+
+    
+    @Override
+    public boolean hasAutoComplete() {
+        return false;
+    }
+
+    @Override
+    public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
+        return new ObjectAdapter[0];
     }
 
     // /////////////////////////////////////////////////////////////
@@ -253,5 +264,6 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
     }
+
 
 }

@@ -97,6 +97,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         public void setSpecification(final ObjectSpecification objectSpec) {
             this.objectSpec = objectSpec;
         }
+
     }
 
     private ObjectActionParameterAbstractToTest objectActionParameter;

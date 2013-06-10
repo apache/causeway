@@ -88,7 +88,7 @@ import org.apache.isis.applib.value.Blob;
 @ObjectType("TODO")
 @Audited
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
-@AutoComplete(repository=ToDoItems.class, action="autoComplete")
+@AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
 @MemberGroups({"General", "Detail"})
 @Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
@@ -357,6 +357,12 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         getDependencies().add(toDoItem);
         return this;
     }
+    public List<ToDoItem> autoComplete0Add(final String search) {
+        final List<ToDoItem> list = toDoItems.autoComplete(search);
+        list.remove(this);
+        return list;
+    }
+
     public String disableAdd(final ToDoItem toDoItem) {
         if(isComplete()) {
             return "Cannot add dependencies for items that are complete";

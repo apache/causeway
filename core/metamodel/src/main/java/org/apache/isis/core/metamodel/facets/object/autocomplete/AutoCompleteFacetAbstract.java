@@ -86,11 +86,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         return CollectionFacetUtils.convertToAdapterList(resultAdapter);
     }
 
-    @Override
-    public ObjectAdapter lookup(RootOid oid) {
-        return adapterManager.adapterFor(oid);
-    }
-
     private void cacheRepositoryAndRepositoryActionIfRequired() {
         if(!cachedRepositoryAction) {
             cacheRepositoryAction();

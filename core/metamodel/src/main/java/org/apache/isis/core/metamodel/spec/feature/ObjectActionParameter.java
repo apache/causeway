@@ -96,6 +96,12 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
 
     /**
+     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * method) for the parameter.
+     */
+    boolean hasChoices();
+
+    /**
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from.
      */
@@ -105,8 +111,14 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
      * method) for the parameter.
      */
-    boolean hasChoices();
-    
+    boolean hasAutoComplete();
+
+    /**
+     * Returns a list of possible references/values for this parameter, which the
+     * user can choose from, based on the input search argument.
+     */
+    ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg);
+
     ObjectAdapter getDefault(ObjectAdapter adapter);
 
 

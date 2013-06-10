@@ -34,6 +34,7 @@ public class MethodPrefixConstants {
 
     public static final String DEFAULT_PREFIX = "default";
     public static final String CHOICES_PREFIX = "choices";
+    public static final String AUTO_COMPLETE_PREFIX = "autoComplete";
 
     public static final String HIDE_PREFIX = "hide";
     public static final String ALWAYS_HIDE_PREFIX = "alwaysHide";

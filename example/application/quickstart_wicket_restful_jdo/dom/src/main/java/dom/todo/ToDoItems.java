@@ -166,7 +166,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // AutoComplete
     // //////////////////////////////////////
 
-    @Hidden // only for autoComplete
+    @Programmatic // not part of metamodel
     public List<ToDoItem> autoComplete(final String description) {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override

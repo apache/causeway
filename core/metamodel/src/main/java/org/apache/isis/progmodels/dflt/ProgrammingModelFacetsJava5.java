@@ -126,6 +126,7 @@ import org.apache.isis.core.progmodel.facets.object.value.annotation.ValueFacetF
 import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.enums.ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.methodnum.ActionParameterChoicesFacetFactory;
@@ -265,6 +266,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ActionValidationFacetViaValidateMethodFacetFactory.class);
         addFactory(ActionChoicesFacetFactory.class);
         addFactory(ActionParameterChoicesFacetFactory.class);
+        addFactory(ActionParameterAutoCompleteFacetFactory.class);
         addFactory(ActionDefaultsFacetFactory.class);
         addFactory(ActionParameterDefaultsFacetFactory.class);
         addFactory(QueryOnlyAnnotationFacetFactory.class);

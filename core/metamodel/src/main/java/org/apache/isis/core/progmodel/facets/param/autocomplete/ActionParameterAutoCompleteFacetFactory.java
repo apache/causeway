@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.param.choices.methodnum;
+package org.apache.isis.core.progmodel.facets.param.autocomplete;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -26,29 +26,22 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class ActionParameterAutoCompleteFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
 
-    private static final String[] PREFIXES = {};
+    private static final String[] PREFIXES = {"autoComplete"};
 
     private AdapterManager adapterManager;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
-    public ActionParameterChoicesFacetFactory() {
+    public ActionParameterAutoCompleteFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
@@ -62,11 +55,11 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
         final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
 
-        attachChoicesFacetForParametersIfChoicesNumMethodIsFound(processMethodContext, holderList);
+        attachAutoCompleteFacetForParametersIfAutoCompleteNumMethodIsFound(processMethodContext, holderList);
 
     }
 
-    private void attachChoicesFacetForParametersIfChoicesNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private void attachAutoCompleteFacetForParametersIfAutoCompleteNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -77,36 +70,31 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
         for (int i = 0; i < params.length; i++) {
 
-            final Class<?> arrayOfParamType = (Array.newInstance(params[i], 0)).getClass();
+            final Class<?> paramType = params[i];
+            final Class<?> arrayOfParamType = (Array.newInstance(paramType, 0)).getClass();
 
-            Method choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, arrayOfParamType);
-            if (choicesMethod == null) {
-                choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, List.class);
+            Method autoCompleteMethod = findAutoCompleteNumMethodReturning(processMethodContext, i, arrayOfParamType);
+            if (autoCompleteMethod == null) {
+                autoCompleteMethod = findAutoCompleteNumMethodReturning(processMethodContext, i, List.class);
             }
-            if (choicesMethod == null) {
+            if (autoCompleteMethod == null) {
                 continue;
             }
-            processMethodContext.removeMethod(choicesMethod);
-
-            final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
-            if (facetedMethod.containsDoOpFacet(ActionChoicesFacet.class)) {
-                final Class<?> cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new choices syntax - must use one or other");
-            }
+            processMethodContext.removeMethod(autoCompleteMethod);
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder, getSpecificationLoader(), getAdapterManager()));
+            FacetUtil.addFacet(new ActionParameterAutoCompleteFacetViaMethod(autoCompleteMethod, paramType, paramAsHolder, getSpecificationLoader(), getAdapterManager()));
         }
     }
 
-    private Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int i, final Class<?> arrayOfParamType) {
+    private Method findAutoCompleteNumMethodReturning(final ProcessMethodContext processMethodContext, final int i, final Class<?> paramType) {
 
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
-        final String name = MethodPrefixConstants.CHOICES_PREFIX + i + capitalizedName;
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, arrayOfParamType, new Class[0]);
+        final String name = MethodPrefixConstants.AUTO_COMPLETE_PREFIX + i + capitalizedName;
+        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, paramType, new Class[]{String.class});
     }
 
     // ///////////////////////////////////////////////////////////////

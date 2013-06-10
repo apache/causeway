@@ -564,7 +564,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
-                ObjectActionParameterAbstract.checkChoicesType(getSpecificationLookup(), parameterChoicesPojos[i], paramSpec);
+                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(getSpecificationLookup(), parameterChoicesPojos[i], paramSpec);
                 parameterChoicesAdapters[i] = new ObjectAdapter[parameterChoicesPojos[i].length];
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);

@@ -17,15 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.autocomplete;
-
-import java.util.List;
+package org.apache.isis.core.metamodel.facets.param.autocomplete;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-public interface AutoCompleteFacet extends Facet {
+/**
+ * Obtain autocompletion for each of the parameters of the action.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * <tt>autoCompleteNXxx(..., String)</tt> support method for an action (where N is the 0-based
+ * parameter number).
+ */
+public interface ActionParameterAutoCompleteFacet extends Facet {
 
-    public List<ObjectAdapter> execute(String search);
-
+    public Object[] autoComplete(ObjectAdapter inObject, String searchArg);
 }

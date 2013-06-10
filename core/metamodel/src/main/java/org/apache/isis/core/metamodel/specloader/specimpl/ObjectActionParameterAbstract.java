@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
@@ -245,6 +246,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return new ActionArgumentContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
     }
 
+
+    @Override
+    public boolean hasChoices() {
+        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+
+        return choicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
+    }
+
     @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
         final List<ObjectAdapter> parameterChoices = Lists.newArrayList();
@@ -252,7 +261,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         if (choicesFacet != null) {
             final Object[] choices = choicesFacet.getChoices(parentAction.realTarget(adapter));
-            checkChoicesType(getSpecificationLookup(), choices, getSpecification());
+            checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
             for (final Object choice : choices) {
                 parameterChoices.add(getAdapterMap().adapterFor(choice));
             }
@@ -264,10 +273,27 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public boolean hasChoices() {
-        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+    public boolean hasAutoComplete() {
+        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
+        return facet != null;
+    }
 
-        return choicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
+    @Override
+    public ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg) {
+        final List<ObjectAdapter> autoCompleteChoiceAdapters = Lists.newArrayList();
+        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
+
+        if (facet != null) {
+            final Object[] autoCompleteChoices = facet.autoComplete(parentAction.realTarget(adapter), searchArg);
+            checkChoicesOrAutoCompleteType(getSpecificationLookup(), autoCompleteChoices, getSpecification());
+            for (final Object autoCompleteChoice : autoCompleteChoices) {
+                autoCompleteChoiceAdapters.add(getAdapterMap().adapterFor(autoCompleteChoice));
+            }
+        }
+        if (autoCompleteChoiceAdapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
+            addParameterChoicesForBounded(autoCompleteChoiceAdapters);
+        }
+        return autoCompleteChoiceAdapters.toArray(new ObjectAdapter[0]);
     }
 
     private <T> void addParameterChoicesForBounded(final List<ObjectAdapter> parameterChoices) {
@@ -278,11 +304,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    protected static void checkChoicesType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
+    protected static void checkChoicesOrAutoCompleteType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
             final ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
             if (!componentSpec.isOfType(paramSpec)) {
-                throw new DomainModelException("Choice type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
+                throw new DomainModelException("Type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
             }
         }
     }

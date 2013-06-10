@@ -225,7 +225,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     }
 
     // /////////////////////////////////////////////////////////////
-    // options (choices)
+    // choices and autoComplete
     // /////////////////////////////////////////////////////////////
 
     @Override
@@ -261,6 +261,18 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return options;
     }
 
+    
+    @Override
+    public boolean hasAutoComplete() {
+        // TODO...
+        return false;
+    }
+
+    @Override
+    public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
+        return new ObjectAdapter[0];
+    }
+
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
@@ -293,5 +305,6 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
+
 
 }

@@ -121,8 +121,17 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
             @Override
             public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-                // TODO Auto-generated method stub
                 return false;
+            }
+
+            @Override
+            public boolean hasAutoComplete() {
+                return false;
+            }
+
+            @Override
+            public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
+                return null;
             }
         };
 
