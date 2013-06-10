@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
@@ -264,13 +265,22 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     
     @Override
     public boolean hasAutoComplete() {
-        // TODO...
-        return false;
+        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
+        return propertyAutoCompleteFacet != null;
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
-        return new ObjectAdapter[0];
+    public ObjectAdapter[] getAutoComplete(ObjectAdapter ownerAdapter, String searchArg) {
+        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
+        final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg);
+        if (pojoOptions != null) {
+            final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
+            for (int i = 0; i < options.length; i++) {
+                options[i] = getAdapterManager().adapterFor(pojoOptions[i]);
+            }
+            return options;
+        }
+        return null;
     }
 
     // /////////////////////////////////////////////////////////////

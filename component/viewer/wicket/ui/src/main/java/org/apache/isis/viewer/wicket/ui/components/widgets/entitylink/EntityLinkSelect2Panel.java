@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -290,11 +291,11 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 final ScalarModel scalarModel = (ScalarModel) entityModel;
                 final boolean hasAutoComplete = scalarModel.hasAutoComplete();
                 if(!hasAutoComplete) {
-                    return null;
+                    return Collections.emptyList();
                 }
                 final List<ObjectAdapter> autoCompleteChoices = scalarModel.getAutoComplete(term);
                 if(autoCompleteChoices.isEmpty()) {
-                    return null;
+                    return Collections.emptyList();
                 }
                 // take a copy otherwise is only lazily evaluated
                 return Lists.newArrayList(Lists.transform(autoCompleteChoices, Mementos.fromAdapter()));
@@ -316,11 +317,11 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 final ScalarModel scalarModel = (ScalarModel) entityModel;
                 final boolean hasChoices = scalarModel.hasChoices();
                 if(!hasChoices) {
-                    return null;
+                    return Collections.emptyList();
                 }
                 final List<ObjectAdapter> choices = scalarModel.getChoices();
                 if(choices.isEmpty()) {
-                    return null;
+                    return Collections.emptyList();
                 }
                 // take a copy otherwise is only lazily evaluated
                 return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));

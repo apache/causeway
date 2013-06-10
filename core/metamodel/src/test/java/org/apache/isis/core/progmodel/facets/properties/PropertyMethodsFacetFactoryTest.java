@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
@@ -58,6 +59,8 @@ import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFac
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyAccessorFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
+import org.apache.isis.core.progmodel.facets.properties.autocomplete.PropertyAutoCompleteFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.autocomplete.PropertyAutoCompleteFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.defaults.method.PropertyDefaultFacetFactory;
@@ -360,6 +363,35 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals(propertyChoicesMethod, propertyChoicesFacet.getMethods().get(0));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyChoicesMethod));
+    }
+    
+    public void testAutoCompleteFacetFoundAndMethodRemoved() {
+        final PropertyAutoCompleteFacetFactory facetFactory = new PropertyAutoCompleteFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+        
+        class Customer {
+            @SuppressWarnings("unused")
+            public String getFirstName() {
+                return null;
+            }
+            
+            @SuppressWarnings("unused")
+            public Object[] autoCompleteFirstName(String searchArg) {
+                return null;
+            }
+        }
+        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
+        final Method propertyAutoCompleteMethod = findMethod(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
+        
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
+        
+        final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof PropertyAutoCompleteFacetViaMethod);
+        final PropertyAutoCompleteFacetViaMethod propertyAutoCompleteFacet = (PropertyAutoCompleteFacetViaMethod) facet;
+        assertEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().get(0));
+        
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAutoCompleteMethod));
     }
 
     public void testDefaultFacetFoundAndMethodRemoved() {

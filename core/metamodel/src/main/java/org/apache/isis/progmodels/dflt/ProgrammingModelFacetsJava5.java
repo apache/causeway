@@ -145,6 +145,7 @@ import org.apache.isis.core.progmodel.facets.param.validate.maxlenannot.MaxLengt
 import org.apache.isis.core.progmodel.facets.param.validate.perspec.MustSatisfySpecificationOnParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.validate.regexannot.RegExFacetAnnotationForParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyAccessorFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.autocomplete.PropertyAutoCompleteFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.defaults.fromtype.PropertyDefaultDerivedFromTypeFacetFactory;
@@ -252,6 +253,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(PropertyValidateFacetFactory.class);
         addFactory(PropertyChoicesFacetFactory.class);
+        addFactory(PropertyAutoCompleteFacetFactory.class);
         addFactory(PropertyDefaultFacetFactory.class);
         addFactory(PropertyOptionalFacetFactory.class);
 

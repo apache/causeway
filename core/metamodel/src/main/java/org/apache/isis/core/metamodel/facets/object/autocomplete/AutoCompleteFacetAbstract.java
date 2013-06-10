@@ -73,7 +73,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
         cacheRepositoryAndRepositoryActionIfRequired();
         if(repositoryAction == null || repository == null) {
-            return Collections.<ObjectAdapter>emptyList();
+            return Collections.emptyList();
         }
         
         final ObjectAdapter repositoryAdapter = adapterManager.getAdapterFor(repository);
@@ -81,7 +81,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, new ObjectAdapter[] { searchAdapter} );
         // check a collection was returned
         if(CollectionFacetUtils.getCollectionFacetFromSpec(resultAdapter) == null) {
-            return Collections.<ObjectAdapter>emptyList();
+            return Collections.emptyList();
         }
         return CollectionFacetUtils.convertToAdapterList(resultAdapter);
     }
