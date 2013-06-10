@@ -41,7 +41,8 @@
 	padding-left: 4px;
 	padding-right: 4px;
 }
-.collectionContentsAsAjaxTablePanel table.contents tr th { 
+.collectionContentsAsAjaxTablePanel table.contents tr th,
+.collectionContentsAsAjaxTablePanel table.contents tr th a { 
 	color: #FFFFFF;
 	background-color: #46423C;
 	text-align: left; 
@@ -50,16 +51,32 @@
 	font-weight:bold;
 }
 
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp a,
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown a {
+    background-color: #20B5C2;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp a:hover,
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown a:hover {
+    color: #46423C;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown {
-	background-color: #87cbff; 
-	background-image: url(displaytag/img/arrow_down.png); 
+	background-color: #20B5C2; 
+	background-image: url(images/arrow_down.png); 
+    background-position: right;
+    background-repeat: no-repeat;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp {
-	background-color: #87cbff; 
-	background-image: url(displaytag/img/arrow_up.png);
+	background-color: #20B5C2; 
+	background-image: url(images/arrow_up.png);
+    background-position: right;
+    background-repeat: no-repeat;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderNone {
-	background-image: url(displaytag/img/arrow_off.png);
+	background-image: url(images/arrow_off.png);
+	background-position: right;
+    background-repeat: no-repeat;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th a {
 	font-weight: normal;

@@ -48,13 +48,10 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
 
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private final String sortProperty;
     private final String propertyExpression;
 
     public ObjectAdapterPropertyColumn(final IModel<String> columnNameModel, final String sortProperty, final String propertyName) {
-        super(columnNameModel);
-        this.sortProperty = sortProperty;
+        super(columnNameModel, sortProperty);
         this.propertyExpression = propertyName;
     }
 
