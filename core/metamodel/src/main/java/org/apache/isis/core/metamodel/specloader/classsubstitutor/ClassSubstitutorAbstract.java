@@ -83,6 +83,10 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         if (shouldIgnore(cls)) {
             return null;
         }
+        final Class<?> superclass = cls.getSuperclass();
+        if(superclass != null && superclass.isEnum()) {
+            return superclass;
+        }
         return cls;
     }
 

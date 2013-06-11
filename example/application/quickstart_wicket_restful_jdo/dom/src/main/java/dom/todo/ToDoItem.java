@@ -160,7 +160,26 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     public static enum Category {
-        Professional, Domestic, Other;
+        Professional {
+            @Override
+            public int priority() {
+                return 1;
+            }
+        }, Domestic {
+            @Override
+            public int priority() {
+                return 2;
+            }
+        }, Other {
+            @Override
+            public int priority() {
+                return 3;
+            }
+        };
+        
+        // this method is simply to demonstrate that anonymous 
+        // subtypes of enums are allowed
+        public abstract int priority();
     }
 
     private Category category;
