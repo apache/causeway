@@ -18,7 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -28,20 +30,22 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
-public class Get_thenRepresentation_ok_TODO {
+public class Get_thenRepresentation_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -56,49 +60,53 @@ public class Get_thenRepresentation_ok_TODO {
         domainObjectResource = client.getDomainObjectResource();
     }
 
-    @Ignore("to get working again")
     @Test
-    public void actionPrompt() throws Exception {
+    public void representation() throws Exception {
 
         // when
-        final Response actionPromptResp = domainObjectResource.actionPrompt("OID","1", "list");
+        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "67", "contains");
         final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         assertThat(actionPromptJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
         // then
         final ObjectActionRepresentation actionPromptRepr = actionPromptJsonResp.getEntity();
 
-        // _self.link
-        final LinkRepresentation selfLink = actionPromptRepr.getLink("_self.link");
-        assertThat(selfLink.getRel(), is("member"));
-        assertThat(selfLink.getHref(), matches(".+objects/OID:1/actions/list"));
-        assertThat(selfLink.getHttpMethod(), is(RestfulHttpMethod.GET));
-
-        // _self.object
-        final LinkRepresentation selfObject = actionPromptRepr.getLink("_self.object");
-        assertThat(selfObject.getRel(), is("object"));
-        assertThat(selfObject.getHref(), matches(".+objects/OID:1"));
-        assertThat(selfObject.getHttpMethod(), is(RestfulHttpMethod.GET));
-
-        // type
-        final LinkRepresentation type = actionPromptRepr.getLink("type");
-        assertThat(type.getRel(), is("type"));
-        assertThat(type.getHref(), matches(".+vnd\\.list\\+json"));
-        assertThat(type.getHttpMethod(), is(RestfulHttpMethod.GET));
-
         assertThat(actionPromptRepr.getString("memberType"), is("action"));
-        assertThat(actionPromptRepr.getString("actionType"), is("USER"));
-        assertThat(actionPromptRepr.getInt("numParameters"), is(0));
-        assertThat(actionPromptRepr.getArray("parameters").size(), is(0));
 
-        final LinkRepresentation invokeLink = actionPromptRepr.getLink("invoke");
-        assertThat(invokeLink.getRel(), is("invoke"));
-        assertThat(invokeLink.getHref(), matches(".+objects/OID:1/actions/list/invoke"));
-        assertThat(invokeLink.getHttpMethod(), is(RestfulHttpMethod.POST));
+        // self link
+        final LinkRepresentation selfLink = actionPromptRepr.getLinkWithRel(Rel.SELF);
+        assertThat(selfLink, isLink(client)
+                                .httpMethod(RestfulHttpMethod.GET)
+                                .href(endsWith("/objects/RTNE/67/actions/contains"))
+                                .returning(HttpStatusCode.OK));
+
+        // up link
+        final LinkRepresentation upLink = actionPromptRepr.getLinkWithRel(Rel.UP);
+        assertThat(upLink, isLink(client)
+                                .httpMethod(RestfulHttpMethod.GET)
+                                .href(endsWith("/objects/RTNE/67"))
+                                .returning(HttpStatusCode.OK)
+                                .type(RepresentationType.DOMAIN_OBJECT.getMediaType())
+                                .title("Untitled Actions Entity"));
+
+        //invoke link
+        final LinkRepresentation invokeLink = actionPromptRepr.getLinkWithRel(Rel.INVOKE);
+        assertThat(invokeLink, isLink(client)
+                                .httpMethod(RestfulHttpMethod.GET)
+                                .href(endsWith("/services/ActionsEntities/actions/contains/invoke")));
+
         assertThat(invokeLink.getArguments(), is(not(nullValue())));
-        assertThat(invokeLink.getArguments().isArray(), is(true));
-        assertThat(invokeLink.getArguments().size(), is(0));
+        assertThat(invokeLink.getArguments().isArray(), is(false));
+        assertThat(invokeLink.getArguments().size(), is(3));
+
+     // described by link
+        final LinkRepresentation describedByLink = actionPromptRepr.getLinkWithRel(Rel.DESCRIBEDBY);
+        assertThat(describedByLink, isLink(client)
+                                .returning(HttpStatusCode.OK)
+                                .responseEntityWithSelfHref(describedByLink.getHref()));
+
+        assertThat(actionPromptRepr.getExtensions().getString("actionType"), is("user"));
+        assertThat(actionPromptRepr.getExtensions().getString("actionSemantics"), is("safe"));
+        assertThat(actionPromptRepr.getArray("parameters").size(), is(3));
     }
-
-
 }
