@@ -16,27 +16,50 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
+package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action;
 
-import org.junit.Before;
-import org.junit.Rule;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
+import javax.ws.rs.core.Response;
+
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-public class Get_thenResponseHeaders_ContentLength_ok_TODO {
+public class Get_thenResponseHeaders_ContentLength_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     protected RestfulClient client;
+    private DomainObjectResource domainObjectResource;
 
     @Before
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
+        domainObjectResource = client.getDomainObjectResource();
     }
 
+    @Test
+    public void ok() throws Exception {
+        // given
+    	final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "67", "contains");
 
+        // when
+    	final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
+
+        // then
+        assertThat(actionPromptJsonResp.getHeader(Header.CONTENT_LENGTH), is(IsisMatchers.greaterThan(1000)));
+    }
+    
 }

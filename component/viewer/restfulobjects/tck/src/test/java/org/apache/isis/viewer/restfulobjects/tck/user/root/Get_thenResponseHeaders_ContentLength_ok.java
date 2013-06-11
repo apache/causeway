@@ -16,27 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
+package org.apache.isis.viewer.restfulobjects.tck.user.root;
 
-import org.apache.isis.core.webserver.WebServer;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import javax.ws.rs.core.Response;
+
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
+import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_thenResponseHeaders_ContentLength_ok_TODO {
-
-    @Rule
+public class Get_thenResponseHeaders_ContentLength_ok {
+	@Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
-    protected RestfulClient client;
+    private RestfulClient client;
+    private UserResource resource;
 
     @Before
     public void setUp() throws Exception {
-        final WebServer webServer = webServerRule.getWebServer();
-        client = new RestfulClient(webServer.getBase());
+        client = webServerRule.getClient();
+        resource = client.getUserResource();
     }
 
+
+    @Test
+    public void ok() throws Exception {
+
+        // given
+        final Response resp = resource.user();
+
+        // when
+        final RestfulResponse<UserRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+
+        // then
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(IsisMatchers.greaterThan(1000)));
+    }
 }
