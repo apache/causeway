@@ -18,14 +18,14 @@
  */
 package org.apache.isis.applib.services.settings;
 
-import java.util.List;
+import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotation.Named;
+public interface ApplicationSettingsServiceRW extends ApplicationSettingsService {
 
-public interface ApplicationSettingsService {
-
-    ApplicationSetting find(@Named("Key") String key);
-
-    List<ApplicationSetting> listAll();
-
+    ApplicationSetting newInt(String name, String description, Integer defaultValue);
+    ApplicationSetting newLocalDate(String name, String description, LocalDate defaultValue);
+    ApplicationSetting newLong(String name, String description, Long defaultValue);
+    ApplicationSetting newString(String name, String description, String defaultValue);
+    ApplicationSetting newBoolean(String name, String description, Boolean defaultValue);
+    
 }

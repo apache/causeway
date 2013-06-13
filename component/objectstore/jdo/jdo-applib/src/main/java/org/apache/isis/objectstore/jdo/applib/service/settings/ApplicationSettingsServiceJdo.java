@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.settings.ApplicationSetting;
 import org.apache.isis.applib.services.settings.ApplicationSettingsService;
+import org.apache.isis.applib.services.settings.ApplicationSettingsServiceRW;
 import org.apache.isis.applib.services.settings.SettingAbstract;
 import org.apache.isis.applib.services.settings.SettingType;
 
@@ -39,7 +40,7 @@ import org.apache.isis.applib.services.settings.SettingType;
  * as entities into a JDO-backed database.
  */
 @Named("Application Settings")
-public class ApplicationSettingsServiceJdo extends AbstractService implements ApplicationSettingsService {
+public class ApplicationSettingsServiceJdo extends AbstractService implements ApplicationSettingsServiceRW {
 
     @Hidden
     @Override
@@ -52,36 +53,41 @@ public class ApplicationSettingsServiceJdo extends AbstractService implements Ap
 
     // //////////////////////////////////////
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @MemberOrder(sequence="1")
-    public List<ApplicationSettingJdo> listAll() {
-        return allMatches(
+    public List<ApplicationSetting> listAll() {
+        return (List)allMatches(
                 new QueryDefault<ApplicationSettingJdo>(ApplicationSettingJdo.class, 
                         "applicationsetting_all"));
     }
 
     // //////////////////////////////////////
 
+    @Override
     @MemberOrder(sequence="10")
-    public ApplicationSettingJdo newString(
+    public ApplicationSetting newString(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
             @Named("Value") String value) {
         return newSetting(key, description, SettingType.STRING, value);
     }
+    @Override
     @MemberOrder(sequence="11")
     public ApplicationSettingJdo newInt(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
-            @Named("Value") int value) {
-        return newSetting(key, description, SettingType.INT, new Integer(value).toString());
+            @Named("Value") Integer value) {
+        return newSetting(key, description, SettingType.INT, value.toString());
     }
+    @Override
     @MemberOrder(sequence="12")
     public ApplicationSettingJdo newLong(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
-            @Named("Value") long value) {
-        return newSetting(key, description, SettingType.LONG, new Long(value).toString());
+            @Named("Value") Long value) {
+        return newSetting(key, description, SettingType.LONG, value.toString());
     }
+    @Override
     @MemberOrder(sequence="13")
     public ApplicationSettingJdo newLocalDate(
             @Named("Key") String key, 
@@ -89,6 +95,7 @@ public class ApplicationSettingsServiceJdo extends AbstractService implements Ap
             @Named("Value") LocalDate value) {
         return newSetting(key, description, SettingType.LOCAL_DATE, value.toString(SettingAbstract.DATE_FORMATTER));
     }
+    @Override
     @MemberOrder(sequence="14")
     public ApplicationSettingJdo newBoolean(
             @Named("Key") String key, 
