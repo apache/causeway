@@ -136,7 +136,7 @@
                 <dependency>
                     <groupId>org.datanucleus</groupId>
                     <artifactId>datanucleus-core</artifactId>
-                    <version>(3.1.99, 3.2.99)</version>
+                    <version>(3.2.0-m1, 3.2.99)</version>
                     <scope>runtime</scope>
                 </dependency>
             </dependencies>

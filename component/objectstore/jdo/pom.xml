@@ -29,7 +29,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <datanucleus.version>[3.1.99, )</datanucleus.version>
+        <datanucleus-core.version>3.2.4</datanucleus-core.version>
+        <datanucleus-api-jdo.version>3.2.3</datanucleus-api-jdo.version>
+        <datanucleus-rdbms.version>3.2.3</datanucleus-rdbms.version>
+        <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
         
 		<siteBaseDir>.</siteBaseDir>
 		<relativeUrl />
@@ -153,22 +156,22 @@
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-core</artifactId>
-                <version>${datanucleus.version}</version>
+                <version>${datanucleus-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-api-jdo</artifactId>
-                <version>${datanucleus.version}</version>
+                <version>${datanucleus-api-jdo.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-rdbms</artifactId>
-                <version>${datanucleus.version}</version>
+                <version>${datanucleus-rdbms.version}</version>
             </dependency>
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
 	            <artifactId>datanucleus-jodatime</artifactId>
-	            <version>3.2.1</version>
+                <version>${datanucleus-jodatime.version}</version>
 	        </dependency>
 
             <dependency>
@@ -191,7 +194,7 @@
             <id>apache-release</id>
             <properties>
                 <!-- workaround for http://jira.codehaus.org/browse/MRRESOURCES-58 -->
-                <datanucleus.version>3.2.2</datanucleus.version>
+                <datanucleus.version>3.2.3</datanucleus.version>
             </properties>
         </profile>        
     </profiles>
