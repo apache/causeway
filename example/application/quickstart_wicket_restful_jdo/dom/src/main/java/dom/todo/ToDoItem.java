@@ -262,7 +262,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Column(scale = 2)
     @Optional
-    @MemberOrder(sequence = "4.1")
+    @MemberOrder(name="Detail", sequence = "4.1")
     public BigDecimal getCost() {
         return cost;
     }
