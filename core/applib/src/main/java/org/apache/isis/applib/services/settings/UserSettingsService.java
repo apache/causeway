@@ -18,10 +18,19 @@
  */
 package org.apache.isis.applib.services.settings;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
 public interface UserSettingsService {
 
+    @MemberOrder(sequence="1")
     UserSetting find(@Named("User") String user, @Named("Key") String key);
     
+    @MemberOrder(sequence="2")
+    List<UserSetting> listAll();
+
+    @MemberOrder(sequence="3")
+    List<UserSetting> listAllFor(@Named("User") String user);
 }

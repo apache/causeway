@@ -20,12 +20,15 @@ package org.apache.isis.applib.services.settings;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
 public interface ApplicationSettingsService {
 
+    @MemberOrder(sequence="1")
     ApplicationSetting find(@Named("Key") String key);
 
+    @MemberOrder(sequence="2")
     List<ApplicationSetting> listAll();
 
 }

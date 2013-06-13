@@ -38,13 +38,14 @@ import org.apache.isis.applib.services.settings.SettingAbstract;
 import org.apache.isis.applib.services.settings.SettingType;
 import org.apache.isis.applib.services.settings.UserSetting;
 import org.apache.isis.applib.services.settings.UserSettingsService;
+import org.apache.isis.applib.services.settings.UserSettingsServiceRW;
 
 /**
  * An implementation of {@link UserSettingsService} that persists settings
  * as entities into a JDO-backed database.
  */
 @Named("User Settings")
-public class UserSettingsServiceJdo extends AbstractService implements UserSettingsService {
+public class UserSettingsServiceJdo extends AbstractService implements UserSettingsServiceRW {
 
     @Hidden
     @Override
@@ -60,16 +61,16 @@ public class UserSettingsServiceJdo extends AbstractService implements UserSetti
 
     // //////////////////////////////////////
 
-    @MemberOrder(sequence="1")
-    public List<UserSettingJdo> listAll() {
-        return allMatches(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public List<UserSetting> listAll() {
+        return (List)allMatches(
                 new QueryDefault<UserSettingJdo>(UserSettingJdo.class, 
                         "usersetting_all"));
     }
 
-    @MemberOrder(sequence="1")
-    public List<UserSettingJdo> listAllFor(@Named("User") String user) {
-        return allMatches(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public List<UserSetting> listAllFor(String user) {
+        return (List)allMatches(
                 new QueryDefault<UserSettingJdo>(UserSettingJdo.class, 
                         "usersetting_by_user", 
                         "user", user));
@@ -79,12 +80,12 @@ public class UserSettingsServiceJdo extends AbstractService implements UserSetti
     }
 
     private List<String> existingUsers() {
-        final List<UserSettingJdo> listAll = listAll();
+        final List<UserSetting> listAll = listAll();
         return Lists.newArrayList(Sets.newTreeSet(Iterables.transform(listAll, GET_USER)));
     }
 
-    private final static Function<UserSettingJdo, String> GET_USER = new Function<UserSettingJdo, String>() {
-        public String apply(UserSettingJdo input) {
+    private final static Function<UserSetting, String> GET_USER = new Function<UserSetting, String>() {
+        public String apply(UserSetting input) {
             return input.getUser();
         }
     };
