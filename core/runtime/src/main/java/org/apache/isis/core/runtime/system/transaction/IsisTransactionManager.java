@@ -369,6 +369,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;
+                    transactionLevel = 1; // because the transactionLevel was decremented earlier
                 }
             }
             
@@ -379,6 +380,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;
+                    transactionLevel = 1; // because the transactionLevel was decremented earlier
                 }
             }
             
@@ -388,6 +390,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;
+                    
+                    // hacky... moving the transaction back to something other than COMMITTED
+                    transactionLevel = 1; // because the transactionLevel was decremented earlier
+                    getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
                 }
             }
             
@@ -401,6 +407,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;
+                    transactionLevel = 1; // because the transactionLevel was decremented earlier
+                    getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
                 }
                 
                 throw abortCause;
