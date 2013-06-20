@@ -405,10 +405,9 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 try {
                     abortTransaction();
                 } catch(RuntimeException ex) {
-                    // just in case any new exception was raised...
-                    abortCause = ex;
-                    transactionLevel = 1; // because the transactionLevel was decremented earlier
-                    getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                    // ignore; nothing to do:
+                    // * we want the existing abortCause to be available
+                    // * the transactionLevel is correctly now at 0.
                 }
                 
                 throw abortCause;
