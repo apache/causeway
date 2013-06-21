@@ -19,14 +19,18 @@
 
 package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,8 +53,23 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
  */
 public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
-    private static final long serialVersionUID = 1L;
-    private final CssMenuLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
+    private final static long serialVersionUID = 1L;
+    
+    private final static CssMenuLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
+
+    static class LogicalServiceAction {
+        private final String serviceName;
+        private final ObjectAdapter serviceAdapter;
+        private final ObjectAdapterMemento serviceAdapterMemento;
+        private final ObjectAction objectAction;
+        
+        LogicalServiceAction(final String serviceName, final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
+            this.serviceName = serviceName;
+            this.serviceAdapter = serviceAdapter;
+            this.serviceAdapterMemento = ObjectAdapterMemento.createOrNull(serviceAdapter);
+            this.objectAction = objectAction;
+        }
+    }
 
     public AppActionsCssMenuFactory() {
         super(ComponentType.APPLICATION_ACTIONS);
@@ -70,60 +89,104 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         return new CssMenuPanel(id, CssMenuPanel.Style.REGULAR, buildMenu(applicationActionsModel));
     }
 
-    private List<CssMenuItem> buildMenu(final ApplicationActionsModel cssModel) {
+    private List<CssMenuItem> buildMenu(final ApplicationActionsModel appActionsModel) {
 
-        final List<ObjectAdapter> serviceAdapters = cssModel.getObject();
-        final List<CssMenuItem> menuItems = new ArrayList<CssMenuItem>();
+        final List<ObjectAdapter> serviceAdapters = appActionsModel.getObject();
+
+        final List<LogicalServiceAction> serviceActions = Lists.newArrayList();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
-            addMenuItemsIfVisible(menuItems, serviceAdapter);
+            collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
+            collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
+        
+        final List<String> serviceNamesInOrder = serviceNamesInOrder(serviceActions);
+        final Map<String, List<LogicalServiceAction>> serviceActionsByName = groupByServiceName(serviceActions);
+        
+        return buildMenuItems(serviceNamesInOrder, serviceActionsByName);
+    }
 
-        // addPlaytimeMenu(menuItems);
-
+    /**
+     * Builds a hierarchy of {@link CssMenuItem}s, following the provided map of {@link LogicalServiceAction}s (keyed by their service Name).
+     */
+    private List<CssMenuItem> buildMenuItems(final List<String> serviceNamesInOrder, final Map<String, List<LogicalServiceAction>> serviceActionsByName) {
+        final List<CssMenuItem> menuItems = Lists.newArrayList();
+        for (String serviceName : serviceNamesInOrder) {
+            final CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName).build();
+            final List<LogicalServiceAction> serviceActionsForName = serviceActionsByName.get(serviceName);
+            for (LogicalServiceAction logicalServiceAction : serviceActionsForName) {
+                final ObjectAdapter serviceAdapter = logicalServiceAction.serviceAdapter;
+                final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+                if (serviceSpec.isHidden()) {
+                    continue;
+                }
+                final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
+                final ObjectAction objectAction = logicalServiceAction.objectAction;
+                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuLinkFactory);
+                if (subMenuItemBuilder == null) {
+                    // not visible
+                    continue;
+                } 
+                subMenuItemBuilder.build();
+            }
+            if (serviceMenuItem.hasSubMenuItems()) {
+                menuItems.add(serviceMenuItem);
+            }
+        }
         return menuItems;
     }
 
-    private void addMenuItemsIfVisible(final List<CssMenuItem> menuItems, final ObjectAdapter serviceAdapter) {
+
+    // //////////////////////////////////////
+
+    /**
+     * Spin through all object actions of the service adapter, and add to the provided List of {@link LogicalServiceAction}s. 
+     */
+    private static void collateServiceActions(final ObjectAdapter serviceAdapter, ActionType actionType, List<LogicalServiceAction> serviceActions) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-        if (serviceSpec.isHidden()) {
-            return;
-        }
-        final ObjectAdapterMemento serviceAdapterMemento = ObjectAdapterMemento.createOrNull(serviceAdapter);
-        final String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
-        final CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName).build();
-
-        addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem);
-        if (serviceMenuItem.hasSubMenuItems()) {
-            menuItems.add(serviceMenuItem);
-        }
-    }
-
-    private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento, final CssMenuItem serviceMenuItem) {
-
-        addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem, ActionType.USER);
-        addActionSubMenuItems(serviceAdapterMemento, serviceMenuItem, ActionType.PROTOTYPE);
-    }
-
-    private void addActionSubMenuItems(
-        final ObjectAdapterMemento serviceAdapterMemento,
-        final CssMenuItem serviceMenuItem,
-        ActionType actionType) {
-        final ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification();
-        for (final ObjectAction noAction : serviceSpec.getObjectActions(actionType, Contributed.INCLUDED)) {
-
+        for (final ObjectAction objectAction : serviceSpec.getObjectActions(actionType, Contributed.INCLUDED)) {
             // skip if annotated to not be included in repository menu
-            if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {
+            if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {
                 continue;
             }
-            final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, noAction, getLinkFactory());
-            if (subMenuItemBuilder != null) {
-                // not visible
-                subMenuItemBuilder.build();
+
+            final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
+            String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
+            if(Strings.isNullOrEmpty(serviceName)){
+                serviceName = serviceSpec.getFacet(NamedFacet.class).value();
             }
+            serviceActions.add(new LogicalServiceAction(serviceName, serviceAdapter, objectAction));
         }
     }
 
-    private CssMenuLinkFactory getLinkFactory() {
-        return cssMenuLinkFactory;
+    /**
+     * The unique service names, as they appear in order of the provided List of {@link LogicalServiceAction}s.
+     */
+    private List<String> serviceNamesInOrder(final List<LogicalServiceAction> serviceActions) {
+        final List<String> serviceNameOrder = Lists.newArrayList();
+        for (LogicalServiceAction serviceAction : serviceActions) {
+            if(!serviceNameOrder.contains(serviceAction.serviceName)) {
+                serviceNameOrder.add(serviceAction.serviceName);
+            }
+        }
+        return serviceNameOrder;
     }
+
+    /**
+     * Group the provided {@link LogicalServiceAction}s by their service name. 
+     */
+    private static Map<String, List<LogicalServiceAction>> groupByServiceName(final List<LogicalServiceAction> serviceActions) {
+        final Map<String, List<LogicalServiceAction>> serviceActionsByName = Maps.newTreeMap(); 
+        for (LogicalServiceAction serviceAction : serviceActions) {
+            List<LogicalServiceAction> serviceActionsForName = serviceActionsByName.get(serviceAction.serviceName);
+            if(serviceActionsForName == null) {
+                serviceActionsForName = Lists.newArrayList();
+                serviceActionsByName.put(serviceAction.serviceName, serviceActionsForName);
+            }
+            serviceActionsForName.add(serviceAction);
+        }
+        return serviceActionsByName;
+    }
+
+
+
 }
