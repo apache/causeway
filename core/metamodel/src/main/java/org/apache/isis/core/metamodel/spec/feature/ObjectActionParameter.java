@@ -108,7 +108,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     ObjectAdapter[] getChoices(ObjectAdapter adapter);
 
     /**
-     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * Whether there is an autoComplete provided (eg <tt>autoCompleteXxx</tt> supporting
      * method) for the parameter.
      */
     boolean hasAutoComplete();
@@ -119,7 +119,10 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg);
 
+    int getAutoCompleteMinLength();
+
     ObjectAdapter getDefault(ObjectAdapter adapter);
 
+ 
 
 }

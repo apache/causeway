@@ -32,11 +32,13 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.progmodel.facets.CollectionUtils;
+import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 
 public class PropertyAutoCompleteFacetViaMethod extends PropertyAutoCompleteFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesClass;
+    private final int minLength;
 
     private final AdapterManager adapterManager;
     private SpecificationLoader specificationLookup;
@@ -47,6 +49,7 @@ public class PropertyAutoCompleteFacetViaMethod extends PropertyAutoCompleteFace
         this.choicesClass = choicesClass;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
+        this.minLength = MinLengthUtil.determineMinLength(method);
     }
 
     /**
@@ -56,6 +59,11 @@ public class PropertyAutoCompleteFacetViaMethod extends PropertyAutoCompleteFace
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public int getMinLength() {
+        return minLength;
     }
 
     @Override

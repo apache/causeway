@@ -46,6 +46,9 @@ public abstract class ActionParameterAutoCompleteFacetAbstract extends FacetAbst
         return type != null ? getSpecificationLookup().loadSpecification(type) : null;
     }
 
+    @Override
+    public abstract int getMinLength();
+
     // /////////////////////////////////////////////////////////
     // Dependencies
     // /////////////////////////////////////////////////////////

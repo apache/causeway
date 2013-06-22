@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 
@@ -282,6 +283,13 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         }
         return null;
     }
+
+    @Override
+    public int getAutoCompleteMinLength() {
+        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
+        return propertyAutoCompleteFacet != null? propertyAutoCompleteFacet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
+    }
+
 
     // /////////////////////////////////////////////////////////////
     // getInstance

@@ -23,8 +23,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class PropertyAutoCompleteFacetAbstract extends FacetAbstract implements PropertyAutoCompleteFacet {
 
@@ -36,5 +34,7 @@ public abstract class PropertyAutoCompleteFacetAbstract extends FacetAbstract im
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 
+    @Override
+    public abstract int getMinLength();
 
 }

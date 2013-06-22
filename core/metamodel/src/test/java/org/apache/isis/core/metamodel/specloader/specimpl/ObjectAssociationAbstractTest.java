@@ -121,19 +121,21 @@ public class ObjectAssociationAbstractTest {
 
             @Override
             public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-                // TODO Auto-generated method stub
                 return false;
             }
 
             @Override
             public boolean hasAutoComplete() {
-                // TODO Auto-generated method stub
                 return false;
             }
 
             @Override
             public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
                 return null;
+            }
+            @Override
+            public int getAutoCompleteMinLength() {
+                return 0;
             }
         };
     }

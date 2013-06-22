@@ -41,4 +41,8 @@ public interface PropertyAutoCompleteFacet extends Facet {
      * Gets the available auto-complete choices for this property.
      */
     public Object[] autoComplete(ObjectAdapter inObject, String searchArg);
+    /**
+     * The minimum number of characters that need to be entered.
+     */
+    public int getMinLength();
 }

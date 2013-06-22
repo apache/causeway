@@ -17,24 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.autocomplete;
+package org.apache.isis.applib.annotation;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Obtain autocompletion for each of the parameters of the action.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
- * <tt>autoCompleteNXxx(..., String)</tt> support method for an action (where N is the 0-based
- * parameter number).
+ * The minimum entry length of an autocomplete search argument.
  */
-public interface ActionParameterAutoCompleteFacet extends Facet {
-
-    public Object[] autoComplete(ObjectAdapter inObject, String searchArg);
-    /**
-     * The minimum number of characters that need to be entered.
-     */
-    public int getMinLength();
+@Inherited
+@Target({ ElementType.PARAMETER })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MinLength {
+    int value();
 }

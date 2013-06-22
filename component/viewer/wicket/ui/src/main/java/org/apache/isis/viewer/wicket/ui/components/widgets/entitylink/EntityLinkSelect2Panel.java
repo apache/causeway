@@ -75,8 +75,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
     private static final String ID_FEEDBACK = "feedback";
     
-    private static final int MIN_INPUT_LENGTH = 1;
-
     private Select2Choice<ObjectAdapterMemento> autoCompleteField;
     private Link<String> entityDetailsLink;
     private Link<String> entityClearLink;
@@ -215,7 +213,9 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         };
         autoCompleteField = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model, provider);
         final Settings settings = autoCompleteField.getSettings();
-        settings.setMinimumInputLength(MIN_INPUT_LENGTH);
+        
+        ScalarModel scalarModel = (ScalarModel) getEntityModel();
+        settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
         addOrReplace(autoCompleteField);
         
         // no need for link, since can see in drop-down
@@ -231,7 +231,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
         @Override
         protected String getDisplayText(ObjectAdapterMemento choice) {
-            return choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString();
+            return choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString(null);
         }
 
         @Override

@@ -231,6 +231,11 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
         return new ObjectAdapter[0];
     }
+    
+    @Override
+    public int getAutoCompleteMinLength() {
+        return 0; // n/a
+    }
 
     // /////////////////////////////////////////////////////////////
     // getInstance

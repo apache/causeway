@@ -92,4 +92,5 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
     @Deprecated
     void clearAssociation(ObjectAdapter inObject);
 
+
 }

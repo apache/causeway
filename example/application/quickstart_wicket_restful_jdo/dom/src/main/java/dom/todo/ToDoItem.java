@@ -46,6 +46,7 @@ import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersisted;
@@ -377,8 +378,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         getDependencies().add(toDoItem);
         return this;
     }
-    public List<ToDoItem> autoComplete0Add(final String search) {
+    public List<ToDoItem> autoComplete0Add(final @MinLength(2) String search) {
         final List<ToDoItem> list = toDoItems.autoComplete(search);
+        list.removeAll(getDependencies());
         list.remove(this);
         return list;
     }

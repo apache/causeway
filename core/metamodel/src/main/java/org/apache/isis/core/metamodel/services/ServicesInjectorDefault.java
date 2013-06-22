@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -167,15 +168,22 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static void injectServices(final Object object, final List<Object> services) {
         final Class<?> cls = object.getClass();
-        final Method[] methods = cls.getMethods();
-
-        for (int j = 0; j < methods.length; j++) {
+        
+        final List<Method> methods = Arrays.asList(cls.getMethods());
+        final Iterable<Method> setterAndInjectorMethods = Iterables.filter(methods, new Predicate<Method>(){
+            public boolean apply(Method method) {
+                final String methodName = method.getName();
+                return methodName.startsWith("set") || methodName.startsWith("inject");
+            }
+        });
+        
+        for (final Method method : setterAndInjectorMethods) {
             for (final Object service : services) {
                 final Class<?> serviceClass = service.getClass();
-                boolean isInjectorMethod = isInjectorMethodFor(methods[j], serviceClass);
+                boolean isInjectorMethod = isInjectorMethodFor(method, serviceClass);
                 if(isInjectorMethod) {
-                    methods[j].setAccessible(true);
-                    invokeSetMethod(methods[j], object, service);
+                    method.setAccessible(true);
+                    invokeSetMethod(method, object, service);
                 }
             }
         }

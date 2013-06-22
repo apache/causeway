@@ -37,11 +37,13 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
 
     private final Method method;
     private final Class<?> choicesType;
+    private final int minLength;
 
     public ActionParameterAutoCompleteFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
         super(holder, specificationLookup, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
+        this.minLength = MinLengthUtil.determineMinLength(method);
     }
 
     /**
@@ -51,6 +53,11 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+    
+    @Override
+    public int getMinLength() {
+        return minLength;
     }
 
     @Override
@@ -81,5 +88,6 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     protected String toStringValues() {
         return "method=" + method + ",type=" + choicesType;
     }
+
 
 }

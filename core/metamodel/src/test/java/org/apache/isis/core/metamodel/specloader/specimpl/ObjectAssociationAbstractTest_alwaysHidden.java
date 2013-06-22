@@ -133,6 +133,10 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
                 return null;
             }
+            @Override
+            public int getAutoCompleteMinLength() {
+                return 0;
+            }
         };
 
         context.checking(new Expectations() {

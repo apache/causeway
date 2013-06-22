@@ -46,7 +46,6 @@ import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -58,6 +57,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
@@ -294,6 +294,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             addParameterChoicesForBounded(autoCompleteChoiceAdapters);
         }
         return autoCompleteChoiceAdapters.toArray(new ObjectAdapter[0]);
+    }
+
+    @Override
+    public int getAutoCompleteMinLength() {
+        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
+        return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
     private <T> void addParameterChoicesForBounded(final List<ObjectAdapter> parameterChoices) {

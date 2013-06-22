@@ -64,6 +64,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg);
 
+    int getAutoCompleteMinLength();
+
     /**
      * Returns true if calculated from other data in the object, that is, should
      * not be persisted.

@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -181,6 +182,19 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
+            public int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel) {
+                
+                if (scalarModel.hasAutoComplete()) {
+                    final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                    final OneToOneAssociation property = propertyMemento.getProperty();
+                    return property.getAutoCompleteMinLength();
+                } else {
+                    return 0;
+                }
+            }
+
+            
+            @Override
             public void resetVersion(ScalarModel scalarModel) {
                 scalarModel.parentObjectAdapterMemento.resetVersion();
             }
@@ -207,6 +221,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
+
         },
         PARAMETER {
             @Override
@@ -305,7 +320,18 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectAdapter[] choices = actionParameter.getAutoComplete(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), searchArg);
                 return choicesAsList(choices);
             }
-            
+
+            @Override
+            public int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel) {
+                if (scalarModel.hasAutoComplete()) {
+                    final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                    final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                    return actionParameter.getAutoCompleteMinLength();
+                } else {
+                    return 0;
+                }
+            }
+
             @Override
             public void resetVersion(ScalarModel scalarModel) {
                 // no-op?
@@ -370,6 +396,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ObjectAdapter> getAutoComplete(ScalarModel scalarModel, String searchArg);
+        public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
         
         public abstract void resetVersion(ScalarModel scalarModel);
 
@@ -378,6 +405,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
         public abstract Integer getLength(ScalarModel scalarModel);
         public abstract Integer getScale(ScalarModel scalarModel);
+
     }
 
     private final Kind kind;
@@ -591,6 +619,14 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     public List<LinkAndLabel> getLinks() {
         return Collections.unmodifiableList(entityActions);
     }
+
+    /**
+     * @return
+     */
+    public int getAutoCompleteMinLength() {
+        return kind.getAutoCompleteOrChoicesMinLength(this);
+    }
+
 
 
 }
