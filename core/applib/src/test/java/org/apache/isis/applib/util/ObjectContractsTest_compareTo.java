@@ -46,24 +46,31 @@ public class ObjectContractsTest_compareTo extends ComparableContractTest_compar
         return listOf(
                    listOf(
                            // invoice desc, ...
-                           InvoiceItem.newInvoiceItem(null, null, null)
-                          ,InvoiceItem.newInvoiceItem(inv456, null, null)
-                          ,InvoiceItem.newInvoiceItem(inv456, null, null)
-                          ,InvoiceItem.newInvoiceItem(inv123, null, null)
+                           InvoiceItem.newInvoiceItem(null, null, null, null)
+                          ,InvoiceItem.newInvoiceItem(inv456, null, null, null)
+                          ,InvoiceItem.newInvoiceItem(inv456, null, null, null)
+                          ,InvoiceItem.newInvoiceItem(inv123, null, null, null)
                            )
                    ,listOf(
                            // ..., productCode, ...
-                           InvoiceItem.newInvoiceItem(inv123, null, null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "B", null)
+                           InvoiceItem.newInvoiceItem(inv123, null, null, null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "B", null, null)
                            )
                    ,listOf(
                            // ..., quantity
-                           InvoiceItem.newInvoiceItem(inv123, "A", null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1))
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1))
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2))
+                           InvoiceItem.newInvoiceItem(inv123, "A", null, null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
+                           )
+                   ,listOf(
+                           // ..., rush desc
+                           InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), true)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), true)
+                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
                            )
                 );
     }

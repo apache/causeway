@@ -38,18 +38,20 @@ public class ObjectContractsTest_toString {
 
     @Test
     public void vanilla() {
-        assertThat(InvoiceItem.newInvoiceItem(null, null, null).toString(), is("InvoiceItem{invoice=null, productCode=null, quantity=null}"));
-        assertThat(InvoiceItem.newInvoiceItem(inv, null, null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=null, quantity=null}"));
-        assertThat(InvoiceItem.newInvoiceItem(inv, "A", null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=null}"));
-        assertThat(InvoiceItem.newInvoiceItem(inv, "A", new Integer(1)).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1}"));
+        assertThat(InvoiceItem.newInvoiceItem(null, null, null, null).toString(), is("InvoiceItem{invoice=null, productCode=null, quantity=null, rush=null}"));
+        assertThat(InvoiceItem.newInvoiceItem(inv, null, null, null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=null, quantity=null, rush=null}"));
+        assertThat(InvoiceItem.newInvoiceItem(inv, "A", null, null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=null, rush=null}"));
+        assertThat(InvoiceItem.newInvoiceItem(inv, "A", new Integer(1), null).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1, rush=null}"));
+        assertThat(InvoiceItem.newInvoiceItem(inv, "A", new Integer(1), true).toString(), is("InvoiceItem{invoice=Invoice{number=123}, productCode=A, quantity=1, rush=true}"));
     }
 
     @Test
     public void customized() {
-        assertThat(InvoiceItem2.newInvoiceItem(null, null, null).toString(), is("InvoiceItem2{invoice=null, productCode=null, quantity=null}"));
-        assertThat(InvoiceItem2.newInvoiceItem(inv2, null, null).toString(), is("InvoiceItem2{invoice=123, productCode=null, quantity=null}"));
-        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", null).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=null}"));
-        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", new Integer(1)).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1}"));
+        assertThat(InvoiceItem2.newInvoiceItem(null, null, null, null).toString(), is("InvoiceItem2{invoice=null, productCode=null, quantity=null, rush=null}"));
+        assertThat(InvoiceItem2.newInvoiceItem(inv2, null, null, null).toString(), is("InvoiceItem2{invoice=123, productCode=null, quantity=null, rush=null}"));
+        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", null, null).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=null, rush=null}"));
+        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", new Integer(1), null).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1, rush=null}"));
+        assertThat(InvoiceItem2.newInvoiceItem(inv2, "A", new Integer(1), false).toString(), is("InvoiceItem2{invoice=123, productCode=A, quantity=1, rush=false}"));
     }
 
 }
@@ -75,11 +77,12 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
 }
 class InvoiceItem2 implements Comparable<InvoiceItem2> {
 
-    static InvoiceItem2 newInvoiceItem(Invoice2 invoice, String productCode, Integer quantity) {
+    static InvoiceItem2 newInvoiceItem(Invoice2 invoice, String productCode, Integer quantity, Boolean rush) {
         final InvoiceItem2 invoiceItem = new InvoiceItem2();
         invoiceItem.setInvoice(invoice);
         invoiceItem.setProductCode(productCode);
         invoiceItem.setQuantity(quantity);
+        invoiceItem.setRush(rush);
         return invoiceItem;
     }
 
@@ -107,8 +110,16 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
         this.quantity = quantity;
     }
  
+    private Boolean rush;
+    public Boolean isRush() {
+        return rush;
+    }
+    public void setRush(Boolean rush) {
+        this.rush = rush;
+    }
     
-    private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity";
+    
+    private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
     
     @Override
     public String toString() {

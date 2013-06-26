@@ -19,7 +19,6 @@
 package dom.todo;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
@@ -63,6 +62,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
 
@@ -349,11 +349,18 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public static class DependenciesComparator implements Comparator<ToDoItem> {
         @Override
         public int compare(ToDoItem p, ToDoItem q) {
-            return ORDERING_BY_DESCRIPTION
+            Ordering<ToDoItem> byDescription = new Ordering<ToDoItem>() {
+                public int compare(final ToDoItem p, final ToDoItem q) {
+                    return Ordering.natural().nullsFirst().compare(p.getDescription(), q.getDescription());
+                }
+            };
+            return byDescription
                     .compound(Ordering.<ToDoItem>natural())
                     .compare(p, q);
         }
     }
+
+    
 
     @javax.jdo.annotations.Persistent(table="TODO_DEPENDENCIES")
     @javax.jdo.annotations.Join(column="DEPENDING_TODO_ID")
@@ -567,39 +574,12 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     /**
-     * by complete flag, then due by date, then description.
-     * 
-     * <p>
-     * Required because {@link #getDependencies()} is of type {@link SortedSet}. 
+     * Required so can store in {@link SortedSet sorted set}s (eg {@link #getDependencies()}). 
      */
     @Override
     public int compareTo(final ToDoItem other) {
-        return ORDERING_BY_COMPLETE
-                .compound(ORDERING_BY_DUE_BY)
-                .compound(ORDERING_BY_DESCRIPTION)
-                .compare(this, other);
+        return ObjectContracts.compare(this, other, "complete,dueBy,description");
     }
-    
-    private final static Ordering<ToDoItem> ORDERING_BY_COMPLETE = new Ordering<ToDoItem>() {
-        public int compare(final ToDoItem p, final ToDoItem q) {
-            return Ordering.natural().nullsFirst().compare(p.isComplete(), q.isComplete());
-        }
-    };
-    private final static Ordering<ToDoItem> ORDERING_BY_DUE_BY = new Ordering<ToDoItem>() {
-        public int compare(final ToDoItem p, final ToDoItem q) {
-            return Ordering.natural().nullsFirst().compare(p.getDueBy(), q.getDueBy());
-        }
-    };
-    private final static Ordering<ToDoItem> ORDERING_BY_DESCRIPTION = new Ordering<ToDoItem>() {
-        public int compare(final ToDoItem p, final ToDoItem q) {
-            return Ordering.natural().nullsFirst().compare(p.getDescription(), q.getDescription());
-        }
-    };
-    private final static Ordering<ToDoItem> ORDERING_BY_CATEGORY = new Ordering<ToDoItem>() {
-        public int compare(final ToDoItem p, final ToDoItem q) {
-            return Ordering.natural().nullsFirst().compare(p.getCategory(), q.getCategory());
-        }
-    };
 
     // //////////////////////////////////////
     // Injected
@@ -636,6 +616,5 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //    public void setLocation(Location location) {
 //        this.location = location;
 //    }
-
 
 }

@@ -170,16 +170,20 @@ class Clause {
         if(obj == null) {
             return null;
         }
-        String methodName = buildMethodName(propertyName);
+        final String methodNameSuffix = upperFirst(propertyName);
+        final String getMethodName = "get" + methodNameSuffix;
         try {
-            final Method getterMethod = obj.getClass().getMethod(methodName);
+            final Method getterMethod = obj.getClass().getMethod(getMethodName);
             return getterMethod.invoke(obj);
         } catch (Exception e) {
-            throw new IllegalArgumentException("No such method ' " + methodName + "'", e);
+            final String isMethodName = "is" + methodNameSuffix;
+            try {
+                final Method getterMethod = obj.getClass().getMethod(isMethodName);
+                return getterMethod.invoke(obj);
+            } catch (Exception ex) {
+                throw new IllegalArgumentException("No such method ' " + getMethodName + "' or '" + isMethodName + "'", e);
+            }
         }
-    }
-    private static String buildMethodName(String propertyName) {
-        return "get" + upperFirst(propertyName);
     }
     private static String upperFirst(final String str) {
         if (Strings.isNullOrEmpty(str)) {

@@ -19,11 +19,12 @@ package org.apache.isis.applib.util;
 
 class InvoiceItem implements Comparable<InvoiceItem> {
 
-    static InvoiceItem newInvoiceItem(Invoice invoice, String productCode, Integer quantity) {
+    static InvoiceItem newInvoiceItem(Invoice invoice, String productCode, Integer quantity, Boolean rush) {
         final InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setInvoice(invoice);
         invoiceItem.setProductCode(productCode);
         invoiceItem.setQuantity(quantity);
+        invoiceItem.setRush(rush);
         return invoiceItem;
     }
 
@@ -51,8 +52,15 @@ class InvoiceItem implements Comparable<InvoiceItem> {
         this.quantity = quantity;
     }
  
+    private Boolean rush;
+    public Boolean isRush() {
+        return rush;
+    }
+    public void setRush(Boolean rush) {
+        this.rush = rush;
+    }
     
-    private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity";
+    private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
     
     @Override
     public String toString() {
