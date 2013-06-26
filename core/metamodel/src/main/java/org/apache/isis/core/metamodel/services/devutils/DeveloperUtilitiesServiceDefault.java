@@ -62,16 +62,30 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
         
         final List<MetaModelRow> rows = Lists.newArrayList();
         for (ObjectSpecification spec : specifications) {
+            if(exclude(spec)) {
+                continue;
+            }
             final List<ObjectAssociation> properties = spec.getAssociations(ObjectAssociationFilters.PROPERTIES);
             for (ObjectAssociation property : properties) {
-                rows.add(new MetaModelRow(spec, (OneToOneAssociation)property));
+                final OneToOneAssociation otoa = (OneToOneAssociation)property;
+                if(exclude(otoa)) {
+                    continue;
+                }
+                rows.add(new MetaModelRow(spec, otoa));
             }
             final List<ObjectAssociation> associations = spec.getAssociations(ObjectAssociationFilters.COLLECTIONS);
             for (ObjectAssociation collection : associations) {
-                rows.add(new MetaModelRow(spec, (OneToManyAssociation)collection));
+                final OneToManyAssociation otma = (OneToManyAssociation)collection;
+                if(exclude(otma)) {
+                    continue;
+                }
+                rows.add(new MetaModelRow(spec, otma));
             }
             final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
             for (ObjectAction action : actions) {
+                if(exclude(action)) {
+                    continue;
+                }
                 rows.add(new MetaModelRow(spec, action));
             }
         }
@@ -86,8 +100,27 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
         return new Clob("metamodel.csv", mimeTypeTextCsv, buf.toString().toCharArray());
     }
 
+    protected boolean exclude(OneToOneAssociation property) {
+        return false;
+    }
+
+    protected boolean exclude(OneToManyAssociation collection) {
+        return false;
+    }
     
+    protected boolean exclude(ObjectAction action) {
+        return false;
+    }
     
+    protected boolean exclude(ObjectSpecification spec) {
+        return isBuiltIn(spec) || spec.isAbstract();
+    }
+
+    protected boolean isBuiltIn(ObjectSpecification spec) {
+        final String className = spec.getFullIdentifier();
+        return className.startsWith("java") || className.startsWith("org.joda") || className.startsWith("org.apache.isis");
+    }
+
     private SpecificationLoader specificationLoader;
     
     @Override
