@@ -35,6 +35,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 
@@ -100,6 +101,6 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
 
         };
         link.add(new JGrowlBehaviour());
-        return new LinkAndLabel(link, objectAction.getName(), null);
+        return new LinkAndLabel(link, objectAction.getName(), null, false);
     }
 }

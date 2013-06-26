@@ -31,6 +31,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -49,7 +50,8 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
         final String actionLabel = ObjectActions.nameFor(action);
 
-        return new LinkAndLabel(link, actionLabel, null);
+        boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
+        return new LinkAndLabel(link, actionLabel, null, blobOrClob);
     }
 
     

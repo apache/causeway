@@ -29,11 +29,13 @@ public class LinkAndLabel implements Serializable {
     private final AbstractLink link;
     private final String label;
     private final String disabledReasonIfAny;
+    private final boolean blobOrClob;
 
-    public LinkAndLabel(final AbstractLink link, final String label, String disabledReasonIfAny) {
+    public LinkAndLabel(final AbstractLink link, final String label, String disabledReasonIfAny, boolean blobOrClob) {
         this.link = link;
         this.label = label;
         this.disabledReasonIfAny = disabledReasonIfAny;
+        this.blobOrClob = blobOrClob;
     }
 
     public AbstractLink getLink() {
@@ -46,5 +48,9 @@ public class LinkAndLabel implements Serializable {
  
     public String getDisabledReasonIfAny() {
         return disabledReasonIfAny;
+    }
+
+    public boolean isBlobOrClob() {
+        return blobOrClob;
     }
 }

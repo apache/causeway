@@ -21,7 +21,7 @@ $(document).ready(function() {
         $('#veil').show(); 
     };
     
-    $('.buttons .okButton').click(showVeil);
-    $('.buttons .ok').click(showVeil);
-    $('.cssSubMenuItemsPanel .cssSubMenuItem a').click(showVeil);
+    $('.buttons .okButton:not(.noVeil)').click(showVeil);
+    $('.buttons .ok:not(.noVeil)').click(showVeil);
+    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(showVeil);
 });

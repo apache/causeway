@@ -21,12 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -73,6 +75,9 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
                 if(disabledReasonIfAny != null) {
                     viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
+                }
+                if(linkAndLabel.isBlobOrClob()) {
+                    link.add(new AttributeModifier("class", Model.of("noVeil")));
                 }
                 viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);

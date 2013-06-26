@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -38,12 +37,14 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -87,6 +88,12 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
+
+        public Builder returnsBlobOrClob(boolean blobOrClob) {
+            cssMenuItem.setReturnsBlobOrClob(blobOrClob);
+            return this;
+        }
+
         /**
          * Access the {@link CssMenuItem} before it is attached to its parent.
          * 
@@ -114,12 +121,13 @@ public class CssMenuItem implements Serializable {
 
     private AbstractLink link;
     private boolean enabled = true; // unless disabled
-
     private String disabledReason;
+    private boolean blobOrClob = false; // unless set otherwise
 
     static final String ID_MENU_LABEL = "menuLabel";
 
     static final String ID_SUB_MENU_ITEMS = "subMenuItems";
+
 
     /**
      * Factory method returning {@link Builder builder}.
@@ -172,6 +180,11 @@ public class CssMenuItem implements Serializable {
         this.enabled = enabled;
     }
 
+    public void setReturnsBlobOrClob(boolean blobOrClob) {
+        this.blobOrClob = blobOrClob;
+    }
+
+
     /**
      * Only populated if not {@link #isEnabled() enabled}.
      */
@@ -223,10 +236,26 @@ public class CssMenuItem implements Serializable {
         // check whether enabled
         final Consent usability = objectAction.isUsable(session, adapter, where);
         final String reasonDisabledIfAny = usability.getReason();
+        
+        // check if returns blob or clob (if so, then add CSS to suppress veil)
+        boolean blobOrClob = returnsBlobOrClob(objectAction);
 
-        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny);
+        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny).returnsBlobOrClob(blobOrClob);
     }
 
+    public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
+        boolean blobOrClob = false;
+        final ObjectSpecification returnType = objectAction.getReturnType();
+        if(returnType != null) {
+            Class<?> cls = returnType.getCorrespondingClass();
+            if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
+                blobOrClob = true;
+            }
+        }
+        return blobOrClob;
+    }
+
+    
     /**
      * Creates a {@link Builder} for a submenu item where the provided {@link CssMenuLinkFactory} is able to provide the target adapter. 
      */
@@ -260,6 +289,10 @@ public class CssMenuItem implements Serializable {
             // show link...
             markupContainer.add(link);
             link.add(label);
+            
+            if(this.blobOrClob) {
+                link.add(new AttributeModifier("class", Model.of("noVeil")));
+            }
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return link;

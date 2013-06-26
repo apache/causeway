@@ -43,6 +43,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -81,7 +82,8 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
             link.setEnabled(false);
         }
 
-        return new LinkAndLabel(link, label, disabledReasonIfAny);
+        boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
+        return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob);
     }
 
     private AbstractLink createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
