@@ -103,6 +103,11 @@ public class CssMenuItem implements Serializable {
             return cssMenuItem;
         }
 
+        public Builder prototyping(boolean prototype) {
+            cssMenuItem.setPrototyping(prototype);
+            return this;
+        }
+        
         /**
          * Returns the built {@link CssMenuItem}, associating with
          * {@link #parent(CssMenuItem) parent} (if specified).
@@ -113,6 +118,7 @@ public class CssMenuItem implements Serializable {
             }
             return cssMenuItem;
         }
+
     }
 
     private final String name;
@@ -123,10 +129,12 @@ public class CssMenuItem implements Serializable {
     private boolean enabled = true; // unless disabled
     private String disabledReason;
     private boolean blobOrClob = false; // unless set otherwise
+    private boolean prototype = false; // unless set otherwise
 
     static final String ID_MENU_LABEL = "menuLabel";
 
     static final String ID_SUB_MENU_ITEMS = "subMenuItems";
+
 
 
     /**
@@ -134,6 +142,14 @@ public class CssMenuItem implements Serializable {
      */
     public static Builder newMenuItem(final String name) {
         return new Builder(name);
+    }
+
+    /**
+     * @param prototype
+     */
+    public void setPrototyping(boolean prototype) {
+        this.prototype = prototype;
+        
     }
 
     private CssMenuItem(final String name) {
@@ -238,9 +254,10 @@ public class CssMenuItem implements Serializable {
         final String reasonDisabledIfAny = usability.getReason();
         
         // check if returns blob or clob (if so, then add CSS to suppress veil)
-        boolean blobOrClob = returnsBlobOrClob(objectAction);
+        final boolean blobOrClob = returnsBlobOrClob(objectAction);
+        final boolean prototype = isExplorationOrPrototype(objectAction);
 
-        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny).returnsBlobOrClob(blobOrClob);
+        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny).returnsBlobOrClob(blobOrClob).prototyping(prototype);
     }
 
     public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
@@ -253,6 +270,10 @@ public class CssMenuItem implements Serializable {
             }
         }
         return blobOrClob;
+    }
+
+    public static boolean isExplorationOrPrototype(final ObjectAction action) {
+        return action.getType().isExploration() || action.getType().isPrototype();
     }
 
     
@@ -291,7 +312,10 @@ public class CssMenuItem implements Serializable {
             link.add(label);
             
             if(this.blobOrClob) {
-                link.add(new AttributeModifier("class", Model.of("noVeil")));
+                link.add(new CssClassAppender("noVeil"));
+            }
+            if(this.prototype) {
+                link.add(new CssClassAppender("prototype"));
             }
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
@@ -302,6 +326,7 @@ public class CssMenuItem implements Serializable {
             // ... and show label, along with disabled reason
             label.add(new AttributeModifier("title", Model.of(this.getDisabledReason())));
             label.add(new AttributeModifier("class", Model.of("disabled")));
+
             markupContainer.add(label);
 
             return label;

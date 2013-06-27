@@ -93,7 +93,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
      * Builds the parts of the GUI that are not dynamic.
      */
     private void buildGui() {
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
+        //addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
         syncWithInput();
     }
 

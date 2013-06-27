@@ -77,7 +77,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
                 }
                 if(linkAndLabel.isBlobOrClob()) {
-                    link.add(new AttributeModifier("class", Model.of("noVeil")));
+                    link.add(new CssClassAppender("noVeil"));
+                }
+                if(linkAndLabel.isPrototype()) {
+                    link.add(new CssClassAppender("prototype"));
                 }
                 viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);

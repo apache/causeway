@@ -235,6 +235,11 @@ colors
     	font-weight:bold;
 	}
 	
+    #applicationActions .cssMenuPanel .menuh a.prototype span {
+	    color: lightblue;
+	}
+	
+	
 	#applicationActions .cssMenuPanel .menuh li a:link, 
 	#applicationActions .cssMenuPanel .menuh li a:visited, 
 	#applicationActions .cssMenuPanel .menuh li a:active, 
@@ -291,7 +296,7 @@ colors
 	    padding: 0px 1em 0px 1em;
 	    background-image:none !important;
 	}
-	
+
 	#applicationActions .cssMenuPanel .menuh li:hover a, 
 	#applicationActions .cssMenuPanel .menuh li:hover p {
 		color: #FFFFFF;

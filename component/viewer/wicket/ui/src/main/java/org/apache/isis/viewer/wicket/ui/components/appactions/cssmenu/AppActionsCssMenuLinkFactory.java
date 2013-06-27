@@ -50,8 +50,10 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
         final String actionLabel = ObjectActions.nameFor(action);
 
-        boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
-        return new LinkAndLabel(link, actionLabel, null, blobOrClob);
+        final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
+        final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);
+        
+        return new LinkAndLabel(link, actionLabel, null, blobOrClob, prototype);
     }
 
     

@@ -82,8 +82,9 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
             link.setEnabled(false);
         }
 
-        boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
-        return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob);
+        final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
+        final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);
+        return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob, prototype);
     }
 
     private AbstractLink createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
