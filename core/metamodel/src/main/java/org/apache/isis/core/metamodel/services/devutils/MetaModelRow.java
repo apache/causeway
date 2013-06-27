@@ -16,13 +16,16 @@
  */
 package org.apache.isis.core.metamodel.services.devutils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.SortedSet;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
@@ -49,99 +52,11 @@ import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidat
 public class MetaModelRow implements Comparable<MetaModelRow>{
 
     enum MemberType {
-        PROPERTY {
-            @Override
-            String getChoices(MetaModelRow metaModelRow) {
-                return interpretRowAndFacet(metaModelRow, PropertyChoicesFacet.class);
-            }
-            @Override
-            String getAutoComplete(MetaModelRow metaModelRow) {
-                return interpretRowAndFacet(metaModelRow, PropertyAutoCompleteFacet.class);
-            }
-            @Override
-            String getDefault(MetaModelRow metaModelRow) {
-                return interpretRowAndFacet(metaModelRow, PropertyDefaultFacet.class);
-            }
-            @Override
-            String getValidate(MetaModelRow metaModelRow) {
-                return interpretRowAndFacet(metaModelRow, PropertyValidateFacet.class);
-            }
-        },
-        COLLECTION {
-            @Override
-            String getChoices(MetaModelRow metaModelRow) {
-                return "";
-            }
-            @Override
-            String getAutoComplete(MetaModelRow metaModelRow) {
-                return "";
-            }
-            @Override
-            String getDefault(MetaModelRow metaModelRow) {
-                return "";
-            }
-            @Override
-            String getValidate(MetaModelRow metaModelRow) {
-                final List<String> interpretations = Lists.newArrayList();
-                addIfNotEmpty(interpretRowAndFacet(metaModelRow, CollectionValidateAddToFacet.class), interpretations);
-                addIfNotEmpty(interpretRowAndFacet(metaModelRow, CollectionValidateRemoveFromFacet.class), interpretations);
-                return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
-            }
-        },
-        ACTION {
-            @Override
-            String getChoices(MetaModelRow metaModelRow) {
-                final List<ObjectActionParameter> parameters = metaModelRow.action.getParameters();
-                final List<String> interpretations = Lists.newArrayList();
-                for (ObjectActionParameter param : parameters) {
-                    final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
-                    addIfNotEmpty(interpretFacet(facet), interpretations);
-                }
-                return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : interpretRowAndFacet(metaModelRow, ActionChoicesFacet.class);
-            }
-            @Override
-            String getAutoComplete(MetaModelRow metaModelRow) {
-                final List<ObjectActionParameter> parameters = metaModelRow.action.getParameters();
-                final List<String> interpretations = Lists.newArrayList();
-                for (ObjectActionParameter param : parameters) {
-                    final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
-                    addIfNotEmpty(interpretFacet(facet), interpretations);
-                }
-                return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
-            }
-            @Override
-            String getDefault(MetaModelRow metaModelRow) {
-                final List<ObjectActionParameter> parameters = metaModelRow.action.getParameters();
-                final List<String> interpretations = Lists.newArrayList();
-                for (ObjectActionParameter param : parameters) {
-                    final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);
-                    addIfNotEmpty(interpretFacet(facet), interpretations);
-                }
-                return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : interpretRowAndFacet(metaModelRow, ActionDefaultsFacet.class);
-            }
-            @Override
-            String getValidate(MetaModelRow metaModelRow) {
-                return interpretRowAndFacet(metaModelRow, ActionValidationFacet.class);
-            }
-        };
-
-        private static String interpretRowAndFacet(MetaModelRow metaModelRow, Class<? extends Facet> facetClass) {
-            final Facet facet = metaModelRow.member.getFacet(facetClass);
-            return interpretFacet(facet);
-        }
-        
-        private static void addIfNotEmpty(final String str, final List<String> list) {
-            if(!Strings.isNullOrEmpty(str)) {
-                list.add(str);
-            }
-        }
-
-        abstract String getChoices(MetaModelRow metaModelRow);
-        abstract String getAutoComplete(MetaModelRow metaModelRow);
-        abstract String getDefault(MetaModelRow metaModelRow);
-        abstract String getValidate(MetaModelRow metaModelRow);
+        PROPERTY,
+        COLLECTION,
+        ACTION;
     }
-    
+
     private final ObjectSpecification spec;
     private final MemberType memberType;
     private final ObjectMember member;
@@ -173,7 +88,16 @@ public class MetaModelRow implements Comparable<MetaModelRow>{
         return service || spec.isService() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
     }
     public String getClassName() {
-        return spec.getFullIdentifier();
+        final String fullIdentifier = spec.getFullIdentifier();
+        final int lastDot = fullIdentifier.lastIndexOf(".");
+        return lastDot>0 && lastDot < fullIdentifier.length()-1
+                ?fullIdentifier.substring(lastDot+1,fullIdentifier.length())
+                :fullIdentifier;
+    }
+    public String getPackageName() {
+        final String fullIdentifier = spec.getFullIdentifier();
+        final int lastDot = fullIdentifier.lastIndexOf(".");
+        return lastDot>0?fullIdentifier.substring(0,lastDot):fullIdentifier;
     }
     public String getType() {
         return memberType.name().toLowerCase();
@@ -191,25 +115,71 @@ public class MetaModelRow implements Comparable<MetaModelRow>{
         return interpret(DisabledFacet.class);
     }
     public String getChoices() {
-        return memberType.getChoices(this);
+        if(memberType == MemberType.PROPERTY) {
+            return interpretRowAndFacet(PropertyChoicesFacet.class);
+        } else if(memberType == MemberType.COLLECTION) {
+            return "";
+        } else {
+            final List<ObjectActionParameter> parameters = this.action.getParameters();
+            final SortedSet<String> interpretations = Sets.newTreeSet();
+            for (ObjectActionParameter param : parameters) {
+                final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
+                addIfNotEmpty(interpretFacet(facet), interpretations);
+            }
+            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : interpretRowAndFacet(ActionChoicesFacet.class);
+        }
     }
     public String getAutoComplete() {
-        return memberType.getAutoComplete(this);
+        if(memberType == MemberType.PROPERTY) {
+            return interpretRowAndFacet(PropertyAutoCompleteFacet.class);
+        } else if(memberType == MemberType.COLLECTION) {
+           return "";
+        } else {
+            final List<ObjectActionParameter> parameters = this.action.getParameters();
+            final SortedSet<String> interpretations = Sets.newTreeSet();
+            for (ObjectActionParameter param : parameters) {
+                final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
+                addIfNotEmpty(interpretFacet(facet), interpretations);
+            }
+            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
+        }
     }
     String getDefault() {
-        return memberType.getDefault(this);
+        if(memberType == MemberType.PROPERTY) {
+            return interpretRowAndFacet(PropertyDefaultFacet.class);
+        } else if(memberType == MemberType.COLLECTION) {
+            return "";
+        } else {
+            final List<ObjectActionParameter> parameters = this.action.getParameters();
+            final SortedSet<String> interpretations = Sets.newTreeSet();
+            for (ObjectActionParameter param : parameters) {
+                final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);
+                addIfNotEmpty(interpretFacet(facet), interpretations);
+            }
+            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : interpretRowAndFacet(ActionDefaultsFacet.class);
+        }
     }
     String getValidate() {
-        return memberType.getValidate(this);
+        if(memberType == MemberType.PROPERTY) {
+            return interpretRowAndFacet(PropertyValidateFacet.class);
+        } else if(memberType == MemberType.COLLECTION) {
+            final SortedSet<String> interpretations = Sets.newTreeSet();
+            addIfNotEmpty(interpretRowAndFacet(CollectionValidateAddToFacet.class), interpretations);
+            addIfNotEmpty(interpretRowAndFacet(CollectionValidateRemoveFromFacet.class), interpretations);
+            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
+       } else {
+           return interpretRowAndFacet(ActionValidationFacet.class);
+        }
     }
 
     static Object header() {
-        return "classType,className,memberType,memberName,numParams,hidden,disabled,choices,autoComplete,default,validate";
+        return "classType,packageName,className,memberType,memberName,numParams,hidden,disabled,choices,autoComplete,default,validate";
     }
     
     String asTextCsv() {
         return Joiner.on(",").join(
                 getClassType(),
+                getPackageName(),
                 getClassName(),
                 getType(),
                 getMemberName(),
@@ -221,26 +191,44 @@ public class MetaModelRow implements Comparable<MetaModelRow>{
                 getDefault(),
                 getValidate());
     }
+ 
+    private String interpretRowAndFacet(Class<? extends Facet> facetClass) {
+        final Facet facet = member.getFacet(facetClass);
+        return interpretFacet(facet);
+    }
+    
+    private static void addIfNotEmpty(final String str, final SortedSet<String> set) {
+        if(!Strings.isNullOrEmpty(str)) {
+            set.add(str);
+        }
+    }
     
     private String interpret(final Class<? extends Facet> cls) {
         return interpretFacet(member.getFacet(cls));
     }
 
     private static String interpretFacet(final Facet facet) {
-        if (facet == null) {
+        if (facet == null || facet.isNoop()) {
             return "";
         }
         if (facet instanceof ImperativeFacet) {
             ImperativeFacet imperativeFacet = (ImperativeFacet) facet;
             return imperativeFacet.getMethods().get(0).getName();
-        } else {
-            return "decl.";
-        }
+        } 
+        final String name = facet.getClass().getSimpleName();
+        if (ignore(name)) {
+            return "";
+        } 
+        final String abbr = StringUtils.toAbbreviation(name);
+        return abbr.length()>0 ? abbr : name;
+    }
+
+    protected static boolean ignore(final String name) {
+        return Arrays.asList("PropertyValidateFacetDefault","PropertyDefaultFacetDerivedFromDefaultedFacet").contains(name);
     }
 
     @Override
     public int compareTo(MetaModelRow o) {
         return ObjectContracts.compare(this, o, "classType,className,type desc,memberName");
     }
-
 }

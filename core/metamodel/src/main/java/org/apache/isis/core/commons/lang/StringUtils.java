@@ -371,4 +371,18 @@ public final class StringUtils {
         return Enums.getEnumNameFromFriendly(enumFriendlyName);
     }
 
+    /*
+     * eg converts <tt>HiddenFacetForMemberAnnotation</tt> to <tt>HFFMA</tt>.
+     */
+    public static String toAbbreviation(final String str) {
+        final StringBuilder buf = new StringBuilder();
+        for(char c: str.toCharArray()) {
+            if(Character.isUpperCase(c)) {
+                buf.append(c);
+            }
+        }
+        final String string2 = buf.toString();
+        return string2;
+    }
+
 }
