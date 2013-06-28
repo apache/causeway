@@ -20,13 +20,11 @@
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.lang.reflect.Modifier;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 
 /**
  * Designed to simply filter out any synthetic methods.
@@ -34,29 +32,21 @@ import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
  * <p>
  * Does not add any {@link Facet}s.
  */
-public class SyntheticMethodFilteringFacetFactory extends FacetFactoryAbstract implements MethodFilteringFacetFactory {
+public class RemoveSyntheticOrAbstractMethodsFacetFactory extends FacetFactoryAbstract {
 
-    public SyntheticMethodFilteringFacetFactory() {
-        super(new ArrayList<FeatureType>());
+    public RemoveSyntheticOrAbstractMethodsFacetFactory() {
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public boolean recognizes(final Method method) {
-        return isSynthetic(method);
-    }
-
-    private boolean isSynthetic(final Method method) {
-        try {
-            final Class<?> type = method.getClass();
-            try {
-                return ((Boolean) type.getMethod("isSynthetic", (Class[]) null).invoke(method, (Object[]) null)).booleanValue();
-            } catch (final NoSuchMethodException nsm) {
-                // pre java 5
-                return false;
+    public void process(final ProcessClassContext processClassContext) {
+        super.process(processClassContext);
+        Class<?> cls = processClassContext.getCls();
+        Method[] methods = cls.getMethods();
+        for (Method method : methods) {
+            if (method.isSynthetic() || Modifier.isAbstract(method.getModifiers())) {
+                processClassContext.removeMethod(method);
             }
-        } catch (final Exception e) {
-            throw new IsisException(e);
         }
     }
-
 }

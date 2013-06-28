@@ -37,11 +37,12 @@ public class RemoveJavaLangComparableMethodsFacetFactory extends FacetFactoryAbs
     public void process(final ProcessClassContext processClassContext) {
         super.process(processClassContext);
         Class<?> cls = processClassContext.getCls();
-        Method[] declaredMethods = cls.getMethods(); // not getDeclaredMethods !!!
-        for (Method method : declaredMethods) {
+        Method[] methods = cls.getMethods(); // not getDeclaredMethods !!!
+        for (Method method : methods) {
             if(method.getName().equals("compareTo")) {
                 processClassContext.removeMethod(method);
             }
+            
         }
     }
 

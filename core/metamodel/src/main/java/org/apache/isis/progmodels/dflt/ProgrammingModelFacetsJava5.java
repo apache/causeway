@@ -94,7 +94,7 @@ import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveInject
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangComparableMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.SyntheticMethodFilteringFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSyntheticOrAbstractMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
@@ -216,7 +216,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ObjectTypeDerivedFromClassNameFacetFactory.class);
         
         addFactory(IteratorFilteringFacetFactory.class);
-        addFactory(SyntheticMethodFilteringFacetFactory.class);
+        addFactory(RemoveSyntheticOrAbstractMethodsFacetFactory.class);
         addFactory(RemoveSuperclassMethodsFacetFactory.class);
         addFactory(RemoveJavaLangObjectMethodsFacetFactory.class);
         addFactory(RemoveJavaLangComparableMethodsFacetFactory.class);

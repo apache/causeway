@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.properties.accessor;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
