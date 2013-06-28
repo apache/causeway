@@ -27,6 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.common.eventbus.EventBus;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -72,6 +74,8 @@ public class IsisSessionDefault implements IsisSession {
     private long accessTime;
     private String debugSnapshot;
 
+    private EventBus eventBus;
+
     public IsisSessionDefault(final IsisSessionFactory sessionFactory, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final UserProfile userProfile) {
 
         // global context
@@ -91,6 +95,7 @@ public class IsisSessionDefault implements IsisSession {
         setSessionOpenTime(System.currentTimeMillis());
 
         this.id = nextId++;
+        
     }
 
     // //////////////////////////////////////////////////////
@@ -99,6 +104,8 @@ public class IsisSessionDefault implements IsisSession {
 
     @Override
     public void open() {
+        this.eventBus = new EventBus();
+        
         persistenceSession.open();
     }
 
@@ -109,6 +116,8 @@ public class IsisSessionDefault implements IsisSession {
     public void close() {
         takeSnapshot();
         getPersistenceSession().close();
+        
+        eventBus = null;
     }
 
     // //////////////////////////////////////////////////////
@@ -241,6 +250,11 @@ public class IsisSessionDefault implements IsisSession {
         return getTransactionManager().getTransaction();
     }
 
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
     // //////////////////////////////////////////////////////
     // testSetObjectPersistor
     // //////////////////////////////////////////////////////
@@ -341,5 +355,6 @@ public class IsisSessionDefault implements IsisSession {
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
+
 
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.objectstore.jdo.datanucleus.service.support;
 
+import java.util.Collection;
+
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.annotation.Hidden;
@@ -34,12 +36,19 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 @Hidden
 public class IsisJdoSupportImpl implements IsisJdoSupport {
     
+    @Programmatic
     @Override
     public <T> T refresh(T domainObject) {
         DataNucleusObjectStore objectStore = getObjectStore();
         ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         objectStore.refreshRoot(adapter);
         return domainObject;
+    }
+
+    @Programmatic
+    @Override
+    public void ensureLoaded(Collection<?> domainObjects) {
+        getObjectStore().getPersistenceManager().retrieveAll(domainObjects);
     }
 
     protected DataNucleusObjectStore getObjectStore() {
@@ -63,5 +72,6 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     public PersistenceManager getJdoPersistenceManager() {
         return getObjectStore().getPersistenceManager();
     }
+
 
 }

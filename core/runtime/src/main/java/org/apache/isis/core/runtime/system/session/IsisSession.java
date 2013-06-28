@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system.session;
 
+import com.google.common.eventbus.EventBus;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -111,6 +113,16 @@ public interface IsisSession extends SessionScopedComponent {
 
     public UserProfile getUserProfile();
 
+    
+    // //////////////////////////////////////////////////////
+    // EventBus
+    // //////////////////////////////////////////////////////
+
+    /**
+     * Guava {@link EventBus}, scoped to this session.
+     */
+    public EventBus getEventBus();
+
     // //////////////////////////////////////////////////////
     // Transaction (if in progress)
     // //////////////////////////////////////////////////////
@@ -126,5 +138,6 @@ public interface IsisSession extends SessionScopedComponent {
     public void debug(DebugBuilder debug);
 
     public void debugState(DebugBuilder debug);
+
 
 }
