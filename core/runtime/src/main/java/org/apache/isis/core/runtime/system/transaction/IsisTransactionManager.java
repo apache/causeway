@@ -334,10 +334,17 @@ public class IsisTransactionManager implements SessionScopedComponent {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '" + abortCause.getMessage() + "' has been set");
             }
-            abortTransaction();
+            try {
+                abortTransaction();
+
+                // just in case any different exception was raised...
+                abortCause = this.getTransaction().getAbortCause();
+            } catch(RuntimeException ex) {
+                
+                // ... or, capture this most recent exception
+                abortCause = ex;
+            }
             
-            // just in case any different exception was raised...
-            abortCause = this.getTransaction().getAbortCause();
             
             if(abortCause != null) {
                 // hasn't been rendered lower down the stack, so fall back

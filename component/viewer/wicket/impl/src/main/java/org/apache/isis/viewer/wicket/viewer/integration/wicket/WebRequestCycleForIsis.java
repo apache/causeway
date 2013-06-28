@@ -90,10 +90,15 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
             } catch(Exception ex) {
+                // will redirect to error page after this, 
+                // so make sure there is a new transaction ready to go.
+                if(getTransactionManager().getTransaction().getState().isComplete()) {
+                    getTransactionManager().startTransaction();
+                }
                 if(handler instanceof RenderPageRequestHandler) {
                     RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
                     if(requestHandler.getPage() instanceof ErrorPage) {
-                        // do nothing; 
+                        // do nothing
                         return;
                     }
                 }
