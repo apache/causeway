@@ -16,45 +16,30 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.service.eventbus;
 
-import java.util.Collection;
-
-import com.google.common.eventbus.EventBus;
-
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
 
-public class EventBusServiceJdo extends EventBusService {
+/**
+ * An implementation that allows events to be {@link #post(Object) posted} from the
+ * setters of entities, automatically ignoring any calls to those setters that occur
+ * as a side-effect of the JDO load/detach lifecycle. 
+ */
+public class EventBusServiceJdo extends EventBusServiceDefault {
 
-    
-    @Override
-    protected EventBus getEventBus() {
-        return IsisContext.getSession().getEventBus();
-    }
-
-    // //////////////////////////////////////
-
-    @Override
-    protected void ensureLoaded(final Collection<?> collection) {
-        isisJdoSupport.ensureLoaded(collection);
-    }
 
     /**
      * skip if called in any way by way of the {@link JDOStateManagerForIsis}.
+     * 
+     * <p>
+     * The {@link JDOStateManagerForIsis} sets a {@link JDOStateManagerForIsis#hint threadlocal}
+     * if it has been called.
      */
     @Override
     protected boolean skip(Object event) {
         return JDOStateManagerForIsis.hint.get() != Hint.NONE;
     }
     
-    // //////////////////////////////////////
-
-    private IsisJdoSupport isisJdoSupport;
-    public void setIsisJdoSupport(IsisJdoSupport isisJdoSupport) {
-        this.isisJdoSupport = isisJdoSupport;
-    }
 
 }
 

@@ -16,34 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
 
-import org.apache.isis.applib.util.ObjectContracts;
+package org.apache.isis.core.metamodel.facets.properties.event;
 
-public abstract class ChangedEvent<S,T> {
-    private final S source;
-    private final T oldValue;
-    private final T newValue;
-    
-    public ChangedEvent(S source, T oldValue, T newValue) {
-        this.source = source;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+
+public abstract class PostsPropertyChangedEventFacetAbstract extends SingleValueFacetAbstract<Class<? extends PropertyChangedEvent<?,?>>> implements PostsPropertyChangedEventFacet {
+
+    public static Class<? extends Facet> type() {
+        return PostsPropertyChangedEventFacet.class;
     }
 
-    public S getSource() {
-        return source;
+    public PostsPropertyChangedEventFacetAbstract(final Class<? extends PropertyChangedEvent<?,?>> changedEventType, final FacetHolder holder) {
+        super(type(), changedEventType, holder);
     }
-    
-    public T getOldValue() {
-        return oldValue;
-    }
-    public T getNewValue() {
-        return newValue;
-    }
-    
-    @Override
-    public String toString() {
-        return ObjectContracts.toString(this, "source,oldValue,newValue");
-    }
+
 }

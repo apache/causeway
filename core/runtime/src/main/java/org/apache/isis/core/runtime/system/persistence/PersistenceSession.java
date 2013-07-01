@@ -83,6 +83,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPatt
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -238,6 +239,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         if (LOG.isDebugEnabled()) {
             LOG.debug("closing " + this);
         }
+        
+        // a bit of a hack
+        if(eventBusService != null) {
+            eventBusService.close();
+        }
 
         try {
             objectStore.close();
@@ -285,6 +291,14 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             if (existingOid == null) {
                 final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
                 registerService(persistentOid);
+            }
+            
+            // a bit of a hack
+            final Object object = serviceAdapter.getObject();
+            if(object instanceof EventBusServiceDefault) {
+                eventBusService = (EventBusServiceDefault) object;
+                EventBusServiceDefault ebs = eventBusService;
+                ebs.open();
             }
 
         }
@@ -944,6 +958,8 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // ///////////////////////////////////////////////////////////////////////////
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
+
+    private EventBusServiceDefault eventBusService;
 
     /**
      * Callback from the {@link PersistAlgorithm} (or equivalent; some object

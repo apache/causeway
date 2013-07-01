@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.publish;
+package org.apache.isis.core.metamodel.facets.properties.event;
 
-import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 
-public abstract class PublishedActionFacetAbstract extends SingleValueFacetAbstract<PublishedAction.PayloadFactory> implements PublishedActionFacet {
-
-    public static Class<? extends Facet> type() {
-        return PublishedActionFacet.class;
-    }
-
-    public PublishedActionFacetAbstract(final PublishedAction.PayloadFactory payloadFactory, final FacetHolder holder) {
-        super(type(), payloadFactory, holder);
-    }
+/**
+ * Indicates that (the specified subclass of) {@link PropertyChangedEvent} should be posted to the
+ * {@link EventBusService}.
+ */
+public interface PostsPropertyChangedEventFacet extends SingleValueFacet<Class<? extends PropertyChangedEvent<?,?>>>, PropertyClearFacet, PropertySetterFacet, MultiTypedFacet {
 
 }

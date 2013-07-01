@@ -16,17 +16,20 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * A wrapper for a Guava {@link EventBus}, allowing arbitrary events to be posted and
+ * subscribed to.
+ *  
+ * <p>
+ * It is highly advisable that only domain services - not domain entities - are registered as subscribers.  
+ * Domain services are guaranteed to be instantiated and resident in memory, whereas the same is not true
+ * of domain entities.  The typical implementation of a domain service subscriber is to identify the impacted entities,
+ * load them using a repository, and then to delegate to the event to them.
+ */
 public abstract class EventBusService {
 
     /**
@@ -39,7 +42,7 @@ public abstract class EventBusService {
         @Override
         public void unregister(Object domainObject) {};
         @Override
-        public void post(Object event, java.util.Collection<?>... collections) {}
+        public void post(Object event) {}
         @Override
         protected EventBus getEventBus() {
             return null;
@@ -79,22 +82,17 @@ public abstract class EventBusService {
     }
     
     /**
-     * Post an event, but ensuring that any possible subscribers 
-     * to that event have been brought into memory.
+     * Post an event.
      */
     @Programmatic
-    public void post(Object event, Collection<?>... collections ) {
+    public void post(Object event) {
         if(skip(event)) {
             return;
         }
-        final List<Object> list = Lists.newArrayList();
-        for (Collection<?> collection : collections) {
-            list.addAll(collection);
-        }
-        ensureLoaded(list);
         getEventBus().post(event);
     }
 
+    
     /**
      * A hook to allow subclass implementations to skip the publication of certain events.
      * 
@@ -105,16 +103,5 @@ public abstract class EventBusService {
     protected boolean skip(Object event) {
         return false;
     }
-
-    /**
-     * Overrideable hook method.
-     * 
-     * <p>
-     * If using JDO objectstore, then use the <tt>EventBusServiceJdo</tt> implementation, 
-     * which overrides this method to load objects from the database.
-     */
-    protected void ensureLoaded(final Collection<?> collection) {
-    }
-    
 }
 
