@@ -18,6 +18,7 @@ package org.apache.isis.applib.services.eventbus;
 
 import com.google.common.eventbus.EventBus;
 
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -30,6 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  * of domain entities.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
  */
+@Hidden
 public abstract class EventBusService {
 
     /**
