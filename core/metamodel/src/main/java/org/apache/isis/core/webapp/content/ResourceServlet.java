@@ -62,6 +62,7 @@ public class ResourceServlet extends HttpServlet {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("request: " + servletPath + " loaded from filesystem");
             }
+            writeContentType(request, response);
             IoUtils.copy(is2, response.getOutputStream());
             is2.close();
             return;
@@ -73,12 +74,39 @@ public class ResourceServlet extends HttpServlet {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("request: " + servletPath + " loaded from classpath");
             }
+            writeContentType(request, response);
             IoUtils.copy(is, response.getOutputStream());
             is.close();
             return;
         }
 
         LOG.warn("failed to load resource from classpath or file system: " + servletPath);
+    }
+
+    private static void writeContentType(final HttpServletRequest request, final HttpServletResponse response) {
+        final String contentType = guessContentType(request.getServletPath());
+        if(contentType != null) {
+            response.setContentType(contentType);
+        }
+    }
+
+    private static String guessContentType(String servletPath) {
+        if(servletPath.endsWith(".js")) {
+            return "application/x-javascript";
+        } else if(servletPath.endsWith(".css")) {
+            return "text/css";
+        } else if(servletPath.endsWith(".html")) {
+            return "text/html";
+        } else if(servletPath.endsWith(".png")) {
+            return "image/png";
+        } else if(servletPath.endsWith(".jpg")) {
+            return "image/jpeg";
+        } else if(servletPath.endsWith(".jpeg")) {
+            return "image/jpeg";
+        } else if(servletPath.endsWith(".gif")) {
+            return "image/gif";
+        }
+        return null;
     }
 
     private FileInputStream getRealPath(final HttpServletRequest request) {
