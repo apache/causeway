@@ -52,8 +52,9 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
 
         final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
         final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);
+        final String actionIdentifier = CssMenuItem.actionIdentifierFor(action);
         
-        return new LinkAndLabel(link, actionLabel, null, blobOrClob, prototype);
+        return new LinkAndLabel(link, actionLabel, null, blobOrClob, prototype, actionIdentifier);
     }
 
     

@@ -101,6 +101,9 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
 
         };
         link.add(new JGrowlBehaviour());
-        return new LinkAndLabel(link, objectAction.getName(), null, false, CssMenuItem.isExplorationOrPrototype(objectAction));
+        final boolean explorationOrPrototype = CssMenuItem.isExplorationOrPrototype(objectAction);
+        final String actionIdentifier = CssMenuItem.actionIdentifierFor(objectAction);
+
+        return new LinkAndLabel(link, objectAction.getName(), null, false, explorationOrPrototype, actionIdentifier);
     }
 }

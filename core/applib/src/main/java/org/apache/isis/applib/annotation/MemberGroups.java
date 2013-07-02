@@ -25,26 +25,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Indicates that the class has additional facets, and specifies the how to
- * obtain the <tt>FacetFactory</tt> to manufacture them.
- * 
- * <p>
- * At least one named factory (as per {@link #facetFactoryNames()}) or one class
- * factory (as per {@link #facetFactoryClasses()}) should be specified.
- */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MemberGroups {
 
     /**
-     * Array of group names, as they appear as names in the {@link MemberOrder} annotation.
+     * Names of groups of properties, as they appear as the <tt>name</tt> attribute of the 
+     * {@link MemberOrder} annotation.
      * 
      * <p>
-     * The order in this list determines the order that the groups will be rendered.  By convention
+     * The order in this list determines the order that the property groups will be rendered.  By convention
      * any {@link MemberOrder} that does not have a {@link MemberOrder#name() name} is considered
      * to be in the default group, whose name is hard-coded as <i>General</i>.
+     * 
+     * <p>
+     * In the case of the Wicket viewer, these property groups are rendered down the left hand side.
      */
     String[] value() default {};
 

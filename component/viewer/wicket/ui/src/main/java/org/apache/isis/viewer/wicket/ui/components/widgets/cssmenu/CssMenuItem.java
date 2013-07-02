@@ -36,6 +36,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -107,7 +108,12 @@ public class CssMenuItem implements Serializable {
             cssMenuItem.setPrototyping(prototype);
             return this;
         }
-        
+
+        public Builder withActionIdentifier(String actionIdentifier) {
+            cssMenuItem.setActionIdentifier(actionIdentifier);
+            return this;
+        }
+
         /**
          * Returns the built {@link CssMenuItem}, associating with
          * {@link #parent(CssMenuItem) parent} (if specified).
@@ -118,6 +124,7 @@ public class CssMenuItem implements Serializable {
             }
             return cssMenuItem;
         }
+
 
     }
 
@@ -135,6 +142,8 @@ public class CssMenuItem implements Serializable {
 
     static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
+    private String actionIdentifier;
+
 
 
     /**
@@ -144,9 +153,10 @@ public class CssMenuItem implements Serializable {
         return new Builder(name);
     }
 
-    /**
-     * @param prototype
-     */
+    public void setActionIdentifier(String actionIdentifier) {
+        this.actionIdentifier = actionIdentifier;
+    }
+
     public void setPrototyping(boolean prototype) {
         this.prototype = prototype;
         
@@ -256,8 +266,9 @@ public class CssMenuItem implements Serializable {
         // check if returns blob or clob (if so, then add CSS to suppress veil)
         final boolean blobOrClob = returnsBlobOrClob(objectAction);
         final boolean prototype = isExplorationOrPrototype(objectAction);
+        final String actionIdentifier = actionIdentifierFor(objectAction);
 
-        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny).returnsBlobOrClob(blobOrClob).prototyping(prototype);
+        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny).returnsBlobOrClob(blobOrClob).prototyping(prototype).withActionIdentifier(actionIdentifier);
     }
 
     public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
@@ -276,6 +287,15 @@ public class CssMenuItem implements Serializable {
         return action.getType().isExploration() || action.getType().isPrototype();
     }
 
+    public static String actionIdentifierFor(ObjectAction action) {
+        @SuppressWarnings("unused")
+        final Identifier identifier = action.getIdentifier();
+        
+        final String className = action.getOnType().getShortIdentifier();
+        final String actionId = action.getId();
+        return className+"-"+actionId;
+    }
+
     
     /**
      * Creates a {@link Builder} for a submenu item where the provided {@link CssMenuLinkFactory} is able to provide the target adapter. 
@@ -287,7 +307,7 @@ public class CssMenuItem implements Serializable {
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
-        return this.newSubMenuItem(actionLabel).link(link);
+        return this.newSubMenuItem(actionLabel).link(link).prototyping(linkAndLabel.isPrototype());
     }
 
     // //////////////////////////////////////////////////////////////
@@ -317,6 +337,8 @@ public class CssMenuItem implements Serializable {
             if(this.prototype) {
                 link.add(new CssClassAppender("prototype"));
             }
+            link.add(new CssClassAppender(this.actionIdentifier));
+            
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return link;
@@ -360,5 +382,6 @@ public class CssMenuItem implements Serializable {
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
+
 
 }

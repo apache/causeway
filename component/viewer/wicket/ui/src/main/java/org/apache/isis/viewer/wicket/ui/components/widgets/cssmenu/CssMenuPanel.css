@@ -320,3 +320,7 @@
     background-color:#FFFFFF;
     cursor: default;
 }
+
+.entityActions a.prototype span {
+	color: lightblue;
+}

@@ -82,6 +82,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 if(linkAndLabel.isPrototype()) {
                     link.add(new CssClassAppender("prototype"));
                 }
+                link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
                 viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);
                 item.addOrReplace(link);
