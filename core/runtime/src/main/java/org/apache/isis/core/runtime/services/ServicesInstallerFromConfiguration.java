@@ -20,10 +20,15 @@
 package org.apache.isis.core.runtime.services;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -79,27 +84,48 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         appendObjectFixtureService(configuration, root, listOfServices);
     }
 
+    private final static Pattern regex = Pattern.compile("((\\d+):)(.*)");
+    
     private void appendConfiguredServices(final String servicePrefix, final String configuredServices, List<Object> serviceList) {
         if (configuredServices == null) {
             return;
         }
+        final SortedMap<Integer,List<Object>> positionedServices = Maps.newTreeMap();
+        
         final StringTokenizer services = new StringTokenizer(configuredServices, ConfigurationConstants.LIST_SEPARATOR);
         if (!services.hasMoreTokens()) {
             throw new InitialisationException("Services specified, but none loaded");
         }
         while (services.hasMoreTokens()) {
-            final String serviceName = services.nextToken().trim();
+            String serviceName = services.nextToken().trim();
             if (serviceName.equals("")) {
                 continue;
             }
-            LOG.info("creating service " + serviceName);
+            final Matcher matcher = regex.matcher(serviceName);
+            Integer order = Integer.MAX_VALUE;
+            if(matcher.matches()) {
+                order = Integer.parseInt(matcher.group(2));
+                serviceName = matcher.group(3);
+            }
+            List<Object> list = positionedServices.get(order);
+            if(list == null) {
+                list = Lists.newArrayList();
+                positionedServices.put(order, list);
+            }
+
+            LOG.info("creating service " + serviceName + (order!=Integer.MAX_VALUE?" at position " + order: "" ));
             Object service;
             if (serviceName.indexOf(DELIMITER) == -1) {
                 service = createService(servicePrefix + serviceName);
             } else {
                 service = createSimpleRepository(servicePrefix, serviceName);
             }
-            serviceList.add(service);
+            
+            list.add(service);
+        }
+        for (Integer position : positionedServices.keySet()) {
+            final List<Object> list = positionedServices.get(position);
+            serviceList.addAll(list);
         }
     }
 
