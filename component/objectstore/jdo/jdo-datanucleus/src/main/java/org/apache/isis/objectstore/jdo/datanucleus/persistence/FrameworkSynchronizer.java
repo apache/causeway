@@ -34,6 +34,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -46,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -63,7 +65,7 @@ public class FrameworkSynchronizer {
      * Just used for logging.
      */
     public enum CalledFrom {
-        EVENT_LOAD, EVENT_STORE, EVENT_PREDIRTY, OS_QUERY, OS_RESOLVE, OS_LAZILYLOADED, EVENT_PREDELETE
+        EVENT_LOAD, EVENT_STORE, EVENT_PREDIRTY, OS_QUERY, OS_RESOLVE, OS_LAZILYLOADED, EVENT_PREDELETE, EVENT_POSTDELETE
     }
 
 
@@ -109,6 +111,9 @@ public class FrameworkSynchronizer {
                     PersistorUtil.toEndState(adapter);
                 }
                 adapter.setVersion(datastoreVersion);
+                if(pojo.jdoIsDeleted()) {
+                    adapter.changeState(ResolveState.DESTROYED);
+                }
 
                 ensureFrameworksInAgreement(pojo);
             }
@@ -229,6 +234,21 @@ public class FrameworkSynchronizer {
         
     }
 
+    public void postDeleteProcessingFor(final PersistenceCapable pojo, final CalledFrom calledFrom) {
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                if(!adapter.isDestroyed()) {
+                    adapter.changeState(ResolveState.DESTROYED);
+                }
+                
+                ensureFrameworksInAgreement(pojo);
+            }
+        }, calledFrom);
+        
+    }
+    
     // /////////////////////////////////////////////////////////
     // Helpers
     // /////////////////////////////////////////////////////////
@@ -287,7 +307,17 @@ public class FrameworkSynchronizer {
                 throw new IsisException(MessageFormat.format("adapter oid={0} has oid in invalid state; should be transient; pojo: {1}", oid, pojo));
             }
 
+        } else if(pojo.jdoIsDeleted()) {
+            
+            // make sure the adapter is destroyed
+            if (!adapter.getResolveState().isDestroyed()) {
+                throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be destroyed but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
+            }
+            
         } else {
+            
+            
+            
             // make sure the adapter is persistent
             if (!adapter.getResolveState().representsPersistent()) {
                 throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be in a persistent but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));

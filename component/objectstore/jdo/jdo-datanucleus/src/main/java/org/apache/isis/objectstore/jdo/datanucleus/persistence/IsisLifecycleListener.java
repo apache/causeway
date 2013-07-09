@@ -131,7 +131,13 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     @Override
     public void postDelete(InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableEnsureFrameworksInAgreement(event));
+        withLogging(Phase.POST, event, new RunnableAbstract(event){
+            @Override
+            protected void doRun() {
+                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                synchronizer.postDeleteProcessingFor(pojo, CalledFrom.EVENT_POSTDELETE);
+            }
+        });
     }
 
     /**

@@ -370,7 +370,9 @@ public class IsisTransaction implements TransactionScopedComponent {
                 if (command instanceof DestroyObjectCommand) {
                     final ObjectAdapter adapter = command.onAdapter();
                     adapter.setVersion(null);
-                    adapter.changeState(ResolveState.DESTROYED);
+                    if(!adapter.isDestroyed()) {
+                        adapter.changeState(ResolveState.DESTROYED);
+                    }
                 }
             }
         } finally {
