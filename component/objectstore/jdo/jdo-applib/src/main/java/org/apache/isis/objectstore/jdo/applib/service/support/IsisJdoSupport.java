@@ -20,6 +20,8 @@
 package org.apache.isis.objectstore.jdo.applib.service.support;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 
@@ -53,5 +55,14 @@ public interface IsisJdoSupport {
     
     @Programmatic
     PersistenceManager getJdoPersistenceManager();
-    
+
+    @Programmatic
+    List<Map<String, Object>> executeSql(String sql);
+
+    @Programmatic
+    Integer executeUpdate(String sql);
+
+    @Programmatic
+    void deleteAll(Class<?>... pcClasses);
+
 }
