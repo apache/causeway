@@ -37,6 +37,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.integtestsupport.legacy.Fixture;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -622,8 +623,26 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         }
         throw new RuntimeException("Could not find a service of type: " + serviceClass.getName());
     }
+
     
+    ////////////////////////////////////////////////////////////
+    // Fixture management 
+    // (for each test, rather than at bootstrap)
+    ////////////////////////////////////////////////////////////
+
     
+    public void installFixtures(final InstallableFixture... fixtures) {
+        final FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
+        for (InstallableFixture fixture : fixtures) {
+            fid.addFixture(fixture);
+        }
+        fid.installFixtures();
+    }
+
+
+    ////////////////////////////////////////////////////////////
+    // Dependencies
+    ////////////////////////////////////////////////////////////
     
     protected IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
@@ -641,6 +660,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         return IsisContext.getPersistenceSession();
     }
 
-
+    
+    
     
 }
