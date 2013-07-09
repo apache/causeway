@@ -1,43 +1,50 @@
 Web site: http://isis.apache.org/
 
-Project Status
+Description
 
-  Description
+  Apache Isis software is a framework for rapidly developing domain-driven apps in 
+  Java. Write your business logic in entities, domain services and repositories, and 
+  the framework dynamically generates a representation of that domain model as a 
+  webapp or a RESTful API.  Licensed under ASL v2.0.  Suitable for prototyping or 
+  for production.
 
-  Isis is an ASL 2.0 licensed implementation of the Naked Objects pattern and
-  also an implementation of the Restful Objects specification. It is based on 
-  contributions of the original Naked Objects Framework along with a number 
-  of sister projects that were developed for the book "Domain Driven Design 
-  using Naked Objects " (pragprog 2009).
+  Isis was accepted into the Apache Incubator in Sept 2010 and graduated in Oct 2012.
+  Its first release as a TLP was in Dec 2012.
 
-  Isis was accepted into the Incubator in 2010, September 7th.
-
-  Isis graduated from the Incubator in 2012, October 17th.
-
-  To participate in Isis, please join the mailing lists.  Send an empty 
-  message to users-subscribe@isis.apache.org (for users)
-  or to dev-subscribe@isis.apache.org (for developers).
-
-Project info
-
-  As a subproject of the Apache Incubator project, Isis follows the direction 
-  of the Apache Incubator PMC. Significant contributions over a sustained 
-  period of time can earn a contributor commit access to the codebase.
+  To participate in Isis, please join the mailing lists.  Send an empty message to 
+  users-subscribe@isis.apache.org (for users) or to dev-subscribe@isis.apache.org 
+  (for contributors).  Significant contributions over a sustained period of time can 
+  earn a contributor commit access to the codebase.
 
 TLP releases:
- * isis-security-shiro-1.0.0                      : Released Jan 2013
- * quickstart-wicket-restful_jdo-archetype-1.0.1  : Released Jan 2013
 
- * isis-1.0.0                                     : Released Dec 2012
- * isis-objectstore-jdo-1.0.0                     : Released Dec 2012
- * isis-security-file-1.0.0                       : Released Dec 2012
- * isis-viewer-wicket-1.0.0                       : Released Dec 2012
- * isis-viewer-restfulobjects-1.0.0               : Released Dec 2012
- * quickstart-wicket-restful_jdo-archetype-1.0.0  : Released Dec 2012
-
+  * isis-1.2.0                                     : 31 May 2013
+  * isis-viewer-wicket-1.2.0                       : 31 May 2013
+  * isis-viewer-restfulobjects-2.0.0               : 31 May 2013
+  * isis-objectstore-jdo-1.1.0                     : 31 May 2013
+  * isis-security-shiro-1.1.1                      : 31 May 2013
+  * isis-security-file-1.0.1                       : 31 May 2013
+  * quickstart-wicket-restful_jdo-archetype-1.0.3  : 31 May 2013
+ 
+  * isis-1.1.0                                     : 31 Jan 2013
+  * isis-security-shiro-1.1.0                      : 31 Jan 2013
+  * isis-viewer-wicket-1.1.0                       : 31 Jan 2013
+  * quickstart-wicket-restful_jdo-archetype-1.0.2  : 31 Jan 2013
+ 
+  * isis-security-shiro-1.0.0                      : 10 Jan 2013
+  * quickstart-wicket-restful_jdo-archetype-1.0.1  : 10 Jan 2013
+ 
+  * isis-1.0.0                                     : 24 Dec 2012
+  * isis-objectstore-jdo-1.0.0                     : 24 Dec 2012
+  * isis-security-file-1.0.0                       : 24 Dec 2012
+  * isis-viewer-wicket-1.0.0                       : 24 Dec 2012
+  * isis-viewer-restfulobjects-1.0.0               : 24 Dec 2012
+  * quickstart-wicket-restful_jdo-archetype-1.0.0  : 24 Dec 2012
+ 
 Incubating releases:
- * 0.2.0-incubating    : Released January 2012
- * 0.1.2-incubating    : Released July 2011
+
+  * 0.2.0-incubating                               : Jan 2012
+  * 0.1.2-incubating                               : Jul 2011
 
 
 Resources:
@@ -53,21 +60,19 @@ Resources:
   JIRA           www    http://issues.apache.org/jira/browse/ISIS
   Wiki           www    http://cwiki.apache.org/confluence/display/ISIS/Index
   CI             www    http://builds.apache.org/hudson/job/isis-trunk-windows
-  Fisheye        www    https://fisheye6.atlassian.com/graph/isis
+  Fisheye        www    https://fisheye6.atlassian.com/graph/isis-git
 
 
 Team:
 
-  role(s)            user id      name
-  -----------------  -----        -------------------------------------
-  Mentor, Committer  struberg     Mark Struberg
-  Mentor, Committer  bimargulies  Benson Margulies
-  Mentor, Committer  mnour        Mohammad Nour El-Din (CLA on file)
-  Mentor, Committer  sgoeschl     Siegfried Goeschl
-  Committer          danhaywood   Daniel Keir Haywood (CLA on file)
-  Committer          rmatthews    Robert Charles Matthews (CLA on file)
-  Committer          kevin        Kevin Meyer (CLA on file)
-  Committer          themalkolm   Alexander Krasnukhin (CLA on file)
-  Committer          dslaughter   David Slaughter (CLA on file)
-  Committer          jvanderwal   Jeroen van der Wal (CLA on file)
-  Committer          uli          Ulrich Stärk (CLA on file)
+  role(s)              user id      name
+  -----------------    -----        -------------------------------------
+  PMC Chair, Committer danhaywood   Daniel Keir Haywood (CLA on file)
+  PMC, Committer       jvanderwal   Jeroen van der Wal (CLA on file)
+  PMC, Committer       rmatthews    Robert Charles Matthews (CLA on file)
+  PMC, Committer       kevin        Kevin Meyer (CLA on file)
+  PMC, Committer       struberg     Mark Struberg (CLA on file)
+  PMC, Committer       mnour        Mohammad Nour El-Din (CLA on file)
+  PMC, Committer       themalkolm   Alexander Krasnukhin (CLA on file)
+  PMC, Committer       dslaughter   David Slaughter (CLA on file)
+  Committer            madytyoo     Maurizio Taverna (CLA on file)
