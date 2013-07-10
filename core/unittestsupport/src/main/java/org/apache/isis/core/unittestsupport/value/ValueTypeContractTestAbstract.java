@@ -21,8 +21,10 @@ package org.apache.isis.core.unittestsupport.value;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 import java.util.List;
 
@@ -30,8 +32,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Contract test for value types ({@link #equals(Object)} and
- * {@link #hashCode()}).
+ * Contract test for value types ({@link #equals(Object) equals} and
+ * {@link #hashCode() hashCode}), and also {@link Comparable#compareTo(Object) compareTo} for
+ * any value types that also are {@link Comparable}
  */
 public abstract class ValueTypeContractTestAbstract<T> {
 
@@ -86,6 +89,34 @@ public abstract class ValueTypeContractTestAbstract<T> {
                     assertThat(o2.equals(o3), is(true));
                     assertThat(o1.equals(o3), is(true));
                 }
+            }
+        }
+    }
+
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public void comparableEquivalence() throws Exception {
+        for (final T o1 : getObjectsWithSameValue()) {
+            assumeThat(o1 instanceof Comparable, is(true));
+            Comparable c1 = (Comparable)o1;
+
+            for (final T o2 : getObjectsWithSameValue()) {
+                assumeThat(o2 instanceof Comparable, is(true));
+                Comparable c2 = (Comparable)o2;
+                
+                assertThat(c1.compareTo(c2), is(0));
+                assertThat(c2.compareTo(c1), is(0));
+            }
+            
+            for (final T o2 : getObjectsWithDifferentValue()) {
+                assumeThat(o2 instanceof Comparable, is(true));
+                Comparable c2 = (Comparable)o2;
+                
+                final int x = c1.compareTo(c2);
+                final int y = c2.compareTo(c1);
+                assertThat(x, is(not(0)));
+
+                assertThat(x, is(-y));
             }
         }
     }

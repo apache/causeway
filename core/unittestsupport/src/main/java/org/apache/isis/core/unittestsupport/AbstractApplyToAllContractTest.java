@@ -93,4 +93,6 @@ public abstract class AbstractApplyToAllContractTest {
 
     protected abstract void applyContractTest(Class<?> entityType);
 
+    
+    
 }
