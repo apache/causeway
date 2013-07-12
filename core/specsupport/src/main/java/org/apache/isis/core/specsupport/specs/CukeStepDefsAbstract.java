@@ -25,6 +25,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.jmock.Sequence;
+import org.jmock.States;
+import org.jmock.internal.ExpectationBuilder;
 import org.junit.Assert;
 
 import cucumber.api.java.Before;
@@ -32,6 +35,7 @@ import cucumber.api.java.Before;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
+import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionForUnit;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 
 
@@ -66,6 +70,7 @@ public abstract class CukeStepDefsAbstract {
      */
     public void put(String type, String id, Object value) {
         scenarioExecution().put(type, id, value);
+        
     }
     
     /**
@@ -107,16 +112,44 @@ public abstract class CukeStepDefsAbstract {
      * Convenience method
      */
     protected <T> T wrap(T obj) {
-        return scenarioExecution.wrapperFactory().wrap(obj);
+        return wrapperFactory().wrap(obj);
     }
     
     /**
      * Convenience method
      */
     protected <T> T unwrap(T obj) {
-        return scenarioExecution.wrapperFactory().unwrap(obj);
+        return wrapperFactory().unwrap(obj);
     }
     
+    /**
+     * Convenience method
+     */
+    public void checking(ExpectationBuilder expectations) {
+        scenarioExecution().checking(expectations);
+    }
+    
+    /**
+     * Convenience method
+     */
+    public void assertIsSatisfied() {
+        scenarioExecution().assertIsSatisfied();
+    }
+    
+    /**
+     * Convenience method
+     */
+    public Sequence sequence(String name) {
+        return scenarioExecution().sequence(name);
+    }
+    
+    /**
+     * Convenience method
+     */
+    public States states(String name) {
+        return scenarioExecution().states(name);
+    }
+
     // //////////////////////////////////////
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -222,9 +255,17 @@ public abstract class CukeStepDefsAbstract {
      *     before(ScenarioExecutionScope.INTEGRATION);
      *  }
      * </pre>
-     * where <tt>ScenarioExecutionForMyAppIntegration</tt> is an application-specific subclass of
-     * {@link ScenarioExecution} for integration-testing.  Typically this is done using the 
-     * <tt>IsisSystemForTest</tt> class provided in the <tt>isis-core-integtestsupport</tt> module).
+     * The built-in {@link ScenarioExecutionScope#UNIT unit}-level scope will instantiate a 
+     * {@link ScenarioExecutionForUnit}, while the built-in
+     * {@link ScenarioExecutionScope#INTEGRATION integration}-level scope instantiates 
+     * <tt>ScenarioExecutionForIntegration</tt> (from the <tt>isis-core-integtestsupport</tt> module).  
+     * The former provides access to domain services as mocks, whereas the latter wraps a running 
+     * <tt>IsisSystemForTest</tt>.
+     * 
+     * <p>
+     * If need be, it is also possible to define custom scopes, with a different implementation of 
+     * {@link ScenarioExecution}.  This might be done when unit testing where a large number of specs
+     * have similar expectations needing to be set on the mock domain services.
      * 
      * <p>
      * Not every class holding step definitions should have these hooks, only those that correspond to the logical

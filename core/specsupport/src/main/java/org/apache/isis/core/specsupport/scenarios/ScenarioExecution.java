@@ -16,9 +16,14 @@
  */
 package org.apache.isis.core.specsupport.scenarios;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+
+import org.jmock.Sequence;
+import org.jmock.States;
+import org.jmock.internal.ExpectationBuilder;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.InstallableFixture;
@@ -50,7 +55,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  * <tt>IntegrationScenarioExecution</tt> provides additional support for fixtures and 
  * transaction management, used both by integration-scoped specs and by integration tests.
  */
-public class ScenarioExecution {
+public abstract class ScenarioExecution {
     
     private static ThreadLocal<ScenarioExecution> current = new ThreadLocal<ScenarioExecution>();
     
@@ -67,7 +72,7 @@ public class ScenarioExecution {
 
     protected final DomainServiceProvider dsp;
     
-    public ScenarioExecution(final DomainServiceProvider dsp) {
+    protected ScenarioExecution(final DomainServiceProvider dsp) {
         this.dsp = dsp;
         current.set(this);
     }
@@ -247,11 +252,59 @@ public class ScenarioExecution {
     // //////////////////////////////////////
 
     /**
+     * Install expectations on mock domain services.
+     * 
+     * <p>
+     * This implementation is a no-op, but subclasses of this class tailored to
+     * supporting unit specs/tests are expected to override.
+     */
+    public void checking(ExpectationBuilder expectations) {
+        // do nothing
+    }
+    
+    /**
+     * Install expectations on mock domain services.
+     * 
+     * <p>
+     * This implementation is a no-op, but subclasses of this class tailored to
+     * supporting unit specs/tests are expected to override.
+     */
+    public void assertIsSatisfied() {
+        // do nothing
+    }
+    
+    /**
+     * Define {@link Sequence} in a (JMock) interaction.
+     * 
+     * <p>
+     * This implementation is a no-op, but subclasses of this class tailored to
+     * supporting unit specs/tests are expected to override.
+     */
+    public Sequence sequence(String name) {
+        // do nothing
+        return null;
+    }
+    
+    /**
+     * Define {@link States} in a (JMock) interaction.
+     * 
+     * <p>
+     * This implementation is a no-op, but subclasses of this class tailored to
+     * supporting unit specs/tests are expected to override.
+     */
+    public States states(String name) {
+        // do nothing
+        return null;
+    }
+    
+    // //////////////////////////////////////
+
+    /**
      * Install arbitrary fixtures, eg before an integration tests or as part of a 
      * Cucumber step definitions or hook.
      * 
      * <p>
-     * This implementation has a no-op, but subclasses of this class tailored to
+     * This implementation is a no-op, but subclasses of this class tailored to
      * supporting integration specs/tests are expected to override.
      */
     public void install(InstallableFixture... fixtures) {
@@ -264,7 +317,7 @@ public class ScenarioExecution {
      * For Cucumber hooks to call, performing transaction management around each step.
      * 
      * <p>
-     * This implementation has a no-op, but subclasses of this class tailored to
+     * This implementation is a no-op, but subclasses of this class tailored to
      * supporting integration specs are expected to override.  (Integration tests can use
      * the <tt>IsisTransactionRule</tt> to do transaction management transparently).
      */
@@ -276,12 +329,38 @@ public class ScenarioExecution {
      * For Cucumber hooks to call, performing transaction management around each step.
      * 
      * <p>
-     * This implementation has a no-op, but subclasses of this class tailored to
+     * This implementation is a no-op, but subclasses of this class tailored to
      * supporting integration specs are expected to override.  (Integration tests can use
      * the <tt>IsisTransactionRule</tt> to do transaction management transparently).
      */
     public void endTran(boolean ok) {
         // do nothing
+    }
+
+    // //////////////////////////////////////
+
+    public Object injectServices(final Object obj) {
+        try {
+            final Method[] methods = obj.getClass().getMethods();
+            for (Method method : methods) {
+                final Class<?>[] parameterTypes = method.getParameterTypes();
+                if(parameterTypes.length != 1) {
+                    continue;
+                }
+                final Class<?> serviceClass = parameterTypes[0];
+                if(method.getName().startsWith("inject")) {
+                    final Object service = service(serviceClass);
+                        method.invoke(obj, service);
+                }
+                if(method.getName().startsWith("set") && serviceClass == DomainObjectContainer.class) {
+                    final Object container = container();
+                    method.invoke(obj, container);
+                }
+            }
+            return obj;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -23,7 +23,8 @@ package org.apache.isis.core.specsupport.scenarios;
  */
 public class ScenarioExecutionScope {
     
-    public final static ScenarioExecutionScope UNIT = new ScenarioExecutionScope(ScenarioExecution.class);
+    public final static ScenarioExecutionScope UNIT = new ScenarioExecutionScope(ScenarioExecutionForUnit.class);
+    public final static ScenarioExecutionScope INTEGRATION = new ScenarioExecutionScope("org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration");
     
     private final Class<? extends ScenarioExecution> scenarioExecutionClass;
 
@@ -31,6 +32,16 @@ public class ScenarioExecutionScope {
         this.scenarioExecutionClass = scenarioExecutionClass;
     }
     
+    @SuppressWarnings("unchecked")
+    public ScenarioExecutionScope(String scenarioExecutionClassName) {
+        try {
+            this.scenarioExecutionClass = (Class<? extends ScenarioExecution>) 
+                    Thread.currentThread().getContextClassLoader().loadClass(scenarioExecutionClassName);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ScenarioExecution instantiate() {
         try {
             return scenarioExecutionClass.newInstance();
