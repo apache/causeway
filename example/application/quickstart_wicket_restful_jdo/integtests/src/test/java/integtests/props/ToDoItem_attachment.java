@@ -20,7 +20,6 @@ package integtests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import integtests.AbstractIntegTest;
 
 import java.nio.charset.Charset;
@@ -29,6 +28,8 @@ import java.util.List;
 import javax.activation.MimeType;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,22 +39,16 @@ import org.apache.isis.applib.value.Blob;
 
 public class ToDoItem_attachment extends AbstractIntegTest {
 
+
     private ToDoItem toDoItem;
-    private Blob attachment;
 
     @Before
     public void setUp() throws Exception {
-        // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
+        
+        scenarioExecution().install(new ToDoItemsFixture());
+        
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
-
-        // to reset after
-        attachment = toDoItem.getAttachment();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).setAttachment(attachment);
     }
 
     @Test

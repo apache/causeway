@@ -20,12 +20,13 @@ package integtests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import integtests.AbstractIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -37,21 +38,13 @@ import org.apache.isis.applib.clock.Clock;
 public class ToDoItem_dueBy extends AbstractIntegTest {
 
     private ToDoItem toDoItem;
-    private LocalDate dueBy;
 
     @Before
     public void setUp() throws Exception {
-        // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
+        scenarioExecution().install(new ToDoItemsFixture());
+
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
-
-        // to reset after
-        dueBy = toDoItem.getDueBy();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).setDueBy(dueBy);
     }
 
     @Test

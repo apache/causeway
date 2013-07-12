@@ -22,6 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import integtests.AbstractIntegTest;
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
 
 import org.junit.Test;
@@ -32,21 +33,21 @@ public class ToDoItems_newToDo_and_delete extends AbstractIntegTest {
     public void happyCase() throws Exception {
         
         // given
-        int size = wrap(toDoItems).notYetComplete().size();
+        int size = wrap(service(ToDoItems.class)).notYetComplete().size();
         
         // when
-        final ToDoItem newToDo = wrap(toDoItems).newToDo("new todo", Category.Professional, null, null);
+        final ToDoItem newToDo = wrap(service(ToDoItems.class)).newToDo("new todo", Category.Professional, null, null);
 
         // then
         assertThat(newToDo.getDescription(), is("new todo"));
         assertThat(newToDo.getCategory(), is(Category.Professional));
-        assertThat(wrap(toDoItems).notYetComplete().size(), is(size+1));
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(size+1));
         
         // when
         newToDo.delete();
 
         // then
-        assertThat(wrap(toDoItems).notYetComplete().size(), is(size));
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(size));
     }
 
 }

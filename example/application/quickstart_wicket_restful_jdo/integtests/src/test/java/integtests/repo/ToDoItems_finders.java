@@ -20,12 +20,13 @@ package integtests.repo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import integtests.AbstractIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -38,8 +39,10 @@ public class ToDoItems_finders extends AbstractIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        final List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
-        final List<ToDoItem> completedItems = wrap(toDoItems).complete();
+        scenarioExecution().install(new ToDoItemsFixture());
+
+        final List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> completedItems = wrap(service(ToDoItems.class)).complete();
         
         notYetCompletedSize = notYetCompleteItems.size();
         completedSize = completedItems.size();
@@ -51,23 +54,22 @@ public class ToDoItems_finders extends AbstractIntegTest {
     public void complete_and_notYetComplete() throws Exception {
         
         // given
-        List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
+        List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
         final ToDoItem toDoItem = wrap(notYetCompleteItems.get(0));
         
         // when
         toDoItem.completed();
         
         // then
-        assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize-1));
-        assertThat(wrap(toDoItems).complete().size(), is(completedSize+1));
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
+        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize+1));
         
         // and when
         toDoItem.notYetCompleted();
         
         // then
-        assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize));
-        assertThat(wrap(toDoItems).complete().size(), is(completedSize));
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
+        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize));
     }
-
 
 }

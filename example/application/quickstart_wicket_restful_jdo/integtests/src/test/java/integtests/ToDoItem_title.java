@@ -25,9 +25,10 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,55 +37,46 @@ import org.apache.isis.applib.clock.Clock;
 public class ToDoItem_title extends AbstractIntegTest {
 
     private ToDoItem toDoItem;
-    private String description;
-    private boolean isComplete;
     private LocalDate dueBy;
+
 
     @Before
     public void setUp() throws Exception {
-        // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
+
+        scenarioExecution().install(new ToDoItemsFixture());
+        
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
 
-        // to reset after
-        description = toDoItem.getDescription();
-        isComplete = toDoItem.isComplete();
         dueBy = toDoItem.getDueBy();
     }
 
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).setDescription(description);
-        unwrap(toDoItem).setComplete(isComplete);
-        unwrap(toDoItem).setDueBy(dueBy);
-    }
-    
     
     @Test
     public void includesDescription() throws Exception {
 
         // given
-        assertThat(container.titleOf(toDoItem), containsString("Buy bread due by"));
+        assertThat(container().titleOf(toDoItem), containsString("Buy bread due by"));
 
         // when
         unwrap(toDoItem).setDescription("Buy bread and butter");
         
         // then
-        assertThat(container.titleOf(toDoItem), containsString("Buy bread and butter due by"));
+        assertThat(container().titleOf(toDoItem), containsString("Buy bread and butter due by"));
     }
 
     @Test
     public void includesDueDateIfAny() throws Exception {
 
         // given
-        assertThat(container.titleOf(toDoItem), containsString("due by " + dueBy.toString("yyyy-MM-dd")));
+        assertThat(container().titleOf(toDoItem), containsString("due by " + dueBy.toString("yyyy-MM-dd")));
 
         // when
         final LocalDate fiveDaysFromNow = Clock.getTimeAsLocalDate().plusDays(5);
         unwrap(toDoItem).setDueBy(fiveDaysFromNow);
 
         // then
-        assertThat(container.titleOf(toDoItem), containsString("due by " + fiveDaysFromNow.toString("yyyy-MM-dd")));
+        assertThat(container().titleOf(toDoItem), containsString("due by " + fiveDaysFromNow.toString("yyyy-MM-dd")));
     }
 
 
@@ -96,21 +88,21 @@ public class ToDoItem_title extends AbstractIntegTest {
         toDoItem.setDueBy(null);
 
         // then
-        assertThat(container.titleOf(toDoItem), not(containsString("due by")));
+        assertThat(container().titleOf(toDoItem), not(containsString("due by")));
     }
 
     @Test
     public void usesWhetherCompleted() throws Exception {
 
         // given
-        assertThat(container.titleOf(toDoItem), not(containsString("Completed!")));
+        assertThat(container().titleOf(toDoItem), not(containsString("Completed!")));
 
         // when
         toDoItem.completed();
 
         // then
-        assertThat(container.titleOf(toDoItem), not(containsString("due by")));
-        assertThat(container.titleOf(toDoItem), containsString("Buy bread - Completed!"));
+        assertThat(container().titleOf(toDoItem), not(containsString("due by")));
+        assertThat(container().titleOf(toDoItem), containsString("Buy bread - Completed!"));
     }
 
 }

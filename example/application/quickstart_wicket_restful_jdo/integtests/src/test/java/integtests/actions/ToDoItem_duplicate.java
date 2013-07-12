@@ -18,20 +18,18 @@
  */
 package integtests.actions;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import integtests.AbstractIntegTest;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import dom.todo.ToDoItem;
-import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,14 +42,10 @@ public class ToDoItem_duplicate extends AbstractIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
-        toDoItem = wrap(all.get(0));
-    }
+        scenarioExecution().install(new ToDoItemsFixture());
 
-    @After
-    public void tearDown() throws Exception {
-        duplicateToDoItem.delete();
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        toDoItem = wrap(all.get(0));
     }
 
     @Test

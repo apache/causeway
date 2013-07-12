@@ -20,36 +20,28 @@ package integtests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import integtests.AbstractIntegTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ToDoItem_notes extends AbstractIntegTest {
 
     private ToDoItem toDoItem;
-    private String notes;
 
     @Before
     public void setUp() throws Exception {
         // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
+        scenarioExecution().install(new ToDoItemsFixture());
+
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
-
-        // to reset after
-        notes = toDoItem.getNotes();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).setNotes(notes);
     }
 
     @Test

@@ -20,13 +20,14 @@ package integtests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import integtests.AbstractIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
+import fixture.todo.ToDoItemsFixture;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -38,21 +39,13 @@ import org.apache.isis.applib.clock.Clock;
 public class ToDoItem_category extends AbstractIntegTest {
 
     private ToDoItem toDoItem;
-    private Category category;
 
     @Before
     public void setUp() throws Exception {
-        // given
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
+        scenarioExecution().install(new ToDoItemsFixture());
+
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
-
-        // to reset after
-        category = toDoItem.getCategory();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).setCategory(category);
     }
 
     @Test

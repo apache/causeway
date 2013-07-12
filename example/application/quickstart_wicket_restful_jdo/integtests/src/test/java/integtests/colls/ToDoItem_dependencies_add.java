@@ -25,6 +25,8 @@ import integtests.AbstractIntegTest;
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,23 +36,20 @@ public class ToDoItem_dependencies_add extends AbstractIntegTest {
 
     private ToDoItem toDoItem;
     private ToDoItem otherToDoItem;
-    private boolean isComplete;
     
 
     @Before
     public void setUp() throws Exception {
-        // given
-        final List<ToDoItem> items = wrap(toDoItems).notYetComplete();
+        scenarioExecution().install(new ToDoItemsFixture());
+
+        final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(items.get(0));
         otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
-        
-        isComplete = toDoItem.isComplete();
     }
 
     @After
     public void tearDown() throws Exception {
         unwrap(toDoItem).getDependencies().clear();
-        unwrap(toDoItem).setComplete(isComplete);
     }
 
     @Test
