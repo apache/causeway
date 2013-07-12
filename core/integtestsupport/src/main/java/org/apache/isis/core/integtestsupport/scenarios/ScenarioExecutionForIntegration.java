@@ -16,11 +16,9 @@
  */
 package org.apache.isis.core.integtestsupport.scenarios;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.InstallableFixture;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.core.unittestsupport.scenarios.ScenarioExecution;
+import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 
 
 /**
@@ -28,36 +26,20 @@ import org.apache.isis.core.unittestsupport.scenarios.ScenarioExecution;
  * integration tests and Cucumber specs where there is back-end database.
  *
  * <p>
- * To this end it provides the ability to 
- * {@link #install(InstallableFixture...) install arbitrary fixtures} to
- * tear down/setup data, and also to methods to {@link #beginTran() begin}
- * or {@link #endTran(boolean) end} transactions. 
+ * To this end it provides implementations of 
+ * {@link #install(InstallableFixture...)} (to tear down/setup data)
+ * and of {@link #beginTran() begin} and {@link #endTran(boolean) end} (
+ * for transaction management.
  */
-public abstract class ScenarioExecutionIntegrationScopeAbstract extends ScenarioExecution  {
+public class ScenarioExecutionForIntegration extends ScenarioExecution  {
 
     protected final IsisSystemForTest isft;
     
-    public ScenarioExecutionIntegrationScopeAbstract(IsisSystemForTest isft) {
+    public ScenarioExecutionForIntegration(IsisSystemForTest isft) {
         super(isft);
         this.isft = isft;
     }
 
-    // //////////////////////////////////////
-
-    /**
-     * Convenience
-     */
-    public DomainObjectContainer getContainer() {
-        return service(DomainObjectContainer.class);
-    }
-
-    /**
-     * Convenience
-     */
-    public WrapperFactory getWrapperFactory() {
-        return service(WrapperFactory.class);
-    }
-    
 
     // //////////////////////////////////////
 

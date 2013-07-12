@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.scenarios.specs;
+package org.apache.isis.core.specsupport.specs;
 
 import cucumber.api.Transformer;
 

@@ -14,11 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.scenarios;
+package org.apache.isis.core.specsupport.scenarios;
 
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 
 /**
@@ -51,11 +55,11 @@ public class ScenarioExecution {
     private static ThreadLocal<ScenarioExecution> current = new ThreadLocal<ScenarioExecution>();
     
     public static ScenarioExecution current() {
-        final ScenarioExecution world = current.get();
-        if(world == null) {
+        final ScenarioExecution execution = current.get();
+        if(execution == null) {
             throw new IllegalStateException("Scenario has not yet been instantiated by Cukes");
         } 
-        return world;
+        return execution;
     }
 
 
@@ -63,14 +67,17 @@ public class ScenarioExecution {
 
     protected final DomainServiceProvider dsp;
     
-    /**
-     * For instantiation by Cucumber-JVM only.
-     */
     public ScenarioExecution(final DomainServiceProvider dsp) {
         this.dsp = dsp;
         current.set(this);
     }
 
+    /**
+     * Returns a domain service of the specified type, ensuring that
+     * it is available.
+     * 
+     * @throws IllegalStateException if not available
+     */
     public <T> T service(Class<T> cls) {
         final T service = dsp.getService(cls);
         if(service == null) {
@@ -82,7 +89,32 @@ public class ScenarioExecution {
         return service;
     }
 
-    
+    /**
+     * Convenience method, returning the {@link DomainObjectContainer},
+     * first ensuring that it is available.
+     * 
+     * @throws IllegalStateException if not available
+     */
+    public DomainObjectContainer container() {
+        final DomainObjectContainer container = dsp.getContainer();
+        if(container == null) {
+            throw new IllegalStateException(
+                    "No DomainObjectContainer available");
+        }
+        return container;
+    }
+
+    /**
+     * Convenience method, returning the {@link WrapperFactory} domain service,
+     * first ensuring that it is available.
+     * 
+     * @throws IllegalStateException if not available
+     */
+    public WrapperFactory wrapperFactory() {
+        return service(WrapperFactory.class);
+    }
+
+
     // //////////////////////////////////////
 
     /**
@@ -210,6 +242,46 @@ public class ScenarioExecution {
     @SuppressWarnings("unchecked")
     public <X> X get(String type, String id, Class<X> cls) {
         return (X) get(type, id);
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Install arbitrary fixtures, eg before an integration tests or as part of a 
+     * Cucumber step definitions or hook.
+     * 
+     * <p>
+     * This implementation has a no-op, but subclasses of this class tailored to
+     * supporting integration specs/tests are expected to override.
+     */
+    public void install(InstallableFixture... fixtures) {
+        // do nothing
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * For Cucumber hooks to call, performing transaction management around each step.
+     * 
+     * <p>
+     * This implementation has a no-op, but subclasses of this class tailored to
+     * supporting integration specs are expected to override.  (Integration tests can use
+     * the <tt>IsisTransactionRule</tt> to do transaction management transparently).
+     */
+    public void beginTran() {
+        // do nothing
+    }
+
+    /**
+     * For Cucumber hooks to call, performing transaction management around each step.
+     * 
+     * <p>
+     * This implementation has a no-op, but subclasses of this class tailored to
+     * supporting integration specs are expected to override.  (Integration tests can use
+     * the <tt>IsisTransactionRule</tt> to do transaction management transparently).
+     */
+    public void endTran(boolean ok) {
+        // do nothing
     }
 
 }

@@ -14,25 +14,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.scenarios.specs;
+package org.apache.isis.core.specsupport.specs;
 
-import org.apache.isis.core.unittestsupport.scenarios.ScenarioExecution;
+import cucumber.api.junit.Cucumber;
+
+import org.junit.runner.RunWith;
 
 /**
- * Base class for unit-scope Cucumber step definitions.
- * 
- * <p>
- * Simply declares that an instance of (a concrete subclass of) 
- * {@link ScenarioExecution} must be instantiated by the Cucumber-JVM
- * runtime and injected into the step definitions.
+ * Base class for all Cucumber specs run at unit-scope; runs the spec as a JUnit test.
  */
-public abstract class CukeStepDefsAbstract<T extends ScenarioExecution> {
-
-    protected final T scenarioExecution;
-    
-    public CukeStepDefsAbstract(T scenarioExecution) {
-        this.scenarioExecution = scenarioExecution;
-    }
+@RunWith(Cucumber.class)
+@Cucumber.Options(
+        format = {
+                "html:target/cucumber-html-report"
+                // addHook causes an exception to be thrown if this reporter is registered...
+                // ,"json-pretty:target/cucumber-json-report.json"
+        },
+        strict = true,
+        tags = { "~@backlog" })
+public abstract class CukeSpecsAbstract {
 
 
 }

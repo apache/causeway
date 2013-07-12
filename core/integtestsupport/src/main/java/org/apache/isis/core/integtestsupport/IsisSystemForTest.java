@@ -57,7 +57,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
-import org.apache.isis.core.unittestsupport.scenarios.DomainServiceProvider;
+import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.

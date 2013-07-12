@@ -14,25 +14,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.scenarios.specs;
+package org.apache.isis.core.specsupport.scenarios;
 
-import cucumber.api.junit.Cucumber;
+import org.apache.isis.applib.DomainObjectContainer;
 
-import org.junit.runner.RunWith;
 
 /**
- * Base class for all Cucumber specs run at unit-scope; runs the spec as a JUnit test.
+ * Provides access to the {@link DomainObjectContainer} and any other domain services 
+ * that may have been configured.
+ * 
+ * <p>
+ * For {@link ScenarioExecution scenario}s with integration-scope, these will be
+ * configured services for an end-to-end running system.  For scenarios with
+ * unit-scope, these will typically be mocks.
  */
-@RunWith(Cucumber.class)
-@Cucumber.Options(
-        format = {
-                "html:target/cucumber-html-report"
-                // addHook causes an exception to be thrown if this reporter is registered...
-                // ,"json-pretty:target/cucumber-json-report.json"
-        },
-        strict = true,
-        tags = { "~@backlog" })
-public abstract class CukeSpecsAbstract {
+public interface DomainServiceProvider {
 
+    public abstract DomainObjectContainer getContainer();
+
+    public abstract <T> T getService(Class<T> serviceClass);
 
 }
