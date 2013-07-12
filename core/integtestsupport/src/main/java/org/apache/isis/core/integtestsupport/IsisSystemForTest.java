@@ -37,7 +37,6 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.integtestsupport.legacy.Fixture;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -58,11 +57,12 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
+import org.apache.isis.core.unittestsupport.scenarios.DomainServiceProvider;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
  */
-public class IsisSystemForTest implements org.junit.rules.TestRule {
+public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServiceProvider {
 
     public interface Listener {
 
@@ -123,8 +123,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
     private IsisSystemDefault isisSystem;
     private AuthenticationSession authenticationSession;
 
-    // public visibility just to reduce noise in tests
-    public DomainObjectContainer container;
+    private DomainObjectContainer container;
     
     private final IsisConfiguration configuration;
     private final PersistenceMechanismInstaller persistenceMechanismInstaller;
@@ -279,7 +278,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         authenticationSession = authenticationManager.authenticate(authenticationRequest);
 
         IsisContext.openSession(authenticationSession);
-        container = getContainer();
+        setContainer(getContainer());
         
         wireAndInstallFixtures();
         if(fireListeners.shouldFire()) {
@@ -301,7 +300,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         }
     }
     
-    private DomainObjectContainer getContainer() {
+    public DomainObjectContainer getContainer() {
         return getPersistenceSession().getServicesInjector().getContainer();
     }
 
@@ -451,14 +450,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
     public ObjectAdapter persist(Object domainObject) {
         ensureSessionInProgress();
         ensureObjectIsNotPersistent(domainObject);
-        container.persist(domainObject);
+        getContainer().persist(domainObject);
         return adapterFor(domainObject);
     }
 
     public ObjectAdapter destroy(Object domainObject ) {
         ensureSessionInProgress();
         ensureObjectIsPersistent(domainObject);
-        container.remove(domainObject);
+        getContainer().remove(domainObject);
         return adapterFor(domainObject);
     }
 
@@ -499,13 +498,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
     }
 
     private void ensureObjectIsNotPersistent(Object domainObject) {
-        if(container.isPersistent(domainObject)) {
+        if(getContainer().isPersistent(domainObject)) {
             throw new IllegalArgumentException("domain object is already persistent");
         }
     }
 
     private void ensureObjectIsPersistent(Object domainObject) {
-        if(!container.isPersistent(domainObject)) {
+        if(!getContainer().isPersistent(domainObject)) {
             throw new IllegalArgumentException("domain object is not persistent");
         }
     }
@@ -609,11 +608,16 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
         }
     }
 
-    
-    
 
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.integtestsupport.ServiceProvider#getService(java.lang.Class)
+     */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getService(Class<T> serviceClass) {
+        if(serviceClass == DomainObjectContainer.class) {
+            return (T) getContainer();
+        }
         List<ObjectAdapter> servicesAdapters = getPersistenceSession().getServices();
         for(ObjectAdapter serviceAdapter: servicesAdapters) {
             Object servicePojo = serviceAdapter.getObject();
@@ -658,6 +662,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
+    }
+
+    /**
+     * @param container the container to set
+     */
+    public void setContainer(DomainObjectContainer container) {
+        this.container = container;
+        
     }
 
     

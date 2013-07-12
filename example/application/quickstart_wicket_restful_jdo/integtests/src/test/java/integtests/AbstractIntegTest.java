@@ -73,7 +73,7 @@ public abstract class AbstractIntegTest {
     public void init() {
         toDoItems = getIsft().getService(ToDoItemsJdo.class);
         wrapperFactory = getIsft().getService(WrapperFactoryDefault.class);
-        container = getIsft().container;
+        container = getIsft().getContainer();
     }
 
     protected <T> T wrap(T obj) {

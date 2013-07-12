@@ -232,6 +232,13 @@
               <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
 
@@ -1387,6 +1394,23 @@ ${license.additional-notes}
                 		<artifactId>objenesis</artifactId>
                 	</exclusion>
                 </exclusions>
+            </dependency>
+
+            <!-- BDD testing -->
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-java</artifactId>
+                <version>1.1.4-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>1.1.4-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-picocontainer</artifactId>
+                <version>1.1.4-SNAPSHOT</version>
             </dependency>
 
            <dependency>
