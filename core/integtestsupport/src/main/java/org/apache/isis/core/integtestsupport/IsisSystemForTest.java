@@ -117,7 +117,27 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     }
 
+    // //////////////////////////////////////
 
+    private static ThreadLocal<IsisSystemForTest> ISFT = new ThreadLocal<IsisSystemForTest>();
+
+    public static IsisSystemForTest getElseNull() {
+        return ISFT.get();
+    }
+    
+    public static IsisSystemForTest get() {
+        final IsisSystemForTest isft = ISFT.get();
+        if(isft == null) {
+            throw new IllegalStateException("No IsisSystemForTest available on thread; call #set(IsisSystemForTest) first");
+        }
+        return isft;
+    }
+
+    public static void set(IsisSystemForTest isft) {
+        ISFT.set(isft);
+    }
+
+    // //////////////////////////////////////
 
 
     private IsisSystemDefault isisSystem;
@@ -672,7 +692,5 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         
     }
 
-    
-    
     
 }

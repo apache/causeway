@@ -18,6 +18,7 @@ package org.apache.isis.core.integtestsupport.scenarios;
 
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 
 
@@ -33,11 +34,11 @@ import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
  */
 public class ScenarioExecutionForIntegration extends ScenarioExecution  {
 
-    protected final IsisSystemForTest isft;
-    
-    public ScenarioExecutionForIntegration(IsisSystemForTest isft) {
-        super(isft);
-        this.isft = isft;
+    private IsisSystemForTest isft;
+
+    public ScenarioExecutionForIntegration() {
+        super(IsisSystemForTest.get());
+        this.isft = (IsisSystemForTest) dsp;
     }
 
 

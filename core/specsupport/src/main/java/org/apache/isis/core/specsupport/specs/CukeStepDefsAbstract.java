@@ -16,6 +16,17 @@
  */
 package org.apache.isis.core.specsupport.specs;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import org.junit.Assert;
+
 import cucumber.api.java.Before;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -23,8 +34,9 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 
+
 /**
- * Base class for unit-scope Cucumber step definitions.
+ * Base class for Cucumber-JVM step definitions.
  * 
  * <p>
  * Simply declares that an instance of {@link ScenarioExecution} (or a subclass)
@@ -46,28 +58,141 @@ public abstract class CukeStepDefsAbstract {
         }
         return scenarioExecution;
     }
+
+    // //////////////////////////////////////
+
+    /**
+     * Convenience method
+     */
+    public void put(String type, String id, Object value) {
+        scenarioExecution().put(type, id, value);
+    }
     
     /**
-     * Convenience
+     * Convenience method
+     */
+    public Object get(String type, String id) {
+        return scenarioExecution().get(type, id);
+    }
+    
+    /**
+     * Convenience method
+     */
+    public <X> X get(String type, String id, Class<X> cls) {
+        return scenarioExecution().get(type, id ,cls);
+    }
+    
+    /**
+     * Convenience method
      */
     protected <T> T service(Class<T> cls) {
         return scenarioExecution().service(cls);
     }
     
     /**
-     * Convenience
+     * Convenience method
      */
     protected DomainObjectContainer container() {
         return scenarioExecution().container();
     }
     
     /**
-     * Convenience
+     * Convenience method
      */
     protected WrapperFactory wrapperFactory() {
         return scenarioExecution().wrapperFactory();
     }
     
+    /**
+     * Convenience method
+     */
+    protected <T> T wrap(T obj) {
+        return scenarioExecution.wrapperFactory().wrap(obj);
+    }
+    
+    /**
+     * Convenience method
+     */
+    protected <T> T unwrap(T obj) {
+        return scenarioExecution.wrapperFactory().unwrap(obj);
+    }
+    
+    // //////////////////////////////////////
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void assertTableEquals(final List listOfExpecteds, final Iterable iterableOfActuals) {
+        final List<Object> listOfActuals = Lists.newArrayList(iterableOfActuals);
+        assertThat(listOfActuals.size(), is(listOfExpecteds.size()));
+
+        for (int i=0; i<listOfActuals.size(); i++) {
+            
+            final Object actual = listOfActuals.get(i);
+            final Object expected = listOfExpecteds.get(i);
+            
+            final Field[] expectedFields = expected.getClass().getDeclaredFields();
+            for (Field field : expectedFields) {
+                final String propertyName = field.getName();
+                final Object actualProp = getProperty(actual, propertyName );
+                final Object expectedProp = getProperty(expected, propertyName);
+
+                assertThat("Values differ for property: " + propertyName, actualProp, is(expectedProp));
+            }
+        }
+    }
+
+    
+    private static Object getProperty(Object obj, String propertyName) {
+        if(obj == null) {
+            return null;
+        }
+        final Class<? extends Object> cls = obj.getClass();
+        try {
+            final String methodName = "get" + capitalize(propertyName);
+            final Method method = cls.getMethod(methodName, new Class[]{});
+            if(method != null) {
+                return method.invoke(obj);
+            }
+        } catch (Exception e) {
+            // continue
+        }
+        
+        try {
+            final String methodName = "is" + capitalize(propertyName);
+            final Method method = cls.getMethod(methodName, new Class[]{});
+            if(method != null) {
+                return method.invoke(obj);
+            }
+        } catch (Exception e) {
+            // continue
+        }
+        
+        try {
+            final Field field = cls.getDeclaredField(propertyName);
+            if(field != null) {
+                if(!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                return field.get(obj);
+            }
+        } catch (Exception e) {
+            // continue
+        }
+        
+        Assert.fail("Unable to locate property '" + propertyName + "' in object " + obj);
+        return null;
+    }
+
+    private static String capitalize(final String str) {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        if (str.length() == 1) {
+            return str.toUpperCase();
+        }
+        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+
+
     // //////////////////////////////////////
 
     /**
@@ -94,7 +219,7 @@ public abstract class CukeStepDefsAbstract {
      *  }
      *  &#64;cucumber.api.java.Before("@integration")
      *  public void beforeScenarioIntegrationScope() {
-     *     before(new ScenarioExecutionScope(ScenarioExecutionForMyAppIntegration.class));
+     *     before(ScenarioExecutionScope.INTEGRATION);
      *  }
      * </pre>
      * where <tt>ScenarioExecutionForMyAppIntegration</tt> is an application-specific subclass of
