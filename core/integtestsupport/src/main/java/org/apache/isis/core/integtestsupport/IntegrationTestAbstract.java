@@ -42,7 +42,9 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
  */
 public abstract class IntegrationTestAbstract {
 
-    protected static ScenarioExecution scenarioExecution;
+    protected static ScenarioExecution scenarioExecution() {
+        return ScenarioExecution.current();
+    }
 
     // //////////////////////////////////////
 
@@ -104,9 +106,6 @@ public abstract class IntegrationTestAbstract {
     }
 
 
-    private ScenarioExecution scenarioExecution() {
-        return scenarioExecution;
-    }
     
     // //////////////////////////////////////
 
