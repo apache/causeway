@@ -63,11 +63,9 @@
                 <module>component/viewer/scimpi</module>
                 <module>component/viewer/wicket</module>
                 <module>component/viewer/restfulobjects</module>
-                <module>component/viewer/bdd</module>
         
                 <module>example/application/claims</module>
                 <module>example/application/quickstart_scimpi_nosql</module>
-                <module>example/application/quickstart_dnd_junit_bdd</module>
                 <module>example/application/quickstart_wicket_restful_jdo</module>
         
                 <module>example/archetype/quickstart_wicket_restful_jdo</module>
