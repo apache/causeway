@@ -65,7 +65,7 @@ public abstract class CukeStepDefsAbstract {
      * Convenience
      */
     protected WrapperFactory wrapperFactory() {
-        return scenarioExecution().wrapperFactory()
+        return scenarioExecution().wrapperFactory();
     }
     
     // //////////////////////////////////////
