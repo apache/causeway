@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests;
+package integration.tests;
+
+import integration.ToDoSystemInitializer;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
@@ -24,7 +26,7 @@ import org.junit.BeforeClass;
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
-public abstract class AbstractIntegTest extends IntegrationTestAbstract {
+public abstract class ToDoIntegTest extends IntegrationTestAbstract {
 
     
     @BeforeClass

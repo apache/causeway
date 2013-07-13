@@ -14,7 +14,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests;
+package integration;
 
 import objstore.jdo.todo.ToDoItemsJdo;
 
@@ -33,7 +33,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
  * Holds an instance of an {@link IsisSystemForTest} as a {@link ThreadLocal} on the current thread,
  * initialized with ToDo app's domain services. 
  */
-class ToDoSystemInitializer {
+public class ToDoSystemInitializer {
     
     private ToDoSystemInitializer(){}
 

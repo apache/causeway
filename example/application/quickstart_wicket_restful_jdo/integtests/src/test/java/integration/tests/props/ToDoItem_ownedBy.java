@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.actions;
+package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -31,7 +29,7 @@ import fixture.todo.ToDoItemsFixture;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_completed extends AbstractIntegTest {
+public class ToDoItem_ownedBy extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
@@ -43,41 +41,13 @@ public class ToDoItem_completed extends AbstractIntegTest {
         toDoItem = wrap(all.get(0));
     }
 
-
     @Test
-    public void happyCase() throws Exception {
+    public void cannotModify() throws Exception {
         
-        // given
-        assertThat(toDoItem.isComplete(), is(false));
-        
-        // when
-        toDoItem.completed();
-        
-        // then
-        assertThat(toDoItem.isComplete(), is(true));
+        // when, then
+        expectedExceptions.expectMessage("Always hidden");
+        toDoItem.setOwnedBy("other");
     }
 
-
-    @Test
-    public void cannotCompleteIfAlreadyCompleted() throws Exception {
-        
-        // given
-        unwrap(toDoItem).setComplete(true);
-
-        // when, then should fail
-        expectedExceptions.expectMessage("Already completed");
-        toDoItem.completed();
-    }
-
-
-    @Test
-    public void cannotSetPropertyDirectly() throws Exception {
-        
-        // given
-
-        // when, then should fail
-        expectedExceptions.expectMessage("Always disabled");
-        toDoItem.setComplete(true);
-    }
 
 }

@@ -16,74 +16,57 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.colls;
+package integration.tests.actions;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.junit.After;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_dependencies_add extends AbstractIntegTest {
+import org.apache.isis.applib.clock.Clock;
+
+public class ToDoItem_duplicate extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
-    private ToDoItem otherToDoItem;
-    
+    private ToDoItem duplicateToDoItem;
 
     @Before
     public void setUp() throws Exception {
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(items.get(0));
-        otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).getDependencies().clear();
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        toDoItem = wrap(all.get(0));
     }
 
     @Test
     public void happyCase() throws Exception {
-
-        // given
-        assertThat(toDoItem.getDependencies().size(), is(0));
         
-        // when
-        toDoItem.add(otherToDoItem);
+        // given
+        final LocalDate todaysDate = Clock.getTimeAsLocalDate();
+        toDoItem.setDueBy(todaysDate);
+        toDoItem.setCost(new BigDecimal("123.45"));
+        
+        duplicateToDoItem = toDoItem.duplicate(
+                unwrap(toDoItem).default0Duplicate(), 
+                unwrap(toDoItem).default1Duplicate(),
+                unwrap(toDoItem).default2Duplicate(),
+                new BigDecimal("987.65"));
         
         // then
-        assertThat(toDoItem.getDependencies().size(), is(1));
-        assertThat(toDoItem.getDependencies().first(), is(unwrap(otherToDoItem)));
-    }
-
-
-    @Test
-    public void cannotDependOnSelf() throws Exception {
-
-        // when, then
-        expectedExceptions.expectMessage("Can't set up a dependency to self");
-        toDoItem.add(toDoItem);
-    }
-
-    @Test
-    public void cannotAddDependencyIfComplete() throws Exception {
-
-        // given
-        unwrap(toDoItem).setComplete(true);
-        
-        // when, then
-        expectedExceptions.expectMessage("Cannot add dependencies for items that are complete");
-        toDoItem.add(otherToDoItem);
+        assertThat(duplicateToDoItem.getDescription(), is(toDoItem.getDescription() + " - Copy"));
+        assertThat(duplicateToDoItem.getCategory(), is(toDoItem.getCategory()));
+        assertThat(duplicateToDoItem.getDueBy(), is(todaysDate));
+        assertThat(duplicateToDoItem.getCost(), is(new BigDecimal("987.65")));
     }
 
 }

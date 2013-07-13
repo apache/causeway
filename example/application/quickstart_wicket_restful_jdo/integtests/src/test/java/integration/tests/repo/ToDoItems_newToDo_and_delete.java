@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.repo;
+package integration.tests.repo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
 
 import org.junit.Test;
 
-public class ToDoItems_newToDo_and_delete extends AbstractIntegTest {
+public class ToDoItems_newToDo_and_delete extends ToDoIntegTest {
 
     @Test
     public void happyCase() throws Exception {

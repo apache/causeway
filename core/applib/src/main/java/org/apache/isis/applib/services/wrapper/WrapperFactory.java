@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Hidden;
@@ -71,6 +72,48 @@ public interface WrapperFactory {
     public static enum ExecutionMode {
         EXECUTE, NO_EXECUTE
     }
+
+    WrapperFactory NOOP = new WrapperFactory(){
+
+        @Override
+        public <T> T wrap(T domainObject) {
+            return domainObject;
+        }
+
+        @Override
+        public <T> T wrap(T domainObject, ExecutionMode mode) {
+            return domainObject;
+        }
+
+        @Override
+        public <T> T unwrap(T possibleWrappedDomainObject) {
+            return possibleWrappedDomainObject;
+        }
+
+        @Override
+        public <T> boolean isWrapper(T possibleWrappedDomainObject) {
+            return false;
+        }
+
+        @Override
+        public List<InteractionListener> getListeners() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public boolean addInteractionListener(InteractionListener listener) {
+            return false;
+        }
+
+        @Override
+        public boolean removeInteractionListener(InteractionListener listener) {
+            return false;
+        }
+
+        @Override
+        public void notifyListeners(InteractionEvent ev) {
+        }
+    };
 
     /**
      * Provides the &quot;wrapper&quot; of the underlying domain object.

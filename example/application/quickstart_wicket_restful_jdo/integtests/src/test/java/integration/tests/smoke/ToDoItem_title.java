@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests;
+package integration.tests.smoke;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.clock.Clock;
 
-public class ToDoItem_title extends AbstractIntegTest {
+public class ToDoItem_title extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
     private LocalDate dueBy;

@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.props;
+package integration.tests.actions;
 
-import integtests.AbstractIntegTest;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -26,10 +28,11 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_ownedBy extends AbstractIntegTest {
+public class ToDoItem_notYetCompleted extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
@@ -41,13 +44,30 @@ public class ToDoItem_ownedBy extends AbstractIntegTest {
         toDoItem = wrap(all.get(0));
     }
 
+
     @Test
-    public void cannotModify() throws Exception {
+    public void happyCase() throws Exception {
         
-        // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
+        // given
+        unwrap(toDoItem).setComplete(true);
+        
+        // when
+        toDoItem.notYetCompleted();
+        
+        // then
+        assertThat(toDoItem.isComplete(), is(false));
     }
 
+
+    @Test
+    public void cannotUndoIfNotYetCompleted() throws Exception {
+        
+        // given
+        assertThat(toDoItem.isComplete(), is(false));
+
+        // when, then should fail
+        expectedExceptions.expectMessage("Not yet completed");
+        toDoItem.notYetCompleted();
+    }
 
 }

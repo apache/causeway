@@ -16,77 +16,61 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.props;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
+import dom.todo.ToDoItem.Category;
 import fixture.todo.ToDoItemsFixture;
 
+import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_cost extends AbstractIntegTest {
+import org.apache.isis.applib.clock.Clock;
+
+public class ToDoItem_category extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
-    private BigDecimal cost;
 
     @Before
     public void setUp() throws Exception {
-        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
-        cost = toDoItem.getCost();
     }
 
     @Test
-    public void happyCaseUsingProperty() throws Exception {
-        
-        final BigDecimal newCost = new BigDecimal("123.45");
+    public void happyCase() throws Exception {
         
         // when
-        toDoItem.setCost(newCost);
+        toDoItem.setCategory(Category.Professional);
         
         // then
-        assertThat(toDoItem.getCost(), is(newCost));
+        assertThat(toDoItem.getCategory(), is(Category.Professional));
+        
+        // when
+        toDoItem.setCategory(Category.Domestic);
+        
+        // then
+        assertThat(toDoItem.getCategory(), is(Category.Domestic));
     }
 
-    @Test
-    public void happyCaseUsingAction() throws Exception {
-        
-        final BigDecimal newCost = new BigDecimal("123.45");
-        
-        // when
-        toDoItem.updateCost(newCost);
-        
-        // then
-        assertThat(toDoItem.getCost(), is(newCost));
-    }
-    
-    @Test
-    public void canBeNull() throws Exception {
-        
-        // when
-        toDoItem.setCost((BigDecimal)null);
-        
-        // then
-        assertThat(toDoItem.getCost(), is((BigDecimal)null));
-    }
 
     @Test
-    public void defaultForAction() throws Exception {
+    public void cannotBeNull() throws Exception {
         
-        // then
-        assertThat(unwrap(toDoItem).default0UpdateCost(), is(cost));
+        // when, then
+        expectedExceptions.expectMessage("Mandatory");
+        toDoItem.setCategory(null);
     }
-    
-    
+
 }

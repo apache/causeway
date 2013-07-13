@@ -95,35 +95,38 @@ public class InMemoryDB {
     
     private Map<InMemoryDB.EntityId, Object> objectsById = Maps.newHashMap();
     
-    private Object get(Class<?> cls, final String id) {
-        while(cls != null) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public <T> T get(final Class<T> cls, final String id) {
+        Class type = cls;
+        while(type != null) {
             // search for this class and all superclasses
             final InMemoryDB.EntityId entityId = new EntityId(cls, id);
             final Object object = objectsById.get(entityId);
             if(object != null) {
-                return object;
+                return (T) object;
             }
-            cls = cls.getSuperclass();
+            type = type.getSuperclass();
         }
         return null;
     }
 
-    private Object getElseCreate(Class<?> cls, final String id) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public <T> T getElseCreate(final Class<T> cls, final String id) {
         final Object object = get(cls, id);
         if(object != null) { 
-            return object;
+            return (T) object;
         }
-        Object obj;
-        obj = instantiateAndInject(cls);
+        Object obj = instantiateAndInject(cls);
         init(obj, id);
         
+        Class type = cls;
         // put for this class and all superclasses
-        while(cls != null) {
+        while(type != null) {
             final InMemoryDB.EntityId entityId = new EntityId(cls, id);
             objectsById.put(entityId, obj);
-            cls = cls.getSuperclass();
+            type = type.getSuperclass();
         }
-            return obj;
+        return (T) obj;
     }
 
     private Object instantiateAndInject(Class<?> cls)  {

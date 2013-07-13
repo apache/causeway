@@ -28,6 +28,7 @@ import org.jmock.internal.ExpectationBuilder;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
 
 /**
@@ -71,9 +72,11 @@ public abstract class ScenarioExecution {
     // //////////////////////////////////////
 
     protected final DomainServiceProvider dsp;
+    private WrapperFactory wrapperFactory;
     
-    protected ScenarioExecution(final DomainServiceProvider dsp) {
+    protected ScenarioExecution(final DomainServiceProvider dsp, final WrapperFactory wrapperFactory) {
         this.dsp = dsp;
+        this.wrapperFactory = wrapperFactory;
         current.set(this);
     }
 
@@ -83,7 +86,11 @@ public abstract class ScenarioExecution {
      * 
      * @throws IllegalStateException if not available
      */
+    @SuppressWarnings("unchecked")
     public <T> T service(Class<T> cls) {
+        if(WrapperFactory.class.isAssignableFrom(cls)) {
+            return (T) wrapperFactory();
+        }
         final T service = dsp.getService(cls);
         if(service == null) {
             throw new IllegalStateException(
@@ -109,14 +116,9 @@ public abstract class ScenarioExecution {
         return container;
     }
 
-    /**
-     * Convenience method, returning the {@link WrapperFactory} domain service,
-     * first ensuring that it is available.
-     * 
-     * @throws IllegalStateException if not available
-     */
+    
     public WrapperFactory wrapperFactory() {
-        return service(WrapperFactory.class);
+        return wrapperFactory;
     }
 
 
@@ -207,6 +209,7 @@ public abstract class ScenarioExecution {
 
     public void put(String type, String id, Object value) {
         objectByVariableId.put(new VariableId(type, id), value);
+        objectsById.put(id, value);
         mostRecent.put(type, value);
     }
 

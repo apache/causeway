@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.actions;
+package integration.tests.colls;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -32,42 +32,62 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_notYetCompleted extends AbstractIntegTest {
+public class ToDoItem_dependencies_remove extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
+    private ToDoItem otherToDoItem;
+    private ToDoItem yetAnotherToDoItem;
+    
 
     @Before
     public void setUp() throws Exception {
+        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(all.get(0));
+        final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
+        toDoItem = wrap(items.get(0));
+        otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
+        yetAnotherToDoItem = items.get(2); // wrapping this seems to trip up cglib :-(
+        
+        toDoItem.add(otherToDoItem);
     }
 
+    @After
+    public void tearDown() throws Exception {
+        unwrap(toDoItem).getDependencies().clear();
+    }
 
     @Test
     public void happyCase() throws Exception {
-        
+
         // given
-        unwrap(toDoItem).setComplete(true);
+        assertThat(toDoItem.getDependencies().size(), is(1));
         
         // when
-        toDoItem.notYetCompleted();
+        toDoItem.remove(otherToDoItem);
         
         // then
-        assertThat(toDoItem.isComplete(), is(false));
+        assertThat(toDoItem.getDependencies().size(), is(0));
     }
 
 
     @Test
-    public void cannotUndoIfNotYetCompleted() throws Exception {
-        
-        // given
-        assertThat(toDoItem.isComplete(), is(false));
+    public void cannotRemoveItemIfNotADepedndency() throws Exception {
 
-        // when, then should fail
-        expectedExceptions.expectMessage("Not yet completed");
-        toDoItem.notYetCompleted();
+        // when, then
+        expectedExceptions.expectMessage("Not a dependency");
+        toDoItem.remove(yetAnotherToDoItem);
+    }
+
+    @Test
+    public void cannotRemoveDependencyIfComplete() throws Exception {
+
+        // given
+        unwrap(toDoItem).setComplete(true);
+        
+        // when, then
+        expectedExceptions.expectMessage("Cannot remove dependencies for items that are complete");
+        toDoItem.remove(otherToDoItem);
     }
 
 }

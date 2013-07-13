@@ -16,13 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.actions;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import dom.todo.ToDoItem;
@@ -30,15 +29,15 @@ import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
 import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.clock.Clock;
 
-public class ToDoItem_duplicate extends AbstractIntegTest {
+public class ToDoItem_dueBy extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
-    private ToDoItem duplicateToDoItem;
 
     @Before
     public void setUp() throws Exception {
@@ -51,22 +50,46 @@ public class ToDoItem_duplicate extends AbstractIntegTest {
     @Test
     public void happyCase() throws Exception {
         
-        // given
-        final LocalDate todaysDate = Clock.getTimeAsLocalDate();
-        toDoItem.setDueBy(todaysDate);
-        toDoItem.setCost(new BigDecimal("123.45"));
-        
-        duplicateToDoItem = toDoItem.duplicate(
-                unwrap(toDoItem).default0Duplicate(), 
-                unwrap(toDoItem).default1Duplicate(),
-                unwrap(toDoItem).default2Duplicate(),
-                new BigDecimal("987.65"));
+        // when
+        final LocalDate fiveDaysFromNow = Clock.getTimeAsLocalDate().plusDays(5);
+        toDoItem.setDueBy(fiveDaysFromNow);
         
         // then
-        assertThat(duplicateToDoItem.getDescription(), is(toDoItem.getDescription() + " - Copy"));
-        assertThat(duplicateToDoItem.getCategory(), is(toDoItem.getCategory()));
-        assertThat(duplicateToDoItem.getDueBy(), is(todaysDate));
-        assertThat(duplicateToDoItem.getCost(), is(new BigDecimal("987.65")));
+        assertThat(toDoItem.getDueBy(), is(fiveDaysFromNow));
+    }
+
+
+    @Test
+    public void canBeNull() throws Exception {
+        
+        // when
+        toDoItem.setDueBy((LocalDate)null);
+        
+        // then
+        assertThat(toDoItem.getDueBy(), is((LocalDate)null));
+    }
+
+    @Test
+    public void canBeUpToSixDaysInPast() throws Exception {
+        
+        final LocalDate sixDaysAgo = Clock.getTimeAsLocalDate().plusDays(-6);
+
+        // when
+        toDoItem.setDueBy(sixDaysAgo);
+        
+        // then
+        assertThat(toDoItem.getDueBy(), is(sixDaysAgo));
+    }
+
+
+    @Test
+    public void cannotBeMoreThanSixDaysInPast() throws Exception {
+        
+        final LocalDate sevenDaysAgo = Clock.getTimeAsLocalDate().plusDays(-7);
+        
+        // when, then
+        expectedExceptions.expectMessage("Due by date cannot be more than one week old");
+        toDoItem.setDueBy(sevenDaysAgo);
     }
 
 }

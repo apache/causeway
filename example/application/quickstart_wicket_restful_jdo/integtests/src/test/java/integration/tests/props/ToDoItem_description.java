@@ -16,27 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.props;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
-import dom.todo.ToDoItem.Category;
 import fixture.todo.ToDoItemsFixture;
 
-import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
-
-public class ToDoItem_category extends AbstractIntegTest {
+public class ToDoItem_description extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
@@ -51,26 +46,31 @@ public class ToDoItem_category extends AbstractIntegTest {
     @Test
     public void happyCase() throws Exception {
         
-        // when
-        toDoItem.setCategory(Category.Professional);
-        
-        // then
-        assertThat(toDoItem.getCategory(), is(Category.Professional));
+        // given
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
         
         // when
-        toDoItem.setCategory(Category.Domestic);
+        toDoItem.setDescription("Buy bread and butter");
         
         // then
-        assertThat(toDoItem.getCategory(), is(Category.Domestic));
+        assertThat(toDoItem.getDescription(), is("Buy bread and butter"));
     }
 
+
+    @Test
+    public void failsRegex() throws Exception {
+        
+        // when
+        expectedExceptions.expectMessage("Doesn't match pattern");
+        toDoItem.setDescription("exclamation marks are not allowed!!!");
+    }
 
     @Test
     public void cannotBeNull() throws Exception {
         
         // when, then
         expectedExceptions.expectMessage("Mandatory");
-        toDoItem.setCategory(null);
+        toDoItem.setDescription(null);
     }
 
 }

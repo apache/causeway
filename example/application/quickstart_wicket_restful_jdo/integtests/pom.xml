@@ -67,6 +67,15 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-integtestsupport</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-specsupport</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>

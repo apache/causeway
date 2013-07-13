@@ -14,25 +14,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.specsupport.scenarios;
+package integration.specs.todoitem;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import dom.todo.ToDoItem;
 
+import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
+import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 
-/**
- * Provides access to the {@link DomainObjectContainer} and any other domain services 
- * that may have been configured.
- * 
- * <p>
- * For {@link ScenarioExecution scenario}s with integration-scope, these will be
- * configured services for an end-to-end running system.  For scenarios with
- * unit-scope, these will typically be mocks.
- */
-public interface DomainServiceProvider {
-
-    public abstract DomainObjectContainer getContainer();
-
-    public abstract <T> T getService(Class<T> serviceClass);
-
+public class InMemoryDBForToDoApp extends InMemoryDB {
+    
+    public InMemoryDBForToDoApp(ScenarioExecution scenarioExecution) {
+        super(scenarioExecution);
+    }
+    
+    /**
+     * Hook to initialize if possible.
+     */
+    @Override
+    protected void init(Object obj, String str) {
+        if(obj instanceof ToDoItem) {
+            ToDoItem toDoItem = (ToDoItem) obj;
+            toDoItem.setDescription(str);
+        }
+    }
 }

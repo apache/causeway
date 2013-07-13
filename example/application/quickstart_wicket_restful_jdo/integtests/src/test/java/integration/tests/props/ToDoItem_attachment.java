@@ -16,29 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.props;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
+import java.nio.charset.Charset;
 import java.util.List;
+
+import javax.activation.MimeType;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_description extends AbstractIntegTest {
+import org.apache.isis.applib.value.Blob;
+
+public class ToDoItem_attachment extends ToDoIntegTest {
+
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
+        
         scenarioExecution().install(new ToDoItemsFixture());
-
+        
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
     }
@@ -46,31 +54,25 @@ public class ToDoItem_description extends AbstractIntegTest {
     @Test
     public void happyCase() throws Exception {
         
-        // given
-        assertThat(toDoItem.getDescription(), is("Buy bread"));
+        byte[] bytes = "{\"foo\": \"bar\"}".getBytes(Charset.forName("UTF-8"));
+        final Blob newAttachment = new Blob("myfile.json", new MimeType("application/json"), bytes);
         
         // when
-        toDoItem.setDescription("Buy bread and butter");
+        toDoItem.setAttachment(newAttachment);
         
         // then
-        assertThat(toDoItem.getDescription(), is("Buy bread and butter"));
+        assertThat(toDoItem.getAttachment(), is(newAttachment));
     }
 
-
     @Test
-    public void failsRegex() throws Exception {
+    public void canBeNull() throws Exception {
         
         // when
-        expectedExceptions.expectMessage("Doesn't match pattern");
-        toDoItem.setDescription("exclamation marks are not allowed!!!");
-    }
-
-    @Test
-    public void cannotBeNull() throws Exception {
+        toDoItem.setAttachment((Blob)null);
         
-        // when, then
-        expectedExceptions.expectMessage("Mandatory");
-        toDoItem.setDescription(null);
+        // then
+        assertThat(toDoItem.getAttachment(), is((Blob)null));
     }
 
+    
 }

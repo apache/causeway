@@ -16,63 +16,60 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.props;
+package integration.tests.repo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
-import java.nio.charset.Charset;
 import java.util.List;
-
-import javax.activation.MimeType;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.junit.After;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.value.Blob;
+public class ToDoItems_finders extends ToDoIntegTest {
 
-public class ToDoItem_attachment extends AbstractIntegTest {
-
-
-    private ToDoItem toDoItem;
+    private int notYetCompletedSize;
+    private int completedSize;
 
     @Before
     public void setUp() throws Exception {
-        
         scenarioExecution().install(new ToDoItemsFixture());
+
+        final List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> completedItems = wrap(service(ToDoItems.class)).complete();
         
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(all.get(0));
+        notYetCompletedSize = notYetCompleteItems.size();
+        completedSize = completedItems.size();
+        
+        assertThat(notYetCompletedSize, is(Matchers.greaterThan(5)));
     }
 
     @Test
-    public void happyCase() throws Exception {
+    public void complete_and_notYetComplete() throws Exception {
         
-        byte[] bytes = "{\"foo\": \"bar\"}".getBytes(Charset.forName("UTF-8"));
-        final Blob newAttachment = new Blob("myfile.json", new MimeType("application/json"), bytes);
-        
-        // when
-        toDoItem.setAttachment(newAttachment);
-        
-        // then
-        assertThat(toDoItem.getAttachment(), is(newAttachment));
-    }
-
-    @Test
-    public void canBeNull() throws Exception {
+        // given
+        List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+        final ToDoItem toDoItem = wrap(notYetCompleteItems.get(0));
         
         // when
-        toDoItem.setAttachment((Blob)null);
+        toDoItem.completed();
         
         // then
-        assertThat(toDoItem.getAttachment(), is((Blob)null));
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
+        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize+1));
+        
+        // and when
+        toDoItem.notYetCompleted();
+        
+        // then
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
+        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize));
     }
 
-    
 }

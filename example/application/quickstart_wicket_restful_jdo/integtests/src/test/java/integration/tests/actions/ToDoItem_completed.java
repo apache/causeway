@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.repo;
+package integration.tests.actions;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -28,48 +28,56 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItems_finders extends AbstractIntegTest {
+public class ToDoItem_completed extends ToDoIntegTest {
 
-    private int notYetCompletedSize;
-    private int completedSize;
+    private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
-        final List<ToDoItem> completedItems = wrap(service(ToDoItems.class)).complete();
-        
-        notYetCompletedSize = notYetCompleteItems.size();
-        completedSize = completedItems.size();
-        
-        assertThat(notYetCompletedSize, is(Matchers.greaterThan(5)));
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        toDoItem = wrap(all.get(0));
     }
 
+
     @Test
-    public void complete_and_notYetComplete() throws Exception {
+    public void happyCase() throws Exception {
         
         // given
-        List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
-        final ToDoItem toDoItem = wrap(notYetCompleteItems.get(0));
+        assertThat(toDoItem.isComplete(), is(false));
         
         // when
         toDoItem.completed();
         
         // then
-        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
-        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize+1));
+        assertThat(toDoItem.isComplete(), is(true));
+    }
+
+
+    @Test
+    public void cannotCompleteIfAlreadyCompleted() throws Exception {
         
-        // and when
-        toDoItem.notYetCompleted();
+        // given
+        unwrap(toDoItem).setComplete(true);
+
+        // when, then should fail
+        expectedExceptions.expectMessage("Already completed");
+        toDoItem.completed();
+    }
+
+
+    @Test
+    public void cannotSetPropertyDirectly() throws Exception {
         
-        // then
-        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
-        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize));
+        // given
+
+        // when, then should fail
+        expectedExceptions.expectMessage("Always disabled");
+        toDoItem.setComplete(true);
     }
 
 }

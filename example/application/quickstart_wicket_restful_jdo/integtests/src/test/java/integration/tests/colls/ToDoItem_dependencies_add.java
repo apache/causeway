@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.colls;
+package integration.tests.colls;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -32,24 +32,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_dependencies_remove extends AbstractIntegTest {
+public class ToDoItem_dependencies_add extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
     private ToDoItem otherToDoItem;
-    private ToDoItem yetAnotherToDoItem;
     
 
     @Before
     public void setUp() throws Exception {
-        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
         final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(items.get(0));
         otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
-        yetAnotherToDoItem = items.get(2); // wrapping this seems to trip up cglib :-(
-        
-        toDoItem.add(otherToDoItem);
     }
 
     @After
@@ -61,33 +56,34 @@ public class ToDoItem_dependencies_remove extends AbstractIntegTest {
     public void happyCase() throws Exception {
 
         // given
-        assertThat(toDoItem.getDependencies().size(), is(1));
+        assertThat(toDoItem.getDependencies().size(), is(0));
         
         // when
-        toDoItem.remove(otherToDoItem);
+        toDoItem.add(otherToDoItem);
         
         // then
-        assertThat(toDoItem.getDependencies().size(), is(0));
+        assertThat(toDoItem.getDependencies().size(), is(1));
+        assertThat(toDoItem.getDependencies().first(), is(unwrap(otherToDoItem)));
     }
 
 
     @Test
-    public void cannotRemoveItemIfNotADepedndency() throws Exception {
+    public void cannotDependOnSelf() throws Exception {
 
         // when, then
-        expectedExceptions.expectMessage("Not a dependency");
-        toDoItem.remove(yetAnotherToDoItem);
+        expectedExceptions.expectMessage("Can't set up a dependency to self");
+        toDoItem.add(toDoItem);
     }
 
     @Test
-    public void cannotRemoveDependencyIfComplete() throws Exception {
+    public void cannotAddDependencyIfComplete() throws Exception {
 
         // given
         unwrap(toDoItem).setComplete(true);
         
         // when, then
-        expectedExceptions.expectMessage("Cannot remove dependencies for items that are complete");
-        toDoItem.remove(otherToDoItem);
+        expectedExceptions.expectMessage("Cannot add dependencies for items that are complete");
+        toDoItem.add(otherToDoItem);
     }
 
 }

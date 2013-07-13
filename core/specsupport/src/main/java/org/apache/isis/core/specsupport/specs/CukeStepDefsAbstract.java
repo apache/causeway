@@ -70,7 +70,6 @@ public abstract class CukeStepDefsAbstract {
      */
     public void put(String type, String id, Object value) {
         scenarioExecution().put(type, id, value);
-        
     }
     
     /**

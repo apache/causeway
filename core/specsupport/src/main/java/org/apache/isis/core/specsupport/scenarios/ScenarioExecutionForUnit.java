@@ -31,6 +31,8 @@ import org.jmock.internal.ExpectationBuilder;
 import org.jmock.lib.legacy.ClassImposteriser;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
 /**
  * An implementation of {@link ScenarioExecution} with which uses JMock to provide
@@ -48,10 +50,20 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
         private DomainObjectContainer mockContainer = null;
         private final Map<Class<?>, Object> mocks = Maps.newHashMap();
         
-        private final Mockery context = new Mockery() {{
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }};
+        private Mockery context;
+
         private ScenarioExecution scenarioExecution;
+
+        DomainServiceProviderMockery() {
+            init();
+        }
+
+        private void init() {
+            context = new Mockery() {{
+                setImposteriser(ClassImposteriser.INSTANCE);
+            }};
+            mocks.clear();
+        }
 
         @Override
         public DomainObjectContainer getContainer() {
@@ -99,6 +111,15 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
             this.scenarioExecution = scenarioExecution;
             return this;
         }
+
+        /**
+         * not API 
+         */
+        void assertIsSatisfied() {
+            mockery().assertIsSatisfied();
+            // discard all existing mocks and mockery, to start again.
+            init();
+        }
     }
 
     private final ScenarioExecutionForUnit.DomainServiceProviderMockery dspm;
@@ -107,10 +128,11 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
         this(new DomainServiceProviderMockery());
     }
     private ScenarioExecutionForUnit(ScenarioExecutionForUnit.DomainServiceProviderMockery dspm) {
-        super(dspm);
+        super(dspm, WrapperFactory.NOOP);
         this.dspm = dspm.init(this);
     }
-    
+
+
     // //////////////////////////////////////
 
     public void checking(ExpectationBuilder expectations) {
@@ -118,7 +140,7 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
     }
     
     public void assertIsSatisfied() {
-        dspm.mockery().assertIsSatisfied();
+        dspm.assertIsSatisfied();
     }
     
     public Sequence sequence(String name) {

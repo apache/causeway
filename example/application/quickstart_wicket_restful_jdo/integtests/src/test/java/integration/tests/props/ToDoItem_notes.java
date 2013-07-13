@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integtests.props;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integtests.AbstractIntegTest;
+import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
@@ -28,19 +28,16 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
-
-public class ToDoItem_dueBy extends AbstractIntegTest {
+public class ToDoItem_notes extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
+        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
@@ -50,46 +47,24 @@ public class ToDoItem_dueBy extends AbstractIntegTest {
     @Test
     public void happyCase() throws Exception {
         
+        final String newNotes = "Lorem ipsum yada yada";
+        
         // when
-        final LocalDate fiveDaysFromNow = Clock.getTimeAsLocalDate().plusDays(5);
-        toDoItem.setDueBy(fiveDaysFromNow);
+        toDoItem.setNotes(newNotes);
         
         // then
-        assertThat(toDoItem.getDueBy(), is(fiveDaysFromNow));
+        assertThat(toDoItem.getNotes(), is(newNotes));
     }
-
 
     @Test
     public void canBeNull() throws Exception {
         
         // when
-        toDoItem.setDueBy((LocalDate)null);
+        toDoItem.setNotes((String)null);
         
         // then
-        assertThat(toDoItem.getDueBy(), is((LocalDate)null));
+        assertThat(toDoItem.getNotes(), is((String)null));
     }
 
-    @Test
-    public void canBeUpToSixDaysInPast() throws Exception {
-        
-        final LocalDate sixDaysAgo = Clock.getTimeAsLocalDate().plusDays(-6);
-
-        // when
-        toDoItem.setDueBy(sixDaysAgo);
-        
-        // then
-        assertThat(toDoItem.getDueBy(), is(sixDaysAgo));
-    }
-
-
-    @Test
-    public void cannotBeMoreThanSixDaysInPast() throws Exception {
-        
-        final LocalDate sevenDaysAgo = Clock.getTimeAsLocalDate().plusDays(-7);
-        
-        // when, then
-        expectedExceptions.expectMessage("Due by date cannot be more than one week old");
-        toDoItem.setDueBy(sevenDaysAgo);
-    }
-
+    
 }
