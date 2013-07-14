@@ -49,13 +49,13 @@ public class ToDoItemsFixture extends AbstractFixture {
 
         createToDoItemForUser("Buy milk", Category.Domestic, user, daysFromToday(0), new BigDecimal("0.75"));
         createToDoItemForUser("Buy bread", Category.Domestic, user, daysFromToday(0), new BigDecimal("1.75"));
-        createToDoItemForUser("Buy stamps", Category.Domestic, user, daysFromToday(0), new BigDecimal("10.00"));
+        createToDoItemForUser("Buy stamps", Category.Domestic, user, daysFromToday(0), new BigDecimal("10.00")).setComplete(true);
         createToDoItemForUser("Pick up laundry", Category.Domestic, user, daysFromToday(6), new BigDecimal("7.50"));
         createToDoItemForUser("Sharpen knives", Category.Domestic, user, daysFromToday(14), null);
         
         createToDoItemForUser("Write to penpal", Category.Other, user, null, null);
         
-        createToDoItemForUser("Write blog post", Category.Professional, user, daysFromToday(7), null);
+        createToDoItemForUser("Write blog post", Category.Professional, user, daysFromToday(7), null).setComplete(true);
         createToDoItemForUser("Organize brown bag", Category.Professional, user, daysFromToday(14), null);
         createToDoItemForUser("Submit conference session", Category.Professional, user, daysFromToday(21), null);
         createToDoItemForUser("Stage Isis release", Category.Professional, user, null, null);

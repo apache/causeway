@@ -52,22 +52,29 @@ public abstract class IntegrationTestAbstract {
     /**
      * Convenience method
      */
-    public void put(String type, String id, Object value) {
-        scenarioExecution().put(type, id, value);
-    }
-    
-    /**
-     * Convenience method
-     */
-    public Object get(String type, String id) {
-        return scenarioExecution().get(type, id);
+    public Object getVar(String type, String id) {
+        return scenarioExecution().getVar(type, id);
     }
 
     /**
      * Convenience method
      */
-    public <X> X get(String type, String id, Class<X> cls) {
-        return scenarioExecution().get(type, id ,cls);
+    public <X> X getVar(String type, String id, Class<X> cls) {
+        return scenarioExecution().getVar(type, id ,cls);
+    }
+
+    /**
+     * Convenience method
+     */
+    public void putVar(String type, String id, Object value) {
+        scenarioExecution().putVar(type, id, value);
+    }
+    
+    /**
+     * Convenience method
+     */
+    public void removeVar(String type, String id) {
+        scenarioExecution().removeVar(type, id);
     }
 
     /**

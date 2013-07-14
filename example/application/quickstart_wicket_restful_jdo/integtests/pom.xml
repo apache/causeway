@@ -37,6 +37,7 @@
                     <configuration>
                         <includes>
                             <include>**/*Test*.java</include>
+                            <include>**/*Specs*.java</include>
                         </includes>
                         <excludes>
                             <exclude>**/*Abstract*.java</exclude>

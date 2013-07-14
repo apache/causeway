@@ -68,24 +68,31 @@ public abstract class CukeStepDefsAbstract {
     /**
      * Convenience method
      */
-    public void put(String type, String id, Object value) {
-        scenarioExecution().put(type, id, value);
+    public Object getVar(String type, String id) {
+        return scenarioExecution().getVar(type, id);
     }
     
     /**
      * Convenience method
      */
-    public Object get(String type, String id) {
-        return scenarioExecution().get(type, id);
+    public <X> X getVar(String type, String id, Class<X> cls) {
+        return scenarioExecution().getVar(type, id ,cls);
     }
     
     /**
      * Convenience method
      */
-    public <X> X get(String type, String id, Class<X> cls) {
-        return scenarioExecution().get(type, id ,cls);
+    public void putVar(String type, String id, Object value) {
+        scenarioExecution().putVar(type, id, value);
     }
-    
+
+    /**
+     * Convenience method
+     */
+    public void removeVar(String type, String id) {
+        scenarioExecution().removeVar(type, id);
+    }
+
     /**
      * Convenience method
      */
@@ -123,6 +130,14 @@ public abstract class CukeStepDefsAbstract {
     
     /**
      * Convenience method
+     * @return 
+     */
+    public boolean supportsMocks() {
+        return scenarioExecution().supportsMocks();
+    }
+    
+    /**
+     * Convenience method
      */
     public void checking(ExpectationBuilder expectations) {
         scenarioExecution().checking(expectations);
@@ -131,7 +146,7 @@ public abstract class CukeStepDefsAbstract {
     /**
      * Convenience method
      */
-    public void assertIsSatisfied() {
+    public void assertMocksSatisfied() {
         scenarioExecution().assertIsSatisfied();
     }
     

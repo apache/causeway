@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.jmock.Mockery;
 import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
@@ -28,7 +29,6 @@ import org.jmock.internal.ExpectationBuilder;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
 
 /**
@@ -116,8 +116,7 @@ public abstract class ScenarioExecution {
      * otherwise returns a {@link WrapperFactory#NOOP no-op} implementation.
      */
     public WrapperFactory wrapperFactory() {
-        final WrapperFactory wrapperFactory = dsp.getService(WrapperFactory.class);
-        return wrapperFactory != null? wrapperFactory: WrapperFactory.NOOP;
+        return WrapperFactory.NOOP;
     }
 
 
@@ -206,21 +205,41 @@ public abstract class ScenarioExecution {
     
     private final Map<String, Object> mostRecent = Maps.newHashMap();
 
-    public void put(String type, String id, Object value) {
-        objectByVariableId.put(new VariableId(type, id), value);
+    public void putVar(String type, String id, Object value) {
+        if(type == null || id == null) {
+            throw new IllegalArgumentException("type and id must both be provided to save a scenario variable");
+        }
+        if(value == null) {
+            throw new IllegalArgumentException("value cannot be null; use remove() to clear an scenario variable");
+        }
+        final VariableId key = new VariableId(type, id);
+        objectByVariableId.put(key, value);
         objectsById.put(id, value);
         mostRecent.put(type, value);
     }
 
+    public void removeVar(String type, String id) {
+        if(type != null && id != null) {
+            final VariableId key = new VariableId(type, id);
+            objectByVariableId.remove(key);
+        }
+        if(id != null) {
+            objectsById.remove(id);
+        }
+        if(type != null) {
+            mostRecent.remove(type);
+        }
+    }
+
     /**
-     * Retrieve an object previously used in the scenario.
+     * Retrieve an variable previously used in the scenario.
      * 
      * <p>
      * Must specify type and/or id.
      * 
      * @see VariableId - for rules on what constitutes an identifier.
      */
-    public Object get(String type, String id) {
+    public Object getVar(String type, String id) {
         if(type != null && id != null) {
             final VariableId variableId = new VariableId(type,id);
             final Object value = objectByVariableId.get(variableId);
@@ -244,59 +263,83 @@ public abstract class ScenarioExecution {
     }
 
     /**
-     * As {@link #get(String, String)}, but downcasting to the provided class.
+     * As {@link #getVar(String, String)}, but downcasting to the provided class.
      */
     @SuppressWarnings("unchecked")
-    public <X> X get(String type, String id, Class<X> cls) {
-        return (X) get(type, id);
+    public <X> X getVar(String type, String id, Class<X> cls) {
+        return (X) getVar(type, id);
     }
 
     // //////////////////////////////////////
 
     /**
-     * Install expectations on mock domain services.
+     * Whether this implementation supports mocks.
      * 
      * <p>
-     * This implementation is a no-op, but subclasses of this class tailored to
-     * supporting unit specs/tests are expected to override.
+     * This default implementation returns <tt>false</tt>, meaning that the methods to
+     * support mocking ({@link #checking(ExpectationBuilder)}, {@link #assertIsSatisfied()}, 
+     * {@link #sequence(String)} and {@link #states(String)}) may not be called.  However, 
+     * the {@link ScenarioExecutionForUnit} overrides this and does support mocking.
+     */
+    public boolean supportsMocks() {
+        return false;
+    }
+
+    /**
+     * Install expectations on mock domain services (if appropriate).
+     *
+     * <p>
+     * By default, mocks are not supported.  However, {@link ScenarioExecutionForUnit} overrides this
+     * method and does support mocking (delegating to an underlying JMock {@link Mockery}).
+     * 
+     * <p>
+     * Subclasses of this class tailored to supporting integration specs/tests should do nothing
      */
     public void checking(ExpectationBuilder expectations) {
-        // do nothing
+        throw new IllegalStateException("Mocks are not supported");
     }
     
     /**
-     * Install expectations on mock domain services.
+     * Install expectations on mock domain services (if appropriate).
+     *
+     * <p>
+     * By default, mocks are not supported.  To reduce clutter in tests, this method is a no-op
+     * and will silently do nothing if called when mocks are not supported.
      * 
      * <p>
-     * This implementation is a no-op, but subclasses of this class tailored to
-     * supporting unit specs/tests are expected to override.
+     * The {@link ScenarioExecutionForUnit} overrides this method and does support mocking, delegating 
+     * to an underlying JMock {@link Mockery}).  Not only will it assert all existing interactions
+     * have been satisfied, it also resets mocks/expectations for the next interaction. 
      */
     public void assertIsSatisfied() {
-        // do nothing
     }
     
     /**
-     * Define {@link Sequence} in a (JMock) interaction.
+     * Define {@link Sequence} in a (JMock) interaction  (if appropriaate).
+     *
+     * <p>
+     * By default, mocks are not supported.  However, {@link ScenarioExecutionForUnit} overrides this
+     * method and does support mocking (delegating to an underlying JMock {@link Mockery}).
      * 
      * <p>
-     * This implementation is a no-op, but subclasses of this class tailored to
-     * supporting unit specs/tests are expected to override.
+     * Subclasses of this class tailored to supporting integration specs/tests should do nothing
      */
     public Sequence sequence(String name) {
-        // do nothing
-        return null;
+        throw new IllegalStateException("Mocks are not supported");
     }
     
     /**
-     * Define {@link States} in a (JMock) interaction.
+     * Define {@link States} in a (JMock) interaction (if appropriaate).
+     *
+     * <p>
+     * By default, mocks are not supported.  However, {@link ScenarioExecutionForUnit} overrides this
+     * method and does support mocking (delegating to an underlying JMock {@link Mockery}).
      * 
      * <p>
-     * This implementation is a no-op, but subclasses of this class tailored to
-     * supporting unit specs/tests are expected to override.
+     * Subclasses of this class tailored to supporting integration specs/tests should do nothing
      */
     public States states(String name) {
-        // do nothing
-        return null;
+        throw new IllegalStateException("Mocks are not supported");
     }
     
     // //////////////////////////////////////
@@ -364,5 +407,6 @@ public abstract class ScenarioExecution {
             throw new RuntimeException(e);
         }
     }
+
 
 }

@@ -16,22 +16,22 @@
  */
 package integration.specs.todoitem;
 
-import integration.ToDoSystemInitializer;
-import cucumber.api.java.Before;
+import cucumber.api.junit.Cucumber;
 
-import org.apache.log4j.PropertyConfigurator;
+import org.junit.runner.RunWith;
 
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
-import org.apache.isis.core.specsupport.specs.CukeStepDefsAbstract;
 
-public class BootstrapIntegrationStepDefs extends CukeStepDefsAbstract {
+/**
+ * Runs scenarios in all <tt>.feature</tt> files in this package. 
+ */
+@RunWith(Cucumber.class)
+@Cucumber.Options(
+        format = {
+                "html:target/cucumber-html-report"
+        },
+        strict = true,
+        tags = { "~@backlog", "~@ignore" })
+public class FindCompletedToDoItemAndMarkAsNotYetCompleteSpec {
 
-    @Before(value={"@integration"}, order=100)
-    public void beforeScenarioIntegrationScope() {
-        PropertyConfigurator.configure("logging.properties");
-        ToDoSystemInitializer.initIsft();
-        
-        before(ScenarioExecutionScope.INTEGRATION);
-    }
-    
+
 }

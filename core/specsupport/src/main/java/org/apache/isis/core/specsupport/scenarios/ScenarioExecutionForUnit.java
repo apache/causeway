@@ -48,6 +48,10 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
 
     // //////////////////////////////////////
 
+    @Override
+    public boolean supportsMocks() {
+        return true;
+    }
     /**
      * Sets up an expectation against the underlying JMock {@link Mockery} 
      * (as wrapped by {@link DomainServiceProviderMockery}).

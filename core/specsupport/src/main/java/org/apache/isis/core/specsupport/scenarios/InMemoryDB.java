@@ -16,8 +16,12 @@
  */
 package org.apache.isis.core.specsupport.scenarios;
 
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.hamcrest.Description;
@@ -27,10 +31,10 @@ import org.jmock.api.Invocation;
 import org.apache.isis.applib.DomainObjectContainer;
 
 /**
- * To support unit-scope specifications, intended to work with mocks.
+ * Utility class to support the writing of unit-scope specs.
  * 
  * <p>
- * The {@link #findByXxx(Class, Strategy)} provides an implementation of a JMock
+ * The {@link #finds(Class, Strategy)} provides an implementation of a JMock
  * {@link Action} that can simulate searching for an object from a database, and 
  * optionally automatically creating a new one if {@link Strategy specified}.
  * 
@@ -52,11 +56,14 @@ public class InMemoryDB {
     }
     
     public static class EntityId {
-        private final String type;
+        private final Class<?> type;
         private final String id;
         public EntityId(Class<?> type, String id) {
-            this.type = type.getName();
+            this.type = type;
             this.id = id;
+        }
+        Class<?> getType() {
+            return type;
         }
         @Override
         public int hashCode() {
@@ -95,8 +102,11 @@ public class InMemoryDB {
     
     private Map<InMemoryDB.EntityId, Object> objectsById = Maps.newHashMap();
     
+    /**
+     * Returns the object if exists, but will NOT instantiate a new one if not present.
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public <T> T get(final Class<T> cls, final String id) {
+    public <T> T getNoCreate(final Class<T> cls, final String id) {
         Class type = cls;
         while(type != null) {
             // search for this class and all superclasses
@@ -110,15 +120,30 @@ public class InMemoryDB {
         return null;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    /**
+     * Returns the object if exists, else will instantiate and save a new one if not present.
+     * 
+     * <p>
+     * The new object will have services injected into it (through the {@link ScenarioExecution#injectServices(Object)})
+     * and will be initialized through the {@link #init(Object, String) init hook} method.
+     */
+    @SuppressWarnings({ "unchecked" })
     public <T> T getElseCreate(final Class<T> cls, final String id) {
-        final Object object = get(cls, id);
+        final Object object = getNoCreate(cls, id);
         if(object != null) { 
             return (T) object;
         }
         Object obj = instantiateAndInject(cls);
         init(obj, id);
         
+        return put(cls, id, obj);
+    }
+
+    /**
+     * Put an object into the database.
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public <T> T put(final Class<T> cls, final String id, Object obj) {
         Class type = cls;
         // put for this class and all superclasses
         while(type != null) {
@@ -137,12 +162,19 @@ public class InMemoryDB {
         }
     }
 
-    public enum Strategy {
-        STRICT,
-        AUTOCREATE
-    }
-    
-    public Action findByXxx(final Class<?> cls, final InMemoryDB.Strategy strategy) {
+    /**
+     * Returns a JMock {@link Action} to return an instance of the provided class.
+     * 
+     * <p>
+     * If the object is not yet held in memory, it will be automatically created,
+     * as per {@link #getElseCreate(Class, String)}.
+     * 
+     * <p>
+     * This {@link Action} can only be set for expectations to invoke a method
+     * accepting a single string argument.  This string argument is taken to be an
+     * identifier for the object (and is used in the caching of that object in memory).  
+     */
+    public Action finds(final Class<?> cls) {
         return new Action() {
             
             @Override
@@ -155,23 +187,43 @@ public class InMemoryDB {
                     throw new IllegalArgumentException("Argument must be a string");
                 } 
                 String arg = (String) argObj;
-                if(strategy == Strategy.AUTOCREATE) {
-                    return getElseCreate(cls, arg);
-                } else {
-                    return get(cls, arg);
-                }
+                return getElseCreate(cls, arg);
             }
             
             @Override
             public void describeTo(Description description) {
-                description.appendText("findByXxx for " + cls.getName());
+                description.appendText("finds an instance of " + cls.getName());
             }
         };
     }
-    
+
+    public <T> List<T> findAll(Class<T> cls) {
+        return find(cls, Predicates.<T>alwaysTrue());
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> find(Class<T> cls, Predicate<T> predicate) {
+        final List<T> list = Lists.newArrayList(); 
+        for (EntityId entityId : objectsById.keySet()) {
+            if(cls.isAssignableFrom(entityId.getType())) {
+                final T object = (T) objectsById.get(entityId);
+                if(predicate.apply(object)) {
+                    list.add(object);
+                }
+            }
+        }
+        return list;
+    }
+
     /**
      * Hook to initialize if possible.
+     * 
+     * <p>
+     * The provided string is usually taken to be some sort of unique identifier for the object
+     * (unique in the context of any given scenario, that is).
      */
-    protected void init(Object obj, String id) {
+    protected void init(Object obj, String str) {
     }
+
+
 }
