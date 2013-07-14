@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 
 
 /**
- * Runs scenarios in all <tt>.feature</tt> files in this package. 
+ * Runs scenarios in corresponding <tt>.feature</tt> file. 
  */
 @RunWith(Cucumber.class)
 @Cucumber.Options(
