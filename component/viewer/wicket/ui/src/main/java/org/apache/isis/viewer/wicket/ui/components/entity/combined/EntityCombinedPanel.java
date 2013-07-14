@@ -19,9 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.combined;
 
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
@@ -38,6 +40,10 @@ public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
     private void buildGui() {
         final EntityModel model = getModel();
+        final CssClassFacet facet = model.getObject().getSpecification().getFacet(CssClassFacet.class);
+        if(facet != null) {
+            this.add(new CssClassAppender(facet.value()));
+        }
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
         addOrReplace(ComponentType.ENTITY_PROPERTIES, model);

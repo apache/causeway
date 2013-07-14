@@ -69,7 +69,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_COLLECTION);
 
         final Component collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS, getModel());
-        
+
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, collectionContents));
         addOrReplace(markupContainer);
     }

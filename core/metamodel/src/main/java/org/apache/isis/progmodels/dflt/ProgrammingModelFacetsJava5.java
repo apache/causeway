@@ -49,6 +49,7 @@ import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation
 import org.apache.isis.core.progmodel.facets.collections.sortedby.SortedByAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfAnnotationForCollectionsFacetFactory;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.cssclass.CssClassAnnotationOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsAnnotationOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaDescriptionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledAnnotationFacetFactory;
@@ -75,6 +76,7 @@ import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistCal
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.update.UpdateCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.choices.enums.EnumFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.cssclass.CssClassAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.defaults.annotation.DefaultedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.describedas.annotation.DescribedAsAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
@@ -338,6 +340,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
         addFactory(HiddenAnnotationForMemberFacetFactory.class);
+        addFactory(CssClassAnnotationForTypeFacetFactory.class);
+        addFactory(CssClassAnnotationOnMemberFacetFactory.class);
 
         addFactory(HiddenObjectViaHiddenMethodFacetFactory.class);
         addFactory(DisabledObjectViaDisabledMethodFacetFactory.class);

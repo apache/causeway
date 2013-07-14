@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -59,6 +60,10 @@ public class CssMenuItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String ID_MENU_LINK = "menuLink";
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
 
     public static class Builder {
         private final CssMenuItem cssMenuItem;
@@ -114,6 +119,10 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
+        public void withCssClass(String cssClass) {
+            cssMenuItem.setCssClass(cssClass);
+        }
+
         /**
          * Returns the built {@link CssMenuItem}, associating with
          * {@link #parent(CssMenuItem) parent} (if specified).
@@ -124,8 +133,6 @@ public class CssMenuItem implements Serializable {
             }
             return cssMenuItem;
         }
-
-
     }
 
     private final String name;
@@ -143,6 +150,7 @@ public class CssMenuItem implements Serializable {
     static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
     private String actionIdentifier;
+    private String cssClass;
 
 
 
@@ -262,13 +270,23 @@ public class CssMenuItem implements Serializable {
         // check whether enabled
         final Consent usability = objectAction.isUsable(session, adapter, where);
         final String reasonDisabledIfAny = usability.getReason();
-        
+        CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
+
         // check if returns blob or clob (if so, then add CSS to suppress veil)
         final boolean blobOrClob = returnsBlobOrClob(objectAction);
         final boolean prototype = isExplorationOrPrototype(objectAction);
         final String actionIdentifier = actionIdentifierFor(objectAction);
 
-        return newSubMenuItem(actionLabel).link(link).enabled(reasonDisabledIfAny).returnsBlobOrClob(blobOrClob).prototyping(prototype).withActionIdentifier(actionIdentifier);
+        Builder builder = newSubMenuItem(actionLabel)
+                .link(link)
+                .enabled(reasonDisabledIfAny)
+                .returnsBlobOrClob(blobOrClob)
+                .prototyping(prototype)
+                .withActionIdentifier(actionIdentifier);
+        if (cssClassFacet != null) {
+            builder.withCssClass(cssClassFacet.value());
+        }
+        return builder;
     }
 
     public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
@@ -293,7 +311,7 @@ public class CssMenuItem implements Serializable {
         
         final String className = action.getOnType().getShortIdentifier();
         final String actionId = action.getId();
-        return className+"-"+actionId;
+        return className + "-" + actionId;
     }
 
     
@@ -306,8 +324,13 @@ public class CssMenuItem implements Serializable {
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
+        Builder builder = this.newSubMenuItem(actionLabel).link(link).prototyping(linkAndLabel.isPrototype());
 
-        return this.newSubMenuItem(actionLabel).link(link).prototyping(linkAndLabel.isPrototype());
+        CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
+        if (cssClassFacet != null) {
+            builder.withCssClass(cssClassFacet.value());
+        }
+        return builder;
     }
 
     // //////////////////////////////////////////////////////////////
@@ -337,8 +360,11 @@ public class CssMenuItem implements Serializable {
             if(this.prototype) {
                 link.add(new CssClassAppender("prototype"));
             }
+            if(this.cssClass != null) {
+                link.add(new CssClassAppender(this.cssClass));
+            }
             link.add(new CssClassAppender(this.actionIdentifier));
-            
+
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return link;

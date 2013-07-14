@@ -101,7 +101,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
      * 
      * <p>
-     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecId(String)}.
+     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecId(ObjectSpecId)}.
      */
     ObjectSpecId getSpecId();
     
@@ -159,6 +159,14 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * is not necessarily immutable.
      */
     String getHelp();
+
+    /**
+     * Returns a css class name of the specification.
+     *
+     * <p>
+     * Corresponds to the {@link CssClass#value()) value} of {@link CssClassFacet};
+     */
+    String getCssClass();
 
     /**
      * Returns the title string for the specified object.

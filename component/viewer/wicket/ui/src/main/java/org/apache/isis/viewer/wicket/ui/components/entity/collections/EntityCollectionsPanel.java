@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -75,10 +77,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     }
 
     private void addCollections() {
-        final EntityModel entityModel = (EntityModel) getModel();
+        final EntityModel entityModel = getModel();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification noSpec = adapter.getSpecification();
-
         final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec);
 
         final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
@@ -98,7 +99,11 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private void addCollectionToForm(final EntityModel entityModel,
 			final ObjectAssociation association,
 			final WebMarkupContainer collectionRvContainer) {
-	    
+
+        final CssClassFacet facet = association.getFacet(CssClassFacet.class);
+        if(facet != null) {
+            collectionRvContainer.add(new CssClassAppender(facet.value()));
+        }
         final WebMarkupContainer fieldset = new WebMarkupContainer(ID_COLLECTION_GROUP);
         collectionRvContainer.add(fieldset);
         
@@ -128,7 +133,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     }
 
     private EntityModel getEntityModel() {
-        return (EntityModel) getModel();
+        return getModel();
     }
 
     void toViewMode(final AjaxRequestTarget target) {

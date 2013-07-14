@@ -28,6 +28,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.Identifier;
@@ -491,6 +492,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public String getHelp() {
         final HelpFacet helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
+    }
+
+    @Override
+    public String getCssClass() {
+        final CssClassFacet cssClassFacet = getFacet(CssClassFacet.class);
+        return cssClassFacet == null ? null : cssClassFacet.value();
     }
 
     @Override

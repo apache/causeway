@@ -23,6 +23,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -173,6 +175,12 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         final String cssForMetaModel = getModel().getLongName();
         if (cssForMetaModel != null) {
             add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
+        }
+
+        ScalarModel model = getModel();
+        final CssClassFacet facet = model.getFacet(CssClassFacet.class);
+        if(facet != null) {
+              add(new CssClassAppender(facet.value()));
         }
     }
 
