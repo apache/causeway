@@ -32,7 +32,7 @@ public final class OidUtils {
 
     public static String getDomainType(final ObjectAdapter objectAdapter) {
         Oid oid = objectAdapter.getOid();
-        if(oid == null || !(oid instanceof TypedOid)) {
+        if (oid == null || !(oid instanceof TypedOid)) {
             return null;
         }
         TypedOid typedOid = (TypedOid) oid;
@@ -48,7 +48,7 @@ public final class OidUtils {
     
     public static String getOidStr(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
-        if(!(oid instanceof RootOid)) {
+        if (!(oid instanceof RootOid)) {
             throw new IllegalArgumentException("objectAdapter must be a root adapter");
         }
         return oid != null ? oid.enStringNoVersion(getOidMarshaller()) : null;

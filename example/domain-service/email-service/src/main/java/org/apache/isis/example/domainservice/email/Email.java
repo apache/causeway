@@ -77,10 +77,6 @@ public class Email extends AbstractDomainObject {
     public void removeFromTo(Address address) { 
         to.remove(address);
     }
-    
-   
-    
-    
 }
 
 

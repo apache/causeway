@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -51,9 +50,7 @@ import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
@@ -131,13 +128,13 @@ public abstract class ResourceAbstract {
     protected void init(RepresentationType representationType, Where where, String queryString) {
         if (!IsisContext.inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
-        } 
+        }
         if (getAuthenticationSession() == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
         this.resourceContext = new ResourceContext(
-                representationType, httpHeaders, uriInfo, request, where, queryString, httpServletRequest, httpServletResponse, 
+                representationType, httpHeaders, uriInfo, request, where, queryString, httpServletRequest, httpServletResponse,
                 securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
     }
 

@@ -94,7 +94,7 @@ public interface FacetFactory {
     /**
      * Process the class, and return the correctly setup annotation if present.
      */
-    void process(ProcessClassContext processClassContaxt);
+    void process(ProcessClassContext processClassContext);
 
     public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover {
         private final Class<?> cls;

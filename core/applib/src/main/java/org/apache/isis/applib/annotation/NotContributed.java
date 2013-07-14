@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the a (repository) action should be not be contributed.
+ * Indicates the a (repository) action should not be contributed.
  * 
  * <p>
  * It may still be appear in the repository menu (unless it has been annotated

@@ -45,7 +45,6 @@ public final class LinkBuilder {
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
-    private String id;
 
     protected LinkBuilder(final RendererContext resourceContext, final String rel, final String href, final MediaType mediaType) {
         this.resourceContext = resourceContext;

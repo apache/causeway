@@ -84,7 +84,7 @@ public enum Where {
      * collection or a standalone list.
      * 
      * <p>
-     * This combines {@link #PARENTED_TABLE} and {@link #STANDALONE_TABLE}.
+     * This combines {@link #PARENTED_TABLES} and {@link #STANDALONE_TABLES}.
      */
     ALL_TABLES {
         @Override

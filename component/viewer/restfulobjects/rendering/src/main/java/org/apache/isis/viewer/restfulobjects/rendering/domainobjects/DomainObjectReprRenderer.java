@@ -18,15 +18,9 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 
-import org.codehaus.jackson.node.NullNode;
-
-import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -149,7 +143,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             } else {
                 final String domainType = getDomainType();
                 final String instanceId = getInstanceId();
-                if(domainType != null) {
+                if (domainType != null) {
                     representation.mapPut("domainType", domainType);
                     representation.mapPut("instanceId", instanceId);
                     
