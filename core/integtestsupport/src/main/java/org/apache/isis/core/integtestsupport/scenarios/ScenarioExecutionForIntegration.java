@@ -39,15 +39,14 @@ public class ScenarioExecutionForIntegration extends ScenarioExecution  {
     private IsisSystemForTest isft;
 
     public ScenarioExecutionForIntegration() {
-        super(IsisSystemForTest.get(), new WrapperFactoryDefault());
+        super(IsisSystemForTest.get());
         this.isft = (IsisSystemForTest) dsp;
     }
 
     // //////////////////////////////////////
 
-    private WrapperFactory wrapperFactory = new WrapperFactoryDefault();
     public WrapperFactory wrapperFactory() {
-        return wrapperFactory;
+        return service(WrapperFactory.class);
     }
 
     // //////////////////////////////////////

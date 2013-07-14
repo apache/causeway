@@ -16,21 +16,11 @@
  */
 package org.apache.isis.core.specsupport.scenarios;
 
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
-import org.hamcrest.Description;
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.Sequence;
 import org.jmock.States;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
 import org.jmock.internal.ExpectationBuilder;
-import org.jmock.lib.legacy.ClassImposteriser;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
@@ -45,96 +35,23 @@ import org.apache.isis.core.wrapper.WrapperFactoryDefault;
  */
 public class ScenarioExecutionForUnit extends ScenarioExecution {
 
-    private static class DomainServiceProviderMockery implements DomainServiceProvider {
-
-        private DomainObjectContainer mockContainer = null;
-        private final Map<Class<?>, Object> mocks = Maps.newHashMap();
-        
-        private Mockery context;
-
-        private ScenarioExecution scenarioExecution;
-
-        DomainServiceProviderMockery() {
-            init();
-        }
-
-        private void init() {
-            context = new Mockery() {{
-                setImposteriser(ClassImposteriser.INSTANCE);
-            }};
-            mocks.clear();
-        }
-
-        @Override
-        public DomainObjectContainer getContainer() {
-            if(mockContainer == null) {
-                mockContainer = getService(DomainObjectContainer.class);
-                context.checking(new Expectations() {
-                    {
-                        allowing(mockContainer).newTransientInstance(with(Expectations.<Class<?>>anything()));
-                        will(new Action() {
-                            
-                            @SuppressWarnings("rawtypes")
-                            public Object invoke(Invocation invocation) throws Throwable {
-                                Class cls = (Class) invocation.getParameter(0);
-                                return scenarioExecution.injectServices(cls.newInstance());
-                            }
-                            
-                            public void describeTo(Description description) {
-                                description.appendText("newTransientInstance");
-                            }
-                        });
-                        
-                        allowing(mockContainer).persistIfNotAlready(with(anything()));
-                    }
-                });
-            }
-            return mockContainer;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public <T> T getService(Class<T> serviceClass) {
-            Object mock = mocks.get(serviceClass);
-            if(mock == null) {
-                mock = context.mock(serviceClass);
-            }
-            mocks.put(serviceClass, mock);
-            return (T) mock;
-        }
-        
-        public Mockery mockery() {
-            return context;
-        }
-
-        private DomainServiceProviderMockery init(ScenarioExecution scenarioExecution) {
-            this.scenarioExecution = scenarioExecution;
-            return this;
-        }
-
-        /**
-         * not API 
-         */
-        void assertIsSatisfied() {
-            mockery().assertIsSatisfied();
-            // discard all existing mocks and mockery, to start again.
-            init();
-        }
-    }
-
-    private final ScenarioExecutionForUnit.DomainServiceProviderMockery dspm;
+    private final DomainServiceProviderMockery dspm;
     
     public ScenarioExecutionForUnit() {
         this(new DomainServiceProviderMockery());
     }
-    private ScenarioExecutionForUnit(ScenarioExecutionForUnit.DomainServiceProviderMockery dspm) {
-        super(dspm, WrapperFactory.NOOP);
+    private ScenarioExecutionForUnit(DomainServiceProviderMockery dspm) {
+        super(dspm);
         this.dspm = dspm.init(this);
     }
 
 
     // //////////////////////////////////////
 
+    /**
+     * Sets up an expectation against the underlying JMock {@link Mockery} 
+     * (as wrapped by {@link DomainServiceProviderMockery}).
+     */
     public void checking(ExpectationBuilder expectations) {
         dspm.mockery().checking(expectations);
     }

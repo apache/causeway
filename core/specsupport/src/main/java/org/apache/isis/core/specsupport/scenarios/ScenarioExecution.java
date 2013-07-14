@@ -72,11 +72,9 @@ public abstract class ScenarioExecution {
     // //////////////////////////////////////
 
     protected final DomainServiceProvider dsp;
-    private WrapperFactory wrapperFactory;
     
-    protected ScenarioExecution(final DomainServiceProvider dsp, final WrapperFactory wrapperFactory) {
+    protected ScenarioExecution(final DomainServiceProvider dsp) {
         this.dsp = dsp;
-        this.wrapperFactory = wrapperFactory;
         current.set(this);
     }
 
@@ -86,11 +84,7 @@ public abstract class ScenarioExecution {
      * 
      * @throws IllegalStateException if not available
      */
-    @SuppressWarnings("unchecked")
     public <T> T service(Class<T> cls) {
-        if(WrapperFactory.class.isAssignableFrom(cls)) {
-            return (T) wrapperFactory();
-        }
         final T service = dsp.getService(cls);
         if(service == null) {
             throw new IllegalStateException(
@@ -117,8 +111,13 @@ public abstract class ScenarioExecution {
     }
 
     
+    /**
+     * Returns the  {@link WrapperFactory} if one {@link #service(Class) is available}, 
+     * otherwise returns a {@link WrapperFactory#NOOP no-op} implementation.
+     */
     public WrapperFactory wrapperFactory() {
-        return wrapperFactory;
+        final WrapperFactory wrapperFactory = dsp.getService(WrapperFactory.class);
+        return wrapperFactory != null? wrapperFactory: WrapperFactory.NOOP;
     }
 
 
