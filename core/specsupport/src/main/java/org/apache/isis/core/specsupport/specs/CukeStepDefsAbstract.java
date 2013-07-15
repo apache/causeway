@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import org.jmock.Sequence;
@@ -30,6 +31,7 @@ import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
 import org.junit.Assert;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -171,6 +173,7 @@ public abstract class CukeStepDefsAbstract {
         final List<Object> listOfActuals = Lists.newArrayList(iterableOfActuals);
         assertThat(listOfActuals.size(), is(listOfExpecteds.size()));
 
+        final StringBuilder buf = new StringBuilder();
         for (int i=0; i<listOfActuals.size(); i++) {
             
             final Object actual = listOfActuals.get(i);
@@ -182,8 +185,13 @@ public abstract class CukeStepDefsAbstract {
                 final Object actualProp = getProperty(actual, propertyName );
                 final Object expectedProp = getProperty(expected, propertyName);
 
-                assertThat("Values differ for property: " + propertyName, actualProp, is(expectedProp));
+                if(!Objects.equal(actualProp, expectedProp)) {
+                    buf.append("#" + i + ": " + propertyName + ": " + expectedProp + " vs " + actualProp).append("\n");
+                }
             }
+        }
+        if(buf.length() != 0) {
+            Assert.fail("\n" + buf.toString());
         }
     }
 
