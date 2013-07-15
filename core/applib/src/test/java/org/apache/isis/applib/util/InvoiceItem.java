@@ -60,7 +60,7 @@ class InvoiceItem implements Comparable<InvoiceItem> {
         this.rush = rush;
     }
     
-    private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
+    private static final String KEY_PROPERTIES = "invoice desc, productCode asc, quantity asc nullsLast, rush desc nullsLast";
     
     @Override
     public String toString() {

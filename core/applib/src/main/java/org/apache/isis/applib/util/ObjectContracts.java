@@ -19,6 +19,7 @@ package org.apache.isis.applib.util;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 
 
@@ -126,7 +128,7 @@ public class ObjectContracts {
     
 }
 class Clause {
-    private static Pattern pattern = Pattern.compile("\\W*(\\w+)\\W*(asc|desc)?\\W*");
+    private static Pattern pattern = Pattern.compile("\\W*(\\w+)\\W*(asc|asc nullsFirst|asc nullsLast|desc|desc nullsFirst|desc nullsLast)?\\W*");
     enum Direction {
         ASC {
             @Override
@@ -134,17 +136,35 @@ class Clause {
                 return Ordering.natural().nullsFirst();
             }
         }, 
+        ASC_NULLS_LAST {
+            @Override
+            public Comparator<Comparable<?>> getOrdering() {
+                return Ordering.natural().nullsLast();
+            }
+        }, 
         DESC {
             @Override
             public Comparator<Comparable<?>> getOrdering() {
                 return Ordering.natural().nullsLast().reverse();
             }
+        }, 
+        DESC_NULLS_LAST {
+            @Override
+            public Comparator<Comparable<?>> getOrdering() {
+                return Ordering.natural().nullsFirst().reverse();
+            }
         };
-
+        
         public abstract Comparator<Comparable<?>> getOrdering();
         
         public static Direction valueOfElseAsc(String str) {
-            return str!=null?valueOf(str.toUpperCase()):ASC;
+            if("asc".equals(str)) return ASC;
+            if("asc nullsFirst".equals(str)) return ASC;
+            if("asc nullsLast".equals(str)) return ASC_NULLS_LAST;
+            if("desc".equals(str)) return DESC;
+            if("desc nullsFirst".equals(str)) return DESC;
+            if("desc nullsLast".equals(str)) return DESC_NULLS_LAST;
+            return ASC;
         }
     }
     private String propertyName;
