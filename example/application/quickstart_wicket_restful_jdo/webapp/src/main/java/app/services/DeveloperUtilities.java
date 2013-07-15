@@ -16,8 +16,6 @@
  */
 package app.services;
 
-import fixture.todo.ToDoItemsFixturesService;
-
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;

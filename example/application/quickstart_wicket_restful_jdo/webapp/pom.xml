@@ -173,21 +173,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- objectstore/domain service/repository implementations (brings in dependency to objectstore-jdo)-->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         
         <!-- other isis components -->
+        <dependency>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-impl</artifactId>

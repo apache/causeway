@@ -16,16 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo;
+package app.services;
 
 import java.util.List;
 
-import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.Named;
-
 import com.google.common.collect.Lists;
 
-import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixture;
+
+import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 
 /**
  * Enables fixtures to be installed from the application.
@@ -34,18 +35,12 @@ import dom.todo.ToDoItems;
 public class ToDoItemsFixturesService extends AbstractService {
 
     public String install() {
-        final ToDoItemsFixture fixture = new ToDoItemsFixture();
-        fixture.setContainer(getContainer());
-        fixture.setToDoItems(toDoItems);
-        fixture.install();
+        installFixturesFor(null); // ie current user
         return "Example fixtures installed";
     }
 
     public String installFor(@Named("User") String user) {
-        final ToDoItemsFixture fixture = new ToDoItemsFixture();
-        fixture.setContainer(getContainer());
-        fixture.setToDoItems(toDoItems);
-        fixture.installFor(user);
+        installFixturesFor(user);
         return "Example fixtures installed for " + user;
     }
     public String default0InstallFor() {
@@ -55,10 +50,10 @@ public class ToDoItemsFixturesService extends AbstractService {
         return Lists.newArrayList("guest", "dick", "bob", "joe");
     }
 
-    
-    private ToDoItems toDoItems;
-    public void setToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
+    private static void installFixturesFor(String user) {
+        final FixturesInstallerDelegate installer = new FixturesInstallerDelegate().withOverride();
+        installer.addFixture(new ToDoItemsFixture(user));
+        installer.installFixtures();
     }
 
 }

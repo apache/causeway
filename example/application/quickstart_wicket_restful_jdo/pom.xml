@@ -252,7 +252,6 @@
     <modules>
         <module>dom</module>
         <module>fixture</module>
-        <module>objstore-jdo</module>
         <module>integtests</module>
         <module>webapp</module>
     </modules>
@@ -310,11 +309,6 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart_wicket_restful_jdo-objstore-jdo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

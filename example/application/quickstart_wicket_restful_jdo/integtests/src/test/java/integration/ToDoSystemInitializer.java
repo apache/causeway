@@ -16,7 +16,7 @@
  */
 package integration;
 
-import objstore.jdo.todo.ToDoItemsJdo;
+import dom.todo.ToDoItemsJdo;
 
 import org.apache.log4j.Level;
 

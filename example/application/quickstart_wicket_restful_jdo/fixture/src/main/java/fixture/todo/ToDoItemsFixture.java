@@ -33,10 +33,20 @@ import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
 public class ToDoItemsFixture extends AbstractFixture {
 
+    private final String user;
+
+    public ToDoItemsFixture() {
+        this(null);
+    }
+    
+    public ToDoItemsFixture(String ownedBy) {
+        this.user = ownedBy;
+    }
+    
     @Override
     public void install() {
 
-        final String ownedBy = getContainer().getUser().getName();
+        final String ownedBy = this.user != null? this.user : getContainer().getUser().getName();
         
         isisJdoSupport.executeUpdate("delete from TODOITEM where OWNEDBY = '" + ownedBy + "'");
 
@@ -45,7 +55,7 @@ public class ToDoItemsFixture extends AbstractFixture {
         getContainer().flush();
     }
 
-    public void installFor(String user) {
+    private void installFor(String user) {
 
         createToDoItemForUser("Buy milk", Category.Domestic, user, daysFromToday(0), new BigDecimal("0.75"));
         createToDoItemForUser("Buy bread", Category.Domestic, user, daysFromToday(0), new BigDecimal("1.75"));

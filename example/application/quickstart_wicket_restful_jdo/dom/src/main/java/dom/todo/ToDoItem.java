@@ -41,6 +41,7 @@ import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberGroups;
@@ -138,6 +139,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @MemberOrder(name="Detail", sequence = "3")
     @Optional
+    @CssClass("x-key")
     public LocalDate getDueBy() {
         return dueBy;
     }
@@ -233,6 +235,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @PublishedAction
     @Bulk
     @MemberOrder(name="complete", sequence = "1")
+    @CssClass("x-highlight")
     public ToDoItem completed() {
         setComplete(true);
         return this;
@@ -410,6 +413,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
 
     @MemberOrder(name="dependencies", sequence = "4")
+    @CssClass("x-caution")
     public ToDoItem remove(final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
         return this;
@@ -442,6 +446,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @MemberOrder(sequence = "5")
     @NotPersisted
     @Render(Type.LAZILY)
+    @CssClass("x-info")
     public List<ToDoItem> getSimilarItems() {
         return toDoItems.similarTo(this);
     }
@@ -456,6 +461,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
+    @CssClass("x-caution")
     public ToDoItem duplicate(
             @Named("Description") 
             String description,
