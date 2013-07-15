@@ -69,6 +69,8 @@ public class FixturesInstallerDelegate {
      */
     private LogonFixture logonFixture;
 
+    private boolean override;
+
     // /////////////////////////////////////////////////////////
     // Constructor
     // /////////////////////////////////////////////////////////
@@ -89,6 +91,19 @@ public class FixturesInstallerDelegate {
      */
     public FixturesInstallerDelegate(final PersistenceSession persistenceSession) {
         this.persistenceSession = persistenceSession;
+    }
+    
+    /**
+     * Force the ability to install the fixtures (outside of initial bootstrapping).
+     * 
+     * 
+     * <p>
+     * Intended for programmatic reuse of installation of fixtures within the
+     * running application (eg for demo purposes).
+     */
+    public FixturesInstallerDelegate withOverride() {
+        this.override = true;
+        return this;
     }
 
     // /////////////////////////////////////////////////////////
@@ -220,6 +235,10 @@ public class FixturesInstallerDelegate {
     }
 
     private boolean shouldInstallFixture(final InstallableFixture installableFixture) {
+        if(override) {
+            return true;
+        }
+        
         final FixtureType fixtureType = installableFixture.getType();
 
         if (fixtureType == FixtureType.DOMAIN_OBJECTS) {
