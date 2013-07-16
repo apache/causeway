@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.actions;
+package integration.tests.repo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,46 +28,48 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.junit.After;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_notYetCompleted extends ToDoIntegTest {
+public class ToDoItemsTest_finders extends ToDoIntegTest {
 
-    private ToDoItem toDoItem;
+    private int notYetCompletedSize;
+    private int completedSize;
 
     @Before
     public void setUp() throws Exception {
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(all.get(0));
+        final List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> completedItems = wrap(service(ToDoItems.class)).complete();
+        
+        notYetCompletedSize = notYetCompleteItems.size();
+        completedSize = completedItems.size();
+        
+        assertThat(notYetCompletedSize, is(Matchers.greaterThan(5)));
     }
 
-
     @Test
-    public void happyCase() throws Exception {
+    public void complete_and_notYetComplete() throws Exception {
         
         // given
-        unwrap(toDoItem).setComplete(true);
+        List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+        final ToDoItem toDoItem = wrap(notYetCompleteItems.get(0));
         
         // when
+        toDoItem.completed();
+        
+        // then
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
+        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize+1));
+        
+        // and when
         toDoItem.notYetCompleted();
         
         // then
-        assertThat(toDoItem.isComplete(), is(false));
-    }
-
-
-    @Test
-    public void cannotUndoIfNotYetCompleted() throws Exception {
-        
-        // given
-        assertThat(toDoItem.isComplete(), is(false));
-
-        // when, then should fail
-        expectedExceptions.expectMessage("Not yet completed");
-        toDoItem.notYetCompleted();
+        assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
+        assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize));
     }
 
 }

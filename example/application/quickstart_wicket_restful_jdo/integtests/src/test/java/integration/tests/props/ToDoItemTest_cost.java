@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.actions;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -29,44 +29,64 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
-
-public class ToDoItem_duplicate extends ToDoIntegTest {
+public class ToDoItemTest_cost extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
-    private ToDoItem duplicateToDoItem;
+    private BigDecimal cost;
 
     @Before
     public void setUp() throws Exception {
+        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
+        cost = toDoItem.getCost();
     }
 
     @Test
-    public void happyCase() throws Exception {
+    public void happyCaseUsingProperty() throws Exception {
         
-        // given
-        final LocalDate todaysDate = Clock.getTimeAsLocalDate();
-        toDoItem.setDueBy(todaysDate);
-        toDoItem.setCost(new BigDecimal("123.45"));
+        final BigDecimal newCost = new BigDecimal("123.45");
         
-        duplicateToDoItem = toDoItem.duplicate(
-                unwrap(toDoItem).default0Duplicate(), 
-                unwrap(toDoItem).default1Duplicate(),
-                unwrap(toDoItem).default2Duplicate(),
-                new BigDecimal("987.65"));
+        // when
+        toDoItem.setCost(newCost);
         
         // then
-        assertThat(duplicateToDoItem.getDescription(), is(toDoItem.getDescription() + " - Copy"));
-        assertThat(duplicateToDoItem.getCategory(), is(toDoItem.getCategory()));
-        assertThat(duplicateToDoItem.getDueBy(), is(todaysDate));
-        assertThat(duplicateToDoItem.getCost(), is(new BigDecimal("987.65")));
+        assertThat(toDoItem.getCost(), is(newCost));
     }
 
+    @Test
+    public void happyCaseUsingAction() throws Exception {
+        
+        final BigDecimal newCost = new BigDecimal("123.45");
+        
+        // when
+        toDoItem.updateCost(newCost);
+        
+        // then
+        assertThat(toDoItem.getCost(), is(newCost));
+    }
+    
+    @Test
+    public void canBeNull() throws Exception {
+        
+        // when
+        toDoItem.setCost((BigDecimal)null);
+        
+        // then
+        assertThat(toDoItem.getCost(), is((BigDecimal)null));
+    }
+
+    @Test
+    public void defaultForAction() throws Exception {
+        
+        // then
+        assertThat(unwrap(toDoItem).default0UpdateCost(), is(cost));
+    }
+    
+    
 }

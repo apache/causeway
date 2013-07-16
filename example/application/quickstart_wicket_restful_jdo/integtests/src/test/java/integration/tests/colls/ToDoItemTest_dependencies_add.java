@@ -16,16 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.props;
+package integration.tests.colls;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import integration.tests.ToDoIntegTest;
 
-import java.nio.charset.Charset;
 import java.util.List;
-
-import javax.activation.MimeType;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
@@ -35,44 +32,58 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.value.Blob;
-
-public class ToDoItem_attachment extends ToDoIntegTest {
-
+public class ToDoItemTest_dependencies_add extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
+    private ToDoItem otherToDoItem;
+    
 
     @Before
     public void setUp() throws Exception {
-        
         scenarioExecution().install(new ToDoItemsFixture());
-        
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(all.get(0));
+
+        final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
+        toDoItem = wrap(items.get(0));
+        otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        unwrap(toDoItem).getDependencies().clear();
     }
 
     @Test
     public void happyCase() throws Exception {
-        
-        byte[] bytes = "{\"foo\": \"bar\"}".getBytes(Charset.forName("UTF-8"));
-        final Blob newAttachment = new Blob("myfile.json", new MimeType("application/json"), bytes);
+
+        // given
+        assertThat(toDoItem.getDependencies().size(), is(0));
         
         // when
-        toDoItem.setAttachment(newAttachment);
+        toDoItem.add(otherToDoItem);
         
         // then
-        assertThat(toDoItem.getAttachment(), is(newAttachment));
+        assertThat(toDoItem.getDependencies().size(), is(1));
+        assertThat(toDoItem.getDependencies().first(), is(unwrap(otherToDoItem)));
+    }
+
+
+    @Test
+    public void cannotDependOnSelf() throws Exception {
+
+        // when, then
+        expectedExceptions.expectMessage("Can't set up a dependency to self");
+        toDoItem.add(toDoItem);
     }
 
     @Test
-    public void canBeNull() throws Exception {
+    public void cannotAddDependencyIfComplete() throws Exception {
+
+        // given
+        unwrap(toDoItem).setComplete(true);
         
-        // when
-        toDoItem.setAttachment((Blob)null);
-        
-        // then
-        assertThat(toDoItem.getAttachment(), is((Blob)null));
+        // when, then
+        expectedExceptions.expectMessage("Cannot add dependencies for items that are complete");
+        toDoItem.add(otherToDoItem);
     }
 
-    
 }

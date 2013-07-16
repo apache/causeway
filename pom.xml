@@ -92,6 +92,41 @@
                 <module>component/viewer/restfulobjects</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>core</id>
+            <modules>
+                <module>core</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>objectstore-jdo</id>
+            <modules>
+                <module>component/objectstore/jdo</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>viewer-wicket</id>
+            <modules>
+                <module>component/viewer/wicket</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>viewer-restfulobjects</id>
+            <modules>
+                <module>component/viewer/restfulobjects</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>quickstart</id>
+            <modules>
+                <module>example/application/quickstart_wicket_restful_jdo</module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>

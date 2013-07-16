@@ -16,68 +16,63 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.actions;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import integration.tests.ToDoIntegTest;
 
+import java.nio.charset.Charset;
 import java.util.List;
+
+import javax.activation.MimeType;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_completed extends ToDoIntegTest {
+import org.apache.isis.applib.value.Blob;
+
+public class ToDoItemTest_attachment extends ToDoIntegTest {
+
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
+        
         scenarioExecution().install(new ToDoItemsFixture());
-
+        
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
     }
 
-
     @Test
     public void happyCase() throws Exception {
         
-        // given
-        assertThat(toDoItem.isComplete(), is(false));
+        byte[] bytes = "{\"foo\": \"bar\"}".getBytes(Charset.forName("UTF-8"));
+        final Blob newAttachment = new Blob("myfile.json", new MimeType("application/json"), bytes);
         
         // when
-        toDoItem.completed();
+        toDoItem.setAttachment(newAttachment);
         
         // then
-        assertThat(toDoItem.isComplete(), is(true));
+        assertThat(toDoItem.getAttachment(), is(newAttachment));
     }
-
 
     @Test
-    public void cannotCompleteIfAlreadyCompleted() throws Exception {
+    public void canBeNull() throws Exception {
         
-        // given
-        unwrap(toDoItem).setComplete(true);
-
-        // when, then should fail
-        expectedExceptions.expectMessage("Already completed");
-        toDoItem.completed();
+        // when
+        toDoItem.setAttachment((Blob)null);
+        
+        // then
+        assertThat(toDoItem.getAttachment(), is((Blob)null));
     }
 
-
-    @Test
-    public void cannotSetPropertyDirectly() throws Exception {
-        
-        // given
-
-        // when, then should fail
-        expectedExceptions.expectMessage("Always disabled");
-        toDoItem.setComplete(true);
-    }
-
+    
 }

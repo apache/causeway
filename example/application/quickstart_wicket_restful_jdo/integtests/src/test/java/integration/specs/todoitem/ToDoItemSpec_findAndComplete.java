@@ -16,25 +16,22 @@
  */
 package integration.specs.todoitem;
 
-import dom.todo.ToDoItem;
+import cucumber.api.junit.Cucumber;
 
-import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
+import org.junit.runner.RunWith;
 
-public class InMemoryDBForToDoApp extends InMemoryDB {
-    
-    public InMemoryDBForToDoApp(ScenarioExecution scenarioExecution) {
-        super(scenarioExecution);
-    }
-    
-    /**
-     * Hook to initialize if possible.
-     */
-    @Override
-    protected void init(Object obj, String str) {
-        if(obj instanceof ToDoItem) {
-            ToDoItem toDoItem = (ToDoItem) obj;
-            toDoItem.setDescription(str);
-        }
-    }
+
+/**
+ * Runs scenarios in corresponding <tt>.feature</tt> file. 
+ */
+@RunWith(Cucumber.class)
+@Cucumber.Options(
+        format = {
+                "html:target/cucumber-html-report"
+        },
+        strict = true,
+        tags = { "~@backlog", "~@ignore" })
+public class ToDoItemSpec_findAndComplete {
+
+
 }

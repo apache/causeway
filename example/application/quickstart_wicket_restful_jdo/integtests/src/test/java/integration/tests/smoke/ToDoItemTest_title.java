@@ -35,7 +35,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.clock.Clock;
 
-public class ToDoItem_title extends ToDoIntegTest {
+public class ToDoItemTest_title extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
     private LocalDate dueBy;

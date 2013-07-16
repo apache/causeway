@@ -27,7 +27,7 @@ import dom.todo.ToDoItem.Category;
 
 import org.junit.Test;
 
-public class ToDoItems_newToDo_and_delete extends ToDoIntegTest {
+public class ToDoItemsTest_newToDo_and_delete extends ToDoIntegTest {
 
     @Test
     public void happyCase() throws Exception {

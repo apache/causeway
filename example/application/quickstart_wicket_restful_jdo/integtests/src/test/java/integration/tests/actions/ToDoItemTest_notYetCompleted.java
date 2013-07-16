@@ -16,77 +16,58 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.props;
+package integration.tests.actions;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import integration.tests.ToDoIntegTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_cost extends ToDoIntegTest {
+public class ToDoItemTest_notYetCompleted extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
-    private BigDecimal cost;
 
     @Before
     public void setUp() throws Exception {
-        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
-        cost = toDoItem.getCost();
     }
 
-    @Test
-    public void happyCaseUsingProperty() throws Exception {
-        
-        final BigDecimal newCost = new BigDecimal("123.45");
-        
-        // when
-        toDoItem.setCost(newCost);
-        
-        // then
-        assertThat(toDoItem.getCost(), is(newCost));
-    }
 
     @Test
-    public void happyCaseUsingAction() throws Exception {
+    public void happyCase() throws Exception {
         
-        final BigDecimal newCost = new BigDecimal("123.45");
-        
-        // when
-        toDoItem.updateCost(newCost);
-        
-        // then
-        assertThat(toDoItem.getCost(), is(newCost));
-    }
-    
-    @Test
-    public void canBeNull() throws Exception {
+        // given
+        unwrap(toDoItem).setComplete(true);
         
         // when
-        toDoItem.setCost((BigDecimal)null);
+        toDoItem.notYetCompleted();
         
         // then
-        assertThat(toDoItem.getCost(), is((BigDecimal)null));
+        assertThat(toDoItem.isComplete(), is(false));
     }
 
+
     @Test
-    public void defaultForAction() throws Exception {
+    public void cannotUndoIfNotYetCompleted() throws Exception {
         
-        // then
-        assertThat(unwrap(toDoItem).default0UpdateCost(), is(cost));
+        // given
+        assertThat(toDoItem.isComplete(), is(false));
+
+        // when, then should fail
+        expectedExceptions.expectMessage("Not yet completed");
+        toDoItem.notYetCompleted();
     }
-    
-    
+
 }

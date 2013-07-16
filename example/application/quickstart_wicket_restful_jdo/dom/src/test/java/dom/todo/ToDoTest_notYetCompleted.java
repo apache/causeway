@@ -14,24 +14,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package integration.specs.todoitem;
+package dom.todo;
 
-import cucumber.api.junit.Cucumber;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
-import org.junit.runner.RunWith;
+import org.junit.Before;
+import org.junit.Test;
 
+public class ToDoTest_notYetCompleted {
 
-/**
- * Runs scenarios in corresponding <tt>.feature</tt> file. 
- */
-@RunWith(Cucumber.class)
-@Cucumber.Options(
-        format = {
-                "html:target/cucumber-html-report"
-        },
-        strict = true,
-        tags = { "~@backlog", "~@ignore" })
-public class FindCompletedToDoItemAndMarkAsNotYetCompleteSpec {
+    private ToDoItem toDoItem;
 
-
+    @Before
+    public void setUp() throws Exception {
+        toDoItem = new ToDoItem();
+        toDoItem.setComplete(true);
+    }
+    
+    @Test
+    public void happyCase() throws Exception {
+        // given
+        assertThat(toDoItem.disableNotYetCompleted(), is(nullValue()));
+        
+        // when
+        toDoItem.notYetCompleted();
+        
+        // then
+        assertThat(toDoItem.isComplete(), is(false));
+        assertThat(toDoItem.disableNotYetCompleted(), is(not(nullValue())));
+    }
+    
 }

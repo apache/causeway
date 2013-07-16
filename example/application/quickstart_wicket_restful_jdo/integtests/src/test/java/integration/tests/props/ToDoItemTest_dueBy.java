@@ -28,10 +28,14 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
+import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_description extends ToDoIntegTest {
+import org.apache.isis.applib.clock.Clock;
+
+public class ToDoItemTest_dueBy extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
@@ -46,31 +50,46 @@ public class ToDoItem_description extends ToDoIntegTest {
     @Test
     public void happyCase() throws Exception {
         
-        // given
-        assertThat(toDoItem.getDescription(), is("Buy bread"));
-        
         // when
-        toDoItem.setDescription("Buy bread and butter");
+        final LocalDate fiveDaysFromNow = Clock.getTimeAsLocalDate().plusDays(5);
+        toDoItem.setDueBy(fiveDaysFromNow);
         
         // then
-        assertThat(toDoItem.getDescription(), is("Buy bread and butter"));
+        assertThat(toDoItem.getDueBy(), is(fiveDaysFromNow));
     }
 
 
     @Test
-    public void failsRegex() throws Exception {
+    public void canBeNull() throws Exception {
         
         // when
-        expectedExceptions.expectMessage("Doesn't match pattern");
-        toDoItem.setDescription("exclamation marks are not allowed!!!");
+        toDoItem.setDueBy((LocalDate)null);
+        
+        // then
+        assertThat(toDoItem.getDueBy(), is((LocalDate)null));
     }
 
     @Test
-    public void cannotBeNull() throws Exception {
+    public void canBeUpToSixDaysInPast() throws Exception {
+        
+        final LocalDate sixDaysAgo = Clock.getTimeAsLocalDate().plusDays(-6);
+
+        // when
+        toDoItem.setDueBy(sixDaysAgo);
+        
+        // then
+        assertThat(toDoItem.getDueBy(), is(sixDaysAgo));
+    }
+
+
+    @Test
+    public void cannotBeMoreThanSixDaysInPast() throws Exception {
+        
+        final LocalDate sevenDaysAgo = Clock.getTimeAsLocalDate().plusDays(-7);
         
         // when, then
-        expectedExceptions.expectMessage("Mandatory");
-        toDoItem.setDescription(null);
+        expectedExceptions.expectMessage("Due by date cannot be more than one week old");
+        toDoItem.setDueBy(sevenDaysAgo);
     }
 
 }

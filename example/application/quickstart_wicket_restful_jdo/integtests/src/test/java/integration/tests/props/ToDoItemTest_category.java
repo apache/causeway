@@ -26,18 +26,22 @@ import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
+import dom.todo.ToDoItem.Category;
 import fixture.todo.ToDoItemsFixture;
 
+import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_notes extends ToDoIntegTest {
+import org.apache.isis.applib.clock.Clock;
+
+public class ToDoItemTest_category extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        // given
         scenarioExecution().install(new ToDoItemsFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
@@ -47,24 +51,26 @@ public class ToDoItem_notes extends ToDoIntegTest {
     @Test
     public void happyCase() throws Exception {
         
-        final String newNotes = "Lorem ipsum yada yada";
-        
         // when
-        toDoItem.setNotes(newNotes);
+        toDoItem.setCategory(Category.Professional);
         
         // then
-        assertThat(toDoItem.getNotes(), is(newNotes));
+        assertThat(toDoItem.getCategory(), is(Category.Professional));
+        
+        // when
+        toDoItem.setCategory(Category.Domestic);
+        
+        // then
+        assertThat(toDoItem.getCategory(), is(Category.Domestic));
     }
+
 
     @Test
-    public void canBeNull() throws Exception {
+    public void cannotBeNull() throws Exception {
         
-        // when
-        toDoItem.setNotes((String)null);
-        
-        // then
-        assertThat(toDoItem.getNotes(), is((String)null));
+        // when, then
+        expectedExceptions.expectMessage("Mandatory");
+        toDoItem.setCategory(null);
     }
 
-    
 }

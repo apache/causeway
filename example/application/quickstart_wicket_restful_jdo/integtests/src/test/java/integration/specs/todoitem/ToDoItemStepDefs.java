@@ -18,6 +18,8 @@ package integration.specs.todoitem;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import integration.ToDoSystemInitializer;
+import integration.specs.InMemoryDBForToDoApp;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.jmock.Expectations;
 import org.junit.Assert;
 
@@ -52,8 +55,11 @@ public class ToDoItemStepDefs extends CukeStepDefsAbstract {
         before(ScenarioExecutionScope.UNIT);
     }
 
-    @Before({"@integration"})
+    @Before(value={"@integration"}, order=100)
     public void beforeScenarioIntegrationScope() {
+        PropertyConfigurator.configure("logging.properties");
+        ToDoSystemInitializer.initIsft();
+        
         before(ScenarioExecutionScope.INTEGRATION);
     }
 

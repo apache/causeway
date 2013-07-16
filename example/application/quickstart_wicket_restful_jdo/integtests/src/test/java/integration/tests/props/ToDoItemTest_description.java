@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.colls;
+package integration.tests.props;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,62 +28,49 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItem_dependencies_add extends ToDoIntegTest {
+public class ToDoItemTest_description extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
-    private ToDoItem otherToDoItem;
-    
 
     @Before
     public void setUp() throws Exception {
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(items.get(0));
-        otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        unwrap(toDoItem).getDependencies().clear();
+        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        toDoItem = wrap(all.get(0));
     }
 
     @Test
     public void happyCase() throws Exception {
-
+        
         // given
-        assertThat(toDoItem.getDependencies().size(), is(0));
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
         
         // when
-        toDoItem.add(otherToDoItem);
+        toDoItem.setDescription("Buy bread and butter");
         
         // then
-        assertThat(toDoItem.getDependencies().size(), is(1));
-        assertThat(toDoItem.getDependencies().first(), is(unwrap(otherToDoItem)));
+        assertThat(toDoItem.getDescription(), is("Buy bread and butter"));
     }
 
 
     @Test
-    public void cannotDependOnSelf() throws Exception {
-
-        // when, then
-        expectedExceptions.expectMessage("Can't set up a dependency to self");
-        toDoItem.add(toDoItem);
+    public void failsRegex() throws Exception {
+        
+        // when
+        expectedExceptions.expectMessage("Doesn't match pattern");
+        toDoItem.setDescription("exclamation marks are not allowed!!!");
     }
 
     @Test
-    public void cannotAddDependencyIfComplete() throws Exception {
-
-        // given
-        unwrap(toDoItem).setComplete(true);
+    public void cannotBeNull() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage("Cannot add dependencies for items that are complete");
-        toDoItem.add(otherToDoItem);
+        expectedExceptions.expectMessage("Mandatory");
+        toDoItem.setDescription(null);
     }
 
 }

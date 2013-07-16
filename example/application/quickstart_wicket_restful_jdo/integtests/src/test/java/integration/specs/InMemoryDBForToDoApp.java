@@ -14,24 +14,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package integration.specs.todoitem;
+package integration.specs;
 
-import integration.ToDoSystemInitializer;
-import cucumber.api.java.Before;
+import dom.todo.ToDoItem;
 
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
+import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
-import org.apache.isis.core.specsupport.specs.CukeStepDefsAbstract;
-
-public class BootstrapIntegrationStepDefs extends CukeStepDefsAbstract {
-
-    @Before(value={"@integration"}, order=100)
-    public void beforeScenarioIntegrationScope() {
-        PropertyConfigurator.configure("logging.properties");
-        ToDoSystemInitializer.initIsft();
-        
-        before(ScenarioExecutionScope.INTEGRATION);
+public class InMemoryDBForToDoApp extends InMemoryDB {
+    
+    public InMemoryDBForToDoApp(ScenarioExecution scenarioExecution) {
+        super(scenarioExecution);
     }
     
+    /**
+     * Hook to initialize if possible.
+     */
+    @Override
+    protected void init(Object obj, String str) {
+        if(obj instanceof ToDoItem) {
+            ToDoItem toDoItem = (ToDoItem) obj;
+            toDoItem.setDescription(str);
+        }
+    }
 }
