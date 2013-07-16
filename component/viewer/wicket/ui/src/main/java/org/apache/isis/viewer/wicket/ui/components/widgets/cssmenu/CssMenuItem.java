@@ -314,7 +314,11 @@ public class CssMenuItem implements Serializable {
         return className + "-" + actionId;
     }
 
-    
+    public static String cssClassFor(ObjectAction action) {
+        CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
+        return cssClassFacet != null ? cssClassFacet.value() : null;
+    }
+
     /**
      * Creates a {@link Builder} for a submenu item where the provided {@link CssMenuLinkFactory} is able to provide the target adapter. 
      */
@@ -361,7 +365,7 @@ public class CssMenuItem implements Serializable {
                 link.add(new CssClassAppender("prototype"));
             }
             if(this.cssClass != null) {
-                link.add(new CssClassAppender(this.cssClass));
+                markupContainer.add(new CssClassAppender(this.cssClass));
             }
             link.add(new CssClassAppender(this.actionIdentifier));
 

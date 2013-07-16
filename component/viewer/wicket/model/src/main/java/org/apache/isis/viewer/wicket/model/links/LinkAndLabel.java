@@ -32,14 +32,16 @@ public class LinkAndLabel implements Serializable {
     private final boolean blobOrClob;
     private final boolean prototype;
     private final String actionIdentifier;
+    private final String cssClass;
 
-    public LinkAndLabel(final AbstractLink link, final String label, String disabledReasonIfAny, final boolean blobOrClob, final boolean prototype, final String actionIdentifier) {
+    public LinkAndLabel(final AbstractLink link, final String label, String disabledReasonIfAny, final boolean blobOrClob, final boolean prototype, String identifier, final String cssClass) {
         this.link = link;
         this.label = label;
         this.disabledReasonIfAny = disabledReasonIfAny;
         this.blobOrClob = blobOrClob;
         this.prototype = prototype;
-        this.actionIdentifier = actionIdentifier;
+        this.actionIdentifier = identifier;
+        this.cssClass = cssClass;
     }
 
     public AbstractLink getLink() {
@@ -65,5 +67,8 @@ public class LinkAndLabel implements Serializable {
     public String getActionIdentifier() {
         return actionIdentifier;
     }
-    
+
+    public String getCssClass() {
+        return cssClass;
+    }
 }

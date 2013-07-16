@@ -21,14 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -70,7 +68,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
                 
                 final AbstractLink link = linkAndLabel.getLink();
-                        
+
                 Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
                 String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
                 if(disabledReasonIfAny != null) {
@@ -83,6 +81,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     link.add(new CssClassAppender("prototype"));
                 }
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
+                String cssClass = linkAndLabel.getCssClass();
+                if(cssClass != null) {
+                    item.add(new CssClassAppender(cssClass));
+                }
                 viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);
                 item.addOrReplace(link);
