@@ -68,6 +68,22 @@ public abstract class CukeStepDefsAbstract {
     // //////////////////////////////////////
 
     /**
+     * Intended to be called at the beginning of any 'when' (after all the 'given's)
+     * or at the beginning of any 'then' (after all the 'when's)
+     * 
+     * <p>
+     * Simply {@link ScenarioExecution#endTran(boolean) ends any existing transaction} and
+     * then {@link ScenarioExecution#beginTran() starts a new one}.
+     */
+    protected void nextTransaction() {
+        scenarioExecution().endTran(true);
+        scenarioExecution().beginTran();
+    }
+    
+
+    // //////////////////////////////////////
+
+    /**
      * Convenience method
      */
     public Object getVar(String type, String id) {

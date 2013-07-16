@@ -35,10 +35,16 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
  * Base class for integration tests.
  * 
  * <p>
- * There is substantial overlap with {@link CukeStepDefsAbstract}, and it would be
- * possible to combine.  However, the code is quite simple; chosen not to in order
- * to make it easier to see the equivalence of these two classes.
+ * There is substantial overlap with {@link CukeStepDefsAbstract}, and it would be possible to factor
+ * out a common base class.  Both delegate to an underlying {@link ScenarioExecution}, and provide
+ * a bunch of helper methods.  The reason this has not been done is mostly to make it easier to see 
+ * the equivalence of these two classes.
  * 
+ * <p>
+ * The only real differences between this class and {@link CukeStepDefsAbstract} is that this class 
+ * uses JUnit rules to automatically perform {@link IsisTransactionRule transaction management} and
+ * uses JUnit rules for {@link ExpectedException exception handling}.  In {@link CukeStepDefsAbstract} these
+ * are required (by Cucumber-JVM) to be explicitly handled in the step definitions.
  */
 public abstract class IntegrationTestAbstract {
 
@@ -46,6 +52,26 @@ public abstract class IntegrationTestAbstract {
         return ScenarioExecution.current();
     }
 
+    // //////////////////////////////////////
+
+  
+    /**
+     * Intended to be called whenever there is a logically distinct interaction
+     * with the system.
+     * 
+     * <p>
+     * Simply {@link ScenarioExecution#endTran(boolean) ends any existing transaction} and
+     * then {@link ScenarioExecution#beginTran() starts a new one}.
+     * 
+     * <p>
+     * Typically there is no need to call this method, because (thanks to
+     * {@link IsisTransactionRule}) every test is called within its own transaction.
+     */
+    protected void nextTransaction() {
+        scenarioExecution().endTran(true);
+        scenarioExecution().beginTran();
+    }
+    
     // //////////////////////////////////////
 
     
