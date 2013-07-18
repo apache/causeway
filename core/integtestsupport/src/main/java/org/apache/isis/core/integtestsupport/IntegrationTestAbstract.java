@@ -27,7 +27,7 @@ import org.junit.runners.model.Statement;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
-import org.apache.isis.core.specsupport.specs.CukeStepDefsAbstract;
+import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -35,15 +35,15 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
  * Base class for integration tests.
  * 
  * <p>
- * There is substantial overlap with {@link CukeStepDefsAbstract}, and it would be possible to factor
+ * There is substantial overlap with {@link CukeGlueAbstract}, and it would be possible to factor
  * out a common base class.  Both delegate to an underlying {@link ScenarioExecution}, and provide
  * a bunch of helper methods.  The reason this has not been done is mostly to make it easier to see 
  * the equivalence of these two classes.
  * 
  * <p>
- * The only real differences between this class and {@link CukeStepDefsAbstract} is that this class 
+ * The only real differences between this class and {@link CukeGlueAbstract} is that this class 
  * uses JUnit rules to automatically perform {@link IsisTransactionRule transaction management} and
- * uses JUnit rules for {@link ExpectedException exception handling}.  In {@link CukeStepDefsAbstract} these
+ * uses JUnit rules for {@link ExpectedException exception handling}.  In {@link CukeGlueAbstract} these
  * are required (by Cucumber-JVM) to be explicitly handled in the step definitions.
  */
 public abstract class IntegrationTestAbstract {

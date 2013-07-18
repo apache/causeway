@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
         format = {
                 "html:target/cucumber-html-report"
         },
+        glue="integration.glue",
         strict = true,
         tags = { "~@backlog", "~@ignore" })
 public class ToDoItemSpec_findCompletedAndMarkAsNotYetComplete {

@@ -14,6 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+@ToDoItemsFixture
 Feature: Find completed ToDoItem and mark as not yet complete
 
   # the scenario is listed twice here just to demonstrate that it

@@ -16,23 +16,11 @@
  */
 package org.apache.isis.core.integtestsupport.scenarios;
 
-import org.hamcrest.Description;
-import org.hamcrest.StringDescription;
-import org.jmock.Sequence;
-import org.jmock.States;
-import org.jmock.internal.ExpectationBuilder;
-import org.jmock.internal.InvocationExpectation;
-import org.jmock.internal.NamedSequence;
-import org.jmock.internal.State;
-import org.jmock.internal.StateMachine;
-import org.jmock.internal.StatePredicate;
-
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
+import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 
 
 /**
@@ -50,7 +38,7 @@ public class ScenarioExecutionForIntegration extends ScenarioExecution  {
     private IsisSystemForTest isft;
 
     public ScenarioExecutionForIntegration() {
-        super(IsisSystemForTest.get());
+        super(IsisSystemForTest.get(), ScenarioExecutionScope.INTEGRATION);
         this.isft = (IsisSystemForTest) dsp;
     }
 

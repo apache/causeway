@@ -59,7 +59,11 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 public abstract class ScenarioExecution {
     
     private static ThreadLocal<ScenarioExecution> current = new ThreadLocal<ScenarioExecution>();
-    
+
+    public static ScenarioExecution peek() {
+        return current.get();
+    }
+
     public static ScenarioExecution current() {
         final ScenarioExecution execution = current.get();
         if(execution == null) {
@@ -72,11 +76,20 @@ public abstract class ScenarioExecution {
     // //////////////////////////////////////
 
     protected final DomainServiceProvider dsp;
+    private final ScenarioExecutionScope scope;
     
-    protected ScenarioExecution(final DomainServiceProvider dsp) {
+    protected ScenarioExecution(final DomainServiceProvider dsp, ScenarioExecutionScope scope) {
         this.dsp = dsp;
+        this.scope = scope;
         current.set(this);
     }
+
+    public boolean ofScope(ScenarioExecutionScope scope) {
+        return this.scope == scope;
+    }
+
+
+    // //////////////////////////////////////
 
     /**
      * Returns a domain service of the specified type, ensuring that
@@ -407,6 +420,8 @@ public abstract class ScenarioExecution {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
 }

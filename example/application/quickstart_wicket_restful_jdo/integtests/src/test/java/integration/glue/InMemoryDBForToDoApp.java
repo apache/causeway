@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package integration.specs;
+package integration.glue;
 
 import dom.todo.ToDoItem;
 

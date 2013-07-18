@@ -41,7 +41,7 @@ public class ScenarioExecutionForUnit extends ScenarioExecution {
         this(new DomainServiceProviderMockery());
     }
     private ScenarioExecutionForUnit(DomainServiceProviderMockery dspm) {
-        super(dspm);
+        super(dspm, ScenarioExecutionScope.UNIT);
         this.dspm = dspm.init(this);
     }
 

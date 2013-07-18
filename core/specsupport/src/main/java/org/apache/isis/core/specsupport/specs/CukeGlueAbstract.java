@@ -48,10 +48,8 @@ import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
  * Simply declares that an instance of {@link ScenarioExecution} (or a subclass)
  * must be instantiated by the Cucumber-JVM runtime and injected into the step definitions.
  */
-public abstract class CukeStepDefsAbstract {
+public abstract class CukeGlueAbstract {
 
-    private ScenarioExecution scenarioExecution;
-    
     /**
      * Access the {@link ScenarioExecution} as setup through a previous call to {@link #before(ScenarioExecutionScope)}.
      * 
@@ -59,10 +57,10 @@ public abstract class CukeStepDefsAbstract {
      * This corresponds, broadly, to the (Ruby) Cucumber's &quot;World&quot; object.
      */
     protected ScenarioExecution scenarioExecution() {
-        if(scenarioExecution == null) {
+        if(ScenarioExecution.current() == null) {
             throw new IllegalStateException("The scenario execution has not been set up; call #before(ScenarioExecutionScope) first");
         }
-        return scenarioExecution;
+        return ScenarioExecution.current();
     }
 
     // //////////////////////////////////////
@@ -311,10 +309,12 @@ public abstract class CukeStepDefsAbstract {
      * (and fails fast if called more than once).
      */
     protected void before(ScenarioExecutionScope scope) {
-        if(scenarioExecution != null) {
-            throw new IllegalStateException("Scenario execution scope has already been set");
+        final ScenarioExecution se = ScenarioExecution.peek();
+        if(se != null && se.ofScope(scope)) {
+            // don't trample over an existing, compatible ScenarioExecution.
+            return;
         }
-        scenarioExecution = scope.instantiate();
+        final ScenarioExecution scenarioExecution = scope.instantiate();
         scenarioExecution.beginTran();
     }
 
@@ -342,11 +342,7 @@ public abstract class CukeStepDefsAbstract {
      * (and fails fast if called more than once).
      */
     public void after(cucumber.api.Scenario sc) {
-        if(scenarioExecution == null) {
-            throw new IllegalStateException("Scenario execution is not set");
-        }
-        scenarioExecution.endTran(!sc.isFailed());
-        scenarioExecution = null;
+        ScenarioExecution.current().endTran(!sc.isFailed());
     }
 
 }

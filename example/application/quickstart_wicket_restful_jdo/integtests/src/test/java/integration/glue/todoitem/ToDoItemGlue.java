@@ -14,12 +14,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package integration.specs.todoitem;
+package integration.glue.todoitem;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import integration.ToDoSystemInitializer;
-import integration.specs.InMemoryDBForToDoApp;
 
 import java.util.List;
 
@@ -28,67 +26,19 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.jmock.Expectations;
 import org.junit.Assert;
 
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
-import org.apache.isis.core.specsupport.specs.CukeStepDefsAbstract;
+import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
-public class ToDoItemStepDefs extends CukeStepDefsAbstract {
-
-
-    // //////////////////////////////////////
-    
-    @Before({"@unit"})
-    public void beforeScenarioUnitScope() {
-        before(ScenarioExecutionScope.UNIT);
-    }
-
-    @Before(value={"@integration"}, order=100)
-    public void beforeScenarioIntegrationScope() {
-        PropertyConfigurator.configure("logging.properties");
-        ToDoSystemInitializer.initIsft();
-        
-        before(ScenarioExecutionScope.INTEGRATION);
-    }
-
-    @After
-    public void afterScenario(cucumber.api.Scenario sc) {
-        assertMocksSatisfied();
-        after(sc);
-    }
-
-    // //////////////////////////////////////
-    
-
-    @Before(value={"@unit"}, order=20000)
-    public void unitFixtures() throws Throwable {
-        final InMemoryDB inMemoryDB = new InMemoryDBForToDoApp(this.scenarioExecution());
-        inMemoryDB.getElseCreate(ToDoItem.class, "Write blog post");
-        inMemoryDB.getElseCreate(ToDoItem.class, "Pick up bread");
-        final ToDoItem t3 = inMemoryDB.getElseCreate(ToDoItem.class, "Pick up butter");
-        t3.setComplete(true);
-        putVar("isis", "in-memory-db", inMemoryDB);
-    }
-
-    @Before(value={"@integration"}, order=20000)
-    public void integrationFixtures() throws Throwable {
-        scenarioExecution().install(new ToDoItemsFixture());
-    }
-    
-    // //////////////////////////////////////
-    
+public class ToDoItemGlue extends CukeGlueAbstract {
 
     @Given("^there are a number of incomplete ToDo items$")
     public void there_are_a_number_of_incomplete_ToDo_items() throws Throwable {
