@@ -22,17 +22,17 @@ import org.junit.runner.RunWith;
 
 
 /**
- * Runs scenarios in corresponding <tt>.feature</tt> file. 
+ * Runs scenarios in all <tt>.feature</tt> files (this package and any subpackages). 
  */
 @RunWith(Cucumber.class)
 @Cucumber.Options(
         format = {
                 "html:target/cucumber-html-report"
+                ,"json:target/cucumber.json"
         },
-        glue="integration.glue",
+        glue={"classpath:integration.glue"},
         strict = true,
         tags = { "~@backlog", "~@ignore" })
-public class ToDoItemSpec_findAndComplete {
-
-
+public class RunSpecs {
+    // intentionally empty 
 }

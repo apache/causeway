@@ -309,11 +309,6 @@ public abstract class CukeGlueAbstract {
      * (and fails fast if called more than once).
      */
     protected void before(ScenarioExecutionScope scope) {
-        final ScenarioExecution se = ScenarioExecution.peek();
-        if(se != null && se.ofScope(scope)) {
-            // don't trample over an existing, compatible ScenarioExecution.
-            return;
-        }
         final ScenarioExecution scenarioExecution = scope.instantiate();
         scenarioExecution.beginTran();
     }

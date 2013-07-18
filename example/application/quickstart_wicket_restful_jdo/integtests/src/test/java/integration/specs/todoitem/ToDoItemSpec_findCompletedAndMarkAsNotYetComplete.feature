@@ -21,14 +21,14 @@ Feature: Find completed ToDoItem and mark as not yet complete
   # can be run either at @unit-level scope (using mocks) or
   # at @integration-level scope (against the running system).
   
-  @unit
+  @integration
   Scenario: Todo items can be uncompleted
     Given a completed item
     When  I mark the item as not yet complete
     Then  the item is listed as incomplete 
 
  
-  @integration
+  @unit
   Scenario: Todo items can be uncompleted
     Given a completed ToDo item
     When  I mark the item as not yet complete
