@@ -71,9 +71,7 @@
                 <module>example/archetype/quickstart_wicket_restful_jdo</module>
         
                 <module>example/domain-service/email-service</module>
-                <module>example/misc/metamodel/namefile</module>
-        
-        <!-- 
+         <!-- 
                 <module>example/misc/metamodel/jsr303</module>
          -->        
         
