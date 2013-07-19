@@ -17,9 +17,11 @@
 package org.apache.isis.applib.services.devutils;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.value.Clob;
 
 @Named("Developer Utilities")
@@ -29,4 +31,10 @@ public interface DeveloperUtilitiesService {
     @ActionSemantics(Of.SAFE)
     public Clob downloadMetaModel();
     
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="99")
+    @Prototype
+    public Object refresh(Object domainObject);
+
 }

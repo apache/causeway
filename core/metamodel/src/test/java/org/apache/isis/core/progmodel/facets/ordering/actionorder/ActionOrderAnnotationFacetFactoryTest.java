@@ -49,7 +49,7 @@ public class ActionOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionOrderFacet.class);
         assertNotNull(facet);

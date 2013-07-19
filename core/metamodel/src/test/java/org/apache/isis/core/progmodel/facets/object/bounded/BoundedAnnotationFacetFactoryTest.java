@@ -48,7 +48,7 @@ public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BoundedFacet.class);
         assertNotNull(facet);

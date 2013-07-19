@@ -53,7 +53,7 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
         assertNotNull(facet);

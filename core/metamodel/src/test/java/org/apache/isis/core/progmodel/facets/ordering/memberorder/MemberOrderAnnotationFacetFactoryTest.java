@@ -27,18 +27,18 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.members.order.MemberOrderAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private MemberOrderAnnotationFacetFactory facetFactory;
+    private MemberOrderFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new MemberOrderAnnotationFacetFactory();
+        facetFactory = new MemberOrderFacetFactory();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
         assertNotNull(facet);
@@ -84,7 +84,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
         assertNotNull(facet);
@@ -104,7 +104,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method method = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
         assertNotNull(facet);

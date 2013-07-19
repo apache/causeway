@@ -28,7 +28,7 @@ public class CssClassAnnotationForTypeFacetFactoryTest extends AbstractFacetFact
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, null, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
         assertThat(facet, is(not(nullValue())));

@@ -48,7 +48,7 @@ public class RenderedAsDayBeforeAnnotationFacetFactoryTest extends AbstractFacet
         }
         final Method method = findMethod(Customer.class, "getEndDate");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RenderedAdjustedFacet.class);
         assertNotNull(facet);

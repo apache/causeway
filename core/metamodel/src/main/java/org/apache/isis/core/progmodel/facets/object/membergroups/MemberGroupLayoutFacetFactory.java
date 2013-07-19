@@ -20,18 +20,14 @@
 package org.apache.isis.core.progmodel.facets.object.membergroups;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 import java.util.Properties;
-
-import com.google.common.io.InputSupplier;
-import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -64,8 +60,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
         
         final Class<?> cls = processClassContext.getCls();
 
-        // try to find property file (different suffices supported)
-        final Properties properties = propertiesFor(cls, ".memberGroupLayout", ".memberLayout", ".layout");
+        final Properties properties = processClassContext.layoutProperties("memberGroupLayout");
         if(properties != null) {
             return new MemberGroupLayoutFacetProperties(properties, holder);
         }
@@ -79,27 +74,6 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
             return new MemberGroupsFacetAnnotation(mgAnnot, processClassContext.getFacetHolder());
         }
         return new MemberGroupLayoutFacetFallback(holder); 
-    }
-
-    static Properties propertiesFor(final Class<?> cls, final String... suffices) {
-        for (String suffix : suffices) {
-            final Properties properties = propertiesFor(cls, suffix);
-            if(properties != null) {
-                return properties;
-            }
-        }
-        return null;
-    }
-    static Properties propertiesFor(final Class<?> cls, final String suffix) {
-        try {
-            final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
-            final InputSupplier<InputStream> inputSupplier = Resources.newInputStreamSupplier(url);
-            final Properties properties = new Properties();
-            properties.load(inputSupplier.getInput());
-            return properties;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     @Override
@@ -116,26 +90,35 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                 ColumnSpans columnSpans = facet.getColumnSpans();
                 final List<String> middle = facet.getMiddle();
                 final List<String> right = facet.getRight();
-                List<ObjectAssociation> objectCollections = objectSpec.getAssociations(ObjectAssociationFilters.staticallyVisible(Where.OBJECT_FORMS));
+                final int numCollections = numCollectionsOf(objectSpec);
 
                 if(columnSpans.getMiddle() == 0 && !middle.isEmpty()) {
                     validationFailures.add("%s MemberGroupLayout: middle (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.", objectSpec.getIdentifier().getClassName(), columnSpans.name(), middle);
                 }
                 if(columnSpans.getMiddle() > 0 && middle.isEmpty()) {
-                    validationFailures.add("%s MemberGroupLayout: middle (property) column is non-zero for ColumnSpans (%s), but no groups have been listed", objectSpec.getIdentifier().getClassName(), columnSpans.name());
+                    // ignore; may want a gap, or there may just not be any properties to put in this column.
+                    // validationFailures.add("%s MemberGroupLayout: middle (property) column is non-zero for ColumnSpans (%s), but no groups have been listed", objectSpec.getIdentifier().getClassName(), columnSpans.name());
                 }
                 
                 if(columnSpans.getRight() == 0 && !right.isEmpty()) {
                     validationFailures.add("%s MemberGroupLayout: right (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.", objectSpec.getIdentifier().getClassName(), columnSpans.name(), right);
                 }
                 if(columnSpans.getRight() > 0 && right.isEmpty()) {
-                    validationFailures.add("%s MemberGroupLayout: right (property) column is non-zero for ColumnSpans (%s), but no groups have been listed", objectSpec.getIdentifier().getClassName(), columnSpans.name());
+                    // ignore; may want a gap, or there may just not be any properties to put in this column.
+                    // validationFailures.add("%s MemberGroupLayout: right (property) column is non-zero for ColumnSpans (%s), but no groups have been listed", objectSpec.getIdentifier().getClassName(), columnSpans.name());
                 }
                 
-                if(columnSpans.getCollections() == 0 && !objectCollections.isEmpty()) {
-                    validationFailures.add("%s MemberGroupLayout: collections column is 0 for ColumnSpans (%s), but there are (up to) %d visible collections visible", objectSpec.getIdentifier().getClassName(), columnSpans.name(), objectCollections.size());
+                if(columnSpans.getCollections() == 0 && numCollections>0) {
+                    validationFailures.add("%s MemberGroupLayout: collections column is 0 for ColumnSpans (%s), but there are (up to) %d visible collections", objectSpec.getIdentifier().getClassName(), columnSpans.name(), numCollections);
                 }
                 return true;
+            }
+
+            @SuppressWarnings("unchecked")
+            private int numCollectionsOf(ObjectSpecification objectSpec) {
+                List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
+                        Filters.and(ObjectAssociationFilters.staticallyVisible(Where.OBJECT_FORMS), ObjectAssociationFilters.COLLECTIONS));
+                return objectCollections.size();
             }
         };
     }

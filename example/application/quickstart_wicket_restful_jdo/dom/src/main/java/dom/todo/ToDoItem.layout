@@ -1,5 +1,58 @@
-columnSpans=_2_4_0_6
-#columnSpans=_6_0_6_0 
-left=General 
-middle=Detail
-right=
+###########################################
+# MemberGroupLayout
+###########################################
+
+memberGroupLayout.columnSpans=_3_4_0_5
+memberGroupLayout.left=General 
+memberGroupLayout.middle=Detail
+memberGroupLayout.right=
+
+
+###########################################
+# MemberOrder
+###########################################
+
+# Properties 
+memberOrder.description.sequence=1
+memberOrder.category.sequence=2
+memberOrder.complete.sequence=3
+
+# Properties (Detail)
+memberOrder.dueBy.name=Detail
+memberOrder.cost.name=Detail
+memberOrder.notes.name=Detail
+memberOrder.attachment.name=Detail
+
+memberOrder.dueBy.sequence=1
+memberOrder.cost.sequence=2
+memberOrder.notes.sequence=3
+memberOrder.attachment.sequence=4
+
+# Properties (Misc)
+memberOrder.versionSequence.name=Misc
+memberOrder.versionSequence.sequence=99
+
+
+#Collections
+memberOrder.dependencies.sequence=1
+memberOrder.similarItems.sequence=2
+
+
+#Actions (freestanding)
+memberOrder.delete.sequence=1
+memberOrder.duplicate.sequence=2
+
+
+#Actions (associated with properties)
+memberOrder.completed.name=complete
+memberOrder.notYetCompleted.name=complete
+
+memberOrder.completed.sequence=1
+memberOrder.notYetCompleted.sequence=2
+
+memberOrder.updateCost.name=cost
+
+#Actions (associated with collections)
+memberOrder.add.name=dependencies
+
+memberOrder.remove.name=dependencies

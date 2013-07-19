@@ -129,11 +129,8 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
     // //////////////////////////////////////
 
     
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="99")
-    @Prototype
-    public Object rebuildMetaModel(Object domainObject) {
+    @Override
+    public Object refresh(Object domainObject) {
         specificationLoader.invalidateCacheFor(domainObject);
         return domainObject;
     }

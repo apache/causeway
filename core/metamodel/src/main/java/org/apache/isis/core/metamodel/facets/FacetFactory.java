@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.lang.PropertyUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -56,11 +59,20 @@ public interface FacetFactory {
     public static class ProcessClassContext extends AbstractProcessContext<FacetHolder> implements MethodRemover {
         private final Class<?> cls;
         private final MethodRemover methodRemover;
+        private final Properties properties;
 
+        /**
+         * For testing only.
+         */
         public ProcessClassContext(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+            this(cls, null, methodRemover, facetHolder);
+        }
+
+        public ProcessClassContext(final Class<?> cls, final Properties properties, final MethodRemover methodRemover, final FacetHolder facetHolder) {
             super(facetHolder);
             this.cls = cls;
             this.methodRemover = methodRemover;
+            this.properties = properties;
         }
 
         /**
@@ -89,6 +101,14 @@ public interface FacetFactory {
         public void removeMethods(final List<Method> methods) {
             methodRemover.removeMethods(methods);
         }
+
+        public Properties layoutProperties(String prefix) {
+            if(properties == null) {
+                return null;
+            }
+            final Properties subsetProperties = PropertyUtil.subset(this.properties, prefix);
+            return !subsetProperties.isEmpty() ? subsetProperties : null;
+        }
     }
 
     /**
@@ -98,12 +118,16 @@ public interface FacetFactory {
 
     public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover {
         private final Class<?> cls;
+        private final FeatureType featureType;
+        private final Properties properties;
         private final Method method;
         private final MethodRemover methodRemover;
 
-        public ProcessMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod) {
+        public ProcessMethodContext(final Class<?> cls, FeatureType featureType, Properties properties, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod) {
             super(facetedMethod);
             this.cls = cls;
+            this.featureType = featureType;
+            this.properties = properties;
             this.method = method;
             this.methodRemover = methodRemover;
         }
@@ -134,6 +158,18 @@ public interface FacetFactory {
         @Override
         public void removeMethods(final List<Method> methods) {
             methodRemover.removeMethods(methods);
+        }
+
+        public Properties layoutProperties(String prefix) {
+            
+            if(properties == null) {
+                return null;
+            }
+            Identifier identifier = featureType.identifierFor(getCls(), getMethod());
+            final String id = identifier.getMemberName();
+            
+            final Properties subsetProperties = PropertyUtil.subset(this.properties, prefix+"."+id);
+            return !subsetProperties.isEmpty() ? subsetProperties : null;
         }
     }
 

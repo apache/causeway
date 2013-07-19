@@ -67,7 +67,7 @@ public class PagedAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFa
     public void testAnnotationPickedUpOnCollection() {
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
         final Method method = facetedMethod.getMethod();
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod);
         facetFactory.process(processMethodContext);
 
         final Facet facet = facetedMethod.getFacet(PagedFacet.class);
@@ -80,7 +80,7 @@ public class PagedAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFa
     public void testNoAnnotationOnCollection() {
         facetedMethod = FacetedMethod.createForCollection(CustomerWithoutPagedAnnotation.class, "orders");
         final Method method = facetedMethod.getMethod();
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod);
         facetFactory.process(processMethodContext);
 
         final Facet facet = facetedMethod.getFacet(PagedFacet.class);

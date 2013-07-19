@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.members.order;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
@@ -35,8 +37,12 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
 
     public MemberOrderFacetAbstract(final String name, final String sequence, final FacetHolder holder) {
         super(type(), holder);
-        this.name = name;
-        this.sequence = sequence;
+        this.name = valueElse(name, "");
+        this.sequence = valueElse(sequence, "1");
+    }
+
+    private static String valueElse(final String name, final String string) {
+        return !Strings.isNullOrEmpty(name) ? name : string;
     }
 
     @Override

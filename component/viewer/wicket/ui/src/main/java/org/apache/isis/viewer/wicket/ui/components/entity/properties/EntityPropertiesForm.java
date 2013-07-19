@@ -25,8 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -66,6 +64,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelH
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 
 class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
@@ -103,12 +102,16 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void buildGui() {
-        addPropertiesAndOrCollections();
+        boolean added = addPropertiesAndOrCollections();
         addButtons();
         addFeedbackGui();
+        if(!added) {
+            // a bit hacky...
+            Components.permanentlyHide(this, editButton.getId(), okButton.getId(), cancelButton.getId(), ID_FEEDBACK);
+        }
     }
 
-    private void addPropertiesAndOrCollections() {
+    private boolean addPropertiesAndOrCollections() {
         final EntityModel entityModel = (EntityModel) getModel();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
@@ -123,6 +126,9 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         
         for(String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
+            if(associationsInGroup==null) {
+                continue;
+            }
 
             final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
             memberGroupRv.add(memberGroupRvContainer);
@@ -141,6 +147,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 addPropertyToForm(entityModel, association, propertyRvContainer);
             }
         }
+        return !groupNames.isEmpty();
     }
 
     private void addPropertyToForm(final EntityModel entityModel,
@@ -163,6 +170,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void addButtons() {
+        
         editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
             private static final long serialVersionUID = 1L;
 
@@ -340,6 +348,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 toViewMode(target);
             }
         };
+
         add(cancelButton);
 
         okButton.setOutputMarkupPlaceholderTag(true);
@@ -428,9 +437,10 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         requestRepaintPanel(target);
     }
 
-
     private void addFeedbackGui() {
-        final FeedbackPanel feedback = addOrReplaceFeedback();
+        feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
+        feedback.setOutputMarkupPlaceholderTag(true);
+        addOrReplace(feedback);
         feedback.setEscapeModelStrings(false);
 
         final ObjectAdapter adapter = getEntityModel().getObject();
@@ -439,12 +449,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         }
     }
 
-    private FeedbackPanel addOrReplaceFeedback() {
-        feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
-        feedback.setOutputMarkupPlaceholderTag(true);
-        addOrReplace(feedback);
-        return feedback;
-    }
     
     ///////////////////////////////////////////////////////
     // Dependencies (from context)

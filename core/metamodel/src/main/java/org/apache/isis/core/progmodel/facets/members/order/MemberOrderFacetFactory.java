@@ -19,29 +19,44 @@
 
 package org.apache.isis.core.progmodel.facets.members.order;
 
+import java.util.Properties;
+
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetProperties;
 
-public class MemberOrderAnnotationFacetFactory extends FacetFactoryAbstract {
+public class MemberOrderFacetFactory extends FacetFactoryAbstract {
 
-    public MemberOrderAnnotationFacetFactory() {
+    public MemberOrderFacetFactory() {
         super(FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Class<MemberOrder> annotationClass = MemberOrder.class;
-        final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), annotationClass);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
+        
+        final FacetedMethod holder = processMethodContext.getFacetHolder();
+        
+        MemberOrderFacet memberOrderFacet = null;
+        final Properties properties = processMethodContext.layoutProperties("memberOrder");
+        if(properties != null) {
+            memberOrderFacet = new MemberOrderFacetProperties(properties, holder);
+        }
 
-    private MemberOrderFacet create(final MemberOrder annotation, final FacetHolder holder) {
-        return annotation == null ? null : new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), holder);
+        if(memberOrderFacet == null) {
+            final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
+            if (annotation != null) {
+                memberOrderFacet = new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), holder);
+            }
+        }
+
+        // no-op if facet is null
+        FacetUtil.addFacet(memberOrderFacet);
     }
 
 }

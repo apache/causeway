@@ -34,7 +34,7 @@ public class CssClassAnnotationOnMemberFacetFactoryTest extends AbstractFacetFac
         expectNoMethodsRemoved();
 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "name");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
         assertThat(facet, is(not(nullValue())));

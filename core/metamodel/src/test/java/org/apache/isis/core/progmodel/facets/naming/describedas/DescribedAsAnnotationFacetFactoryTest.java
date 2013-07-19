@@ -43,7 +43,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
@@ -66,7 +66,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
@@ -89,7 +89,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
@@ -111,7 +111,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);

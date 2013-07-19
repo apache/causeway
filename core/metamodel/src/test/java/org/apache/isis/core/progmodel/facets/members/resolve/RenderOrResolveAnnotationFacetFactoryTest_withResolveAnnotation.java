@@ -59,7 +59,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         }
 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "numberOfOrders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RenderFacet.class);
         assertNotNull(facet);
@@ -81,7 +81,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         }
 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "numberOfOrders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
         assertThat(facet.value(), is(Render.Type.EAGERLY));
@@ -98,7 +98,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
         }
 
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "numberOfOrders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
         assertThat(facet.value(), is(Render.Type.LAZILY));
@@ -113,7 +113,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
             }
         }
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RenderFacet.class);
         assertNotNull(facet);
@@ -133,7 +133,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
             }
         }
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
         assertThat(facet.value(), is(Render.Type.EAGERLY));
@@ -148,7 +148,7 @@ public class RenderOrResolveAnnotationFacetFactoryTest_withResolveAnnotation ext
             }
         }
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final RenderFacet facet = facetedMethod.getFacet(RenderFacet.class);
         assertThat(facet.value(), is(Render.Type.LAZILY));

@@ -49,7 +49,7 @@ public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ParentedFacet.class);
         assertNotNull(facet);

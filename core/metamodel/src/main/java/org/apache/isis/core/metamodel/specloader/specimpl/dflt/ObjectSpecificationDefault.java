@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -124,8 +125,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public void introspectTypeHierarchyAndMembers() {
 
         // class
+        Properties properties = null;
         if(isNotIntrospected()) {
-            facetedMethodsBuilder.introspectClass();
+            properties = facetedMethodsBuilder.introspectClass();
         }
         
         // name
@@ -176,8 +178,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
 
         // associations and actions
-        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
-        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
+        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods(properties);
+        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
 
         if(isNotIntrospected()) {
             final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
@@ -190,7 +192,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
 
         if(isNotIntrospected()) {
-            facetedMethodsBuilder.introspectClassPostProcessing();    
+            facetedMethodsBuilder.introspectClassPostProcessing(properties);    
         }
         
         if(isNotIntrospected()) {

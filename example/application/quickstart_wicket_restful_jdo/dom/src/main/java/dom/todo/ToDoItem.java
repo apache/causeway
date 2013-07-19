@@ -44,10 +44,6 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberGroupLayout;
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.applib.annotation.MemberGroups;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
@@ -122,7 +118,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
     // only words, spaces and selected punctuation accepted
-    @MemberOrder(sequence = "1")
+    
     public String getDescription() {
         return description;
     }
@@ -138,7 +134,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     private LocalDate dueBy;
 
-    @MemberOrder(name="Detail", sequence = "3")
     @Optional
     @CssClass("x-key")
     public LocalDate getDueBy() {
@@ -188,7 +183,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     private Category category;
 
-    @MemberOrder(sequence = "2")
     public Category getCategory() {
         return category;
     }
@@ -223,7 +217,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Disabled
     // cannot be edited as a property
-    @MemberOrder(sequence = "4")
     public boolean isComplete() {
         return complete;
     }
@@ -235,7 +228,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @Named("Done")
     @PublishedAction
     @Bulk
-    @MemberOrder(name="complete", sequence = "1")
     @CssClass("x-highlight")
     public ToDoItem completed() {
         setComplete(true);
@@ -249,7 +241,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @Named("Undo")
     @PublishedAction
     @Bulk
-    @MemberOrder(name="complete", sequence = "2")
     public ToDoItem notYetCompleted() {
         setComplete(false);
         return this;
@@ -267,7 +258,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Column(scale = 2)
     @Optional
-    @MemberOrder(name="Detail", sequence = "4.1")
     public BigDecimal getCost() {
         return cost;
     }
@@ -277,7 +267,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     
     @Named("Update")
-    @MemberOrder(name="cost", sequence = "1")
     public ToDoItem updateCost(@Named("New cost") final BigDecimal cost) {
         setCost(cost);
         return this;
@@ -296,7 +285,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @Hidden(where=Where.ALL_TABLES)
     @Optional
     @MultiLine(numberOfLines=5)
-    @MemberOrder(name="Detail", sequence = "6")
     public String getNotes() {
         return notes;
     }
@@ -313,7 +301,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
     @Optional
-    @MemberOrder(name="Detail", sequence = "7")
     @Hidden(where=Where.STANDALONE_TABLES)
     public Blob getAttachment() {
         return attachment;
@@ -329,7 +316,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Hidden(where=Where.ALL_TABLES)
     @Disabled
-    @MemberOrder(name="Detail", sequence = "99")
     @Named("Version")
     public Long getVersionSequence() {
         if(!(this instanceof PersistenceCapable)) {
@@ -373,7 +359,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @SortedBy(DependenciesComparator.class)
     @Disabled
-    @MemberOrder(sequence = "1")
     @Render(Type.EAGERLY)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
@@ -384,7 +369,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
 
     @PublishedAction
-    @MemberOrder(name="dependencies", sequence = "3")
     public ToDoItem add(final ToDoItem toDoItem) {
         getDependencies().add(toDoItem);
         return this;
@@ -413,7 +397,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return null;
     }
 
-    @MemberOrder(name="dependencies", sequence = "4")
     @CssClass("x-caution")
     public ToDoItem remove(final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
@@ -444,7 +427,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     
-    @MemberOrder(sequence = "5")
     @NotPersisted
     @Render(Type.EAGERLY)
     @CssClass("x-info")
@@ -458,7 +440,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Named("Clone")
     // the name of the action in the UI
-    @MemberOrder(sequence = "3")
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
@@ -491,7 +472,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     @Bulk
-    @MemberOrder(sequence = "4")
     public List<ToDoItem> delete() {
         container.removeIfNotAlready(this);
         container.informUser("Deleted " + container.titleOf(this));

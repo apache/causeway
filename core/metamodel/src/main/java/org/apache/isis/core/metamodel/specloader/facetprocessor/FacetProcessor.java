@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
@@ -277,17 +278,17 @@ public class FacetProcessor implements RuntimeContextAware {
      *            - holder to attach facets to.
      * 
      */
-    public void process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+    public void process(final Class<?> cls, final Properties properties, final MethodRemover methodRemover, final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
+            facetFactory.process(new ProcessClassContext(cls, properties, removerElseNullRemover(methodRemover), facetHolder));
         }
     }
 
-    public void processPost(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+    public void processPost(final Class<?> cls, Properties properties, final MethodRemover methodRemover, final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT_POST_PROCESSING);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
+            facetFactory.process(new ProcessClassContext(cls, properties, removerElseNullRemover(methodRemover), facetHolder));
         }
     }
 
@@ -312,11 +313,12 @@ public class FacetProcessor implements RuntimeContextAware {
      * @param featureType
      *            - what type of feature the method represents (property,
      *            action, collection etc)
+     * @param properties TODO
      */
-    public void process(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod, final FeatureType featureType) {
+    public void process(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod, final FeatureType featureType, Properties properties) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessMethodContext(cls, method, removerElseNullRemover(methodRemover), facetedMethod));
+            facetFactory.process(new ProcessMethodContext(cls, featureType, properties, method, removerElseNullRemover(methodRemover), facetedMethod));
         }
     }
 

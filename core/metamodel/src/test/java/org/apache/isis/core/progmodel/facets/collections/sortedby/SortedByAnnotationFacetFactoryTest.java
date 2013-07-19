@@ -71,7 +71,7 @@ public class SortedByAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
             }
         }
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(SortedByFacet.class);
         assertNotNull(facet);
@@ -100,7 +100,7 @@ public class SortedByAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
             }
         }
         facetedMethod = FacetedMethod.createForCollection(Customer.class, "orders");
-        facetFactory.process(new ProcessMethodContext(Customer.class, facetedMethod.getMethod(), methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(SortedByFacet.class);
         assertNotNull(facet);

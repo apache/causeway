@@ -56,7 +56,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         
         expectNoMethodsRemoved();
         
-        facetFactory.process(new ProcessClassContext(Customer.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -82,7 +82,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, mockMethodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -106,7 +106,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, mockMethodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
@@ -129,7 +129,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, mockMethodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));
