@@ -21,21 +21,26 @@ package org.apache.isis.core.metamodel.facets.object.membergroups;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
 /**
- * Indicates the order in which the member groups (as defined by {@link MemberOrderFacet})
- * should be rendered.
+ * Indicates the (column) layout of property groups (as defined by {@link MemberOrderFacet})
+ * and collections.
  * 
  * <p>
- * Corresponds to the {@link MemberOrder} annotation in the applib.
+ * Corresponds to the {@link MemberGroupsFacet} annotation in the applib.
  */
-public interface MemberGroupsFacet extends SingleValueFacet<List<String>> {
+public interface MemberGroupLayoutFacet extends Facet {
 
     /**
-     * The default group if not otherwise specified.
+     * The default group for properties if not otherwise specified.
      */
     public final static String DEFAULT_GROUP = "General";
+
+    public ColumnSpans getColumnSpans();
+
+    public List<String> getLeft();
+    public List<String> getMiddle();
 }

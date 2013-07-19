@@ -21,13 +21,14 @@
 <body>
 <wicket:panel>
 	<div class="entityCombined">
-		<div wicket:id="entitySummary" />
-		<div id="entityPropertiesForLayout">
-			<div wicket:id="entityProperties"/>
-		</div>
-		<div id="entityCollectionsForLayout">
+        <div class="row-fluid">
+    		<div wicket:id="entitySummary" />
+        </div>
+        <div class="row-fluid">
+			<div wicket:id="entityPropertiesLeft"/>
+            <div wicket:id="entityPropertiesMiddle"/>
 			<div wicket:id="entityCollections"/>
-		</div>
+        </div>
 	</div>
 </wicket:panel>
 </body>

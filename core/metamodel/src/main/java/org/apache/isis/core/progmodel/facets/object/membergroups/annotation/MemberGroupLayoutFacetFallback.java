@@ -20,15 +20,20 @@
 package org.apache.isis.core.progmodel.facets.object.membergroups.annotation;
 
 import java.util.Arrays;
+import java.util.Collections;
 
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupsFacet;
-import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
-public class MemberGroupsFacetFallback extends MemberGroupsFacetAbstract {
+public class MemberGroupLayoutFacetFallback extends MemberGroupLayoutFacetAbstract {
 
-    public MemberGroupsFacetFallback(final FacetHolder holder) {
-        super(Arrays.asList(MemberGroupsFacet.DEFAULT_GROUP), holder);
+    public MemberGroupLayoutFacetFallback(final FacetHolder holder) {
+        super(ColumnSpans._4_0_8, 
+                Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP), 
+                Collections.<String>emptyList(), 
+                holder);
     }
 
 }

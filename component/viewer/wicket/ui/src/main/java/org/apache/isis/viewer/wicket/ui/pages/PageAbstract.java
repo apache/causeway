@@ -87,6 +87,8 @@ public abstract class PageAbstract extends WebPage {
 
     private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
+    
+    //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
 
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
@@ -170,6 +172,7 @@ public abstract class PageAbstract extends WebPage {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS)));
         response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS)));
+        //response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(BOOTSTRAP_JS)));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if (!StringUtils.isEmpty(feedbackMsg)) {

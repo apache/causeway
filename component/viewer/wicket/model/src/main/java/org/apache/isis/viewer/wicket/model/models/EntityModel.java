@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -43,6 +44,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications.MemberGroupLayoutHint;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -128,13 +130,19 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
+    private MemberGroupLayoutHint memberGroupLayoutHint;
 
 
     /**
      * Toggled by 'entityDetailsButton'.
      */
     private boolean entityDetailsVisible;
-    
+
+    /**
+     * Set by {@link #setMemberGroupsHint(List)}
+     */
+    private List<String> memberGroupsHint;
+
     /**
      * {@link ConcurrencyException}, if any, that might have occurred previously
      */
@@ -375,6 +383,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         entityDetailsVisible = !entityDetailsVisible;
     }
 
+    public MemberGroupLayoutHint getMemberGroupLayoutHint() {
+        return memberGroupLayoutHint;
+    }
+    public void setMemberGroupLayoutHint(MemberGroupLayoutHint memberGroupLayoutHint) {
+        this.memberGroupLayoutHint = memberGroupLayoutHint;
+    }
+
     
     // //////////////////////////////////////////////////////////
     // concurrency exceptions
@@ -504,5 +519,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 }

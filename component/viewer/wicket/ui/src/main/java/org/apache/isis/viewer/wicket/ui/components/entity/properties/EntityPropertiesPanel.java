@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
-
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

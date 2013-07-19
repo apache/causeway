@@ -119,7 +119,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         add(memberGroupRv);
 
         Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociations.groupByMemberOrderName(associations);
-        final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet());
+        final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), entityModel.getMemberGroupLayoutHint());
         
         for(String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
@@ -127,7 +127,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
             memberGroupRv.add(memberGroupRvContainer);
             memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
-
 
             final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
             final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();

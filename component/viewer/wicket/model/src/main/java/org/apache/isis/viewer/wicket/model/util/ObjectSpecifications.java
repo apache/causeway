@@ -24,7 +24,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupsFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
@@ -33,17 +33,33 @@ public final class ObjectSpecifications {
     private ObjectSpecifications() {
     }
 
-    public static List<String> orderByMemberGroups(ObjectSpecification objSpec, Set<String> groupNamesToOrder) {
-        final MemberGroupsFacet facet = objSpec.getFacet(MemberGroupsFacet.class);
-        final List<String> groupNames = Lists.newArrayList(groupNamesToOrder);
+    public enum MemberGroupLayoutHint {
+        LEFT,
+        MIDDLE;
+        public List<String> getValue(MemberGroupLayoutFacet facet) {
+            return this == LEFT? facet.getLeft(): facet.getMiddle();
+        }
+    }
+
+    public static List<String> orderByMemberGroups(ObjectSpecification objSpec, Set<String> groupNamesToOrder, MemberGroupLayoutHint memberGroupLayoutHint) {
+        final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
+        final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
         
         // not expected to happen
         if(facet == null) {
-            return groupNames;
+            return leftColumnGroupNames;
         }
         
-        final List<String> groupNamedInRequiredOrder = facet.value();
-        return order(groupNames, groupNamedInRequiredOrder);
+        if(memberGroupLayoutHint == MemberGroupLayoutHint.LEFT) {
+            // per the requested order, including any groups not mentioned in either list, excluding any groups in the middle column
+            final List<String> groupNamedInRequiredOrder = facet.getLeft();
+            final List<String> order = order(leftColumnGroupNames, groupNamedInRequiredOrder);
+            order.removeAll(facet.getMiddle());
+            return order;
+        } else {
+            // strictly those listed for the middle column.
+            return facet.getMiddle();
+        }
     }
 
     static List<String> order(final List<String> valuesToOrder, final List<String> valuesInRequiredOrder) {

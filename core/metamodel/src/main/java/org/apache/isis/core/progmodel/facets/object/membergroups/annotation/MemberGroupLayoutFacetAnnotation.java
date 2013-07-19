@@ -17,39 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.membergroups;
+package org.apache.isis.core.progmodel.facets.object.membergroups.annotation;
 
-import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
-public abstract class MemberGroupsFacetAbstract extends SingleValueFacetAbstract<List<String>> implements MemberGroupLayoutFacet {
+public class MemberGroupLayoutFacetAnnotation extends MemberGroupLayoutFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return MemberGroupLayoutFacet.class;
-    }
-
-    public MemberGroupsFacetAbstract(List<String> value, FacetHolder holder) {
-        super(type(), value, holder);
-    }
-
-    @Override
-    public ColumnSpans getColumnSpans() {
-        return ColumnSpans._4_0_8;
-    }
-
-    @Override
-    public List<String> getLeft() {
-        return value();
-    }
-
-    @Override
-    public List<String> getMiddle() {
-        return Collections.emptyList();
+    public MemberGroupLayoutFacetAnnotation(
+            final MemberGroupLayout memberGroupLayout,
+            FacetHolder holder) {
+        super(memberGroupLayout.columnSpans(), 
+                asList(memberGroupLayout.left()), 
+                asList(memberGroupLayout.middle()), 
+                holder);
     }
 }

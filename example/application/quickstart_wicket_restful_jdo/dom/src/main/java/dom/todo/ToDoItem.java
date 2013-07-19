@@ -44,6 +44,8 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberGroupLayout;
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
@@ -92,7 +94,7 @@ import org.apache.isis.applib.value.Blob;
 @Audited
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
-@MemberGroups({"General", "Detail"})
+@MemberGroupLayout(columnSpans=ColumnSpans._4_4_4, left={"General"}, middle={"Detail"})
 @Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 

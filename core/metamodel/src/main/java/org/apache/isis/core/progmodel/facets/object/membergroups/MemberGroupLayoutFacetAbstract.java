@@ -19,37 +19,54 @@
 
 package org.apache.isis.core.progmodel.facets.object.membergroups;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
-public abstract class MemberGroupsFacetAbstract extends SingleValueFacetAbstract<List<String>> implements MemberGroupLayoutFacet {
+public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract implements MemberGroupLayoutFacet {
+
+    private final ColumnSpans columns;
+    private final List<String> left;
+    private final List<String> middle;
 
     public static Class<? extends Facet> type() {
         return MemberGroupLayoutFacet.class;
     }
+    
+    protected static List<String> asList(final String[] value) {
+        return value == null || value.length == 0 
+                ? Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP) 
+                : Arrays.asList(value);
+    }
 
-    public MemberGroupsFacetAbstract(List<String> value, FacetHolder holder) {
-        super(type(), value, holder);
+    public MemberGroupLayoutFacetAbstract(
+            final ColumnSpans columns,
+            final List<String> left, final List<String> middle, 
+            FacetHolder holder) {
+        super(type(), holder, Derivation.NOT_DERIVED);
+        this.columns = columns;
+        this.left = left;
+        this.middle = middle;
     }
 
     @Override
     public ColumnSpans getColumnSpans() {
-        return ColumnSpans._4_0_8;
+        return columns;
     }
 
     @Override
     public List<String> getLeft() {
-        return value();
+        return left;
     }
 
     @Override
     public List<String> getMiddle() {
-        return Collections.emptyList();
+        return middle;
     }
+
 }

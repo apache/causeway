@@ -103,7 +103,7 @@ import org.apache.isis.core.progmodel.facets.object.immutable.annotation.Immutab
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.maxlen.annotation.MaxLengthAnnotationForTypeFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.membergroups.annotation.MemberGroupsAnnotationElseFallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLineAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethodFacetFactory;
@@ -312,7 +312,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MemberOrderAnnotationFacetFactory.class);
         addFactory(ActionOrderAnnotationFacetFactory.class);
         addFactory(FieldOrderAnnotationFacetFactory.class);
-        addFactory(MemberGroupsAnnotationElseFallbackFacetFactory.class);
+        addFactory(MemberGroupLayoutFacetFactory.class);
         
         addFactory(AggregatedAnnotationFacetFactory.class);
         addFactory(BookmarkableAnnotationFacetFactory.class);
