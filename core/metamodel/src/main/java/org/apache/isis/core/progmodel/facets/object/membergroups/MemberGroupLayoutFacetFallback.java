@@ -19,37 +19,20 @@
 
 package org.apache.isis.core.progmodel.facets.object.membergroups;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
-public abstract class MemberGroupsFacetAbstract extends SingleValueFacetAbstract<List<String>> implements MemberGroupLayoutFacet {
+public class MemberGroupLayoutFacetFallback extends MemberGroupLayoutFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return MemberGroupLayoutFacet.class;
+    public MemberGroupLayoutFacetFallback(final FacetHolder holder) {
+        super(null, 
+                Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP), 
+                Collections.<String>emptyList(), 
+                Collections.<String>emptyList(), 
+                holder);
     }
 
-    public MemberGroupsFacetAbstract(List<String> value, FacetHolder holder) {
-        super(type(), value, holder);
-    }
-
-    @Override
-    public ColumnSpans getColumnSpans() {
-        return ColumnSpans._4_0_8;
-    }
-
-    @Override
-    public List<String> getLeft() {
-        return value();
-    }
-
-    @Override
-    public List<String> getMiddle() {
-        return Collections.emptyList();
-    }
 }

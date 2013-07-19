@@ -17,23 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.membergroups.annotation;
+package org.apache.isis.core.progmodel.facets.object.membergroups;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
-public class MemberGroupLayoutFacetFallback extends MemberGroupLayoutFacetAbstract {
+public class MemberGroupLayoutFacetAnnotation extends MemberGroupLayoutFacetAbstract {
 
-    public MemberGroupLayoutFacetFallback(final FacetHolder holder) {
-        super(ColumnSpans._4_0_8, 
-                Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP), 
-                Collections.<String>emptyList(), 
+    public MemberGroupLayoutFacetAnnotation(
+            final MemberGroupLayout memberGroupLayout,
+            FacetHolder holder) {
+        super(memberGroupLayout.columnSpans(), 
+                asListWithDefaultGroup(memberGroupLayout.left()), 
+                asList(memberGroupLayout.middle()), 
+                asList(memberGroupLayout.right()), 
                 holder);
     }
-
 }

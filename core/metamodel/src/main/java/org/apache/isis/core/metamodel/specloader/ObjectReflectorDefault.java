@@ -334,6 +334,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return newlyDiscoveredClasses;
     }
 
+    
+    
     @Override
     public void shutdown() {
         LOG.info("shutting down " + this);
@@ -342,6 +344,19 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         getCache().clear();
         facetDecoratorSet.shutdown();
+    }
+
+
+    @Override
+    public void invalidateCacheFor(Object domainObject) {
+        final Class<? extends Object> cls = domainObject.getClass();
+        final Class<?> substitutedType = getClassSubstitutor().getClass(cls);
+        ObjectSpecification origSpec = getCache().remove(substitutedType.getName());
+        
+        final ObjectSpecification newSpec = loadSpecification(cls);
+        // ObjectSpecId is a value type, so in fact it shouldn't matter whether
+        // the original or the new Spec's SpecId is used.
+        getCache().recache(origSpec.getSpecId(), newSpec);
     }
 
     
@@ -763,5 +778,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both %s and %s are annotated with value of ''%s''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
         }
     }
+
 
 }

@@ -29,12 +29,15 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.devutils.DeveloperUtilitiesService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -42,7 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesService, SpecificationLoaderAware {
+public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesService, SpecificationLoaderSpiAware {
 
     private final MimeType mimeTypeTextCsv;
 
@@ -53,9 +56,10 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
             throw new RuntimeException(e);
         }
     }
-    
+
+    // //////////////////////////////////////
+
     @Override
-    @ActionSemantics(Of.SAFE)
     public Clob downloadMetaModel() {
         
         final Collection<ObjectSpecification> specifications = specificationLoader.allSpecifications();
@@ -121,11 +125,26 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
         return className.startsWith("java") || className.startsWith("org.joda") || className.startsWith("org.apache.isis");
     }
 
-    private SpecificationLoader specificationLoader;
     
-    @Override
+    // //////////////////////////////////////
+
+    
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="99")
+    @Prototype
+    public Object rebuildMetaModel(Object domainObject) {
+        specificationLoader.invalidateCacheFor(domainObject);
+        return domainObject;
+    }
+    
+    // //////////////////////////////////////
+
+    private SpecificationLoaderSpi specificationLoader;
+    
     @Programmatic
-    public void setSpecificationLookup(SpecificationLoader specificationLoader) {
+    @Override
+    public void setSpecificationLoaderSpi(SpecificationLoaderSpi specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
 

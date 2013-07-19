@@ -43,4 +43,5 @@ public interface MemberGroupLayoutFacet extends Facet {
 
     public List<String> getLeft();
     public List<String> getMiddle();
+    public List<String> getRight();
 }

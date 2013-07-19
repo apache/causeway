@@ -17,23 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.membergroups.annotation;
+package org.apache.isis.applib.annotation;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout;
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
+import org.junit.Test;
 
-public class MemberGroupLayoutFacetAnnotation extends MemberGroupLayoutFacetAbstract {
+public class MemberGroupLayoutColumnSpansTest {
 
-    public MemberGroupLayoutFacetAnnotation(
-            final MemberGroupLayout memberGroupLayout,
-            FacetHolder holder) {
-        super(memberGroupLayout.columnSpans(), 
-                asList(memberGroupLayout.left()), 
-                asList(memberGroupLayout.middle()), 
-                holder);
+    @Test
+    public void regex() {
+        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getLeft(), is(2));
+        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getMiddle(), is(3));
+        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getRight(), is(0));
+        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getCollections(), is(7));
     }
+
 }

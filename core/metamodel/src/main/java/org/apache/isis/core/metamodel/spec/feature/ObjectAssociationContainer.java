@@ -47,7 +47,7 @@ public interface ObjectAssociationContainer {
      * 
      * To get the statically visible fields (where any invisible and
      * unauthorised fields have been removed) use
-     * <tt>ObjectAssociationFilters#STATICALLY_VISIBLE_ASSOCIATIONS</tt>
+     * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      * 
      * @see Filters
      */

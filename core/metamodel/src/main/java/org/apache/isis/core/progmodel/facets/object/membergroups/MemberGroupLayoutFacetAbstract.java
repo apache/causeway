@@ -33,25 +33,31 @@ public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract imple
     private final ColumnSpans columns;
     private final List<String> left;
     private final List<String> middle;
+    private final List<String> right;
 
     public static Class<? extends Facet> type() {
         return MemberGroupLayoutFacet.class;
     }
     
-    protected static List<String> asList(final String[] value) {
+    protected static List<String> asListWithDefaultGroup(final String[] value) {
         return value == null || value.length == 0 
                 ? Arrays.asList(MemberGroupLayoutFacet.DEFAULT_GROUP) 
                 : Arrays.asList(value);
     }
 
+    protected static List<String> asList(final String[] value) {
+        return Arrays.asList(value);
+    }
+    
     public MemberGroupLayoutFacetAbstract(
             final ColumnSpans columns,
-            final List<String> left, final List<String> middle, 
+            final List<String> left, final List<String> middle, final List<String> right, 
             FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.columns = columns;
+        this.columns = columns != null? columns: ColumnSpans._4_0_0_8;
         this.left = left;
         this.middle = middle;
+        this.right = right;
     }
 
     @Override
@@ -69,4 +75,8 @@ public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract imple
         return middle;
     }
 
+    @Override
+    public List<String> getRight() {
+        return right;
+    }
 }

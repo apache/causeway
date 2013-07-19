@@ -41,6 +41,7 @@ class SpecificationCacheDefault {
     public void cache(final String className, final ObjectSpecification spec) {
         specByClassName.put(className, spec);
     }
+    
 
     public void clear() {
         specByClassName.clear();
@@ -63,6 +64,23 @@ class SpecificationCacheDefault {
     void setCacheBySpecId(Map<ObjectSpecId, ObjectSpecification> specById) {
         this.specById = Maps.newHashMap();
         this.specById.putAll(specById);
+    }
+
+    public ObjectSpecification remove(String typeName) {
+        ObjectSpecification removed = specByClassName.remove(typeName);
+        if(removed != null) {
+            specById.remove(removed.getSpecId());
+        }
+        return removed;
+    }
+
+    /**
+     * 
+     * @param specId
+     * @param spec
+     */
+    public void recache(ObjectSpecId specId, ObjectSpecification spec) {
+        specById.put(specId, spec);
     }
 
 }

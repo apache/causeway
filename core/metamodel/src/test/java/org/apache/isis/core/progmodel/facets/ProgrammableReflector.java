@@ -83,6 +83,7 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     public void shutdown() {
     }
 
+
     @Override
     public boolean loaded(final Class<?> cls) {
         throw new NotYetImplementedException();
@@ -145,5 +146,10 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     public List<Class<?>> getServiceClasses() {
         throw new NotYetImplementedException();
     }
+
+    @Override
+    public void invalidateCacheFor(Object domainObject) {
+    }
+
 
 }

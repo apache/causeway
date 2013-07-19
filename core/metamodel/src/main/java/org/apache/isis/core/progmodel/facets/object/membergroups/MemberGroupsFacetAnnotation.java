@@ -17,20 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.membergroups.annotation;
+package org.apache.isis.core.progmodel.facets.object.membergroups;
 
 import java.util.Collections;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetAbstract;
 
 public class MemberGroupsFacetAnnotation extends MemberGroupLayoutFacetAbstract {
 
     public MemberGroupsFacetAnnotation(final MemberGroups annotation, final FacetHolder holder) {
-        super(ColumnSpans._4_0_8, 
-                asList(annotation.value()), 
+        super(null, 
+                asListWithDefaultGroup(annotation.value()), 
+                Collections.<String>emptyList(), 
                 Collections.<String>emptyList(), 
                 holder);
     }

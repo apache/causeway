@@ -94,7 +94,6 @@ import org.apache.isis.applib.value.Blob;
 @Audited
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
-@MemberGroupLayout(columnSpans=ColumnSpans._4_4_4, left={"General"}, middle={"Detail"})
 @Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
@@ -447,7 +446,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     @MemberOrder(sequence = "5")
     @NotPersisted
-    @Render(Type.LAZILY)
+    @Render(Type.EAGERLY)
     @CssClass("x-info")
     public List<ToDoItem> getSimilarItems() {
         return toDoItems.similarTo(this);

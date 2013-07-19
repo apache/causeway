@@ -24,6 +24,8 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A successor to {@link MemberGroups}, specifying the (groups of) members in a page,
@@ -47,25 +49,83 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MemberGroupLayout {
 
+    /**
+     * The relative widths of the columns of members.
+     * 
+     * <p>
+     * Each value of this enum is in the form <tt>_X_Y_Z_W</tt>.  The 
+     * <tt>X</tt>, <tt>Y</tt> and <tt>Z</tt>
+     * indicate the relative widths of (up to) three property columns,
+     * while <tt>W</tt> indicates the relative width of the collection column.
+     */
     public enum ColumnSpans {
-        _2_0_10(2,0,10),
-        _3_0_9(3,0,9),
-        _4_0_8(4,0,8),
-        _5_0_7(5,0,7),
-        _6_0_6(6,0,6),
-        _3_3_6(3,3,6),
-        _2_3_7(2,3,7),
-        _2_4_6(2,4,6),
-        _4_4_4(4,4,4);
+        // two column, with collections
+        _2_0_0_10,
+        _3_0_0_9,
+        _4_0_0_8,
+        _5_0_0_7,
+        _6_0_0_6,
         
-        private int left;
-        private int middle;
-        private int right;
+        // three column, with collections
+        _2_2_0_8,
+        _2_3_0_7,
+        _2_4_0_6,
+        _2_5_0_5,
+        _2_6_0_4,
+        
+        _3_3_0_6,
+        _3_4_0_5,
+        _3_5_0_4,
+        _3_6_0_3,
+        
+        _4_4_0_4,
+        
+        // two column, suppress collections
+        _2_0_10_0,
+        _3_0_9_0,
+        _4_0_8_0,
+        _5_0_7_0,
+        _6_0_6_0,
+        
+        // three column, suppress collections
+        _2_2_8_0,
+        _2_3_7_0,
+        _2_4_6_0,
+        _2_5_5_0,
+        _2_6_4_0,
+        
+        _3_3_6_0,
+        _3_4_5_0,
+        _3_5_4_0,
+        _3_6_3_0,
+        
+        _4_4_4_0,
+        _4_5_3_0,
+        _4_6_2_0,
+        ;
+        
+        private final int left;
+        private final int middle;
+        private final int right;
+        private final int collections;
+                
+        private ColumnSpans() {
+            final Pattern namePattern = Pattern.compile("^_(\\d+)_(\\d+)_(\\d+)_(\\d+)$");
+            final String name = name();
+            Matcher matcher = namePattern.matcher(name);
+            if(!matcher.matches()) {
+                // call to matches is required; Matcher is a state machine
+                throw new IllegalArgumentException("enum constant's name must match " + namePattern.pattern());
+            } 
+            
+            this.left = parseGroup(matcher, 1);
+            this.middle = parseGroup(matcher, 2);
+            this.right = parseGroup(matcher, 3);
+            this.collections = parseGroup(matcher, 4);
+        }
 
-        private ColumnSpans(int left, int middle, int right) {
-            this.left = left;
-            this.middle = middle;
-            this.right = right;
+        private static int parseGroup(Matcher matcher, final int group) {
+            return Integer.parseInt(matcher.group(group));
         }
 
         public int getLeft() {
@@ -77,16 +137,19 @@ public @interface MemberGroupLayout {
         public int getRight() {
             return right;
         }
+        public int getCollections() {
+            return collections;
+        }
         
     }
 
     /**
-     * Specify the spans of each of the <i>left</i>_<i>middle</i>_<i>right</i> columns.
+     * Specify the spans of each of the columns.
      * 
      * <p>
      * The sum of the spans is always 12.
      */
-    ColumnSpans columnSpans() default ColumnSpans._4_0_8;
+    ColumnSpans columnSpans() default ColumnSpans._4_0_0_8;
 
     /**
      * Order of groups of properties as they appear in the left-most column of a webpage,
@@ -108,9 +171,19 @@ public @interface MemberGroupLayout {
      * 
      * <p>
      * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size
-     * (eg {@link ColumnSpans#_2_0_10}, then the framework will not boot and will instead indicate 
+     * (eg {@link ColumnSpans#_2_0_0_10}, then the framework will not boot and will instead indicate 
      * a meta-model validation exception. 
      */
     String[] middle() default {};
+
+    /**
+     * As {@link #right()}, but for the right column in a page.
+     * 
+     * <p>
+     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size
+     * (eg {@link ColumnSpans#_2_0_0_10}, then the framework will not boot and will instead indicate 
+     * a meta-model validation exception.
+     */
+    String[] right() default {};
 
 }

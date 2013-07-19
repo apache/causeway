@@ -26,6 +26,7 @@ import fixture.todo.ToDoItemsFixture;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 
 /**
@@ -34,11 +35,15 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 @Named("Fixtures")
 public class ToDoItemsFixturesService extends AbstractService {
 
+    @Prototype
     public String install() {
         installFixturesFor(null); // ie current user
         return "Example fixtures installed";
     }
 
+    // //////////////////////////////////////
+
+    @Prototype
     public String installFor(@Named("User") String user) {
         installFixturesFor(user);
         return "Example fixtures installed for " + user;
@@ -49,6 +54,8 @@ public class ToDoItemsFixturesService extends AbstractService {
     public List<String> choices0InstallFor() {
         return Lists.newArrayList("guest", "dick", "bob", "joe");
     }
+
+    // //////////////////////////////////////
 
     private static void installFixturesFor(String user) {
         final FixturesInstallerDelegate installer = new FixturesInstallerDelegate().withOverride();

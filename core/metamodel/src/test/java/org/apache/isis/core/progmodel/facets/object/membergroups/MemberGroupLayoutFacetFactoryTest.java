@@ -29,9 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.membergroups.annotation.MemberGroupLayoutFacetAnnotation;
-import org.apache.isis.core.progmodel.facets.object.membergroups.annotation.MemberGroupLayoutFacetFallback;
-import org.apache.isis.core.progmodel.facets.object.membergroups.annotation.MemberGroupsFacetAnnotation;
 
 public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -53,7 +50,8 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
     @MemberGroupLayout(
             left={"General","Foo", "Bar"}, 
             middle={"Baz", "Boz"}, 
-            columnSpans=ColumnSpans._2_4_6)
+            right={"Flip", "Flop"}, 
+            columnSpans=ColumnSpans._2_4_6_0)
     public static class ClassWithMemberGroupLayoutAnnotation {
         
     }
@@ -61,7 +59,7 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
     @MemberGroupLayout(
             left={"General","Foo", "Bar"}, 
             middle={"Baz", "Boz"}, 
-            columnSpans=ColumnSpans._2_4_6)
+            columnSpans=ColumnSpans._2_4_0_6)
     @MemberGroups({"General","Foo", "Bar"})
     public static class ClassWithMemberGroupLayoutAndMemberGroupsAnnotation {
         
@@ -89,10 +87,12 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
         final MemberGroupLayoutFacetAnnotation memberGroupsFacet = (MemberGroupLayoutFacetAnnotation) facet;
         final List<String> leftNames = memberGroupsFacet.getLeft();
         final List<String> middleNames = memberGroupsFacet.getMiddle();
+        final List<String> rightNames = memberGroupsFacet.getRight();
         final ColumnSpans columnSpans = memberGroupsFacet.getColumnSpans();
         assertEquals(Arrays.asList("General", "Foo", "Bar"), leftNames);
         assertEquals(Arrays.asList("Baz", "Boz"), middleNames);
-        assertEquals(ColumnSpans._2_4_6, columnSpans);
+        assertEquals(Arrays.asList("Flip", "Flop"), rightNames);
+        assertEquals(ColumnSpans._2_4_6_0, columnSpans);
 
         assertNoMethodsRemoved();
     }

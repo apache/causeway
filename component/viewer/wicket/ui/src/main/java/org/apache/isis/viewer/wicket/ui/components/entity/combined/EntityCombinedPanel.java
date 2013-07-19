@@ -37,6 +37,10 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final String ID_ENTITY_PROPERTIES_MIDDLE = "entityPropertiesMiddle";
+    private static final String ID_ENTITY_PROPERTIES_LEFT = "entityPropertiesLeft";
+    private static final String ID_ENTITY_PROPERTIES_RIGHT = "entityPropertiesRight";
 
     public EntityCombinedPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -54,20 +58,37 @@ public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
         final ColumnSpans columnSpans = mglFacet.getColumnSpans();
         
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
-        model.setMemberGroupLayoutHint(MemberGroupLayoutHint.LEFT);
         
-        final Component leftColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, "entityPropertiesLeft", ComponentType.ENTITY_PROPERTIES, model);
+        // left property column
+        model.setMemberGroupLayoutHint(MemberGroupLayoutHint.LEFT);
+        final Component leftColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_LEFT, ComponentType.ENTITY_PROPERTIES, model);
         addClassForSpan(leftColumn, columnSpans.getLeft());
         
-        if(!mglFacet.getMiddle().isEmpty()) {
+        // middle property column
+        if(columnSpans.getMiddle() > 0) {
             model.setMemberGroupLayoutHint(MemberGroupLayoutHint.MIDDLE);
-            final Component middleColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, "entityPropertiesMiddle", ComponentType.ENTITY_PROPERTIES, model);
+            final Component middleColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_MIDDLE, ComponentType.ENTITY_PROPERTIES, model);
             addClassForSpan(middleColumn, columnSpans.getMiddle());
         } else {
-            permanentlyHide("entityPropertiesMiddle");
+            permanentlyHide(ID_ENTITY_PROPERTIES_MIDDLE);
         }
-        final Component rightColumn = addOrReplace(ComponentType.ENTITY_COLLECTIONS, model);
-        addClassForSpan(rightColumn, columnSpans.getRight());
+        
+        // right property column
+        if(columnSpans.getRight() > 0) {
+            model.setMemberGroupLayoutHint(MemberGroupLayoutHint.RIGHT);
+            final Component rightColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_RIGHT, ComponentType.ENTITY_PROPERTIES, model);
+            addClassForSpan(rightColumn, columnSpans.getRight());
+        } else {
+            permanentlyHide(ID_ENTITY_PROPERTIES_RIGHT);
+        }
+
+        // collections column
+        if(columnSpans.getCollections() > 0) {
+            final Component propertiesColumn = addOrReplace(ComponentType.ENTITY_COLLECTIONS, model);
+            addClassForSpan(propertiesColumn, columnSpans.getCollections());
+        } else {
+            permanentlyHide(ComponentType.ENTITY_COLLECTIONS.toString());
+        }
     }
 
     private static void addClassForSpan(final Component component, final int numGridCols) {

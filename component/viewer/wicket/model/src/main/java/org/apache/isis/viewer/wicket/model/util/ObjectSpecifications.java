@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -35,10 +36,8 @@ public final class ObjectSpecifications {
 
     public enum MemberGroupLayoutHint {
         LEFT,
-        MIDDLE;
-        public List<String> getValue(MemberGroupLayoutFacet facet) {
-            return this == LEFT? facet.getLeft(): facet.getMiddle();
-        }
+        MIDDLE,
+        RIGHT;
     }
 
     public static List<String> orderByMemberGroups(ObjectSpecification objSpec, Set<String> groupNamesToOrder, MemberGroupLayoutHint memberGroupLayoutHint) {
@@ -50,16 +49,25 @@ public final class ObjectSpecifications {
             return leftColumnGroupNames;
         }
         
-        if(memberGroupLayoutHint == MemberGroupLayoutHint.LEFT) {
-            // per the requested order, including any groups not mentioned in either list, excluding any groups in the middle column
-            final List<String> groupNamedInRequiredOrder = facet.getLeft();
-            final List<String> order = order(leftColumnGroupNames, groupNamedInRequiredOrder);
-            order.removeAll(facet.getMiddle());
-            return order;
-        } else {
-            // strictly those listed for the middle column.
-            return facet.getMiddle();
+        if(memberGroupLayoutHint == MemberGroupLayoutHint.MIDDLE) {
+            return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
+        if(memberGroupLayoutHint == MemberGroupLayoutHint.RIGHT) {
+            return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
+        }
+        
+        // else left; per the requested order, including any groups not mentioned in either list, 
+        // but excluding any groups in the middle or right columns
+        final List<String> groupNamedInRequiredOrder = facet.getLeft();
+        final List<String> order = order(leftColumnGroupNames, groupNamedInRequiredOrder);
+        
+        if(facet.getColumnSpans().getMiddle() > 0) {
+            order.removeAll(facet.getMiddle());
+        }
+        if(facet.getColumnSpans().getRight() > 0) {
+            order.removeAll(facet.getRight());
+        }
+        return order;
     }
 
     static List<String> order(final List<String> valuesToOrder, final List<String> valuesInRequiredOrder) {
