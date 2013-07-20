@@ -46,10 +46,10 @@ public class PropertyUtil {
 
     public static Properties subset(Properties properties, String... prefix) {
         final String prefices = Joiner.on(".").join(prefix);
-        return subset(properties, prefices+".");
+        return subsetOf(properties, prefices+".");
     }
     
-    private static Properties subset(Properties properties, String prefix) {
+    private static Properties subsetOf(Properties properties, String prefix) {
         final int prefixLength = prefix.length();
     
         final Properties subsetProperties = new Properties();
