@@ -1283,6 +1283,11 @@ ${license.additional-notes}
                 <artifactId>jackson-mapper-asl</artifactId>
                 <version>1.9.11</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.2.1</version>
+            </dependency>
             
 
             <!-- Databases -->

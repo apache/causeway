@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +29,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public final class ObjectAssociations {
 

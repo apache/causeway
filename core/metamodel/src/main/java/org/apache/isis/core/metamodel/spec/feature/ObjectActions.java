@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 
@@ -57,6 +60,26 @@ public final class ObjectActions {
             }
         }
         return actions;
+    }
+
+    public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
+        final String assocName = association.getName();
+        final String assocId = association.getId();
+        return new Filter<ObjectAction>() {
+    
+            @Override
+            public boolean accept(ObjectAction t) {
+                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
+                if(memberOrderFacet == null) {
+                    return false; 
+                }
+                final String memberOrderName = memberOrderFacet.name();
+                if(Strings.isNullOrEmpty(memberOrderName)) {
+                    return false;
+                }
+                return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
+            }
+        };
     }
 
 }

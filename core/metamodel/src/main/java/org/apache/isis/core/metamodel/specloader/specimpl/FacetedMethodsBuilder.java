@@ -29,12 +29,14 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonSyntaxException;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.PropertyUtil;
+import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,6 +48,11 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
+import org.apache.isis.core.metamodel.layoutmetadata.propfile.LayoutMetadataReaderFromPropertyFile;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -169,6 +176,9 @@ public class FacetedMethodsBuilder {
     // introspect class
     // ////////////////////////////////////////////////////////////////////////////
 
+
+    
+    
     public Properties introspectClass() {
         LOG.info("introspecting " + getClassName());
         if (LOG.isDebugEnabled()) {
@@ -177,8 +187,8 @@ public class FacetedMethodsBuilder {
 
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
-        
-        final Properties properties = PropertyUtil.propertiesFor(introspectedClass, ".layout");
+
+        Properties properties = layoutMetadataProperties(introspectedClass);
 
         getFacetProcessor().process(introspectedClass, properties, methodRemover, spec);
 
@@ -201,6 +211,33 @@ public class FacetedMethodsBuilder {
             }
         }
         return properties;
+    }
+
+    /**
+     * In the future expect this to be configurable (eg read implementations from {@link IsisConfiguration}).
+     * 
+     * <p>
+     * Not doing for now, though, because expect the {@link LayoutMetadata} to evolve a bit yet. 
+     */
+    private Properties layoutMetadataProperties(Class<?> domainClass) {
+        List<LayoutMetadataReader> layoutMetadataReaders = 
+                Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson(), new LayoutMetadataReaderFromJson());
+        for (LayoutMetadataReader reader : layoutMetadataReaders) {
+            try {
+                Properties properties = reader.asProperties(domainClass);
+                if(properties != null) {
+                    return properties;
+                }
+            } catch(ReaderException ex) {
+                final String message = reader.toString() +": unable to load layout metadata for " + domainClass.getName() + " (" + ex.getMessage() + ")";
+                if(ex.getCause() instanceof JsonSyntaxException) {
+                    LOG.warn(message);
+                } else {
+                    LOG.debug(message);
+                }
+            }
+        }
+        return null;
     }
 
     // ////////////////////////////////////////////////////////////////////////////

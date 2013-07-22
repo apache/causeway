@@ -48,8 +48,10 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -57,8 +59,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.ObjectAssociations;
-import org.apache.isis.viewer.wicket.model.util.ObjectSpecifications;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
@@ -116,7 +116,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
-        final List<ObjectAssociation> associations = visibleAssociations(adapter, objSpec, Where.OBJECT_FORMS);
+        final List<ObjectAssociation> associations = visibleProperties(adapter, objSpec, Where.OBJECT_FORMS);
 
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         add(memberGroupRv);
@@ -160,12 +160,12 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 		getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 	}
 
-    private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
-        return objSpec.getAssociations(visibleAssociationFilter(adapter, where));
+    private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
+        return objSpec.getAssociations(visiblePropertyFilter(adapter, where));
     }
 
     @SuppressWarnings("unchecked")
-    private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter, Where where) {
+    private Filter<ObjectAssociation> visiblePropertyFilter(final ObjectAdapter adapter, Where where) {
         return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
     }
 

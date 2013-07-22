@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.metamodel.spec;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,6 +32,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 
 @RunWith(Parameterized.class)
 public class ObjectSpecificationsTest {

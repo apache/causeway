@@ -18,15 +18,27 @@
  */
 package org.apache.isis.core.metamodel.services.devutils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -34,7 +46,12 @@ import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.devutils.DeveloperUtilitiesService;
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
@@ -45,13 +62,18 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesService, SpecificationLoaderSpiAware {
+public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesService, SpecificationLoaderSpiAware, AdapterManagerAware {
+
 
     private final MimeType mimeTypeTextCsv;
+    private final MimeType mimeTypeApplicationZip;
+    private final MimeType mimeTypeApplicationJson;
 
     public DeveloperUtilitiesServiceDefault() {
         try {
             mimeTypeTextCsv = new MimeType("text", "csv");
+            mimeTypeApplicationJson = new MimeType("application", "jzon");
+            mimeTypeApplicationZip = new MimeType("application", "zip");
         } catch (MimeTypeParseException e) {
             throw new RuntimeException(e);
         }
@@ -61,33 +83,33 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
 
     @Override
     public Clob downloadMetaModel() {
-        
+
         final Collection<ObjectSpecification> specifications = specificationLoader.allSpecifications();
-        
+
         final List<MetaModelRow> rows = Lists.newArrayList();
         for (ObjectSpecification spec : specifications) {
-            if(exclude(spec)) {
+            if (exclude(spec)) {
                 continue;
             }
             final List<ObjectAssociation> properties = spec.getAssociations(ObjectAssociationFilters.PROPERTIES);
             for (ObjectAssociation property : properties) {
-                final OneToOneAssociation otoa = (OneToOneAssociation)property;
-                if(exclude(otoa)) {
+                final OneToOneAssociation otoa = (OneToOneAssociation) property;
+                if (exclude(otoa)) {
                     continue;
                 }
                 rows.add(new MetaModelRow(spec, otoa));
             }
             final List<ObjectAssociation> associations = spec.getAssociations(ObjectAssociationFilters.COLLECTIONS);
             for (ObjectAssociation collection : associations) {
-                final OneToManyAssociation otma = (OneToManyAssociation)collection;
-                if(exclude(otma)) {
+                final OneToManyAssociation otma = (OneToManyAssociation) collection;
+                if (exclude(otma)) {
                     continue;
                 }
                 rows.add(new MetaModelRow(spec, otma));
             }
             final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
             for (ObjectAction action : actions) {
-                if(exclude(action)) {
+                if (exclude(action)) {
                     continue;
                 }
                 rows.add(new MetaModelRow(spec, action));
@@ -111,11 +133,11 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
     protected boolean exclude(OneToManyAssociation collection) {
         return false;
     }
-    
+
     protected boolean exclude(ObjectAction action) {
         return false;
     }
-    
+
     protected boolean exclude(ObjectSpecification spec) {
         return isBuiltIn(spec) || spec.isAbstract();
     }
@@ -125,25 +147,87 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
         return className.startsWith("java") || className.startsWith("org.joda") || className.startsWith("org.apache.isis");
     }
 
-    
     // //////////////////////////////////////
 
-    
     @Override
-    public Object refresh(Object domainObject) {
+    public Object refreshLayout(Object domainObject) {
         specificationLoader.invalidateCacheFor(domainObject);
         return domainObject;
     }
+
+    // //////////////////////////////////////
     
+    @Override
+    public Clob downloadLayout(Object domainObject) {
+        
+        final ObjectAdapter adapterFor = adapterManager.adapterFor(domainObject);
+        final ObjectSpecification objectSpec = adapterFor.getSpecification();
+        
+        final LayoutMetadataReaderFromJson propertiesReader = new LayoutMetadataReaderFromJson();
+        final String json = propertiesReader.asJson(objectSpec);
+        
+        return new Clob(objectSpec.getShortIdentifier() +".isis.json", mimeTypeApplicationJson, json);
+    }
+
+    // //////////////////////////////////////
+
+    @Override
+    public Blob downloadLayouts() {
+        final LayoutMetadataReaderFromJson propertiesReader = new LayoutMetadataReaderFromJson();
+        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
+        final Collection<ObjectSpecification> domainObjectSpecs = Collections2.filter(allSpecs, new Predicate<ObjectSpecification>(){
+            @Override
+            public boolean apply(ObjectSpecification input) {
+                return  !input.isAbstract() && 
+                        !input.isService() && 
+                        !input.isValue() && 
+                        !input.isParentedOrFreeCollection();
+            }});
+        try {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ZipOutputStream zos = new ZipOutputStream(baos);
+            OutputStreamWriter writer = new OutputStreamWriter(zos);
+            for (ObjectSpecification objectSpec : domainObjectSpecs) {
+                zos.putNextEntry(new ZipEntry(objectSpec.getFullIdentifier()));
+                writer.write(propertiesReader.asJson(objectSpec));
+            }
+            writer.close();
+            return new Blob("layouts.zip", mimeTypeApplicationZip, baos.toByteArray());
+        } catch (IOException e) {
+            throw new ApplicationException("Unable to create zip of layouts", e);
+        }
+    }
+
+
+    // //////////////////////////////////////
+
+    private List<String> sortedSpecNames() {
+        final Collection<ObjectSpecification> allSpecifications = specificationLoader.allSpecifications();
+        final Iterable<String> classNames = Iterables.transform(allSpecifications, new Function<ObjectSpecification, String>() {
+            @Override
+            public String apply(ObjectSpecification input) {
+                return input.getFullIdentifier();
+            }
+        });
+        final List<String> classNamesList = Lists.newArrayList(classNames);
+        Collections.sort(classNamesList);
+        return classNamesList;
+    }
+
     // //////////////////////////////////////
 
     private SpecificationLoaderSpi specificationLoader;
-    
+    private AdapterManager adapterManager;
+
     @Programmatic
     @Override
     public void setSpecificationLoaderSpi(SpecificationLoaderSpi specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
 
+    @Override
+    public void setAdapterManager(AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
+    }
 
 }

@@ -19,16 +19,19 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
+import com.google.common.io.InputSupplier;
+import com.google.common.io.Resources;
+
 /**
- * Adapted from Ibatis Common.
+ * Adapted from Ibatis Common, now with some additional guava stuff.
  */
-public class Resources {
+public class ResourceUtil {
 
     /**
      * Returns the URL, or null if not available.
@@ -43,7 +46,7 @@ public class Resources {
         }
 
         // try this class' classloader
-        classLoader = Resources.class.getClassLoader();
+        classLoader = ResourceUtil.class.getClassLoader();
         url = classLoader.getResource(resource);
         if (url != null) {
             return url;
@@ -71,7 +74,7 @@ public class Resources {
         }
 
         // try this class' classloader
-        classLoader = Resources.class.getClassLoader();
+        classLoader = ResourceUtil.class.getClassLoader();
         is = classLoader.getResourceAsStream(resource);
         if (is != null) {
             return is;
@@ -87,36 +90,22 @@ public class Resources {
         }
     }
 
-    public static File getResourceAsFile(final String resource) {
-        final URL url = getResourceURL(resource);
-        if (url == null) {
+
+    public static Properties propertiesFor(final Class<?> cls, final String suffix) {
+        try {
+            final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
+            final InputSupplier<InputStream> inputSupplier = com.google.common.io.Resources.newInputStreamSupplier(url);
+            final Properties properties = new Properties();
+            properties.load(inputSupplier.getInput());
+            return properties;
+        } catch (Exception e) {
             return null;
         }
-
-        return new File(url.getFile());
     }
 
-    public static Properties getResourceAsProperties(final String resource) {
-
-        final InputStream is = getResourceAsStream(resource);
-        if (is == null) {
-            return null;
-        }
-
-        final Properties props = new Properties();
-        try {
-            props.load(is);
-        } catch (final IOException ex) {
-            throw new RuntimeException(ex);
-        } finally {
-            try {
-                is.close();
-            } catch (final IOException ignore) {
-                // ignore
-            }
-        }
-
-        return props;
+    public static String contentOf(final Class<?> cls, final String suffix) throws IOException {
+        final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
+        return Resources.toString(url, Charset.defaultCharset());
     }
 
 }

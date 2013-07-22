@@ -28,7 +28,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -98,7 +98,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
         if (enhancer == null) {
             enhancer = new Enhancer();
             enhancer.setSuperclass(cls);
-            enhancer.setInterfaces(ArrayUtils.combine(cls.getInterfaces(), new Class<?>[] { CglibEnhanced.class }));
+            enhancer.setInterfaces(ArrayUtil.combine(cls.getInterfaces(), new Class<?>[] { CglibEnhanced.class }));
             enhancer.setCallback(callback);
             enhancerByClass.put(cls, enhancer);
         }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.metamodel.spec;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,6 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public final class ObjectSpecifications {

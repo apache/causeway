@@ -25,7 +25,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.core.webserver.WebServer.StartupMode;
@@ -37,7 +37,7 @@ public final class OptionHandlerStartupMode implements OptionHandler {
     static final String STARTUP_MODE_BASE_OPT = "a";
 
     public static String[] appendArg(final String[] args, final StartupMode startupMode) {
-        return ArrayUtils.append(args, "--" + STARTUP_MODE_LONG_OPT, "" + startupMode.name());
+        return ArrayUtil.append(args, "--" + STARTUP_MODE_LONG_OPT, "" + startupMode.name());
     }
 
     private StartupMode startupMode;

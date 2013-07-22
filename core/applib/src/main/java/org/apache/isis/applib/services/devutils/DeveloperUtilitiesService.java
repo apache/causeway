@@ -22,19 +22,38 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 @Named("Developer Utilities")
 public interface DeveloperUtilitiesService {
 
-    @Prototype
+    @MemberOrder(sequence="1")
     @ActionSemantics(Of.SAFE)
+    @Prototype
     public Clob downloadMetaModel();
+
+    /**
+     * Downloads a zip of the layout of all domain classes.
+     */
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="3")
+    @Prototype
+    public Blob downloadLayouts();
+
+    /**
+     * Download the JSON layout of the domain object's type.
+     */
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="2")
+    @Prototype
+    public Clob downloadLayout(Object domainObject);
     
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="99")
     @Prototype
-    public Object refresh(Object domainObject);
+    public Object refreshLayout(Object domainObject);
 
 }

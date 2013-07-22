@@ -27,7 +27,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
-import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.IsisRunner;
@@ -66,7 +66,7 @@ public class WebServer {
     private Server jettyServer;
 
     public static void main(final String[] args) {
-        new WebServer().run(ArrayUtils.append(args, "--" + Constants.NO_SPLASH_LONG_OPT));
+        new WebServer().run(ArrayUtil.append(args, "--" + Constants.NO_SPLASH_LONG_OPT));
     }
 
     /**

@@ -22,6 +22,9 @@ package org.apache.isis.core.commons.lang;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
@@ -36,7 +39,7 @@ public final class ArrayUtil {
             return (Object[]) option;
         }
         if (arrayType == char.class) {
-            return ArrayUtils.convertCharToCharacterArray(option);
+            return ArrayUtil.convertCharToCharacterArray(option);
         } else {
             return convertPrimitiveToObjectArray(arrayType, option);
         }
@@ -66,6 +69,34 @@ public final class ArrayUtil {
             throw new IsisException(e);
         }
         return convertedArray;
+    }
+
+    public static Object[] convertCharToCharacterArray(final Object originalArray) {
+        final char[] original = (char[]) originalArray;
+        final int len = original.length;
+        final Character[] converted = new Character[len];
+        for (int i = 0; i < converted.length; i++) {
+            converted[i] = Character.valueOf(original[i]);
+        }
+        return converted;
+    }
+
+    public static <T> T[] combine(final T[]... arrays) {
+        final List<T> combinedList = new ArrayList<T>();
+        for (final T[] array : arrays) {
+            for (final T t : array) {
+                combinedList.add(t);
+            }
+        }
+        return combinedList.toArray(arrays[0]); // using 1st element of arrays
+                                                // to specify the type
+    }
+
+    public static String[] append(final String[] args, final String... moreArgs) {
+        final ArrayList<String> argList = new ArrayList<String>();
+        argList.addAll(Arrays.asList(args));
+        argList.addAll(Arrays.asList(moreArgs));
+        return argList.toArray(new String[] {});
     }
 
 }

@@ -521,6 +521,9 @@ tr.section td {
 	padding-top: 0.75em;
 }
 
+table.contents td {
+	border-left: 1px solid #DDD;
+}
 
 /*************** Styling Entity Forms and Parameters ********************/
 

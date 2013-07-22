@@ -14,29 +14,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package app.services;
+package org.apache.isis.core.metamodel.layoutmetadata;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import java.util.Map;
 
-/**
- * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
- */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
-
-    @MemberOrder(name="Fixtures", sequence="90")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
-    }
-    
-    @MemberOrder(name="Fixtures", sequence="92")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
-    }
+public class MemberGroupRepr {
+    public Map<String,MemberRepr> members;
 }
-

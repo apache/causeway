@@ -16,33 +16,13 @@
  */
 package org.apache.isis.core.commons.lang;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.io.InputSupplier;
-import com.google.common.io.Resources;
 
 public class PropertyUtil {
     
     private PropertyUtil(){}
-
-    public static Properties propertiesFor(final Class<?> cls, final String suffix) {
-        try {
-            final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
-            final InputSupplier<InputStream> inputSupplier = Resources.newInputStreamSupplier(url);
-            final Properties properties = new Properties();
-            properties.load(inputSupplier.getInput());
-            return properties;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
     public static Properties subset(Properties properties, String... prefix) {
         final String prefices = Joiner.on(".").join(prefix);

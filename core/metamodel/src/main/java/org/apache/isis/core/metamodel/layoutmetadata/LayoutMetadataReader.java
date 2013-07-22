@@ -14,29 +14,34 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package app.services;
+package org.apache.isis.core.metamodel.layoutmetadata;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import java.util.Properties;
 
-/**
- * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
- */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+import org.apache.isis.core.commons.exceptions.IsisException;
 
-    @MemberOrder(name="Fixtures", sequence="90")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
+public interface LayoutMetadataReader {
+
+    public static class ReaderException extends IsisException {
+
+        private static final long serialVersionUID = 1L;
+
+        public ReaderException() {
+            super();
+        }
+
+        public ReaderException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public ReaderException(String message) {
+            super(message);
+        }
+
+        public ReaderException(Throwable cause) {
+            super(cause);
+        }
     }
-    
-    @MemberOrder(name="Fixtures", sequence="92")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
-    }
+
+    public Properties asProperties(Class<?> domainClass) throws ReaderException;
 }
-

@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.lang.IoUtils;
-import org.apache.isis.core.commons.lang.Resources;
+import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.StringUtils;
 
 public class ResourceServlet extends HttpServlet {
@@ -69,7 +69,7 @@ public class ResourceServlet extends HttpServlet {
         }
 
         // otherwise, try to load from classpath
-        final InputStream is = Resources.getResourceAsStream(servletPath);
+        final InputStream is = ResourceUtil.getResourceAsStream(servletPath);
         if (is != null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("request: " + servletPath + " loaded from classpath");
