@@ -60,6 +60,10 @@ public class DataNucleusSimplePersistAlgorithm extends PersistAlgorithmAbstract 
             LOG.info("persist " + adapter);
         }
         CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
+        // the callback might have caused the adapter to become persistent.
+        if (alreadyPersistedOrNotPersistable(adapter)) {
+            return;
+        }
         toPersistObjectSet.addCreateObjectCommand(adapter);
     }
 
