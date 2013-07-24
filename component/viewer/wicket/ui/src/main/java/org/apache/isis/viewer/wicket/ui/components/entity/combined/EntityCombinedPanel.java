@@ -19,12 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.combined;
 
-import org.apache.wicket.Component;
-
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -37,11 +32,10 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
-    
-    private static final String ID_ENTITY_PROPERTIES_MIDDLE = "entityPropertiesMiddle";
-    private static final String ID_ENTITY_PROPERTIES_LEFT = "entityPropertiesLeft";
-    private static final String ID_ENTITY_PROPERTIES_RIGHT = "entityPropertiesRight";
 
+    private static final String ID_ENTITY_PROPERTIES = "entityProperties";
+
+    
     public EntityCombinedPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
@@ -54,44 +48,10 @@ public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
             this.add(new CssClassAppender(facet.value()));
         }
 
-        final MemberGroupLayoutFacet mglFacet = model.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
-        final ColumnSpans columnSpans = mglFacet.getColumnSpans();
-        
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
         
-        // left property column
-        model.setMemberGroupLayoutHint(MemberGroupLayoutHint.LEFT);
-        final Component leftColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_LEFT, ComponentType.ENTITY_PROPERTIES, model);
-        addClassForSpan(leftColumn, columnSpans.getLeft());
-        
-        // middle property column
-        if(columnSpans.getMiddle() > 0) {
-            model.setMemberGroupLayoutHint(MemberGroupLayoutHint.MIDDLE);
-            final Component middleColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_MIDDLE, ComponentType.ENTITY_PROPERTIES, model);
-            addClassForSpan(middleColumn, columnSpans.getMiddle());
-        } else {
-            permanentlyHide(ID_ENTITY_PROPERTIES_MIDDLE);
-        }
-        
-        // right property column
-        if(columnSpans.getRight() > 0) {
-            model.setMemberGroupLayoutHint(MemberGroupLayoutHint.RIGHT);
-            final Component rightColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_RIGHT, ComponentType.ENTITY_PROPERTIES, model);
-            addClassForSpan(rightColumn, columnSpans.getRight());
-        } else {
-            permanentlyHide(ID_ENTITY_PROPERTIES_RIGHT);
-        }
-
-        // collections column
-        if(columnSpans.getCollections() > 0) {
-            final Component propertiesColumn = addOrReplace(ComponentType.ENTITY_COLLECTIONS, model);
-            addClassForSpan(propertiesColumn, columnSpans.getCollections());
-        } else {
-            permanentlyHide(ComponentType.ENTITY_COLLECTIONS.toString());
-        }
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES, ComponentType.ENTITY_PROPERTIES, model);
     }
 
-    private static void addClassForSpan(final Component component, final int numGridCols) {
-        component.add(new CssClassAppender("span"+numGridCols));
-    }
+
 }

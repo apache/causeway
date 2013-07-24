@@ -39,7 +39,7 @@
         }
     },
     {
-        span: 4,
+        span: 3,
         memberGroups: {
             Detail: {
                 members: {
@@ -59,7 +59,7 @@
         span: 0
     },
     {
-        span: 5,
+        span: 6,
         collections: {
             dependencies: {
                 actions: {

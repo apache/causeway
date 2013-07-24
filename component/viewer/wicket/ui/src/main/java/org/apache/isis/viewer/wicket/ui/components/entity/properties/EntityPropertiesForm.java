@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -37,6 +38,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -46,9 +48,11 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
+import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
@@ -65,6 +69,7 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 
 class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
@@ -74,6 +79,10 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private static final String ID_MEMBER_GROUP = "memberGroup";
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
+    private static final String ID_LEFT_COLUMN = "leftColumn";
+    private static final String ID_MIDDLE_COLUMN = "middleColumn";
+    private static final String ID_RIGHT_COLUMN = "rightColumn";
+    
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
     private static final String ID_EDIT_BUTTON = "edit";
@@ -102,16 +111,54 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void buildGui() {
-        boolean added = addPropertiesAndOrCollections();
-        addButtons();
-        addFeedbackGui();
+
+        final EntityModel entityModel = (EntityModel) getModel();
+        final ColumnSpans columnSpans = entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class).getColumnSpans();
+
+        // left column
+        MarkupContainer leftColumn = new WebMarkupContainer(ID_LEFT_COLUMN);
+        add(leftColumn);
+        
+        boolean added = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
+        addButtons(leftColumn);
+        addFeedbackGui(leftColumn);
         if(!added) {
             // a bit hacky...
             Components.permanentlyHide(this, editButton.getId(), okButton.getId(), cancelButton.getId(), ID_FEEDBACK);
         }
+        
+        // middle column
+        if(columnSpans.getMiddle() > 0) {
+            MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
+            add(middleColumn);
+            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans);
+        } else {
+            Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
+        }
+
+        // right column
+        if(columnSpans.getRight() > 0) {
+            MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
+            add(rightColumn);
+            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans);
+        } else {
+            Components.permanentlyHide(this, ID_RIGHT_COLUMN);
+        }
+        
+        // TODO: figure out overflow logic....
+        // collections column
+        if(columnSpans.getCollections() > 0) {
+            final Component collectionsColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_COLLECTIONS, entityModel);
+            addClassForSpan(collectionsColumn, columnSpans.getCollections());
+        } else {
+            Components.permanentlyHide(this, ComponentType.ENTITY_COLLECTIONS.toString());
+        }
+
     }
 
-    private boolean addPropertiesAndOrCollections() {
+    private boolean addPropertiesInColumn(MarkupContainer markupContainer, MemberGroupLayoutHint hint, ColumnSpans columnSpans) {
+        final int span = hint.from(columnSpans);
+        
         final EntityModel entityModel = (EntityModel) getModel();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
@@ -119,10 +166,11 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         final List<ObjectAssociation> associations = visibleProperties(adapter, objSpec, Where.OBJECT_FORMS);
 
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
-        add(memberGroupRv);
+        markupContainer.add(memberGroupRv);
 
         Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociations.groupByMemberOrderName(associations);
-        final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), entityModel.getMemberGroupLayoutHint());
+        
+        final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
         
         for(String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
@@ -147,6 +195,8 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 addPropertyToForm(entityModel, association, propertyRvContainer);
             }
         }
+        
+        addClassForSpan(markupContainer, span);
         return !groupNames.isEmpty();
     }
 
@@ -169,7 +219,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
     }
 
-    private void addButtons() {
+    private void addButtons(MarkupContainer markupContainer) {
         
         editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
             private static final long serialVersionUID = 1L;
@@ -200,7 +250,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             }
             
         };
-        add(editButton);
+        markupContainer.add(editButton);
 
         
         okButton = new ButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
@@ -298,7 +348,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             }
 
         };
-        add(okButton);
+        markupContainer.add(okButton);
 
         cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
             private static final long serialVersionUID = 1L;
@@ -349,7 +399,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             }
         };
 
-        add(cancelButton);
+        markupContainer.add(cancelButton);
 
         okButton.setOutputMarkupPlaceholderTag(true);
         editButton.setOutputMarkupPlaceholderTag(true);
@@ -437,10 +487,10 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         requestRepaintPanel(target);
     }
 
-    private void addFeedbackGui() {
+    private void addFeedbackGui(MarkupContainer markupContainer) {
         feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
         feedback.setOutputMarkupPlaceholderTag(true);
-        addOrReplace(feedback);
+        markupContainer.addOrReplace(feedback);
         feedback.setEscapeModelStrings(false);
 
         final ObjectAdapter adapter = getEntityModel().getObject();
@@ -450,6 +500,10 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     
+    private static void addClassForSpan(final Component component, final int numGridCols) {
+        component.add(new CssClassAppender("span"+numGridCols));
+    }
+
     ///////////////////////////////////////////////////////
     // Dependencies (from context)
     ///////////////////////////////////////////////////////

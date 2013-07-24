@@ -21,32 +21,57 @@
 	<body>
 		<wicket:panel>
 			<div class="entityPropertiesPanel entityPropertiesComponentType">
-			    <form wicket:id="entityProperties" class="inputForm">
-			    	<div class="inputFormTable properties">
-		    	    	<fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-		    	    		<legend wicket:id="memberGroupName">[group name]</legend>
-					    	<div wicket:id="properties">
-				              <div wicket:id="property" class="property">[property]</div>
-					    	</div>
-				    	</fieldset>
-			    	</div>
-				    <div class="feedbackPanel">
-				        <span wicket:id="feedback"/>
-				    </div>
-				    <div class="buttons">
-				    	<input type="submit" class="edit" wicket:id="edit"/>
-				    	<input type="submit" class="ok" wicket:id="ok"/>
-				    	<input type="submit" class="cancel" wicket:id="cancel"/>
-
-                        <div id="veil" style="position:fixed;"> 
-                            <div class="imgHolder">
-                                <wicket:link>
-                                    <img src="/images/spinning-icon.gif"/>
-                                </wicket:link>
+                <form wicket:id="entityProperties" class="inputForm">
+                    <div class="row-fluid">
+                        <div wicket:id="leftColumn">
+            		    	<div class="inputFormTable properties">
+            	    	    	<fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+            	    	    		<legend wicket:id="memberGroupName">[group name]</legend>
+            				    	<div wicket:id="properties">
+            			              <div wicket:id="property" class="property">[property]</div>
+            				    	</div>
+            			    	</fieldset>
+            		    	</div>
+            			    <div class="feedbackPanel">
+            			        <span wicket:id="feedback"/>
+            			    </div>
+            			    <div class="buttons">
+            			    	<input type="submit" class="edit" wicket:id="edit"/>
+            			    	<input type="submit" class="ok" wicket:id="ok"/>
+            			    	<input type="submit" class="cancel" wicket:id="cancel"/>
+            
+                                <div id="veil" style="position:fixed;"> 
+                                    <div class="imgHolder">
+                                        <wicket:link>
+                                            <img src="/images/spinning-icon.gif"/>
+                                        </wicket:link>
+                                    </div>
+                                </div>
+            			    </div>
+                        </div>
+                        <div wicket:id="middleColumn">
+                            <div class="inputFormTable properties">
+                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+                                    <legend wicket:id="memberGroupName">[group name]</legend>
+                                    <div wicket:id="properties">
+                                      <div wicket:id="property" class="property">[property]</div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
-				    </div>
-				</form>
+                        <div wicket:id="rightColumn">
+                            <div class="inputFormTable properties">
+                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+                                    <legend wicket:id="memberGroupName">[group name]</legend>
+                                    <div wicket:id="properties">
+                                      <div wicket:id="property" class="property">[property]</div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div wicket:id="entityCollections"/>
+                    </div>
+                </form>
 			</div>
 		</wicket:panel>
 	</body>
