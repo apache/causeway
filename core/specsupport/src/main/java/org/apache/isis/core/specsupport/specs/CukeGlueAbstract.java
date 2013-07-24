@@ -247,7 +247,6 @@ public abstract class CukeGlueAbstract {
             // continue
         }
         
-        Assert.fail("Unable to locate property '" + propertyName + "' in object " + obj);
         return null;
     }
 
