@@ -52,19 +52,19 @@ public class MemberGroupLayoutFacetPropertiesTest_asColumnSpans {
 
     @Test
     public void happyCase() throws Exception {
-        properties.put("columnSpans", "_2_3_0_7");
-        assertThat(MemberGroupLayoutFacetProperties.asColumnSpans(properties), is(ColumnSpans._2_3_0_7));
+        properties.put("columnSpans", "2,3,0,7");
+        assertThat(MemberGroupLayoutFacetProperties.asColumnSpans(properties), is(ColumnSpans.asSpans(2,3,0,7)));
     }
     
     @Test
     public void trimmed() throws Exception {
-        properties.put("columnSpans", " _2_3_0_7 ");
-        assertThat(MemberGroupLayoutFacetProperties.asColumnSpans(properties), is(ColumnSpans._2_3_0_7));
+        properties.put("columnSpans", " 2,3,0,7 ");
+        assertThat(MemberGroupLayoutFacetProperties.asColumnSpans(properties), is(ColumnSpans.asSpans(2,3,0,7)));
     }
     
     @Test
     public void invalid() throws Exception {
-        properties.put("columnSpans", "_x_x_x_x");
+        properties.put("columnSpans", "x,x,x,x");
         assertThat(MemberGroupLayoutFacetProperties.asColumnSpans(properties), is(nullValue()));
     }
 

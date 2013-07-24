@@ -51,7 +51,7 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
             left={"General","Foo", "Bar"}, 
             middle={"Baz", "Boz"}, 
             right={"Flip", "Flop"}, 
-            columnSpans=ColumnSpans._2_4_6_0)
+            columnSpans={2,4,6,0})
     public static class ClassWithMemberGroupLayoutAnnotation {
         
     }
@@ -59,7 +59,7 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
     @MemberGroupLayout(
             left={"General","Foo", "Bar"}, 
             middle={"Baz", "Boz"}, 
-            columnSpans=ColumnSpans._2_4_0_6)
+            columnSpans={2,4,0,6})
     @MemberGroups({"General","Foo", "Bar"})
     public static class ClassWithMemberGroupLayoutAndMemberGroupsAnnotation {
         
@@ -92,7 +92,7 @@ public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest 
         assertEquals(Arrays.asList("General", "Foo", "Bar"), leftNames);
         assertEquals(Arrays.asList("Baz", "Boz"), middleNames);
         assertEquals(Arrays.asList("Flip", "Flop"), rightNames);
-        assertEquals(ColumnSpans._2_4_6_0, columnSpans);
+        assertEquals(ColumnSpans.asSpans(2,4,6,0), columnSpans);
 
         assertNoMethodsRemoved();
     }

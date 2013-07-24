@@ -43,7 +43,7 @@ public class LayoutMetadataReaderFromJsonTest_read {
         final Properties properties = reader.asProperties(ExampleDomainObject.class);
         assertThat(properties, is(not(nullValue())));
         
-        final Properties expectedProperties = ResourceUtil.propertiesFor(ExampleDomainObject.class, ".isis.properties");
+        final Properties expectedProperties = ResourceUtil.propertiesFor(ExampleDomainObject.class, ".layout.properties");
         for (Object expectedKey : expectedProperties.keySet()) {
             final String key = (String) expectedKey;
             final String expectedValue = expectedProperties.getProperty(key);

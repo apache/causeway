@@ -24,14 +24,18 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+
 public class MemberGroupLayoutColumnSpansTest {
 
     @Test
-    public void regex() {
-        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getLeft(), is(2));
-        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getMiddle(), is(3));
-        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getRight(), is(0));
-        assertThat(MemberGroupLayout.ColumnSpans._2_3_0_7.getCollections(), is(7));
+    public void asSpans() {
+        final ColumnSpans spans = MemberGroupLayout.ColumnSpans.asSpans(2,3,0,7);
+        
+        assertThat(spans.getLeft(), is(2));
+        assertThat(spans.getMiddle(), is(3));
+        assertThat(spans.getRight(), is(0));
+        assertThat(spans.getCollections(), is(7));
     }
 
 }

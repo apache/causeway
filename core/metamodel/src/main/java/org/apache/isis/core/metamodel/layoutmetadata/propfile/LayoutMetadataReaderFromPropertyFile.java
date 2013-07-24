@@ -25,7 +25,7 @@ public class LayoutMetadataReaderFromPropertyFile implements LayoutMetadataReade
 
     @Override
     public Properties asProperties(Class<?> domainClass) throws ReaderException {
-        return ResourceUtil.propertiesFor(domainClass, ".isis.properties");
+        return ResourceUtil.propertiesFor(domainClass, ".layout.properties");
     }
 
     @Override

@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.devutils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -166,7 +167,7 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
         final LayoutMetadataReaderFromJson propertiesReader = new LayoutMetadataReaderFromJson();
         final String json = propertiesReader.asJson(objectSpec);
         
-        return new Clob(objectSpec.getShortIdentifier() +".isis.json", mimeTypeApplicationJson, json);
+        return new Clob(objectSpec.getShortIdentifier() +".layout.json", mimeTypeApplicationJson, json);
     }
 
     // //////////////////////////////////////
@@ -188,8 +189,10 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
             ZipOutputStream zos = new ZipOutputStream(baos);
             OutputStreamWriter writer = new OutputStreamWriter(zos);
             for (ObjectSpecification objectSpec : domainObjectSpecs) {
-                zos.putNextEntry(new ZipEntry(objectSpec.getFullIdentifier()));
+                zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
                 writer.write(propertiesReader.asJson(objectSpec));
+                writer.flush();
+                zos.closeEntry();
             }
             writer.close();
             return new Blob("layouts.zip", mimeTypeApplicationZip, baos.toByteArray());
@@ -198,21 +201,11 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
         }
     }
 
-
-    // //////////////////////////////////////
-
-    private List<String> sortedSpecNames() {
-        final Collection<ObjectSpecification> allSpecifications = specificationLoader.allSpecifications();
-        final Iterable<String> classNames = Iterables.transform(allSpecifications, new Function<ObjectSpecification, String>() {
-            @Override
-            public String apply(ObjectSpecification input) {
-                return input.getFullIdentifier();
-            }
-        });
-        final List<String> classNamesList = Lists.newArrayList(classNames);
-        Collections.sort(classNamesList);
-        return classNamesList;
+    private static String zipEntryNameFor(ObjectSpecification objectSpec) {
+        final String fqn = objectSpec.getFullIdentifier();
+        return fqn.replace(".", File.separator)+".layout.json";
     }
+
 
     // //////////////////////////////////////
 

@@ -54,7 +54,7 @@ public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract imple
             final List<String> left, final List<String> middle, final List<String> right, 
             FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.columns = columns != null? columns: ColumnSpans._4_0_0_8;
+        this.columns = columns != null? columns: ColumnSpans.asSpans(4,0,0,8);
         this.left = left;
         this.middle = middle;
         this.right = right;

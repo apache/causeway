@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -58,7 +60,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         try {
             metadata = readMetadata(domainClass);
         } catch (Exception e) {
-            throw new ReaderException("Failed to locate/parse " + domainClass.getName() + ".isis.json file (" + e.getMessage() + ")", e);
+            throw new ReaderException("Failed to locate/parse " + domainClass.getName() + ".layout.json file (" + e.getMessage() + ")", e);
         }
         if(metadata.getColumns() == null || metadata.getColumns().size() != 4) {
             throw new ReaderException("JSON metadata must have precisely 4 columns (prop/prop/prop/coll)");
@@ -80,18 +82,11 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
     private static void setMemberGroupLayoutColumnSpans(LayoutMetadata metadata, final Properties props) {
         final List<ColumnRepr> columns = metadata.getColumns();
-        final StringBuilder buf = new StringBuilder();
-        for (final ColumnRepr columnRepr : columns) {
-            buf.append("_");
-            buf.append(columnRepr.span);
-        }
-        final String columnSpansStr = buf.toString();
-        try {
-            ColumnSpans.valueOf(columnSpansStr);
-        } catch(IllegalArgumentException ex) {
-            throw new ReaderException(
-                "Invalid values for column spans '" + columnSpansStr + "'; when concatenated must be value of the ColumnSpans enum", ex);
-        }
+        final String columnSpansStr = Joiner.on(",").join(Iterables.transform(columns, new Function<ColumnRepr,Integer>(){
+            @Override
+            public Integer apply(ColumnRepr input) {
+                return input.span;
+            }}));
         props.setProperty("memberGroupLayout.columnSpans", columnSpansStr);
     }
 
@@ -173,7 +168,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     // //////////////////////////////////////
 
     private LayoutMetadata readMetadata(Class<?> domainClass) throws IOException {
-        final String content = ResourceUtil.contentOf(domainClass, ".isis.json");
+        final String content = ResourceUtil.contentOf(domainClass, ".layout.json");
         return readMetadata(content);
     }
 
@@ -232,6 +227,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             columnRepr.memberGroups.put(groupName, memberGroupRepr);
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
             memberGroupRepr.members = Maps.newLinkedHashMap();
+            if(associationsInGroup == null) {
+                continue;
+            }
             for (ObjectAssociation assoc : associationsInGroup) {
                 final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc);
                 memberGroupRepr.members.put(assoc.getId(), memberRepr);

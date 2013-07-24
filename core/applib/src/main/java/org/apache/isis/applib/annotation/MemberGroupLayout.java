@@ -24,8 +24,18 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 
 /**
  * A successor to {@link MemberGroups}, specifying the (groups of) members in a page,
@@ -51,81 +61,46 @@ public @interface MemberGroupLayout {
 
     /**
      * The relative widths of the columns of members.
-     * 
-     * <p>
-     * Each value of this enum is in the form <tt>_X_Y_Z_W</tt>.  The 
-     * <tt>X</tt>, <tt>Y</tt> and <tt>Z</tt>
-     * indicate the relative widths of (up to) three property columns,
-     * while <tt>W</tt> indicates the relative width of the collection column.
      */
-    public enum ColumnSpans {
-        // two column, with collections
-        _2_0_0_10,
-        _3_0_0_9,
-        _4_0_0_8,
-        _5_0_0_7,
-        _6_0_0_6,
-        
-        // three column, with collections
-        _2_2_0_8,
-        _2_3_0_7,
-        _2_4_0_6,
-        _2_5_0_5,
-        _2_6_0_4,
-        
-        _3_3_0_6,
-        _3_4_0_5,
-        _3_5_0_4,
-        _3_6_0_3,
-        
-        _4_4_0_4,
-        
-        // two column, suppress collections
-        _2_0_10_0,
-        _3_0_9_0,
-        _4_0_8_0,
-        _5_0_7_0,
-        _6_0_6_0,
-        
-        // three column, suppress collections
-        _2_2_8_0,
-        _2_3_7_0,
-        _2_4_6_0,
-        _2_5_5_0,
-        _2_6_4_0,
-        
-        _3_3_6_0,
-        _3_4_5_0,
-        _3_5_4_0,
-        _3_6_3_0,
-        
-        _4_4_4_0,
-        _4_5_3_0,
-        _4_6_2_0,
-        ;
+    public static class ColumnSpans {
         
         private final int left;
         private final int middle;
         private final int right;
         private final int collections;
-                
-        private ColumnSpans() {
-            final Pattern namePattern = Pattern.compile("^_(\\d+)_(\\d+)_(\\d+)_(\\d+)$");
-            final String name = name();
-            Matcher matcher = namePattern.matcher(name);
-            if(!matcher.matches()) {
-                // call to matches is required; Matcher is a state machine
-                throw new IllegalArgumentException("enum constant's name must match " + namePattern.pattern());
-            } 
-            
-            this.left = parseGroup(matcher, 1);
-            this.middle = parseGroup(matcher, 2);
-            this.right = parseGroup(matcher, 3);
-            this.collections = parseGroup(matcher, 4);
+        
+        public static ColumnSpans valueOf(String str) {
+            final Iterable<String> split = Splitter.on(",").split(str);
+            try {
+                final List<Integer> list = Lists.newArrayList(Iterables.transform(split, new Function<String,Integer>() {
+                    @Override
+                    public Integer apply(String input) {
+                        return Integer.parseInt(input);
+                    }
+                }));
+                return asSpans(list);
+            } catch(RuntimeException ex) {
+                return null;
+            }
         }
-
-        private static int parseGroup(Matcher matcher, final int group) {
-            return Integer.parseInt(matcher.group(group));
+        public static ColumnSpans asSpans(int... columnSpans) {
+            List<Integer> list = Lists.<Integer>newArrayList();
+            for (int i : columnSpans) {
+                list.add(i);
+            }
+            return asSpans(list);
+        }
+        private static ColumnSpans asSpans(List<Integer> list) {
+            return new ColumnSpans(list);
+        }
+        private ColumnSpans(List<Integer> list) {
+            this.left = getElse(list,0,4);
+            this.middle = getElse(list,1,0);
+            this.right = getElse(list,2,0);
+            this.collections = getElse(list,3,8);
+        }
+        private static int getElse(List<Integer> list, int i, int dflt) {
+            return list != null && list.size() > i? list.get(i): dflt;
         }
 
         public int getLeft() {
@@ -140,7 +115,38 @@ public @interface MemberGroupLayout {
         public int getCollections() {
             return collections;
         }
-        
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + collections;
+            result = prime * result + left;
+            result = prime * result + middle;
+            result = prime * result + right;
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ColumnSpans other = (ColumnSpans) obj;
+            if (collections != other.collections)
+                return false;
+            if (left != other.left)
+                return false;
+            if (middle != other.middle)
+                return false;
+            if (right != other.right)
+                return false;
+            return true;
+        }
+        public String name() {
+            return String.format("[%d,%d,%d,%d]", left, middle, right, collections);
+        }
     }
 
     /**
@@ -149,7 +155,7 @@ public @interface MemberGroupLayout {
      * <p>
      * The sum of the spans is always 12.
      */
-    ColumnSpans columnSpans() default ColumnSpans._4_0_0_8;
+    int[] columnSpans() default {4,0,0,8};
 
     /**
      * Order of groups of properties as they appear in the left-most column of a webpage,

@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.object.membergroups;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
+import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class MemberGroupLayoutFacetAnnotation extends MemberGroupLayoutFacetAbstract {
@@ -27,7 +28,7 @@ public class MemberGroupLayoutFacetAnnotation extends MemberGroupLayoutFacetAbst
     public MemberGroupLayoutFacetAnnotation(
             final MemberGroupLayout memberGroupLayout,
             FacetHolder holder) {
-        super(memberGroupLayout.columnSpans(), 
+        super(ColumnSpans.asSpans(memberGroupLayout.columnSpans()), 
                 asListWithDefaultGroup(memberGroupLayout.left()), 
                 asList(memberGroupLayout.middle()), 
                 asList(memberGroupLayout.right()), 

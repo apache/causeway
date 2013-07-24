@@ -64,7 +64,7 @@
             dependencies: {
                 actions: {
                     add:{},
-                    delete: {}
+                    remove: {}
                 }
             },
             similarItems: {}
