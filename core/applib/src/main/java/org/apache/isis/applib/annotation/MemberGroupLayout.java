@@ -147,6 +147,9 @@ public @interface MemberGroupLayout {
         public String name() {
             return String.format("[%d,%d,%d,%d]", left, middle, right, collections);
         }
+        public boolean exceedsRow() {
+            return getLeft() + getMiddle() + getRight() + getCollections() > 12;
+        }
     }
 
     /**

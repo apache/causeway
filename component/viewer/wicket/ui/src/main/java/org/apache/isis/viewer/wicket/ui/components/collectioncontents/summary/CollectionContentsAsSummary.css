@@ -18,7 +18,8 @@
  */
 
 .collectionContentsAsSummary {
-	width: 99%
+	width: 99%;
+	margin-top: 20px;
 }
 
 .collectionContentsAsSummary .propertyNameCell {

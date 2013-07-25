@@ -17,7 +17,7 @@
 {
     columns: [
     {
-        span: 3,
+        span: 6,
         memberGroups: {
             General: {
                 members: {
@@ -39,7 +39,7 @@
         }
     },
     {
-        span: 3,
+        span: 6,
         memberGroups: {
             Detail: {
                 members: {

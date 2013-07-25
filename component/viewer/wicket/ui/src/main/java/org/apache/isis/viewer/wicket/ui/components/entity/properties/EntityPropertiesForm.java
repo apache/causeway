@@ -83,6 +83,9 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
     
+    private static final String ID_ENTITY_COLLECTIONS = "entityCollections";
+    private static final String ID_ENTITY_COLLECTIONS_OVERFLOW = "entityCollectionsOverflow";
+    
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
     private static final String ID_EDIT_BUTTON = "edit";
@@ -144,14 +147,29 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
-        
-        // TODO: figure out overflow logic....
-        // collections column
+
+        // collections
         if(columnSpans.getCollections() > 0) {
-            final Component collectionsColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_COLLECTIONS, entityModel);
-            addClassForSpan(collectionsColumn, columnSpans.getCollections());
+            final String idCollectionsToShow;
+            final String idCollectionsToHide;
+            int collectionSpan;
+            if (columnSpans.exceedsRow())  {
+                idCollectionsToShow = ID_ENTITY_COLLECTIONS_OVERFLOW;
+                idCollectionsToHide = ID_ENTITY_COLLECTIONS;
+                collectionSpan = 12;
+            } else {
+                idCollectionsToShow = ID_ENTITY_COLLECTIONS;
+                idCollectionsToHide = ID_ENTITY_COLLECTIONS_OVERFLOW;
+                collectionSpan = columnSpans.getCollections();
+            }
+
+            final Component collectionsColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, idCollectionsToShow, ComponentType.ENTITY_COLLECTIONS, entityModel);
+            addClassForSpan(collectionsColumn, collectionSpan);
+            
+            Components.permanentlyHide(this, idCollectionsToHide);
         } else {
-            Components.permanentlyHide(this, ComponentType.ENTITY_COLLECTIONS.toString());
+            Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS);
+            Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS_OVERFLOW);
         }
 
     }

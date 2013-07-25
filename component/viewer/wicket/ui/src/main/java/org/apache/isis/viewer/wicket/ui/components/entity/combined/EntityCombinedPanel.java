@@ -33,7 +33,7 @@ public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_PROPERTIES = "entityProperties";
+    private static final String ID_ENTITY_PROPERTIES_AND_COLLECTIONS = "entityPropertiesAndCollections";
 
     
     public EntityCombinedPanel(final String id, final EntityModel entityModel) {
@@ -50,7 +50,7 @@ public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
         
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES, ComponentType.ENTITY_PROPERTIES, model);
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, model);
     }
 
 
