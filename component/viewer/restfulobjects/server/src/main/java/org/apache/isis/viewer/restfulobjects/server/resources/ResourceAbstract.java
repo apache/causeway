@@ -20,10 +20,8 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +35,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
@@ -60,8 +63,6 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 
 public abstract class ResourceAbstract {
 
@@ -89,8 +90,6 @@ public abstract class ResourceAbstract {
 
     // nb: SET is excluded; we simply flatten contributed actions.
     public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
-
-    private final static String UTC_DATEFORMAT = "yyyy-MM-ddTHH:mm:ss.sss";
 
     @Context
     HttpHeaders httpHeaders;
@@ -225,9 +224,7 @@ public abstract class ResourceAbstract {
     }
 
     private static EntityTag asETag(final Date time) {
-        final SimpleDateFormat sdf = new SimpleDateFormat(UTC_DATEFORMAT);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        final String utcTime = sdf.format(time);
+        final String utcTime = ISODateTimeFormat.basicDateTime().print(new DateTime(time));
         return new EntityTag(utcTime, true);
     }
 

@@ -298,7 +298,7 @@ public final class JsonValueEncoder {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     try {
-                        final Date parsedDate = yyyyMMdd.parseDateTime(dateStr).toDate();
+                        final LocalDate parsedDate = yyyyMMdd.parseLocalDate(dateStr);
                         return adapterFor(parsedDate);
                     } catch (IllegalArgumentException ex) {
                         // fall through
@@ -327,7 +327,7 @@ public final class JsonValueEncoder {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     try {
-                        final Date parsedDate = yyyyMMddHHmmss.parseDateTime(dateStr).toDate();
+                        final LocalDateTime parsedDate = yyyyMMddHHmmss.parseLocalDateTime(dateStr);
                         return adapterFor(parsedDate);
                     } catch (IllegalArgumentException ex) {
                         // fall through

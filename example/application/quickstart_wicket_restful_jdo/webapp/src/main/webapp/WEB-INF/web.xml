@@ -235,6 +235,16 @@
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
     </filter-mapping>
 
+    <filter>
+        <filter-name>IsisTransactionFilterForRestfulObjects</filter-name>
+        <filter-class>org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>IsisTransactionFilterForRestfulObjects</filter-name>
+        <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+    </filter-mapping>
+
+
     <servlet>
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>

@@ -735,13 +735,19 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
         final Object adapterPojo = adapter.getObject();
         final ObjectAdapter adapterAccordingToPojoAdapterMap = pojoAdapterMap.getAdapter(adapterPojo);
-        ensureThatArg(adapter, is(adapterAccordingToPojoAdapterMap), "mismatch in PojoAdapterMap: adapter's Pojo: " + adapterPojo + ", \n" + "provided adapter: " + adapter + "; \n" + " but map's adapter was : " + adapterAccordingToPojoAdapterMap);
+        // take care not to touch the pojo, since it might have been deleted.
+        ensureThatArg(
+                adapter, is(adapterAccordingToPojoAdapterMap), 
+                "mismatch in PojoAdapterMap: provided adapter's OID: " + adapter.getOid() + "; \n" + " but map's adapter's OID was : " + adapterAccordingToPojoAdapterMap.getOid());
     }
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
         final Oid adapterOid = adapter.getOid();
         final ObjectAdapter adapterAccordingToOidAdapterMap = oidAdapterMap.getAdapter(adapterOid);
-        ensureThatArg(adapter, is(adapterAccordingToOidAdapterMap), "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter: " + adapter + "; " + "map's adapter: " + adapterAccordingToOidAdapterMap);
+        // take care not to touch the pojo, since it might have been deleted.
+        ensureThatArg(
+                adapter, is(adapterAccordingToOidAdapterMap), 
+                "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter's OID: " + adapter.getOid() + "; " + "map's adapter's Oid: " + adapterAccordingToOidAdapterMap.getOid());
     }
 
     // //////////////////////////////////////////////////////////////////

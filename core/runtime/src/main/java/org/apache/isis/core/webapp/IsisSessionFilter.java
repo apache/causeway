@@ -44,6 +44,9 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.PathUtils;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
@@ -68,7 +71,8 @@ public class IsisSessionFilter implements Filter {
      * assume 'restricted' handling.
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
-
+    
+    
     /**
      * Init parameter key for what should be done if no session was found.
      * 
@@ -260,7 +264,7 @@ public class IsisSessionFilter implements Filter {
         ignoreExtensions = Collections.unmodifiableCollection(parseIgnorePatterns(config));
     }
 
-    private Collection<Pattern> parseIgnorePatterns(final FilterConfig config) {
+    private static Collection<Pattern> parseIgnorePatterns(final FilterConfig config) {
         final String ignoreExtensionsStr = config.getInitParameter(IGNORE_EXTENSIONS_KEY);
         if (ignoreExtensionsStr != null) {
             final List<String> ignoreExtensions = Lists.newArrayList(Splitter.on(",").split(ignoreExtensionsStr));
@@ -268,6 +272,7 @@ public class IsisSessionFilter implements Filter {
         }
         return Lists.newArrayList();
     }
+    
 
     @Override
     public void destroy() {
@@ -311,6 +316,7 @@ public class IsisSessionFilter implements Filter {
 
                     openSession(validSession);
                     SESSION_IN_PROGRESS.setOn(request);
+
                     try {
                         chain.doFilter(request, response);
                     } finally {
@@ -387,8 +393,8 @@ public class IsisSessionFilter implements Filter {
             return IsisContext.getAuthenticationManager();
         }
 
-        void openSession(final AuthenticationSession authSession) {
-            IsisContext.openSession(authSession);
+        IsisSession openSession(final AuthenticationSession authSession) {
+            return IsisContext.openSession(authSession);
         }
 
         void closeSession() {
@@ -402,6 +408,11 @@ public class IsisSessionFilter implements Filter {
 
         final SessionState sessionState = SessionState.lookup(request);
         sessionState.handle(this, request, response, chain);
+    }
+
+    
+    protected IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
     }
 
 }
