@@ -42,7 +42,7 @@ public final class ObjectSpecifications {
         public int from(ColumnSpans columnSpans) {
             if(this == LEFT) return columnSpans.getLeft();
             if(this == MIDDLE) return columnSpans.getMiddle();
-            if(this == LEFT) return columnSpans.getRight();
+            if(this == RIGHT) return columnSpans.getRight();
             return 0;
         }
     }
