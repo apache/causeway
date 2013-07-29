@@ -122,38 +122,20 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
         final String objectStr = DomainResourceHelper.asStringUtf8(object);
-        final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
-        if (!objectRepr.isMap()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
+        final JsonRepresentation argRepr = DomainResourceHelper.readAsMap(objectStr);
+        if (!argRepr.isMap()) {
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", argRepr);
         }
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, oidStr);
 
-        final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
-        if (propertiesList == null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
+        if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, argRepr)) {
+            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value");
         }
 
-        final IsisTransactionManager transactionManager = getResourceContext().getPersistenceSession().getTransactionManager();
-        transactionManager.startTransaction();
-        try {
-            if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
-                transactionManager.abortTransaction();
-                throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
-            }
-
-            final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
-            if (validity.isVetoed()) {
-                transactionManager.abortTransaction();
-                throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
-            }
-
-            transactionManager.endTransaction();
-        } finally {
-            // in case an exception got thrown somewhere...
-            if (!transactionManager.getTransaction().getState().isComplete()) {
-                transactionManager.abortTransaction();
-            }
+        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
+        if (validity.isVetoed()) {
+            throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, validity.getReason());
         }
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);

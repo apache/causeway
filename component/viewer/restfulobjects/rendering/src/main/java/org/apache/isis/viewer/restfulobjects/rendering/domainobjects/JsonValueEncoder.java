@@ -31,10 +31,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.codehaus.jackson.node.NullNode;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -243,6 +245,14 @@ public final class JsonValueEncoder {
                         return adapterFor(str.charAt(0));
                     }
                 }
+                // in case a char literal was provided
+                if(repr.isInt()) {
+                    final Integer x = repr.asInt();
+                    if(Character.MIN_VALUE <= x && x <= Character.MAX_VALUE) {
+                        char c = (char) x.intValue();
+                        return adapterFor(c);
+                    }
+                }
                 return null;
             }
         });
@@ -291,17 +301,23 @@ public final class JsonValueEncoder {
 
         putConverter(new JsonValueConverter("date", "jodalocaldate", LocalDate.class){
 
-            final DateTimeFormatter yyyyMMdd = JsonRepresentation.yyyyMMdd;
+            final List<DateTimeFormatter> formatters = Arrays.asList(
+                    JsonRepresentation.yyyyMMdd, 
+                    DateTimeFormat.forPattern("yyyyMMdd"),
+                    ISODateTimeFormat.basicDate()
+                    );
 
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
-                    try {
-                        final LocalDate parsedDate = yyyyMMdd.parseLocalDate(dateStr);
-                        return adapterFor(parsedDate);
-                    } catch (IllegalArgumentException ex) {
-                        // fall through
+                    for (DateTimeFormatter formatter : formatters) {
+                        try {
+                            final LocalDate parsedDate = formatter.parseLocalDate(dateStr);
+                            return adapterFor(parsedDate);
+                        } catch (IllegalArgumentException ex) {
+                            // fall through
+                        }
                     }
                 }
                 return null;
@@ -312,7 +328,7 @@ public final class JsonValueEncoder {
                 final Object obj = unwrap(objectAdapter);
                 if(obj instanceof LocalDate) {
                     final LocalDate date = (LocalDate) obj;
-                    final String dateStr = yyyyMMdd.print(date.toDateTimeAtStartOfDay());
+                    final String dateStr = formatters.get(0).print(date.toDateTimeAtStartOfDay());
                     append(repr, dateStr, format, xIsisFormat);
                 } else {
                     append(repr, obj, format, xIsisFormat);
@@ -321,16 +337,25 @@ public final class JsonValueEncoder {
         });
 
         putConverter(new JsonValueConverter("date-time", "jodalocaldatetime", LocalDateTime.class){
-            final DateTimeFormatter yyyyMMddHHmmss = JsonRepresentation.yyyyMMddTHHmmssZ;
+            
+            final List<DateTimeFormatter> formatters = Arrays.asList(
+                    JsonRepresentation.yyyyMMddTHHmmssZ, 
+                    DateTimeFormat.forPattern("yyyyMMdd'T'HHmmssZ"), 
+                    ISODateTimeFormat.basicDateTimeNoMillis(),
+                    ISODateTimeFormat.basicDateTime()
+                    );
+            
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
-                    try {
-                        final LocalDateTime parsedDate = yyyyMMddHHmmss.parseLocalDateTime(dateStr);
-                        return adapterFor(parsedDate);
-                    } catch (IllegalArgumentException ex) {
-                        // fall through
+                    for (DateTimeFormatter formatter : formatters) {
+                        try {
+                            final LocalDateTime parsedDate = formatter.parseLocalDateTime(dateStr);
+                            return adapterFor(parsedDate);
+                        } catch (IllegalArgumentException ex) {
+                            // fall through
+                        }
                     }
                 }
                 return null;
@@ -341,8 +366,154 @@ public final class JsonValueEncoder {
                 final Object obj = unwrap(objectAdapter); 
                 if(obj instanceof LocalDateTime) {
                     final LocalDateTime date = (LocalDateTime) obj;
-                    final String dateStr = yyyyMMddHHmmss.print(date.toDateTime());
+                    final String dateStr = formatters.get(0).print(date.toDateTime());
                     append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
+            }
+        });
+
+        putConverter(new JsonValueConverter("date", "javautildate", java.util.Date.class){
+            
+            final List<DateTimeFormatter> formatters = Arrays.asList(
+                    JsonRepresentation.yyyyMMddTHHmmssZ, 
+                    DateTimeFormat.forPattern("yyyyMMdd'T'HHmmssZ"), 
+                    ISODateTimeFormat.basicDateTimeNoMillis(),
+                    ISODateTimeFormat.basicDateTime()
+                    );
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    for (DateTimeFormatter formatter : formatters) {
+                        try {
+                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
+                            final java.util.Date parsedDate = parseDateTime.toDate();
+                            return adapterFor(parsedDate);
+                        } catch (IllegalArgumentException ex) {
+                            // fall through
+                        }
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final Object obj = unwrap(objectAdapter); 
+                if(obj instanceof java.util.Date) {
+                    final java.util.Date date = (java.util.Date) obj;
+                    final String dateStr = formatters.get(0).print(new DateTime(date));
+                    append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
+            }
+        });
+
+        putConverter(new JsonValueConverter("date", "javasqldate", java.sql.Date.class){
+            
+            final List<DateTimeFormatter> formatters = Arrays.asList(
+                            JsonRepresentation.yyyyMMdd, 
+                            DateTimeFormat.forPattern("yyyyMMdd"),
+                            ISODateTimeFormat.basicDate()
+                            );
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    for (DateTimeFormatter formatter : formatters) {
+                        try {
+                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
+                            final java.sql.Date parsedDate = new java.sql.Date(parseDateTime.getMillis());
+                            return adapterFor(parsedDate);
+                        } catch (IllegalArgumentException ex) {
+                            // fall through
+                        }
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final Object obj = unwrap(objectAdapter); 
+                if(obj instanceof java.sql.Date) {
+                    final java.sql.Date date = (java.sql.Date) obj;
+                    final String dateStr = formatters.get(0).print(new DateTime(date));
+                    append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
+            }
+        });
+
+        putConverter(new JsonValueConverter("date", "javasqltime", java.sql.Time.class){
+            
+            final List<DateTimeFormatter> formatters = Arrays.asList(
+                        JsonRepresentation._HHmmss, 
+                        DateTimeFormat.forPattern("HHmmss"), 
+                        ISODateTimeFormat.basicTime());
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    for (DateTimeFormatter formatter : formatters) {
+                        try {
+                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
+                            final java.sql.Time parsedTime = new java.sql.Time(parseDateTime.getMillis());
+                            return adapterFor(parsedTime);
+                        } catch (IllegalArgumentException ex) {
+                            // fall through
+                        }
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final Object obj = unwrap(objectAdapter); 
+                if(obj instanceof java.sql.Time) {
+                    final java.sql.Time date = (java.sql.Time) obj;
+                    final String dateStr = formatters.get(0).print(new DateTime(date));
+                    append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
+            }
+        });
+
+        putConverter(new JsonValueConverter("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
+            
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isLong()) {
+                    final Long millis = repr.asLong();
+                    final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(millis);
+                    return adapterFor(parsedTimestamp);
+                }
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    try {
+                        final Long parseMillis = Long.parseLong(dateStr);
+                        final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(parseMillis);
+                        return adapterFor(parsedTimestamp);
+                    } catch (IllegalArgumentException ex) {
+                        // fall through
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final Object obj = unwrap(objectAdapter); 
+                if(obj instanceof java.sql.Timestamp) {
+                    final java.sql.Timestamp date = (java.sql.Timestamp) obj;
+                    final long millisStr = date.getTime();
+                    append(repr, millisStr, format, xIsisFormat);
                 } else {
                     append(repr, obj, format, xIsisFormat);
                 }

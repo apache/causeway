@@ -70,6 +70,7 @@ import org.apache.isis.viewer.restfulobjects.server.resources.ResourceAbstract.C
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
+
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -111,14 +112,13 @@ public final class DomainResourceHelper {
             final OneToOneAssociation property = (OneToOneAssociation) association;
             final ObjectSpecification propertySpec = property.getSpecification();
             final String id = property.getId();
-            final JsonRepresentation propertyRepr = propertiesList.getRepresentation("[id=%s]", id);
+            final JsonRepresentation propertyRepr = propertiesList.getRepresentation(id);
             if (propertyRepr == null) {
                 if (property.isMandatory()) {
                     throw new IllegalArgumentException(String.format("Mandatory field %s missing", property.getName()));
                 }
                 continue;
             }
-            final JsonRepresentation valueRepr = propertyRepr.getRepresentation("value");
             final Consent usable = property.isUsable(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
             if (usable.isVetoed()) {
                 propertyRepr.mapPut("invalidReason", usable.getReason());
@@ -127,7 +127,7 @@ public final class DomainResourceHelper {
             }
             final ObjectAdapter valueAdapter;
             try {
-                valueAdapter = objectAdapterFor(resourceContext, propertySpec, valueRepr);
+                valueAdapter = objectAdapterFor(resourceContext, propertySpec, propertyRepr);
             } catch(IllegalArgumentException ex) {
                 propertyRepr.mapPut("invalidReason", ex.getMessage());
                 allOk = false;
@@ -310,7 +310,20 @@ public final class DomainResourceHelper {
 
         // value (encodable)
         if (objectSpec.isEncodeable()) {
-            return JsonValueEncoder.asAdapter(objectSpec, argRepr);
+            try {
+                return JsonValueEncoder.asAdapter(objectSpec, argRepr);
+            }catch(Exception ex) {
+                StringBuilder buf = new StringBuilder("Failed to parse representation ");
+                try {
+                    final String reprStr = argRepr.getString("value");
+                    buf.append("'").append(reprStr).append("' ");
+                } catch(Exception ex2) {
+                }
+                buf.append("as value of type '").append(objectSpec.getShortIdentifier()).append("'");
+                String reason = buf.toString();
+                argRepr.mapPut("invalidReason", reason);
+                throw new IllegalArgumentException(reason);
+            }
         }
 
         final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");

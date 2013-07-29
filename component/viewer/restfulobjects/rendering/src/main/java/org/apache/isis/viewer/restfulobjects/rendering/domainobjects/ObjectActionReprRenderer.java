@@ -43,7 +43,6 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     public JsonRepresentation render() {
-        // memberType is rendered eagerly
 
         renderMemberContent();
         putDisabledReasonIfDisabled();

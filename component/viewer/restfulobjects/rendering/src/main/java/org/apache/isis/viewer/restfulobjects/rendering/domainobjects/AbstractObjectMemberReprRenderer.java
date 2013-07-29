@@ -94,8 +94,6 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.memberType = MemberType.determineFrom(objectMember);
         usingLinkTo(new DomainObjectLinkTo());
 
-        representation.mapPut("memberType", memberType.getName());
-
         return cast(this);
     }
 
@@ -151,6 +149,10 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * For subclasses to call from their {@link #render()} method.
      */
     protected void renderMemberContent() {
+        if(!mode.isArguments()) {
+            representation.mapPut("memberType", memberType.getName());
+        }
+
         if (mode.isInline()) {
             addDetailsLinkIfPersistent();
         }

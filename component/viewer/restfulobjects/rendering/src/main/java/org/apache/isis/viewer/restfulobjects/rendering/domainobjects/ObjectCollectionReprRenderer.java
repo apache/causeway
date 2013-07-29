@@ -45,7 +45,6 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
     @Override
     public JsonRepresentation render() {
-        // id and memberType are rendered eagerly
 
         renderMemberContent();
         if (mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.representsPersistent()) {

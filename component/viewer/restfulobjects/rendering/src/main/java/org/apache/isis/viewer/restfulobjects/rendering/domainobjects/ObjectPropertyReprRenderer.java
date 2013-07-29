@@ -46,7 +46,6 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
     @Override
     public JsonRepresentation render() {
-        // id and memberType are rendered eagerly
 
         renderMemberContent();
         addValue();

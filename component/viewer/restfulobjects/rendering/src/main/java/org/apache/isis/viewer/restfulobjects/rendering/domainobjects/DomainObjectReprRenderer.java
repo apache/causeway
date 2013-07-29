@@ -57,35 +57,37 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private static enum Mode {
-        REGULAR(false, true, true), 
-        PERSIST_LINK_ARGUMENTS(true, true, false), 
-        MODIFY_PROPERTIES_LINK_ARGUMENTS(true, false, false),
-        EVENT_SERIALIZATION(false, false, true);
+        REGULAR, 
+        PERSIST_LINK_ARGUMENTS, 
+        UPDATE_PROPERTIES_LINK_ARGUMENTS,
+        EVENT_SERIALIZATION;
 
-        private final boolean representsArguments;
-        private final boolean describedBy;
-        private boolean checkVisibility;
-
-        private Mode(final boolean representsArguments, final boolean describedBy, final boolean visibilityCheck) {
-            this.representsArguments = representsArguments;
-            this.describedBy = describedBy;
-            this.checkVisibility = visibilityCheck;
+        public boolean isRegular() {
+            return this == REGULAR;
         }
 
-        public boolean representsArguments() {
-            return representsArguments;
-        }
-
-        public boolean includesDescribedBy() {
-            return describedBy;
+        public boolean isPersistLinkArgs() {
+            return this == PERSIST_LINK_ARGUMENTS;
         }
         
-        public boolean checkVisibility() {
-            return checkVisibility;
+        public boolean isUpdatePropertiesLinkArgs() {
+            return this == UPDATE_PROPERTIES_LINK_ARGUMENTS;
         }
 
         public boolean isEventSerialization() {
             return this == EVENT_SERIALIZATION;
+        }
+
+        public boolean includeDescribedBy() {
+            return isRegular() || isPersistLinkArgs();
+        }
+        
+        public boolean checkVisibility() {
+            return isRegular() || isUpdatePropertiesLinkArgs();
+        }
+
+        public boolean isArgs() {
+            return isPersistLinkArgs() || isUpdatePropertiesLinkArgs();
         }
     }
 
@@ -118,25 +120,21 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public JsonRepresentation render() {
 
-        // self, extensions.oid
-        if (!mode.representsArguments()) {
+        if (!(mode.isArgs())) {
+            
+            // self, extensions.oid
             if (objectAdapter.representsPersistent()) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
                 getExtensions().mapPut("oid", getOidStr());
             }
-        }
-
-        // title
-        if (!mode.representsArguments()) {
+            
+            // title
             final String title = objectAdapter.titleString(null);
             representation.mapPut("title", title);
-
-        }
-
-        // serviceId or instance Id
-        if (!mode.representsArguments()) {
+            
+            // serviceId or instance Id
             final boolean isService = objectAdapter.getSpecification().isService();
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
@@ -155,11 +153,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         withMembers(objectAdapter);
 
         // described by
-        if (mode.includesDescribedBy()) {
+        if (mode.includeDescribedBy()) {
             addLinkToDescribedBy();
         }
 
-        if (!mode.representsArguments()) {
+        if (!mode.isArgs()) {
             // update/persist
             addPersistLinkIfTransientAndPersistable();
             addUpdatePropertiesLinkIfRequired();
@@ -211,15 +209,18 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
-        final JsonRepresentation members = JsonRepresentation.newMap();
+        final JsonRepresentation appendTo = 
+                mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
         final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
-        addAssociations(objectAdapter, members, associations);
+        addAssociations(objectAdapter, appendTo, associations);
 
-        if (!mode.representsArguments() && !mode.isEventSerialization()) {
+        if (mode.isRegular()) {
             final List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
-            addActions(objectAdapter, actions, members);
+            addActions(objectAdapter, actions, appendTo);
         }
-        representation.mapPut("members", members);
+        if(!mode.isUpdatePropertiesLinkArgs()) {
+            representation.mapPut("members", appendTo);
+        }
         return this;
     }
 
@@ -240,7 +241,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
                 renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
-                if (mode.representsArguments()) {
+                if (mode.isArgs()) {
                     renderer.asArguments();
                 }
                 if(mode.isEventSerialization()) {
@@ -250,8 +251,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 members.mapPut(assoc.getId(), renderer.render());
             }
 
-            if (mode.representsArguments()) {
-                // don't include collections
+            if (mode.isArgs()) {
                 continue;
             }
             if (assoc instanceof OneToManyAssociation) {
@@ -312,8 +312,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return this;
     }
 
-    private DomainObjectReprRenderer asModifyPropertiesLinkArguments() {
-        this.mode = Mode.MODIFY_PROPERTIES_LINK_ARGUMENTS;
+    private DomainObjectReprRenderer asUpdatePropertiesLinkArguments() {
+        this.mode = Mode.UPDATE_PROPERTIES_LINK_ARGUMENTS;
         return this;
     }
 
@@ -337,10 +337,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
 
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
-        final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asModifyPropertiesLinkArguments().render();
+        final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
-        final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.MODIFY.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
-        getLinks().arrayAdd(persistLinkBuilder.build());
+        final LinkBuilder updateLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
+        getLinks().arrayAdd(updateLinkBuilder.build());
     }
 
     // ///////////////////////////////////////////////////////////////////

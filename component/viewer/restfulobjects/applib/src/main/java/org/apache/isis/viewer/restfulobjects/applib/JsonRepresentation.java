@@ -341,7 +341,7 @@ public class JsonRepresentation {
     }
 
     // ///////////////////////////////////////////////////////////////////////
-    // getDate, asDate
+    // getDateTime, asDateTime
     // ///////////////////////////////////////////////////////////////////////
 
     public final static DateTimeFormatter yyyyMMddTHHmmssZ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -364,6 +364,32 @@ public class JsonRepresentation {
         }
         final String textValue = node.getTextValue();
         return new java.util.Date(yyyyMMddTHHmmssZ.parseMillis(textValue));
+    }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // getTime, asTime
+    // ///////////////////////////////////////////////////////////////////////
+
+    public final static DateTimeFormatter _HHmmss = DateTimeFormat.forPattern("HH:mm:ss");
+
+    public java.util.Date getTime(final String path) {
+        return getTime(path, getNode(path));
+    }
+
+    public java.util.Date asTime() {
+        return getTime(null, asJsonNode());
+    }
+
+    private java.util.Date getTime(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a time");
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a time"));
+        }
+        final String textValue = node.getTextValue();
+        return new java.util.Date(_HHmmss.parseMillis(textValue));
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -740,9 +766,9 @@ public class JsonRepresentation {
         if (representsNull(node)) {
             return null;
         }
-        checkValue(path, node, "a biginteger");
+        checkValue(path, node, "a bigdecimal");
         if (!node.isBigDecimal()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger"));
+            throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal"));
         }
         return node.getDecimalValue();
     }
