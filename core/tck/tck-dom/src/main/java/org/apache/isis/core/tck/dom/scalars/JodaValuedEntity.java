@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -51,8 +52,8 @@ public class JodaValuedEntity extends AbstractDomainObject {
         return stringProperty;
     }
 
-    public void setStringProperty(final String description) {
-        this.stringProperty = description;
+    public void setStringProperty(final String stringProperty) {
+        this.stringProperty = stringProperty;
     }
 
     // }}
@@ -83,6 +84,21 @@ public class JodaValuedEntity extends AbstractDomainObject {
 
     public void setLocalDateTimeProperty(final LocalDateTime localDateTimeProperty) {
         this.localDateTimeProperty = localDateTimeProperty;
+    }
+    // }}
+    
+    
+    // {{ DateTimeProperty
+    private DateTime dateTimeProperty;
+    
+    @Optional
+    @MemberOrder(sequence = "1")
+    public DateTime getDateTimeProperty() {
+        return dateTimeProperty;
+    }
+    
+    public void setDateTimeProperty(final DateTime dateTimeProperty) {
+        this.dateTimeProperty = dateTimeProperty;
     }
     // }}
 

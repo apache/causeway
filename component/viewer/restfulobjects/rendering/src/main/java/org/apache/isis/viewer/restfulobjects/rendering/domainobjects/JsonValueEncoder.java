@@ -103,6 +103,16 @@ public final class JsonValueEncoder {
     }
 
     static {
+        putConverter(new JsonValueConverter(null, "string", String.class){
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    return adapterFor(repr.asString());
+                } 
+                return null;
+            }
+        });
+
         putConverter(new JsonValueConverter(null, "boolean", boolean.class, Boolean.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr) {
@@ -297,6 +307,10 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                super.appendValueAndFormat(objectAdapter, repr);
+            }
         });
 
         putConverter(new JsonValueConverter("date", "jodalocaldate", LocalDate.class){
@@ -366,6 +380,44 @@ public final class JsonValueEncoder {
                 final Object obj = unwrap(objectAdapter); 
                 if(obj instanceof LocalDateTime) {
                     final LocalDateTime date = (LocalDateTime) obj;
+                    final String dateStr = formatters.get(0).print(date.toDateTime());
+                    append(repr, dateStr, format, xIsisFormat);
+                } else {
+                    append(repr, obj, format, xIsisFormat);
+                }
+            }
+        });
+
+        putConverter(new JsonValueConverter("date-time", "jodadatetime", DateTime.class){
+            
+            final List<DateTimeFormatter> formatters = Arrays.asList(
+                    JsonRepresentation.yyyyMMddTHHmmssZ, 
+                    DateTimeFormat.forPattern("yyyyMMdd'T'HHmmssZ"), 
+                    ISODateTimeFormat.basicDateTimeNoMillis(),
+                    ISODateTimeFormat.basicDateTime()
+                    );
+            
+            @Override
+            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+                if (repr.isString()) {
+                    final String dateStr = repr.asString();
+                    for (DateTimeFormatter formatter : formatters) {
+                        try {
+                            final DateTime parsedDate = formatter.parseDateTime(dateStr);
+                            return adapterFor(parsedDate);
+                        } catch (IllegalArgumentException ex) {
+                            // fall through
+                        }
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
+                final Object obj = unwrap(objectAdapter); 
+                if(obj instanceof DateTime) {
+                    final DateTime date = (DateTime) obj;
                     final String dateStr = formatters.get(0).print(date.toDateTime());
                     append(repr, dateStr, format, xIsisFormat);
                 } else {
@@ -591,7 +643,7 @@ public final class JsonValueEncoder {
                 throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
             }
             Object value = objectAdapter != null? encodableFacet.toEncodedString(objectAdapter): NullNode.getInstance();
-            append(repr, value, "decimal", "bigdecimal");
+            append(repr, value, "string", "string");
         }
     }
     

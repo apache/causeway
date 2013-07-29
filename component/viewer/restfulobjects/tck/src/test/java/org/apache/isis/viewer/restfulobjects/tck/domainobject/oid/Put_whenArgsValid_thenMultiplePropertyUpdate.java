@@ -31,6 +31,9 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -65,7 +68,6 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         domainObjectResource = client.getDomainObjectResource();
     }
 
-    @Ignore
     @Test
     public void primitivePropertiesUpdated() throws Exception {
         
@@ -185,7 +187,8 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         argRepr.mapPut("javaUtilDateProperty.value", asIso(d));
         argRepr.mapPut("myEnum.value", e);
         argRepr.mapPut("stringProperty.value", s);
-        RestfulResponse<JsonRepresentation> result = client.follow(updateLink, argRepr);
+        
+        final RestfulResponse<JsonRepresentation> result = client.follow(updateLink, argRepr);
         assertThat(result.getStatus(), is(HttpStatusCode.OK));
         
         final DomainObjectRepresentation afterResp = result.getEntity().as(DomainObjectRepresentation.class);
@@ -202,16 +205,84 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         
     }
 
-    private static String asIso(final java.util.Date d) {
-        return ISODateTimeFormat.basicDateTimeNoMillis().print(new org.joda.time.DateTime(d.getTime()));
+    @Test
+    public void jodaPropertiesUpdated() throws Exception {
+        
+        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("JODA", "73");
+        
+        final LinkRepresentation updateLink = domainObjectRepr.getLinkWithRel(Rel.UPDATE);
+        
+        final JsonRepresentation argRepr = updateLink.getArguments();
+        
+        // {
+        //   localDateProperty: {
+        //     value: "2008-03-21",
+        //     format: "date",
+        //     x-isis-format: "jodalocaldate"
+        //   },
+        //   localDateTimeProperty: {
+        //     value: "2009-04-29T13:45:22+0100",
+        //     format: "date-time",
+        //     x-isis-format: "jodalocaldatetime"
+        //   },
+        //   dateTimeProperty: {
+        //     value: "2010-03-31T09:50:43",
+        //     format: "date-time",
+        //     x-isis-format: "jodalocaldatetime"
+        //   },
+        //   stringProperty: {
+        //     value: null,
+        //     x-isis-format: "string"
+        //   }
+        // }
+        
+        final LocalDate ld = new LocalDate(2013,5,1);
+        final LocalDateTime ldt = new LocalDateTime(2013,2,1,14,15,0);
+        final DateTime dt = new DateTime(2013,2,1,14,15,0);
+        final String s = "New string";
+        
+        argRepr.mapPut("localDateProperty.value", asIsoNoT(ld.toDate()));
+        argRepr.mapPut("localDateTimeProperty.value", asIso(ldt.toDate()));
+        argRepr.mapPut("dateTimeProperty.value", asIso(dt.toDate()));
+        argRepr.mapPut("stringProperty.value", s);
+
+        final RestfulResponse<JsonRepresentation> result = client.follow(updateLink, argRepr);
+        assertThat(result.getStatus(), is(HttpStatusCode.OK));
+        
+        final DomainObjectRepresentation afterResp = result.getEntity().as(DomainObjectRepresentation.class);
+        
+        assertThat(afterResp.getProperty("localDateProperty").getDate("value"), is(ld.toDate()));
+        assertThat(afterResp.getProperty("localDateTimeProperty").getDateTime("value"), is(ldt.toDate()));
+        assertThat(afterResp.getProperty("dateTimeProperty").getDateTime("value"), is(dt.toDate()));
+        assertThat(afterResp.getProperty("stringProperty").getString("value"), is(s));
     }
     
+    private static String asIso(final java.util.Date d) {
+        final org.joda.time.DateTime dt = new org.joda.time.DateTime(d.getTime());
+        return asIso(dt);
+    }
+
+    private static String asIso(final org.joda.time.DateTime dt) {
+        return ISODateTimeFormat.basicDateTimeNoMillis().print(dt);
+    }
+    
+    
     private static String asIsoNoT(final java.util.Date d) {
-        return ISODateTimeFormat.basicDate().print(new org.joda.time.DateTime(d.getTime()));
+        final org.joda.time.DateTime dt = new org.joda.time.DateTime(d.getTime());
+        return asIsoNoT(dt);
+    }
+
+    private static String asIsoNoT(final org.joda.time.DateTime dt) {
+        return ISODateTimeFormat.basicDate().print(dt);
     }
     
     private static String asIsoOnlyT(final java.util.Date d) {
-        return ISODateTimeFormat.basicTime().print(new org.joda.time.DateTime(d.getTime()));
+        final org.joda.time.DateTime dt = new org.joda.time.DateTime(d.getTime());
+        return asIsoOnlyT(dt);
+    }
+
+    private static String asIsoOnlyT(final org.joda.time.DateTime dt) {
+        return ISODateTimeFormat.basicTime().print(dt);
     }
 
     private DomainObjectRepresentation getObjectRepr(final String domainType, final String instanceId) throws JsonParseException, JsonMappingException, IOException {
