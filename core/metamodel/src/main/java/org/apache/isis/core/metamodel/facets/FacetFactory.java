@@ -168,8 +168,23 @@ public interface FacetFactory {
             Identifier identifier = featureType.identifierFor(getCls(), getMethod());
             final String id = identifier.getMemberName();
             
-            final Properties subsetProperties = PropertyUtil.subset(this.properties, prefix+"."+id);
-            return !subsetProperties.isEmpty() ? subsetProperties : null;
+            // bit of a hack; to distinguish between actions and properties that have same identifier
+            // eg getPaidBy() and paidBy()
+            if(featureType.isAction()) {
+                Properties subsetProperties = PropertyUtil.subset(this.properties, prefix+"."+id+"()");
+                if (!subsetProperties.isEmpty()) {
+                    return subsetProperties;
+                } 
+                
+            }
+
+            // otherwise, regular processing...
+            Properties subsetProperties = PropertyUtil.subset(this.properties, prefix+"."+id);
+            if (!subsetProperties.isEmpty()) {
+                return subsetProperties;
+            }
+            
+            return null;
         }
     }
 

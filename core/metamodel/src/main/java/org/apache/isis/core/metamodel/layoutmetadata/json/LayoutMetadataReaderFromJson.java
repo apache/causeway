@@ -33,6 +33,7 @@ import com.google.gson.GsonBuilder;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.commons.lang.ResourceUtil;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
@@ -73,8 +74,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         setMemberGroupLayoutColumnLists(metadata, 1, "middle", props);
         setMemberGroupLayoutColumnLists(metadata, 2, "right", props);
         
-        setProperties(metadata, props);
-        setCollections(metadata, props);
+        int[] memberSeq = {0};
+        setProperties(metadata, props, memberSeq);
+        setCollections(metadata, props, memberSeq);
         setFreestandingActions(metadata, props);
 
         return props;
@@ -97,7 +99,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         props.setProperty("memberGroupLayout." + propkey, val);
     }
 
-    private static void setProperties(LayoutMetadata metadata, Properties props) {
+    private static void setProperties(LayoutMetadata metadata, Properties props, int[] memberSeq) {
         final List<ColumnRepr> columns = metadata.getColumns();
         for (final ColumnRepr columnRepr : columns) {
             final Map<String, MemberGroupRepr> memberGroups = columnRepr.memberGroups;
@@ -113,21 +115,20 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 if(members == null) {
                     continue;
                 }
-                setMembersAndAssociatedActions(props, memberGroupName, members);
+                setMembersAndAssociatedActions(props, memberGroupName, members, memberSeq);
             }
         }
     }
 
-    private static void setCollections(LayoutMetadata metadata, Properties props) {
+    private static void setCollections(LayoutMetadata metadata, Properties props, int[] memberSeq) {
         final ColumnRepr columnRepr = metadata.getColumns().get(3);
         final Map<String, MemberRepr> collections = columnRepr.collections;
-        setMembersAndAssociatedActions(props, null, collections);
+        setMembersAndAssociatedActions(props, null, collections, memberSeq);
     }
 
-    private static void setMembersAndAssociatedActions(Properties props, final String memberGroupName, final Map<String, MemberRepr> members) {
-        int memberSeq = 0;
+    private static void setMembersAndAssociatedActions(Properties props, final String memberGroupName, final Map<String, MemberRepr> members, int[] memberSeq) {
         for(final String memberName: members.keySet()) {
-            props.setProperty("memberOrder." + memberName + ".sequence", ""+ ++memberSeq);
+            props.setProperty("memberOrder." + memberName + ".sequence", ""+ ++memberSeq[0]);
             if(memberGroupName != null) {
                 props.setProperty("memberOrder." + memberName + ".name", memberGroupName);
             }
@@ -139,8 +140,14 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             }
             int actSeq = 0;
             for(final String actionName: actions.keySet()) {
-                props.setProperty("memberOrder." + actionName + ".sequence", ""+ ++actSeq);
-                props.setProperty("memberOrder." + actionName + ".name", memberName);
+                String nameKey = "memberOrder." + actionName + ".name";
+                String sequenceKey = "memberOrder." + actionName + ".sequence";
+                if(props.containsKey(nameKey)) {
+                    nameKey = "memberOrder." + actionName + "().name";
+                    sequenceKey = "memberOrder." + actionName + "().sequence";
+                }
+                props.setProperty(nameKey, memberName);
+                props.setProperty(sequenceKey, ""+ ++actSeq);
             }
         }
     }

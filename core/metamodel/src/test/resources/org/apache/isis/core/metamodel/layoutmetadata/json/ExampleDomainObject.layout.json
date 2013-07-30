@@ -43,7 +43,11 @@
         memberGroups: {
             Detail: {
                 members: {
-                    dueBy: {},
+                    dueBy: {
+                        actions: {
+                            dueBy: {}
+                        }
+                    },
                     cost: {
                         actions: {
                             updateCost:{}
