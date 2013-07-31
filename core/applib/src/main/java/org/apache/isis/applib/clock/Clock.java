@@ -21,8 +21,10 @@ package org.apache.isis.applib.clock;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -107,7 +109,10 @@ public abstract class Clock {
     }
 
     public static LocalDate getTimeAsLocalDate() {
-        return new LocalDate(getTime(), Defaults.getTimeZone());
+        
+        //final DateTimeZone timeZone = Defaults.getTimeZone();
+        final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
+        return new LocalDate(getTime(), timeZone);
     }
 
     public static LocalDateTime getTimeAsLocalDateTime() {

@@ -24,7 +24,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +32,11 @@ import java.util.Map.Entry;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.BigIntegerNode;
+import org.codehaus.jackson.node.DecimalNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.NullNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -738,13 +740,22 @@ public class JsonRepresentation {
     public boolean isBigDecimal(final String path) {
         return isBigDecimal(getNode(path));
     }
+    public boolean isBigDecimalOrNumeric(final String path) {
+        return isBigDecimalOrNumeric(getNode(path));
+    }
 
     public boolean isBigDecimal() {
         return isBigDecimal(asJsonNode());
     }
+    public boolean isBigDecimalOrNumeric() {
+        return isBigDecimalOrNumeric(asJsonNode());
+    }
 
     private boolean isBigDecimal(final JsonNode node) {
         return !representsNull(node) && node.isValueNode() && node.isBigDecimal();
+    }
+    private boolean isBigDecimalOrNumeric(final JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger());
     }
 
     /**
@@ -754,6 +765,13 @@ public class JsonRepresentation {
         final JsonNode node = getNode(path);
         return getBigDecimal(path, node);
     }
+    /**
+     * Use {@link #isBigDecimal(String)} to check first, if required.
+     */
+    public BigDecimal getBigDecimalFromNumeric(final String path) {
+        final JsonNode node = getNode(path);
+        return getBigDecimalFromNumeric(path, node);
+    }
 
     /**
      * Use {@link #isBigDecimal()} to check first, if required.
@@ -761,18 +779,52 @@ public class JsonRepresentation {
     public BigDecimal asBigDecimal() {
         return getBigDecimal(null, asJsonNode());
     }
+    
+    /**
+     * Use {@link #isBigDecimalOrNumeric()} to check first, if required.
+     */
+    public BigDecimal asBigDecimalFromNumeric() {
+        return getBigDecimalFromNumeric(null, asJsonNode());
+    }
 
     private BigDecimal getBigDecimal(final String path, final JsonNode node) {
         if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "a bigdecimal");
-        if (!node.isBigDecimal()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal"));
+        if (node.isBigDecimal()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal (or any other numeric)"));
         }
         return node.getDecimalValue();
     }
 
+    private BigDecimal getBigDecimalFromNumeric(final String path, final JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a bigdecimal");
+        if (node.isBigDecimal()) {
+            return node.getDecimalValue();
+        }
+        if (node.isLong()) {
+            // there will be rounding errors, most likely
+            return new BigDecimal(node.getLongValue());
+        }
+        if (node.isDouble()) {
+            // there will be rounding errors, most likely
+            return new BigDecimal(node.getDoubleValue());
+        }
+        if (node.isBigInteger()) {
+            // there will be rounding errors, most likely
+            return new BigDecimal(node.getBigIntegerValue());
+        }
+        if (node.isInt()) {
+            // there will be rounding errors, most likely
+            return new BigDecimal(node.getIntValue());
+        }
+        throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal (or any other numeric)"));
+    }
+    
 
     // ///////////////////////////////////////////////////////////////////////
     // getString, isString, asString
@@ -1024,67 +1076,76 @@ public class JsonRepresentation {
     // mutable (array)
     // ///////////////////////////////////////////////////////////////////////
 
-    public void arrayAdd(final Object value) {
+    public JsonRepresentation arrayAdd(final Object value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(new POJONode(value));
+        return this;
     }
 
-    public void arrayAdd(final JsonRepresentation value) {
+    public JsonRepresentation arrayAdd(final JsonRepresentation value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value.asJsonNode());
+        return this;
     }
 
-    public void arrayAdd(final String value) {
+    public JsonRepresentation arrayAdd(final String value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
-    public void arrayAdd(final JsonNode value) {
+    public JsonRepresentation arrayAdd(final JsonNode value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
-    public void arrayAdd(final long value) {
+    public JsonRepresentation arrayAdd(final long value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
-    public void arrayAdd(final int value) {
+    public JsonRepresentation arrayAdd(final int value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
-    public void arrayAdd(final double value) {
+    public JsonRepresentation arrayAdd(final double value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
-    public void arrayAdd(final float value) {
+    public JsonRepresentation arrayAdd(final float value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
-    public void arrayAdd(final boolean value) {
+    public JsonRepresentation arrayAdd(final boolean value) {
         if (!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         asArrayNode().add(value);
+        return this;
     }
 
     public Iterable<JsonRepresentation> arrayIterable() {
@@ -1124,7 +1185,7 @@ public class JsonRepresentation {
         return new JsonRepresentation(jsonNode.get(i));
     }
 
-    public void arraySetElementAt(final int i, final JsonRepresentation objectRepr) {
+    public JsonRepresentation arraySetElementAt(final int i, final JsonRepresentation objectRepr) {
         ensureIsAnArrayAtLeastAsLargeAs(i+1);
         if (objectRepr.isArray()) {
             throw new IllegalArgumentException("Representation being set cannot be an array");
@@ -1132,6 +1193,7 @@ public class JsonRepresentation {
         // can safely downcast because *this* representation is an array
         final ArrayNode arrayNode = (ArrayNode) jsonNode;
         arrayNode.set(i, objectRepr.asJsonNode());
+        return this;
     }
 
     private void ensureIsAnArrayAtLeastAsLargeAs(final int i) {
@@ -1172,108 +1234,139 @@ public class JsonRepresentation {
         return true;
     }
 
-    public void mapPut(final String key, final List<Object> value) {
+    public JsonRepresentation mapPut(final String key, final List<Object> value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         if (value == null) {
-            return;
+            return this;
         }
         final JsonRepresentation array = JsonRepresentation.newArray();
         for (final Object v : value) {
             array.arrayAdd(v);
         }
         mapPut(key, array);
+        return this;
     }
 
-    public void mapPut(final String key, final Object value) {
+    public JsonRepresentation mapPut(final String key, final Object value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value != null? new POJONode(value): NullNode.getInstance() );
+        return this;
     }
 
-    public void mapPut(final String key, final JsonRepresentation value) {
+    public JsonRepresentation mapPut(final String key, final JsonRepresentation value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         if (value == null) {
-            return;
+            return this;
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value.asJsonNode());
+        return this;
     }
 
-    public void mapPut(final String key, final String value) {
+    public JsonRepresentation mapPut(final String key, final String value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         if (value == null) {
-            return;
+            return this;
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
     }
 
-    public void mapPut(final String key, final JsonNode value) {
+    public JsonRepresentation mapPut(final String key, final JsonNode value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         if (value == null) {
-            return;
+            return this;
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
     }
 
-    public void mapPut(final String key, final long value) {
+    public JsonRepresentation mapPut(final String key, final long value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
     }
 
-    public void mapPut(final String key, final int value) {
+    public JsonRepresentation mapPut(final String key, final int value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
     }
 
-    public void mapPut(final String key, final double value) {
+    public JsonRepresentation mapPut(final String key, final double value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
     }
 
-    public void mapPut(final String key, final float value) {
+    public JsonRepresentation mapPut(final String key, final float value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
     }
 
-    public void mapPut(final String key, final boolean value) {
+    public JsonRepresentation mapPut(final String key, final boolean value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
+        return this;
+    }
+
+    public JsonRepresentation mapPut(final String key, final BigInteger value) {
+        if (!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        final Path path = Path.parse(key);
+        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
+        node.put(path.getTail(), value != null? new BigIntegerNode(value): NullNode.getInstance() );
+        return this;
+
+    }
+
+    public JsonRepresentation mapPut(final String key, final BigDecimal value) {
+        if (!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        final Path path = Path.parse(key);
+        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
+        node.put(path.getTail(), value != null? new DecimalNode(value): NullNode.getInstance() );
+        return this;
     }
 
     private static class Path {
@@ -1483,3 +1576,4 @@ public class JsonRepresentation {
 
 
 }
+

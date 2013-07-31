@@ -149,6 +149,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * For subclasses to call from their {@link #render()} method.
      */
     protected void renderMemberContent() {
+        representation.mapPut("id", objectMember.getId());
+        
         if(!mode.isArguments()) {
             representation.mapPut("memberType", memberType.getName());
         }

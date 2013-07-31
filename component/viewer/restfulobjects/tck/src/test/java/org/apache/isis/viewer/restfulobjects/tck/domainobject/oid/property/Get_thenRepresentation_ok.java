@@ -118,7 +118,7 @@ public class Get_thenRepresentation_ok {
 
         assertThat(propertyRepr.getInt("value"), is(42));
         assertThat(propertyRepr.getString("format"),is("int"));
-        assertThat(propertyRepr.getString("x-isis-format"), is("int"));
+        assertThat(propertyRepr.getString("extensions.x-isis-format"), is("int"));
         assertThat(propertyRepr.getExtensions(), isMap());
         assertThat(propertyRepr.getExtensions().getArray("changed").isArray(), is(true));
         assertThat(propertyRepr.getExtensions().getArray("disposed").isArray(), is(true));

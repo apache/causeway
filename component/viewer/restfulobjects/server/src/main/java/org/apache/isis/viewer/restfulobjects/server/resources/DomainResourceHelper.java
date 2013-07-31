@@ -473,7 +473,7 @@ public final class DomainResourceHelper {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
         }
 
-        return objectAdapterFor(resourceContext, objectSpec, representation);
+        return objectAdapterFor(resourceContext, objectSpec, arguments);
     }
 
     private List<ObjectAdapter> parseAndValidateArguments(final ObjectAction action, final JsonRepresentation arguments) {

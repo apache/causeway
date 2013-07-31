@@ -549,12 +549,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("description", getDescription())
-                .add("complete", isComplete())
-                .add("dueBy", getDueBy())
-                .add("ownedBy", getOwnedBy())
-                .toString();
+        return ObjectContracts.toString(this, "description,complete,dueBy,ownedBy");
     }
         
     // //////////////////////////////////////

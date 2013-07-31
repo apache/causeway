@@ -674,7 +674,7 @@ public final class JsonValueEncoder {
             repr.mapPut("format", format);
         }
         if(xIsisFormat != null) {
-            repr.mapPut("x-isis-format", xIsisFormat);
+            repr.mapPut("extensions.x-isis-format", xIsisFormat);
         }
     }
 

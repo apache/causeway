@@ -72,7 +72,8 @@ public class ToDoItemTest_dueBy extends ToDoIntegTest {
     @Test
     public void canBeUpToSixDaysInPast() throws Exception {
         
-        final LocalDate sixDaysAgo = Clock.getTimeAsLocalDate().plusDays(-6);
+        final LocalDate nowAsLocalDate = Clock.getTimeAsLocalDate();
+        final LocalDate sixDaysAgo = nowAsLocalDate.plusDays(-5);
 
         // when
         toDoItem.setDueBy(sixDaysAgo);
