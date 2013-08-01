@@ -76,7 +76,7 @@ public final class MethodFinderUtils {
         }
 
         // check for return type
-        if (returnType != null && returnType != method.getReturnType()) {
+        if (returnType != null && !returnType.isAssignableFrom(method.getReturnType())) {
             return null;
         }
 

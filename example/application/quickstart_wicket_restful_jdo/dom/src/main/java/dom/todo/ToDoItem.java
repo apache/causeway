@@ -19,6 +19,7 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
@@ -35,7 +36,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
@@ -418,8 +418,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return null;
     }
     // provide a drop-down
-    public List<ToDoItem> choices0Remove() {
-        return Lists.newArrayList(getDependencies());
+    public Collection<ToDoItem> choices0Remove() {
+        return getDependencies();
     }
 
 

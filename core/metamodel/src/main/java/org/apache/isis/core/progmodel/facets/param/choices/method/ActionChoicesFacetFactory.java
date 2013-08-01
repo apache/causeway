@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.param.choices.method;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.NameUtils;
@@ -74,7 +75,7 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             choicesMethod = findChoicesMethodReturning(processMethodContext, Object[].class);
         }
         if (choicesMethod == null) {
-            choicesMethod = findChoicesMethodReturning(processMethodContext, List.class);
+            choicesMethod = findChoicesMethodReturning(processMethodContext, Collection.class);
         }
         if (choicesMethod == null) {
             return;

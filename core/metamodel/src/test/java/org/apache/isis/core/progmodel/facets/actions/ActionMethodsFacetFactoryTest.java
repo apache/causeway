@@ -20,8 +20,10 @@
 package org.apache.isis.core.progmodel.facets.actions;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.When;
@@ -678,11 +680,11 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(final int x, final long y) {
+            public void someAction(final int x, final long y, final long z) {
             }
 
             @SuppressWarnings("unused")
-            public List<Integer> choices0SomeAction() {
+            public Collection<Integer> choices0SomeAction() {
                 return Collections.emptyList();
             }
 
@@ -690,12 +692,18 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             public List<Long> choices1SomeAction() {
                 return Collections.emptyList();
             }
+            
+            @SuppressWarnings("unused")
+            public Set<Long> choices2SomeAction() {
+                return Collections.emptySet();
+            }
         }
 
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
+        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class, long.class });
         final Method choices0Method = findMethod(Customer.class, "choices0SomeAction", new Class[] {});
         final Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
-
+        final Method choices2Method = findMethod(Customer.class, "choices2SomeAction", new Class[] {});
+        
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
@@ -715,6 +723,15 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().get(0));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices1Method));
+
+        final Facet facet2 = facetHolderWithParms.getParameters().get(2).getFacet(ActionParameterChoicesFacet.class);
+        assertNotNull(facet2);
+        assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
+        final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod2 = (ActionParameterChoicesFacetViaMethod) facet2;
+        assertEquals(choices2Method, actionChoicesFacetViaMethod2.getMethods().get(0));
+
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices2Method));
+
 
     }
 
