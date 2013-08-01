@@ -40,15 +40,23 @@ public final class MethodFinderUtils {
 
     /**
      * Returns a specific public methods that: have the specified prefix; have
-     * the specified return type, or void, if canBeVoid is true; and has the
-     * specified number of parameters. If the returnType is specified as null
-     * then the return type is ignored.
+     * the specified return type (or some subtype), and has the
+     * specified number of parameters.
      * 
-     * @param paramTypes
-     *            the set of parameters the method should have, if null then is
-     *            ignored
+     * <p>
+     * If the returnType is specified as null then the return type is ignored.
+     * If void.class is passed in, then searches for void methods.
+     * 
+     * <p>
+     * If the parameter type array is null, is also not checked.
      */
-    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
+    public static Method findMethod(
+            final Class<?> type, 
+            final MethodScope methodScope, 
+            final String name, 
+            final Class<?> returnType, 
+            final Class<?>[] paramTypes) {
+        
         Method method;
         try {
             method = type.getMethod(name, paramTypes);
@@ -60,7 +68,6 @@ public final class MethodFinderUtils {
 
         final int modifiers = method.getModifiers();
 
-        // check for public modifier
         if (!Modifier.isPublic(modifiers)) {
             return null;
         }
@@ -70,17 +77,14 @@ public final class MethodFinderUtils {
             return null;
         }
 
-        // check for name
         if (!method.getName().equals(name)) {
             return null;
         }
 
-        // check for return type
         if (returnType != null && !returnType.isAssignableFrom(method.getReturnType())) {
             return null;
         }
 
-        // check params (if required)
         if (paramTypes != null) {
             final Class<?>[] parameterTypes = method.getParameterTypes();
             if (paramTypes.length != parameterTypes.length) {
