@@ -24,6 +24,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.InvalidException;
@@ -50,7 +51,7 @@ public class MemberInvalidTest extends AbstractTest {
             } catch (final InvalidException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(PropertyValidateFacetViaMethod.class));
                 assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("First Name"));
-                assertThat(ex.getMessage(), equalTo("bad first name"));
+                assertThat(ex.getMessage(), Matchers.containsString("bad first name"));
             }
         }
     }
@@ -66,7 +67,7 @@ public class MemberInvalidTest extends AbstractTest {
             } catch (final InvalidException ex) {
                 assertThat(ex.getAdvisorClass(), classEqualTo(PropertyValidateFacetViaMethod.class));
                 assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Country Of Birth"));
-                assertThat(ex.getMessage(), equalTo("bad country of birth"));
+                assertThat(ex.getMessage(), Matchers.containsString("bad country of birth"));
             }
         }
     }
@@ -80,7 +81,7 @@ public class MemberInvalidTest extends AbstractTest {
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(CollectionValidateAddToFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Visited Countries"));
-            assertThat(ex.getMessage(), equalTo("bad country"));
+            assertThat(ex.getMessage(), Matchers.containsString("bad country"));
         }
     }
 
@@ -94,7 +95,7 @@ public class MemberInvalidTest extends AbstractTest {
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(CollectionValidateRemoveFromFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Visited Countries"));
-            assertThat(ex.getMessage(), equalTo("bad country"));
+            assertThat(ex.getMessage(), Matchers.containsString("bad country"));
         }
     }
 
@@ -107,7 +108,7 @@ public class MemberInvalidTest extends AbstractTest {
         } catch (final InvalidException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(ActionValidationFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Place Order"));
-            assertThat(ex.getMessage(), equalTo("can't place order"));
+            assertThat(ex.getMessage(), Matchers.containsString("can't place order"));
         }
     }
 

@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.InvalidException;
@@ -100,7 +101,7 @@ public class SaveObjectsTest extends AbstractTest {
             assertThat(ex.getAdvisorClass(), classEqualTo(ValidateObjectFacetViaValidateMethod.class));
             assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false)); // not
                                                                                          // saved
-            assertThat(ex.getMessage(), equalTo("No shakes"));
+            assertThat(ex.getMessage(), Matchers.containsString("No shakes"));
         }
     }
 

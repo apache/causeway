@@ -26,6 +26,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.DisabledException;
@@ -44,7 +45,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("First Name"));
-            assertThat(ex.getMessage(), equalTo("cannot alter"));
+            assertThat(ex.getMessage(), Matchers.containsString("cannot alter"));
         }
     }
 
@@ -57,7 +58,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("First Name"));
-            assertThat(ex.getMessage(), equalTo("cannot alter"));
+            assertThat(ex.getMessage(), Matchers.containsString("cannot alter"));
         }
     }
 
@@ -70,7 +71,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Country Of Birth"));
-            assertThat(ex.getMessage(), equalTo("cannot alter"));
+            assertThat(ex.getMessage(), Matchers.containsString("cannot alter"));
         }
     }
 
@@ -83,7 +84,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Country Of Birth"));
-            assertThat(ex.getMessage(), equalTo("cannot alter"));
+            assertThat(ex.getMessage(), Matchers.containsString("cannot alter"));
         }
     }
 
@@ -97,7 +98,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("More Orders"));
-            assertThat(ex.getMessage(), equalTo("Always disabled"));
+            assertThat(ex.getMessage(), Matchers.containsString("Always disabled"));
         }
     }
 
@@ -111,7 +112,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Visited Countries"));
-            assertThat(ex.getMessage(), equalTo("cannot alter"));
+            assertThat(ex.getMessage(), Matchers.containsString("cannot alter"));
         }
     }
 
@@ -124,7 +125,7 @@ public class MemberDisabledTest extends AbstractTest {
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisableForContextFacetViaMethod.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Place Order"));
-            assertThat(ex.getMessage(), equalTo("cannot invoke"));
+            assertThat(ex.getMessage(), Matchers.containsString("cannot invoke"));
         }
     }
 

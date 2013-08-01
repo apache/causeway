@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.DisabledException;
@@ -45,7 +46,7 @@ public class ClaimSubmitTest extends AbstractTest {
             tomsSubmittedClaim.submit(approver);
             fail("Should not be able to submit again");
         } catch (final DisabledException e) {
-            assertThat(e.getMessage(), is("Claim has already been submitted"));
+            assertThat(e.getMessage(), Matchers.containsString("Claim has already been submitted"));
         }
     }
 
