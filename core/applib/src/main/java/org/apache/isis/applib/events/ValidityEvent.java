@@ -54,4 +54,9 @@ public abstract class ValidityEvent extends InteractionEvent implements Proposed
     public Object getSource() {
         return super.getSource();
     }
+    
+    @Override
+    public String getReasonMessage() {
+    	return String.format("Source: %s. %s", this.getSource(), super.getReasonMessage());
+    }
 }

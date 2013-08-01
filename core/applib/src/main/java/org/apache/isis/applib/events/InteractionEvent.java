@@ -131,6 +131,23 @@ public abstract class InteractionEvent extends EventObject {
     public String getReason() {
         return reason;
     }
+    
+    /**
+     * The reason message, if any, that this interaction may have been vetoed or
+     * otherwise disallowed.
+     * 
+     * <p>
+     * This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
+     * 
+     * @return
+     */
+    public String getReasonMessage() {
+    	if (this.getIdentifier() != null) {
+    	return String.format("Reason: %s. Identifier: %s", this.getReason(), this.getIdentifier());
+    } else {
+    	return String.format("Reason: %s", this.getReason());
+    }
+    }
 
     /**
      * The class of the (first) advisor, if any, that provided the

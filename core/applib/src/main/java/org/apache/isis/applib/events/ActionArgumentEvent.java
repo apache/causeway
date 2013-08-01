@@ -64,5 +64,10 @@ public class ActionArgumentEvent extends ValidityEvent {
     public Object getProposed() {
         return proposed;
     }
-
+    
+    @Override
+    public String getReasonMessage() {
+    	return String.format("%s. Position: %s. Proposed: %s", super.getReasonMessage(), this.getPosition(), this.getProposed());
+    }
+    
 }

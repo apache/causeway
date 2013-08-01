@@ -30,7 +30,7 @@ public abstract class InteractionException extends ApplicationException {
     private final InteractionEvent interactionEvent;
 
     public InteractionException(final InteractionEvent interactionEvent) {
-        super(interactionEvent.getReason());
+        super(interactionEvent.getReasonMessage());
         this.interactionEvent = interactionEvent;
     }
 
