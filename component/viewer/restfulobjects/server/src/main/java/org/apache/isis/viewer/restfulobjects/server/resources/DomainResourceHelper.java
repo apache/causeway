@@ -113,38 +113,74 @@ public final class DomainResourceHelper {
             final ObjectSpecification propertySpec = property.getSpecification();
             final String id = property.getId();
             final JsonRepresentation propertyRepr = propertiesList.getRepresentation(id);
-            if (propertyRepr == null) {
-                if (property.isMandatory()) {
-                    throw new IllegalArgumentException(String.format("Mandatory field %s missing", property.getName()));
+            final Consent visibility = property.isVisible(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
+            final Consent usability = property.isUsable(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
+
+            final boolean invisible = visibility.isVetoed();
+            final boolean disabled = usability.isVetoed();
+            final boolean valueProvided = propertyRepr != null;
+
+            if(!valueProvided) {
+                
+                // no value provided
+                
+                if(invisible || disabled) {
+                    // that's ok, indeed expected
+                    continue; 
                 }
-                continue;
-            }
-            final Consent usable = property.isUsable(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
-            if (usable.isVetoed()) {
-                propertyRepr.mapPut("invalidReason", usable.getReason());
+                if (!property.isMandatory()) {
+                    // optional, so also not a problem
+                    continue;
+                }
+
+                // otherwise, is an error.
+                final String invalidReason = propertiesList.getString("x-ro-invalidReason");
+                if(invalidReason != null) {
+                    propertiesList.mapPut("x-ro-invalidReason", invalidReason + "; " + property.getName());
+                } else {
+                    propertiesList.mapPut("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getName());
+                }
                 allOk = false;
                 continue;
-            }
-            final ObjectAdapter valueAdapter;
-            try {
-                valueAdapter = objectAdapterFor(resourceContext, propertySpec, propertyRepr);
-            } catch(IllegalArgumentException ex) {
-                propertyRepr.mapPut("invalidReason", ex.getMessage());
-                allOk = false;
-                continue;
-            }
-            final Consent consent = property.isAssociationValid(objectAdapter, valueAdapter);
-            if (consent.isAllowed()) {
+                
+            } else {
+                
+                // value has been provided
+                if (invisible) {
+                    // silently ignore; don't want to acknowledge the existence of this property to the caller
+                    continue;
+                }
+                if (disabled) {
+                    // not allowed to update
+                    propertyRepr.mapPut("invalidReason", usability.getReason());
+                    allOk = false;
+                    continue;
+                }
+                
+                // ok, we have a value, and the property is not invisible, and is not disabled
+                final ObjectAdapter valueAdapter;
                 try {
-                    property.set(objectAdapter, valueAdapter);
-                } catch (final IllegalArgumentException ex) {
+                    valueAdapter = objectAdapterFor(resourceContext, propertySpec, propertyRepr);
+                } catch(IllegalArgumentException ex) {
                     propertyRepr.mapPut("invalidReason", ex.getMessage());
                     allOk = false;
+                    continue;
                 }
-            } else {
-                propertyRepr.mapPut("invalidReason", consent.getReason());
-                allOk = false;
+                // check if the proposed value is valid 
+                final Consent validity = property.isAssociationValid(objectAdapter, valueAdapter);
+                if (validity.isAllowed()) {
+                    try {
+                        property.set(objectAdapter, valueAdapter);
+                    } catch (final IllegalArgumentException ex) {
+                        propertyRepr.mapPut("invalidReason", ex.getMessage());
+                        allOk = false;
+                    }
+                } else {
+                    propertyRepr.mapPut("invalidReason", validity.getReason());
+                    allOk = false;
+                }
             }
+            
         }
 
         return allOk;
