@@ -521,7 +521,8 @@ tr.section td {
 	padding-top: 0.75em;
 }
 
-table.contents td {
+table.contents td,
+table.contents th {
 	border-left: 1px solid #DDD;
 }
 
