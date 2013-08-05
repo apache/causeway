@@ -136,7 +136,7 @@
 }
 
 .cssMenuPanel li.cssSubMenuItem p.disabled {
-	color: gray;
+	color: lightgray;
 }
 
 .cssMenuPanel li.cssSubMenuItem {
@@ -322,5 +322,9 @@
 }
 
 .entityActions a.prototype span {
-	color: lightblue;
+	color: #CCCC00;
+	font-style: italic;
+}
+.entityActions a.prototype {
+    background-color: #20B5C2;
 }

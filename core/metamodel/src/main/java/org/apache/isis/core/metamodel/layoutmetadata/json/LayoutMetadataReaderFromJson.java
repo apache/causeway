@@ -22,16 +22,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
@@ -49,6 +53,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -198,32 +203,30 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         final MemberGroupLayoutFacet mglf = objectSpec.getFacet(MemberGroupLayoutFacet.class);
         final ColumnSpans columnSpans = mglf.getColumnSpans();
         
+        Set<String> actionIdsForAssociations = Sets.newTreeSet();
+        
         ColumnRepr columnRepr;
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getLeft());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.LEFT, columnRepr);
+        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.LEFT, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getMiddle());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.MIDDLE, columnRepr);
+        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.MIDDLE, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getRight());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.RIGHT, columnRepr);
+        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.RIGHT, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getCollections());
-        
-        final List<ObjectAssociation> objectAssociations = visibleCollections(objectSpec);
-        columnRepr.collections = Maps.newLinkedHashMap();
-        for(ObjectAssociation assoc: objectAssociations) {
-            final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc);
-            columnRepr.collections.put(assoc.getId(), memberRepr);
-        }
+        updateCollectionColumnRepr(objectSpec, columnRepr, actionIdsForAssociations);
 
+        addActions(objectSpec, metadata, actionIdsForAssociations);
+        
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(metadata);
     }
 
-    private static void updateColumnMemberGroups(ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, ColumnRepr columnRepr) {
-        final List<ObjectAssociation> objectAssociations = visibleProperties(objectSpec);
+    private static void updateColumnMemberGroups(ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, ColumnRepr columnRepr, Set<String> actionIdsForAssociations) {
+        final List<ObjectAssociation> objectAssociations = propertiesOf(objectSpec);
         final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociations.groupByMemberOrderName(objectAssociations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objectSpec, associationsByGroup.keySet(), hint);
@@ -238,13 +241,35 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 continue;
             }
             for (ObjectAssociation assoc : associationsInGroup) {
-                final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc);
+                final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc, actionIdsForAssociations);
                 memberGroupRepr.members.put(assoc.getId(), memberRepr);
             }
         }
     }
+    private static void addActions(ObjectSpecification objectSpec, final LayoutMetadata metadata, Set<String> actionIdsForAssociations) {
+        Map<String, ActionRepr> actions = Maps.newLinkedHashMap();
+        final List<ObjectAction> actionsOf = actionsOf(objectSpec, actionIdsForAssociations);
+        for(ObjectAction action: actionsOf) {
+            actions.put(action.getId(), newActionRepr(objectSpec, action));
+        }
+        metadata.setActions(actions);
+    }
 
-    private static MemberRepr newMemberRepr(ObjectSpecification objectSpec, ObjectAssociation assoc) {
+    private static ActionRepr newActionRepr(ObjectSpecification objectSpec, ObjectAction action) {
+        return new ActionRepr();
+    }
+
+    private static void updateCollectionColumnRepr(ObjectSpecification objectSpec, ColumnRepr columnRepr, Set<String> actionIdsOfAssociations) {
+        final List<ObjectAssociation> objectAssociations = collectionsOf(objectSpec);
+        columnRepr.collections = Maps.newLinkedHashMap();
+        for(ObjectAssociation assoc: objectAssociations) {
+            final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc, actionIdsOfAssociations);
+            columnRepr.collections.put(assoc.getId(), memberRepr);
+        }
+    }
+
+
+    private static MemberRepr newMemberRepr(ObjectSpecification objectSpec, ObjectAssociation assoc, Set<String> actionIdsForAssociations) {
         final MemberRepr memberRepr = new MemberRepr();
         
         final List<ObjectAction> actions = objectSpec.getObjectActions(
@@ -255,7 +280,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             sortByMemberOrderFacet(actions);
             
             for (final ObjectAction action : actions) {
-                memberRepr.actions.put(action.getId(), new ActionRepr());
+                final String actionId = action.getId();
+                memberRepr.actions.put(actionId, new ActionRepr());
+                actionIdsForAssociations.add(actionId);
             }
         }
         return memberRepr;
@@ -280,11 +307,28 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     }
 
     
-    private static List<ObjectAssociation> visibleProperties(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+    @SuppressWarnings("unchecked")
+    private static List<ObjectAssociation> propertiesOf(final ObjectSpecification objSpec) {
+        return objSpec.getAssociations(Filters.and(ObjectAssociationFilters.PROPERTIES,  ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
     }
-    private static List<ObjectAssociation> visibleCollections(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(ObjectAssociationFilters.COLLECTIONS);
+    @SuppressWarnings("unchecked")
+    private static List<ObjectAssociation> collectionsOf(final ObjectSpecification objSpec) {
+        return objSpec.getAssociations(Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+    }
+    private static List<ObjectAction> actionsOf(final ObjectSpecification objSpec, final Set<String> excludedActionIds) {
+        return objSpec.getObjectActions(ActionType.ALL_EXCEPT_SET, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Filter<ObjectAction> staticallyVisibleExcluding(final Set<String> excludedActionIds) {
+        return Filters.and(
+                ObjectActionFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE, 
+                new Filter<ObjectAction>(){
+                    @Override
+                    public boolean accept(ObjectAction t) {
+                        return !excludedActionIds.contains(t.getId());
+                    }
+                });
     }
 
     @Override

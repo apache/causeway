@@ -33,6 +33,13 @@ import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
 public class ObjectActionFilters {
 
+    public static final Filter<ObjectAction> WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE = new Filter<ObjectAction>() {
+        @Override
+        public boolean accept(final ObjectAction action) {
+            return !action.isAlwaysHidden();
+        }
+    };
+
     public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
         return new Filter<ObjectAction>() {
             @Override

@@ -351,12 +351,18 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     public void invalidateCacheFor(Object domainObject) {
         final Class<? extends Object> cls = domainObject.getClass();
         final Class<?> substitutedType = getClassSubstitutor().getClass(cls);
-        ObjectSpecification origSpec = getCache().remove(substitutedType.getName());
         
-        final ObjectSpecification newSpec = loadSpecification(cls);
-        // ObjectSpecId is a value type, so in fact it shouldn't matter whether
-        // the original or the new Spec's SpecId is used.
-        getCache().recache(origSpec.getSpecId(), newSpec);
+        ObjectSpecification spec = loadSpecification(substitutedType);
+        while(spec != null) {
+            final Class<?> type = spec.getCorrespondingClass();
+            getCache().remove(type.getName());
+            recache(spec);
+            spec = spec.superclass(); 
+        }
+    }
+
+    private void recache(final ObjectSpecification newSpec) {
+        getCache().recache(newSpec.getSpecId(), newSpec);
     }
 
     

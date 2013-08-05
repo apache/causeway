@@ -236,7 +236,8 @@ colors
 	}
 	
     #applicationActions .cssMenuPanel .menuh a.prototype span {
-	    color: lightblue;
+	    color: #CCCC00;
+	    font-style: italic;
 	}
 	
 	
@@ -320,8 +321,9 @@ colors
 	}
 	
     #applicationActions ul.cssSubMenuItemsPanel li.cssSubMenuItem p.disabled {
-        color: #888;
-        background-color: #F0EFEA;
+        color: lightgray;
+        /*background-color: #F0EFEA;*/
+        
     } 
 
 
