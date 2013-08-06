@@ -17,23 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.param.mandatory.annotation;
+package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract.Semantics;
 
 /**
- * Derived by presence of an <tt>@Optional</tt> method.
- * 
- * <p>
- * This implementation indicates that the {@link FacetHolder} is <i>not</i>
- * mandatory, as per {@link #isInvertedSemantics()}.
+ * Derived by presence of an <tt>@Column</tt> method.
  */
-public class MandatoryFacetInvertedByOptionalForParameter extends MandatoryFacetAbstract {
+public class MandatoryFacetDerivedFromJdoColumn extends MandatoryFacetAbstract {
 
-    public MandatoryFacetInvertedByOptionalForParameter(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
+
+    public MandatoryFacetDerivedFromJdoColumn(final FacetHolder holder, boolean required ) {
+        super(holder, Semantics.of(required));
     }
 
 

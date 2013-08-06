@@ -55,6 +55,8 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
         this.user = user;
     }
 
+    // //////////////////////////////////////
+
     @Title(sequence="10")
     @PrimaryKey
     @Override
@@ -66,7 +68,8 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
         super.setKey(key);
     }
 
-    
+    // //////////////////////////////////////
+
     @Persistent
     @Override
     public String getDescription() {
@@ -77,6 +80,9 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
         super.setDescription(description);
     }
     
+    // //////////////////////////////////////
+
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Title(prepend=" = ", sequence="30")
     @Persistent
     @Override
@@ -88,6 +94,10 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     public void setValueRaw(String valueAsRaw) {
         super.setValueRaw(valueAsRaw);
     }
+    
+    // //////////////////////////////////////
+
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Persistent
     @Override
     public SettingType getType() {

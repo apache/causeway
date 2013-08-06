@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.progmodel.facets.properties.mandatory.staticmethod;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
 
@@ -33,21 +32,6 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
 public class MandatoryFacetOptionalViaMethodForProperty extends MandatoryFacetAbstract {
 
     public MandatoryFacetOptionalViaMethodForProperty(final FacetHolder holder) {
-        super(holder);
+        super(holder, Semantics.OPTIONAL);
     }
-
-    /**
-     * Always returns <tt>false</tt>, indicating that the facet holder is in
-     * fact optional.
-     */
-    @Override
-    public boolean isRequiredButNull(final ObjectAdapter adapter) {
-        return false;
-    }
-
-    @Override
-    public boolean isInvertedSemantics() {
-        return true;
-    }
-
 }

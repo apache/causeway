@@ -41,14 +41,15 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+
+        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
+
         if(BigDecimal.class != processMethodContext.getMethod().getReturnType()) {
             return;
-        }
-        
+        } 
         final BigDecimalValueFacet facet;
         final FacetedMethod holder = processMethodContext.getFacetHolder();
         
-        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
         if (annotation == null) {
             facet = new BigDecimalFacetFallback(holder);
         } else {
@@ -60,5 +61,6 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
     Integer valueElseDefault(final int value, final int defaultValue) {
         return value != -1? value: defaultValue;
     }
+
     
 }

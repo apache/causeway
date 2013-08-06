@@ -154,6 +154,7 @@ import org.apache.isis.core.progmodel.facets.properties.defaults.fromtype.Proper
 import org.apache.isis.core.progmodel.facets.properties.defaults.method.PropertyDefaultFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable.DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.event.PostsPropertyChangedEventAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.MandatoryAnnotationForPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.OptionalAnnotationForPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.dflt.MandatoryDefaultForPropertiesFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.staticmethod.PropertyOptionalFacetFactory;
@@ -380,6 +381,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(OptionalAnnotationForPropertyFacetFactory.class);
         addFactory(OptionalAnnotationForParameterFacetFactory.class);
+        addFactory(MandatoryAnnotationForPropertyFacetFactory.class);
 
         addFactory(ParseableFacetFactory.class);
         addFactory(PluralAnnotationFacetFactory.class);

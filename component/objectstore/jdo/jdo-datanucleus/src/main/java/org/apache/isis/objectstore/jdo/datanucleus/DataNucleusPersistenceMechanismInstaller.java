@@ -49,6 +49,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoE
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 
@@ -189,6 +190,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         programmingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
         
         programmingModel.addFactory(BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class);
+        // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
+        programmingModel.addFactory(MandatoryFromJdoColumnAnnotationFacetFactory.class);
         
         programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
         programmingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);

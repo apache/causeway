@@ -17,24 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.param.mandatory.annotation;
+package org.apache.isis.core.progmodel.facets.properties.mandatory.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract.Semantics;
 
 /**
- * Derived by presence of an <tt>@Optional</tt> method.
+ * Derived by presence of an <tt>@Mandatory</tt> annotation.
  * 
  * <p>
- * This implementation indicates that the {@link FacetHolder} is <i>not</i>
- * mandatory, as per {@link #isInvertedSemantics()}.
+ * This implementation indicates that the {@link FacetHolder} <i>is</i> 
+ * mandatory.
  */
-public class MandatoryFacetInvertedByOptionalForParameter extends MandatoryFacetAbstract {
+public class MandatoryFacetExplicitForProperty extends MandatoryFacetAbstract {
 
-    public MandatoryFacetInvertedByOptionalForParameter(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
+    public MandatoryFacetExplicitForProperty(final FacetHolder holder) {
+        super(holder, Semantics.REQUIRED);
     }
-
-
 }

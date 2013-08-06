@@ -38,7 +38,6 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
 
         class Customer {
-            @SuppressWarnings("unused")
             @Optional
             public String getFirstName() {
                 return null;

@@ -26,16 +26,15 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.jdo.JDOHelper;
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
@@ -44,7 +43,6 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
@@ -117,9 +115,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     private String description;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
-    // only words, spaces and selected punctuation accepted
-    
     public String getDescription() {
         return description;
     }
@@ -135,7 +132,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     private LocalDate dueBy;
 
-    @Optional
+    @javax.jdo.annotations.Column(allowsNull="true")
     @CssClass("x-key")
     public LocalDate getDueBy() {
         return dueBy;
@@ -184,6 +181,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     private Category category;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     public Category getCategory() {
         return category;
     }
@@ -198,8 +196,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     private String ownedBy;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Hidden
-    // not shown in the UI
     public String getOwnedBy() {
         return ownedBy;
     }
@@ -217,7 +215,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private boolean complete;
 
     @Disabled
-    // cannot be edited as a property
     public boolean isComplete() {
         return complete;
     }
@@ -257,8 +254,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     private BigDecimal cost;
 
-    @Column(scale = 2)
-    @Optional
+    @javax.jdo.annotations.Column(allowsNull="true", scale=2)
     public BigDecimal getCost() {
         return cost;
     }
@@ -283,8 +279,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     private String notes;
 
+    @javax.jdo.annotations.Column(allowsNull="true")
     @Hidden(where=Where.ALL_TABLES)
-    @Optional
     @MultiLine(numberOfLines=5)
     public String getNotes() {
         return notes;
@@ -301,7 +297,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private Blob attachment;
 
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
-    @Optional
+    @javax.jdo.annotations.Column(allowsNull="true")
     @Hidden(where=Where.STANDALONE_TABLES)
     public Blob getAttachment() {
         return attachment;

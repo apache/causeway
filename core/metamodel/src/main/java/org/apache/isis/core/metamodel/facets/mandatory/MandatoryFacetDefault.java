@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.mandatory;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 
 /**
  * Whether a property or a parameter is mandatory (not optional).
@@ -38,26 +36,8 @@ import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 public class MandatoryFacetDefault extends MandatoryFacetAbstract {
 
     public MandatoryFacetDefault(final FacetHolder holder) {
-        super(holder);
+        super(holder, Semantics.REQUIRED);
     }
 
-    /**
-     * If not specified or, if a string, then zero length.
-     */
-    @Override
-    public boolean isRequiredButNull(final ObjectAdapter adapter) {
-        final Object object = ObjectAdapterUtils.unwrapObject(adapter);
-        if (object == null) {
-            return true;
-        }
-        // special case string handling.
-        final String str = ObjectAdapterUtils.unwrapObjectAsString(adapter);
-        return str != null && str.length() == 0;
-    }
-
-    @Override
-    public boolean isInvertedSemantics() {
-        return false;
-    }
 
 }

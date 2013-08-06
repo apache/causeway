@@ -37,6 +37,7 @@ public abstract class SettingAbstractJdo extends org.apache.isis.applib.services
 
     private String key;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     public String getKey() {
         return key;
     }
@@ -71,6 +72,7 @@ public abstract class SettingAbstractJdo extends org.apache.isis.applib.services
 
     private SettingType type;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     public SettingType getType() {
         return type;
     }
@@ -83,6 +85,7 @@ public abstract class SettingAbstractJdo extends org.apache.isis.applib.services
 
     private String valueRaw;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     public String getValueRaw() {
         return valueRaw;
     }

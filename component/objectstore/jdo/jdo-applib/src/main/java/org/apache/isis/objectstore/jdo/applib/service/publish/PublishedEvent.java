@@ -28,8 +28,10 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
@@ -48,9 +50,11 @@ public class PublishedEvent {
         QUEUED, PROCESSED
     }
     
-    // {{ Title (property)
+    // //////////////////////////////////////
+
     private String title;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Title
     @Hidden
     public String getTitle() {
@@ -60,10 +64,9 @@ public class PublishedEvent {
     public void setTitle(final String title) {
         this.title = title;
     }
-    // }}
 
+    // //////////////////////////////////////
 
-    // {{ Timestamp (property)
     private long timestamp;
 
     @MemberOrder(sequence = "1")
@@ -74,12 +77,12 @@ public class PublishedEvent {
     public void setTimestamp(final long timestamp) {
         this.timestamp = timestamp;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-    // {{ Id (property)
-    @javax.jdo.annotations.PrimaryKey
     private String id;
 
+    @javax.jdo.annotations.PrimaryKey
     @MemberOrder(sequence = "2")
     public String getId() {
         return id;
@@ -88,10 +91,9 @@ public class PublishedEvent {
     public void setId(final String id) {
         this.id = id;
     }
-    // }}
-
     
-    // {{ TransactionId (property)
+    // //////////////////////////////////////
+
     private String transactionId;
 
     /**
@@ -105,10 +107,9 @@ public class PublishedEvent {
     public void setTransactionId(final String transactionId) {
         this.transactionId = transactionId;
     }
-    // }}
-
     
-    // {{ Sequence (property)
+    // //////////////////////////////////////
+
     private int sequence;
 
     /**
@@ -122,12 +123,12 @@ public class PublishedEvent {
     public void setSequence(final int sequence) {
         this.sequence = sequence;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-
-    // {{ EventType (property)
     private EventType eventType;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     @MemberOrder(sequence = "3")
     public EventType getEventType() {
         return eventType;
@@ -136,12 +137,12 @@ public class PublishedEvent {
     public void setEventType(final EventType eventType) {
         this.eventType = eventType;
     }
-    // }}
-
     
-    // {{ User (property)
+    // //////////////////////////////////////
+
     private String user;
     
+    @javax.jdo.annotations.Column(allowsNull="false")
     @MemberOrder(sequence = "4")
     public String getUser() {
         return user;
@@ -150,12 +151,12 @@ public class PublishedEvent {
     public void setUser(final String user) {
         this.user = user;
     }
-    // }}
     
-    
-    // {{ State (property)
+    // //////////////////////////////////////
+
     private State state;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     @MemberOrder(sequence = "5")
     public State getState() {
         return state;
@@ -168,12 +169,11 @@ public class PublishedEvent {
         setState(state);
         return this;
     }
-    // }}
-
     
-    // {{ SerializedForm (property)
+    // //////////////////////////////////////
 
     @javax.jdo.annotations.NotPersistent
+    @NotPersisted
     @MultiLine(numberOfLines=20)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(sequence = "6")
@@ -185,10 +185,9 @@ public class PublishedEvent {
         final byte[] zippedBytes = IoUtils.toUtf8ZippedBytes("serializedForm", serializedForm);
         setSerializedFormZipped(zippedBytes);
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-
-    // {{ SerializedFormZipped (property)
     @javax.jdo.annotations.Column
     private byte[] serializedFormZipped;
 
@@ -200,10 +199,10 @@ public class PublishedEvent {
     public void setSerializedFormZipped(final byte[] serializedFormZipped) {
         this.serializedFormZipped = serializedFormZipped;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-
-
+ 
     @Bulk
     @ActionSemantics(Of.IDEMPOTENT)
     @MemberOrder(sequence="10")
@@ -226,13 +225,13 @@ public class PublishedEvent {
     }
     
 
-    // {{ injected: DomainObjectContainer
+    // //////////////////////////////////////
+
     private DomainObjectContainer container;
 
     public void setDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
     }
-    // }}
 
 
 

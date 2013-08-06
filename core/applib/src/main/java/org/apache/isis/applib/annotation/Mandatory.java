@@ -26,22 +26,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a property or parameter is not mandatory.
+ * Indicates that a property is mandatory.
  * 
  * <p>
- * Isis' default is that properties/parameters are mandatory unless otherwise
- * annotated as optional; this is most typically done using this annotation.
+ * Isis' default is that properties are mandatory unless otherwise
+ * annotated as optional, most typically indicated using the {@link Optional} annotation.
  * 
  * <p>
- * Note that there is another related annotation, {@link Mandatory}, which can be
- * used to force a property or parameter as being mandatory.  This is only
- * rarely required; see the {@link Mandatory} annotation javadoc for further discussion.
+ * However, if using the JDO/DataNucleus objectstore, it is sometimes necessary
+ * to annotate a property as optional (using <tt>javax.jdo.annotations.Column(allowNulls="true")</tt>) 
+ * even if the property is logically mandatory.  For example, this can occur when
+ * the property is in a subtype class that has been "rolled up" to the superclass
+ * table using <tt>@javax.jdo.annotations.Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)</tt>.
  * 
- * @see Mandatory
+ * <p>
+ * This annotation, therefore, is intended to override any objectstore-specific
+ * annotation, so that Isis can apply the constraint even though the objectstore
+ * is unable to do so.
+ * 
+ *  @see Optional
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.PARAMETER })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Optional {
+public @interface Mandatory {
 
 }

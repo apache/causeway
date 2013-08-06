@@ -43,6 +43,8 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
         super.setKey(key);
     }
 
+    // //////////////////////////////////////
+
     @Persistent
     @Override
     public String getDescription() {
@@ -52,6 +54,10 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
     public void setDescription(String description) {
         super.setDescription(description);
     }
+    
+    // //////////////////////////////////////
+
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Persistent
     @Override
     public String getValueRaw() {
@@ -61,6 +67,10 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
     public void setValueRaw(String valueAsRaw) {
         super.setValueRaw(valueAsRaw);
     }
+    
+    // //////////////////////////////////////
+
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Persistent
     @Override
     public SettingType getType() {

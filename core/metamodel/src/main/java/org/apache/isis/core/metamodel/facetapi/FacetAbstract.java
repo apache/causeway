@@ -87,7 +87,9 @@ public abstract class FacetAbstract implements Facet {
 
     @Override
     public void setUnderlyingFacet(final Facet underlyingFacet) {
-        Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
+        if(underlyingFacet != null) {
+            Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
+        }
         this.underlyingFacet = underlyingFacet;
     }
 

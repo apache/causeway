@@ -25,9 +25,8 @@ import javax.jdo.annotations.Column;
 import org.apache.isis.applib.annotation.MemberOrder;
 
 
-public class SimpleObjectWithColumnAnnotations {
+public class SimpleObjectWithBigDecimalColumnAnnotations {
 
-    // {{ BigDecimalPropertyWithColumnAnnotation (property)
     private BigDecimal bigDecimalPropertyWithColumnAnnotation;
 
     @Column(length=12,scale=3)
@@ -38,9 +37,9 @@ public class SimpleObjectWithColumnAnnotations {
     public void setBigDecimalPropertyWithColumnAnnotation(final BigDecimal val) {
         this.bigDecimalPropertyWithColumnAnnotation = val;
     }
-    // }}
 
-    // {{ BigDecimalPropertyWithColumnAnnotation (property)
+    // //////////////////////////////////////
+
     private BigDecimal bigDecimalPropertyWithColumnAnnotationMissingLength;
 
     @Column(scale=3)
@@ -51,9 +50,9 @@ public class SimpleObjectWithColumnAnnotations {
     public void setBigDecimalPropertyWithColumnAnnotationMissingLength(final BigDecimal val) {
         this.bigDecimalPropertyWithColumnAnnotationMissingLength = val;
     }
-    // }}
 
-    // {{ BigDecimalPropertyWithColumnAnnotationMissingScale (property)
+    // //////////////////////////////////////
+
     private BigDecimal bigDecimalPropertyWithColumnAnnotationMissingScale;
 
     @Column(length=12)
@@ -64,9 +63,9 @@ public class SimpleObjectWithColumnAnnotations {
     public void setBigDecimalPropertyWithColumnAnnotationMissingScale(final BigDecimal val) {
         this.bigDecimalPropertyWithColumnAnnotationMissingScale = val;
     }
-    // }}
 
-    // {{ StringPropertyWithColumnAnnotation (property)
+    // //////////////////////////////////////
+
     private String stringPropertyWithColumnAnnotation;
 
     @Column(length=12, scale=3)
@@ -77,9 +76,9 @@ public class SimpleObjectWithColumnAnnotations {
     public void setStringPropertyWithColumnAnnotation(final String stringPropertyWithColumnAnnotation) {
         this.stringPropertyWithColumnAnnotation = stringPropertyWithColumnAnnotation;
     }
-    // }}
 
-    // {{ BigDecimalPropertyWithoutColumnAnnotation (property)
+    // //////////////////////////////////////
+
     private BigDecimal bigDecimalPropertyWithoutColumnAnnotation;
 
     public BigDecimal getBigDecimalPropertyWithoutColumnAnnotation() {
@@ -89,10 +88,6 @@ public class SimpleObjectWithColumnAnnotations {
     public void setBigDecimalPropertyWithoutColumnAnnotation(final BigDecimal bigDecimalPropertyWithoutColumnAnnotation) {
         this.bigDecimalPropertyWithoutColumnAnnotation = bigDecimalPropertyWithoutColumnAnnotation;
     }
-    // }}
-
-
-
 
 
 }

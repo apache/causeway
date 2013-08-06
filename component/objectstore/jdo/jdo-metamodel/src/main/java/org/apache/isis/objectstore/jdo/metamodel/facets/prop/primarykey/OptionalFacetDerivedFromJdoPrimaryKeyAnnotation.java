@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
 
@@ -34,17 +34,10 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
  * the property as optional, meaning that the {@link PrimaryKey} property is left
  * untouched by Isis.
  */
-public class OptionalFacetDerivedFromJdoPrimaryKeyAnnotation extends
-        MandatoryFacetDefault {
+public class OptionalFacetDerivedFromJdoPrimaryKeyAnnotation extends MandatoryFacetAbstract {
 
     public OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(holder);
+        super(holder, Semantics.OPTIONAL);
     }
-
-    @Override
-    public boolean isInvertedSemantics() {
-        return true;
-    }
-
 
 }

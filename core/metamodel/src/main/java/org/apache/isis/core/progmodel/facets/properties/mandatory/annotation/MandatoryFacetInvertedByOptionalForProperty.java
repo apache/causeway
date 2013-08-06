@@ -19,12 +19,11 @@
 
 package org.apache.isis.core.progmodel.facets.properties.mandatory.annotation;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
 
 /**
- * Derived by presence of an <tt>@Optional</tt> method.
+ * Derived by presence of an <tt>@Optional</tt> annotation.
  * 
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
@@ -33,21 +32,6 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
 public class MandatoryFacetInvertedByOptionalForProperty extends MandatoryFacetAbstract {
 
     public MandatoryFacetInvertedByOptionalForProperty(final FacetHolder holder) {
-        super(holder);
+        super(holder, Semantics.OPTIONAL);
     }
-
-    /**
-     * Always returns <tt>false</tt>, indicating that the facet holder is in
-     * fact optional.
-     */
-    @Override
-    public boolean isRequiredButNull(final ObjectAdapter adapter) {
-        return false;
-    }
-
-    @Override
-    public boolean isInvertedSemantics() {
-        return true;
-    }
-
 }

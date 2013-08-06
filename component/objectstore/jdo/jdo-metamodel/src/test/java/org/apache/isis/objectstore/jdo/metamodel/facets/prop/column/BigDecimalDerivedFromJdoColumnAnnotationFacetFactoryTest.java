@@ -63,7 +63,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
     }
 
     public void testAnnotationPickedUpOnProperty() throws Exception {
-        final Class<?> cls = SimpleObjectWithColumnAnnotations.class;
+        final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotation");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
@@ -75,7 +75,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
     }
 
     public void testAnnotationDefaultsLengthIfMissing() throws Exception {
-        final Class<?> cls = SimpleObjectWithColumnAnnotations.class;
+        final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotationMissingLength");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
@@ -86,7 +86,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
     }
 
     public void testAnnotationDefaultsScaleIfMissing() throws Exception {
-        final Class<?> cls = SimpleObjectWithColumnAnnotations.class;
+        final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotationMissingScale");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
         
@@ -98,7 +98,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
     
     public void testNoFacetIfPropertyTypeIsNotBigDecimal() throws Exception {
         
-        final Class<?> cls = SimpleObjectWithColumnAnnotations.class;
+        final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getStringPropertyWithColumnAnnotation");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
@@ -108,7 +108,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
 
     public void testFallbackFacetIfPropertyIsNotAnnotated() throws Exception {
         
-        final Class<?> cls = SimpleObjectWithColumnAnnotations.class;
+        final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithoutColumnAnnotation");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
         
