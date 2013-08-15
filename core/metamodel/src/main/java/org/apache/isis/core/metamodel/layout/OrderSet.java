@@ -21,12 +21,14 @@ package org.apache.isis.core.metamodel.layout;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -193,6 +195,39 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
             this.addElement(deweyOrderSet);
         }
     }
+    
+    // ///////////////////////// compareTo //////////////////////
+    
+    public void reorderChildren(List<String> requiredOrder) {
+        final LinkedHashMap<String,OrderSet> orderSets = Maps.newLinkedHashMap();
+        
+        // remove all OrderSets from elements
+        // though remembering the order they were encountered
+        for (Object child : elementList()) {
+            if(child instanceof OrderSet) {
+                final OrderSet orderSet = (OrderSet) child;
+                elements.remove(orderSet);
+                orderSets.put(orderSet.getGroupName(), orderSet);
+            }
+        }
+        
+        // spin through the requiredOrder and add back in (if found)  
+        for (String group : requiredOrder) {
+            OrderSet orderSet = orderSets.get(group);
+            if(orderSet == null) {
+                continue;
+            }
+            orderSets.remove(group);
+            elements.add(orderSet);
+        }
+        
+        // anything left, add back in the original order
+        for (String orderSetGroupName : orderSets.keySet()) {
+            final OrderSet orderSet = orderSets.get(orderSetGroupName);
+            elements.add(orderSet);
+        }
+    }
+
 
     // ///////////////////////// compareTo //////////////////////
 

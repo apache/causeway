@@ -18,10 +18,13 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +50,18 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
             LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
 
-        return DeweyOrderSet.createOrderSet(associationMethods);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associationMethods);
+        final MemberGroupLayoutFacet memberGroupLayoutFacet = spec.getFacet(MemberGroupLayoutFacet.class);
+        
+        if(memberGroupLayoutFacet != null) {
+            final List<String> groupOrder = Lists.newArrayList();
+            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
+            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
+            groupOrder.addAll(memberGroupLayoutFacet.getRight());
+            
+            orderSet.reorderChildren(groupOrder);
+        }
+        return orderSet;
     }
 
     // ////////////////////////////////////////////////////////////////////////////

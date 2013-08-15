@@ -167,6 +167,8 @@ public class DeweyOrderSet extends OrderSet {
         super(groupName);
     }
 
+    
+
     /**
      * Format is: <tt>abc,def:XXel/YYm/ZZch</tt>
      * <p>
@@ -178,5 +180,6 @@ public class DeweyOrderSet extends OrderSet {
     public String toString() {
         return getGroupFullName() + ":" + size() + "el/" + (size() - childOrderSets.size()) + "m/" + childOrderSets.size() + "ch";
     }
+
 
 }
