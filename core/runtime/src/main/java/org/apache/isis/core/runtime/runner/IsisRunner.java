@@ -33,7 +33,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -65,7 +66,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 
 public class IsisRunner {
 
-    private static final Logger LOG = Logger.getLogger(IsisRunner.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisRunner.class);
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 

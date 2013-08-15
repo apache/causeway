@@ -24,7 +24,8 @@ import java.util.Vector;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -63,7 +64,7 @@ public final class SqlObjectStore implements ObjectStoreSpi {
     // private static final String ID_COLUMN = "id";
     // private static final String PRIMARYKEY_COLUMN = "pk_id";
     public static final String BASE_NAME = "isis.persistor.sql";
-    private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SqlObjectStore.class);
     private DatabaseConnectorPool connectionPool;
     private ObjectMappingLookup objectMappingLookup;
     private boolean isInitialized;

@@ -23,8 +23,10 @@ import static org.apache.isis.core.commons.lang.CastUtils.enumerationOver;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -46,9 +48,9 @@ public class DebugDumpSnapshotOption extends UserActionAbstract {
 
     @Override
     public Consent disabled(final View component) {
-        final Enumeration<Logger> enumeration = enumerationOver(Logger.getRootLogger().getAllAppenders(), Logger.class);
+        final Enumeration<Logger> enumeration = enumerationOver(org.apache.log4j.Logger.getRootLogger().getAllAppenders(), Logger.class);
         while (enumeration.hasMoreElements()) {
-            final Appender appender = (Appender) enumeration.nextElement();
+            final org.apache.log4j.Appender appender = (org.apache.log4j.Appender) enumeration.nextElement();
             if (appender instanceof SnapshotAppender) {
                 return Allow.DEFAULT;
             }
@@ -59,9 +61,9 @@ public class DebugDumpSnapshotOption extends UserActionAbstract {
 
     @Override
     public void execute(final Workspace workspace, final View view, final Location at) {
-        final Enumeration<Logger> enumeration = enumerationOver(Logger.getRootLogger().getAllAppenders(), Logger.class);
+        final Enumeration<Logger> enumeration = enumerationOver(org.apache.log4j.Logger.getRootLogger().getAllAppenders(), Logger.class);
         while (enumeration.hasMoreElements()) {
-            final Appender appender = (Appender) enumeration.nextElement();
+            final org.apache.log4j.Appender appender = (org.apache.log4j.Appender) enumeration.nextElement();
             if (appender instanceof SnapshotAppender) {
                 ((SnapshotAppender) appender).forceSnapshot();
             }

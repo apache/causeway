@@ -25,7 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -59,7 +60,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
     private static final ViewSpecification fallback = new FallbackView.Specification();
     private final ViewSpecification dialogSpec = new ActionDialogSpecification();
     public static final int INTERNAL = 2;
-    private static final Logger LOG = Logger.getLogger(SkylarkViewFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SkylarkViewFactory.class);
     public static final int WINDOW = 1;
 
     private ViewSpecification emptyFieldSpecification;

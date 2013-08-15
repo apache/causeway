@@ -23,7 +23,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
@@ -59,7 +60,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault;
  */
 public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract {
 
-    public static final Logger LOG = Logger.getLogger(IsisSystemAbstract.class);
+    public static final Logger LOG = LoggerFactory.getLogger(IsisSystemAbstract.class);
 
     private FixturesInstaller fixtureInstaller;
 

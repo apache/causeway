@@ -22,7 +22,8 @@ package org.apache.isis.viewer.dnd.view.menu;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -234,7 +235,7 @@ public class PopupMenu extends AbstractView {
         }
     }
 
-    private static final Logger LOG = Logger.getLogger(PopupMenu.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PopupMenu.class);
     private Color backgroundColor;
     private View forView;
     private Item[] items = new Item[0];

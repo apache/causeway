@@ -22,7 +22,8 @@ package org.apache.isis.core.runtime.persistence.adapter;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -52,7 +53,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
-    private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PojoAdapter.class);
 
     private static final int INCOMPLETE_COLLECTION = -1;
 

@@ -20,14 +20,15 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 
 public class DataNucleusUpdateObjectCommand extends AbstractDataNucleusObjectCommand implements SaveObjectCommand {
-    private static final Logger LOG = Logger
+    private static final Logger LOG = LoggerFactory
             .getLogger(DataNucleusDeleteObjectCommand.class);
 
     public DataNucleusUpdateObjectCommand(ObjectAdapter adapter, PersistenceManager persistenceManager) {

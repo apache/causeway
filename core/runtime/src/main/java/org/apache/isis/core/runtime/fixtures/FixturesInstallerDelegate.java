@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
@@ -47,7 +48,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  */
 public class FixturesInstallerDelegate {
 
-    private static final Logger LOG = Logger.getLogger(FixturesInstallerDelegate.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerDelegate.class);
 
     protected final List<Object> fixtures = new ArrayList<Object>();
     private final SwitchUserServiceImpl switchUserService = new SwitchUserServiceImpl();

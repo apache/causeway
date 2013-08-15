@@ -96,7 +96,7 @@ public class AboutIsis {
     }
 
     public static String getFrameworkName() {
-        return select(frameworkName, "Apache Isis (incubating)");
+        return select(frameworkName, "Apache Isis");
     }
 
     public static String getImageName() {

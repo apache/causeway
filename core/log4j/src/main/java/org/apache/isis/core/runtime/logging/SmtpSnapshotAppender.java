@@ -26,17 +26,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 public class SmtpSnapshotAppender extends SnapshotAppender {
-    private static final Logger LOG = Logger.getLogger(SmtpSnapshotAppender.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SmtpSnapshotAppender.class);
     private String server;
     private String recipient;
     private int port = 25;
     private String senderDomain = "localhost";
 
-    public SmtpSnapshotAppender(final TriggeringEventEvaluator evaluator) {
+    public SmtpSnapshotAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 

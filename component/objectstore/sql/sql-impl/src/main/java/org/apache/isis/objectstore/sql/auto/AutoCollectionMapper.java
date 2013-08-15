@@ -22,7 +22,8 @@ package org.apache.isis.objectstore.sql.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -43,7 +44,7 @@ import org.apache.isis.objectstore.sql.jdbc.JdbcObjectReferenceMapping;
 import org.apache.isis.objectstore.sql.mapping.ObjectReferenceMapping;
 
 public class AutoCollectionMapper extends AbstractMapper implements CollectionMapper {
-    private static final Logger LOG = Logger.getLogger(AutoCollectionMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AutoCollectionMapper.class);
     private String tableName;
     private final ObjectAssociation field;
     private final ObjectReferenceMapping elementMapping;

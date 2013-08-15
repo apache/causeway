@@ -23,7 +23,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -60,7 +61,7 @@ import org.apache.isis.objectstore.sql.mapping.FieldMapping;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
 
-    private static final Logger LOG = Logger.getLogger(AutoMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AutoMapper.class);
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
     private final TitleMapping titleMapping;

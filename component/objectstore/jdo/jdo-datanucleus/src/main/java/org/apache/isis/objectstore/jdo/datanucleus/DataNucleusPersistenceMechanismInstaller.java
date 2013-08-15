@@ -20,7 +20,8 @@ package org.apache.isis.objectstore.jdo.datanucleus;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -72,7 +73,7 @@ import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaMod
  */
 public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
-    private static final Logger LOG = Logger.getLogger(DataNucleusPersistenceMechanismInstaller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusPersistenceMechanismInstaller.class);
 
     public static final String NAME = "datanucleus";
 

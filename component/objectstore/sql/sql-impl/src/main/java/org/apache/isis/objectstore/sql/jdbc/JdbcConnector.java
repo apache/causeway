@@ -29,7 +29,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
@@ -43,7 +44,7 @@ import org.apache.isis.objectstore.sql.SqlObjectStore;
 import org.apache.isis.objectstore.sql.SqlObjectStoreException;
 
 public class JdbcConnector extends AbstractDatabaseConnector {
-    private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcConnector.class);
     private Connection connection;
     private final String baseName;
 

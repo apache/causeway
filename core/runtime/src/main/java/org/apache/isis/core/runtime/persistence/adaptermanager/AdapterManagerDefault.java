@@ -27,7 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -66,7 +67,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class AdapterManagerDefault implements AdapterManagerSpi {
 
-    private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdapterManagerDefault.class);
 
     protected final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     protected final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();

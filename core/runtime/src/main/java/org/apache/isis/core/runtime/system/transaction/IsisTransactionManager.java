@@ -28,7 +28,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
@@ -60,7 +61,7 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
-    private static final Logger LOG = Logger.getLogger(IsisTransactionManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisTransactionManager.class);
 
     private final PersistenceSession persistenceSession;
 

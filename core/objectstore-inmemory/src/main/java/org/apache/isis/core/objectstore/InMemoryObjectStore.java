@@ -26,7 +26,8 @@ import java.util.Vector;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
@@ -64,7 +65,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 
 public class InMemoryObjectStore implements ObjectStoreSpi {
 
-    private final static Logger LOG = Logger.getLogger(InMemoryObjectStore.class);
+    private final static Logger LOG = LoggerFactory.getLogger(InMemoryObjectStore.class);
 
     protected ObjectStorePersistedObjects persistedObjects;
 
@@ -385,7 +386,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
                 try {
                     element = e.next();
                 } catch (final ClassCastException ex) {
-                    LOG.error(ex);
+                    LOG.error(ex.getMessage(), ex);
                     return s.toString();
                 }
 

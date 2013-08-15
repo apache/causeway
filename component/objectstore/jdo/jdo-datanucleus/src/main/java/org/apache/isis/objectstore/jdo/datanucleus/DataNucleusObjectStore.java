@@ -38,7 +38,8 @@ import javax.jdo.spi.PersistenceCapable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -90,7 +91,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQue
 
 public class DataNucleusObjectStore implements ObjectStoreSpi {
 
-    private static final Logger LOG = Logger.getLogger(DataNucleusObjectStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusObjectStore.class);
 
     static enum State {
         NOT_YET_OPEN, OPEN, CLOSED;

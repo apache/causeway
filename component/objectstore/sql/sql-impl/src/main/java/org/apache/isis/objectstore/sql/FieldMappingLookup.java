@@ -22,7 +22,8 @@ package org.apache.isis.objectstore.sql;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -35,7 +36,7 @@ import org.apache.isis.objectstore.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.objectstore.sql.mapping.ObjectReferenceMappingFactory;
 
 public class FieldMappingLookup {
-    private static final Logger LOG = Logger.getLogger(FieldMappingLookup.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FieldMappingLookup.class);
     private final Map<ObjectSpecification, FieldMappingFactory> fieldMappings = new HashMap<ObjectSpecification, FieldMappingFactory>();
     private final Map<ObjectSpecification, ObjectReferenceMappingFactory> referenceMappings = new HashMap<ObjectSpecification, ObjectReferenceMappingFactory>();
     private FieldMappingFactory referenceFieldMappingfactory;

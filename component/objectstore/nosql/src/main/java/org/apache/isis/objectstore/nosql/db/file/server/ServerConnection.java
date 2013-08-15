@@ -27,14 +27,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 import org.apache.isis.objectstore.nosql.db.file.RemotingException;
 
 public class ServerConnection {
 
-    private static final Logger LOG = Logger.getLogger(ServerConnection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServerConnection.class);
 
     private final BufferedReader reader;
     private final PrintWriter writer;

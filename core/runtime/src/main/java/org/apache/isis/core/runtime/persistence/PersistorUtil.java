@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 
 public class PersistorUtil {
 
-    private static final Logger LOG = Logger.getLogger(PersistorUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersistorUtil.class);
 
     private PersistorUtil() {
     }

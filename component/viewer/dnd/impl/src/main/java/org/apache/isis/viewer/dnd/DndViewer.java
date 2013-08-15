@@ -22,7 +22,8 @@ package org.apache.isis.viewer.dnd;
 import java.awt.Dimension;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
@@ -100,7 +101,7 @@ import org.apache.isis.viewer.dnd.viewer.basic.WrappedTextFieldSpecification;
 
 public class DndViewer extends IsisViewerAbstract {
 
-    private static final Logger LOG = Logger.getLogger(DndViewer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DndViewer.class);
     private static final String SPECIFICATION_BASE = Properties.PROPERTY_BASE + "specification.";
     private ViewUpdateNotifier updateNotifier;
     private ViewerFrame frame;

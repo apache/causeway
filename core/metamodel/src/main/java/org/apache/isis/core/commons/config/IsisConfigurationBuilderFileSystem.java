@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.commons.config;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
@@ -35,7 +36,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 public class IsisConfigurationBuilderFileSystem extends IsisConfigurationBuilderResourceStreams {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderFileSystem.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationBuilderFileSystem.class);
 
     private static ResourceStreamSource createResourceStreamSource(final String... directories) {
         final ResourceStreamSourceChainOfResponsibility composite = new ResourceStreamSourceChainOfResponsibility();

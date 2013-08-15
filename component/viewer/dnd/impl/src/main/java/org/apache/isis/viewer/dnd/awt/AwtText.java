@@ -24,7 +24,8 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -35,7 +36,7 @@ import org.apache.isis.viewer.dnd.util.Properties;
 public class AwtText implements Text {
     private static final String ASCENT_ADJUST = Properties.PROPERTY_BASE + "ascent-adjust";
     private static final String FONT_PROPERTY_STEM = Properties.PROPERTY_BASE + "font.";
-    private static final Logger LOG = Logger.getLogger(AwtText.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AwtText.class);
     private static final String SPACING_PROPERTYSTEM = Properties.PROPERTY_BASE + "spacing.";
     private final boolean ascentAdjust;
     private Font font;

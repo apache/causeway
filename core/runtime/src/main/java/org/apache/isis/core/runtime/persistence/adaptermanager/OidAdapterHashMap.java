@@ -24,7 +24,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -39,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, SessionScopedComponent, Resettable {
 
-    private static final Logger LOG = Logger.getLogger(OidAdapterHashMap.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OidAdapterHashMap.class);
     public static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 100;
 
     private final Map<Oid, ObjectAdapter> adapterByOidMap = Maps.newHashMapWithExpectedSize(DEFAULT_OID_ADAPTER_MAP_SIZE);

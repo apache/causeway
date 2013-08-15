@@ -22,11 +22,12 @@ package org.apache.isis.core.commons.encoding;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DebugDataInputExtended extends DataInputExtendedDecorator {
 
-    private static final Logger LOG = Logger.getLogger(DebugDataInputExtended.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DebugDataInputExtended.class);
 
     public DebugDataInputExtended(final DataInputExtended input) {
         super(input);

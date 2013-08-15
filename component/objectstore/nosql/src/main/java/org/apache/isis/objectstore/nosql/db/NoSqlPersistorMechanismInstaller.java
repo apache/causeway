@@ -22,7 +22,8 @@ package org.apache.isis.objectstore.nosql.db;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -43,7 +44,7 @@ import org.apache.isis.objectstore.nosql.versions.VersionCreatorDefault;
 
 public abstract class NoSqlPersistorMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
-    private static final Logger LOG = Logger.getLogger(NoSqlPersistorMechanismInstaller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NoSqlPersistorMechanismInstaller.class);
 
     private static final String NAKEDOBJECTS_ENCRYPTION_CLASSES = ConfigurationConstants.ROOT + "nosql.encryption";
 

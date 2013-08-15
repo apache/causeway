@@ -22,8 +22,9 @@ package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
@@ -50,7 +51,6 @@ public class MemberOrderComparatorTest extends TestCase {
 
     @Override
     protected void setUp() {
-        LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         comparator = new MemberOrderComparator(true);
         laxComparator = new MemberOrderComparator(false);

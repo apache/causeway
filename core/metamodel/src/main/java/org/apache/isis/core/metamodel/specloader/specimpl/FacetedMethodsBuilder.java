@@ -31,7 +31,8 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSyntaxException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -63,7 +64,7 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 
 public class FacetedMethodsBuilder {
 
-    private static final Logger LOG = Logger.getLogger(FacetedMethodsBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FacetedMethodsBuilder.class);
 
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";

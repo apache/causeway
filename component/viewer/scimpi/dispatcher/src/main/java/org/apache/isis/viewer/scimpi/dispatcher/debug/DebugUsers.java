@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -32,7 +33,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 
 public class DebugUsers {
 
-    private static Logger LOG = Logger.getLogger(DebugUsers.class);
+    private static Logger LOG = LoggerFactory.getLogger(DebugUsers.class);
 
     private enum DebugMode {
         OFF, ON, NAMED, SYSADMIN_ONLY

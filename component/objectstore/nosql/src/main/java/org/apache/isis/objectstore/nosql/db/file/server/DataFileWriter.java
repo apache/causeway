@@ -26,7 +26,7 @@ import java.util.List;
 
 public class DataFileWriter {
 
-    // private static final Logger LOG = Logger.getLogger(DataWriter.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(DataWriter.class);
 
     private final List<FileContent> files;
 

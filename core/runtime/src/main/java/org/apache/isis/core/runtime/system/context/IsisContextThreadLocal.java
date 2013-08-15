@@ -23,7 +23,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -36,7 +37,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
  */
 public class IsisContextThreadLocal extends IsisContext {
 
-    private static final Logger LOG = Logger.getLogger(IsisContextThreadLocal.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisContextThreadLocal.class);
 
     public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
         return new IsisContextThreadLocal(sessionFactory);

@@ -20,7 +20,8 @@ import integration.ToDoSystemInitializer;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
@@ -36,7 +37,7 @@ public class BootstrappingGlue extends CukeGlueAbstract {
 
     @Before(value={"@integration"}, order=100)
     public void beforeScenarioIntegrationScope() {
-        PropertyConfigurator.configure("logging.properties");
+        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
         ToDoSystemInitializer.initIsft();
         
         before(ScenarioExecutionScope.INTEGRATION);

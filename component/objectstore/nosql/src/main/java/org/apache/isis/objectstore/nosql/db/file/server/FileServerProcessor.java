@@ -31,13 +31,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 
 public class FileServerProcessor {
 
-    private static final Logger LOG = Logger.getLogger(FileServerProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileServerProcessor.class);
 
     private boolean acceptNewRequests = true;
     private LockManager locks;

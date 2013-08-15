@@ -23,7 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
 
-    private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleMethod.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleMethod.class);
     private final Method method;
 
     public TitleFacetViaTitleMethod(final Method method, final FacetHolder holder) {

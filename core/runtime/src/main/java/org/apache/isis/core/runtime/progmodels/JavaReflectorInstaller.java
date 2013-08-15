@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
@@ -35,7 +36,7 @@ import org.apache.isis.progmodels.dflt.JavaReflectorInstallerNoDecorators;
 
 public class JavaReflectorInstaller extends JavaReflectorInstallerNoDecorators implements InstallerLookupAware {
 
-    private static final Logger LOG = Logger.getLogger(JavaReflectorInstaller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorInstaller.class);
 
     private InstallerLookup installerLookup;
 

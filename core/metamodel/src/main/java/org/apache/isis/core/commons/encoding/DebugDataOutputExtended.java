@@ -21,11 +21,12 @@ package org.apache.isis.core.commons.encoding;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DebugDataOutputExtended extends DataOutputExtendedDecorator {
 
-    private static final Logger LOG = Logger.getLogger(DebugDataOutputExtended.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DebugDataOutputExtended.class);
 
     public DebugDataOutputExtended(final DataOutputExtended underlying) {
         super(underlying);

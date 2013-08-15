@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.objectstore.commands;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,7 +31,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 
 public abstract class AbstractInMemoryPersistenceCommand extends PersistenceCommandAbstract {
 
-    private final static Logger LOG = Logger.getLogger(AbstractInMemoryPersistenceCommand.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AbstractInMemoryPersistenceCommand.class);
 
     private final ObjectStorePersistedObjects persistedObjects;
 

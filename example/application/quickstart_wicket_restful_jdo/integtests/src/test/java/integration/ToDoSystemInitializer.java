@@ -18,7 +18,8 @@ package integration;
 
 import dom.todo.ToDoItemsJdo;
 
-import org.apache.log4j.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -50,7 +51,7 @@ public class ToDoSystemInitializer {
 
         public ToDoSystemBuilder() {
             //withFixtures( ... reference data fixtures ...); // if we had any...
-            withLoggingAt(Level.INFO);
+            withLoggingAt(org.apache.log4j.Level.INFO);
             with(testConfiguration());
             with(new DataNucleusPersistenceMechanismInstaller());
             

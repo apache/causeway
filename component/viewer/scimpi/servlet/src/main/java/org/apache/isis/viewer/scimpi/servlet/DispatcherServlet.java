@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
@@ -36,7 +37,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 
 public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(DispatcherServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DispatcherServlet.class);
     private Dispatcher dispatcher;
     private DebugUsers debugUsers;
 

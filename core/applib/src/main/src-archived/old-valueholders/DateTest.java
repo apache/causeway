@@ -22,8 +22,10 @@ package org.apache.isis.application.valueholder;
 
 import org.apache.isis.application.system.TestClock;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DateTest extends ValueTestCase {

@@ -28,8 +28,10 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +47,7 @@ public class MongoStateWriterIntegrationTest {
 
     @Before
     public void setup() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         try {
 

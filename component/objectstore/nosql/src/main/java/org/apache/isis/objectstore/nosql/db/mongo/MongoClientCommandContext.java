@@ -23,7 +23,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -34,7 +35,7 @@ import org.apache.isis.objectstore.nosql.db.StateWriter;
 
 public class MongoClientCommandContext implements NoSqlCommandContext {
 
-    private static final Logger LOG = Logger.getLogger(MongoClientCommandContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MongoClientCommandContext.class);
     private final DB db;
 
     public MongoClientCommandContext(DB db) {

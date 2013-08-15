@@ -34,7 +34,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -60,7 +61,7 @@ public class Time extends Magnitude {
     private static Clock clock;
     private static final DateFormat ISO_LONG = new SimpleDateFormat("HH:mm");
     private static final DateFormat ISO_SHORT = new SimpleDateFormat("HHmm");
-    private static final Logger LOG = Logger.getLogger(Time.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Time.class);
     private static final DateFormat LONG_FORMAT = DateFormat.getTimeInstance(DateFormat.LONG);
     private static final DateFormat MEDIUM_FORMAT = DateFormat.getTimeInstance(DateFormat.MEDIUM);
     public static final int MINUTE = 60;

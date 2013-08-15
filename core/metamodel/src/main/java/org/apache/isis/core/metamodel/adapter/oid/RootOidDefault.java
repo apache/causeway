@@ -28,7 +28,8 @@ import java.io.Serializable;
 
 import com.google.common.base.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
@@ -42,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public final class RootOidDefault implements Serializable, RootOid {
 
-    private final static Logger LOG = Logger.getLogger(RootOidDefault.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RootOidDefault.class);
 
     private static final long serialVersionUID = 1L;
 

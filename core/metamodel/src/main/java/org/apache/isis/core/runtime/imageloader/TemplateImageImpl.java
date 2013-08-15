@@ -23,7 +23,8 @@ import java.awt.Canvas;
 import java.awt.Image;
 import java.awt.MediaTracker;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Many icons are based on the same image, but in different sizes and possibly
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
  * can provide it clients with the full sized images or scaled images.
  */
 public class TemplateImageImpl implements TemplateImage {
-    private final static Logger LOG = Logger.getLogger(TemplateImageImpl.class);
+    private final static Logger LOG = LoggerFactory.getLogger(TemplateImageImpl.class);
 
     /**
      * Factory method.

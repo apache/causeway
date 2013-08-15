@@ -25,8 +25,10 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
@@ -87,7 +89,7 @@ public class NoSqlObjectStoreTest_interactWith_db {
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         context.checking(new Expectations() {
             {

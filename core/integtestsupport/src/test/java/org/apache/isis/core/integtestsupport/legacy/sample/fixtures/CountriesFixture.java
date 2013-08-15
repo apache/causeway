@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.integtestsupport.legacy.sample.fixtures;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.core.integtestsupport.legacy.sample.service.CountryRepository;
@@ -27,7 +28,7 @@ import org.apache.isis.core.integtestsupport.legacy.sample.service.CountryReposi
 public class CountriesFixture extends AbstractFixture {
 
     // {{ Logger
-    private final static Logger LOGGER = Logger.getLogger(CountriesFixture.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CountriesFixture.class);
 
     public Logger getLOGGER() {
         return LOGGER;

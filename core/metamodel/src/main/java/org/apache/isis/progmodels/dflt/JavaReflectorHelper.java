@@ -22,7 +22,8 @@ package org.apache.isis.progmodels.dflt;
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
@@ -44,7 +45,7 @@ import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 public final class JavaReflectorHelper  {
     
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(JavaReflectorHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorHelper.class);
 
     private JavaReflectorHelper(){}
     

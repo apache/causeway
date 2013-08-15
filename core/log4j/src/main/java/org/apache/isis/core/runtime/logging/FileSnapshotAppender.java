@@ -22,16 +22,15 @@ package org.apache.isis.core.runtime.logging;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 public class FileSnapshotAppender extends SnapshotAppender {
-    private static final Logger LOG = Logger.getLogger(FileSnapshotAppender.class);
+    
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(FileSnapshotAppender.class);
+    
     private String directoryPath;
     private String extension;
     private String fileName = "log-snapshot-";
 
-    public FileSnapshotAppender(final TriggeringEventEvaluator evaluator) {
+    public FileSnapshotAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 

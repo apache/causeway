@@ -21,7 +21,8 @@ package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -44,7 +45,7 @@ import org.apache.isis.viewer.dnd.view.base.FieldErrorView;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 
 public class ObjectFieldBuilder extends AbstractViewBuilder {
-    private static final Logger LOG = Logger.getLogger(ObjectFieldBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectFieldBuilder.class);
 
     // REVIEW: confirm this rendering context
     private final Where where = Where.OBJECT_FORMS;

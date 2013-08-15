@@ -43,7 +43,8 @@ import org.apache.isis.viewer.dnd.viewer.AwtToolkit;
 import org.apache.isis.viewer.dnd.viewer.ViewerFrame;
 import org.apache.isis.viewer.dnd.viewer.XViewer;
 
-import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 

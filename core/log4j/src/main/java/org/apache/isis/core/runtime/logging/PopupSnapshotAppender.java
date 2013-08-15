@@ -32,11 +32,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 public class PopupSnapshotAppender extends SnapshotAppender {
 
-    public PopupSnapshotAppender(final TriggeringEventEvaluator evaluator) {
+    public PopupSnapshotAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 

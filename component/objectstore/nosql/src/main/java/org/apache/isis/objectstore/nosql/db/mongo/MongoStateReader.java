@@ -27,7 +27,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -35,7 +36,7 @@ import org.apache.isis.objectstore.nosql.db.StateReader;
 
 public class MongoStateReader implements StateReader {
     
-    private static final Logger LOG = Logger.getLogger(MongoStateReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MongoStateReader.class);
     private final DBObject instance;
 
     public MongoStateReader(final DB db, final ObjectSpecId objectSpecId, final String mongoId) {

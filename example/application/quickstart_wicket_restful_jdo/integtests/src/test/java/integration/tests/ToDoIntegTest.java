@@ -20,7 +20,8 @@ package integration.tests;
 
 import integration.ToDoSystemInitializer;
 
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.BeforeClass;
 
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
@@ -31,7 +32,7 @@ public abstract class ToDoIntegTest extends IntegrationTestAbstract {
     
     @BeforeClass
     public static void initClass() {
-        PropertyConfigurator.configure("logging.properties");
+        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
         ToDoSystemInitializer.initIsft();
         
         // instantiating will install onto ThreadLocal

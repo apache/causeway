@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.runtime.fixtures;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -28,7 +29,7 @@ import org.apache.isis.core.runtime.fixtures.domainservice.ObjectLoaderFixture;
 
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
 
-    private static final Logger LOG = Logger.getLogger(FixturesInstallerFromConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerFromConfiguration.class);
     private static final String NAKEDOBJECTS_FIXTURES = ConfigurationConstants.ROOT + "fixtures";
     private static final String NAKEDOBJECTS_FIXTURES_PREFIX = ConfigurationConstants.ROOT + "fixtures.prefix";
     private static final String EXPLORATION_OBJECTS = ConfigurationConstants.ROOT + "exploration-objects";

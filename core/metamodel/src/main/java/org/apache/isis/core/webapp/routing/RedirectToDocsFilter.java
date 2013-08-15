@@ -29,7 +29,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This filter attempts to ensure that would-be users of the framework are
@@ -48,7 +49,7 @@ import org.apache.log4j.Logger;
  */
 public class RedirectToDocsFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(RedirectToDocsFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RedirectToDocsFilter.class);
 
     private static final String REDIRECT_TO_KEY = "redirectTo";
     private static final String REDIRECT_TO_DEFAULT = "/index.html";

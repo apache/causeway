@@ -33,7 +33,8 @@ import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -42,7 +43,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 
 public class IsisLifecycleListener implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener, DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener, SuspendableListener {
 
-    private static final Logger LOG = Logger.getLogger(IsisLifecycleListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisLifecycleListener.class);
     
     private final FrameworkSynchronizer synchronizer;
     

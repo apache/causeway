@@ -26,8 +26,9 @@ import junit.framework.TestSuite;
 
 import com.google.common.collect.ImmutableList;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
@@ -79,7 +80,6 @@ public class DeweyOrderSetTest extends TestCase {
 
     @Override
     protected void setUp() {
-        LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     }
 

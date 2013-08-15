@@ -32,7 +32,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
@@ -93,7 +94,7 @@ import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
 
 public class PersistenceSession implements Persistor, EnlistedObjectDirtying, ToPersistObjectSet, RecreatedPojoRemapper, AdapterLifecycleTransitioner, SessionScopedComponent, DebuggableWithTitle {
 
-    private static final Logger LOG = Logger.getLogger(PersistenceSession.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final ObjectAdapterFactory objectAdapterFactory;

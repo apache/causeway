@@ -24,15 +24,14 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.TriggeringEventEvaluator;
+import org.apache.log4j.spi.LoggerFactory;
 
 public class SocketSnapshotAppender extends SnapshotAppender {
-    private static final Logger LOG = Logger.getLogger(SmtpSnapshotAppender.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SmtpSnapshotAppender.class);
     private int port = 9289;
     private String server;
 
-    public SocketSnapshotAppender(final TriggeringEventEvaluator evaluator) {
+    public SocketSnapshotAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 

@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.dnd.view.text;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class TextBlock {
-    private static final Logger LOG = Logger.getLogger(TextBlock.class);
-    private static final Logger UI_LOG = Logger.getLogger("ui." + TextBlock.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(TextBlock.class);
+    private static final Logger UI_LOG = LoggerFactory.getLogger("ui." + TextBlock.class.getName());
     private final TextBlockTarget forField;
     private String text;
     private int[] lineBreaks;

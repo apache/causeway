@@ -27,7 +27,8 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.datanucleus.api.jdo.NucleusJDOHelper;
 
 import org.apache.isis.applib.filter.Filter;
@@ -56,7 +57,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 
 public class FrameworkSynchronizer {
 
-    private static final Logger LOG = Logger.getLogger(FrameworkSynchronizer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FrameworkSynchronizer.class);
 
     /**
      * Categorises where called from.

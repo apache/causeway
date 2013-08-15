@@ -25,10 +25,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataFileReader {
-    private static final Logger LOG = Logger.getLogger(DataFileReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataFileReader.class);
 
     private final BufferedReader reader;
     private final String id;

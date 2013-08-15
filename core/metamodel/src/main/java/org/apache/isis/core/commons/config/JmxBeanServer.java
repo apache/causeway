@@ -27,11 +27,12 @@ import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JmxBeanServer {
 
-    private static final Logger LOG = Logger.getLogger(JmxBeanServer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JmxBeanServer.class);
 
     private static JmxBeanServer instance;
     private final MBeanServer server;

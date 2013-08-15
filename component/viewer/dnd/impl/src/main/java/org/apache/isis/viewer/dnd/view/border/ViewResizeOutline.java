@@ -43,7 +43,7 @@ public class ViewResizeOutline extends AbstractView {
         super.draw(canvas);
 
         final Size s = getSize();
-        // Logger.getLogger(getClass()).debug("drag outline size " + s);
+        // LoggerFactory.getLogger(getClass()).debug("drag outline size " + s);
         final Color color = Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2);
         for (int i = 0; i < thickness; i++) {
             canvas.drawRectangle(i, i, s.getWidth() - i * 2 - 1, s.getHeight() - i * 2 - 1, color);

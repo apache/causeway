@@ -31,7 +31,8 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -48,7 +49,7 @@ public class MongoDb implements NoSqlDataDatabase {
 
 	private static final String SERIALNUMBERS_COLLECTION_NAME = "serialnumbers";
 
-	private static final Logger LOG = Logger.getLogger(MongoDb.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MongoDb.class);
 	
 	private static final int DEFAULT_PORT = 27017;
 

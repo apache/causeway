@@ -22,7 +22,8 @@ package org.apache.isis.core.runtime.web;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -31,7 +32,7 @@ import org.apache.isis.core.runtime.viewer.web.WebAppSpecification;
 public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {
 
     @SuppressWarnings("unused")
-    private final static Logger LOG = Logger.getLogger(EmbeddedWebServerAbstract.class);
+    private final static Logger LOG = LoggerFactory.getLogger(EmbeddedWebServerAbstract.class);
 
     private final List<WebAppSpecification> specifications = new ArrayList<WebAppSpecification>();
 

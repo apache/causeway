@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceStreamSourceComposite extends ResourceStreamSourceAbstract {
 
-    private static Logger LOG = Logger.getLogger(ResourceStreamSourceComposite.class);
+    private static Logger LOG = LoggerFactory.getLogger(ResourceStreamSourceComposite.class);
 
     private final List<ResourceStreamSource> resourceStreamSources = new ArrayList<ResourceStreamSource>();
 

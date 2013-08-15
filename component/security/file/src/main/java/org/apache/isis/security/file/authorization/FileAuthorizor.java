@@ -38,7 +38,8 @@ import java.util.StringTokenizer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -51,7 +52,7 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 
 public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
 
-    private static final Logger LOG = Logger.getLogger(FileAuthorizor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileAuthorizor.class);
 
     private static final String NONE = "";
     private static final String ACCESS_QUALIFIER_RO = "-ro";

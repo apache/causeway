@@ -33,7 +33,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -77,8 +78,8 @@ import org.apache.isis.viewer.dnd.viewer.ApplicationOptions;
 
 public class XViewer implements Viewer {
     private static final Size NO_SIZE = new Size(0, 0);
-    private static final Logger LOG = Logger.getLogger(Viewer.class);
-    private static final Logger UI_LOG = Logger.getLogger("ui." + Viewer.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(Viewer.class);
+    private static final Logger UI_LOG = LoggerFactory.getLogger("ui." + Viewer.class.getName());
     private static final LoggingOptions LOGGING_OPTIONS = new LoggingOptions();
     private static final NullView CLEAR_OVERLAY = new NullView();
     private static final Bounds NO_REDRAW = new Bounds();

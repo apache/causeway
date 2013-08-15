@@ -21,7 +21,8 @@ package org.apache.isis.core.webapp.config;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
@@ -34,7 +35,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStrea
 public class IsisConfigurationBuilderForWebapp extends IsisConfigurationBuilderResourceStreams {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderFileSystem.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationBuilderFileSystem.class);
 
     public IsisConfigurationBuilderForWebapp(final ServletContext servletContext) {
         super(new ResourceStreamSourceForWebInf(servletContext));

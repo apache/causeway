@@ -19,7 +19,8 @@
 
 package org.apache.isis.objectstore.xml.internal.commands;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
@@ -31,7 +32,7 @@ import org.apache.isis.objectstore.xml.internal.version.FileVersion;
 
 public final class XmlUpdateObjectCommand extends AbstractXmlPersistenceCommand implements SaveObjectCommand {
 
-    private static final Logger LOG = Logger.getLogger(XmlUpdateObjectCommand.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlUpdateObjectCommand.class);
 
     public XmlUpdateObjectCommand(final ObjectAdapter adapter, final DataManager dataManager) {
         super(adapter, dataManager);

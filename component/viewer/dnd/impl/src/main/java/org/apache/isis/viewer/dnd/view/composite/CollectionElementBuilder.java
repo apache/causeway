@@ -21,7 +21,8 @@ package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,7 +38,7 @@ import org.apache.isis.viewer.dnd.view.field.OneToManyField;
 import org.apache.isis.viewer.dnd.view.field.OneToManyFieldElementImpl;
 
 public class CollectionElementBuilder extends AbstractViewBuilder {
-    private static final Logger LOG = Logger.getLogger(CollectionElementBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CollectionElementBuilder.class);
     private boolean canDragView = true;
     private final ViewFactory subviewDesign;
 

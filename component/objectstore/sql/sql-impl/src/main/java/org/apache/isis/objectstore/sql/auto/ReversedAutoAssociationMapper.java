@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -47,7 +48,7 @@ import org.apache.isis.objectstore.sql.mapping.ObjectReferenceMapping;
  * known to parent
  */
 public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements CollectionMapper {
-    private static final Logger LOG = Logger.getLogger(ReversedAutoAssociationMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReversedAutoAssociationMapper.class);
     private final ObjectAssociation field;
     private final ObjectReferenceMapping idMapping;
     private final VersionMapping versionMapping;

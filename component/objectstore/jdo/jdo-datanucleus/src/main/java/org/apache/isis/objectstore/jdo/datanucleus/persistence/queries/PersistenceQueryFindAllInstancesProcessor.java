@@ -23,7 +23,8 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -32,7 +33,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
-    private static final Logger LOG = Logger.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
     public PersistenceQueryFindAllInstancesProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
         super(persistenceManager, frameworkSynchronizer);

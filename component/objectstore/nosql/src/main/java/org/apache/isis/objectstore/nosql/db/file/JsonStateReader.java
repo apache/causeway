@@ -31,7 +31,7 @@ import org.apache.isis.objectstore.nosql.db.StateReader;
 
 public class JsonStateReader implements StateReader {
     
-    // private static final Logger LOG = Logger.getLogger(FileStateReader.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(FileStateReader.class);
     
     private JSONObject instance;
 

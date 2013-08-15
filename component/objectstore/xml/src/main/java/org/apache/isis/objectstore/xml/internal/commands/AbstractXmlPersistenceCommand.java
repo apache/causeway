@@ -21,7 +21,8 @@ package org.apache.isis.objectstore.xml.internal.commands;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
@@ -33,7 +34,7 @@ import org.apache.isis.objectstore.xml.internal.data.DataManager;
 import org.apache.isis.objectstore.xml.internal.data.ObjectData;
 
 abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract {
-    private static final Logger LOG = Logger.getLogger(AbstractXmlPersistenceCommand.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractXmlPersistenceCommand.class);
 
     private final DataManager dataManager;
 

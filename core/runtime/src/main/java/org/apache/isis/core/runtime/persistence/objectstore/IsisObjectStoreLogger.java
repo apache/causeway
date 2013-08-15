@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.logging.Logger;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
@@ -41,7 +40,9 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObje
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
-public class IsisObjectStoreLogger extends Logger implements ObjectStoreSpi {
+public class IsisObjectStoreLogger extends Slf4jLogger implements ObjectStoreSpi {
+    
+    
     private final ObjectStoreSpi underlying;
 
     public IsisObjectStoreLogger(final ObjectStoreSpi decorated, final String level) {

@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -33,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public class UpdateNotifierDefault implements UpdateNotifier, DebuggableWithTitle {
 
-    private static final Logger LOG = Logger.getLogger(UpdateNotifierDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateNotifierDefault.class);
     
     private final List<ObjectAdapter> changes = new ArrayList<ObjectAdapter>();
     private final List<ObjectAdapter> disposals = new ArrayList<ObjectAdapter>();

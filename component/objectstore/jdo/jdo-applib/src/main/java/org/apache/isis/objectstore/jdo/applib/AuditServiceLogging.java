@@ -18,7 +18,8 @@
  */
 package org.apache.isis.objectstore.jdo.applib;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Hidden;
 
@@ -26,7 +27,7 @@ import org.apache.isis.applib.annotation.Hidden;
 @SuppressWarnings("deprecation")
 public class AuditServiceLogging implements AuditService {
 
-    private final static Logger LOG = Logger.getLogger(AuditServiceLogging.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AuditServiceLogging.class);
     
     @Hidden
     public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {

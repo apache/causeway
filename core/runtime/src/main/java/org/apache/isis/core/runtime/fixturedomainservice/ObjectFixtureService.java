@@ -29,7 +29,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DescribedAs;
@@ -50,7 +51,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class ObjectFixtureService {
 
-    private static final Logger LOG = Logger.getLogger(ObjectFixtureService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectFixtureService.class);
     private static final String DATA_FILEPATH = ConfigurationConstants.ROOT + "exploration-objects.file";
     private static final String DEFAULT_FILEPATH = "fixture-data";
 

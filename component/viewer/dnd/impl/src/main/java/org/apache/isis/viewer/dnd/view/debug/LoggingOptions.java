@@ -19,9 +19,6 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.ConsentAbstract;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -36,25 +33,25 @@ public class LoggingOptions implements MenuOptions {
 
     @Override
     public void menuOptions(final UserActionSet options) {
-        options.add(loggingOption("Off", Level.OFF));
-        options.add(loggingOption("Error", Level.ERROR));
-        options.add(loggingOption("Warn", Level.WARN));
-        options.add(loggingOption("Info", Level.INFO));
-        options.add(loggingOption("Debug", Level.DEBUG));
+        options.add(loggingOption("Off", org.apache.log4j.Level.OFF));
+        options.add(loggingOption("Error", org.apache.log4j.Level.ERROR));
+        options.add(loggingOption("Warn", org.apache.log4j.Level.WARN));
+        options.add(loggingOption("Info", org.apache.log4j.Level.INFO));
+        options.add(loggingOption("Debug", org.apache.log4j.Level.DEBUG));
 
         options.add(new DebugDumpSnapshotOption());
     }
 
-    private UserActionAbstract loggingOption(final String name, final Level level) {
+    private UserActionAbstract loggingOption(final String name, final org.apache.log4j.Level level) {
         return new UserActionAbstract("Log level " + level, ActionType.DEBUG) {
             @Override
             public Consent disabled(final View component) {
-                return ConsentAbstract.allowIf(LogManager.getRootLogger().getLevel() != level);
+                return ConsentAbstract.allowIf(org.apache.log4j.LogManager.getRootLogger().getLevel() != level);
             }
 
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
-                LogManager.getRootLogger().setLevel(level);
+                org.apache.log4j.LogManager.getRootLogger().setLevel(level);
             }
         };
     }

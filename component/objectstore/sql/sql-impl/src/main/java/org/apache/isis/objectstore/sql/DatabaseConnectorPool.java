@@ -21,12 +21,13 @@ package org.apache.isis.objectstore.sql;
 
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 
 public class DatabaseConnectorPool {
-    private static final Logger LOG = Logger.getLogger(DatabaseConnectorPool.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnectorPool.class);
     private static final int AVERAGE_POOL_SIZE = 5;
 
     private final DatabaseConnectorFactory factory;

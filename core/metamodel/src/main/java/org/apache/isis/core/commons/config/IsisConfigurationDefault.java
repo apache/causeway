@@ -29,7 +29,8 @@ import java.util.StringTokenizer;
 
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -37,7 +38,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
     
-    private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);
     private final Properties properties = new Properties();
     private final ResourceStreamSource resourceStreamSource;
 

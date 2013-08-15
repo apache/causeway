@@ -22,7 +22,8 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
@@ -52,7 +53,7 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
  */
 public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
-    private static final Logger LOG = Logger.getLogger(WebRequestCycleForIsis.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WebRequestCycleForIsis.class);
 
     private AuthenticatedWebSessionForIsis getWebSession() {
         return (AuthenticatedWebSessionForIsis) WebSession.get();

@@ -25,7 +25,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
@@ -63,7 +64,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 public class Memento implements Serializable {
 
     private final static long serialVersionUID = 1L;
-    private final static Logger LOG = Logger.getLogger(Memento.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Memento.class);
 
     private final List<Oid> transientObjects = Lists.newArrayList();
 

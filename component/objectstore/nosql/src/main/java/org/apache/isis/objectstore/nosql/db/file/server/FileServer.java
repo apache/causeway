@@ -57,15 +57,17 @@ import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 
 public class FileServer {
 
-    private static final Logger LOG = Logger.getLogger(FileServer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileServer.class);
     private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_SERVICE_PORT = 9100;
     private static final int DEFAULT_CONTROL_PORT = 9101;
@@ -121,7 +123,7 @@ public class FileServer {
     private long requests;
 
     public FileServer() {
-        PropertyConfigurator.configure("config/logging.properties");
+        org.apache.log4j.PropertyConfigurator.configure("config/logging.properties");
 
         try {
             config = new CompositeConfiguration();

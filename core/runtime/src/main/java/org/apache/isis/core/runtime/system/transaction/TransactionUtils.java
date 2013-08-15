@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.runtime.transaction.facets.CollectionClearFacetWrapTransaction;
 
 public class TransactionUtils {
-    private final static Logger LOG = Logger.getLogger(CollectionClearFacetWrapTransaction.class);
+    private final static Logger LOG = LoggerFactory.getLogger(CollectionClearFacetWrapTransaction.class);
 
     private TransactionUtils() {
     }

@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Named;
@@ -39,7 +40,7 @@ public class OrderRepository extends AbstractFactoryAndRepository {
     // user-defined regions of {{ and }}
 
     @SuppressWarnings("unused")
-    private final static Logger LOGGER = Logger.getLogger(OrderRepository.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(OrderRepository.class);
 
     // {{ findRecentOrders
     public List<Order> findRecentOrders(final Customer customer, @Named("Number of Orders") final Integer numberOfOrders) {

@@ -23,7 +23,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -55,7 +56,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfileStore;
  */
 public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
-    public static final Logger LOG = Logger.getLogger(IsisSystemFixturesHookAbstract.class);
+    public static final Logger LOG = LoggerFactory.getLogger(IsisSystemFixturesHookAbstract.class);
 
     private static final int SPLASH_DELAY_DEFAULT = 6;
 

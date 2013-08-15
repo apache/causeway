@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.objectstore.commands;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
@@ -28,7 +29,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 public final class InMemoryCreateObjectCommand extends AbstractInMemoryPersistenceCommand implements CreateObjectCommand {
-    private final static Logger LOG = Logger.getLogger(InMemoryCreateObjectCommand.class);
+    private final static Logger LOG = LoggerFactory.getLogger(InMemoryCreateObjectCommand.class);
 
     public InMemoryCreateObjectCommand(final ObjectAdapter object, final ObjectStorePersistedObjects persistedObjects) {
         super(object, persistedObjects);

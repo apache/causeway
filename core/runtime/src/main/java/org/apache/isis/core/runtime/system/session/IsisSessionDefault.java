@@ -29,7 +29,8 @@ import java.util.Date;
 
 import com.google.common.eventbus.EventBus;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -58,7 +59,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfile;
  */
 public class IsisSessionDefault implements IsisSession {
 
-    private static final Logger LOG = Logger.getLogger(IsisSessionDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisSessionDefault.class);
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM HH:mm:ss,SSS");
     private static int nextId = 1;

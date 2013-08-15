@@ -40,7 +40,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
@@ -177,7 +178,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
 
-    private static final Logger LOG = Logger.getLogger(IsisTransaction.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
     private final TransactionalResource objectStore;
     private final List<PersistenceCommand> commands = Lists.newArrayList();

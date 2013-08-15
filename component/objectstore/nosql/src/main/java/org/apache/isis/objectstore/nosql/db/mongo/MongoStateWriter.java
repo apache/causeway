@@ -26,7 +26,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -37,7 +38,7 @@ import org.apache.isis.objectstore.nosql.db.StateWriter;
 
 public class MongoStateWriter implements StateWriter {
     
-    private static final Logger LOG = Logger.getLogger(MongoStateWriter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MongoStateWriter.class);
     private final DB db;
     private final BasicDBObject dbObject;
     private DBCollection instances;

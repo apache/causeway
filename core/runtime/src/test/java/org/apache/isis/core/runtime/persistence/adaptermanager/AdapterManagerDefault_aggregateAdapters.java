@@ -23,8 +23,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -117,7 +119,7 @@ public class AdapterManagerDefault_aggregateAdapters {
     
     @Before
     public void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         context.ignoring(mockRuntimeContext);
         context.ignoring(mockAuthenticationSession);

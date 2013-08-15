@@ -32,7 +32,8 @@ import java.util.Map;
 
 import com.google.inject.Injector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
@@ -48,7 +49,7 @@ import org.apache.isis.core.webserver.WebServer.StartupMode;
 
 final class WebServerBootstrapper implements IsisBootstrapper {
 
-    private static final Logger LOG = Logger.getLogger(WebServerBootstrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WebServerBootstrapper.class);
     private static final String SRC_MAIN_WEBAPP = "src/main/webapp";
 
     private final IsisRunner runner;

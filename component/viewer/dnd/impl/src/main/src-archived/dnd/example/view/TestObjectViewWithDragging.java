@@ -26,12 +26,13 @@ import org.apache.isis.viewer.dnd.DragStart;
 import org.apache.isis.viewer.dnd.ViewAxis;
 import org.apache.isis.viewer.dnd.ViewSpecification;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class TestObjectViewWithDragging extends TestObjectView {
 
-    private static final Logger LOG = Logger.getLogger(TestObjectViewWithDragging.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestObjectViewWithDragging.class);
 
     public TestObjectViewWithDragging(final 
             Content content, final

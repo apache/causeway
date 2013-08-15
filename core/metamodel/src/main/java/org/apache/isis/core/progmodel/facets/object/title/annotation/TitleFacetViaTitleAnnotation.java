@@ -26,7 +26,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
@@ -41,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
-    private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
     private final AdapterManager adapterManager;
 

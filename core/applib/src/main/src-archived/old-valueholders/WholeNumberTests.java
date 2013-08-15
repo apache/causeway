@@ -23,8 +23,9 @@ package org.apache.isis.application.valueholder;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 
 public class WholeNumberTests extends ValueTestCase {

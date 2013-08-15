@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.view.option;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -28,7 +29,7 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
 public class ReplaceViewOption extends UserActionAbstract {
-    private static final Logger LOG = Logger.getLogger(ReplaceViewOption.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReplaceViewOption.class);
     private final ViewSpecification specification;
 
     public ReplaceViewOption(final ViewSpecification specification) {

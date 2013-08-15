@@ -19,14 +19,15 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.viewer.dnd.view.BackgroundTask;
 import org.apache.isis.viewer.dnd.view.View;
 
 public final class BackgroundWork {
-    private static final Logger LOG = Logger.getLogger(BackgroundTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundTask.class);
 
     private static class BackgroundThread extends Thread {
         private final View view;

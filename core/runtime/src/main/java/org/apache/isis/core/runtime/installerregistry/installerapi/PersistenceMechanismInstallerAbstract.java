@@ -27,7 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
@@ -80,8 +81,8 @@ import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInj
 public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements PersistenceMechanismInstaller, InstallerLookupAware {
 
 
-    private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT + "persistenceSession";
-    private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
+    private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Log4jLogger.PROPERTY_ROOT + "persistenceSession";
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceMechanismInstallerAbstract.class);
 
     private SystemDependencyInjector installerLookup;
 

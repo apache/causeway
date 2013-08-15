@@ -28,7 +28,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Window;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -37,7 +38,7 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 
 public class SplashWindow extends Window implements Runnable {
     private static final long serialVersionUID = 1L;
-    final static Logger LOG = Logger.getLogger(SplashWindow.class);
+    final static Logger LOG = LoggerFactory.getLogger(SplashWindow.class);
     private static final String LOGO_TEXT = "Apache Isis";
 
     private int delay;

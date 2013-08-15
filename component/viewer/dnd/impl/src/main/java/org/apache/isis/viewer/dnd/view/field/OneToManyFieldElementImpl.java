@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,7 +34,7 @@ import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
 
 public class OneToManyFieldElementImpl extends AbstractObjectContent implements OneToManyFieldElement {
-    private static final Logger LOG = Logger.getLogger(OneToManyFieldElementImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OneToManyFieldElementImpl.class);
     private final ObjectAdapter element;
     private final ObjectField field;
 

@@ -28,7 +28,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
@@ -56,7 +57,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
 public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
-    public static final Logger LOG = Logger.getLogger(IsisSystemUsingInstallers.class);
+    public static final Logger LOG = LoggerFactory.getLogger(IsisSystemUsingInstallers.class);
 
     private final InstallerLookup installerLookup;
 

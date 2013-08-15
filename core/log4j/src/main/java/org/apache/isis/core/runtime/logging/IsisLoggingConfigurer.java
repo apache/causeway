@@ -19,21 +19,14 @@
 
 package org.apache.isis.core.runtime.logging;
 
+import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.apache.log4j.PropertyConfigurator;
-
-import org.apache.isis.core.commons.lang.IoUtils;
 
 public class IsisLoggingConfigurer {
 
@@ -55,9 +48,9 @@ public class IsisLoggingConfigurer {
     }
 
     private static void applyLoggingLevelFromCommandLine(final String[] args) {
-        final Level loggingLevel = loggingLevel(args);
+        final org.apache.log4j.Level loggingLevel = loggingLevel(args);
         if (loggingLevel != null) {
-            Logger.getRootLogger().setLevel(loggingLevel);
+            org.apache.log4j.Logger.getRootLogger().setLevel(loggingLevel);
         }
     }
 
@@ -68,7 +61,7 @@ public class IsisLoggingConfigurer {
      * <p>
      * If a {@link LoggingConstants#LOGGING_CONFIG_FILE logging config file} can
      * be located in the provided directory, then that is used. Otherwise, will
-     * set up the {@link Logger#getRootLogger() root logger} to
+     * set up the {@link Log4jLogger#getRootLogger() root logger} to
      * {@link Level#WARN warning}, a typical {@link PatternLayout} and logging
      * to the {@link ConsoleAppender console}.
      */
@@ -82,7 +75,7 @@ public class IsisLoggingConfigurer {
         } catch (final IOException ignore) {
             // ignore
         } finally {
-            IoUtils.closeSafely(inStream);
+            closeSafely(inStream);
         }
 
         if (properties.size() == 0) {
@@ -95,36 +88,46 @@ public class IsisLoggingConfigurer {
                 }
             } catch (final IOException ignore) {
             } finally {
-                IoUtils.closeSafely(inStream2);
+                closeSafely(inStream2);
             }
         }
 
         if (properties.size() > 0) {
-            PropertyConfigurator.configure(properties);
+            org.apache.log4j.PropertyConfigurator.configure(properties);
         } else {
             configureFallbackLogging();
         }
     }
-
-    private static void configureFallbackLogging() {
-        final Layout layout = new PatternLayout("%-5r [%-25.25c{1} %-10.10t %-5.5p]  %m%n");
-        final Appender appender = new ConsoleAppender(layout);
-        BasicConfigurator.configure(appender);
-        Logger.getRootLogger().setLevel(Level.WARN);
-        Logger.getLogger("ui").setLevel(Level.OFF);
+    
+    private static void closeSafely(final Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (final Exception ignore) {
+                // ignore
+            }
+        }
     }
 
-    private static Level loggingLevel(final String[] args) {
-        Level level = null;
+    private static void configureFallbackLogging() {
+        final org.apache.log4j.Layout layout = new org.apache.log4j.PatternLayout("%-5r [%-25.25c{1} %-10.10t %-5.5p]  %m%n");
+        final org.apache.log4j.Appender appender = new org.apache.log4j.ConsoleAppender(layout);
+        org.apache.log4j.BasicConfigurator.configure(appender);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.WARN);
+        org.apache.log4j.Logger.getLogger("ui").setLevel(org.apache.log4j.Level.OFF);
+    }
+
+    private static org.apache.log4j.Level loggingLevel(final String[] args) {
+        org.apache.log4j.Level level = null;
         for (final String arg : args) {
             if (arg.equals("-" + LoggingConstants.DEBUG_OPT)) {
-                level = Level.DEBUG;
+                level = org.apache.log4j.Level.DEBUG;
                 break;
             } else if (arg.equals("-" + LoggingConstants.QUIET_OPT)) {
-                level = Level.ERROR;
+                level = org.apache.log4j.Level.ERROR;
                 break;
             } else if (arg.equals("-" + LoggingConstants.VERBOSE_OPT)) {
-                level = Level.INFO;
+                level = org.apache.log4j.Level.INFO;
                 break;
             }
         }

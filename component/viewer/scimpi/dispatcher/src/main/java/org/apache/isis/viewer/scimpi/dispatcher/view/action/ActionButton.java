@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.isis.applib.annotation.Where;
@@ -39,7 +40,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
 public class ActionButton extends AbstractElementProcessor {
-    private static final Logger LOG = Logger.getLogger(ActionButton.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActionButton.class);
 
     // REVIEW: should provide this rendering context, rather than hardcoding.
     // the net effect currently is that class members annotated with 

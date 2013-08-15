@@ -29,7 +29,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
 
 public class WebSnapshotAppender extends SnapshotAppender {
@@ -63,7 +63,7 @@ public class WebSnapshotAppender extends SnapshotAppender {
         }
     }
 
-    private static final Logger LOG = Logger.getLogger(WebSnapshotAppender.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(WebSnapshotAppender.class);
     private String proxyAddress;
     private int proxyPort = -1;
 
@@ -77,7 +77,7 @@ public class WebSnapshotAppender extends SnapshotAppender {
     public WebSnapshotAppender() {
     }
 
-    public WebSnapshotAppender(final TriggeringEventEvaluator evaluator) {
+    public WebSnapshotAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 
@@ -119,7 +119,7 @@ public class WebSnapshotAppender extends SnapshotAppender {
             while ((c = in.read()) != -1) {
                 result.append((char) c);
             }
-            LOG.info(result);
+            LOG.info(result.toString());
 
             in.close();
 

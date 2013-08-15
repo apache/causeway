@@ -28,7 +28,8 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -41,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 // TODO allow for multiple extension types
 public class ImageLookup {
-    private static final Logger LOG = Logger.getLogger(ImageLookup.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImageLookup.class);
     private static final String UNKNOWN_IMAGE = "Default";
     private static final String[] EXTENSIONS = { "png", "gif", "jpg", "jpeg" };
     private static final Map images = new HashMap();

@@ -29,7 +29,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.commons.lang.ResourceUtil;
@@ -37,7 +38,7 @@ import org.apache.isis.core.commons.lang.StringUtils;
 
 public class ResourceServlet extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(ResourceServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ResourceServlet.class);
     private static final long serialVersionUID = 1L;
 
     @Override

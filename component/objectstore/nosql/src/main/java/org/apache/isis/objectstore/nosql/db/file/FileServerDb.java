@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -41,7 +42,7 @@ import org.apache.isis.objectstore.nosql.db.StateReader;
 
 public class FileServerDb implements NoSqlDataDatabase {
 
-    private static final Logger LOG = Logger.getLogger(FileServerDb.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileServerDb.class);
 
     private final String host;
     private final int port;

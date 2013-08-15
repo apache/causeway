@@ -27,7 +27,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -70,7 +71,7 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
  */
 public abstract class PageAbstract extends WebPage {
 
-    private static Logger LOG = Logger.getLogger(PageAbstract.class);
+    private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
     

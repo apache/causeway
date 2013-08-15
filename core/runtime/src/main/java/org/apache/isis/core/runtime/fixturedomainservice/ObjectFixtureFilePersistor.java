@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -48,7 +49,7 @@ import org.apache.isis.core.runtime.system.persistence.Persistor;
 
 public class ObjectFixtureFilePersistor {
 
-    private static final Logger LOG = Logger.getLogger(ObjectFixtureFilePersistor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectFixtureFilePersistor.class);
 
     public Set<Object> loadData(final Reader reader) throws IOException {
         final Set<Object> objects = new HashSet<Object>();

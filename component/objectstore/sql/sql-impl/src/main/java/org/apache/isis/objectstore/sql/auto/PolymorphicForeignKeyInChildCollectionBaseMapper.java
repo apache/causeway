@@ -26,7 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -59,7 +60,7 @@ import org.apache.isis.objectstore.sql.mapping.FieldMapping;
  */
 public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKeyInChildCollectionMapper {
 
-    private static final Logger LOG = Logger.getLogger(PolymorphicForeignKeyInChildCollectionBaseMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PolymorphicForeignKeyInChildCollectionBaseMapper.class);
 
     private final String classColumnName;
     private final String itemIdColumnName;

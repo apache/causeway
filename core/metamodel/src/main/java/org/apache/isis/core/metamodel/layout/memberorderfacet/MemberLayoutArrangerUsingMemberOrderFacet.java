@@ -18,7 +18,8 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
@@ -27,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutArranger {
 
-    private static final Logger LOG = Logger.getLogger(MemberLayoutArrangerUsingMemberOrderFacet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MemberLayoutArrangerUsingMemberOrderFacet.class);
 
     // ////////////////////////////////////////////////////////////////////////////
     // constructor

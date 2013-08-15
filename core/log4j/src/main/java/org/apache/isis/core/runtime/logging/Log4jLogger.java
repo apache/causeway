@@ -19,24 +19,23 @@
 
 package org.apache.isis.core.runtime.logging;
 
-import org.apache.log4j.Level;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-
-public abstract class Logger {
-    public static final String PROPERTY_ROOT = ConfigurationConstants.ROOT + "logging.";
+public abstract class Log4jLogger {
+    
+    public static final String PROPERTY_ROOT = "isis.logging.";
+    
     private org.apache.log4j.Logger logger;
-    private final Level level;
+    private final org.apache.log4j.Level level;
 
-    public Logger() {
-        this(Level.DEBUG);
+    public Log4jLogger() {
+        this(org.apache.log4j.Level.DEBUG);
     }
 
-    public Logger(final String level) {
-        this.level = Level.toLevel(level);
+    public Log4jLogger(final String level) {
+        this.level = org.apache.log4j.Level.toLevel(level);
     }
 
-    public Logger(final Level level) {
+    public Log4jLogger(final org.apache.log4j.Level level) {
         this.level = level;
     }
 

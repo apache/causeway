@@ -27,7 +27,8 @@ import org.apache.isis.application.value.ValueParseException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -313,10 +314,10 @@ public class Money extends Magnitude { // implements java.io.Externalizable {
         }
     }
 
-    public Logger getLogger() {
+    public LoggerFactory.getLogger() {
         return logger;
     }
 
-    private final static Logger logger = Logger.getLogger(Money.class);
+    private final static Logger logger = LoggerFactory.getLogger(Money.class);
 
 }

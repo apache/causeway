@@ -27,7 +27,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -44,7 +45,7 @@ import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 
 public class InteractionHandler implements MouseMotionListener, MouseListener, KeyListener {
-    private static final Logger LOG = Logger.getLogger(InteractionHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InteractionHandler.class);
     private final static int THRESHOLD = 7;
     private boolean canDrag;
     /*

@@ -21,7 +21,8 @@ package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 
 public class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
-    private static final Logger LOG = Logger.getLogger(PersistAlgorithmDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersistAlgorithmDefault.class);
 
     @Override
     public String name() {

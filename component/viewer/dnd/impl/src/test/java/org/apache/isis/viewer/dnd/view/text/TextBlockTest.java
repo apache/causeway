@@ -21,8 +21,9 @@ package org.apache.isis.viewer.dnd.view.text;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 public class TextBlockTest extends TestCase {
 
@@ -34,7 +35,7 @@ public class TextBlockTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        LogManager.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         final TextBlockTarget user = new TextBlockTargetExample();
         block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York", true);

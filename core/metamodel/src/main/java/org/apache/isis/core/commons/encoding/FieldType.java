@@ -31,7 +31,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Typesafe writing and reading of fields, providing some level of integrity
@@ -49,7 +50,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class FieldType<T> {
 
-    private static Logger LOG = Logger.getLogger(FieldType.class);
+    private static Logger LOG = LoggerFactory.getLogger(FieldType.class);
 
     private static String LOG_INDENT = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
     private static final int NULL_BIT = 64; // 2 to the 6

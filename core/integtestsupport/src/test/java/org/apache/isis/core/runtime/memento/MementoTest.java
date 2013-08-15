@@ -71,7 +71,7 @@ public class MementoTest {
     @Before
     public void setUpSystem() throws Exception {
         
-//        final Logger logger = Logger.getLogger(FieldType.class);
+//        final Logger logger = LoggerFactory.getLogger(FieldType.class);
 //        logger.setLevel(Level.DEBUG);
 //        logger.addAppender(new ConsoleAppender());
 //        BasicConfigurator.configure();

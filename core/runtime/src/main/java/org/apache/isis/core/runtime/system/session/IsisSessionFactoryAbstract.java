@@ -37,7 +37,8 @@ import javax.annotation.PreDestroy;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -72,7 +73,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
  */
 public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
 
-    private final static Logger LOG = Logger.getLogger(IsisSessionFactoryAbstract.class);
+    private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactoryAbstract.class);
     
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;

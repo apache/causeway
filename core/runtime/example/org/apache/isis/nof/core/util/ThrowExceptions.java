@@ -22,12 +22,14 @@ package org.apache.isis.nof.core.util;
 
 import org.apache.isis.noa.ObjectAdapterRuntimeException;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ThrowExceptions {
-    private static final Logger LOG = Logger.getLogger(ThrowExceptions.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThrowExceptions.class);
 
     public static void main(final String[] args) {
         method1();

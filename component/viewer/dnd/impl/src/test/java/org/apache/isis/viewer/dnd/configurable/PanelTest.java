@@ -22,8 +22,10 @@ package org.apache.isis.viewer.dnd.configurable;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +44,7 @@ public class PanelTest {
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
         TestToolkit.createInstance();
 
         view1 = new DummyView();

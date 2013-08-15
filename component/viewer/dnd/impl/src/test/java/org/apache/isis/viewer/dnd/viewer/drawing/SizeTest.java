@@ -21,8 +21,10 @@ package org.apache.isis.viewer.dnd.viewer.drawing;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.dnd.drawing.Padding;
 import org.apache.isis.viewer.dnd.drawing.Size;
@@ -37,7 +39,7 @@ public class SizeTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         s = new Size(10, 20);
     }

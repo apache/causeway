@@ -25,8 +25,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -152,7 +154,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private final List<InstallableFixture> fixtures;
     private List <Listener> listeners;
     
-    private Level level = Level.INFO;
+    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
     
     private final MetaModelValidator metaModelValidator;
     private final ProgrammingModel programmingModel;
@@ -176,7 +178,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         
         private final List <Listener> listeners = Lists.newArrayList();
 
-        private Level level = null;
+        private org.apache.log4j.Level level = null;
         
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
@@ -203,7 +205,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
         
-        public Builder withLoggingAt(Level level) {
+        public Builder withLoggingAt(org.apache.log4j.Level level) {
             this.level = level;
             return this;
         }
@@ -255,11 +257,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // logging
     ////////////////////////////////////////////////////////////
 
-    public Level getLevel() {
+    public org.apache.log4j.Level getLevel() {
         return level;
     }
     
-    public void setLevel(Level level) {
+    public void setLevel(org.apache.log4j.Level level) {
         this.level = level;
     }
 
@@ -281,7 +283,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private void setUpSystem(FireListeners fireListeners) throws Exception {
-        Logger.getRootLogger().setLevel(getLevel());
+        org.apache.log4j.Logger.getRootLogger().setLevel(getLevel());
 
         boolean firstTime = isisSystem == null;
         if(fireListeners.shouldFire()) {

@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.drawing;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bounds represent a rectangular area on the screen. The top-left corner is
@@ -38,7 +39,7 @@ import org.apache.log4j.Logger;
  * and 29.
  */
 public class Bounds {
-    Logger LOG = Logger.getLogger("Bounds");
+    Logger LOG = LoggerFactory.getLogger("Bounds");
     int x;
     int y;
     int height;

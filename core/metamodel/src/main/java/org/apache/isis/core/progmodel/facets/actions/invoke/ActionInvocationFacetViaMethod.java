@@ -24,7 +24,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -41,7 +42,7 @@ import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
 
-    private final static Logger LOG = Logger.getLogger(ActionInvocationFacetViaMethod.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetViaMethod.class);
 
     private final Method method;
     private final int paramCount;

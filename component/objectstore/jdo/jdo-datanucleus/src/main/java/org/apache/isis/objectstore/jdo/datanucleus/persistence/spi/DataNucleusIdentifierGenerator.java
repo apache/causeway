@@ -23,7 +23,8 @@ import java.util.UUID;
 import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -36,7 +37,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(DataNucleusIdentifierGenerator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusIdentifierGenerator.class);
     
 
 

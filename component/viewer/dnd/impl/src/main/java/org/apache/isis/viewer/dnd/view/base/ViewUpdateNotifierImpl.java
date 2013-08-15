@@ -27,7 +27,8 @@ import java.util.Vector;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -45,7 +46,7 @@ import org.apache.isis.viewer.dnd.view.collection.RootCollection;
 
 public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
     
-    private static final Logger LOG = Logger.getLogger(ViewUpdateNotifierImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ViewUpdateNotifierImpl.class);
     
     protected Map<ObjectAdapter, List<View>> viewListByAdapter = Maps.newHashMap();
 

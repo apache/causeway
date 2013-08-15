@@ -21,7 +21,8 @@ package org.apache.isis.core.integtestsupport.legacy.sample.domain;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
@@ -38,7 +39,7 @@ public class Order extends AbstractDomainObject {
 
     // {{ Logger
     @SuppressWarnings("unused")
-    private final static Logger LOGGER = Logger.getLogger(Order.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(Order.class);
 
     // }}
 

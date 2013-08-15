@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.field;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -28,7 +29,7 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 
 public abstract class TextParseableFieldAbstract extends AbstractField {
-    private static final Logger LOG = Logger.getLogger(TextField.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TextField.class);
 
     protected TextParseableFieldAbstract(final Content content, final ViewSpecification design) {
         super(content, design);

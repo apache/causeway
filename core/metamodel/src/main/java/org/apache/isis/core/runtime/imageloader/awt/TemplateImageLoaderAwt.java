@@ -35,7 +35,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ResourceUtil;
@@ -50,7 +51,7 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
  */
 public class TemplateImageLoaderAwt implements TemplateImageLoader {
 
-    private final static Logger LOG = Logger.getLogger(TemplateImageLoaderAwt.class);
+    private final static Logger LOG = LoggerFactory.getLogger(TemplateImageLoaderAwt.class);
 
     private static final String LOAD_IMAGES_FROM_FILES_KEY = ImageConstants.PROPERTY_BASE + "load-images-from-files";
     private static final String[] EXTENSIONS = { "png", "gif", "jpg", "jpeg", "svg" };

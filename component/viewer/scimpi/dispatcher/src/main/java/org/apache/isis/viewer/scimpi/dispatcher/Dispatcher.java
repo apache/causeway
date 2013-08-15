@@ -34,7 +34,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -84,7 +85,7 @@ public class Dispatcher {
     public static final String REMOVE = "_remove";
     public static final String GENERIC = "_generic";
     public static final String EXTENSION = "shtml";
-    private static final Logger LOG = Logger.getLogger(Dispatcher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Dispatcher.class);
     public static final String COMMAND_ROOT = ".app";
     private final Map<String, Action> actions = new HashMap<String, Action>();
     private final Map<String, String> parameters = new HashMap<String, String>();

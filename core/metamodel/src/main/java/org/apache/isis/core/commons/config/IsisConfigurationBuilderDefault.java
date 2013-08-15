@@ -24,7 +24,8 @@ import java.util.Arrays;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -41,7 +42,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 public class IsisConfigurationBuilderDefault extends IsisConfigurationBuilderResourceStreams {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationBuilderDefault.class);
 
     public IsisConfigurationBuilderDefault() {
         super(resourceStreamSources(null));

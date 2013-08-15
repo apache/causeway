@@ -24,8 +24,10 @@ import org.apache.isis.application.system.TestClock;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public abstract class ValueTestCase extends TestCase {

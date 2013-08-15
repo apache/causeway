@@ -27,7 +27,8 @@ import org.apache.isis.application.value.ValueParseException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -404,10 +405,10 @@ public class WholeNumber extends Magnitude {
         return isEmpty() ? "NULL" : String.valueOf(intValue());
     }
 
-    protected Logger getLogger() {
+    protected LoggerFactory.getLogger() {
         return logger;
     }
 
-    private final static Logger logger = Logger.getLogger(WholeNumber.class);
+    private final static Logger logger = LoggerFactory.getLogger(WholeNumber.class);
 
 }

@@ -23,22 +23,18 @@ import java.io.UnsupportedEncodingException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.log4j.net.SMTPAppender;
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.TriggeringEventEvaluator;
-
-public class SmtpExtendedAppender extends SMTPAppender {
+public class SmtpExtendedAppender extends org.apache.log4j.net.SMTPAppender {
 
     public SmtpExtendedAppender() {
         super();
     }
 
-    public SmtpExtendedAppender(final TriggeringEventEvaluator evaluator) {
+    public SmtpExtendedAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 
     @Override
-    public void append(final LoggingEvent event) {
+    public void append(final org.apache.log4j.spi.LoggingEvent event) {
         if (evaluator.isTriggeringEvent(event)) {
             try {
                 final String subject = limitToFirstLine(String.valueOf(event.getMessage()));

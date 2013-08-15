@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -30,7 +31,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
 public class UserManager {
 
-    private static final Logger LOG = Logger.getLogger(UserManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserManager.class);
     private static UserManager instance;
 
     private static AuthenticationManager getAuthenticationManager() {

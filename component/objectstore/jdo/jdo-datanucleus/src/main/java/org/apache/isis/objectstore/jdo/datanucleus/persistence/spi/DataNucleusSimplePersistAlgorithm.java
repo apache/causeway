@@ -18,7 +18,8 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.persistence.spi;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,7 +35,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistO
  */
 public class DataNucleusSimplePersistAlgorithm extends PersistAlgorithmAbstract {
     
-    private static final Logger LOG = Logger
+    private static final Logger LOG = LoggerFactory
             .getLogger(DataNucleusSimplePersistAlgorithm.class);
 
 

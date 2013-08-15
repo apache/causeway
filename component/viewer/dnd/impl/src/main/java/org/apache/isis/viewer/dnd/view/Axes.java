@@ -22,13 +22,14 @@ package org.apache.isis.viewer.dnd.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.util.ViewerException;
 
 public class Axes {
-    private static final Logger LOG = Logger.getLogger(Axes.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Axes.class);
     private final Map<Class<?>, ViewAxis> axes = new HashMap<Class<?>, ViewAxis>();
 
     public void add(final ViewAxis axis) {

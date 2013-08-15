@@ -21,7 +21,8 @@ package org.apache.isis.core.integtestsupport.legacy.sample.service;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
@@ -40,7 +41,7 @@ public class CustomerRepository extends AbstractFactoryAndRepository {
 
     // {{ Logger
     @SuppressWarnings("unused")
-    private final static Logger LOGGER = Logger.getLogger(CustomerRepository.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CustomerRepository.class);
 
     // }}
 

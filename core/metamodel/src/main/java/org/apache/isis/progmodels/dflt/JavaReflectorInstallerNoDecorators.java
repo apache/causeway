@@ -27,7 +27,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
@@ -50,7 +51,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
  */
 public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implements ObjectReflectorInstaller {
 
-    private static final Logger LOG = Logger.getLogger(JavaReflectorInstallerNoDecorators.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorInstallerNoDecorators.class);
 
     public static final String PROPERTY_BASE = ConfigurationConstants.ROOT;
 

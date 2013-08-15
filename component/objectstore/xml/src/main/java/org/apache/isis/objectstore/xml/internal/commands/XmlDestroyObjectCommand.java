@@ -19,7 +19,8 @@
 
 package org.apache.isis.objectstore.xml.internal.commands;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
@@ -29,7 +30,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.objectstore.xml.internal.data.DataManager;
 
 public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand implements DestroyObjectCommand {
-    private static final Logger LOG = Logger.getLogger(XmlDestroyObjectCommand.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlDestroyObjectCommand.class);
 
     public XmlDestroyObjectCommand(final ObjectAdapter adapter, final DataManager dataManager) {
         super(adapter, dataManager);

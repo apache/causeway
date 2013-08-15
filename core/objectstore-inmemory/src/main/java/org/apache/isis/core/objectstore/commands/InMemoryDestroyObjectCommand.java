@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.objectstore.commands;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
@@ -28,7 +29,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 public final class InMemoryDestroyObjectCommand extends AbstractInMemoryPersistenceCommand implements DestroyObjectCommand {
-    private final static Logger LOG = Logger.getLogger(InMemoryDestroyObjectCommand.class);
+    private final static Logger LOG = LoggerFactory.getLogger(InMemoryDestroyObjectCommand.class);
 
     public InMemoryDestroyObjectCommand(final ObjectAdapter adapter, final ObjectStorePersistedObjects persistedObjects) {
         super(adapter, persistedObjects);

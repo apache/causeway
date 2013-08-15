@@ -24,7 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -54,7 +55,7 @@ import org.apache.isis.objectstore.sql.mapping.ObjectReferenceMapping;
  * @version $Rev$ $Date$
  */
 public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements CollectionMapper {
-    private static final Logger LOG = Logger.getLogger(ForeignKeyCollectionMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ForeignKeyCollectionMapper.class);
     private final ObjectAssociation field;
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;

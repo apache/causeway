@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.integtestsupport.legacy.sample.fixtures;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Customer;
@@ -35,7 +36,7 @@ public class CustomerOrdersFixture extends AbstractFixture {
     // user-defined regions of {{ and }}
 
     // {{ Logger
-    private final static Logger LOGGER = Logger.getLogger(CustomerOrdersFixture.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CustomerOrdersFixture.class);
 
     public Logger getLOGGER() {
         return LOGGER;

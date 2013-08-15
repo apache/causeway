@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
@@ -37,8 +38,8 @@ import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 
 public abstract class ResizeBorder extends AbstractBorder {
-    private static final Logger LOG = Logger.getLogger(ResizeBorder.class);
-    private static final Logger UI_LOG = Logger.getLogger("ui." + ResizeBorder.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ResizeBorder.class);
+    private static final Logger UI_LOG = LoggerFactory.getLogger("ui." + ResizeBorder.class.getName());
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
     public static final int UP = 4;

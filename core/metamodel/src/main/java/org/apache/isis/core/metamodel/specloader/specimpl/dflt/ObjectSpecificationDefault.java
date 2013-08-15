@@ -29,7 +29,8 @@ import java.util.Properties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -82,7 +83,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImp
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
-    private final static Logger LOG = Logger.getLogger(ObjectSpecificationDefault.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationDefault.class);
 
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();

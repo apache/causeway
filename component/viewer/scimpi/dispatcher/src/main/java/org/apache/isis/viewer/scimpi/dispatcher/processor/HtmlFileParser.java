@@ -25,7 +25,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.htmlparser.Node;
 import org.htmlparser.Remark;
 import org.htmlparser.lexer.Lexer;
@@ -42,7 +43,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
 import org.apache.isis.viewer.scimpi.dispatcher.view.SwfTag;
 
 public class HtmlFileParser {
-    private static final Logger LOG = Logger.getLogger(HtmlFileParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HtmlFileParser.class);
     private final ProcessorLookup processors;
 
     public HtmlFileParser(final ProcessorLookup processors) {

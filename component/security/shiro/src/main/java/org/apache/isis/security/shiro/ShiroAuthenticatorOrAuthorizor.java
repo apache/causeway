@@ -32,7 +32,8 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authorization.IsisPermission;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -62,7 +63,7 @@ import com.google.common.collect.Lists;
  */
 public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor {
 
-    private static final Logger LOG = Logger.getLogger(ShiroAuthenticatorOrAuthorizor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShiroAuthenticatorOrAuthorizor.class);
 
     private final IsisConfiguration configuration;
 

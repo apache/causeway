@@ -20,7 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -50,7 +51,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private static final long serialVersionUID = 1L;
     
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(IsisBlobOrClobPanelAbstract.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisBlobOrClobPanelAbstract.class);
     
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_REGULAR_UPLOAD = "scalarIfRegularUpload";

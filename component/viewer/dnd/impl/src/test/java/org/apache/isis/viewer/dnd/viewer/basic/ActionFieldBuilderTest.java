@@ -22,8 +22,10 @@ package org.apache.isis.viewer.dnd.viewer.basic;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.easymock.MockControl;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -84,7 +86,7 @@ public class ActionFieldBuilderTest {
 
     @Before
     public void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         configuration = new IsisConfigurationDefault();
         servicesList = Collections.emptyList();

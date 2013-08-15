@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +48,7 @@ import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
  * workspace view. Open windows are displayed in the centre.
  */
 public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {
-    private static final Logger LOG = Logger.getLogger(ApplicationWorkspaceBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationWorkspaceBuilder.class);
     private static final int PADDING = 10;
     public static final Location UNPLACED = new Location(-1, -1);
 

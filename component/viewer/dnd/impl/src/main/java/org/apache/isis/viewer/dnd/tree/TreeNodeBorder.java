@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.tree;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -66,7 +67,7 @@ public class TreeNodeBorder extends AbstractBorder {
     private static final int BOX_SIZE = 9;
     private static final int BOX_X_OFFSET = 5;
     private final static Text LABEL_STYLE = Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
-    private static final Logger LOG = Logger.getLogger(TreeNodeBorder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TreeNodeBorder.class);
     private final int baseline;
     private final IconGraphic icon;
     private final ViewSpecification replaceWithSpecification;

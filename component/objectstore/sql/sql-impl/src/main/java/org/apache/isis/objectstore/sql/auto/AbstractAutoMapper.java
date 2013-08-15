@@ -26,7 +26,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -51,7 +52,7 @@ import org.apache.isis.objectstore.sql.mapping.FieldMapping;
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
 
-    private static final Logger LOG = Logger.getLogger(AbstractAutoMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractAutoMapper.class);
 
     protected final Map<ObjectAssociation, FieldMapping> fieldMappingByField = Maps.newLinkedHashMap();
 

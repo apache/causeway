@@ -19,8 +19,9 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -32,13 +33,13 @@ public class LogLevel extends AbstractElementProcessor {
 
         String view = request.getOptionalProperty(VIEW, request.getViewPath());
         view = request.getContext().fullFilePath(view);
-        final Level level = LogManager.getRootLogger().getLevel();
+        final org.apache.log4j.Level level = org.apache.log4j.LogManager.getRootLogger().getLevel();
         final boolean showSelector = request.isRequested(SHOW_SELECT, true);
         if (showSelector) {
             request.appendHtml("<form action=\"log.app\" type=\"post\" >");
             request.appendHtml("<input type=\"hidden\" name=\"view\" value=\"" + view + "\" />");
             request.appendHtml("<select name=\"level\">");
-            for (final Level l : new Level[] { Level.OFF, Level.FATAL, Level.ERROR, Level.WARN, Level.INFO, Level.DEBUG, Level.TRACE }) {
+            for (final org.apache.log4j.Level l : new org.apache.log4j.Level[] { org.apache.log4j.Level.OFF, org.apache.log4j.Level.FATAL, org.apache.log4j.Level.ERROR, org.apache.log4j.Level.WARN, org.apache.log4j.Level.INFO, org.apache.log4j.Level.DEBUG, org.apache.log4j.Level.TRACE }) {
                 final String settings = level + "\"" + (level == l ? " selected=\"selected\" " : "");
                 request.appendHtml("<option " + settings + ">" + l + "</option>");
             }

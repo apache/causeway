@@ -31,10 +31,11 @@ import org.apache.isis.viewer.dnd.ViewAxis;
 import org.apache.isis.viewer.dnd.basic.SimpleIdentifier;
 import org.apache.isis.viewer.dnd.core.AbstractCompositeViewSpecification;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ScheduleBlockSpecification extends AbstractCompositeViewSpecification{
-	private static final Logger LOG = Logger.getLogger(ScheduleBlockView.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduleBlockView.class);
 
 	public View createView(Content content, ViewAxis axis) {
     	ObjectSpecification nc = ((ObjectContent) content).getObject().getSpecification();

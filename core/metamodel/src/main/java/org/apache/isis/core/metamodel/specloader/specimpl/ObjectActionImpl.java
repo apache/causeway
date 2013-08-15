@@ -25,7 +25,8 @@ import java.util.List;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
@@ -72,7 +73,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
-    private final static Logger LOG = Logger.getLogger(ObjectActionImpl.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ObjectActionImpl.class);
 
     public static ActionType getType(final String typeStr) {
         final ActionType type = ActionType.valueOf(typeStr);

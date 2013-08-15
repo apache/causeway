@@ -34,11 +34,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class ShutdownDialog extends Dialog implements ActionListener, KeyListener {
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(ShutdownDialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShutdownDialog.class);
     private final static int BORDER = 10;
     private Button cancel;
     private Button quit;

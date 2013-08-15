@@ -23,7 +23,8 @@ import java.util.List;
 
 import javax.servlet.ServletContextListener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.NCSARequestLog;
 import org.mortbay.jetty.Server;
@@ -47,7 +48,7 @@ import org.apache.isis.core.webserver.WebServerConstants;
 import org.apache.isis.core.webserver.WebServerException;
 
 public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
-    private final static Logger LOG = Logger.getLogger(EmbeddedWebServerJetty.class);
+    private final static Logger LOG = LoggerFactory.getLogger(EmbeddedWebServerJetty.class);
 
     // ///////////////////////////////////////////////////////
     // init, shutdown

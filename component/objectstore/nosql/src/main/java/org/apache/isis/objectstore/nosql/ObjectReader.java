@@ -22,7 +22,8 @@ package org.apache.isis.objectstore.nosql;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -48,7 +49,7 @@ import org.apache.isis.objectstore.nosql.versions.VersionCreator;
 
 public class ObjectReader {
 
-    private static final Logger LOG = Logger.getLogger(ObjectReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectReader.class);
     
     private final KeyCreatorDefault keyCreator = new KeyCreatorDefault();
 

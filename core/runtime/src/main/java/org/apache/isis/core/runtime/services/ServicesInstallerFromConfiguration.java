@@ -30,7 +30,8 @@ import java.util.regex.Pattern;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
@@ -43,7 +44,7 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 
 public class ServicesInstallerFromConfiguration extends InstallerAbstract implements ServicesInstaller {
 
-    private static final Logger LOG = Logger.getLogger(ServicesInstallerFromConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromConfiguration.class);
 
     private static final String SERVICES = "services";
     private static final String EXPLORATION_OBJECTS = "exploration-objects";

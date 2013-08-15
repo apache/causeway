@@ -22,7 +22,8 @@ package org.apache.isis.viewer.dnd.view.text;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -30,8 +31,8 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
 public class TextContent {
-    private static final Logger LOG = Logger.getLogger(TextContent.class);
-    private static final Logger UI_LOG = Logger.getLogger("ui." + TextContent.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(TextContent.class);
+    private static final Logger UI_LOG = LoggerFactory.getLogger("ui." + TextContent.class.getName());
     public static final int NO_WRAPPING = 1;
     public static final int WRAPPING = 0;
     private final Vector blocks;

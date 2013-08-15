@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.dnd.table;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -51,7 +52,7 @@ import org.apache.isis.viewer.dnd.view.field.TextParseableFieldImpl;
 import org.apache.isis.viewer.dnd.viewer.basic.UnlinedTextFieldSpecification;
 
 class TableCellBuilder extends AbstractViewBuilder {
-    private static final Logger LOG = Logger.getLogger(TableCellBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TableCellBuilder.class);
 
     // REVIEW: should provide this rendering context, rather than hardcoding.
     // the net effect currently is that class members annotated with

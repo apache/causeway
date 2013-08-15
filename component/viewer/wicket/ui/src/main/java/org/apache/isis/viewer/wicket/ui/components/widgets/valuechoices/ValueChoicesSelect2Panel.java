@@ -26,7 +26,8 @@ import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -49,7 +50,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * Initial skeleton - trying to add support for value choices.
  */
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
-    private static final Logger LOG = Logger.getLogger(ValueChoicesSelect2Panel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ValueChoicesSelect2Panel.class);
 
     private static final long serialVersionUID = 1L;
 

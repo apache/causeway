@@ -16,7 +16,8 @@
  */
 package org.apache.isis.core.progmodel.layout.dflt;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.layout.MemberLayoutArrangerComposite;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
@@ -25,7 +26,7 @@ import org.apache.isis.core.progmodel.layout.ordermethod.MemberLayoutArrangerUsi
 public class MemberLayoutArrangerDefault extends MemberLayoutArrangerComposite {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(MemberLayoutArrangerDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MemberLayoutArrangerDefault.class);
 
     public MemberLayoutArrangerDefault() {
         super(new MemberLayoutArrangerUsingOrderMethod(), new MemberLayoutArrangerUsingMemberOrderFacet());

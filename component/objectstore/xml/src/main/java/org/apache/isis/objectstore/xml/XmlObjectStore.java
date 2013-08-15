@@ -24,7 +24,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -75,7 +76,7 @@ import org.apache.isis.objectstore.xml.internal.version.FileVersion;
 
 public class XmlObjectStore implements ObjectStoreSpi {
 
-    private static final Logger LOG = Logger.getLogger(XmlObjectStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlObjectStore.class);
     private static final String XMLOS_DIR = ConfigurationConstants.ROOT + "xmlos.dir";
     private final DataManager dataManager;
     private final ServiceManager serviceManager;

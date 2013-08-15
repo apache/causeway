@@ -29,7 +29,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NotPersistable;
@@ -94,7 +95,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpeci
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
-    private final static Logger LOG = Logger.getLogger(ObjectSpecificationAbstract.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationAbstract.class);
 
     private static class SubclassList {
         private final List<ObjectSpecification> classes = Lists.newArrayList();

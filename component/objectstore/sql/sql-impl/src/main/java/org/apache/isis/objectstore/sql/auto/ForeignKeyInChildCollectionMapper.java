@@ -24,7 +24,8 @@ package org.apache.isis.objectstore.sql.auto;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -40,7 +41,7 @@ import org.apache.isis.objectstore.sql.ObjectMappingLookup;
  * @author Kevin
  */
 public class ForeignKeyInChildCollectionMapper extends ForeignKeyCollectionMapper {
-    private static final Logger LOG = Logger.getLogger(ForeignKeyCollectionMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ForeignKeyCollectionMapper.class);
 
     protected final ObjectAssociation priorField; // prevents recursion
     protected final List<ObjectAssociation> priorFields;

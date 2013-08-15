@@ -23,11 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class ResourceStreamSourceAbstract implements ResourceStreamSource {
 
-    private static Logger LOG = Logger.getLogger(ResourceStreamSourceAbstract.class);
+    private static Logger LOG = LoggerFactory.getLogger(ResourceStreamSourceAbstract.class);
 
     @Override
     public final InputStream readResource(final String resourcePath) {

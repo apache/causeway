@@ -25,7 +25,8 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections.map.IdentityMap;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -57,7 +58,7 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
         }
     }
 
-    private static final Logger LOG = Logger.getLogger(PojoAdapterHashMap.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PojoAdapterHashMap.class);
     public static final int DEFAULT_POJO_ADAPTER_MAP_SIZE = OidAdapterHashMap.DEFAULT_OID_ADAPTER_MAP_SIZE;
 
     protected final Map<Object, ObjectAdapter> adapterByPojoMap;

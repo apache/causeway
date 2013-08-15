@@ -27,7 +27,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,7 +56,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
 public class DefaultOidObjectMapping implements ObjectMapping {
 
-    private static final Logger LOG = Logger.getLogger(DefaultOidObjectMapping.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultOidObjectMapping.class);
 
     private final Map<String, TransientRootAdapterMapping> requestTransients = Maps.newHashMap();
     private final Map<String, TransientRootAdapterMapping> sessionTransients = Maps.newHashMap();

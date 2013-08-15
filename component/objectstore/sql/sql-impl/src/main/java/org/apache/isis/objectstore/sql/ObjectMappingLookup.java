@@ -22,7 +22,8 @@ package org.apache.isis.objectstore.sql;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -36,7 +37,7 @@ import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class ObjectMappingLookup implements DebuggableWithTitle {
-    private static final Logger LOG = Logger.getLogger(ObjectMappingLookup.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectMappingLookup.class);
     private DatabaseConnectorPool connectionPool;
     private final Map<ObjectSpecification, ObjectMapping> mappings = new HashMap<ObjectSpecification, ObjectMapping>();
     private ObjectMappingFactory objectMappingFactory;

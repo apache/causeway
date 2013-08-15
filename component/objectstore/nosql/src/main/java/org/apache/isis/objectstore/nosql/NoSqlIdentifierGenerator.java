@@ -18,7 +18,8 @@
  */
 package org.apache.isis.objectstore.nosql;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -93,7 +94,7 @@ public class NoSqlIdentifierGenerator implements IdentifierGenerator {
 
 class IdNumbers {
 
-    private static final Logger LOG = Logger.getLogger(IdNumbers.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IdNumbers.class);
 
     private final int batchSize;
     

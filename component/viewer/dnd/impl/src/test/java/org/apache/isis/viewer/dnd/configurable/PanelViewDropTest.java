@@ -21,8 +21,10 @@ package org.apache.isis.viewer.dnd.configurable;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -62,7 +64,7 @@ public class PanelViewDropTest {
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
         
         TestToolkit.createInstance();
         IsisContext.setConfiguration(mockConfiguration);

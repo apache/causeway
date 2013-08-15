@@ -27,7 +27,8 @@ import java.util.Set;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -44,7 +45,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
  */
 public class IsisConfigurationBuilderResourceStreams implements IsisConfigurationBuilder {
 
-    private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderResourceStreams.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationBuilderResourceStreams.class);
     
     static class ConfigurationResourceAndPolicy {
         private final String configurationResource;

@@ -20,7 +20,8 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -28,7 +29,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 
 public class DataNucleusDeleteObjectCommand extends AbstractDataNucleusObjectCommand implements DestroyObjectCommand {
 
-    private static final Logger LOG = Logger.getLogger(DataNucleusDeleteObjectCommand.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusDeleteObjectCommand.class);
 
     public DataNucleusDeleteObjectCommand(ObjectAdapter adapter, PersistenceManager persistenceManager) {
         super(adapter, persistenceManager);

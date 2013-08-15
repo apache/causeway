@@ -21,7 +21,8 @@ package org.apache.isis.core.runtime.userprofile;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -40,7 +41,7 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
     private static final String DEFAULT_PERSPECTIVE_NAME = "Apache Isis";
     private static final String EXPLORATION = " Exploration";
 
-    private final Logger LOG = Logger.getLogger(UserProfile.class);
+    private final Logger LOG = LoggerFactory.getLogger(UserProfile.class);
 
     public static enum Mode {
         /**

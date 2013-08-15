@@ -25,7 +25,8 @@ import java.util.ResourceBundle;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -37,7 +38,7 @@ import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nManager;
  */
 public class I18nManagerUsingResourceBundle implements I18nManager {
 
-    private static final Logger LOG = Logger.getLogger(I18nManagerUsingResourceBundle.class);
+    private static final Logger LOG = LoggerFactory.getLogger(I18nManagerUsingResourceBundle.class);
 
     private static final String BASE_FILE_NAME = "i18n";
 

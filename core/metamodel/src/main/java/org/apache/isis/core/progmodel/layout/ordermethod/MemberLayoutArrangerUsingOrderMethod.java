@@ -21,7 +21,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
@@ -37,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArranger {
 
-    private static final Logger LOG = Logger.getLogger(MemberLayoutArrangerUsingOrderMethod.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MemberLayoutArrangerUsingOrderMethod.class);
 
     private static final Object[] NO_PARAMETERS = new Object[0];
     private static final Class<?>[] NO_PARAMETERS_TYPES = new Class[0];

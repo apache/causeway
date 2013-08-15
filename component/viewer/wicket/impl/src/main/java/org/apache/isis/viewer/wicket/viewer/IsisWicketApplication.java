@@ -29,7 +29,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -124,7 +125,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     private static final long serialVersionUID = 1L;
     
-    private static final Logger LOG = Logger.getLogger(IsisWicketApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisWicketApplication.class);
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 

@@ -38,7 +38,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.StringUtils;
@@ -47,7 +48,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword
 
 public class LoginDialog extends Frame implements ActionListener, KeyListener {
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(LoginDialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginDialog.class);
     private final static int BORDER = 12;
     private TextField user;
     private TextField password;

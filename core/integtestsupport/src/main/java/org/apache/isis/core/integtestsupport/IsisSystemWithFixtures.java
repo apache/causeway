@@ -24,8 +24,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -307,7 +309,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
     private void setUpSystem(FireListeners fireListeners) throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         boolean firstTime = isisSystem == null;
         if(fireListeners.shouldFire()) {

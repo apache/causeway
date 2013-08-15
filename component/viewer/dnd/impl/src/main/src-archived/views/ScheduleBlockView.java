@@ -39,11 +39,12 @@ import org.apache.isis.viewer.dnd.basic.ObjectTitleText;
 import org.apache.isis.viewer.dnd.basic.TitleText;
 import org.apache.isis.viewer.dnd.core.ObjectView;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ScheduleBlockView extends ObjectView {
-	private static final Logger LOG = Logger.getLogger(ScheduleBlockView.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduleBlockView.class);
    	private ObjectField timePeriodField;
 	private ObjectField colorField;
 	private TitleText text;

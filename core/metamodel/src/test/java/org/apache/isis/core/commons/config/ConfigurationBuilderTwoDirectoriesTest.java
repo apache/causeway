@@ -21,15 +21,16 @@ package org.apache.isis.core.commons.config;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigurationBuilderTwoDirectoriesTest extends TestCase {
     IsisConfigurationBuilderFileSystem builder;
 
     @Override
     protected void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
         builder = new IsisConfigurationBuilderFileSystem("src/test/config", "src/test");
     }
 

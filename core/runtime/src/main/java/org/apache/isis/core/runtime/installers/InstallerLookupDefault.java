@@ -34,7 +34,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -86,7 +87,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
  */
 public class InstallerLookupDefault implements InstallerLookup {
 
-    private static final Logger LOG = Logger.getLogger(InstallerLookupDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InstallerLookupDefault.class);
 
     private final List<Installer> installerList = Lists.newArrayList();
 

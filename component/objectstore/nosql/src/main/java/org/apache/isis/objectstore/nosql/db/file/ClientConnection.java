@@ -27,7 +27,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -36,7 +37,7 @@ import org.apache.isis.objectstore.nosql.db.file.server.Util;
 
 public class ClientConnection {
 
-    private static final Logger LOG = Logger.getLogger(ClientConnection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClientConnection.class);
 
     private final InputStream inputStream;
     private final OutputStream outputStream;
@@ -154,7 +155,7 @@ public class ClientConnection {
             return buffer.toString();
         } catch (final Exception e) {
             logFailure();
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
             throw new RemotingException(e);
         }
     }

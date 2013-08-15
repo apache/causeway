@@ -27,8 +27,10 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -78,7 +80,7 @@ public class UserProfileDataHandlerTest {
     
     @Before
     public void setup() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
         service = new TestServiceObject1();
         final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager,
                 mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, Arrays.<Object>asList(service), new OidMarshaller());

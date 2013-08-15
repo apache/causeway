@@ -21,9 +21,11 @@ package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
 import java.io.IOException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -33,7 +35,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
 public class LogAction implements Action {
 
-    private static final Logger LOG = Logger.getLogger(LogAction.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LogAction.class);
 
     @Override
     public void process(final RequestContext context) throws IOException {
@@ -45,13 +47,13 @@ public class LogAction implements Action {
 
         final String levelName = (String) context.getVariable("level");
 
-        final Level level = Level.toLevel(levelName);
+        final org.apache.log4j.Level level = org.apache.log4j.Level.toLevel(levelName);
         boolean changeLogged = false;
-        if (Level.INFO.isGreaterOrEqual(LogManager.getRootLogger().getLevel())) {
+        if (org.apache.log4j.Level.INFO.isGreaterOrEqual(org.apache.log4j.LogManager.getRootLogger().getLevel())) {
             LOG.info("log level changed to " + level);
             changeLogged = true;
         }
-        LogManager.getRootLogger().setLevel(level);
+        org.apache.log4j.LogManager.getRootLogger().setLevel(level);
         if (!changeLogged) {
             LOG.info("log level changed to " + level);
         }

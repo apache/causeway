@@ -26,8 +26,10 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +45,7 @@ public class ClientConnectionTest {
 
     @Before
     public void setup() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         input = IoUtils.asUtf8ByteStream("org.domain.Class false true 1025\n{data...}\n\n102334");
         output = new ByteArrayOutputStream();

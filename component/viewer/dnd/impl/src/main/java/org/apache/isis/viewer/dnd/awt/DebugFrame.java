@@ -43,7 +43,8 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -55,7 +56,7 @@ import org.apache.isis.viewer.dnd.view.debug.DebugOutput;
  */
 public abstract class DebugFrame extends Frame {
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(DebugFrame.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DebugFrame.class);
     private static Vector<Frame> frames = new Vector<Frame>();
     private int panel = 0;
 

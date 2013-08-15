@@ -124,10 +124,10 @@ public class ResizeDrag extends DragImpl implements InternalDrag {
      * public ViewResizeOutline(View forView, int direction, Location location,
      * Size size) { super(forView.getContent(), null, null);
      * 
-     * Logger.getLogger(getClass()).debug("drag outline for " + forView);
+     * LoggerFactory.getLogger(getClass()).debug("drag outline for " + forView);
      * setLocation(location); setSize(size);
      * 
-     * Logger.getLogger(getClass()).debug("drag outline initial size " +
+     * LoggerFactory.getLogger(getClass()).debug("drag outline initial size " +
      * getSize() + " " + forView.getSize());
      * 
      * origin = getBounds();

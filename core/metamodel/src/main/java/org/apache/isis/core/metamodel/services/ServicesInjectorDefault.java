@@ -36,7 +36,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -50,7 +51,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
  */
 public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
-    private static final Logger LOG = Logger.getLogger(ServicesInjectorDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServicesInjectorDefault.class);
 
     /**
      * If no key, not yet searched for type; otherwise the {@link List} indicates

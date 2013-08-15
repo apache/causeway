@@ -22,7 +22,8 @@ package org.apache.isis.viewer.dnd.awt;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -32,7 +33,7 @@ import org.apache.isis.viewer.dnd.view.KeyboardAction;
 import org.apache.isis.viewer.dnd.view.View;
 
 public class KeyboardManager {
-    private static final Logger LOG = Logger.getLogger(KeyboardManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KeyboardManager.class);
     private final XViewer viewer;
     private FocusManager focusManager;
 

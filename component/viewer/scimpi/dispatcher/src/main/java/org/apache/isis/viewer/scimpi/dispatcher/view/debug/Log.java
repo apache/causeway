@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -29,7 +30,7 @@ public class Log extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         String name = request.getRequiredProperty(NAME);
-        Logger logger = Logger.getLogger(name);
+        Logger logger = LoggerFactory.getLogger(name);
         
         request.pushNewBuffer();
         request.processUtilCloseTag();

@@ -21,24 +21,17 @@ package org.apache.isis.core.runtime.logging;
 
 import java.util.Date;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.CyclicBuffer;
-import org.apache.log4j.helpers.OptionConverter;
-import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-
-import org.apache.isis.core.runtime.about.AboutIsis;
 
 class DefaultEvaluator implements TriggeringEventEvaluator {
     @Override
-    public boolean isTriggeringEvent(final LoggingEvent event) {
-        return event.getLevel().isGreaterOrEqual(Level.ERROR);
+    public boolean isTriggeringEvent(final org.apache.log4j.spi.LoggingEvent event) {
+        return event.getLevel().isGreaterOrEqual(org.apache.log4j.Level.ERROR);
     }
 }
 
-public abstract class SnapshotAppender extends AppenderSkeleton {
+public abstract class SnapshotAppender extends org.apache.log4j.AppenderSkeleton {
     private int bufferSize = 512;
     protected CyclicBuffer buffer = new CyclicBuffer(bufferSize);
     private boolean locationInfo = false;
@@ -59,7 +52,7 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     }
 
     @Override
-    public void append(final LoggingEvent event) {
+    public void append(final org.apache.log4j.spi.LoggingEvent event) {
         if (shouldAppend()) {
             event.getThreadName();
             event.getNDC();
@@ -91,16 +84,16 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
             final String user = System.getProperty("user.name");
             final String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") " + System.getProperty("os.version");
             final String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
-            final String version = AboutIsis.getFrameworkVersion();
+            final String version = getFrameworkVersion();
 
-            final LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system + "\n\t" + java + "\n\t" + version, null);
+            final org.apache.log4j.spi.LoggingEvent infoEvent = new org.apache.log4j.spi.LoggingEvent("", org.apache.log4j.Logger.getRootLogger(), org.apache.log4j.Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system + "\n\t" + java + "\n\t" + version, null);
             details.append(layout.format(infoEvent));
         }
 
         final int len = buffer.length();
         String message = "";
         for (int i = 0; i < len; i++) {
-            final LoggingEvent event = buffer.get();
+            final org.apache.log4j.spi.LoggingEvent event = buffer.get();
             message = event.getLoggerName() + ": " + event.getMessage();
             details.append(layout.format(event));
             if (layout.ignoresThrowable()) {
@@ -120,6 +113,11 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
         }
 
         writeSnapshot(message, details.toString());
+    }
+
+    // REVIEW: copied down from AboutIsis...
+    private String getFrameworkVersion() {
+        return "${project.version}-r${buildNumber}";
     }
 
     protected abstract void writeSnapshot(final String message, final String details);
@@ -156,7 +154,7 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     }
 
     public void setEvaluatorClass(final String value) {
-        triggerEvaluator = (TriggeringEventEvaluator) OptionConverter.instantiateByClassName(value, TriggeringEventEvaluator.class, triggerEvaluator);
+        triggerEvaluator = (TriggeringEventEvaluator) org.apache.log4j.helpers.OptionConverter.instantiateByClassName(value, TriggeringEventEvaluator.class, triggerEvaluator);
     }
 
     public void setAddInfo(final boolean addInfo) {

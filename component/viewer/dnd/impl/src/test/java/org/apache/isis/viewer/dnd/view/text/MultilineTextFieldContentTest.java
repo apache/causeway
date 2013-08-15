@@ -21,8 +21,10 @@ package org.apache.isis.viewer.dnd.view.text;
 
 import java.util.Collections;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;
@@ -65,7 +67,7 @@ public class MultilineTextFieldContentTest {
 
     @Before
     public void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         context.ignoring(mockTemplateImageLoader, mockSpecificationLoader, mockPersistenceSessionFactory, mockUserProfileLoader, mockAuthenticationManager, mockAuthorizationManager);
 

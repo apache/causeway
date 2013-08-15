@@ -21,14 +21,15 @@ package org.apache.isis.core.runtime.system.internal;
 
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public class IsisTimeZoneInitializer {
 
-    public static final Logger LOG = Logger.getLogger(IsisTimeZoneInitializer.class);
+    public static final Logger LOG = LoggerFactory.getLogger(IsisTimeZoneInitializer.class);
 
     public void initTimeZone(final IsisConfiguration configuration) {
         final String timeZoneSpec = configuration.getString(ConfigurationConstants.ROOT + "timezone");

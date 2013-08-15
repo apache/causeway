@@ -21,13 +21,14 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class QueryUtil {
 
-    private static final Logger LOG = Logger.getLogger(QueryUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(QueryUtil.class);
 
     private QueryUtil() {}
 

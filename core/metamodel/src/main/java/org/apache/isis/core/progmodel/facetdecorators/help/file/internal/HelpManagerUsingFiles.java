@@ -25,7 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -33,7 +34,7 @@ import org.apache.isis.core.progmodel.facetdecorators.help.HelpManagerAbstract;
 
 public class HelpManagerUsingFiles extends HelpManagerAbstract {
 
-    private static final Logger LOG = Logger.getLogger(HelpManagerUsingFiles.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HelpManagerUsingFiles.class);
 
     /**
      * The name of the file used unless overridden with

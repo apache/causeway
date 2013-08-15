@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.runtime.transaction.facets;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
@@ -33,7 +34,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithR
 
 public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetAbstract implements DecoratingFacet<ActionInvocationFacet> {
 
-    private final static Logger LOG = Logger.getLogger(ActionInvocationFacetWrapTransaction.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetWrapTransaction.class);
 
     private final ActionInvocationFacet underlyingFacet;
 

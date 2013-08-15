@@ -21,14 +21,15 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class MemberLayoutArrangerComposite implements MemberLayoutArranger {
 
-    private static final Logger LOG = Logger.getLogger(MemberLayoutArrangerComposite.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MemberLayoutArrangerComposite.class);
 
     private final List<MemberLayoutArranger> arrangers = Lists.newArrayList();
 

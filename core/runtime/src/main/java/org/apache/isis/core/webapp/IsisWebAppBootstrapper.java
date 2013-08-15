@@ -28,7 +28,8 @@ import javax.servlet.ServletContextListener;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
@@ -56,7 +57,8 @@ import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
  */
 public class IsisWebAppBootstrapper implements ServletContextListener {
 
-    private static final Logger LOG = Logger.getLogger(IsisWebAppBootstrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppBootstrapper.class);
+    
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
     private Injector injector;
 

@@ -27,13 +27,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 
 public class Util {
 
-    private static final Logger LOG = Logger.getLogger(Util.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Util.class);
 
     private static final String DEFAULT_DIRECTORY = "data";
     private static final String SERVICES_DIRECTORY = "services";

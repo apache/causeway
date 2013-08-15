@@ -21,8 +21,10 @@ package org.apache.isis.viewer.dnd.viewer.drawing;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -39,7 +41,7 @@ public class BoundsTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
         b = new Bounds(5, 10, 10, 20);
     }
 

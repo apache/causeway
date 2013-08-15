@@ -24,8 +24,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -116,7 +118,7 @@ public abstract class SqlIntegrationTestCommonBase {
 
     @Before
     public void setUpSystem() throws Exception {
-        Logger.getRootLogger().setLevel(Level.INFO);
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 
         if (!getSqlIntegrationTestFixtures().getState().isInitialize()) {
             return;

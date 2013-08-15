@@ -33,7 +33,8 @@ import java.util.TreeSet;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -56,7 +57,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
 
 public abstract class RequestContext {
-    private static final Logger LOG = Logger.getLogger(RequestContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RequestContext.class);
     static final String TRANSIENT_OBJECT_OID_MARKER = "~";
 
     public enum Scope {

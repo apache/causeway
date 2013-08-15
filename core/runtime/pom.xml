@@ -93,6 +93,11 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-log4j</artifactId>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>
@@ -101,6 +106,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>
             <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -21,8 +21,10 @@ package org.apache.isis.progmodels.dflt;
 
 import java.util.HashSet;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
@@ -67,7 +69,6 @@ public abstract class ObjectReflectorDefaultTestAbstract {
     
     @Before
     public void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
 
         context.checking(new Expectations() {
             {

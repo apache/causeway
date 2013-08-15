@@ -38,7 +38,8 @@ import org.apache.isis.viewer.dnd.core.AbstractFieldSpecification;
 
 import java.sql.Time;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class TimePeriodBarField extends AbstractField {
@@ -56,7 +57,7 @@ public class TimePeriodBarField extends AbstractField {
 	    	return object instanceof TimePeriod;
 		}
    }
-    private static final Logger LOG = Logger.getLogger(TimePeriodBarField.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TimePeriodBarField.class);
     private int endTime;
   //  private int startTime;
 

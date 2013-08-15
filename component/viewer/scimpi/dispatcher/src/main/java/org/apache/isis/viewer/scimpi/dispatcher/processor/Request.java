@@ -21,7 +21,8 @@ package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
@@ -46,7 +47,7 @@ public class Request implements PageWriter {
         }
     }
 
-    private static Logger LOG = Logger.getLogger(Request.class);
+    private static Logger LOG = LoggerFactory.getLogger(Request.class);
     public static final boolean ENSURE_VARIABLES_EXIST = true;
     public static final boolean NO_VARIABLE_CHECKING = false;
     private static Encoder encoder;

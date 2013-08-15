@@ -38,7 +38,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -126,7 +127,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 public final class ObjectReflectorDefault implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware, DebuggableWithTitle {
 
-    private final static Logger LOG = Logger.getLogger(ObjectReflectorDefault.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
     /**
      * Injected in the constructor.

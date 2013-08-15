@@ -24,7 +24,8 @@ import org.apache.isis.application.BusinessObject;
 import org.apache.isis.application.Title;
 import org.apache.isis.application.value.ValueParseException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
  * </p>
  */
 public class TextString extends BusinessValueHolder {
-    private final static Logger logger = Logger.getLogger(TextString.class);
+    private final static Logger logger = LoggerFactory.getLogger(TextString.class);
     private static final long serialVersionUID = 1L;
     private int maximumLength = 0;
     private int minimumLength = 0;
@@ -187,7 +188,7 @@ public class TextString extends BusinessValueHolder {
         return super.equals(object);
     }
 
-    protected Logger getLogger() {
+    protected LoggerFactory.getLogger() {
         return logger;
     }
 

@@ -21,8 +21,9 @@ package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Collections;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -66,7 +67,7 @@ public class ScrollBorderTest {
 
     @Before
     public void setUp() throws Exception {
-        LogManager.getRootLogger().setLevel(Level.OFF);
+        org.apache.log4j.LogManager.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         
 

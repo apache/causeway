@@ -28,7 +28,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -72,7 +73,7 @@ public class ImageField extends AbstractField {
         }
     }
 
-    private static final Logger LOG = Logger.getLogger(ImageField.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImageField.class);
     private static final MediaTracker mt = new MediaTracker(new java.awt.Canvas());
 
     public ImageField(final Content content, final ViewSpecification specification) {

@@ -24,11 +24,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSourceAbstract {
 
-    private static Logger LOG = Logger.getLogger(ResourceStreamSourceChainOfResponsibility.class);
+    private static Logger LOG = LoggerFactory.getLogger(ResourceStreamSourceChainOfResponsibility.class);
 
     private final List<ResourceStreamSource> resourceStreamSources = new ArrayList<ResourceStreamSource>();
 
