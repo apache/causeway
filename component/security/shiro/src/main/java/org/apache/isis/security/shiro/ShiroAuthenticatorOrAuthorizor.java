@@ -163,7 +163,12 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         return new SimpleSession(request.getName(), roles, code);
     }
 
-    private List<String> getRoles(final AuthenticationToken token) {
+    /**
+     * This method has protected visibility to allow for custom implementations
+     * in the future that might obtain the list of roles for a principal from
+     * somewherte other than Shiro's {@link RealmSecurityManager}.
+     */
+    protected List<String> getRoles(final AuthenticationToken token) {
         final List<String> roles = Lists.newArrayList();
 
         RealmSecurityManager securityManager = getSecurityManager();
