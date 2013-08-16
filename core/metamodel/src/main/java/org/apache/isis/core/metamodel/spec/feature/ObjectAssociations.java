@@ -23,12 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributedMember;
 
 public final class ObjectAssociations {
 
@@ -38,8 +40,8 @@ public final class ObjectAssociations {
     public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification noSpec) {
         return new Function<String, OneToOneAssociation>() {
             @Override
-            public OneToOneAssociation apply(final String from) {
-                return (OneToOneAssociation) noSpec.getAssociation(from);
+            public OneToOneAssociation apply(final String id) {
+                return (OneToOneAssociation) noSpec.getAssociation(id);
             }
         };
     }
@@ -90,5 +92,16 @@ public final class ObjectAssociations {
             }
         };
     }
+    
+    public static Predicate<ObjectAssociation> being(final Contributed contributed) {
+        return new Predicate<ObjectAssociation>(){
+            @Override
+            public boolean apply(final ObjectAssociation t) {
+                return contributed.isIncluded() || 
+                       !(t instanceof ContributedMember);
+            }
+        };
+    }
+
 
 }

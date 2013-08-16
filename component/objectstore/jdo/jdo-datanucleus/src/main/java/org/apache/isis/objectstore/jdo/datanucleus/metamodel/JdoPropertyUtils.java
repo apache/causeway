@@ -25,6 +25,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -55,7 +56,7 @@ public final class JdoPropertyUtils {
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return null;
         }
-        final List<? extends ObjectAssociation> propertyList = objSpec.getAssociations(filter);
+        final List<? extends ObjectAssociation> propertyList = objSpec.getAssociations(Contributed.EXCLUDED, filter);
         if (propertyList.size() == 0) {
             return JdoPropertyUtils.getPropertyFor(objSpec.superclass(), annotationName, filter);
         }

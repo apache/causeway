@@ -27,11 +27,11 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -115,7 +116,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         final JSONObject data = createJsonForAdapter(adapter);
 
         final ObjectSpecification specification = adapter.getSpecification();
-        for (final ObjectAssociation association : specification.getAssociations()) {
+        for (final ObjectAssociation association : specification.getAssociations(Contributed.EXCLUDED)) {
             final ObjectAdapter fieldValue = association.get(adapter);
             final String fieldName = association.getId();
 
@@ -240,7 +241,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         //final ObjectSpecification specification = getSpecificationLoader().lookupByObjectType(objectType);
         final ObjectSpecification specification = adapter.getSpecification();
 
-        for (final ObjectAssociation association : specification.getAssociations()) {
+        for (final ObjectAssociation association : specification.getAssociations(Contributed.EXCLUDED)) {
             final String fieldName = association.getId();
 
             final Object fieldValue = jsonObject.has(fieldName) ? jsonObject.get(fieldName) : null;

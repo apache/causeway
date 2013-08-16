@@ -28,18 +28,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectActionContainer {
 
-    public enum Contributed {
-        INCLUDED, EXCLUDED;
-
-        public boolean isIncluded() {
-            return this == INCLUDED;
-        }
-
-        public boolean isExcluded() {
-            return this == EXCLUDED;
-        }
-    }
-
     /**
      * Returns the action of the specified type with the specified signature.
      */

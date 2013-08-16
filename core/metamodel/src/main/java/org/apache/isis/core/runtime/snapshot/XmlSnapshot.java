@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -461,7 +462,7 @@ public class XmlSnapshot {
         final Place fieldPlace = new Place(object, xmlFieldElement);
 
         if (field instanceof OneToOneAssociation) {
-            if (field.getSpecification().getAssociations().size() == 0) {
+            if (field.getSpecification().getAssociations(Contributed.EXCLUDED).size() == 0) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("includeField(Pl, Vec, Str): field is value; done");
                 }
@@ -615,7 +616,7 @@ public class XmlSnapshot {
 
         isisMetaModel.setAttributesForClass(element, oidAsString(object).toString());
 
-        final List<ObjectAssociation> fields = nos.getAssociations();
+        final List<ObjectAssociation> fields = nos.getAssociations(Contributed.EXCLUDED);
         if (LOG.isDebugEnabled()) {
             LOG.debug("objectToElement(NO): processing fields");
         }

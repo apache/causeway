@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -156,29 +157,29 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations() {
+    public List<ObjectAssociation> getAssociations(Contributed contributed) {
         return fields;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<OneToOneAssociation> getProperties() {
+    public List<OneToOneAssociation> getProperties(Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<OneToManyAssociation> getCollections() {
+    public List<OneToManyAssociation> getCollections(Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(ObjectAssociationFilters.COLLECTIONS);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.COLLECTIONS);
         return new ArrayList<OneToManyAssociation>(list);
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(final Filter<ObjectAssociation> filter) {
-        final List<ObjectAssociation> allFields = getAssociations();
+    public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
+        final List<ObjectAssociation> allFields = getAssociations(Contributed.EXCLUDED);
 
         final List<ObjectAssociation> selectedFields = Lists.newArrayList();
         for (int i = 0; i < allFields.size(); i++) {

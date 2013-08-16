@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.drawing.Size;
@@ -56,7 +57,7 @@ public class NewObjectView extends CompositeView {
     protected void buildView() {
         if (getSubviews().length == 0) {
             final ObjectAdapter object = getContent().getAdapter();
-            final List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
+            final List<ObjectAssociation> associations = getContent().getSpecification().getAssociations(Contributed.EXCLUDED);
 
             final ObjectAssociation field = associations.get(0);
 

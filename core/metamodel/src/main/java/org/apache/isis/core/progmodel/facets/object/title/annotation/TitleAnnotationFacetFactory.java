@@ -28,8 +28,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
-import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

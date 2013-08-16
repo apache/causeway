@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -48,7 +49,7 @@ public class FormWithDetailSpecification implements ViewSpecification {
 
     private boolean containsEnoughFields(final Content content) {
         final ObjectSpecification specification = content.getSpecification();
-        final List<ObjectAssociation> associations = specification.getAssociations(new Filter<ObjectAssociation>() {
+        final List<ObjectAssociation> associations = specification.getAssociations(Contributed.EXCLUDED, new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation t) {
                 return t.isOneToManyAssociation() || (t.isOneToOneAssociation() && !((OneToOneAssociation) t).getSpecification().isParseable());

@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
@@ -214,7 +215,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
             }
         });
 
-        final List<ObjectAssociation> fields = getElementSpecification().getAssociations();
+        final List<ObjectAssociation> fields = getElementSpecification().getAssociations(Contributed.EXCLUDED);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
 

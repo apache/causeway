@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
 import org.apache.isis.objectstore.xml.internal.data.DataManager;
@@ -55,7 +56,7 @@ abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract 
         final ObjectSpecification adapterSpec = adapter.getSpecification();
         final ObjectData data = new ObjectData((RootOidDefault) adapter.getOid(), adapter.getVersion());
 
-        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;

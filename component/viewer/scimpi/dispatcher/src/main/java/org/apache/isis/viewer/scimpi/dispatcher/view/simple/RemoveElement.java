@@ -26,6 +26,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -133,7 +134,7 @@ public class RemoveElement extends AbstractElementProcessor {
         // TODO check is valid to remove element
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
         final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(session, adapter, where);
-        final List<ObjectAssociation> visibleFields = adapter.getSpecification().getAssociations(filter);
+        final List<ObjectAssociation> visibleFields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED, filter);
         if (visibleFields.size() == 0) {
             return false;
         }

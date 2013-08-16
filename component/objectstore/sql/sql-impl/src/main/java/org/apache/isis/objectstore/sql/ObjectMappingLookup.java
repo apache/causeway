@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -77,7 +78,7 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
 
     private void add(final String className, final ObjectMapping mapper) {
         final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(className);
-        if (spec.getProperties().size() == 0) {
+        if (spec.getProperties(Contributed.EXCLUDED).size() == 0) {
             throw new SqlObjectStoreException(spec.getFullIdentifier() + " has no fields to persist: " + spec);
         }
         add(spec, mapper, null);

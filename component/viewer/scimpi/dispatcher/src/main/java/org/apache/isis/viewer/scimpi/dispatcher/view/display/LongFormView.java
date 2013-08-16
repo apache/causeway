@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -46,7 +47,7 @@ public class LongFormView extends AbstractFormView {
             IsisContext.getPersistenceSession().resolveField(object, field);
             final ObjectAdapter collection = field.get(object);
             final ObjectSpecification elementSpec = collection.getElementSpecification();
-            final List<ObjectAssociation> fields = elementSpec.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+            final List<ObjectAssociation> fields = elementSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
             if (noColumnsString.equalsIgnoreCase("all")) {
                 noColumns = fields.size();
             } else {

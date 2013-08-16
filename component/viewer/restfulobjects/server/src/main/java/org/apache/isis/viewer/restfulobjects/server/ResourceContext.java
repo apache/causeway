@@ -31,6 +31,8 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import com.google.common.collect.Sets;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -47,8 +49,6 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Reques
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper;
-
-import com.google.common.collect.Sets;
 
 public class ResourceContext implements RendererContext {
 

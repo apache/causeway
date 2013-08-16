@@ -21,10 +21,6 @@ package org.apache.isis.viewer.dnd.view.text;
 
 import java.util.Collections;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;

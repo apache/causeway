@@ -45,7 +45,6 @@ import org.apache.isis.core.commons.lang.PathUtils;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault;

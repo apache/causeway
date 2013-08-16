@@ -19,10 +19,16 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Ordering;
 
 import dom.todo.ToDoItem.Category;
 
@@ -31,13 +37,17 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
 
@@ -147,12 +157,58 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
 
     // //////////////////////////////////////
-    // SimilarTo (action)
+    // priority (contributed property)
+    // //////////////////////////////////////
+    
+    @DescribedAs("The relative priority of this item compared to others (using 'due by' date)")
+    @NotInServiceMenu
+    @MemberOrder(sequence="1")
+    @ActionSemantics(Of.SAFE)
+    @NotContributed(As.ACTION)
+    @Hidden(where=Where.ALL_TABLES)
+    public Integer priority(final ToDoItem toDoItem) {
+        if(toDoItem.isComplete()) {
+            return null;
+        }
+
+        final List<ToDoItem> sortedNotYetComplete = 
+                ORDERING_DUE_BY
+                .compound(ORDERING_DESCRIPTION)
+                .sortedCopy(notYetComplete());
+        int i=1;
+        for (ToDoItem each : sortedNotYetComplete) {
+            if(each == toDoItem) {
+                return i;
+            }
+            i++;
+        }
+        return null;
+    }
+
+    private static Ordering<ToDoItem> ORDERING_DUE_BY = 
+        Ordering.natural().nullsLast().onResultOf(new Function<ToDoItem, LocalDate>(){
+            @Override
+            public LocalDate apply(ToDoItem input) {
+                return input.getDueBy();
+            }
+        });
+    
+    private static Ordering<ToDoItem> ORDERING_DESCRIPTION = 
+            Ordering.natural().nullsLast().onResultOf(new Function<ToDoItem, String>(){
+                @Override
+                public String apply(ToDoItem input) {
+                    return input.getDescription();
+                }
+            });
+    
+    // //////////////////////////////////////
+    // SimilarTo (contributed collection)
     // //////////////////////////////////////
     
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "5")
+    @MemberOrder(sequence="1")
+    @NotContributed(As.ACTION)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
@@ -161,7 +217,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
             }
         });
     }
-
+    
     // //////////////////////////////////////
     // AutoComplete
     // //////////////////////////////////////

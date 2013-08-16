@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringEscapeUtils;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

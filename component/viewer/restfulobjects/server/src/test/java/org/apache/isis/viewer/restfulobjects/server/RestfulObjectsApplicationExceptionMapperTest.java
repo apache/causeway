@@ -21,16 +21,16 @@ package org.apache.isis.viewer.restfulobjects.server;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.junit.Before;
-import org.junit.Test;
 
 public class RestfulObjectsApplicationExceptionMapperTest {
 

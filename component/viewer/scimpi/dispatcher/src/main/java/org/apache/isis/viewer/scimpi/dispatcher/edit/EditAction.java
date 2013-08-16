@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -78,7 +79,7 @@ public class EditAction implements Action {
 
             final ObjectAdapter adapter = context.getMappedObject(objectId);
 
-            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter, where));
+            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, adapter, where));
 
             for (final ObjectAssociation objectAssociation : fields) {
                 if (objectAssociation.isVisible(session, adapter, where).isVetoed()) {

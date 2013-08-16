@@ -27,9 +27,9 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
 
+import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.datanucleus.api.jdo.NucleusJDOHelper;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -48,12 +48,10 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 
 public class FrameworkSynchronizer {
 

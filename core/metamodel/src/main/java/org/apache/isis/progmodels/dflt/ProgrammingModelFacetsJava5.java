@@ -21,7 +21,6 @@ package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableMarkerInterfaceFacetFactory;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;

@@ -32,9 +32,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -119,7 +119,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
             private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 
-                List<ObjectAssociation> associations = objectSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+                List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES);
                 for (ObjectAssociation association : associations) {
                     
                     

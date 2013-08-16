@@ -21,6 +21,7 @@ package org.apache.isis.viewer.dnd.configurable;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
@@ -46,7 +47,7 @@ public class ViewDesignBorder extends AbstractBorder {
         super.viewMenuOptions(menuOptions);
 
         // ObjectAdapter object = getContent().getAdapter();
-        final List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
+        final List<ObjectAssociation> associations = getContent().getSpecification().getAssociations(Contributed.EXCLUDED);
 
         for (final ObjectAssociation objectAssociation : associations) {
             final ObjectAssociation f = objectAssociation;

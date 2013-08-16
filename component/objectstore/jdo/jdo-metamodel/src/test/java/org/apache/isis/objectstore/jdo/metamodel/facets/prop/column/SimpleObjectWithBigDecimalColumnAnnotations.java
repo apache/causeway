@@ -22,8 +22,6 @@ import java.math.BigDecimal;
 
 import javax.jdo.annotations.Column;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-
 
 public class SimpleObjectWithBigDecimalColumnAnnotations {
 

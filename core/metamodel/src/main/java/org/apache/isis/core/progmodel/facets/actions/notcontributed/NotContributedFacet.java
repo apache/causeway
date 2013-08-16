@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.actions.notcontributed;
 
+import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -31,4 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface NotContributedFacet extends Facet {
 
+    public As value();
+
+    public boolean toActions();
+    public boolean toAssociations();
 }

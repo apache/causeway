@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -60,7 +61,7 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
         final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
-        List<ObjectAssociation> associations = elementSpec.getAssociations(OF_TYPE_BIGDECIMAL);
+        List<ObjectAssociation> associations = elementSpec.getAssociations(Contributed.EXCLUDED, OF_TYPE_BIGDECIMAL);
         return appliesIf(!associations.isEmpty());
     }
 

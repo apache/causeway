@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
@@ -229,7 +230,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 	}
 
     private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
-        return objSpec.getAssociations(visiblePropertyFilter(adapter, where));
+        return objSpec.getAssociations(Contributed.INCLUDED, visiblePropertyFilter(adapter, where));
     }
 
     @SuppressWarnings("unchecked")
@@ -489,7 +490,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
     
     private List<ObjectAssociation> enabledAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(enabledAssociationFilter(adapter));
+        return objSpec.getAssociations(Contributed.EXCLUDED, enabledAssociationFilter(adapter));
     }
 
     @SuppressWarnings("unchecked")

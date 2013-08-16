@@ -14,18 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.commons.authentication;
+package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.commons.components.Injectable;
+public enum Contributed {
+    INCLUDED, EXCLUDED;
 
-public interface AuthenticationSessionProvider extends Injectable {
+    public boolean isIncluded() {
+        return this == INCLUDED;
+    }
 
-    /**
-     * Provided by <tt>AuthenticationManager</tt> when used by framework.
-     * 
-     * <p>
-     * Called in multiple places.
-     */
-    AuthenticationSession getAuthenticationSession();
-
+    public boolean isExcluded() {
+        return this == EXCLUDED;
+    }
 }

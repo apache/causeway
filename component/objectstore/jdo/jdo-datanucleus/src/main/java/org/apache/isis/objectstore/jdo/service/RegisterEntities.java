@@ -27,9 +27,9 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Splitter;
 
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.reflections.Reflections;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.runtime.system.context.IsisContext;

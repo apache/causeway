@@ -21,11 +21,6 @@ package org.apache.isis.viewer.dnd.viewer.drawing;
 
 import junit.framework.TestCase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.viewer.dnd.drawing.Padding;
 import org.apache.isis.viewer.dnd.drawing.Size;
 

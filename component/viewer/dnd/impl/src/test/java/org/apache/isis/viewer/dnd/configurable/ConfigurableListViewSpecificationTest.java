@@ -23,10 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Enumeration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;

@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetFactory;
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

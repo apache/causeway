@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.objectstore.commands.InMemoryCreateObjectCommand;
 import org.apache.isis.core.objectstore.commands.InMemoryDestroyObjectCommand;
@@ -423,7 +424,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
         recursiveElements.addElement(object);
 
         // work through all its fields
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED);
 
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);

@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -141,7 +141,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
     
     private Filter<ObjectAction> memberOrderNameNotCollection(final ObjectSpecification adapterSpec) {
 
-        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.EXCLUDED);
         final List<String> associationNames = Lists.transform(associations, ObjectAssociations.toName());
         final List<String> associationIds = Lists.transform(associations, ObjectAssociations.toId());
 

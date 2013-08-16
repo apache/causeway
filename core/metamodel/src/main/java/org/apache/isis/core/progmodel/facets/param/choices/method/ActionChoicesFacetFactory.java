@@ -21,7 +21,6 @@ package org.apache.isis.core.progmodel.facets.param.choices.method;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;

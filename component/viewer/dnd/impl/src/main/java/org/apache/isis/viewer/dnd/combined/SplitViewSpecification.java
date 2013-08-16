@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -75,7 +76,7 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
         final ObjectSpecification spec = content.getSpecification();
         final ObjectAdapter target = content.getAdapter();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target, where));
+        final List<ObjectAssociation> fields = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, target, where));
         final List<ObjectAssociation> selectableFields = new ArrayList<ObjectAssociation>();
         for (final ObjectAssociation field : fields) {
             if (validField(field)) {

@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -309,7 +309,7 @@ public class Debug extends AbstractElementProcessor {
     }
 
     private void specificationGraph(final ObjectSpecification spec, final DebugBuilder view, final ArrayList<ObjectSpecification> visited) {
-        final List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>(spec.getAssociations());
+        final List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>(spec.getAssociations(Contributed.EXCLUDED));
         Collections.sort(fields, new Comparator<ObjectAssociation>() {
             @Override
             public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
@@ -352,7 +352,7 @@ public class Debug extends AbstractElementProcessor {
         specificationClasses(view, "Implemented interfaces", spec.interfaces());
         speficationFacets(view, spec);
 
-        final List<ObjectAssociation> fields = spec.getAssociations();
+        final List<ObjectAssociation> fields = spec.getAssociations(Contributed.EXCLUDED);
         specificationMembers(view, "Fields", fields);
         final List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER, Contributed.INCLUDED);
         specificationMembers(view, "User Actions", userActions);

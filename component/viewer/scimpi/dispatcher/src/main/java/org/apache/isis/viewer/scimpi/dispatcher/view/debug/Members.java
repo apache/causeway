@@ -25,8 +25,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -73,7 +73,7 @@ public class Members extends AbstractElementProcessor {
             final ObjectSpecification specification = field == null ? object.getSpecification() : field.getSpecification();
 
             request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
-            final List<ObjectAssociation> fields = specification.getAssociations();
+            final List<ObjectAssociation> fields = specification.getAssociations(Contributed.EXCLUDED);
             for (final ObjectAssociation fld : fields) {
                 if (!fld.isAlwaysHidden()) {
                     request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> " + fld.getSpecification().getSingularName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n");

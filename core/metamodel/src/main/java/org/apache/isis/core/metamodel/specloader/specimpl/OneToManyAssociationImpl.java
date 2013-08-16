@@ -45,13 +45,23 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class OneToManyAssociationImpl extends ObjectAssociationAbstract implements OneToManyAssociation {
 
-    public OneToManyAssociationImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext) {
-        super(facetedMethod, FeatureType.COLLECTION, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
+    public OneToManyAssociationImpl(
+            final FacetedMethod facetedMethod, 
+            final ObjectMemberContext objectMemberContext) {
+        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
+    }
+
+    protected OneToManyAssociationImpl(
+            final FacetedMethod facetedMethod, 
+            final ObjectSpecification objectSpec, 
+            final ObjectMemberContext objectMemberContext) {
+        super(facetedMethod, FeatureType.COLLECTION, objectSpec, objectMemberContext);
     }
 
     @Override

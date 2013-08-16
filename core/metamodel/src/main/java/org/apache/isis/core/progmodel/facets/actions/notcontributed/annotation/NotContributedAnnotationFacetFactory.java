@@ -40,7 +40,7 @@ public class NotContributedAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     private NotContributedFacet create(final NotContributed annotation, final FacetHolder holder) {
-        return annotation == null ? null : new NotContributedFacetAnnotation(holder);
+        return annotation == null ? null : new NotContributedFacetAnnotation(annotation.value(), holder);
     }
 
 }

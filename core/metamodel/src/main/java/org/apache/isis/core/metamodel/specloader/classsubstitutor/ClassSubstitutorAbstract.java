@@ -24,7 +24,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 

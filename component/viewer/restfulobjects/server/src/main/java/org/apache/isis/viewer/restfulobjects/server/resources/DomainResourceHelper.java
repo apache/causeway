@@ -28,14 +28,21 @@ import java.util.Map.Entry;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -48,7 +55,6 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererFactory;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.AbstractObjectMemberReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
@@ -70,13 +76,6 @@ import org.apache.isis.viewer.restfulobjects.server.resources.ResourceAbstract.C
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.io.ByteStreams;
 
 public final class DomainResourceHelper {
 
@@ -105,7 +104,7 @@ public final class DomainResourceHelper {
 
     static boolean copyOverProperties(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final JsonRepresentation propertiesList) {
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final List<ObjectAssociation> properties = objectSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List<ObjectAssociation> properties = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES);
         boolean allOk = true;
 
         for (final ObjectAssociation association : properties) {

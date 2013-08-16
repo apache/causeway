@@ -21,11 +21,6 @@ package org.apache.isis.viewer.dnd.viewer.view.field;
 
 import junit.framework.TestCase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.drawing.Padding;
 import org.apache.isis.viewer.dnd.field.TextFieldBorder;

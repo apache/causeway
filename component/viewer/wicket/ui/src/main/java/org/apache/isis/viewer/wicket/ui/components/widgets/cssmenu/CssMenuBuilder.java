@@ -131,7 +131,8 @@ public class CssMenuBuilder {
 
     private void addMenuItemForAction(final CssMenuItem parent, final ObjectAction action) {
         
-        if (action.getFacet(NotContributedFacet.class) != null) {
+        final NotContributedFacet notContributed = action.getFacet(NotContributedFacet.class);
+        if (notContributed != null && notContributed.toActions()) {
             // skip if is an action that has been annotated to not be contributed
             return;
         }

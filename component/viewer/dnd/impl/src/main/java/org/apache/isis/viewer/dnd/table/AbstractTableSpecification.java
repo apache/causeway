@@ -22,6 +22,7 @@ package org.apache.isis.viewer.dnd.table;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -79,7 +80,7 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
         } else {
             final CollectionContent collectionContent = (CollectionContent) requirement.getContent();
             final ObjectSpecification elementSpecification = collectionContent.getElementSpecification();
-            final List<ObjectAssociation> fields = elementSpecification.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+            final List<ObjectAssociation> fields = elementSpecification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToOneAssociation()) {
                     return true;

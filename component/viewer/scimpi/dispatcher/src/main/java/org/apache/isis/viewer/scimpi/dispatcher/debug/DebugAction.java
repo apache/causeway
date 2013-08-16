@@ -36,8 +36,8 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.Dump;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -143,12 +143,12 @@ public class DebugAction implements Action {
         final List<String> fullIdentifierList = Lists.newArrayList(Collections2.transform(specs, className));
         for (final String fullIdentifier : fullIdentifierList) {
             final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
-            if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
+            if (spec.getAssociations(Contributed.EXCLUDED).size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
                 continue;
             }
             final String name = spec.getIdentifier().toClassIdentityString();
             context.getWriter().append("# " + spec.getShortIdentifier() + "\n");
-            for (final ObjectAssociation assoc : spec.getAssociations()) {
+            for (final ObjectAssociation assoc : spec.getAssociations(Contributed.EXCLUDED)) {
                 context.getWriter().append("#" + name + ".property." + assoc.getId() + ".name" + "=\n");
                 context.getWriter().append("#" + name + ".property." + assoc.getId() + ".description" + "=\n");
                 context.getWriter().append("#" + name + ".property." + assoc.getId() + ".help" + "=\n");
@@ -176,7 +176,7 @@ public class DebugAction implements Action {
         
         for (final String fullIdentifier : fullIdentifierList) {
             final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
-            if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
+            if (spec.getAssociations(Contributed.EXCLUDED).size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
                 continue;
             }
             final String name = spec.getIdentifier().toClassIdentityString();
@@ -188,14 +188,14 @@ public class DebugAction implements Action {
         
         for (final String fullIdentifier : fullIdentifierList) {
             final ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
-            if (spec.getAssociations().size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
+            if (spec.getAssociations(Contributed.EXCLUDED).size() == 0 && spec.getObjectActions(Contributed.EXCLUDED).size() == 0) {
                 continue;
             }
             final String name = spec.getIdentifier().toClassIdentityString();
             boolean isAbstract = spec.isAbstract();
             context.getWriter().append("### " + spec.getShortIdentifier() + (isAbstract ? " (abstract)" : "") + " ###\n");
             context.getWriter().append((isAbstract ? "#" : "") + name + ":roles\n");
-            for (final ObjectAssociation assoc : spec.getAssociations()) {
+            for (final ObjectAssociation assoc : spec.getAssociations(Contributed.EXCLUDED)) {
                 context.getWriter().append("#" + name + "#" + assoc.getId() + ":roles\n");
                 // context.getWriter().append("#" + name + ".property." +
                 // assoc.getId() + ".description" + "=\n");

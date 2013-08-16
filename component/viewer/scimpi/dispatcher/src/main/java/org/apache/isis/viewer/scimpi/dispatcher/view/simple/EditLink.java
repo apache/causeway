@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -46,7 +47,7 @@ public class EditLink extends AbstractLink {
     protected boolean valid(final Request request, final ObjectAdapter adapter) {
         final ObjectSpecification specification = adapter.getSpecification();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter, where));
+        final List<ObjectAssociation> visibleFields = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, adapter, where));
         final ImmutableFacet facet = specification.getFacet(ImmutableFacet.class);
         final boolean isImmutable = facet != null && facet.when() == When.ALWAYS;
         final boolean isImmutableOncePersisted = facet != null && facet.when() == When.ONCE_PERSISTED && adapter.representsPersistent();

@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 /**
@@ -48,10 +49,11 @@ public class ObjectSpecificationForFreeStandingList extends ObjectSpecificationA
     private static final String DESCRIBED_AS = "Typed instances";
     private static final String ICON_NAME = "instances";
 
-    public ObjectSpecificationForFreeStandingList(final SpecificationContext specificationContext) {
-        super(FreeStandingList.class, NAME, specificationContext);
+    public ObjectSpecificationForFreeStandingList(
+            final SpecificationContext specificationContext,
+            final ObjectMemberContext objectMemberContext) {
+        super(FreeStandingList.class, NAME, specificationContext, objectMemberContext);
     }
-
 
     // /////////////////////////////////////////////////////////
     // Introspection

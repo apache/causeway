@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -94,7 +95,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             final ObjectSpecification spec = original.getSpecification();
 
             final ObjectAdapter clone = getPersistenceSession().createTransientInstance(spec);
-            final List<ObjectAssociation> fields = spec.getAssociations();
+            final List<ObjectAssociation> fields = spec.getAssociations(Contributed.EXCLUDED);
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAdapter fld = fields.get(i).get(original);
 
@@ -167,7 +168,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             // TODO: use Facet for this test instead.
             return new Veto("Can't set field in persistent object with reference to non-persistent object");
         }
-        final List<ObjectAssociation> fields = targetAdapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), targetAdapter, where));
+        final List<ObjectAssociation> fields = targetAdapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), targetAdapter, where));
         for (final ObjectAssociation fld : fields) {
             if (!fld.isOneToOneAssociation()) {
                 continue;
@@ -215,7 +216,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             return action.execute(target, new ObjectAdapter[] { source });
         }
 
-        final List<ObjectAssociation> associations = target.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), target, where));
+        final List<ObjectAssociation> associations = target.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), target, where));
 
         for (int i = 0; i < associations.size(); i++) {
             final ObjectAssociation association = associations.get(i);

@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -109,7 +110,7 @@ public class Memento implements Serializable {
     private ObjectData createObjectData(final ObjectAdapter adapter) {
         transientObjects.add(adapter.getOid());
         final ObjectSpecification cls = adapter.getSpecification();
-        final List<ObjectAssociation> associations = cls.getAssociations();
+        final List<ObjectAssociation> associations = cls.getAssociations(Contributed.EXCLUDED);
         final ObjectData data = new ObjectData(adapter.getOid(), cls.getFullIdentifier());
         for (int i = 0; i < associations.size(); i++) {
             if (associations.get(i).isNotPersisted()) {
@@ -314,7 +315,7 @@ public class Memento implements Serializable {
 
     private void updateFields(final ObjectAdapter object, final Data state) {
         final ObjectData od = (ObjectData) state;
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation field : fields) {
             if (field.isNotPersisted()) {
                 if (field.isOneToManyAssociation()) {

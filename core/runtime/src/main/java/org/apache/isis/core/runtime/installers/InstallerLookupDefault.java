@@ -49,7 +49,6 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.CastUtils;
-import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.IsisInstallerRegistry;

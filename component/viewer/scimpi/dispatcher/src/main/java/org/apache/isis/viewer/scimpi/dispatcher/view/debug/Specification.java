@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -64,7 +65,7 @@ public class Specification extends AbstractElementProcessor {
 
     private void specificationDetails(final Request request, final ObjectSpecification specification) {
         renderName(request, specification);
-        final List<ObjectAssociation> fields = specification.getAssociations();
+        final List<ObjectAssociation> fields = specification.getAssociations(Contributed.EXCLUDED);
         for (int i = 0; i < fields.size(); i++) {
             request.appendHtml("    " + fields.get(i).getName() + " (" + fields.get(i).getSpecification().getSingularName()
                     + ") \n");
@@ -96,7 +97,7 @@ public class Specification extends AbstractElementProcessor {
         }
         processed.add(specification);
 
-        final List<ObjectAssociation> fields = specification.getAssociations();
+        final List<ObjectAssociation> fields = specification.getAssociations(Contributed.EXCLUDED);
         for (int i = 0; i < fields.size(); i++) {
             ObjectSpecification fieldSpecification = fields.get(i).getSpecification();
             if (fieldSpecification.isValue()) {

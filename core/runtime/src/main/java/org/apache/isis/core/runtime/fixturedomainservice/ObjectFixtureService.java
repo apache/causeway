@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -93,7 +94,7 @@ public class ObjectFixtureService {
         objects.add(adapter.getObject());
 
         final ObjectSpecification adapterSpec = adapter.getSpecification();
-        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;

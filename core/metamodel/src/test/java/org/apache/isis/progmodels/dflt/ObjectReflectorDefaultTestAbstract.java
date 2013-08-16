@@ -21,10 +21,6 @@ package org.apache.isis.progmodels.dflt;
 
 import java.util.HashSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.commons.components;
 
-import org.apache.isis.applib.annotation.Programmatic;
 
 public interface Injectable {
 

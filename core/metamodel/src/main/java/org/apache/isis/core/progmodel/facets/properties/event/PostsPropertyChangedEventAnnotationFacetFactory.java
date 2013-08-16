@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChang
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -99,7 +100,7 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                List<OneToManyAssociation> objectCollections = objectSpec.getCollections();
+                List<OneToManyAssociation> objectCollections = objectSpec.getCollections(Contributed.EXCLUDED);
                 for (OneToManyAssociation objectCollection : objectCollections) {
                     final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
                     if(facet != null) {

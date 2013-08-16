@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -73,7 +74,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         final ObjectSpecification spec = object.getSpecification();
         final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where);
-        final List<ObjectAssociation> flds = spec.getAssociations(filter);
+        final List<ObjectAssociation> flds = spec.getAssociations(Contributed.EXCLUDED, filter);
 
         if (view.getSubviews().length == 0) {
             initialBuild(view, axes, object, flds);

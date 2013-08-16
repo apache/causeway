@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -104,7 +105,7 @@ public class ObjectReader {
 
     private void readFields(final StateReader reader, final ObjectAdapter object, final DataEncryption dataEncrypter) {
         final ObjectAssociationContainer specification = object.getSpecification();
-        final List<ObjectAssociation> associations = specification.getAssociations();
+        final List<ObjectAssociation> associations = specification.getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;

@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -42,7 +43,7 @@ public class ObjectLink extends AbstractLink {
     @Override
     protected boolean valid(final Request request, final ObjectAdapter object) {
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, where));
+        final List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, object, where));
         return visibleFields.size() > 0;
     }
 

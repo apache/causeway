@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
@@ -185,7 +186,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         // this spec.
         final Object o = pattern.getObject();
         final ObjectSpecification patternSpec = pattern.getSpecification();
-        final List<ObjectAssociation> patternAssociations = patternSpec.getAssociations();
+        final List<ObjectAssociation> patternAssociations = patternSpec.getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation patternAssoc : patternAssociations) {
             final Method method;
             final Identifier identifier = patternAssoc.getIdentifier();

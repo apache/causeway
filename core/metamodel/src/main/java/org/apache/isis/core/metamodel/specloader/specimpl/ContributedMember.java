@@ -14,18 +14,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.commons.authentication;
+package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
-public interface AuthenticationSessionProvider extends Injectable {
-
-    /**
-     * Provided by <tt>AuthenticationManager</tt> when used by framework.
-     * 
-     * <p>
-     * Called in multiple places.
-     */
-    AuthenticationSession getAuthenticationSession();
-
+/**
+ * Marker interface indicating an a contributed association or action.
+ */
+public interface ContributedMember { 
 }

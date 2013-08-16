@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,13 +30,16 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 
 /**
@@ -80,7 +81,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final EntityModel entityModel = getModel();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification noSpec = adapter.getSpecification();
-        final List<ObjectAssociation> associations = visibleAssociations(adapter, noSpec);
+        final List<ObjectAssociation> associations = visibleCollections(adapter, noSpec);
 
         final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
         final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
@@ -117,12 +118,12 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 		fieldset.addOrReplace(collectionPanel);
 	}
 
-    private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
-        return noSpec.getAssociations(visibleAssociationFilter(adapter));
+    private List<ObjectAssociation> visibleCollections(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
+        return noSpec.getAssociations(Contributed.INCLUDED, visibleCollectionsFilter(adapter));
     }
 
     @SuppressWarnings("unchecked")
-	private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter) {
+	private Filter<ObjectAssociation> visibleCollectionsFilter(final ObjectAdapter adapter) {
         return Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLES));
     }
 

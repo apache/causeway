@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.progmodel.facets.object.choices.enums.EnumFacet;
@@ -112,7 +113,7 @@ public class EditObject extends AbstractElementProcessor {
         request.processUtilCloseTag();
 
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> viewFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object, where));
+        List<ObjectAssociation> viewFields = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, object, where));
         viewFields = containedBlock.includedFields(viewFields);
         final InputField[] formFields = createFields(viewFields);
 
@@ -141,7 +142,7 @@ public class EditObject extends AbstractElementProcessor {
 
         if (!object.isTransient()) {
             // ensure all booleans are included so the pass back TRUE if set.
-            final List<ObjectAssociation> fields2 = object.getSpecification().getAssociations();
+            final List<ObjectAssociation> fields2 = object.getSpecification().getAssociations(Contributed.EXCLUDED);
             for (int i = 0; i < fields2.size(); i++) {
                 final ObjectAssociation field = fields2.get(i);
                 if (!viewFields.contains(field) && field.getSpecification().containsFacet(BooleanValueFacet.class)) {

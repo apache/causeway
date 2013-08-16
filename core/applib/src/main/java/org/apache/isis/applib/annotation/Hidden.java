@@ -32,6 +32,12 @@ import java.lang.annotation.Target;
  * <p>
  * For a repository action, is equivalent to {@link NotContributed} and also
  * {@link NotInServiceMenu}.
+ * 
+ * <p>
+ * If a repository action is contributed as a property, then the {@link Hidden#where() where}
+ * attribute can be used to optionally hide the contributed property in a table (using 
+ * {@link Where#ALL_TABLES}, {@link Where#STANDALONE_TABLES}, {@link Where#PARENTED_TABLES} 
+s * as appropriate).
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD })

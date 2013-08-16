@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -110,7 +111,7 @@ class WriteObjectCommand implements PersistenceCommand {
 
     private void writeFields(final StateWriter writer, final ObjectAdapter adapter) {
         
-        final List<ObjectAssociation> associations = adapter.getSpecification().getAssociations();
+        final List<ObjectAssociation> associations = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
         
 //        final String specName = adapter.getSpecification().getFullIdentifier();
 //        writer.writeObjectType(specName);

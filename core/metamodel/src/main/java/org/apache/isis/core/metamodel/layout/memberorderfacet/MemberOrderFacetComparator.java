@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
 public class MemberOrderFacetComparator implements Comparator<MemberOrderFacet> {

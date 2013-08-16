@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.lang.ResourceUtil;
-import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 
 public class LayoutMetadataReaderFromJsonTest_read {
     

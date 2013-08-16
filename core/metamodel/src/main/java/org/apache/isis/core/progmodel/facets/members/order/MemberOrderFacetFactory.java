@@ -22,14 +22,12 @@ package org.apache.isis.core.progmodel.facets.members.order;
 import java.util.Properties;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.progmodel.facets.object.membergroups.MemberGroupLayoutFacetProperties;
 
 public class MemberOrderFacetFactory extends FacetFactoryAbstract {
 

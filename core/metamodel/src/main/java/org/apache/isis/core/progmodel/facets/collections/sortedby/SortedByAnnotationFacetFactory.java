@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -74,7 +75,7 @@ public class SortedByAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                List<OneToManyAssociation> objectCollections = objectSpec.getCollections();
+                List<OneToManyAssociation> objectCollections = objectSpec.getCollections(Contributed.EXCLUDED);
                 for (OneToManyAssociation objectCollection : objectCollections) {
                     final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
                     if(facet != null) {

@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
@@ -59,7 +60,11 @@ import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 
     public OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext) {
-        super(facetedMethod, FeatureType.PROPERTY, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
+        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
+    }
+    
+    protected OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectSpecification objectSpec, final ObjectMemberContext objectMemberContext) {
+        super(facetedMethod, FeatureType.PROPERTY, objectSpec, objectMemberContext);
     }
 
     // /////////////////////////////////////////////////////////////

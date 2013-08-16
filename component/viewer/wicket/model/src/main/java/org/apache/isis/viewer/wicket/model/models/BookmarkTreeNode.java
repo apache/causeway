@@ -30,6 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -115,7 +116,7 @@ public class BookmarkTreeNode implements Serializable {
             if(candidateBookmarkableModel instanceof EntityModel) {
                 EntityModel entityModel = (EntityModel) candidateBookmarkableModel;
                 final ObjectAdapter candidateAdapter = entityModel.getObject();
-                final List<ObjectAssociation> properties = candidateAdapter.getSpecification().getAssociations(ObjectAssociationFilters.REFERENCE_PROPERTIES);
+                final List<ObjectAssociation> properties = candidateAdapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.REFERENCE_PROPERTIES);
                 for (ObjectAssociation objectAssoc : properties) {
                     final ObjectAdapter possibleParentAdapter = objectAssoc.get(candidateAdapter);
                     if(possibleParentAdapter == null) {

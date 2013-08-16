@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -101,7 +102,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      */
     private Map<Method, ObjectMember> membersByMethod = null;
 
-    private final ObjectMemberContext objectMemberContext;
     private final IntrospectionContext introspectionContext;
     private final CreateObjectContext createObjectContext;
 
@@ -113,13 +113,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     public ObjectSpecificationDefault(final Class<?> correspondingClass, final FacetedMethodsBuilderContext facetedMethodsBuilderContext, final IntrospectionContext introspectionContext, final SpecificationContext specContext, final ObjectMemberContext objectMemberContext,
             final CreateObjectContext createObjectContext) {
-        super(correspondingClass, determineShortName(correspondingClass), specContext);
+        super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberContext);
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
 
         this.introspectionContext = introspectionContext;
         this.createObjectContext = createObjectContext;
-        this.objectMemberContext = objectMemberContext;
     }
 
     @Override
@@ -314,7 +313,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void ensureServiceHasNoAssociations() {
-        final List<ObjectAssociation> associations = getAssociations();
+        final List<ObjectAssociation> associations = getAssociations(Contributed.EXCLUDED);
         final StringBuilder buf = new StringBuilder();
         for (final ObjectAssociation association : associations) {
             final String name = association.getId();
@@ -454,7 +453,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public ObjectAdapter initialize(final ObjectAdapter adapter) {
                         
         // initialize new object
-        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
         for (int i = 0; i < fields.size(); i++) {
             fields.get(i).toDefault(adapter);
         }
@@ -482,7 +481,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
         final Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
-        final List<ObjectAssociation> fields = getAssociations(noop);
+        final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
             final List<Facet> facets = field.getFacets(ImperativeFacet.FILTER);

@@ -19,9 +19,13 @@
 
 package org.apache.isis.core.progmodel.facets.actions.notcontributed;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
@@ -46,7 +50,6 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
 
     public void testAnnotationPickedUp() {
         class CustomerRepository {
-            @SuppressWarnings("unused")
             @NotContributed
             public void someAction() {
             }
@@ -55,11 +58,48 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
 
         facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
+        final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotContributedFacetAbstract);
+        assertThat(facet.value(), is(As.EITHER));
 
         assertNoMethodsRemoved();
     }
 
+    public void testAnnotationPickedUpWithAsAssociation() {
+        class CustomerRepository {
+            @NotContributed(As.ASSOCIATION)
+            public void someAction() {
+            }
+        }
+        final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
+        
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        
+        final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof NotContributedFacetAbstract);
+        assertThat(facet.value(), is(As.ASSOCIATION));
+        
+        assertNoMethodsRemoved();
+    }
+    
+    public void testAnnotationPickedUpWithAsAction() {
+        class CustomerRepository {
+            @NotContributed(As.ACTION)
+            public void someAction() {
+            }
+        }
+        final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
+        
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, null, null, actionMethod, methodRemover, facetedMethod));
+        
+        final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof NotContributedFacetAbstract);
+        assertThat(facet.value(), is(As.ACTION));
+        
+        assertNoMethodsRemoved();
+    }
+    
 }

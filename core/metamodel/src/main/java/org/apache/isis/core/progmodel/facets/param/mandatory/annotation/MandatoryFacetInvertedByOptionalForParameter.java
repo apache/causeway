@@ -21,7 +21,6 @@ package org.apache.isis.core.progmodel.facets.param.mandatory.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract.Semantics;
 
 /**
  * Derived by presence of an <tt>@Optional</tt> method.

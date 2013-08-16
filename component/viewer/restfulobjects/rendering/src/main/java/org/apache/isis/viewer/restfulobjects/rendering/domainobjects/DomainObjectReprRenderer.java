@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -211,7 +211,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
         final JsonRepresentation appendTo = 
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
-        final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
+        final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations(Contributed.EXCLUDED);
         addAssociations(objectAdapter, appendTo, associations);
 
         if (mode.isRegular()) {

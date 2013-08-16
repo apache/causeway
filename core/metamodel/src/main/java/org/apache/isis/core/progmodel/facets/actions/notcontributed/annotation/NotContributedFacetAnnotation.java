@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation;
 
+import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
 public class NotContributedFacetAnnotation extends NotContributedFacetAbstract {
 
-    public NotContributedFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public NotContributedFacetAnnotation(As as, final FacetHolder holder) {
+        super(as, holder);
     }
 
 }

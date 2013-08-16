@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

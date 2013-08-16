@@ -37,7 +37,6 @@ import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.ResourceUtil;
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
@@ -51,8 +50,8 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -309,11 +308,11 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     
     @SuppressWarnings("unchecked")
     private static List<ObjectAssociation> propertiesOf(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Filters.and(ObjectAssociationFilters.PROPERTIES,  ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+        return objSpec.getAssociations(Contributed.EXCLUDED, Filters.and(ObjectAssociationFilters.PROPERTIES,  ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
     }
     @SuppressWarnings("unchecked")
     private static List<ObjectAssociation> collectionsOf(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+        return objSpec.getAssociations(Contributed.EXCLUDED, Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
     }
     private static List<ObjectAction> actionsOf(final ObjectSpecification objSpec, final Set<String> excludedActionIds) {
         return objSpec.getObjectActions(ActionType.ALL_EXCEPT_SET, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));

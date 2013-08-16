@@ -268,7 +268,11 @@
 
 .entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover {
 	color: #000;
-	background-color:#FFFFFF;
+}
+
+.entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover:not(.disabled) {
+    color: #FFF;
+    background-color:#20B5C2;
 }
 
 .additionalLinkList {
@@ -306,18 +310,19 @@
     color: #46423C;
 }
 
-.additionalLinkList li em {
-    color: grey;
-}
 
 .additionalLinkList li a:hover {
 	background-color:#20B5C2;
 	color:#FFFFFF;
 }
 
+/* em = disabled */
+.additionalLinkList li em {
+    color: lightgrey;
+}
+
 .additionalLinkList li em:hover {
-    color: grey;
-    background-color:#FFFFFF;
+    color: black;
     cursor: default;
 }
 

@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -446,7 +446,7 @@ class TestFieldExists extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
-        final List<? extends ObjectAssociation> objectFields = object.getSpecification().getAssociations();
+        final List<? extends ObjectAssociation> objectFields = object.getSpecification().getAssociations(Contributed.EXCLUDED);
         boolean fieldExists = false;
         for (final ObjectAssociation objectAssociation : objectFields) {
             if (objectAssociation.getId().equals(attributeName)) {

@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 /**
  * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid

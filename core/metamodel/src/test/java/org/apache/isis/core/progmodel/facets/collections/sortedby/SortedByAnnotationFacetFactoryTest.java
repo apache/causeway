@@ -19,22 +19,15 @@
 
 package org.apache.isis.core.progmodel.facets.collections.sortedby;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.SortedSet;
 
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.SortedBy;
-import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class SortedByAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

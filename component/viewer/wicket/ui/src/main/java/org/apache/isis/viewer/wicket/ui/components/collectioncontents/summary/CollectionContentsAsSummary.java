@@ -27,7 +27,6 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.AbstractItem;
@@ -38,6 +37,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -81,7 +81,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
 
-        List<ObjectAssociation> numberAssociations = elementSpec.getAssociations(CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
+        List<ObjectAssociation> numberAssociations = elementSpec.getAssociations(Contributed.EXCLUDED, CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
 
         RepeatingView repeating = new RepeatingView(ID_REPEATING_SUMMARY);
         addOrReplace(repeating);

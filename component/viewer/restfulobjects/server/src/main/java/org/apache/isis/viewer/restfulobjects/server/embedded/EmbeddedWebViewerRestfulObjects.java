@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.embedded;
 
+import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
+
 import org.apache.isis.core.commons.lang.MapUtils;
 import org.apache.isis.core.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
@@ -27,8 +30,6 @@ import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.core.webapp.content.ResourceServlet;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication;
 import org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyTrusted;
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
 final class EmbeddedWebViewerRestfulObjects extends EmbeddedWebViewer {
     @Override

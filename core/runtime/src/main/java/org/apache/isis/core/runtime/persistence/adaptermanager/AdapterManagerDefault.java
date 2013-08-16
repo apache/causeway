@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -524,7 +525,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     }
 
     private void remapContainedAggregatedObject(final ObjectAdapter adapter, final RootOid persistedRootOid) {
-        for (final ObjectAssociation association: adapter.getSpecification().getAssociations()) {
+        for (final ObjectAssociation association: adapter.getSpecification().getAssociations(Contributed.EXCLUDED)) {
             if (association.isOneToManyAssociation() && !association.isNotPersisted()) {
                 final ObjectAdapter collection = association.get(adapter);
                 final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);

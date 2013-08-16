@@ -19,18 +19,38 @@
 
 package org.apache.isis.core.progmodel.facets.actions.notcontributed;
 
+import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
 public abstract class NotContributedFacetAbstract extends MarkerFacetAbstract implements NotContributedFacet {
 
+    private final As as;
+
     public static Class<? extends Facet> type() {
         return NotContributedFacet.class;
     }
 
-    public NotContributedFacetAbstract(final FacetHolder holder) {
+    public NotContributedFacetAbstract(As as, final FacetHolder holder) {
         super(type(), holder);
+        this.as = as;
+    }
+
+    @Override
+    public As value() {
+        return as;
+    }
+
+
+    @Override
+    public boolean toActions() {
+        return value() == As.EITHER || value() == As.ACTION;
+    }
+
+    @Override
+    public boolean toAssociations() {
+        return value() == As.EITHER || value() == As.ASSOCIATION;
     }
 
 }

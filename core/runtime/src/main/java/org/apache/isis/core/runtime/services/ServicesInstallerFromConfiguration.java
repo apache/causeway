@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.services;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.StringTokenizer;

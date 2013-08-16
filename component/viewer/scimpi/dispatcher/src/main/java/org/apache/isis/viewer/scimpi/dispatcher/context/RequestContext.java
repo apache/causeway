@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
@@ -217,7 +218,7 @@ public abstract class RequestContext {
         //final AggregatedOid aggregatedOid = new AggregatedOid(objectType, (TypedOid) parentAdapter.getOid(), idParts[2]);
 
         ObjectAdapter aggregatedAdapter = null;
-        outer: for (final ObjectAssociation association : parentAdapter.getSpecification().getAssociations()) {
+        outer: for (final ObjectAssociation association : parentAdapter.getSpecification().getAssociations(Contributed.EXCLUDED)) {
             if (association.getSpecification().isParented()) {
                 final ObjectAdapter objectAdapter = association.get(parentAdapter);
                 if (objectAdapter == null) {

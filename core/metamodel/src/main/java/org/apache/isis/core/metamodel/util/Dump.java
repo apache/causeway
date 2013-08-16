@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.facets.object.cached.CachedFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -182,7 +182,7 @@ public final class Dump {
     }
 
     private static void specificationFields(final ObjectSpecification specification, final DebugBuilder debugBuilder) {
-        final List<ObjectAssociation> fields = specification.getAssociations();
+        final List<ObjectAssociation> fields = specification.getAssociations(Contributed.EXCLUDED);
         debugBuilder.appendln("All");
         debugBuilder.indent();
         for (int i = 0; i < fields.size(); i++) {
@@ -190,7 +190,7 @@ public final class Dump {
         }
         debugBuilder.unindent();
 
-        final List<ObjectAssociation> fields2 = specification.getAssociations(ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+        final List<ObjectAssociation> fields2 = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
         debugBuilder.appendln("Static");
         debugBuilder.indent();
         for (int i = 0; i < fields2.size(); i++) {
@@ -444,7 +444,7 @@ public final class Dump {
         } else {
             // object is a regular Object
             try {
-                final List<ObjectAssociation> fields = objectSpec.getAssociations();
+                final List<ObjectAssociation> fields = objectSpec.getAssociations(Contributed.EXCLUDED);
                 for (int i = 0; i < fields.size(); i++) {
                     final ObjectAssociation field = fields.get(i);
                     final ObjectAdapter obj = field.get(collectionAdapter);
@@ -508,7 +508,7 @@ public final class Dump {
 
         try {
             // work through all its fields
-            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAssociation field = fields.get(i);
                 final ObjectAdapter obj = field.get(adapter);

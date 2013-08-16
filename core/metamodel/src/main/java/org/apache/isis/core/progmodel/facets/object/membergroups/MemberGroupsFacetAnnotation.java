@@ -21,7 +21,6 @@ package org.apache.isis.core.progmodel.facets.object.membergroups;
 
 import java.util.Collections;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 

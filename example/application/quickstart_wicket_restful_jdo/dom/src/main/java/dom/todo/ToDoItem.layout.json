@@ -28,7 +28,8 @@
                             completed: {},
                             notYetCompleted: {}
                         }
-                    }
+                    },
+                    rank: {}
                 }
             },
             Misc: {
@@ -64,10 +65,10 @@
             dependencies: {
                 actions: {
                     add:{},
-                    delete: {}
+                    remove: {}
                 }
             },
-            similarItems: {}
+            similarTo: {}
         }
     }
     ],

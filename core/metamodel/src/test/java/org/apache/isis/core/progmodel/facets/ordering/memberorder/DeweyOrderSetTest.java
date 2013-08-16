@@ -26,10 +26,6 @@ import junit.framework.TestSuite;
 
 import com.google.common.collect.ImmutableList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;

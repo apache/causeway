@@ -40,7 +40,7 @@ public interface ObjectAssociationContainer {
      * Return all the fields that exist in an object of this specification,
      * although they need not all be accessible or visible.
      */
-    List<ObjectAssociation> getAssociations();
+    List<ObjectAssociation> getAssociations(Contributed contributed);
 
     /**
      * Return all {@link ObjectAssociation}s matching the supplied filter.
@@ -51,13 +51,13 @@ public interface ObjectAssociationContainer {
      * 
      * @see Filters
      */
-    List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter);
+    List<ObjectAssociation> getAssociations(Contributed contributed, Filter<ObjectAssociation> filter);
 
     /**
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
      */
-    List<OneToOneAssociation> getProperties();
+    List<OneToOneAssociation> getProperties(Contributed contributed);
 
     /**
      * All {@link ObjectAssociation association}s that represents
@@ -65,6 +65,6 @@ public interface ObjectAssociationContainer {
      * 
      * @return
      */
-    List<OneToManyAssociation> getCollections();
+    List<OneToManyAssociation> getCollections(Contributed contributed);
 
 }

@@ -35,6 +35,7 @@ import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -91,7 +92,7 @@ public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityMod
     @SuppressWarnings("unchecked")
     private List<OneToOneAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
         @SuppressWarnings("rawtypes")
-        final List list = noSpec.getAssociations(visiblePropertyFilter(adapter));
+        final List list = noSpec.getAssociations(Contributed.EXCLUDED, visiblePropertyFilter(adapter));
         return new ArrayList<OneToOneAssociation>(list);
     }
 

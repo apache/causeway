@@ -20,11 +20,11 @@ package org.apache.isis.viewer.restfulobjects.server.util;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import com.google.common.collect.Lists;
 
 // TODO: unused, apparently, to remove
 final class NOTUSED_ActionUtils {

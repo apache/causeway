@@ -25,14 +25,14 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Stack;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.htmlparser.Node;
 import org.htmlparser.Remark;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;

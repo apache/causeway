@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.objectstore.nosql.NoSqlCommandContext;
@@ -182,7 +183,7 @@ public class MongoDb implements NoSqlDataDatabase {
 
         // REVIEW check the right types are used in matches 
         final BasicDBObject query = new BasicDBObject();
-        for ( ObjectAssociation association  : pattern.getSpecification().getAssociations()) {
+        for ( ObjectAssociation association  : pattern.getSpecification().getAssociations(Contributed.EXCLUDED)) {
             ObjectAdapter field = association.get(pattern);
             if (!association.isEmpty(pattern)) {
                 if (field.isValue()) {

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.dnd.calendar;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 import org.apache.isis.viewer.dnd.view.Axes;
@@ -53,7 +54,7 @@ public class CalendarSpecification implements CompositeViewSpecification {
     public boolean canDisplay(final ViewRequirement requirement) {
         final boolean openCollection = requirement.isCollection() && requirement.isOpen();
         if (openCollection) {
-            final List<OneToOneAssociation> propertyList = ((CollectionContent) requirement.getContent()).getElementSpecification().getProperties();
+            final List<OneToOneAssociation> propertyList = ((CollectionContent) requirement.getContent()).getElementSpecification().getProperties(Contributed.EXCLUDED);
             for (final OneToOneAssociation association : propertyList) {
                 if (!association.isAlwaysHidden() && association.getSpecification().containsFacet(DateValueFacet.class)) {
                     return true;

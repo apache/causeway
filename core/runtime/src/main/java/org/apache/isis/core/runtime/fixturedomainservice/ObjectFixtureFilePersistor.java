@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -137,7 +138,7 @@ public class ObjectFixtureFilePersistor {
         writer.println(adapter.getSpecification().getFullIdentifier() + "#" + id);
 
         final ObjectSpecification adapterSpec = adapter.getSpecification();
-        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;

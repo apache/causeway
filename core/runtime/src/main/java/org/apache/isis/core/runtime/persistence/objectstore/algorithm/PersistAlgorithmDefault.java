@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 
@@ -70,7 +71,7 @@ public class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
             return;
         }
 
-        final List<ObjectAssociation> associations = adapter.getSpecification().getAssociations();
+        final List<ObjectAssociation> associations = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
         if (!adapter.getSpecification().isEncodeable() && associations.size() > 0) {
             if(LOG.isDebugEnabled()) {
                 LOG.debug("make persistent " + adapter);

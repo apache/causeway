@@ -49,14 +49,17 @@ public final class ObjectActions {
     public static List<ObjectAction> flattenedActions(final List<ObjectAction> objectActions) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ObjectAction action : objectActions) {
+            if (!action.getType().isSet()) {
+                actions.add(action);
+            }
+        }
+        for (final ObjectAction action : objectActions) {
             if (action.getType().isSet()) {
                 final ObjectActionSet actionSet = (ObjectActionSet) action;
                 final List<ObjectAction> subActions = actionSet.getActions();
                 for (final ObjectAction subAction : subActions) {
                     actions.add(subAction);
                 }
-            } else {
-                actions.add(action);
             }
         }
         return actions;

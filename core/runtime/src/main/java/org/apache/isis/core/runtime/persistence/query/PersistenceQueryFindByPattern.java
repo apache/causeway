@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
@@ -51,7 +52,7 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
     private boolean matchesPattern(final ObjectAdapter pattern, final ObjectAdapter instance) {
         final ObjectAdapter object = instance;
         final ObjectSpecification nc = object.getSpecification();
-        final List<ObjectAssociation> fields = nc.getAssociations();
+        final List<ObjectAssociation> fields = nc.getAssociations(Contributed.EXCLUDED);
 
         for (int f = 0; f < fields.size(); f++) {
             final ObjectAssociation fld = fields.get(f);

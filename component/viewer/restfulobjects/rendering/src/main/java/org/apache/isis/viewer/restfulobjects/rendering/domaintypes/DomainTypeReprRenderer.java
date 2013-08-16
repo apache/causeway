@@ -19,8 +19,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -31,6 +31,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
+
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.base.Strings;
@@ -83,7 +84,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addMembers() {
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
-        final List<ObjectAssociation> associations = objectSpecification.getAssociations();
+        final List<ObjectAssociation> associations = objectSpecification.getAssociations(Contributed.EXCLUDED);
         for (final ObjectAssociation association : associations) {
             if (association.isOneToOneAssociation()) {
                 final OneToOneAssociation property = (OneToOneAssociation) association;

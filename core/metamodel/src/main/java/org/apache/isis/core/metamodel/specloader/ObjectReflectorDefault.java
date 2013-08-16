@@ -535,14 +535,17 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
+        // create contexts as inputs ...
         final SpecificationContext specContext = new SpecificationContext(getDeploymentCategory(), authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup);
 
+        final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
+        final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
+
+        // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
-            return new ObjectSpecificationForFreeStandingList(specContext);
+            return new ObjectSpecificationForFreeStandingList(specContext, objectMemberContext);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
-            final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
-            final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
             final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
             final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);

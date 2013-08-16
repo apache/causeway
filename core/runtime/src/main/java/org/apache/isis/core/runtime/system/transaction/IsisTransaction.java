@@ -32,10 +32,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -68,6 +66,7 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -77,8 +76,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction.AdapterAndProperty;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction.PreAndPostValues;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -861,7 +858,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     public void enlistCreated(ObjectAdapter adapter) {
         enlist(adapter, ChangeKind.CREATE);
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
@@ -884,7 +881,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     public void enlistUpdating(ObjectAdapter adapter) {
         enlist(adapter, ChangeKind.UPDATE);
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
@@ -907,7 +904,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     public void enlistDeleting(ObjectAdapter adapter) {
         enlist(adapter, ChangeKind.DELETE);
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;

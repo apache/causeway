@@ -424,12 +424,12 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     
-    @NotPersisted
-    @Render(Type.EAGERLY)
-    @CssClass("x-info")
-    public List<ToDoItem> getSimilarItems() {
-        return toDoItems.similarTo(this);
-    }
+//    @NotPersisted
+//    @Render(Type.EAGERLY)
+//    @CssClass("x-info")
+//    public List<ToDoItem> getSimilarItems() {
+//        return toDoItems.similarTo(this);
+//    }
 
     // //////////////////////////////////////
     // Clone (action)

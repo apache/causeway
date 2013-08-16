@@ -30,10 +30,10 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetAnnotationOnParameter;
 import org.apache.isis.core.progmodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnParameterFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetAnnotationOnProperty;
+import org.apache.isis.core.progmodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetAnnotationOnParameter;
 import org.apache.isis.core.progmodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetAnnotationOnProperty;
 
 public class RenderedAsDayBeforeAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

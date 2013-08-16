@@ -23,8 +23,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;

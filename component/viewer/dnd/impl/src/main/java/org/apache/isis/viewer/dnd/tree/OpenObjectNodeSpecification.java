@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -71,7 +72,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
     public boolean canDisplay(final ViewRequirement requirement) {
         if (requirement.isObject() && requirement.hasReference()) {
             final ObjectAdapter object = requirement.getAdapter();
-            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where));
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where));
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToManyAssociation()) {
                     return true;

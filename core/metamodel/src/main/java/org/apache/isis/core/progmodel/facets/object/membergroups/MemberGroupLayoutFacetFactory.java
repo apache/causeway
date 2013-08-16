@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.progmodel.facets.object.membergroups;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -117,7 +117,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
             @SuppressWarnings("unchecked")
             private int numCollectionsOf(ObjectSpecification objectSpec) {
                 List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
-                        Filters.and(ObjectAssociationFilters.staticallyVisible(Where.OBJECT_FORMS), ObjectAssociationFilters.COLLECTIONS));
+                        Contributed.EXCLUDED, Filters.and(ObjectAssociationFilters.staticallyVisible(Where.OBJECT_FORMS), ObjectAssociationFilters.COLLECTIONS));
                 return objectCollections.size();
             }
         };

@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -111,7 +112,7 @@ public class CalendarGrid extends CompositeView {
 
     private ObjectAssociation findDate(final ObjectAdapter adapter) {
         final ObjectSpecification spec = adapter.getSpecification();
-        final List<ObjectAssociation> fields = spec.getAssociations();
+        final List<ObjectAssociation> fields = spec.getAssociations(Contributed.EXCLUDED);
         for (int i = 0; i < fields.size(); i++) {
             final Facet facet = fields.get(i).getSpecification().getFacet(DateValueFacet.class);
             if (facet != null) {

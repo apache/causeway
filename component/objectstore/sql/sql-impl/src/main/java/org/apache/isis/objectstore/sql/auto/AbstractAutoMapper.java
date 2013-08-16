@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -90,7 +91,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
     private static ObjectSpecification specificationFor(final String className) {
         ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
-        List<OneToOneAssociation> properties = specification.getProperties();
+        List<OneToOneAssociation> properties = specification.getProperties(Contributed.EXCLUDED);
         if (isNullOrEmpty(properties) && !specification.isAbstract()) {
             throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: " + specification);
         }
@@ -135,7 +136,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     private void setupFullMapping(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         final String className, final IsisConfiguration configParameters, final String parameterBase) {
 
-        fields.addAll(specification.getAssociations());
+        fields.addAll(specification.getAssociations(Contributed.EXCLUDED));
 
         int simpleFieldCount = 0;
         int collectionFieldCount = 0;

@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -53,7 +52,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
-import org.apache.isis.core.metamodel.layoutmetadata.propfile.LayoutMetadataReaderFromPropertyFile;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -248,7 +246,6 @@ public class FacetedMethodsBuilder {
     /**
      * Returns a {@link List} of {@link FacetedMethod}s representing object
      * actions, lazily creating them first if required.
-     * @param properties TODO
      */
     public List<FacetedMethod> getAssociationFacetedMethods(Properties properties) {
         if (associationFacetMethods == null) {

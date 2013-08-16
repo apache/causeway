@@ -22,10 +22,6 @@ package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;

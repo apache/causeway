@@ -16,16 +16,15 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata.json;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
-import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 
 public class LayoutMetadataReaderFromJsonTest_readMetadata {
     

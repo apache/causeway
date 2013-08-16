@@ -26,18 +26,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the a (repository) action should not be contributed.
+ * Indicates the a (repository) action should not be contributed, either as
+ * an object action, or as an association (property/collection), or as either.
  * 
  * <p>
  * It may still be appear in the repository menu (unless it has been annotated
- * as {@link NotInServiceMenu}). If {@link Hidden}, then also implies that the
+ * as {@link NotInServiceMenu}).
+ * 
+ * <p>
+ * If annotated with {@link Hidden}, then also implies that the
  * menu should not be contributed.
  * 
  * <p>
- * Has no meanings for actions on regular entities.
+ * Has no meaning for actions on regular entities.
  */
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotContributed {
+    public enum As {
+        ACTION,
+        ASSOCIATION,
+        EITHER;
+    }
+    
+    As value() default As.EITHER; 
 }
