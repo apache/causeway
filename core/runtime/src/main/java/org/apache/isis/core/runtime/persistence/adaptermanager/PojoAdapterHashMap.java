@@ -24,7 +24,6 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.commons.collections.map.IdentityMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

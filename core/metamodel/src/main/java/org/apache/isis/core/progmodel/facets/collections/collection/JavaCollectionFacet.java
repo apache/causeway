@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.collections.collection;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.collections.CollectionUtils;
+import com.google.common.collect.Collections2;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -42,7 +42,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     @SuppressWarnings("unchecked")
     public Collection<ObjectAdapter> collection(final ObjectAdapter wrappedCollection) {
         final Collection<?> collectionOfUnderlying = collectionOfUnderlying(wrappedCollection);
-        return CollectionUtils.collect(collectionOfUnderlying, new ObjectToAdapterTransformer(getAdapterManager()));
+        return Collections2.transform(collectionOfUnderlying, new ObjectToAdapterFunction(getAdapterManager()));
     }
 
     @Override

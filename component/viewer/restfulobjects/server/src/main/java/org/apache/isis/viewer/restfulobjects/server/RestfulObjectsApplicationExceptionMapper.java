@@ -20,20 +20,19 @@ package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.List;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.exceptions.ExceptionUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-
-import com.google.common.collect.Lists;
 
 //@Path("/") // FIXME: workaround for TomEE ... but breaks the RestEasy TCK tests so commented out:-(
 @Provider

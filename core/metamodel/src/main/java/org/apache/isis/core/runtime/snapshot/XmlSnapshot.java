@@ -499,9 +499,7 @@ public class XmlSnapshot {
                 LOG.debug("includeField(Pl, Vec, Str): 1->M: " + log("collection.size", "" + facet.size(collection)));
             }
             boolean allFieldsNavigated = true;
-            final Enumeration elements = facet.elements(collection);
-            while (elements.hasMoreElements()) {
-                final ObjectAdapter referencedObject = (ObjectAdapter) elements.nextElement();
+            for(final ObjectAdapter referencedObject: facet.iterable(collection)) {
                 final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for " + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));

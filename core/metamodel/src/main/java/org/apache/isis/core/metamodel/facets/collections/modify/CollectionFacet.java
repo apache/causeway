@@ -40,13 +40,6 @@ public interface CollectionFacet extends Facet {
 
     int size(ObjectAdapter collection);
 
-    /**
-     * @deprecated - use {@link #iterator(ObjectAdapter)} or
-     *             {@link #iterable(ObjectAdapter)}.
-     */
-    @Deprecated
-    Enumeration<ObjectAdapter> elements(ObjectAdapter collectionAdapter);
-
     Iterable<ObjectAdapter> iterable(ObjectAdapter collectionAdapter);
 
     Iterator<ObjectAdapter> iterator(ObjectAdapter collectionAdapter);

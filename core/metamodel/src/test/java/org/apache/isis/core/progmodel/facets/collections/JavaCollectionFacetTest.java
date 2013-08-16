@@ -77,9 +77,6 @@ public class JavaCollectionFacetTest {
                 one(mockCollection).getObject();
                 will(returnValue(mockWrappedCollection));
 
-                one(mockWrappedCollection).size();
-                will(returnValue(0));
-
                 one(mockWrappedCollection).iterator();
                 will(returnValue(mockIterator));
 

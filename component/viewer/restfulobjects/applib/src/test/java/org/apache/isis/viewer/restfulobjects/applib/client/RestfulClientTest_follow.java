@@ -21,19 +21,15 @@ package org.apache.isis.viewer.restfulobjects.applib.client;
 import java.net.URI;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.commons.collections.map.MultiValueMap;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.restfulobjects.applib.JsonFixture;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.core.BaseClientResponse;
+import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.jboss.resteasy.specimpl.UriBuilderImpl;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -41,6 +37,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.viewer.restfulobjects.applib.JsonFixture;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 
 public class RestfulClientTest_follow {
 
@@ -90,13 +92,13 @@ public class RestfulClientTest_follow {
                 allowing(mockClientRequest).getHttpMethod();
                 will(returnValue("GET"));
 
-                one(mockClientRequest).execute();
+                oneOf(mockClientRequest).execute();
                 will(returnValue(mockClientResponse));
 
-                one(mockClientResponse).setReturnType(String.class);
+                oneOf(mockClientResponse).setReturnType(String.class);
                 allowing(mockClientResponse);
 
-                final MultiValueMap result = new MultiValueMap();
+                final MultivaluedMap result = new MultivaluedMapImpl();
                 result.put("Content-Type", "application/json");
                 allowing(mockClientResponse).getMetadata();
                 will(returnValue(result));

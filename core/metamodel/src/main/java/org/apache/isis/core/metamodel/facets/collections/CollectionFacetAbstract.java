@@ -20,10 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections;
 
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
-
-import org.apache.commons.collections.iterators.IteratorEnumeration;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -35,12 +32,6 @@ public abstract class CollectionFacetAbstract extends FacetAbstract implements C
 
     public CollectionFacetAbstract(final FacetHolder holder) {
         super(CollectionFacet.class, holder, Derivation.NOT_DERIVED);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public final Enumeration<ObjectAdapter> elements(final ObjectAdapter collectionAdapter) {
-        return new IteratorEnumeration(iterator(collectionAdapter));
     }
 
     @Override

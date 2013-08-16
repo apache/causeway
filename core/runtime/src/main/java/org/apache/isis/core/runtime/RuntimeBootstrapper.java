@@ -22,10 +22,10 @@ package org.apache.isis.core.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 
 import org.apache.isis.core.commons.lang.Threads;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
@@ -78,15 +78,13 @@ final class RuntimeBootstrapper implements IsisBootstrapper {
     }
 
     private List<IsisViewer> findWebViewers(final List<IsisViewer> viewers) {
-        final List<IsisViewer> webViewers = new ArrayList<IsisViewer>(viewers);
-        CollectionUtils.filter(webViewers, new Predicate() {
-            @Override
-            public boolean evaluate(final Object object) {
-                final IsisViewer viewer = (IsisViewer) object;
-                return viewer.getWebAppSpecification() != null;
-            }
-        });
-        return webViewers;
+        return Lists.newArrayList(
+                Iterables.filter(viewers, new Predicate<IsisViewer>() {
+                    @Override
+                    public boolean apply(final IsisViewer viewer) {
+                        return viewer.getWebAppSpecification() != null;
+                    }
+                }));
     }
 
     private List<IsisViewer> findNonWebViewers(final List<IsisViewer> viewers, final List<IsisViewer> webViewers) {

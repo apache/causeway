@@ -17,40 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.adaptermanager;
+package org.apache.isis.core.progmodel.facets.collections.collection;
 
-import org.apache.commons.collections.Transformer;
+import com.google.common.base.Function;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
  * Uses the Commons Collection API to transform {@link Object}s into
  * {@link ObjectAdapter} adapters.
  * 
  */
-public final class ObjectToAdapterTransformer implements Transformer {
+public final class ObjectToAdapterFunction implements Function<Object,ObjectAdapter> {
 
-    public ObjectToAdapterTransformer() {
+    private final AdapterManager adapterManager;
+
+    public ObjectToAdapterFunction(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 
     @Override
-    public Object transform(final Object object) {
+    public ObjectAdapter apply(final Object object) {
         return getAdapterManager().adapterFor(object);
     }
 
     // //////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
+    // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }

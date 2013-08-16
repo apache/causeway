@@ -21,10 +21,7 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.AbstractList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-
-import org.apache.commons.collections.iterators.IteratorEnumeration;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -56,15 +53,6 @@ public class FreeStandingList extends AbstractList<ObjectAdapter> {
     @Override
     public int size() {
         return instances.size();
-    }
-
-    /**
-     * @deprecated - use {@link #iterator()}.
-     */
-    @SuppressWarnings("unchecked")
-    @Deprecated
-    public Enumeration<ObjectAdapter> elements() {
-        return new IteratorEnumeration(iterator());
     }
 
     public ObjectSpecification getElementSpecification() {

@@ -23,12 +23,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -44,6 +42,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
@@ -176,7 +176,7 @@ public abstract class PageAbstract extends WebPage {
         //response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(BOOTSTRAP_JS)));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if (!StringUtils.isEmpty(feedbackMsg)) {
+        if (!Strings.isNullOrEmpty(feedbackMsg)) {
             response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
         }
         
