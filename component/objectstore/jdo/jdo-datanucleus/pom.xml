@@ -111,7 +111,11 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- because DataNucleus uses log4j as its preferred logger -->
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
         </dependency>
 
         <dependency>

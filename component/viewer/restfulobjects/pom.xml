@@ -153,6 +153,15 @@
                 <scope>test</scope>
 			</dependency>
 
+            <dependency>
+                <!-- 
+                required because resteasy-jaxrs declares as a test dependency
+                whereas httpclient4 needs it as a compile dependency -->
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
