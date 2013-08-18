@@ -18,7 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import javax.activation.MimeType;
+import javax.imageio.ImageIO;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
@@ -32,14 +40,20 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -58,7 +72,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private static final String ID_SCALAR_IF_REGULAR_CLEAR = "scalarIfRegularClear";
     private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
-    private static final String ID_FEEDBACK = "feedback";
+    private static final String ID_IMAGE = "scalarImage";
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
     private static final String ID_SCALAR_IF_COMPACT_DOWNLOAD = "scalarIfCompactDownload";
 
@@ -79,6 +93,13 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         labelIfRegular.add(scalarName);
+
+        final Image wicketImage = asWicketImage(ID_IMAGE);
+        if(wicketImage != null) {
+            labelIfRegular.addOrReplace(wicketImage);
+        } else {
+            Components.permanentlyHide(labelIfRegular, ID_IMAGE);
+        }
         
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, labelIfRegular);
         
@@ -89,10 +110,70 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         return labelIfRegular;
     }
 
+    private Image asWicketImage(String id) {
+        
+        final ObjectAdapter adapter = getModel().getObject();
+        if(adapter == null) {
+            return null;
+        }
+        
+        final Object object = adapter.getObject();
+        if(!(object instanceof Blob)) {
+            return null;
+        } 
+        
+        final Blob blob = (Blob)object;
+        final MimeType mimeType = blob.getMimeType();
+        if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
+            return null;
+        } 
+        
+        final BufferedImage image = asBufferedImage(blob);
+        if(image == null) {
+            return null;
+        }
+        final BufferedDynamicImageResource imageResource = new BufferedDynamicImageResource();
+        imageResource.setImage(image);
+        
+        //return new Image(id, asResourceReference(id, imageResource));
+        return new Image(id, imageResource);
+    }
+
+    @SuppressWarnings("unused")
+    private ResourceReference asResourceReference(String id, final BufferedDynamicImageResource resource) {
+        return new ResourceReference(this.getClass(), id)
+        {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public IResource getResource()
+            {
+                return resource;
+            }
+        };
+    }
+
+    private BufferedImage asBufferedImage(final Blob blob) {
+        final byte[] bytes = blob.getBytes();
+        if(bytes == null) {
+            return null;
+        }
+        
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        try {
+            return ImageIO.read(bais);
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            IoUtils.closeSafely(bais);
+        }
+    }
+
     @Override
     protected void renderHead(IHeaderResponse response, Class<?> cls) {
         super.renderHead(response, IsisBlobOrClobPanelAbstract.class); // don't use the subclass
-        // also include JQuery
+        // TODO: is this also necessary?
+        // thought that JQuery was already included...
         response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings()
                 .getJQueryReference()));
     }
