@@ -44,23 +44,19 @@ public interface ObjectAction extends ObjectMember {
     ActionSemantics.Of getSemantics();
 
     /**
-     * Determine the real target for this action. If this action represents an
-     * object action than the target is returned. If this action is on a service
-     * then that service will be returned.
-     */
-    ObjectAdapter realTarget(ObjectAdapter target);
-
-    /**
      * Returns the specification for the type of object that this action can be
      * invoked upon.
      */
     ObjectSpecification getOnType();
 
-    /**
-     * Return true if the action is run on a service object using the target
-     * object as a parameter.
-     */
-    boolean isContributed();
+    
+//    /**
+//     * Determine the real target for this action. If this action represents an
+//     * object action than the target is returned. If this action is on a service
+//     * then that service will be returned.
+//     */
+//    ObjectAdapter realTarget(ObjectAdapter target);
+
 
     boolean promptForParameters(ObjectAdapter target);
 

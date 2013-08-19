@@ -76,14 +76,14 @@ public class ActionButton extends AbstractElementProcessor {
         final ObjectAdapter[] objectParameters;
         
         final ObjectAdapter target;
-        if (action.isContributed()) {
-            objectParameters= null;
-            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
-            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
-            target =  action.realTarget(object);
-            if (!action.hasReturn() && resultOverride == null) {
-                resultOverride = parameters[0];
-            }
+        if (false /*action.isContributed()*/) {
+//            objectParameters= null;
+//            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
+//            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
+//            target =  action.realTarget(object);
+//            if (!action.hasReturn() && resultOverride == null) {
+//                resultOverride = parameters[0];
+//            }
         } else {
             objectParameters = new ObjectAdapter[parameters.length];
             target = object;

@@ -125,7 +125,8 @@ public class ActionHelper {
     }
 
     public ObjectAdapter getTarget() {
-        return action.realTarget(target);
+        return target;
+        //return action.realTarget(target);
     }
 
     public ObjectAdapter invoke() {

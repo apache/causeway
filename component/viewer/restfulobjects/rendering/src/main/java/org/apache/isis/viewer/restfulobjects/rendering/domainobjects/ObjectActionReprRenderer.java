@@ -88,7 +88,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     protected ObjectAdapterLinkTo linkToForMutatorInvoke() {
-        if (!objectMember.isContributed()) {
+        if (true /*!objectMember.isContributed()*/) {
             return super.linkToForMutatorInvoke();
         }
         final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
@@ -118,7 +118,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object argValueFor(final int i) {
-        if (objectMember.isContributed()) {
+        if (false /*objectMember.isContributed() */) {
             final ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
             if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
                 return DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, objectAdapter).build();
@@ -196,7 +196,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     protected void addLinksIsisProprietary() {
-        if (objectMember.isContributed()) {
+        if (false /*objectMember.isContributed() */) {
             final ObjectAdapter serviceAdapter = contributingServiceAdapter();
             final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
             getLinks().arrayAdd(contributedByLink);

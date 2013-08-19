@@ -68,17 +68,17 @@ public class ObjectActionFilters {
             }};
     }
 
-    public static Filter<ObjectAction> contributedAnd1ParamAndVoid() {
-        return new Filter<ObjectAction>(){
-            @Override
-            public boolean accept(final ObjectAction objectAction) {
-                boolean contributed = objectAction.isContributed();
-                boolean has1Param = objectAction.getParameterCount() == 1;
-                boolean hasReturn = objectAction.hasReturn();
-                return contributed && has1Param && !hasReturn;
-            }
-        };
-    }
+//    public static Filter<ObjectAction> contributedAnd1ParamAndVoid() {
+//        return new Filter<ObjectAction>(){
+//            @Override
+//            public boolean accept(final ObjectAction objectAction) {
+//                boolean contributed = objectAction.isContributed();
+//                boolean has1Param = objectAction.getParameterCount() == 1;
+//                boolean hasReturn = objectAction.hasReturn();
+//                return contributed && has1Param && !hasReturn;
+//            }
+//        };
+//    }
 
     public static Filter<ObjectAction> filterOfType(final ActionType type) {
         return new Filter<ObjectAction>(){

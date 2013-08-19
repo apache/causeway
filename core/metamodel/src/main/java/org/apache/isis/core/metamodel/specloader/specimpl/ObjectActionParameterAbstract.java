@@ -102,6 +102,13 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction;
     }
 
+    /**
+     * NOT API, but exposed for the benefit of {@link ObjectActionParameterContributee}.
+     */
+    public TypedHolder getPeer() {
+        return peer;
+    }
+
     @Override
     public ObjectSpecification getSpecification() {
         return ObjectMemberAbstract.getSpecification(getSpecificationLookup(), peer.getType());
@@ -260,7 +267,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
 
         if (choicesFacet != null) {
-            final Object[] choices = choicesFacet.getChoices(parentAction.realTarget(adapter));
+            final Object[] choices = choicesFacet.getChoices(adapter);
             checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
             for (final Object choice : choices) {
                 parameterChoices.add(getAdapterMap().adapterFor(choice));
@@ -284,7 +291,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
-            final Object[] autoCompleteChoices = facet.autoComplete(parentAction.realTarget(adapter), searchArg);
+            final Object[] autoCompleteChoices = facet.autoComplete(adapter, searchArg);
             checkChoicesOrAutoCompleteType(getSpecificationLookup(), autoCompleteChoices, getSpecification());
             for (final Object autoCompleteChoice : autoCompleteChoices) {
                 autoCompleteChoiceAdapters.add(getAdapterMap().adapterFor(autoCompleteChoice));
@@ -321,14 +328,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-        if (parentAction.isContributed() && adapter != null) {
+        if (false /*parentAction.isContributed()*/ && adapter != null) {
             if (adapter.getSpecification().isOfType(getSpecification())) {
                 return adapter;
             }
         }
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(parentAction.realTarget(adapter));
+            final Object dflt = defaultsFacet.getDefault(adapter);
             if (dflt == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it

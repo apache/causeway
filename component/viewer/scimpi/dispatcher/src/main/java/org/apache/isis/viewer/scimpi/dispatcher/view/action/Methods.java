@@ -108,21 +108,21 @@ public class Methods extends AbstractElementProcessor {
                 request.appendHtml("<div class=\"actions\">");
                 writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList, view, cancelTo);
                 request.appendHtml("</div>");
-            } else if (action.isContributed()) {
-                if (action.getParameterCount() == 1 && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
-                    if (objectId != null) {
-                        final ObjectAdapter target = request.getContext().getMappedObject(objectId);
-                        final ObjectAdapter realTarget = action.realTarget(target);
-                        final String realTargetId = request.getContext().mapObject(realTarget, Scope.INTERACTION);
-                        writeMethod(request, adapter, new String[] { objectId }, action, realTargetId, showForms, view, cancelTo);
-                    } else {
-                        request.appendHtml("<div class=\"action\">");
-                        request.appendAsHtmlEncoded(action.getName());
-                        request.appendHtml("???</div>");
-                    }
-                } else if (!adapter.getSpecification().isService()) {
-                    writeMethod(request, adapter, new String[0], action, objectId, showForms, view, cancelTo);
-                }
+            } else if (false /*action.isContributed()*/) {
+//                if (action.getParameterCount() == 1 && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+//                    if (objectId != null) {
+//                        final ObjectAdapter target = request.getContext().getMappedObject(objectId);
+//                        final ObjectAdapter realTarget = action.realTarget(target);
+//                        final String realTargetId = request.getContext().mapObject(realTarget, Scope.INTERACTION);
+//                        writeMethod(request, adapter, new String[] { objectId }, action, realTargetId, showForms, view, cancelTo);
+//                    } else {
+//                        request.appendHtml("<div class=\"action\">");
+//                        request.appendAsHtmlEncoded(action.getName());
+//                        request.appendHtml("???</div>");
+//                    }
+//                } else if (!adapter.getSpecification().isService()) {
+//                    writeMethod(request, adapter, new String[0], action, objectId, showForms, view, cancelTo);
+//                }
             } else {
                 writeMethod(request, adapter, new String[0], action, objectId, showForms, view, cancelTo);
             }
@@ -160,7 +160,7 @@ public class Methods extends AbstractElementProcessor {
                 request.appendHtml("</span>");
             } else {
                 final String version = request.getContext().mapVersion(adapter);
-                if (action.getParameterCount() == 0 || (action.isContributed() && action.getParameterCount() == 1)) {
+                if (action.getParameterCount() == 0 || (false /*action.isContributed() && action.getParameterCount() == 1*/ )) {
                     ActionButton.write(request, adapter, action, parameters, version, "_generic." + Dispatcher.EXTENSION, null, null, null, null, null, null, null, null, null);
                 } else if (showForms) {
                     final CreateFormParameter params = new CreateFormParameter();

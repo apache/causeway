@@ -119,7 +119,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final Mode actionMode = determineActionMode(objectAction, contextAdapter);
         PageParameterNames.ACTION_MODE.addEnumTo(pageParameters, actionMode);
 
-        addActionParamContextIfPossible(objectAction, contextAdapter, pageParameters);
+        //addActionParamContextIfPossible(objectAction, contextAdapter, pageParameters);
         return pageParameters;
     }
 
@@ -247,23 +247,23 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return objectAction.promptForParameters(contextAdapter)?Mode.PARAMETERS:Mode.RESULTS;
     }
 
-	private static void addActionParamContextIfPossible(final ObjectAction objectAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
-        if (contextAdapter == null) {
-            return;
-        }
-        if(!objectAction.isContributed()) {
-            return;
-        }
-        int i = 0;
-        for (final ObjectActionParameter actionParam : objectAction.getParameters()) {
-            if (ObjectActionParameters.compatibleWith(contextAdapter, actionParam)) {
-                final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
-                PageParameterNames.ACTION_PARAM_CONTEXT.addStringTo(pageParameters, oidKeyValue);
-                return;
-            }
-            i++;
-        }
-    }
+//	private static void addActionParamContextIfPossible(final ObjectAction objectAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
+//        if (contextAdapter == null) {
+//            return;
+//        }
+//        if(!objectAction.isContributed()) {
+//            return;
+//        }
+//        int i = 0;
+//        for (final ObjectActionParameter actionParam : objectAction.getParameters()) {
+//            if (ObjectActionParameters.compatibleWith(contextAdapter, actionParam)) {
+//                final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
+//                PageParameterNames.ACTION_PARAM_CONTEXT.addStringTo(pageParameters, oidKeyValue);
+//                return;
+//            }
+//            i++;
+//        }
+//    }
 
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getIdentifier();

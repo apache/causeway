@@ -69,30 +69,41 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
             return;
         }
 
-        final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
-
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
         for (int i = 0; i < paramTypes.length; i++) {
 
-            final Method defaultMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + i + capitalizedName, paramTypes[i], new Class[0]);
-
+            // two attempts to match method...
+            Method defaultMethod;
+            defaultMethod = findDefaultNumMethod(processMethodContext, i, paramTypes);
+            if (defaultMethod == null) {
+                defaultMethod = findDefaultNumMethod(processMethodContext, i, new Class[0]);
+            }
             if (defaultMethod == null) {
                 continue;
             }
+            
             processMethodContext.removeMethod(defaultMethod);
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsDoOpFacet(ActionDefaultsFacet.class)) {
-                throw new MetaModelException(cls + " uses both old and new default syntax for " + actionMethod.getName() + "(...) - must use one or other");
+                final Class<?> cls2 = processMethodContext.getCls();
+                throw new MetaModelException(cls2 + " uses both old and new default syntax for " + actionMethod.getName() + "(...) - must use one or other");
             }
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
             FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder));
         }
+    }
+
+    private static Method findDefaultNumMethod(final ProcessMethodContext processMethodContext, int i, Class<?>[] paramTypes) {
+        final Class<?> cls = processMethodContext.getCls();
+        final Method actionMethod = processMethodContext.getMethod();
+        final Class<?> returnType = actionMethod.getParameterTypes()[i];
+        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + i + capitalizedName, returnType, paramTypes);
     }
 
 }

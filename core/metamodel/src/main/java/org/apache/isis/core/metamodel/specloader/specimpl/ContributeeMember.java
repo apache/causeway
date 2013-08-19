@@ -26,5 +26,5 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 /**
  * Marker interface indicating an a contributed association or action.
  */
-public interface ContributedMember { 
+public interface ContributeeMember { 
 }

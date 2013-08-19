@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributedMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 public final class ObjectAssociations {
 
@@ -98,7 +98,7 @@ public final class ObjectAssociations {
             @Override
             public boolean apply(final ObjectAssociation t) {
                 return contributed.isIncluded() || 
-                       !(t instanceof ContributedMember);
+                       !(t instanceof ContributeeMember);
             }
         };
     }

@@ -64,7 +64,7 @@ public class RunAction extends AbstractElementProcessor {
         }
 
         // swap null parameter of the object's type to run a contributed method
-        if (action.isContributed()) {
+        if (false /*action.isContributed()*/) {
             final List<ObjectActionParameter> parameterSpecs = action.getParameters();
             for (int i = 0; i < parameters.length; i++) {
                 if (parameters[i] == null && object.getSpecification().isOfType(parameterSpecs.get(i).getSpecification())) {

@@ -16,73 +16,48 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
-import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacetAbstract;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
-public class OneToManyAssociationContributed extends OneToManyAssociationImpl implements ContributedMember {
+public class OneToOneAssociationContributee extends OneToOneAssociationImpl implements ContributeeMember {
 
     private final ObjectAdapter serviceAdapter;
     private final ObjectAction objectAction;
     
-    private final RenderFacet renderFacet;
     private final NotPersistedFacet notPersistedFacet;
-    private final TypeOfFacet typeOfFacet; 
 
-    private static ObjectSpecification typeOfSpec(final ObjectActionImpl objectAction, ObjectMemberContext objectMemberContext) {
-        final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        return objectMemberContext.getSpecificationLookup().loadSpecification(actionTypeOfFacet.value());
-    }
-    
-    public OneToManyAssociationContributed(ObjectAdapter serviceAdapter, ObjectActionImpl objectAction, ObjectMemberContext objectMemberContext) {
-        super(objectAction.getFacetedMethod(), typeOfSpec(objectAction, objectMemberContext), objectMemberContext);
+    public OneToOneAssociationContributee(
+            final ObjectAdapter serviceAdapter, 
+            final ObjectActionImpl objectAction, 
+            final ObjectMemberContext objectMemberContext) {
+        super(objectAction.getFacetedMethod(), objectAction.getReturnType(), objectMemberContext);
         this.serviceAdapter = serviceAdapter;
         this.objectAction = objectAction;
         
-        renderFacet = new RenderFacetAbstract(Render.Type.EAGERLY, this) {};
         notPersistedFacet = new NotPersistedFacetAbstract(this) {};
-        typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {};
     }
 
-    
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
         return objectAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter});
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Facet> T getFacet(Class<T> facetType) {
-        if(facetType == RenderFacet.class) {
-            return (T) renderFacet;
-        }
-        if(facetType == NotPersistedFacet.class) {
+    public <T extends Facet> T getFacet(Class<T> cls) {
+        if(cls == NotPersistedFacet.class) {
             return (T) notPersistedFacet;
         }
-        if(facetType == TypeOfFacet.class) {
-            return (T) typeOfFacet;
-        }
-        return super.getFacet(facetType);
+        return super.getFacet(cls);
     }
-    
+
     @Override
     public boolean containsFacet(Class<? extends Facet> facetType) {
-        if(facetType == RenderFacet.class) {
-            return true;
-        }
         if(facetType == NotPersistedFacet.class) {
-            return true;
-        }
-        if(facetType == TypeOfFacet.class) {
             return true;
         }
         return super.containsFacet(facetType);
@@ -90,16 +65,11 @@ public class OneToManyAssociationContributed extends OneToManyAssociationImpl im
     
     @Override
     public boolean containsDoOpFacet(Class<? extends Facet> facetType) {
-        if(facetType == RenderFacet.class) {
-            return true;
-        }
         if(facetType == NotPersistedFacet.class) {
-            return true;
-        }
-        if(facetType == TypeOfFacet.class) {
             return true;
         }
         return super.containsDoOpFacet(facetType);
     }
+
 
 }

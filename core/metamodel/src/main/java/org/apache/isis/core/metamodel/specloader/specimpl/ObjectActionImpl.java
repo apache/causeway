@@ -90,17 +90,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      */
     private List<ObjectActionParameter> parameters;
 
-    /**
-     * Controls the initialization of {@link #contributed}.
-     */
-    private boolean knownWhetherContributed = false;
-    /**
-     * Lazily initialized, controlled by {@link #knownWhetherContributed}
-     * 
-     * @see #isContributed()
-     */
-    private boolean contributed;
-
+    
     // //////////////////////////////////////////////////////////////////
     // Constructors
     // //////////////////////////////////////////////////////////////////
@@ -194,27 +184,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return ActionType.USER;
     }
 
-    @Override
-    public boolean isContributed() {
-        if (!knownWhetherContributed) {
-            contributed = determineWhetherContributed();
-            knownWhetherContributed = true;
-        }
-        return contributed;
-    }
-
-    private boolean determineWhetherContributed() {
-        if (getOnType().isService() && getParameterCount() > 0) {
-            final List<ObjectActionParameter> params = getParameters();
-            for (int i = 0; i < params.size(); i++) {
-                if (params.get(i).isObject()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     // /////////////////////////////////////////////////////////////
     // Parameters
     // /////////////////////////////////////////////////////////////
@@ -226,25 +195,26 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public boolean promptForParameters(final ObjectAdapter target) {
-        switch(getParameterCount()) {
-            case 0:
-                return false;
-            case 1:
-                if(!isContributed()) {
-                    return true;
-                }
-                if(target == null) {
-                    return true;
-                }
-                if (target.getSpecification().isService()) {
-                    return true;
-                }
-                final ObjectSpecification targetSpec = target.getSpecification();
-                final ObjectSpecification param0Spec = getParameters().get(0).getSpecification();
-                return !targetSpec.isOfType(param0Spec);
-            default:
-                return true;
-        }
+        return getParameterCount() != 0;
+//        switch(getParameterCount()) {
+//            case 0:
+//                return false;
+//            case 1:
+//                if(!isContributed()) {
+//                    return true;
+//                }
+//                if(target == null) {
+//                    return true;
+//                }
+//                if (target.getSpecification().isService()) {
+//                    return true;
+//                }
+//                final ObjectSpecification targetSpec = target.getSpecification();
+//                final ObjectSpecification param0Spec = getParameters().get(0).getSpecification();
+//                return !targetSpec.isOfType(param0Spec);
+//            default:
+//                return true;
+//        }
     }
 
     /**
@@ -263,15 +233,18 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final TypedHolder paramPeer = paramPeers.get(i);
                 final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLookup(), paramPeer.getType());
+                
+                final ObjectActionParameter parameter;
                 if (specification.isParseable()) {
-                    parameters.add(new ObjectActionParameterParseable(i, this, paramPeer));
+                    parameter = new ObjectActionParameterParseable(i, this, paramPeer);
                 } else if (specification.isNotCollection()) {
-                    parameters.add(new OneToOneActionParameterImpl(i, this, paramPeer));
+                    parameter = new OneToOneActionParameterImpl(i, this, paramPeer);
                 } else if (specification.isParentedOrFreeCollection()) {
                     throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
                 } else {
                     throw new UnknownTypeException(specification);
                 }
+                parameters.add(parameter);
             }
             this.parameters = parameters;
         }
@@ -341,10 +314,10 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return new ActionVisibilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
-    @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        return super.isVisible(session, realTarget(target), where);
-    }
+//    @Override
+//    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+//        return super.isVisible(session, realTarget(target), where);
+//    }
 
     // /////////////////////////////////////////////////////////////
     // Usable (or disabled)
@@ -355,10 +328,10 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return new ActionUsabilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
-    @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        return super.isUsable(session, realTarget(target), where);
-    }
+//    @Override
+//    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+//        return super.isUsable(session, realTarget(target), where);
+//    }
 
     // //////////////////////////////////////////////////////////////////
     // validate
@@ -369,9 +342,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
-    public Consent isProposedArgumentSetValid(final ObjectAdapter object, final ObjectAdapter[] proposedArguments) {
-        final ObjectAdapter[] parameters = realParameters(object, proposedArguments);
-        return isProposedArgumentSetValidResultSet(realTarget(object), parameters).createConsent();
+    public Consent isProposedArgumentSetValid(final ObjectAdapter target, final ObjectAdapter[] proposedArguments) {
+        //final ObjectAdapter[] parameters = realParameters(target, proposedArguments);
+        return isProposedArgumentSetValidResultSet(target, proposedArguments).createConsent();
     }
 
     private InteractionResultSet isProposedArgumentSetValidResultSet(final ObjectAdapter object, final ObjectAdapter[] proposedArguments) {
@@ -403,54 +376,47 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter execute(final ObjectAdapter object, final ObjectAdapter[] parameters) {
+    public ObjectAdapter execute(final ObjectAdapter target, final ObjectAdapter[] arguments) {
         if(LOG.isDebugEnabled()) {
-            LOG.debug("execute action " + object + "." + getId());
+            LOG.debug("execute action " + target + "." + getId());
         }
-        final ObjectAdapter[] params = realParameters(object, parameters);
-        final ObjectAdapter target = realTarget(object);
+        //final ObjectAdapter[] params = realParameters(target, arguments);
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(target, params);
+        return facet.invoke(target, arguments);
     }
 
-    private ActionInvocationFacet getActionInvocationFacet() {
+    protected ActionInvocationFacet getActionInvocationFacet() {
         return getFacetedMethod().getFacet(ActionInvocationFacet.class);
     }
 
-    /**
-     * Previously (prior to 3.0.x) this method had a check to see if the action
-     * was on an instance. With the reflector redesign this has been removed,
-     * because NOF 3.x only supports instance methods, not class-level methods.
-     */
-    @Override
-    public ObjectAdapter realTarget(final ObjectAdapter target) {
-        if (target == null) {
-            return findService();
-        } else if (target.getSpecification().isService()) {
-            return target;
-        } else if (isContributed()) {
-            return findService();
-        } else {
-            return target;
-        }
-    }
+//    protected ObjectAdapter realTarget(final ObjectAdapter target) {
+//        if (target == null) {
+//            return findService();
+//        } else if (target.getSpecification().isService()) {
+//            return target;
+//        } else if (false /*isContributed()*/) {
+//            return findService();
+//        } else {
+//            return target;
+//        }
+//    }
 
-    private ObjectAdapter findService() {
-        final List<ObjectAdapter> services = getServicesProvider().getServices();
-        for (final ObjectAdapter serviceAdapter : services) {
-            if (serviceAdapter.getSpecification() == getOnType()) {
-                return serviceAdapter;
-            }
-        }
-        throw new IsisException("failed to find service for action " + this.getName());
-    }
+//    private ObjectAdapter findService() {
+//        final List<ObjectAdapter> services = getServicesProvider().getServices();
+//        for (final ObjectAdapter serviceAdapter : services) {
+//            if (serviceAdapter.getSpecification() == getOnType()) {
+//                return serviceAdapter;
+//            }
+//        }
+//        throw new IsisException("failed to find service for action " + this.getName());
+//    }
 
-    private ObjectAdapter[] realParameters(final ObjectAdapter target, final ObjectAdapter[] parameters) {
-        if (parameters != null) {
-            return parameters;
-        }
-        return isContributed() ? new ObjectAdapter[] { target } : new ObjectAdapter[0];
-    }
+//    protected ObjectAdapter[] realParameters(final ObjectAdapter target, final ObjectAdapter[] parameters) {
+//        if (parameters != null) {
+//            return parameters;
+//        }
+//        return false /*isContributed()*/ ? new ObjectAdapter[] { target } : new ObjectAdapter[0];
+//    }
 
     // //////////////////////////////////////////////////////////////////
     // defaults
@@ -458,7 +424,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
-        final ObjectAdapter realTarget = realTarget(target);
 
         final int parameterCount = getParameterCount();
         final List<ObjectActionParameter> parameters = getParameters();
@@ -472,7 +437,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         final ActionDefaultsFacet facet = getFacet(ActionDefaultsFacet.class);
         if (!facet.isNoop()) {
             // use the old defaultXxx approach
-            parameterDefaultPojos = facet.getDefaults(realTarget);
+            parameterDefaultPojos = facet.getDefaults(target);
             if (parameterDefaultPojos.length != parameterCount) {
                 throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + facet);
             }
@@ -492,7 +457,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterDefaultsFacet paramFacet = parameters.get(i).getFacet(ActionParameterDefaultsFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterDefaultPojos[i] = paramFacet.getDefault(realTarget);
+                    parameterDefaultPojos[i] = paramFacet.getDefault(target);
                 } else {
                     parameterDefaultPojos[i] = null;
                 }
@@ -507,7 +472,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         }
 
         // set the target if contributed.
-        if (isContributed() && target != null) {
+        if (false /*isContributed()*/ && target != null) {
             for (int i = 0; i < parameterCount; i++) {
                 if (target.getSpecification().isOfType(parameters.get(i).getSpecification())) {
                     parameterDefaultAdapters[i] = target;
@@ -527,7 +492,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
-        final ObjectAdapter realTarget = realTarget(target);
 
         final int parameterCount = getParameterCount();
         Object[][] parameterChoicesPojos;
@@ -537,7 +501,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
         if (!facet.isNoop()) {
             // using the old choicesXxx() approach
-            parameterChoicesPojos = facet.getChoices(realTarget);
+            parameterChoicesPojos = facet.getChoices(target);
 
             // if no options, or not the right number of pojos, then default
             if (parameterChoicesPojos == null) {
@@ -553,7 +517,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterChoicesPojos[i] = paramFacet.getChoices(realTarget);
+                    parameterChoicesPojos[i] = paramFacet.getChoices(target);
                 } else {
                     parameterChoicesPojos[i] = new Object[0];
                 }

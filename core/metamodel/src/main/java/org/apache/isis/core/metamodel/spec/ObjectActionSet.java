@@ -114,11 +114,6 @@ public class ObjectActionSet implements ObjectAction {
         return false;
     }
 
-    @Override
-    public boolean isContributed() {
-        return false;
-    }
-
     /**
      * Always returns <tt>null</tt>.
      */
@@ -132,14 +127,14 @@ public class ObjectActionSet implements ObjectAction {
         return null;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // target
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public ObjectAdapter realTarget(final ObjectAdapter target) {
-        return null;
-    }
+//    // /////////////////////////////////////////////////////////////
+//    // target
+//    // /////////////////////////////////////////////////////////////
+//
+//    @Override
+//    public ObjectAdapter realTarget(final ObjectAdapter target) {
+//        return null;
+//    }
 
     // /////////////////////////////////////////////////////////////
     // execute

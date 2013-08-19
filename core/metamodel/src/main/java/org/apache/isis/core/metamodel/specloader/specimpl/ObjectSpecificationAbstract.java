@@ -873,7 +873,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(!serviceAction.hasReturn()) {
                 continue;
             }
-            if (serviceAction.getParameterCount() != 1 || !matchesParameterOf(serviceAction)) {
+            if (serviceAction.getParameterCount() != 1 || contributeeParameterMatchOf(serviceAction) == -1) {
                 continue;
             }
             if(!(serviceAction instanceof ObjectActionImpl)) {
@@ -888,9 +888,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             public ObjectAssociation apply(ObjectActionImpl input) {
                 final ObjectSpecification returnType = input.getReturnType();
                 if(returnType.isNotCollection()) {
-                    return new OneToOneAssociationContributed(serviceAdapter, input, objectMemberContext);
+                    return new OneToOneAssociationContributee(serviceAdapter, input, objectMemberContext);
                 } else {
-                    return new OneToManyAssociationContributed(serviceAdapter, input, objectMemberContext);
+                    return new OneToManyAssociationContributee(serviceAdapter, input, objectMemberContext);
                 }
             }
         }));
@@ -942,17 +942,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (specification == this) {
             return;
         }
-        final List<ObjectAction> contributedActions = findContributedActions(specification, actionType);
-        // only add if there are matching subactions.
-        if (contributedActions.isEmpty()) {
-            return;
-        }
-        final ObjectActionSet contributedActionSet = new ObjectActionSet("id", serviceAdapter.titleString(), contributedActions);
-        contributedActionSetsToAppendTo.add(contributedActionSet);
-    }
-
-    private List<ObjectAction> findContributedActions(final ObjectSpecification specification, final ActionType actionType) {
-        final List<ObjectAction> contributedActions = Lists.newArrayList();
+        final List<ObjectAction> contributeeActions = Lists.newArrayList();
         final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED, Filters.<ObjectAction>any());
         for (final ObjectAction serviceAction : serviceActions) {
             if (serviceAction.isAlwaysHidden()) {
@@ -962,23 +952,38 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(notContributed != null && notContributed.toActions()) {
                 continue;
             }
-
+            if(!(serviceAction instanceof ObjectActionImpl)) {
+                continue;
+            }
+            ObjectActionImpl serviceActionImpl = (ObjectActionImpl) serviceAction;
+        
             // see if qualifies by inspecting all parameters
-            if (matchesParameterOf(serviceAction)) {
-                contributedActions.add(serviceAction);
+            final int contributeeParam = contributeeParameterMatchOf(serviceActionImpl);
+            if (contributeeParam != -1) {
+                ObjectActionContributee contributee = 
+                        new ObjectActionContributee(serviceAdapter, serviceActionImpl, contributeeParam, this, objectMemberContext);
+                contributeeActions.add(contributee);
             }
         }
-        return contributedActions;
+        // only add if there are matching subactions.
+        if (contributeeActions.isEmpty()) {
+            return;
+        }
+        final ObjectActionSet contributedActionSet = new ObjectActionSet("id", serviceAdapter.titleString(null), contributeeActions);
+        contributedActionSetsToAppendTo.add(contributedActionSet);
     }
 
-    private boolean matchesParameterOf(final ObjectAction serviceAction) {
+    /**
+     * @param the number of the parameter that matches, or -1 if none.
+     */
+    private int contributeeParameterMatchOf(final ObjectAction serviceAction) {
         final List<ObjectActionParameter> params = serviceAction.getParameters();
         for (final ObjectActionParameter param : params) {
             if (isOfType(param.getSpecification())) {
-                return true;
+                return param.getNumber();
             }
         }
-        return false;
+        return -1;
     }
 
     // //////////////////////////////////////////////////////////////////////

@@ -96,15 +96,14 @@ public class ActionLink extends AbstractElementProcessor {
         
         // TODO copied from ActionButton
         //final ObjectAdapter target;
-        if (action.isContributed()) {
-            objectParameters= null;
-            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
-            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
-         //   target =  action.realTarget(object);
-            target =  request.getContext().mapObject(action.realTarget(object), Scope.REQUEST);
-            if (!action.hasReturn() && resultOverride == null) {
-                resultOverride = parameters[0];
-            }
+        if (false /*action.isContributed() */) {
+//            objectParameters= null;
+//            System.arraycopy(parameters, 0, parameters, 1, parameters.length - 1);
+//            parameters[0] = request.getContext().mapObject(object, Scope.REQUEST);
+//            target =  request.getContext().mapObject(action.realTarget(object), Scope.REQUEST);
+//            if (!action.hasReturn() && resultOverride == null) {
+//                resultOverride = parameters[0];
+//            }
         } else {
             objectParameters = new ObjectAdapter[parameters.length];
             // target = object;

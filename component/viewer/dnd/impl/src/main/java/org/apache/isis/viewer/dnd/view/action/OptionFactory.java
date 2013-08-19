@@ -77,7 +77,7 @@ public class OptionFactory {
                 final int noOfParameters = actions.get(i).getParameterCount();
                 if (noOfParameters == 0) {
                     option = ImmediateObjectOption.createOption(actions.get(i), target);
-                } else if (actions.get(i).isContributed() && noOfParameters == 1 && target != null && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())) {
+                } else if (false /*actions.get(i).isContributed() && noOfParameters == 1 && target != null && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())*/) {
                     option = ImmediateObjectOption.createServiceOption(actions.get(i), target);
                 } else {
                     option = DialoggedObjectOption.createOption(actions.get(i), target);

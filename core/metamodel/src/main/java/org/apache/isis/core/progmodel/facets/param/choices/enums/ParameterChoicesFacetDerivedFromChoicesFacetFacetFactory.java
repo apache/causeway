@@ -24,6 +24,8 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 
 public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
@@ -40,8 +42,14 @@ public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fa
         if (!paramType.isEnum()) {
             return;
         }
-
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext.getFacetHolder(), getSpecificationLoader(), getAdapterManager()));
+        
+        // don't trample over any existing facets.
+        final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
+        if(facetHolder.containsDoOpFacet(ActionParameterChoicesFacet.class)) {
+            return;
+        }
+        
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder, getSpecificationLoader(), getAdapterManager()));
     }
 
     // /////////////////////////////////////////////

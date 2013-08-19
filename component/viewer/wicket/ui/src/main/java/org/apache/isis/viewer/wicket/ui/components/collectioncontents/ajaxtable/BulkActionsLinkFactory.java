@@ -67,7 +67,7 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
                     final ObjectAdapter entityAdapter = entityAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
                     int numParameters = objectAction.getParameterCount();
-                    if(objectAction.isContributed()) {
+                    if(false /*objectAction.isContributed() */) {
                         // a contributed action
                         if(numParameters != 1) {
                             return;

@@ -106,7 +106,7 @@ public class ActionForm extends AbstractElementProcessor {
         final String objectId = context.mapObject(object, Scope.INTERACTION);
         final String errorView = context.fullFilePath(parameterObject.forwardErrorTo == null ? context.getResourceFile() : parameterObject.forwardErrorTo);
         final String voidView = context.fullFilePath(parameterObject.forwardVoidTo == null ? context.getResourceFile() : parameterObject.forwardVoidTo);
-        if (action.isContributed() && !action.hasReturn() && parameterObject.resultOverride == null) {
+        if (false /* action.isContributed() && !action.hasReturn() && parameterObject.resultOverride == null */) {
             parameterObject.resultOverride = objectId;
         }
         final HiddenInputField[] hiddenFields = new HiddenInputField[] { new HiddenInputField("_" + OBJECT, objectId), new HiddenInputField("_" + VERSION, version), new HiddenInputField("_" + FORM_ID, parameterObject.formId), new HiddenInputField("_" + METHOD, parameterObject.methodName),
@@ -180,7 +180,7 @@ public class ActionForm extends AbstractElementProcessor {
         for (int i = 0; i < fields.length; i++) {
             final InputField field = fields[i];
             final ObjectActionParameter param = parameters.get(i);
-            if (action.isContributed() && i == 0) {
+            if (false /*action.isContributed() && i == 0*/) {
                 // fields[i].setValue(context.mapObject(object,
                 // Scope.INTERACTION));
                 fields[i].setType(InputField.REFERENCE);
