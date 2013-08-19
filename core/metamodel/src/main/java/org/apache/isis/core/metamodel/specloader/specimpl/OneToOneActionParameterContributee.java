@@ -17,16 +17,17 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public class OneToOneActionParameterContributee extends OneToOneActionParameterImpl implements ObjectActionParameterContributee{
 
     private final ObjectAdapter serviceAdapter;
-    @SuppressWarnings("unused")
     private final ObjectActionImpl serviceAction;
     private final ObjectActionParameter serviceActionParameter;
     @SuppressWarnings("unused")
     private final int serviceParamNumber;
+    private final ObjectActionContributee objectAction;
 
     public OneToOneActionParameterContributee(
             final ObjectAdapter serviceAdapter,
@@ -40,6 +41,7 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
         this.serviceAction = serviceAction;
         this.serviceActionParameter = serviceActionParameter;
         this.serviceParamNumber = serviceParamNumber;
+        this.objectAction = objectAction;
     }
 
     @Override
@@ -54,7 +56,19 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-        return serviceActionParameter.getDefault(serviceAdapter);
+        
+        ObjectAdapter[] args = new ObjectAdapter[serviceAction.getParameterCount()];
+        args[objectAction.getContributeeParam()] = serviceAdapter;
+        
+        final ActionParameterDefaultsFacet defaultsFacet = serviceActionParameter.getFacet(ActionParameterDefaultsFacet.class);
+        if (defaultsFacet != null) {
+            final Object dflt = defaultsFacet.getDefault(serviceAdapter, args);
+            if (dflt == null) {
+                return null;
+            }
+            return getAdapterMap().adapterFor(dflt);
+        }
+        return null;
     }
 
 }

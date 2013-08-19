@@ -34,10 +34,8 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -83,7 +81,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return type;
     }
 
-    private final ServicesProvider servicesProvider;
 
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
@@ -95,9 +92,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // Constructors
     // //////////////////////////////////////////////////////////////////
 
-    public ObjectActionImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext, final ServicesProvider servicesProvider) {
+    public ObjectActionImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext) {
         super(facetedMethod, FeatureType.ACTION, objectMemberContext);
-        this.servicesProvider = servicesProvider;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -196,25 +192,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     @Override
     public boolean promptForParameters(final ObjectAdapter target) {
         return getParameterCount() != 0;
-//        switch(getParameterCount()) {
-//            case 0:
-//                return false;
-//            case 1:
-//                if(!isContributed()) {
-//                    return true;
-//                }
-//                if(target == null) {
-//                    return true;
-//                }
-//                if (target.getSpecification().isService()) {
-//                    return true;
-//                }
-//                final ObjectSpecification targetSpec = target.getSpecification();
-//                final ObjectSpecification param0Spec = getParameters().get(0).getSpecification();
-//                return !targetSpec.isOfType(param0Spec);
-//            default:
-//                return true;
-//        }
     }
 
     /**
@@ -314,11 +291,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return new ActionVisibilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
 
-//    @Override
-//    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-//        return super.isVisible(session, realTarget(target), where);
-//    }
-
     // /////////////////////////////////////////////////////////////
     // Usable (or disabled)
     // /////////////////////////////////////////////////////////////
@@ -327,11 +299,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
         return new ActionUsabilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
     }
-
-//    @Override
-//    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-//        return super.isUsable(session, realTarget(target), where);
-//    }
 
     // //////////////////////////////////////////////////////////////////
     // validate
@@ -343,7 +310,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      */
     @Override
     public Consent isProposedArgumentSetValid(final ObjectAdapter target, final ObjectAdapter[] proposedArguments) {
-        //final ObjectAdapter[] parameters = realParameters(target, proposedArguments);
         return isProposedArgumentSetValidResultSet(target, proposedArguments).createConsent();
     }
 
@@ -389,34 +355,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return getFacetedMethod().getFacet(ActionInvocationFacet.class);
     }
 
-//    protected ObjectAdapter realTarget(final ObjectAdapter target) {
-//        if (target == null) {
-//            return findService();
-//        } else if (target.getSpecification().isService()) {
-//            return target;
-//        } else if (false /*isContributed()*/) {
-//            return findService();
-//        } else {
-//            return target;
-//        }
-//    }
-
-//    private ObjectAdapter findService() {
-//        final List<ObjectAdapter> services = getServicesProvider().getServices();
-//        for (final ObjectAdapter serviceAdapter : services) {
-//            if (serviceAdapter.getSpecification() == getOnType()) {
-//                return serviceAdapter;
-//            }
-//        }
-//        throw new IsisException("failed to find service for action " + this.getName());
-//    }
-
-//    protected ObjectAdapter[] realParameters(final ObjectAdapter target, final ObjectAdapter[] parameters) {
-//        if (parameters != null) {
-//            return parameters;
-//        }
-//        return false /*isContributed()*/ ? new ObjectAdapter[] { target } : new ObjectAdapter[0];
-//    }
 
     // //////////////////////////////////////////////////////////////////
     // defaults
@@ -430,10 +368,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
         final Object[] parameterDefaultPojos;
 
-        // TODO here and elsewhere: the target needs to be
-        // replaced by the service where the action is for a service!
-        // set a flag on entry if for a service - or get from spec using
-        // isService
         final ActionDefaultsFacet facet = getFacet(ActionDefaultsFacet.class);
         if (!facet.isNoop()) {
             // use the old defaultXxx approach
@@ -457,7 +391,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterDefaultsFacet paramFacet = parameters.get(i).getFacet(ActionParameterDefaultsFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterDefaultPojos[i] = paramFacet.getDefault(target);
+                    parameterDefaultPojos[i] = paramFacet.getDefault(target, null);
                 } else {
                     parameterDefaultPojos[i] = null;
                 }
@@ -471,14 +405,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             }
         }
 
-        // set the target if contributed.
-        if (false /*isContributed()*/ && target != null) {
-            for (int i = 0; i < parameterCount; i++) {
-                if (target.getSpecification().isOfType(parameters.get(i).getSpecification())) {
-                    parameterDefaultAdapters[i] = target;
-                }
-            }
-        }
         return parameterDefaultAdapters;
     }
 
@@ -585,14 +511,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         }
         sb.append("}]");
         return sb.toString();
-    }
-
-    // ////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // ////////////////////////////////////////////////////
-
-    public ServicesProvider getServicesProvider() {
-        return servicesProvider;
     }
 
 

@@ -60,7 +60,7 @@ public class LoadingCallbackFacetViaMethod extends LoadingCallbackFacetAbstract 
 
     @Override
     public void invoke(final ObjectAdapter adapter) {
-        AdapterInvokeUtils.invoke(methods, adapter);
+        AdapterInvokeUtils.invokeAll(methods, adapter);
     }
 
     @Override

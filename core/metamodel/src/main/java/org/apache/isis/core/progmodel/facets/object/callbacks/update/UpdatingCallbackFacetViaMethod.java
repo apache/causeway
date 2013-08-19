@@ -60,7 +60,7 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
 
     @Override
     public void invoke(final ObjectAdapter adapter) {
-        AdapterInvokeUtils.invoke(methods, adapter);
+        AdapterInvokeUtils.invokeAll(methods, adapter);
     }
 
     @Override

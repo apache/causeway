@@ -335,7 +335,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(adapter);
+            final Object dflt = defaultsFacet.getDefault(adapter, null);
             if (dflt == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it

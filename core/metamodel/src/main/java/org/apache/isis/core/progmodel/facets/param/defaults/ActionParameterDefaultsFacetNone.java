@@ -29,7 +29,7 @@ public class ActionParameterDefaultsFacetNone extends ActionParameterDefaultsFac
     }
 
     @Override
-    public Object getDefault(final ObjectAdapter inObject) {
+    public Object getDefault(final ObjectAdapter inObject, ObjectAdapter[] parameters) {
         return null;
     }
 

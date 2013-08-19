@@ -277,7 +277,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
-        return new ObjectActionImpl(facetedMethod, objectMemberContext, getServicesProvider());
+        return new ObjectActionImpl(facetedMethod, objectMemberContext);
     }
 
     private ObjectActionSet createObjectActionSet(final OrderSet set) {

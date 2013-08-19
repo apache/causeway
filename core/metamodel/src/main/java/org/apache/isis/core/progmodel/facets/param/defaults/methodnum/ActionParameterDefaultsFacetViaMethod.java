@@ -58,8 +58,8 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     }
 
     @Override
-    public Object getDefault(final ObjectAdapter owningAdapter) {
-        return AdapterInvokeUtils.invoke(method, owningAdapter);
+    public Object getDefault(final ObjectAdapter target, ObjectAdapter[] argumentsIfAvailable) {
+        return AdapterInvokeUtils.invokeWithDefaults(method, target, argumentsIfAvailable);
     }
 
     @Override

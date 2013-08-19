@@ -49,7 +49,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
     private final ObjectAdapter serviceAdapter;
     private final ObjectActionImpl serviceAction;
-    private int contributeeParam;
+    private final int contributeeParam;
     private final ObjectSpecification contributeeType;
 
     /**
@@ -66,7 +66,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             final int contributeeParam,
             final ObjectSpecification contributeeType,
             final ObjectMemberContext objectMemberContext) {
-        super(serviceAction.getFacetedMethod(), objectMemberContext, null);
+        super(serviceAction.getFacetedMethod(), objectMemberContext);
         
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
@@ -83,6 +83,10 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         return serviceAction.getParameterCount() - 1;
     }
 
+    public int getContributeeParam() {
+        return contributeeParam;
+    }
+    
     public synchronized List<ObjectActionParameter> getParameters() {
         
         if (this.parameters == null) {
@@ -159,13 +163,13 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
     // //////////////////////////////////////
 
-    private static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {
+    static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {
         List<T> list = Lists.newArrayList(Arrays.asList(array));
         list.add(n, element);
         return list.toArray(type);
     }
 
-    private static <T> T[] removeElementFromArray(T[] array, int n, T[] t) {
+    static <T> T[] removeElementFromArray(T[] array, int n, T[] t) {
         List<T> list = Lists.newArrayList(Arrays.asList(array));
         list.remove(n);
         return list.toArray(t);
