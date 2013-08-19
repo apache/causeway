@@ -67,6 +67,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -364,6 +365,11 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 }
 
                 toViewMode(null);
+                
+                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
+                
+                // "redirect-after-post"
+                EntityPropertiesForm.this.setResponsePage(entityPage);
             }
 
         };

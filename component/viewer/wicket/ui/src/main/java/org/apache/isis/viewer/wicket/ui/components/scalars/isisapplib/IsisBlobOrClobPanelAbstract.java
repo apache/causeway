@@ -19,9 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,6 +31,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,13 +40,12 @@ import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +74,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
     private static final String ID_SCALAR_IF_COMPACT_DOWNLOAD = "scalarIfCompactDownload";
 
+    private Image wicketImage;
+
     protected enum InputFieldVisibility {
             VISIBLE, NOT_VISIBLE;
         }
@@ -94,8 +94,9 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         labelIfRegular.add(scalarName);
 
-        final Image wicketImage = asWicketImage(ID_IMAGE);
+        wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
+            wicketImage.setOutputMarkupId(true);
             labelIfRegular.addOrReplace(wicketImage);
         } else {
             Components.permanentlyHide(labelIfRegular, ID_IMAGE);
@@ -132,25 +133,13 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         if(image == null) {
             return null;
         }
+        
         final BufferedDynamicImageResource imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(image);
+        final ThumbnailImageResource thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
         
-        //return new Image(id, asResourceReference(id, imageResource));
-        return new Image(id, imageResource);
-    }
-
-    @SuppressWarnings("unused")
-    private ResourceReference asResourceReference(String id, final BufferedDynamicImageResource resource) {
-        return new ResourceReference(this.getClass(), id)
-        {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public IResource getResource()
-            {
-                return resource;
-            }
-        };
+        final NonCachingImage wicketImage = new NonCachingImage(id, thumbnailImageResource);
+        return wicketImage;
     }
 
     private BufferedImage asBufferedImage(final Blob blob) {
@@ -172,10 +161,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     @Override
     protected void renderHead(IHeaderResponse response, Class<?> cls) {
         super.renderHead(response, IsisBlobOrClobPanelAbstract.class); // don't use the subclass
-        // TODO: is this also necessary?
-        // thought that JQuery was already included...
-        response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings()
-                .getJQueryReference()));
     }
 
     @Override
@@ -248,10 +233,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         updateClearLink(visibility);
     
         final MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formComponent);
+        
+        // the visibility of download link is intentionally 'backwards';
+        // if in edit mode then do NOT show
         if (downloadLink != null) {
-            // the visibility of download link is intentionally 'backwards';
-            // if in edit mode then do NOT show
             downloadLink.setVisible(visibility == InputFieldVisibility.NOT_VISIBLE);
+        }
+        // ditto any image
+        if(wicketImage != null) {
+            wicketImage.setVisible(visibility == InputFieldVisibility.NOT_VISIBLE);
         }
     }
 

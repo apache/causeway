@@ -850,3 +850,8 @@ div#jGrowl div.jGrowl-closer {
 
 
 
+/** general **/
+
+.hidden {
+	display: none;
+}

@@ -42,7 +42,7 @@
 	padding-right: 4px;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th,
-.collectionContentsAsAjaxTablePanel table.contents tr th a { 
+.collectionContentsAsAjaxTablePanel table.contents tr th a span { 
 	color: #FFFFFF;
 	background-color: #46423C;
 	text-align: left; 
@@ -51,8 +51,8 @@
 	font-weight:bold;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp a,
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown a {
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp a span ,
+.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown a span {
     background-color: #20B5C2;
 }
 
