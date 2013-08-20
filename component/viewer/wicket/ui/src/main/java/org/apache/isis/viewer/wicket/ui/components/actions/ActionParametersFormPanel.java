@@ -25,23 +25,33 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -71,11 +81,13 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         add(new ActionParameterForm("inputForm", getModel()));
     }
 
-    class ActionParameterForm extends Form<ObjectAdapter>  {
+    class ActionParameterForm extends Form<ObjectAdapter> implements ScalarModelSubscriber  {
 
         private static final long serialVersionUID = 1L;
 
         private static final String ID_FEEDBACK = "feedback";
+
+        private final List<ScalarPanelAbstract> scalarPanels = Lists.newArrayList();
 
         public ActionParameterForm(final String id, final ActionModel actionModel) {
             super(id, actionModel);
@@ -107,12 +119,21 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             
             final RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
             add(rv);
+            
+            scalarPanels.clear();
             for (final ActionParameterMemento apm : mementos) {
                 final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
                 rv.add(container);
 
                 final ScalarModel argumentModel = actionModel.getArgumentModel(apm);
-                getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
+                final Component paramPanel = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
+                final ScalarPanelAbstract scalarPanel = paramPanel instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) paramPanel : null;
+                scalarPanels.add(scalarPanel);
+            }
+            
+            // subscribe to all param panels
+            for (ScalarPanelAbstract scalarPanel : scalarPanels) {
+                scalarPanel.addScalarModelSubscriber(this);
             }
         }
 
@@ -135,6 +156,37 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             // we copy into a new array list otherwise we get lazy evaluation =
             // reference to a non-serializable object
             return Lists.newArrayList(parameterMementoList);
+        }
+
+        @Override
+        public void onUpdate(ScalarModelProvider provider) {
+            final ScalarModel scalarModel = provider.getModel();
+            String name = scalarModel.getName();
+            final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
+            final List<ObjectAdapter> pendingArgs = 
+                    Lists.newArrayList(
+                            Iterables.transform(scalarPanels, new Function<ScalarPanelAbstract, ObjectAdapter>() {
+                        @Override
+                        public ObjectAdapter apply(ScalarPanelAbstract input) {
+                            if(input == null) {
+                                return null;
+                            }
+                            final ScalarModel model = input.getModel();
+                            final ObjectAdapterMemento objectAdapterMemento = model.getObjectAdapterMemento();
+                            if(objectAdapterMemento == null) {
+                                return null;
+                            }
+                            return objectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                        }
+                    })
+            );
+            //System.out.println(name + " = '" + (objectAdapterMemento != null? objectAdapterMemento.getTitleHint(): null) + "'");
+            System.out.println(pendingArgs);
+            final ActionModel actionModel = getActionModel();
+            actionModel.getArgumentsAsArray();
+            for (ScalarPanelAbstract scalarPanel : scalarPanels) {
+                
+            }
         }
     }
 }

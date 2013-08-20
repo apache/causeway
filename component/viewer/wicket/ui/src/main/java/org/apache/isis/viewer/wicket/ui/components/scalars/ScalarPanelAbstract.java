@@ -25,7 +25,10 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
@@ -117,6 +120,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     private Component componentIfRegular;
     protected final ScalarModel scalarModel;
 
+
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
@@ -168,8 +172,27 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         componentIfCompact = addComponentForCompact();
         getRendering().buildGui(this);
         addCssForMetaModel();
+        
+        if(!subscribers.isEmpty()) {
+            addFormComponentBehaviour(new AjaxFormComponentUpdatingBehavior("onchange"){
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    for (ScalarModelSubscriber subscriber : subscribers) {
+                        subscriber.onUpdate(ScalarPanelAbstract.this);
+                    }
+                }
+            });
+        }
     }
 
+
+    /**
+     * Mandatory hook.
+     */
+    protected abstract void addFormComponentBehaviour(Behavior behavior);
 
     private void addCssForMetaModel() {
         final String cssForMetaModel = getModel().getLongName();
@@ -208,8 +231,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         addAdditionalLinks(labelIfRegular, entityActions);
     }
 
-
-    
     private void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
         if(links == null || links.isEmpty()) {
             Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
@@ -238,5 +259,14 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      */
     protected void onBeforeRenderWhenEnabled() {
     }
+
+    // //////////////////////////////////////
+
+    private final List<ScalarModelSubscriber> subscribers = Lists.newArrayList();
+
+    public void addScalarModelSubscriber(final ScalarModelSubscriber subscriber) {
+        subscribers.add(subscriber);
+    }
+
 
 }

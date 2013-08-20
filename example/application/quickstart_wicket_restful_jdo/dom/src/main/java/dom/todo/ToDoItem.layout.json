@@ -23,6 +23,7 @@
                 members: {
                     description: {},
                     category: {},
+                    subcategory: {},
                     complete: {
                         actions: {
                             completed: {},

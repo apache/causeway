@@ -19,8 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -28,6 +32,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -81,8 +86,6 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
 
-
-
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#COMPACT compact} format.
@@ -133,6 +136,11 @@ public class BooleanPanel extends ScalarPanelAbstract {
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
         checkBox.setEnabled(false);
+    }
+
+    @Override
+    protected void addFormComponentBehaviour(Behavior behavior) {
+        checkBox.add(behavior);
     }
 
 }

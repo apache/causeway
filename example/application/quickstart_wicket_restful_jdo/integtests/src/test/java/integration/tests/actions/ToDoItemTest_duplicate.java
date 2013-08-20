@@ -60,6 +60,7 @@ public class ToDoItemTest_duplicate extends ToDoIntegTest {
                 unwrap(toDoItem).default0Duplicate(), 
                 unwrap(toDoItem).default1Duplicate(),
                 unwrap(toDoItem).default2Duplicate(),
+                unwrap(toDoItem).default3Duplicate(),
                 new BigDecimal("987.65"));
         
         // then

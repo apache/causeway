@@ -31,6 +31,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -76,13 +77,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     private Image wicketImage;
 
+    private FileUploadField fileUploadField;
+
     protected enum InputFieldVisibility {
             VISIBLE, NOT_VISIBLE;
         }
 
     @Override
     protected FormComponentLabel addComponentForRegular() {
-        final FileUploadField fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
+        fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
         
         final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, fileUploadField);
@@ -286,10 +289,16 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         return new ResourceLink<Object>(id, bar);
     }
 
+    @Override
+    protected void addFormComponentBehaviour(Behavior behavior) {
+        fileUploadField.add(behavior);
+    }
+
     
     /**
      * Mandatory hook method.
      */
     protected abstract IResource newResource(final T namedWithMimeType);
+
 
 }

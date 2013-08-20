@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 import dom.todo.ToDoItems;
 
 import org.joda.time.LocalDate;
@@ -57,18 +58,20 @@ public class ToDoItemsFixture extends AbstractFixture {
 
     private void installFor(String user) {
 
-        createToDoItemForUser("Buy milk", Category.Domestic, user, daysFromToday(0), new BigDecimal("0.75"));
-        createToDoItemForUser("Buy bread", Category.Domestic, user, daysFromToday(0), new BigDecimal("1.75"));
-        createToDoItemForUser("Buy stamps", Category.Domestic, user, daysFromToday(0), new BigDecimal("10.00")).setComplete(true);
-        createToDoItemForUser("Pick up laundry", Category.Domestic, user, daysFromToday(6), new BigDecimal("7.50"));
-        createToDoItemForUser("Sharpen knives", Category.Domestic, user, daysFromToday(14), null);
+        createToDoItemForUser("Buy milk", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("0.75"));
+        createToDoItemForUser("Buy bread", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("1.75"));
+        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("10.00")).setComplete(true);
+        createToDoItemForUser("Pick up laundry", Category.Domestic, Subcategory.Chores, user, daysFromToday(6), new BigDecimal("7.50"));
+        createToDoItemForUser("Mow lawn", Category.Domestic, Subcategory.Garden, user, daysFromToday(6), null);
+        createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, daysFromToday(3), null);
+        createToDoItemForUser("Sharpen knives", Category.Domestic, Subcategory.Chores, user, daysFromToday(14), null);
         
-        createToDoItemForUser("Write to penpal", Category.Other, user, null, null);
+        createToDoItemForUser("Write to penpal", Category.Other, Subcategory.Other, user, null, null);
         
-        createToDoItemForUser("Write blog post", Category.Professional, user, daysFromToday(7), null).setComplete(true);
-        createToDoItemForUser("Organize brown bag", Category.Professional, user, daysFromToday(14), null);
-        createToDoItemForUser("Submit conference session", Category.Professional, user, daysFromToday(21), null);
-        createToDoItemForUser("Stage Isis release", Category.Professional, user, null, null);
+        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, daysFromToday(7), null).setComplete(true);
+        createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, daysFromToday(14), null);
+        createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, daysFromToday(21), null);
+        createToDoItemForUser("Stage Isis release", Category.Professional, Subcategory.OpenSource, user, null, null);
 
         getContainer().flush();
     }
@@ -76,8 +79,8 @@ public class ToDoItemsFixture extends AbstractFixture {
 
     // //////////////////////////////////////
 
-    private ToDoItem createToDoItemForUser(final String description, final Category category, String user, final LocalDate dueBy, final BigDecimal cost) {
-        return toDoItems.newToDo(description, category, user, dueBy, cost);
+    private ToDoItem createToDoItemForUser(final String description, final Category category, Subcategory subcategory, String user, final LocalDate dueBy, final BigDecimal cost) {
+        return toDoItems.newToDo(description, category, subcategory, user, dueBy, cost);
     }
 
     private static LocalDate daysFromToday(final int i) {

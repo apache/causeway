@@ -24,6 +24,7 @@ import integration.tests.ToDoIntegTest;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class ToDoItemsTest_newToDo_and_delete extends ToDoIntegTest {
         int size = wrap(service(ToDoItems.class)).notYetComplete().size();
         
         // when
-        final ToDoItem newToDo = wrap(service(ToDoItems.class)).newToDo("new todo", Category.Professional, null, null);
+        final ToDoItem newToDo = wrap(service(ToDoItems.class)).newToDo("new todo", Category.Professional, Subcategory.OpenSource, null, null);
 
         // then
         assertThat(newToDo.getDescription(), is("new todo"));

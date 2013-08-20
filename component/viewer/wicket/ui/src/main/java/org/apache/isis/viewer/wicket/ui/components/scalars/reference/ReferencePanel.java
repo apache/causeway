@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.Model;
@@ -171,4 +172,10 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         return labelIfCompact;
     }
+    
+    @Override
+    protected void addFormComponentBehaviour(Behavior behavior) {
+        entityLink.add(behavior);
+    }
+
 }

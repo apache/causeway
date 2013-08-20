@@ -34,6 +34,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
 import org.joda.time.LocalDate;
 
@@ -139,14 +140,15 @@ public class ToDoItems extends AbstractFactoryAndRepository {
             @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation
             @Named("Description") String description, 
             @Named("Category") Category category,
+            @Named("Subcategory") Subcategory subcategory,
             @Optional
             @Named("Due by") LocalDate dueBy,
             @Optional
             @Named("Cost") BigDecimal cost) {
         final String ownedBy = currentUserName();
-        return newToDo(description, category, ownedBy, dueBy, cost);
+        return newToDo(description, category, subcategory, ownedBy, dueBy, cost);
     }
-    public LocalDate default2NewToDo() {
+    public LocalDate default3NewToDo() {
         return new LocalDate(Clock.getTime()).plusDays(14);
     }
 
@@ -207,12 +209,13 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     public ToDoItem newToDo(
             final String description, 
             final Category category, 
-            final String userName,
-            final LocalDate dueBy, 
-            final BigDecimal cost) {
+            final Subcategory subcategory,
+            final String userName, 
+            final LocalDate dueBy, final BigDecimal cost) {
         final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
+        toDoItem.setSubcategory(subcategory);
         toDoItem.setOwnedBy(userName);
         toDoItem.setDueBy(dueBy);
         toDoItem.setCost(cost);

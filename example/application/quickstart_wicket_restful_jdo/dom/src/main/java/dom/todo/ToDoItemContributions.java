@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
 import org.joda.time.LocalDate;
 
@@ -140,27 +141,36 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     // UpdateCategory (contributed action)
     // //////////////////////////////////////
 
-    @DescribedAs("Demonstrates contributed actions; could also be implemented as a simple editable property")
+    @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
     @ActionSemantics(Of.IDEMPOTENT)
     @MemberOrder(sequence="1")
-    public ToDoItem updateCategory(ToDoItem item, @Named("Category") Category category) {
+    public ToDoItem updateCategory(
+            final ToDoItem item, 
+            final @Named("Category") Category category,
+            final @Named("Subcategory") Subcategory subcategory) {
         item.setCategory(category);
+        item.setSubcategory(subcategory);
         return item;
     }
 
-    public List<Category> choices1UpdateCategory(ToDoItem item, Category category) {
-        // in principle we could fine-tune the choices.
-        // here, though, we just return all categories
-        return Arrays.asList(Category.values());
-    }
-    
-    public Category default1UpdateCategory(ToDoItem item, Category category) {
+    public Category default1UpdateCategory(
+            final ToDoItem item, final Category category, final Subcategory subcategory) {
         return item.getCategory();
     }
+    public Subcategory default2UpdateCategory(
+            final ToDoItem item, final Category category, final Subcategory subcategory) {
+        return item.getSubcategory();
+    }
+
+    public List<Subcategory> choices2UpdateCategory(
+            final ToDoItem item, final Category category, final Subcategory subcategory) {
+        return Subcategory.listFor(category);
+    }
     
-    public String validateUpdateCategory(final ToDoItem item, Category category) {
-        return category == item.getCategory() ? "Already set to that value!" : null;
+    public String validateUpdateCategory(
+            final ToDoItem item, final Category category, final Subcategory subcategory) {
+        return Subcategory.validate(category, subcategory);
     }
 
     

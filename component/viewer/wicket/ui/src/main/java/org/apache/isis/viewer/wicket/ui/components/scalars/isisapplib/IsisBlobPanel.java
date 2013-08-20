@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import java.util.List;
 
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
@@ -52,6 +53,7 @@ public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
     protected ByteArrayResource newResource(final Blob blob) {
         return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
     }
+
 
 
 }

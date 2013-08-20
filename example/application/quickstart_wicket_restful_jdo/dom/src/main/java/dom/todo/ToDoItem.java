@@ -19,7 +19,9 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
@@ -31,6 +33,7 @@ import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
@@ -153,35 +156,59 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
 
     // //////////////////////////////////////
-    // Category (property)
+    // Category and Subcategory (property)
     // //////////////////////////////////////
 
     public static enum Category {
         Professional {
             @Override
-            public int priority() {
-                return 1;
+            public List<Subcategory> subcategories() {
+                return Arrays.asList(Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education);
             }
         }, Domestic {
             @Override
-            public int priority() {
-                return 2;
+            public List<Subcategory> subcategories() {
+                return Arrays.asList(Subcategory.Shopping, Subcategory.Housework, Subcategory.Garden, Subcategory.Chores);
             }
         }, Other {
             @Override
-            public int priority() {
-                return 3;
+            public List<Subcategory> subcategories() {
+                return Arrays.asList(Subcategory.Other);
             }
         };
         
-        // this method is simply to demonstrate that anonymous 
-        // subtypes of enums are allowed
-        public abstract int priority();
+        public abstract List<Subcategory> subcategories();
     }
+
+    public static enum Subcategory {
+        // professional
+        OpenSource, Consulting, Education, Marketing,
+        // domestic
+        Shopping, Housework, Garden, Chores,
+        // other
+        Other;
+
+        public static List<Subcategory> listFor(Category category) {
+            return category != null? category.subcategories(): Collections.<Subcategory>emptyList();
+        }
+
+        static String validate(final Category category, final Subcategory subcategory) {
+            if(category == null) {
+                return "Enter category first";
+            }
+            return !category.subcategories().contains(subcategory) 
+                    ? "Invalid subcategory for category '" + category + "'" 
+                    : null;
+        }
+    }
+
+    // //////////////////////////////////////
+
 
     private Category category;
 
     @javax.jdo.annotations.Column(allowsNull="false")
+    @Disabled
     public Category getCategory() {
         return category;
     }
@@ -190,6 +217,20 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.category = category;
     }
 
+    // //////////////////////////////////////
+
+    private Subcategory subcategory;
+
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Disabled
+    public Subcategory getSubcategory() {
+        return subcategory;
+    }
+    public void setSubcategory(final Subcategory subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    
     // //////////////////////////////////////
     // OwnedBy (property)
     // //////////////////////////////////////
@@ -446,13 +487,15 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
             String description,
             @Named("Category")
             ToDoItem.Category category, 
+            @Named("Subcategory")
+            ToDoItem.Subcategory subcategory, 
             @Named("Due by") 
             @Optional
             LocalDate dueBy,
             @Named("Cost") 
             @Optional
             BigDecimal cost) {
-        return toDoItems.newToDo(description, category, dueBy, cost);
+        return toDoItems.newToDo(description, category, subcategory, dueBy, cost);
     }
     public String default0Duplicate() {
         return getDescription() + " - Copy";
@@ -460,7 +503,10 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public Category default1Duplicate() {
         return getCategory();
     }
-    public LocalDate default2Duplicate() {
+    public Subcategory default2Duplicate() {
+        return getSubcategory();
+    }
+    public LocalDate default3Duplicate() {
         return getDueBy();
     }
 

@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -206,4 +207,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.add(new AttributeModifier("title", Model.of(titleAttribute)));
     }
 
+    @Override
+    protected void addFormComponentBehaviour(Behavior behavior) {
+        textField.add(behavior);
+    }
+
 }
+

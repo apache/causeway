@@ -19,11 +19,11 @@ Description
 TLP releases:
 
   * isis-1.2.0                                     : 31 May 2013
-  * isis-viewer-wicket-1.2.0                       : 31 May 2013
-  * isis-viewer-restfulobjects-2.0.0               : 31 May 2013
   * isis-objectstore-jdo-1.1.0                     : 31 May 2013
-  * isis-security-shiro-1.1.1                      : 31 May 2013
   * isis-security-file-1.0.1                       : 31 May 2013
+  * isis-security-shiro-1.1.1                      : 31 May 2013
+  * isis-viewer-restfulobjects-2.0.0               : 31 May 2013
+  * isis-viewer-wicket-1.2.0                       : 31 May 2013
   * quickstart-wicket-restful_jdo-archetype-1.0.3  : 31 May 2013
  
   * isis-1.1.0                                     : 31 Jan 2013
@@ -37,8 +37,8 @@ TLP releases:
   * isis-1.0.0                                     : 24 Dec 2012
   * isis-objectstore-jdo-1.0.0                     : 24 Dec 2012
   * isis-security-file-1.0.0                       : 24 Dec 2012
-  * isis-viewer-wicket-1.0.0                       : 24 Dec 2012
   * isis-viewer-restfulobjects-1.0.0               : 24 Dec 2012
+  * isis-viewer-wicket-1.0.0                       : 24 Dec 2012
   * quickstart-wicket-restful_jdo-archetype-1.0.0  : 24 Dec 2012
  
 Incubating releases:

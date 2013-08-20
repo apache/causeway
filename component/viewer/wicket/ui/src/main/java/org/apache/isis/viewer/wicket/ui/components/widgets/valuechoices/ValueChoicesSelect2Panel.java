@@ -28,6 +28,9 @@ import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -48,7 +51,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 /**
  * Initial skeleton - trying to add support for value choices.
  */
-public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
+public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
     private static final Logger LOG = LoggerFactory.getLogger(ValueChoicesSelect2Panel.class);
 
     private static final long serialVersionUID = 1L;
@@ -207,7 +210,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
             }
 
         };
-        return new Select2Choice<ObjectAdapterMemento>(id, modelObject, provider);
+        final Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<ObjectAdapterMemento>(id, modelObject, provider);
+        return select2Choice;
     }
 
     @Override
@@ -222,9 +226,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
 
     private IModel<List<ObjectAdapterMemento>> getChoicesModel() {
         final List<ObjectAdapter> choices = scalarModel.getChoices();
-        if (choices.size() == 0) {
-            return null;
-        }
         
         // take a copy otherwise is only lazily evaluated
         final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
@@ -243,5 +244,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
                 return getObject();
             }};
     }
+    
+    @Override
+    protected void addFormComponentBehaviour(Behavior behavior) {
+        valueField.add(behavior);
+    }
+
 
 }
