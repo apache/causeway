@@ -18,39 +18,51 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
-import dom.todo.ToDoItem.Category;
 import fixture.todo.ToDoItemsFixture;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItemTest_ownedBy extends ToDoIntegTest {
+public class ToDoItemContributionsTest_priority extends ToDoIntegTest {
 
-    private ToDoItem toDoItem;
+    private ToDoItemContributions toDoItemContributions;
+    
+    private List<ToDoItem> notYetComplete;
 
     @Before
     public void setUp() throws Exception {
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
-        toDoItem = wrap(all.get(0));
+        final ToDoItems toDoItems = wrap(service(ToDoItems.class));
+        toDoItemContributions = wrap(service(ToDoItemContributions.class));
+        notYetComplete = toDoItems.notYetComplete();
     }
 
     @Test
-    public void cannotModify() throws Exception {
-        
-        // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
+    public void happyCase() throws Exception {
+        assertPriority(0, 1);
+        assertPriority(1, 2);
+        assertPriority(2, 4);
+        assertPriority(3, 6);
+        assertPriority(4, 5);
+        assertPriority(5, 7);
+        assertPriority(6, 9);
+        assertPriority(7, 8);
+        assertPriority(8, 3);
+        assertPriority(9, 10);
     }
 
-
+    private void assertPriority(final int n, final int priority) {
+        assertThat(toDoItemContributions.priority(notYetComplete.get(n)), is(Integer.valueOf(priority)));
+    }
+    
 }

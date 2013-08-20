@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.props;
+package integration.tests.colls;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -25,32 +25,42 @@ import integration.tests.ToDoIntegTest;
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 import fixture.todo.ToDoItemsFixture;
 
+import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItemTest_ownedBy extends ToDoIntegTest {
+import org.apache.isis.applib.clock.Clock;
+
+public class ToDoItemContributionsTest_similarTo extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
+    private ToDoItemContributions toDoItemContributions;
 
     @Before
     public void setUp() throws Exception {
         scenarioExecution().install(new ToDoItemsFixture());
 
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final ToDoItems toDoItems = wrap(service(ToDoItems.class));
+        toDoItemContributions = wrap(service(ToDoItemContributions.class));
+        final List<ToDoItem> all = toDoItems.notYetComplete();
         toDoItem = wrap(all.get(0));
     }
 
     @Test
-    public void cannotModify() throws Exception {
+    public void happyCase() throws Exception {
         
-        // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
+        // when
+        List<ToDoItem> similarItems = toDoItemContributions.similarTo(toDoItem);
+        
+        // then
+        assertThat(similarItems.size(), is(6));
     }
-
-
+    
 }

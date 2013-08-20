@@ -18,21 +18,20 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItem.Subcategory;
 import dom.todo.ToDoItems;
-import dom.todo.ToDoItem.Category;
 import fixture.todo.ToDoItemsFixture;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ToDoItemTest_ownedBy extends ToDoIntegTest {
+public class ToDoItemTest_subcategory extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
 
@@ -48,8 +47,8 @@ public class ToDoItemTest_ownedBy extends ToDoIntegTest {
     public void cannotModify() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
+        expectedExceptions.expectMessage(containsString("Always disabled"));
+        toDoItem.setSubcategory(Subcategory.Chores);
     }
 
 

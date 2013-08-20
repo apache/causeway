@@ -18,8 +18,7 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
@@ -29,12 +28,8 @@ import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
 import fixture.todo.ToDoItemsFixture;
 
-import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.applib.clock.Clock;
 
 public class ToDoItemTest_category extends ToDoIntegTest {
 
@@ -49,28 +44,12 @@ public class ToDoItemTest_category extends ToDoIntegTest {
     }
 
     @Test
-    public void happyCase() throws Exception {
-        
-        // when
-        toDoItem.setCategory(Category.Professional);
-        
-        // then
-        assertThat(toDoItem.getCategory(), is(Category.Professional));
-        
-        // when
-        toDoItem.setCategory(Category.Domestic);
-        
-        // then
-        assertThat(toDoItem.getCategory(), is(Category.Domestic));
-    }
-
-
-    @Test
-    public void cannotBeNull() throws Exception {
+    public void cannotModify() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage("Mandatory");
-        toDoItem.setCategory(null);
+        expectedExceptions.expectMessage(containsString("Always disabled"));
+        toDoItem.setCategory(Category.Professional);
     }
+
 
 }
