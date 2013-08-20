@@ -131,8 +131,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
                 paramPanels.add(paramPanel);
                 if(paramPanel != null) {
-                    paramPanel.notifyOnChange(this);
                     paramPanel.setOutputMarkupId(true);
+                    paramPanel.notifyOnChange(this);
                 }
             }
         }

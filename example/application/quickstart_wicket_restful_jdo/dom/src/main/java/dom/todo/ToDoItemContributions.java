@@ -144,7 +144,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
     @ActionSemantics(Of.IDEMPOTENT)
-    @MemberOrder(sequence="1")
+    @MemberOrder(name="Subcategory", sequence="1")
     public ToDoItem updateCategory(
             final ToDoItem item, 
             final @Named("Category") Category category,

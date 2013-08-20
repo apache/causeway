@@ -74,7 +74,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         final IModel<ObjectAdapterMemento> modelObject = createModel();
         
         select2ChoiceField = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
-        select2ChoiceField.setProvider(newChoiceProviderForArgs(null));
+        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(null);
+        setChoices(choicesMementos);
 
         addStandardSemantics();
 
@@ -90,8 +91,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         return labelIfRegular;
     }
 
-    private ChoiceProvider<ObjectAdapterMemento> newChoiceProviderForArgs(final ObjectAdapter[] argumentsIfAvailable) {
-        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argumentsIfAvailable);
+    protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
         final IModel<List<ObjectAdapterMemento>> choicesModel = newModel(choicesMementos);
         final ChoiceProvider<ObjectAdapterMemento> choiceProvider = newChoiceProvider(choicesModel);
         return choiceProvider;
@@ -112,11 +112,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         
         // take a copy otherwise is only lazily evaluated
         final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
-        
-        final ObjectAdapterMemento currentValue = getModel().getObjectAdapterMemento();
-        if(currentValue != null && !choicesMementos.contains(currentValue)) {
-            choicesMementos.add(currentValue);
-        }
         return choicesMementos;
     }
 
@@ -260,9 +255,27 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
 
     @Override
     public void updateChoices(ObjectAdapter[] arguments) {
-        select2ChoiceField.setProvider(newChoiceProviderForArgs(arguments));
+        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(arguments);
+        setChoices(choicesMementos);
+    }
+
+    /**
+     * sets up the choices, also ensuring that any currently held value
+     * is compatible.
+     */
+    private void setChoices(final List<ObjectAdapterMemento> choicesMementos) {
+        select2ChoiceField.setProvider(newChoiceProvider(choicesMementos));
         getModel().setPending(null);
-        select2ChoiceField.clearInput();
+        final ObjectAdapterMemento objectAdapterMemento = getModel().getObjectAdapterMemento();
+        if(!choicesMementos.contains(objectAdapterMemento)) {
+            final ObjectAdapterMemento newAdapterMemento = 
+                    !choicesMementos.isEmpty() 
+                    ? choicesMementos.get(0) 
+                    : null;
+            select2ChoiceField.getModel().setObject(newAdapterMemento);
+            getModel().setObject(
+                    newAdapterMemento != null? newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null);
+        }
     }
 
 }
