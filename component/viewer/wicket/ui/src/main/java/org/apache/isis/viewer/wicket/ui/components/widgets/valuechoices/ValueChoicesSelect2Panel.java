@@ -229,6 +229,12 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract { // ScalarPan
         // take a copy otherwise is only lazily evaluated
         final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
         
+        final ObjectAdapterMemento currentValue = getModel().getObjectAdapterMemento();
+        if(currentValue != null && !choicesMementos.contains(currentValue)) {
+            choicesMementos.add(currentValue);
+        }
+        
+
         return new ModelAbstract<List<ObjectAdapterMemento>>(choicesMementos){
             private static final long serialVersionUID = 1L;
 

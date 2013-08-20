@@ -27,21 +27,24 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
     private final ObjectActionParameter serviceActionParameter;
     @SuppressWarnings("unused")
     private final int serviceParamNumber;
-    private final ObjectActionContributee objectAction;
+    @SuppressWarnings("unused")
+    private final int contributeeParamNumber;
+    private final ObjectActionContributee contributeeAction;
 
     public OneToOneActionParameterContributee(
             final ObjectAdapter serviceAdapter,
             final ObjectActionImpl serviceAction,
             final ObjectActionParameterAbstract serviceActionParameter,
             final int serviceParamNumber,
-            final int number,
-            final ObjectActionContributee objectAction) {
-        super(number, objectAction, serviceActionParameter.getPeer());
+            final int contributeeParamNumber,
+            final ObjectActionContributee contributeeAction) {
+        super(contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
         this.serviceActionParameter = serviceActionParameter;
         this.serviceParamNumber = serviceParamNumber;
-        this.objectAction = objectAction;
+        this.contributeeParamNumber = contributeeParamNumber;
+        this.contributeeAction = contributeeAction;
     }
 
     @Override
@@ -49,26 +52,14 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg);
     }
 
-    @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
-        return serviceActionParameter.getChoices(serviceAdapter);
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter) {
+        return serviceAdapter;
     }
 
-    @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-        
+    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter) {
         ObjectAdapter[] args = new ObjectAdapter[serviceAction.getParameterCount()];
-        args[objectAction.getContributeeParam()] = serviceAdapter;
-        
-        final ActionParameterDefaultsFacet defaultsFacet = serviceActionParameter.getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(serviceAdapter, args);
-            if (dflt == null) {
-                return null;
-            }
-            return getAdapterMap().adapterFor(dflt);
-        }
-        return null;
+        args[contributeeAction.getContributeeParam()] = adapter;
+        return args;
     }
 
 }

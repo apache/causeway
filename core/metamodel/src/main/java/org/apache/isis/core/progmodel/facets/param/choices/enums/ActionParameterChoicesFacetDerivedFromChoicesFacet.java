@@ -35,7 +35,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter) {
+    public Object[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] arguments) {
         final FacetHolder facetHolder = getFacetHolder();
         final TypedHolder paramPeer = (TypedHolder) facetHolder;
         final ObjectSpecification noSpec = getSpecification(paramPeer.getType());

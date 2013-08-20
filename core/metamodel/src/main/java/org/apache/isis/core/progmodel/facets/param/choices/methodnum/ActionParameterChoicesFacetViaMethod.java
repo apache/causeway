@@ -65,8 +65,8 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter owningAdapter) {
-        final Object options = AdapterInvokeUtils.invoke(method, owningAdapter);
+    public Object[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] arguments) {
+        final Object options = AdapterInvokeUtils.invoke(method, adapter, arguments);
         if (options == null) {
             return new Object[0];
         }

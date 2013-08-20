@@ -244,40 +244,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    // //////////////////////////////////////////////////////////
-    // Interaction
-    // //////////////////////////////////////////////////////////
 
-    @Override
-    public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments, final int position) {
-        return new ActionArgumentContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
-    }
-
-
-    @Override
-    public boolean hasChoices() {
-        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-
-        return choicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
-    }
-
-    @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
-        final List<ObjectAdapter> parameterChoices = Lists.newArrayList();
-        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-
-        if (choicesFacet != null) {
-            final Object[] choices = choicesFacet.getChoices(adapter);
-            checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
-            for (final Object choice : choices) {
-                parameterChoices.add(getAdapterMap().adapterFor(choice));
-            }
-        }
-        if (parameterChoices.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
-            addParameterChoicesForBounded(parameterChoices);
-        }
-        return parameterChoices.toArray(new ObjectAdapter[0]);
-    }
+    // /////////////////////////////////////////////////////////////
+    // AutoComplete
+    // /////////////////////////////////////////////////////////////
 
     @Override
     public boolean hasAutoComplete() {
@@ -287,20 +257,20 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg) {
-        final List<ObjectAdapter> autoCompleteChoiceAdapters = Lists.newArrayList();
+        final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
-            final Object[] autoCompleteChoices = facet.autoComplete(adapter, searchArg);
-            checkChoicesOrAutoCompleteType(getSpecificationLookup(), autoCompleteChoices, getSpecification());
-            for (final Object autoCompleteChoice : autoCompleteChoices) {
-                autoCompleteChoiceAdapters.add(getAdapterMap().adapterFor(autoCompleteChoice));
+            final Object[] choices = facet.autoComplete(adapter, searchArg);
+            checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
+            for (final Object choice : choices) {
+                adapters.add(getAdapterMap().adapterFor(choice));
             }
         }
-        if (autoCompleteChoiceAdapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
-            addParameterChoicesForBounded(autoCompleteChoiceAdapters);
+        if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
+            addAllInstancesForType(adapters);
         }
-        return autoCompleteChoiceAdapters.toArray(new ObjectAdapter[0]);
+        return adapters.toArray(new ObjectAdapter[0]);
     }
 
     @Override
@@ -309,15 +279,89 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-    private <T> void addParameterChoicesForBounded(final List<ObjectAdapter> parameterChoices) {
-        final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
-        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-        for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
-            parameterChoices.add(choiceAdapter);
-        }
+
+    // /////////////////////////////////////////////////////////////
+    // Choices
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public boolean hasChoices() {
+        final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+        return choicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
     }
 
-    protected static void checkChoicesOrAutoCompleteType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
+    @Override
+    public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter);
+        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter);
+        
+        return getChoices(target, args);
+    }
+
+    private ObjectAdapter[] getChoices(final ObjectAdapter target, final ObjectAdapter[] args) {
+        final List<ObjectAdapter> adapters = Lists.newArrayList();
+        final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
+
+        if (facet != null) {
+            final Object[] choices = facet.getChoices(target, args);
+            checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
+            for (final Object choice : choices) {
+                adapters.add(getAdapterMap().adapterFor(choice));
+            }
+        }
+        if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
+            addAllInstancesForType(adapters);
+        }
+        return adapters.toArray(new ObjectAdapter[0]);
+    }
+    
+    // /////////////////////////////////////////////////////////////
+    // Defaults
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+        
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter);;
+        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter);
+        
+        return getDefault(target, args);
+    }
+
+    private ObjectAdapter getDefault(
+            final ObjectAdapter target, 
+            final ObjectAdapter[] args) {
+        final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
+        if (defaultsFacet != null) {
+            final Object dflt = defaultsFacet.getDefault(target, args);
+            if (dflt == null) {
+                // it's possible that even though there is a default facet, when
+                // invoked it is unable to return a default.
+                return null;
+            }
+            return getAdapterMap().adapterFor(dflt);
+        }
+        return null;
+    }
+
+    /**
+     * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
+     */
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter) {
+        return adapter;
+    }
+
+    /**
+     * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
+     */
+    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter) {
+        return null;
+    }
+
+    
+    // helpers
+
+    static void checkChoicesOrAutoCompleteType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
             final ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
             if (!componentSpec.isOfType(paramSpec)) {
@@ -326,36 +370,23 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-        if (false /*parentAction.isContributed()*/ && adapter != null) {
-            if (adapter.getSpecification().isOfType(getSpecification())) {
-                return adapter;
-            }
+    private <T> void addAllInstancesForType(final List<ObjectAdapter> adapters) {
+        final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
+        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
+        for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
+            adapters.add(choiceAdapter);
         }
-        final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(adapter, null);
-            if (dflt == null) {
-                // it's possible that even though there is a default facet, when
-                // invoked it
-                // is unable to return a default.
-                return null;
-            }
-            return getAdapterMap().adapterFor(dflt);
-        }
-        return null;
     }
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return getAuthenticationSessionProvider().getAuthenticationSession();
-    }
-
-    
     
     // /////////////////////////////////////////////////////////////
     // Validation
     // /////////////////////////////////////////////////////////////
+
+    @Override
+    public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments, final int position) {
+        return new ActionArgumentContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
+    }
 
     @Override
     public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
@@ -433,6 +464,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     protected QuerySubmitter getQuerySubmitter() {
         return parentAction.getQuerySubmitter();
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
 }

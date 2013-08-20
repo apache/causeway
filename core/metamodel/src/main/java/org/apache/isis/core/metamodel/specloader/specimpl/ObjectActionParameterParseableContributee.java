@@ -16,7 +16,13 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -33,21 +39,24 @@ public class ObjectActionParameterParseableContributee extends ObjectActionParam
     private final ObjectActionParameter serviceActionParameter;
     @SuppressWarnings("unused")
     private final int serviceParamNumber;
-    private final ObjectActionContributee objectAction;
+    @SuppressWarnings("unused")
+    private final int contributeeParamNumber;
+    private final ObjectActionContributee contributeeAction;
 
     public ObjectActionParameterParseableContributee(
             final ObjectAdapter serviceAdapter,
             final ObjectActionImpl serviceAction,
             final ObjectActionParameterAbstract serviceActionParameter,
             final int serviceParamNumber,
-            final int number,
-            final ObjectActionContributee objectAction) {
-        super(number, objectAction, serviceActionParameter.getPeer());
+            final int contributeeParamNumber,
+            final ObjectActionContributee contributeeAction) {
+        super(contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
         this.serviceActionParameter = serviceActionParameter;
         this.serviceParamNumber = serviceParamNumber;
-        this.objectAction = objectAction;
+        this.contributeeParamNumber = contributeeParamNumber;
+        this.contributeeAction = contributeeAction;
     }
 
     @Override
@@ -55,28 +64,14 @@ public class ObjectActionParameterParseableContributee extends ObjectActionParam
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg);
     }
 
-    @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
-        return serviceActionParameter.getChoices(serviceAdapter);
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter) {
+        return serviceAdapter;
     }
 
-    @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-        
+    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter) {
         ObjectAdapter[] args = new ObjectAdapter[serviceAction.getParameterCount()];
-        args[objectAction.getContributeeParam()] = adapter;
-        
-        final ActionParameterDefaultsFacet defaultsFacet = serviceActionParameter.getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(serviceAdapter, args);
-            if (dflt == null) {
-                return null;
-            }
-            return getAdapterMap().adapterFor(dflt);
-        }
-        return null;
+        args[contributeeAction.getContributeeParam()] = adapter;
+        return args;
     }
-
-    
     
 }

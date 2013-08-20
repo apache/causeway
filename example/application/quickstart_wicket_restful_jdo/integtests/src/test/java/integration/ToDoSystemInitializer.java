@@ -16,10 +16,8 @@
  */
 package integration;
 
-import dom.todo.ToDoItemsJdo;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import dom.todo.ToDoItemContributions;
+import dom.todo.ToDoItems;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -56,7 +54,8 @@ public class ToDoSystemInitializer {
             with(new DataNucleusPersistenceMechanismInstaller());
             
             withServices(
-                    new ToDoItemsJdo(),
+                    new ToDoItems(),
+                    new ToDoItemContributions(),
                     new WrapperFactoryDefault(),
                     new RegisterEntities(),
                     new IsisJdoSupportImpl()

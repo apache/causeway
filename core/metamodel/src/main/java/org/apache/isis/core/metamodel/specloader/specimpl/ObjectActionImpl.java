@@ -443,7 +443,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterChoicesPojos[i] = paramFacet.getChoices(target);
+                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null);
                 } else {
                     parameterChoicesPojos[i] = new Object[0];
                 }

@@ -45,6 +45,7 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -94,6 +95,10 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
+        public Builder describedAs(String descriptionIfAny) {
+            cssMenuItem.setDescription(descriptionIfAny);
+            return this;
+        }
 
         public Builder returnsBlobOrClob(boolean blobOrClob) {
             cssMenuItem.setReturnsBlobOrClob(blobOrClob);
@@ -133,6 +138,7 @@ public class CssMenuItem implements Serializable {
             }
             return cssMenuItem;
         }
+
     }
 
     private final String name;
@@ -152,6 +158,8 @@ public class CssMenuItem implements Serializable {
     private String actionIdentifier;
     private String cssClass;
 
+    private String description;
+
 
 
     /**
@@ -160,6 +168,7 @@ public class CssMenuItem implements Serializable {
     public static Builder newMenuItem(final String name) {
         return new Builder(name);
     }
+
 
     public void setActionIdentifier(String actionIdentifier) {
         this.actionIdentifier = actionIdentifier;
@@ -218,7 +227,6 @@ public class CssMenuItem implements Serializable {
         this.blobOrClob = blobOrClob;
     }
 
-
     /**
      * Only populated if not {@link #isEnabled() enabled}.
      */
@@ -228,6 +236,13 @@ public class CssMenuItem implements Serializable {
 
     public void setDisabledReason(final String disabledReason) {
         this.disabledReason = disabledReason;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     // //////////////////////////////////////////////////////////////
@@ -267,18 +282,21 @@ public class CssMenuItem implements Serializable {
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
-        // check whether enabled
         final Consent usability = objectAction.isUsable(session, adapter, where);
         final String reasonDisabledIfAny = usability.getReason();
-        CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
+        
+        final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
+        final String descriptionIfAny = describedAsFacet != null? describedAsFacet.value(): null;
+        
+        final CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
 
-        // check if returns blob or clob (if so, then add CSS to suppress veil)
         final boolean blobOrClob = returnsBlobOrClob(objectAction);
         final boolean prototype = isExplorationOrPrototype(objectAction);
         final String actionIdentifier = actionIdentifierFor(objectAction);
 
         Builder builder = newSubMenuItem(actionLabel)
                 .link(link)
+                .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
                 .returnsBlobOrClob(blobOrClob)
                 .prototyping(prototype)
@@ -357,7 +375,10 @@ public class CssMenuItem implements Serializable {
             // show link...
             markupContainer.add(link);
             link.add(label);
-            
+
+            if(this.description != null) {
+                label.add(new AttributeModifier("title", Model.of(description)));
+            }
             if(this.blobOrClob) {
                 link.add(new CssClassAppender("noVeil"));
             }

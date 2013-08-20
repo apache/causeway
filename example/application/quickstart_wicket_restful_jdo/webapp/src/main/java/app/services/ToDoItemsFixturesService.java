@@ -22,6 +22,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
 import org.apache.isis.applib.AbstractService;
@@ -57,10 +59,26 @@ public class ToDoItemsFixturesService extends AbstractService {
 
     // //////////////////////////////////////
 
+    @Prototype
+    public ToDoItem installAndReturnFirst() {
+        install();
+        List<ToDoItem> notYetComplete = toDoItems.notYetComplete();
+        return !notYetComplete.isEmpty() ? notYetComplete.get(0) : null;
+    }
+
+    // //////////////////////////////////////
+
     private static void installFixturesFor(String user) {
         final FixturesInstallerDelegate installer = new FixturesInstallerDelegate().withOverride();
         installer.addFixture(new ToDoItemsFixture(user));
         installer.installFixtures();
+    }
+    
+    // //////////////////////////////////////
+
+    private ToDoItems toDoItems;
+    public void injectToDoItems(ToDoItems toDoItems) {
+        this.toDoItems = toDoItems;
     }
 
 }

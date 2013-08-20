@@ -20,6 +20,8 @@ package dom.todo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,6 +30,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import dom.todo.ToDoItem.Category;
@@ -50,6 +53,7 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.query.QueryDefault;
 
 @Named("ToDos")
 public class ToDoItems extends AbstractFactoryAndRepository {
@@ -68,53 +72,66 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
 
     // //////////////////////////////////////
-    // NotYetComplete(action)
+    // NotYetComplete (action)
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
-        List<ToDoItem> items = doNotYetComplete();
+        final List<ToDoItem> items;
+        if(false) {
+            // the naive implementation ...
+            items = allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+                @Override
+                public boolean accept(final ToDoItem t) {
+                    return ownedByCurrentUser(t) && !t.isComplete();
+                }
+            });
+        } else {
+            // the JDO implementation ...
+            items = allMatches(
+                    new QueryDefault<ToDoItem>(ToDoItem.class, 
+                            "todo_notYetComplete", 
+                            "ownedBy", currentUserName()));
+        }
         if(items.isEmpty()) {
             getContainer().informUser("All to-do items have been completed :-)");
         }
         return items;
     }
-
-    protected List<ToDoItem> doNotYetComplete() {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && !t.isComplete();
-            }
-        });
-    }
     
     // //////////////////////////////////////
-    // Complete(action)
+    // Complete (action)
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     public List<ToDoItem> complete() {
-        List<ToDoItem> items = doComplete();
+        final List<ToDoItem> items;
+        if(false) {
+            // the naive implementation ...
+            items = allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+                @Override
+                public boolean accept(final ToDoItem t) {
+                    return ownedByCurrentUser(t) && t.isComplete();
+                }
+            });
+        } else {
+            // the JDO implementation ...
+            items = allMatches(
+                    new QueryDefault<ToDoItem>(ToDoItem.class, 
+                            "todo_complete", 
+                            "ownedBy", currentUserName()));
+        }
         if(items.isEmpty()) {
             getContainer().informUser("No to-do items have yet been completed :-(");
         }
         return items;
     }
 
-    protected List<ToDoItem> doComplete() {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && t.isComplete();
-            }
-        });
-    }
 
     // //////////////////////////////////////
-    // NewToDo(action)
+    // NewToDo (action)
     // //////////////////////////////////////
 
     @MemberOrder(sequence = "3")
@@ -134,7 +151,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     }
 
     // //////////////////////////////////////
-    // AllToDos(action)
+    // AllToDos (action)
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
@@ -156,81 +173,30 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         return items;
     }
 
-    // //////////////////////////////////////
-    // priority (contributed property)
-    // //////////////////////////////////////
-    
-    @DescribedAs("The relative priority of this item compared to others (using 'due by' date)")
-    @NotInServiceMenu
-    @MemberOrder(sequence="1")
-    @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ACTION)
-    @Hidden(where=Where.ALL_TABLES)
-    public Integer priority(final ToDoItem toDoItem) {
-        if(toDoItem.isComplete()) {
-            return null;
-        }
 
-        final List<ToDoItem> sortedNotYetComplete = 
-                ORDERING_DUE_BY
-                .compound(ORDERING_DESCRIPTION)
-                .sortedCopy(notYetComplete());
-        int i=1;
-        for (ToDoItem each : sortedNotYetComplete) {
-            if(each == toDoItem) {
-                return i;
-            }
-            i++;
-        }
-        return null;
-    }
-
-    private static Ordering<ToDoItem> ORDERING_DUE_BY = 
-        Ordering.natural().nullsLast().onResultOf(new Function<ToDoItem, LocalDate>(){
-            @Override
-            public LocalDate apply(ToDoItem input) {
-                return input.getDueBy();
-            }
-        });
-    
-    private static Ordering<ToDoItem> ORDERING_DESCRIPTION = 
-            Ordering.natural().nullsLast().onResultOf(new Function<ToDoItem, String>(){
-                @Override
-                public String apply(ToDoItem input) {
-                    return input.getDescription();
-                }
-            });
-    
-    // //////////////////////////////////////
-    // SimilarTo (contributed collection)
-    // //////////////////////////////////////
-    
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="1")
-    @NotContributed(As.ACTION)
-    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(ToDoItem t) {
-                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
-            }
-        });
-    }
-    
     // //////////////////////////////////////
     // AutoComplete
     // //////////////////////////////////////
 
     @Programmatic // not part of metamodel
     public List<ToDoItem> autoComplete(final String description) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && t.getDescription().contains(description);
-            }
-
-        });
+        if(false) {
+            // the naive implementation ...
+            return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+                @Override
+                public boolean accept(final ToDoItem t) {
+                    return ownedByCurrentUser(t) && t.getDescription().contains(description);
+                }
+                
+            });
+        } else {
+            // the JDO implementation ...
+            return allMatches(
+                    new QueryDefault<ToDoItem>(ToDoItem.class, 
+                            "todo_autoComplete", 
+                            "ownedBy", currentUserName(), 
+                            "description", description));
+        }
     }
 
     // //////////////////////////////////////
@@ -272,6 +238,5 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     protected String currentUserName() {
         return getContainer().getUser().getName();
     }
-
 
 }

@@ -31,7 +31,7 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter inObject) {
+    public Object[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] arguments) {
         return new ObjectAdapter[0];
     }
 

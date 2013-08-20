@@ -32,5 +32,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ActionParameterChoicesFacet extends Facet {
 
-    public Object[] getChoices(ObjectAdapter inObject);
+    public Object[] getChoices(ObjectAdapter target, ObjectAdapter[] arguments);
 }
