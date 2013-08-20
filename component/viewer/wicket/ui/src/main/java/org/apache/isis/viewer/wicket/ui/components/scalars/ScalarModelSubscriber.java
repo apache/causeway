@@ -16,10 +16,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 
 public interface ScalarModelSubscriber {
 
-    void onUpdate(ScalarModelProvider provider);
+    void onUpdate(AjaxRequestTarget target, ScalarModelProvider provider);
 
 }

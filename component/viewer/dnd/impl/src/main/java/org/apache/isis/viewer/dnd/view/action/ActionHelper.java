@@ -45,7 +45,7 @@ public class ActionHelper {
 
         for (int i = 0; i < parameterSpecs.size(); i++) {
             defaultValues[i] = parameterSpecs.get(i).getDefault(target);
-            options[i] = parameterSpecs.get(i).getChoices(target);
+            options[i] = parameterSpecs.get(i).getChoices(target, null);
         }
 
         if (!hasValues(defaultValues) && !hasValues(options)) {

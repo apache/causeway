@@ -16,9 +16,11 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterContributee.Util;
 
 public class OneToOneActionParameterContributee extends OneToOneActionParameterImpl implements ObjectActionParameterContributee{
 
@@ -52,14 +54,18 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg);
     }
 
-    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter) {
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
         return serviceAdapter;
     }
 
-    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter) {
-        ObjectAdapter[] args = new ObjectAdapter[serviceAction.getParameterCount()];
-        args[contributeeAction.getContributeeParam()] = adapter;
-        return args;
+    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+        final int required = serviceAction.getParameterCount();
+        final int existing = contributeeAction.getContributeeParam();
+        
+        List<ObjectAdapter> input = Util.toList(argumentsIfAvailable);
+        List<ObjectAdapter> output = Util.update(input, required, existing, adapter);
+        
+        return output.toArray(new ObjectAdapter[]{});
     }
-
+    
 }

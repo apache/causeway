@@ -159,7 +159,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
-            public List<ObjectAdapter> getChoices(final ScalarModel scalarModel) {
+            public List<ObjectAdapter> getChoices(final ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
                 final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
@@ -300,10 +300,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 return actionParameter.hasChoices();
             }
             @Override
-            public List<ObjectAdapter> getChoices(final ScalarModel scalarModel) {
+            public List<ObjectAdapter> getChoices(final ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), argumentsIfAvailable);
                 return choicesAsList(choices);
             }
 
@@ -392,7 +392,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         }
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
-        public abstract List<ObjectAdapter> getChoices(ScalarModel scalarModel);
+        public abstract List<ObjectAdapter> getChoices(ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ObjectAdapter> getAutoComplete(ScalarModel scalarModel, String searchArg);
@@ -586,8 +586,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return kind.hasChoices(this);
     }
 
-    public List<ObjectAdapter> getChoices() {
-        return kind.getChoices(this);
+    public List<ObjectAdapter> getChoices(final ObjectAdapter[] argumentsIfAvailable) {
+        return kind.getChoices(this, argumentsIfAvailable);
     }
 
     public boolean hasAutoComplete() {

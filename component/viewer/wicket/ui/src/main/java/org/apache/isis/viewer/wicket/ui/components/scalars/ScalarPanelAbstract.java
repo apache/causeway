@@ -36,8 +36,11 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
@@ -181,7 +184,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     for (ScalarModelSubscriber subscriber : subscribers) {
-                        subscriber.onUpdate(ScalarPanelAbstract.this);
+                        subscriber.onUpdate(target, ScalarPanelAbstract.this);
                     }
                 }
             });
@@ -264,8 +267,16 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     private final List<ScalarModelSubscriber> subscribers = Lists.newArrayList();
 
-    public void addScalarModelSubscriber(final ScalarModelSubscriber subscriber) {
+    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
         subscribers.add(subscriber);
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Optional hook method
+     */
+    public void updateChoices(ObjectAdapter[] pendingArguments) {
     }
 
 

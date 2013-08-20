@@ -160,7 +160,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object choicesFor(final ObjectActionParameter param) {
-        final ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter);
+        final ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter, null);
         if (choiceAdapters == null || choiceAdapters.length == 0) {
             return null;
         }

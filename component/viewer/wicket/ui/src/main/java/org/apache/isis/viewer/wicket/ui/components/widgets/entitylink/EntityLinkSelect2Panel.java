@@ -318,7 +318,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 if(!hasChoices) {
                     return Collections.emptyList();
                 }
-                final List<ObjectAdapter> choices = scalarModel.getChoices();
+                final List<ObjectAdapter> choices = scalarModel.getChoices(null);
                 if(choices.isEmpty()) {
                     return Collections.emptyList();
                 }

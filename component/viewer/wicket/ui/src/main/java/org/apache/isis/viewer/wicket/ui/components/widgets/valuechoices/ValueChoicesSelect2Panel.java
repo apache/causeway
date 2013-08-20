@@ -28,11 +28,8 @@ import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -63,7 +60,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
 
     private static final String ID_VALUE_ID = "valueId";
 
-    private FormComponent<ObjectAdapterMemento> valueField;
+    private Select2Choice<ObjectAdapterMemento> select2ChoiceField;
     private ObjectAdapterMemento pending;
 
     public ValueChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
@@ -75,8 +72,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
     protected FormComponentLabel addComponentForRegular() {
 
         final IModel<ObjectAdapterMemento> modelObject = createModel();
-        final IModel<List<ObjectAdapterMemento>> choicesMementos = getChoicesModel();
-        valueField = createDropDownChoices(choicesMementos, modelObject);
+        
+        select2ChoiceField = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
+        select2ChoiceField.setProvider(newChoiceProviderForArgs(null));
 
         addStandardSemantics();
 
@@ -86,10 +84,40 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         }
         
         addOrReplace(labelIfRegular);
-        addFeedbackTo(labelIfRegular, valueField);
+        addFeedbackTo(labelIfRegular, select2ChoiceField);
         addAdditionalLinksTo(labelIfRegular);
         
         return labelIfRegular;
+    }
+
+    private ChoiceProvider<ObjectAdapterMemento> newChoiceProviderForArgs(final ObjectAdapter[] argumentsIfAvailable) {
+        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argumentsIfAvailable);
+        final IModel<List<ObjectAdapterMemento>> choicesModel = newModel(choicesMementos);
+        final ChoiceProvider<ObjectAdapterMemento> choiceProvider = newChoiceProvider(choicesModel);
+        return choiceProvider;
+    }
+
+    private IModel<List<ObjectAdapterMemento>> newModel(final List<ObjectAdapterMemento> choicesMementos) {
+        return new ModelAbstract<List<ObjectAdapterMemento>>(choicesMementos){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected List<ObjectAdapterMemento> load() {
+                return getObject();
+            }};
+    }
+
+    private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
+        final List<ObjectAdapter> choices = scalarModel.getChoices(argumentsIfAvailable);
+        
+        // take a copy otherwise is only lazily evaluated
+        final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+        
+        final ObjectAdapterMemento currentValue = getModel().getObjectAdapterMemento();
+        if(currentValue != null && !choicesMementos.contains(currentValue)) {
+            choicesMementos.add(currentValue);
+        }
+        return choicesMementos;
     }
 
     private Model<ObjectAdapterMemento> createModel() {
@@ -137,23 +165,23 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
     private void setRequiredIfSpecified() {
         final ScalarModel scalarModel = getModel();
         final boolean required = scalarModel.isRequired();
-        valueField.setRequired(required);
+        select2ChoiceField.setRequired(required);
     }
 
     protected FormComponentLabel createFormComponentLabel() {
         final String name = getModel().getName();
-        valueField.setLabel(Model.of(name));
+        select2ChoiceField.setLabel(Model.of(name));
 
-        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, valueField);
+        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, select2ChoiceField);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(valueField));
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2ChoiceField));
         labelIfRegular.add(scalarName);
-        labelIfRegular.add(valueField);
+        labelIfRegular.add(select2ChoiceField);
 
         return labelIfRegular;
     }
@@ -170,9 +198,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         return scalarModel.getObject();
     }
 
-    private FormComponent<ObjectAdapterMemento> createDropDownChoices(final IModel<List<ObjectAdapterMemento>> choicesMementos, final IModel<ObjectAdapterMemento> modelObject) {
-        final String id = ID_VALUE_ID;
-        
+    protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final IModel<List<ObjectAdapterMemento>> choicesMementos) {
         ChoiceProvider<ObjectAdapterMemento> provider = new TextChoiceProvider<ObjectAdapterMemento>() {
 
             private static final long serialVersionUID = 1L;
@@ -210,45 +236,33 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
             }
 
         };
-        final Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<ObjectAdapterMemento>(id, modelObject, provider);
-        return select2Choice;
+        return provider;
     }
 
     @Override
     protected void onBeforeRenderWhenViewMode() { // View: Read only
-        valueField.setEnabled(false);
+        select2ChoiceField.setEnabled(false);
     }
 
     @Override
     protected void onBeforeRenderWhenEnabled() { // Edit: read/write
-        valueField.setEnabled(true);
+        select2ChoiceField.setEnabled(true);
     }
 
-    private IModel<List<ObjectAdapterMemento>> getChoicesModel() {
-        final List<ObjectAdapter> choices = scalarModel.getChoices();
-        
-        // take a copy otherwise is only lazily evaluated
-        final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
-        
-        final ObjectAdapterMemento currentValue = getModel().getObjectAdapterMemento();
-        if(currentValue != null && !choicesMementos.contains(currentValue)) {
-            choicesMementos.add(currentValue);
-        }
-        
-
-        return new ModelAbstract<List<ObjectAdapterMemento>>(choicesMementos){
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected List<ObjectAdapterMemento> load() {
-                return getObject();
-            }};
-    }
     
     @Override
     protected void addFormComponentBehaviour(Behavior behavior) {
-        valueField.add(behavior);
+        select2ChoiceField.add(behavior);
     }
 
+
+    // //////////////////////////////////////
+
+    @Override
+    public void updateChoices(ObjectAdapter[] arguments) {
+        select2ChoiceField.setProvider(newChoiceProviderForArgs(arguments));
+        getModel().setPending(null);
+        select2ChoiceField.clearInput();
+    }
 
 }

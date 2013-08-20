@@ -291,14 +291,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter);
-        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter);
+    public ObjectAdapter[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter, argumentsIfAvailable);
+        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter, argumentsIfAvailable);
         
-        return getChoices(target, args);
+        return findChoices(target, args);
     }
 
-    private ObjectAdapter[] getChoices(final ObjectAdapter target, final ObjectAdapter[] args) {
+    private ObjectAdapter[] findChoices(final ObjectAdapter target, final ObjectAdapter[] args) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
@@ -322,13 +322,13 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter);;
-        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter);
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter, null);
+        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter, null);
         
-        return getDefault(target, args);
+        return findDefault(target, args);
     }
 
-    private ObjectAdapter getDefault(
+    private ObjectAdapter findDefault(
             final ObjectAdapter target, 
             final ObjectAdapter[] args) {
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
@@ -347,14 +347,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter) {
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
         return adapter;
     }
 
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter) {
+    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
         return null;
     }
 

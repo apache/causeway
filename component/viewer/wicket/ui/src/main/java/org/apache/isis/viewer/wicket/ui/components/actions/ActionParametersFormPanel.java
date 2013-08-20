@@ -30,6 +30,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -86,8 +87,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         private static final long serialVersionUID = 1L;
 
         private static final String ID_FEEDBACK = "feedback";
-
-        private final List<ScalarPanelAbstract> scalarPanels = Lists.newArrayList();
+        
+        private final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
 
         public ActionParameterForm(final String id, final ActionModel actionModel) {
             super(id, actionModel);
@@ -120,20 +121,19 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             final RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
             add(rv);
             
-            scalarPanels.clear();
+            paramPanels.clear();
             for (final ActionParameterMemento apm : mementos) {
                 final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
                 rv.add(container);
 
                 final ScalarModel argumentModel = actionModel.getArgumentModel(apm);
-                final Component paramPanel = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
-                final ScalarPanelAbstract scalarPanel = paramPanel instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) paramPanel : null;
-                scalarPanels.add(scalarPanel);
-            }
-            
-            // subscribe to all param panels
-            for (ScalarPanelAbstract scalarPanel : scalarPanels) {
-                scalarPanel.addScalarModelSubscriber(this);
+                final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
+                final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
+                paramPanels.add(paramPanel);
+                if(paramPanel != null) {
+                    paramPanel.notifyOnChange(this);
+                    paramPanel.setOutputMarkupId(true);
+                }
             }
         }
 
@@ -159,34 +159,23 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         }
 
         @Override
-        public void onUpdate(ScalarModelProvider provider) {
-            final ScalarModel scalarModel = provider.getModel();
-            String name = scalarModel.getName();
-            final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
-            final List<ObjectAdapter> pendingArgs = 
-                    Lists.newArrayList(
-                            Iterables.transform(scalarPanels, new Function<ScalarPanelAbstract, ObjectAdapter>() {
-                        @Override
-                        public ObjectAdapter apply(ScalarPanelAbstract input) {
-                            if(input == null) {
-                                return null;
-                            }
-                            final ScalarModel model = input.getModel();
-                            final ObjectAdapterMemento objectAdapterMemento = model.getObjectAdapterMemento();
-                            if(objectAdapterMemento == null) {
-                                return null;
-                            }
-                            return objectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                        }
-                    })
-            );
-            //System.out.println(name + " = '" + (objectAdapterMemento != null? objectAdapterMemento.getTitleHint(): null) + "'");
-            System.out.println(pendingArgs);
+        public void onUpdate(AjaxRequestTarget target, ScalarModelProvider provider) {
+
             final ActionModel actionModel = getActionModel();
-            actionModel.getArgumentsAsArray();
-            for (ScalarPanelAbstract scalarPanel : scalarPanels) {
-                
+            
+            final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
+            System.out.println(pendingArguments);
+
+            final ObjectAction action = actionModel.getActionMemento().getAction();
+            final int numParams = action.getParameterCount();
+            for (int i = 0; i < numParams; i++) {
+                final ScalarPanelAbstract paramPanel = paramPanels.get(i);
+                if(paramPanel != null) {
+                    paramPanel.updateChoices(pendingArguments);
+                    target.add(paramPanel);
+                }
             }
+            
         }
     }
 }

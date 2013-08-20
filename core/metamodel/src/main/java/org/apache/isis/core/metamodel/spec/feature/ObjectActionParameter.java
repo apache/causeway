@@ -86,15 +86,22 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     ActionArgumentContext createProposedArgumentInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] args, int position);
 
-    /**
-     * Whether proposed value for this parameter is valid.
-     * 
-     * @param adapter
-     * @param proposedValue
-     * @return
-     */
-    String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
 
+    /**
+     * Whether there is an autoComplete provided (eg <tt>autoCompleteXxx</tt> supporting
+     * method) for the parameter.
+     */
+    boolean hasAutoComplete();
+    
+    /**
+     * Returns a list of possible references/values for this parameter, which the
+     * user can choose from, based on the input search argument.
+     */
+    ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg);
+
+    
+    
+    int getAutoCompleteMinLength();
     /**
      * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
      * method) for the parameter.
@@ -105,24 +112,20 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from.
      */
-    ObjectAdapter[] getChoices(ObjectAdapter adapter);
+    ObjectAdapter[] getChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable);
 
-    /**
-     * Whether there is an autoComplete provided (eg <tt>autoCompleteXxx</tt> supporting
-     * method) for the parameter.
-     */
-    boolean hasAutoComplete();
-
-    /**
-     * Returns a list of possible references/values for this parameter, which the
-     * user can choose from, based on the input search argument.
-     */
-    ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg);
-
-    int getAutoCompleteMinLength();
 
     ObjectAdapter getDefault(ObjectAdapter adapter);
 
+    
+    /**
+     * Whether proposed value for this parameter is valid.
+     * 
+     * @param adapter
+     * @param proposedValue
+     * @return
+     */
+    String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
  
 
 }

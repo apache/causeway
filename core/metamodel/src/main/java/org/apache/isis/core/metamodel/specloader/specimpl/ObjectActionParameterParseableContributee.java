@@ -16,6 +16,8 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -64,14 +66,19 @@ public class ObjectActionParameterParseableContributee extends ObjectActionParam
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg);
     }
 
-    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter) {
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
         return serviceAdapter;
     }
 
-    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter) {
-        ObjectAdapter[] args = new ObjectAdapter[serviceAction.getParameterCount()];
-        args[contributeeAction.getContributeeParam()] = adapter;
-        return args;
+    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+        final int required = serviceAction.getParameterCount();
+        final int existing = contributeeAction.getContributeeParam();
+        
+        List<ObjectAdapter> input = Util.toList(argumentsIfAvailable);
+        List<ObjectAdapter> output = Util.update(input, required, existing, adapter);
+        
+        return output.toArray(new ObjectAdapter[]{});
     }
+
     
 }
