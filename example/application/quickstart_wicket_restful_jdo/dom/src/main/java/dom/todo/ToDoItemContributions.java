@@ -155,16 +155,16 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     }
 
     public Category default1UpdateCategory(
-            final ToDoItem item, final Category category, final Subcategory subcategory) {
+            final ToDoItem item) {
         return item.getCategory();
     }
     public Subcategory default2UpdateCategory(
-            final ToDoItem item, final Category category, final Subcategory subcategory) {
+            final ToDoItem item) {
         return item.getSubcategory();
     }
 
     public List<Subcategory> choices2UpdateCategory(
-            final ToDoItem item, final Category category, final Subcategory subcategory) {
+            final ToDoItem item, final Category category) {
         return Subcategory.listFor(category);
     }
     

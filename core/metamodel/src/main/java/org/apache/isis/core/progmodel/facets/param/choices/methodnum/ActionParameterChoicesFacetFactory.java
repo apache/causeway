@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
@@ -33,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
@@ -80,19 +82,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
             final Class<?> arrayOfParamType = (Array.newInstance(paramTypes[i], 0)).getClass();
             
-            // four attempts to find matching method
-            Method choicesMethod;
-            choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, paramTypes, arrayOfParamType);
-            if (choicesMethod == null) {
-                choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, paramTypes, Collection.class);
-            }
-            if (choicesMethod == null) {
-                // ... otherwise on method name + no params
-                choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, new Class[0], arrayOfParamType);
-            }
-            if (choicesMethod == null) {
-                choicesMethod = findChoicesNumMethodReturning(processMethodContext, i, new Class[0], Collection.class);
-            }
+            final Method choicesMethod = findChoicesNumMethodReturning(processMethodContext, i);
             if (choicesMethod == null) {
                 continue;
             }
@@ -111,12 +101,47 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
         }
     }
 
-    private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int i, Class<?>[] paramTypes, final Class<?> arrayOfParamType) {
+    /**
+     * search successively for the default method, trimming number of param types each loop
+     */
+    private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n) {
+        
+        final Method actionMethod = processMethodContext.getMethod();
+        final List<Class<?>> paramTypes = ListUtils.mutableCopy(actionMethod.getParameterTypes());
+        
+        final Class<?> arrayOfParamType = (Array.newInstance(paramTypes.get(n), 0)).getClass();
+        
+        final int numParamTypes = paramTypes.size();
+        
+        for(int i=0; i< numParamTypes+1; i++) {
+            Method method;
+            
+            method = findChoicesNumMethodReturning(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}), arrayOfParamType);
+            if(method != null) {
+                return method;
+            }
+            method = findChoicesNumMethodReturning(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}), Collection.class);
+            if(method != null) {
+                return method;
+            }
+            
+            // remove last, and search again
+            if(!paramTypes.isEmpty()) {
+                paramTypes.remove(paramTypes.size()-1);
+            }
+        }
+
+        return null;
+    }
+
+
+    
+    private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n, Class<?>[] paramTypes, final Class<?> returnType) {
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
-        final String name = MethodPrefixConstants.CHOICES_PREFIX + i + capitalizedName;
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, arrayOfParamType, paramTypes);
+        final String name = MethodPrefixConstants.CHOICES_PREFIX + n + capitalizedName;
+        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, paramTypes);
     }
 
     // ///////////////////////////////////////////////////////////////

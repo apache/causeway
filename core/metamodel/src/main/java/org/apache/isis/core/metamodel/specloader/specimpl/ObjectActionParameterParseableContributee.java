@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -37,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 public class ObjectActionParameterParseableContributee extends ObjectActionParameterParseable implements ObjectActionParameterContributee {
 
     private final ObjectAdapter serviceAdapter;
+    @SuppressWarnings("unused")
     private final ObjectActionImpl serviceAction;
     private final ObjectActionParameter serviceActionParameter;
     @SuppressWarnings("unused")
@@ -66,18 +68,18 @@ public class ObjectActionParameterParseableContributee extends ObjectActionParam
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg);
     }
 
-    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
         return serviceAdapter;
     }
 
-    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
-        final int required = serviceAction.getParameterCount();
-        final int existing = contributeeAction.getContributeeParam();
+    protected List<ObjectAdapter> argsForDefaultOrChoices(final ObjectAdapter contributee, final List<ObjectAdapter> argumentsIfAvailable) {
+
+        final List<ObjectAdapter> suppliedArgs = ListUtils.mutableCopy(argumentsIfAvailable);
         
-        List<ObjectAdapter> input = Util.toList(argumentsIfAvailable);
-        List<ObjectAdapter> output = Util.update(input, required, existing, adapter);
+        final int contributeeParam = contributeeAction.getContributeeParam();
+        ListUtils.insert(suppliedArgs, contributeeParam, contributee);
         
-        return output.toArray(new ObjectAdapter[]{});
+        return suppliedArgs;
     }
 
     

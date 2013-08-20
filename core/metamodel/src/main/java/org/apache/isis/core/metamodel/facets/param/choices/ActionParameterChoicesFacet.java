@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
@@ -32,5 +34,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ActionParameterChoicesFacet extends Facet {
 
-    public Object[] getChoices(ObjectAdapter target, ObjectAdapter[] arguments);
+    public Object[] getChoices(ObjectAdapter target, List<ObjectAdapter> arguments);
 }

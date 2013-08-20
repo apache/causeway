@@ -22,7 +22,11 @@ package org.apache.isis.core.metamodel.adapter.util;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterContributee.Util;
 
 public final class AdapterInvokeUtils {
 
@@ -50,6 +54,30 @@ public final class AdapterInvokeUtils {
     }
     
     /**
+     * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
+     * 
+     * <p>
+     * That is:
+     * <ul>
+     * <li>if the method declares parameters but arguments are missing, then will provide 'null' defaults for these.
+     * <li>if the method does not declare all parameters for arguments, then truncates arguments.
+     * </ul>
+     */
+    public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
+        final List<ObjectAdapter> args = Lists.newArrayList();
+        if(argumentsIfAvailable != null) {
+            args.addAll(argumentsIfAvailable);
+        }
+        
+        final int requiredLength = method.getParameterTypes().length;
+        ListUtils.adjust(args, requiredLength);
+
+        final ObjectAdapter[] argArray = args.toArray(new ObjectAdapter[]{});
+        
+        return AdapterInvokeUtils.invoke(method, target, argArray);
+    }
+    
+    /**
      * Invokes the method, adjusting arguments as required.
      * 
      * <p>
@@ -59,7 +87,8 @@ public final class AdapterInvokeUtils {
      * <li>if the method does not declare parameters but arguments were provided, then will ignore those argumens.
      * </ul>
      */
-    public static Object invokeWithDefaults(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
+    @SuppressWarnings("unused")
+    private static Object invokeWithDefaults(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
         final int numParams = method.getParameterTypes().length;
         ObjectAdapter[] adapters;
         

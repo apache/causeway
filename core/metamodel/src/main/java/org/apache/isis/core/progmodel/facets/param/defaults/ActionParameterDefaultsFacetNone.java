@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.param.defaults;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -29,7 +31,7 @@ public class ActionParameterDefaultsFacetNone extends ActionParameterDefaultsFac
     }
 
     @Override
-    public Object getDefault(final ObjectAdapter inObject, ObjectAdapter[] parameters) {
+    public Object getDefault(final ObjectAdapter inObject, List<ObjectAdapter> parameters) {
         return null;
     }
 

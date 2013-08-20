@@ -22,7 +22,12 @@ package org.apache.isis.core.commons.lang;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public final class ListUtils {
     private static final String DEFAULT_DELIMITER = ",";
@@ -138,5 +143,36 @@ public final class ListUtils {
         list.addAll(Arrays.asList(optionValues));
         return list;
     }
+    
+    // //////////////////////////////////////
+    
+    public static <T> List<T> mutableCopy(final List<T> input) {
+        return Lists.newArrayList(input != null? input: Collections.<T>emptyList());
+    }
+
+    public static <T> List<T> mutableCopy(T[] arr) {
+        return mutableCopy(arr != null? Arrays.asList(arr): Collections.<T>emptyList()) ;
+    }
+
+    public static <T> void insert(final List<T> list, final int insertionPoint, final T elementToInsert) {
+        extend(list, insertionPoint);
+        list.add(insertionPoint, elementToInsert);
+    }
+
+    public static <T> void adjust(final List<T> list, final int requiredLength) {
+        extend(list, requiredLength);
+        if(list.size() > requiredLength) {
+            list.subList(requiredLength, list.size()).clear();;
+        }
+    }
+
+    private static <T> void extend(final List<T> list, final int requiredLength) {
+        for(int i=list.size(); i<requiredLength; i++) {
+            list.add(null);
+        }
+    }
+
+    
+
 
 }

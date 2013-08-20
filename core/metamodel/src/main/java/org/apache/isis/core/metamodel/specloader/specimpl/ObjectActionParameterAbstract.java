@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -30,6 +31,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -57,6 +59,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterContributee.Util;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
@@ -292,13 +295,15 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter, argumentsIfAvailable);
-        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter, argumentsIfAvailable);
+        final List<ObjectAdapter> argListIfAvailable = ListUtils.mutableCopy(argumentsIfAvailable);
+        
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter, argListIfAvailable);
+        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
         
         return findChoices(target, args);
     }
 
-    private ObjectAdapter[] findChoices(final ObjectAdapter target, final ObjectAdapter[] args) {
+    private ObjectAdapter[] findChoices(final ObjectAdapter target, final List<ObjectAdapter> args) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
@@ -323,14 +328,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         
         final ObjectAdapter target = targetForDefaultOrChoices(adapter, null);
-        final ObjectAdapter[] args = argsForDefaultOrChoices(adapter, null);
+        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, null);
         
         return findDefault(target, args);
     }
 
     private ObjectAdapter findDefault(
             final ObjectAdapter target, 
-            final ObjectAdapter[] args) {
+            final List<ObjectAdapter> args) {
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
             final Object dflt = defaultsFacet.getDefault(target, args);
@@ -347,14 +352,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
         return adapter;
     }
 
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter[] argsForDefaultOrChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+    protected List<ObjectAdapter> argsForDefaultOrChoices(final ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
         return null;
     }
 

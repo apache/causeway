@@ -22,6 +22,7 @@ package org.apache.isis.core.progmodel.facets.param.defaults.methodnum;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -74,12 +75,8 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
 
         for (int i = 0; i < paramTypes.length; i++) {
 
-            // two attempts to match method...
-            Method defaultMethod;
-            defaultMethod = findDefaultNumMethod(processMethodContext, i, paramTypes);
-            if (defaultMethod == null) {
-                defaultMethod = findDefaultNumMethod(processMethodContext, i, new Class[0]);
-            }
+            // attempt to match method...
+            Method defaultMethod = findDefaultNumMethod(processMethodContext, i);
             if (defaultMethod == null) {
                 continue;
             }
@@ -98,12 +95,36 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
         }
     }
 
-    private static Method findDefaultNumMethod(final ProcessMethodContext processMethodContext, int i, Class<?>[] paramTypes) {
+    /**
+     * search successively for the default method, trimming number of param types each loop
+     */
+    private static Method findDefaultNumMethod(ProcessMethodContext processMethodContext, int n) {
+        
+        final Method actionMethod = processMethodContext.getMethod();
+        final List<Class<?>> paramTypes = ListUtils.mutableCopy(actionMethod.getParameterTypes());
+        
+        final int numParamTypes = paramTypes.size();
+        
+        for(int i=0; i< numParamTypes+1; i++) {
+            final Method method = findDefaultNumMethod(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}));
+            if(method != null) {
+                return method;
+            }
+            // remove last, and search again
+            if(!paramTypes.isEmpty()) {
+                paramTypes.remove(paramTypes.size()-1);
+            }
+        }
+
+        return null;
+    }
+
+    private static Method findDefaultNumMethod(final ProcessMethodContext processMethodContext, int n, Class<?>[] paramTypes) {
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
-        final Class<?> returnType = actionMethod.getParameterTypes()[i];
+        final Class<?> returnType = actionMethod.getParameterTypes()[n];
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + i + capitalizedName, returnType, paramTypes);
+        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + n + capitalizedName, returnType, paramTypes);
     }
 
 }

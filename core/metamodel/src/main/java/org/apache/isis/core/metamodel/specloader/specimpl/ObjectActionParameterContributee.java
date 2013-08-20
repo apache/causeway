@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,13 +28,20 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public interface ObjectActionParameterContributee extends ObjectActionParameter {
 
+    // TODO: can probably remove this now?
     public static class Util {
-        
-        static <T> List<T> toList(final T[] inputArray) {
+
+        @SuppressWarnings("unused")
+        private static <T> List<T> toList(final T[] inputArray) {
+            return Lists.newArrayList(asList(inputArray));
+        }
+
+        private static <T> List<T> asList(final T[] inputArray) {
             return inputArray != null? Arrays.asList(inputArray): Collections.<T>emptyList();
         }
 
-        static <T> List<T> update(List<T> input, final int requiredLength, final int index, final T elementAtIndex) {
+        @SuppressWarnings("unused")
+        private static <T> List<T> adjust(final List<T> input, final int requiredLength, final int index, final T elementAtIndex) {
             List<T> output;
             if(input.isEmpty()) {
                 // nothing provided, so just create an empty list of the required length
@@ -50,13 +58,13 @@ public interface ObjectActionParameterContributee extends ObjectActionParameter 
             } else {
                 throw new IllegalArgumentException("Provided " + input.size() + " args for method taking " + requiredLength + " parameters");
             }
-
+            
             // finally, overwrite the element
             output.set(index, elementAtIndex);
             return output;
         }
 
-        static <T> List<T> newList(final int requiredLength) {
+        private static <T> List<T> newList(final int requiredLength) {
             List<T> output;
             output = Lists.newArrayList();
             for(int i=0; i<requiredLength; i++) {
@@ -64,5 +72,74 @@ public interface ObjectActionParameterContributee extends ObjectActionParameter 
             }
             return output;
         }
+        
+//      @Test
+//      public void adjust_whenSameSize() throws Exception {
+//          final List<Integer> input = Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+//          final List<Integer> output = ObjectActionParameterContributee.Util.adjust(input, 3, 0, Integer.valueOf(10));
+//          
+//          assertThat(output.size(), is(3));
+//          assertThat(output.get(0), is(Integer.valueOf(10)));
+//          assertThat(output.get(1), is(Integer.MAX_VALUE));
+//          assertThat(output.get(2), is(Integer.MIN_VALUE));
+//      }
+  //    
+//      @Test
+//      public void adjust_whenEmpty() throws Exception {
+//          final List<Integer> input = Collections.emptyList();
+//          final List<Integer> output = ObjectActionParameterContributee.Util.adjust(input, 3, 0, Integer.valueOf(10));
+//          
+//          assertThat(output.size(), is(3));
+//          assertThat(output.get(0), is(Integer.valueOf(10)));
+//          assertThat(output.get(1), is(nullValue()));
+//          assertThat(output.get(2), is(nullValue()));
+//      }
+  //
+//      @Test
+//      public void adjust_whenOneLess_replaceStart() throws Exception {
+//          final List<Integer> input = Arrays.asList(Integer.MAX_VALUE, Integer.MIN_VALUE);
+//          final List<Integer> output = ObjectActionParameterContributee.Util.adjust(input, 3, 0, Integer.valueOf(10));
+//          
+//          assertThat(output.size(), is(3));
+//          assertThat(output.get(0), is(Integer.valueOf(10)));
+//          assertThat(output.get(1), is(Integer.MAX_VALUE));
+//          assertThat(output.get(2), is(Integer.MIN_VALUE));
+//      }
+  //    
+//      @Test
+//      public void adjust_whenOneLess_replaceMiddle() throws Exception {
+//          final List<Integer> input = Arrays.asList(Integer.MAX_VALUE, Integer.MIN_VALUE);
+//          final List<Integer> output = ObjectActionParameterContributee.Util.adjust(input, 3, 1, Integer.valueOf(10));
+//          
+//          assertThat(output.size(), is(3));
+//          assertThat(output.get(0), is(Integer.MAX_VALUE));
+//          assertThat(output.get(1), is(Integer.valueOf(10)));
+//          assertThat(output.get(2), is(Integer.MIN_VALUE));
+//      }
+  //    
+//      @Test
+//      public void adjust_whenOneLess_replaceEnd() throws Exception {
+//          final List<Integer> input = Arrays.asList(Integer.MAX_VALUE, Integer.MIN_VALUE);
+//          final List<Integer> output = ObjectActionParameterContributee.Util.adjust(input, 3, 2, Integer.valueOf(10));
+//          
+//          assertThat(output.size(), is(3));
+//          assertThat(output.get(0), is(Integer.MAX_VALUE));
+//          assertThat(output.get(1), is(Integer.MIN_VALUE));
+//          assertThat(output.get(2), is(Integer.valueOf(10)));
+//      }
+      
+      
+      
+
+  //  @Test
+  //  public void newList() throws Exception {
+//        final List<Object> list = ObjectActionParameterContributee.Util.newList(3);
+//        assertThat(list.size(), is(3));
+//        assertThat(list.get(0), is(nullValue()));
+//        assertThat(list.get(1), is(nullValue()));
+//        assertThat(list.get(2), is(nullValue()));
+  //  }
+
+        
     }
 }

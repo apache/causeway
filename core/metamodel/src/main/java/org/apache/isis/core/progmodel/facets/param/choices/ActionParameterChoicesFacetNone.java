@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.param.choices;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -31,7 +33,7 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] arguments) {
+    public Object[] getChoices(final ObjectAdapter adapter, final List<ObjectAdapter> arguments) {
         return new ObjectAdapter[0];
     }
 

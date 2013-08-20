@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.param.choices.enums;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,7 +37,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] arguments) {
+    public Object[] getChoices(final ObjectAdapter adapter, final List<ObjectAdapter> arguments) {
         final FacetHolder facetHolder = getFacetHolder();
         final TypedHolder paramPeer = (TypedHolder) facetHolder;
         final ObjectSpecification noSpec = getSpecification(paramPeer.getType());
