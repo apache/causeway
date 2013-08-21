@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterContributee.Util;
 
 public final class AdapterInvokeUtils {
 

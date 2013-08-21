@@ -139,7 +139,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
     @Override
-    protected void addFormComponentBehaviour(Behavior behavior) {
+    protected void addFormComponentBehavior(Behavior behavior) {
         checkBox.add(behavior);
     }
 

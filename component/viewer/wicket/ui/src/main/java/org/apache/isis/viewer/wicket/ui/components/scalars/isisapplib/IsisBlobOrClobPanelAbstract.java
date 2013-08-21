@@ -290,7 +290,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     @Override
-    protected void addFormComponentBehaviour(Behavior behavior) {
+    protected void addFormComponentBehavior(Behavior behavior) {
         fileUploadField.add(behavior);
     }
 

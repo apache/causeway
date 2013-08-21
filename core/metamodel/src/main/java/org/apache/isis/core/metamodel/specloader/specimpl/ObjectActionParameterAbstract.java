@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -59,7 +58,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterContributee.Util;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {

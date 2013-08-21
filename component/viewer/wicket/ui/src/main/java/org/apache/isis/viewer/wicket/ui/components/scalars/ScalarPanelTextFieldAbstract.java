@@ -208,7 +208,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected void addFormComponentBehaviour(Behavior behavior) {
+    protected void addFormComponentBehavior(Behavior behavior) {
         textField.add(behavior);
     }
 

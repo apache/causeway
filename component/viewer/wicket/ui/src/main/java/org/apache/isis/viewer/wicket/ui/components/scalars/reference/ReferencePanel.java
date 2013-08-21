@@ -172,10 +172,17 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         return labelIfCompact;
     }
-    
+
+    // //////////////////////////////////////
+
     @Override
-    protected void addFormComponentBehaviour(Behavior behavior) {
-        entityLink.add(behavior);
+    protected void addFormComponentBehavior(Behavior behavior) {
+        entityLink.addFormComponentBehavior(behavior);
+    }
+
+    @Override
+    public void updateChoices(ObjectAdapter[] argsIfAvailable) {
+        entityLink.updateChoices(argsIfAvailable);
     }
 
 }

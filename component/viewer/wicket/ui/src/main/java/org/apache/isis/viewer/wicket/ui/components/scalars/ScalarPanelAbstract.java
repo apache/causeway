@@ -177,7 +177,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         addCssForMetaModel();
         
         if(!subscribers.isEmpty()) {
-            addFormComponentBehaviour(new AjaxFormComponentUpdatingBehavior("onchange"){
+            addFormComponentBehavior(new AjaxFormComponentUpdatingBehavior("onchange"){
 
                 private static final long serialVersionUID = 1L;
 
@@ -195,7 +195,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     /**
      * Mandatory hook.
      */
-    protected abstract void addFormComponentBehaviour(Behavior behavior);
+    protected abstract void addFormComponentBehavior(Behavior behavior);
 
     private void addCssForMetaModel() {
         final String cssForMetaModel = getModel().getLongName();

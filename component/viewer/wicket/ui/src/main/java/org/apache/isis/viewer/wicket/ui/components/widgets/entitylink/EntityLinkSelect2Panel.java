@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.vaynberg.wicket.select2.Settings;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.link.Link;
@@ -72,9 +74,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
 
     private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
-    private static final String ID_FEEDBACK = "feedback";
     
-    private Select2Choice<ObjectAdapterMemento> autoCompleteField;
+    private Select2Choice<ObjectAdapterMemento> select2Field;
     private Link<String> entityDetailsLink;
     private Link<String> entityClearLink;
 
@@ -120,8 +121,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             entityDetailsLink.setVisible(getEntityModel().getRenderingHint() == RenderingHint.REGULAR);
         }
         
-        if(autoCompleteField != null) {
-            autoCompleteField.setEnabled(mutability);
+        if(select2Field != null) {
+            select2Field.setEnabled(mutability);
         }
         
         if(isEditableWithEitherAutoCompleteOrChoices()) {
@@ -130,8 +131,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     }
 
     protected void doSyncVisibilityAndUsability(boolean mutability) {
-        if(autoCompleteField != null) {
-            autoCompleteField.setEnabled(mutability);
+        if(select2Field != null) {
+            select2Field.setEnabled(mutability);
         }
 
         if(isEditableWithEitherAutoCompleteOrChoices()) {
@@ -148,7 +149,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     @Override
     public String getInput() {
         final ObjectAdapter pendingElseCurrentAdapter = getEntityModel().getPendingElseCurrentAdapter();
-        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(): "(no object)";
+        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
     }
 
     @Override
@@ -156,7 +157,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
         if(getEntityModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
             // flush changes to pending
-            onSelected(autoCompleteField.getConvertedInput());
+            onSelected(select2Field.getConvertedInput());
         }
 
         final ObjectAdapter pendingAdapter = getEntityModel().getPendingAdapter();
@@ -192,14 +193,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             return;
         }
         
-        final ChoiceProvider<ObjectAdapterMemento> provider;
-        if (hasChoices()) {
-            provider = providerForChoices(getEntityModel());
-        } else if(hasParamOrPropertyAutoComplete()) {
-            provider = providerForParamOrPropertyAutoComplete(getEntityModel());
-        } else {
-            provider = providerForObjectAutoComplete(getEntityModel());
-        }
 
         final ModelAbstract<ObjectAdapterMemento> model = new ModelAbstract<ObjectAdapterMemento>(){
             private static final long serialVersionUID = 1L;
@@ -210,12 +203,15 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             }
             
         };
-        autoCompleteField = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model, provider);
-        final Settings settings = autoCompleteField.getSettings();
+
+        select2Field = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model);
+        setChoices(null);
+        
+        final Settings settings = select2Field.getSettings();
         
         ScalarModel scalarModel = (ScalarModel) getEntityModel();
         settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
-        addOrReplace(autoCompleteField);
+        addOrReplace(select2Field);
         
         // no need for link, since can see in drop-down
         permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
@@ -224,6 +220,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         // can represent this fact in the drop-down
         permanentlyHide(ID_ENTITY_TITLE_NULL);
     }
+
 
     abstract static class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
         private static final long serialVersionUID = 1L;
@@ -261,10 +258,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         }
     }
 
-    /**
-     * @param entityModel - serializable, referenced by the AutoCompletionChoicesProvider below 
-     */
-    private static ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete(final EntityModel entityModel) {
+    private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
+        final EntityModel entityModel = getEntityModel();
         return new ObjectAdapterMementoProviderAbstract() {
 
             private static final long serialVersionUID = 1L;
@@ -280,7 +275,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         };
     }
 
-    private static ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete(final EntityModel entityModel) {
+    private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
+        final EntityModel entityModel = getEntityModel();
         return new ObjectAdapterMementoProviderAbstract() {
             
             private static final long serialVersionUID = 1L;
@@ -303,31 +299,35 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         };
     }
     
-    /**
-     * @param entityModel - serializable, referenced by the AutoCompletionChoicesProvider below 
-     */
-    private static ChoiceProvider<ObjectAdapterMemento> providerForChoices(final EntityModel entityModel) {
+    private ChoiceProvider<ObjectAdapterMemento> providerForChoices(final ObjectAdapter[] argsIfAvailable) {
+        
+        final List<ObjectAdapterMemento> choices = getChoiceMementos(argsIfAvailable);
+        
         return new ObjectAdapterMementoProviderAbstract() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final ScalarModel scalarModel = (ScalarModel) entityModel;
-                final boolean hasChoices = scalarModel.hasChoices();
-                if(!hasChoices) {
-                    return Collections.emptyList();
-                }
-                final List<ObjectAdapter> choices = scalarModel.getChoices(null);
-                if(choices.isEmpty()) {
-                    return Collections.emptyList();
-                }
-                // take a copy otherwise is only lazily evaluated
-                return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+            protected List<ObjectAdapterMemento> obtainMementos(String unused) {
+                return choices;
             }
         };
     }
 
+    private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
+        
+        final ScalarModel scalarModel = (ScalarModel) getEntityModel();;
+        final boolean hasChoices = scalarModel.hasChoices();
+        if(!hasChoices) {
+            return Collections.emptyList();
+        }
+        final List<ObjectAdapter> choices = scalarModel.getChoices(argsIfAvailable);
+        if(choices.isEmpty()) {
+            return Collections.emptyList();
+        }
+        // take a copy otherwise is only lazily evaluated
+        return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+    }
 
     private void syncLinkWithInput(final ObjectAdapter adapter) {
         if (adapter != null) {
@@ -464,6 +464,28 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
         return autoCompleteFacet != null;
     }
+
+    // //////////////////////////////////////
+
+    public void addFormComponentBehavior(Behavior behavior) {
+        select2Field.add(behavior);
+    }
+
+    public void updateChoices(ObjectAdapter[] argsIfAvailable) {
+        setChoices(argsIfAvailable);
+    }
     
-    
+    private void setChoices(final ObjectAdapter[] argsIfAvailable) {
+        
+        final ChoiceProvider<ObjectAdapterMemento> provider;
+        if (hasChoices()) {
+            provider = providerForChoices(argsIfAvailable);
+        } else if(hasParamOrPropertyAutoComplete()) {
+            provider = providerForParamOrPropertyAutoComplete();
+        } else {
+            provider = providerForObjectAutoComplete();
+        }
+        select2Field.setProvider(provider);
+    }
+
 }
