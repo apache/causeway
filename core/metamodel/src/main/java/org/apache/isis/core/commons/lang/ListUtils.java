@@ -27,8 +27,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 public final class ListUtils {
     private static final String DEFAULT_DELIMITER = ",";
 
@@ -158,7 +156,7 @@ public final class ListUtils {
         extend(list, insertionPoint);
         list.add(insertionPoint, elementToInsert);
     }
-
+    
     public static <T> void adjust(final List<T> list, final int requiredLength) {
         extend(list, requiredLength);
         if(list.size() > requiredLength) {

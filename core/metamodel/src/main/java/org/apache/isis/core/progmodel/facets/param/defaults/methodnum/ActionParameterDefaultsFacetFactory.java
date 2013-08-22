@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -39,9 +41,11 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
 
     private static final String[] PREFIXES = {};
+
+    private AdapterManager adapterManager;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -64,7 +68,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
         attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(processMethodContext, holderList);
     }
 
-    private static void attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private void attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -91,7 +95,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder));
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder, getAdapterManager()));
         }
     }
 
@@ -126,5 +130,19 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + n + capitalizedName, returnType, paramTypes);
     }
+
+    // ///////////////////////////////////////////////////////////////
+    // Dependencies
+    // ///////////////////////////////////////////////////////////////
+
+    @Override
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
+    }
+
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
+    }
+
 
 }

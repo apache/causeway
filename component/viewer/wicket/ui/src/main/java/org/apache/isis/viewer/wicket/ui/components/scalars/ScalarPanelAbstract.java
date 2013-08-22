@@ -171,8 +171,12 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * @see #setFormat(Rendering)
      */
     private void buildGui() {
-        componentIfRegular = addComponentForRegular();
+        
+        // REVIEW: this is nasty, both write to the same entityLink field
+        // even though only one is used
         componentIfCompact = addComponentForCompact();
+        componentIfRegular = addComponentForRegular();
+        
         getRendering().buildGui(this);
         addCssForMetaModel();
         

@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.WrapperUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -358,7 +359,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
     protected List<ObjectAdapter> argsForDefaultOrChoices(final ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
-        return null;
+        return argumentsIfAvailable;
     }
 
     
@@ -366,9 +367,20 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     static void checkChoicesOrAutoCompleteType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
-            final ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
-            if (!componentSpec.isOfType(paramSpec)) {
-                throw new DomainModelException("Type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
+
+            // check type, but wrap first 
+            // (eg we treat int.class and java.lang.Integer.class as compatible with each other)
+            final Class<? extends Object> choiceClass = object.getClass();
+            final Class<?> paramClass = paramSpec.getCorrespondingClass();
+            
+            final Class<? extends Object> choiceWrappedClass = WrapperUtils.wrapAsNecessary(choiceClass);
+            final Class<? extends Object> paramWrappedClass = WrapperUtils.wrapAsNecessary(paramClass);
+            
+            final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
+            final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);
+            
+            if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
+                throw new DomainModelException("Type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + choiceClass.getName());
             }
         }
     }

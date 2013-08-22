@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.commons.lang;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,24 +31,18 @@ public final class MapUtils {
     /**
      * Converts a list of objects [a, 1, b, 2] into a map {a -> 1; b -> 2}
      */
-    public static Map<String, String> asMap(final String... paramArgs) {
-        final HashMap<String, String> map = new HashMap<String, String>();
-        boolean param = true;
-        String paramStr = null;
-        for (final String paramArg : paramArgs) {
-            if (param) {
-                paramStr = paramArg;
-            } else {
-                final String arg = paramArg;
-                map.put(paramStr, arg);
-                paramStr = null;
-            }
-            param = !param;
-        }
-        if (paramStr != null) {
-            throw new IllegalArgumentException("Must have equal number of parameters and arguments");
-        }
-        return map;
-    }
+    @SuppressWarnings("unchecked")
+    public static <K,V> Map<K,V> asMap(Object... keyValPair){
+        Map<K,V> map = new HashMap<K,V>();
 
+        if(keyValPair.length % 2 != 0){
+            throw new IllegalArgumentException("Keys and values must be pairs.");
+        }
+
+        for(int i = 0; i < keyValPair.length; i += 2){
+            map.put((K) keyValPair[i], (V) keyValPair[i+1]);
+        }
+
+        return Collections.unmodifiableMap(map);
+    }
 }

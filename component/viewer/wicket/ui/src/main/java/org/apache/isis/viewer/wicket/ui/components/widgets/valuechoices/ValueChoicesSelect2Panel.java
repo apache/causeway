@@ -19,6 +19,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -38,11 +39,14 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -88,22 +92,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         addAdditionalLinksTo(labelIfRegular);
         
         return labelIfRegular;
-    }
-
-
-    protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
-        final IModel<List<ObjectAdapterMemento>> choicesModel = newModel(choicesMementos);
-        return newChoiceProvider(choicesModel);
-    }
-
-    private IModel<List<ObjectAdapterMemento>> newModel(final List<ObjectAdapterMemento> choicesMementos) {
-        return new ModelAbstract<List<ObjectAdapterMemento>>(choicesMementos){
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected List<ObjectAdapterMemento> load() {
-                return getObject();
-            }};
     }
 
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
@@ -191,33 +179,16 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         return scalarModel.getObject();
     }
 
-    protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final IModel<List<ObjectAdapterMemento>> choicesMementos) {
-        ChoiceProvider<ObjectAdapterMemento> provider = new TextChoiceProvider<ObjectAdapterMemento>() {
+    
+    protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
+        ChoiceProvider<ObjectAdapterMemento> provider = new ObjectAdapterMementoProviderAbstract() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected String getDisplayText(ObjectAdapterMemento choice) {
-                
-                final ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                return objectAdapter.titleString(null);
-            }
-
-            @Override
-            protected Object getId(ObjectAdapterMemento choice) {
-                final ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                return objectAdapter.getObject().toString(); // toString of each value acts as its the key
-            }
-
-            @Override
-            public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapterMemento> response) {
-                response.addAll(choicesMementos.getObject());
-            }
-
-            @Override
             public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-                final List<ObjectAdapterMemento> mementos = choicesMementos.getObject();
-                Predicate<ObjectAdapterMemento> predicate = new Predicate<ObjectAdapterMemento>() {
+                final List<ObjectAdapterMemento> mementos = obtainMementos(null);
+                final Predicate<ObjectAdapterMemento> predicate = new Predicate<ObjectAdapterMemento>() {
 
                     @Override
                     public boolean apply(ObjectAdapterMemento input) {
@@ -226,6 +197,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
                     }
                 };
                 return Collections2.filter(mementos, predicate); 
+            }
+
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                return choicesMementos;
             }
 
         };
@@ -263,8 +239,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
     private void setChoices(ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
         
-        select2Field.setProvider(newChoiceProvider(choicesMementos));
-        getModel().setPending(null);
+        final ChoiceProvider<ObjectAdapterMemento> provider = newChoiceProvider(choicesMementos);
+        select2Field.setProvider(provider);
+        getModel().clearPending();
         final ObjectAdapterMemento objectAdapterMemento = getModel().getObjectAdapterMemento();
         if(!choicesMementos.contains(objectAdapterMemento)) {
             final ObjectAdapterMemento newAdapterMemento = 

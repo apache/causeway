@@ -20,7 +20,6 @@
 package org.apache.isis.core.commons.lang;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,19 +27,31 @@ public final class WrapperUtils {
 
     private WrapperUtils() {
     }
+    
+    private static final Map<Class<?>, Object> defaultByPrimitiveClass = 
+        MapUtils.asMap(
+            boolean.class, false,
+            byte.class, (byte)0,
+            short.class, (short)0,
+            int.class, 0,
+            long.class, 0L,
+            float.class, 0.0f,
+            double.class, 0.0,
+            char.class, (char)0
+        );
 
-    private static Map<Class<?>, Class<?>> wrapperClasses = new HashMap<Class<?>, Class<?>>();
 
-    static {
-        wrapperClasses.put(boolean.class, Boolean.class);
-        wrapperClasses.put(byte.class, Byte.class);
-        wrapperClasses.put(char.class, Character.class);
-        wrapperClasses.put(short.class, Short.class);
-        wrapperClasses.put(int.class, Integer.class);
-        wrapperClasses.put(long.class, Long.class);
-        wrapperClasses.put(float.class, Float.class);
-        wrapperClasses.put(double.class, Double.class);
-    }
+    private static Map<Class<?>, Class<?>> wrapperClasses = 
+        MapUtils.asMap(
+            boolean.class, Boolean.class,
+            byte.class, Byte.class,
+            char.class, Character.class,
+            short.class, Short.class,
+            int.class, Integer.class,
+            long.class, Long.class,
+            float.class, Float.class,
+            double.class, Double.class
+        );
 
     public static Class<?> wrap(final Class<?> primitiveClass) {
         return wrapperClasses.get(primitiveClass);
@@ -49,13 +60,20 @@ public final class WrapperUtils {
     public static Class<?>[] wrapAsNecessary(final Class<?>[] classes) {
         final List<Class<?>> wrappedClasses = new ArrayList<Class<?>>();
         for (final Class<?> cls : classes) {
-            if (cls.isPrimitive()) {
-                wrappedClasses.add(wrap(cls));
-            } else {
-                wrappedClasses.add(cls);
-            }
+            wrappedClasses.add(wrapAsNecessary(cls));
         }
         return wrappedClasses.toArray(new Class[] {});
+    }
+
+    public static Class<? extends Object> wrapAsNecessary(final Class<?> cls) {
+        return cls.isPrimitive() ? wrap(cls) : cls;
+    }
+
+    public static Object defaultFor(final Class<?> cls) {
+        if(!cls.isPrimitive()) {
+            return null;
+        }
+        return WrapperUtils.defaultByPrimitiveClass.get(cls);
     }
 
 }

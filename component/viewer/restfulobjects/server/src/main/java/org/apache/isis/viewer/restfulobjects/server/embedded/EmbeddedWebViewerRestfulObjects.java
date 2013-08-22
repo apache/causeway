@@ -43,7 +43,7 @@ final class EmbeddedWebViewerRestfulObjects extends EmbeddedWebViewer {
         webAppSpec.addContextParams(RestfulObjectsViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulObjectsApplication.class.getName());
 
         webAppSpec.addFilterSpecification(IsisSessionFilter.class, 
-                MapUtils.asMap(
+                MapUtils.<String,String>asMap(
                         IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY, AuthenticationSessionStrategyTrusted.class.getName(),
                         IsisSessionFilter.WHEN_NO_SESSION_KEY, IsisSessionFilter.WhenNoSession.CONTINUE.name().toLowerCase()), 
                 RestfulObjectsViewerInstaller.EVERYTHING);

@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -304,7 +305,24 @@ public class ObjectAdapterMemento implements Serializable {
         return objectSpecId;
     }
 
-    
+
+    /**
+     * Analogous to {@link List#contains(Object)}, but does not perform
+     * {@link ConcurrencyChecking concurrency checking} of the OID.
+     */
+    public boolean containedIn(List<ObjectAdapterMemento> list) {
+        // REVIEW: heavy handed, ought to be possible to just compare the OIDs
+        // ignoring the concurrency checking
+        final ObjectAdapter currAdapter = getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+        for (ObjectAdapterMemento each : list) {
+            final ObjectAdapter otherAdapter = each.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            if(currAdapter == otherAdapter) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public int hashCode() {
         return type.hashCode(this);
@@ -314,6 +332,7 @@ public class ObjectAdapterMemento implements Serializable {
     public boolean equals(Object obj) {
         return (obj instanceof ObjectAdapterMemento) && type.equals(this, (ObjectAdapterMemento)obj);
     }
+
 
     @Override
     public String toString() {
@@ -336,6 +355,7 @@ public class ObjectAdapterMemento implements Serializable {
 	public static OidMarshaller getOidMarshaller() {
 		return IsisContext.getOidMarshaller();
 	}
+
 
 
 

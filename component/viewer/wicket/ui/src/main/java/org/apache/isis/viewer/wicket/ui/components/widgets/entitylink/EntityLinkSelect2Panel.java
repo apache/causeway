@@ -20,17 +20,13 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
 import com.vaynberg.wicket.select2.Settings;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -40,8 +36,6 @@ import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -58,6 +52,7 @@ import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
+import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
@@ -204,14 +199,19 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             
         };
 
-        select2Field = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model);
-        setChoices(null);
+        if(select2Field == null) {
+            select2Field = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model);
+            setChoices(null);
+            if(!hasChoices()) {
+                final Settings settings = select2Field.getSettings();
+                ScalarModel scalarModel = (ScalarModel) getEntityModel();
+                final int minLength = scalarModel.getAutoCompleteMinLength();
+                settings.setMinimumInputLength(minLength);
+            }
+            addOrReplace(select2Field);
+        }
         
-        final Settings settings = select2Field.getSettings();
         
-        ScalarModel scalarModel = (ScalarModel) getEntityModel();
-        settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
-        addOrReplace(select2Field);
         
         // no need for link, since can see in drop-down
         permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
@@ -221,42 +221,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         permanentlyHide(ID_ENTITY_TITLE_NULL);
     }
 
-
-    abstract static class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        protected String getDisplayText(ObjectAdapterMemento choice) {
-            return choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString(null);
-        }
-
-        @Override
-        protected Object getId(ObjectAdapterMemento choice) {
-            return choice.toString();
-        }
-
-        @Override
-        public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapterMemento> response) {
-            
-            List<ObjectAdapterMemento> mementos = obtainMementos(term);
-            response.addAll(mementos);
-        }
-
-        protected abstract List<ObjectAdapterMemento> obtainMementos(String term);
-
-        @Override
-        public Collection<ObjectAdapterMemento> toChoices(Collection<String> ids) {
-            Function<String, ObjectAdapterMemento> function = new Function<String, ObjectAdapterMemento>() {
-
-                @Override
-                public ObjectAdapterMemento apply(String input) {
-                    final RootOid oid = RootOidDefault.deString(input, ObjectAdapterMemento.getOidMarshaller());
-                    return ObjectAdapterMemento.createPersistent(oid);
-                }
-            };
-            return Collections2.transform(ids, function);
-        }
-    }
 
     private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
         final EntityModel entityModel = getEntityModel();
@@ -299,21 +263,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         };
     }
     
-    private ChoiceProvider<ObjectAdapterMemento> providerForChoices(final ObjectAdapter[] argsIfAvailable) {
-        
-        final List<ObjectAdapterMemento> choices = getChoiceMementos(argsIfAvailable);
-        
-        return new ObjectAdapterMementoProviderAbstract() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String unused) {
-                return choices;
-            }
-        };
-    }
-
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
         
         final ScalarModel scalarModel = (ScalarModel) getEntityModel();;
@@ -479,13 +428,38 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         
         final ChoiceProvider<ObjectAdapterMemento> provider;
         if (hasChoices()) {
-            provider = providerForChoices(argsIfAvailable);
+            final List<ObjectAdapterMemento> choiceMementos = getChoiceMementos(argsIfAvailable);
+            provider = new ObjectAdapterMementoProviderAbstract() {
+                private static final long serialVersionUID = 1L;
+                @Override
+                protected List<ObjectAdapterMemento> obtainMementos(String unused) {
+                    return choiceMementos;
+                }
+            };
+            select2Field.setProvider(provider);
+            getEntityModel().clearPending();
+            final ObjectAdapterMemento curr = select2Field.getModelObject();
+            final ObjectAdapterMemento curr2 = getEntityModel().getObjectAdapterMemento();
+            if(curr == null || !curr.containedIn(choiceMementos)) {
+                final ObjectAdapterMemento newAdapterMemento = 
+                        !choiceMementos.isEmpty() 
+                        ? choiceMementos.get(0) 
+                                : null;
+                        select2Field.getModel().setObject(newAdapterMemento);
+                        getModel().setObject(
+                                newAdapterMemento != null? newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null);
+            } else {
+                //select2Field.getModel().setObject(curr);
+            }
         } else if(hasParamOrPropertyAutoComplete()) {
             provider = providerForParamOrPropertyAutoComplete();
+            select2Field.setProvider(provider);
+            getEntityModel().setPending(null);
         } else {
             provider = providerForObjectAutoComplete();
+            select2Field.setProvider(provider);
+            getEntityModel().setPending(null);
         }
-        select2Field.setProvider(provider);
     }
 
 }

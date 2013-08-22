@@ -25,7 +25,9 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.WrapperUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 
 public final class AdapterInvokeUtils {
 
@@ -62,20 +64,32 @@ public final class AdapterInvokeUtils {
      * <li>if the method does not declare all parameters for arguments, then truncates arguments.
      * </ul>
      */
-    public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
+    public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable, final AdapterManager adapterManager) {
         final List<ObjectAdapter> args = Lists.newArrayList();
         if(argumentsIfAvailable != null) {
             args.addAll(argumentsIfAvailable);
         }
         
-        final int requiredLength = method.getParameterTypes().length;
-        ListUtils.adjust(args, requiredLength);
+        adjust(method, args, adapterManager);
 
         final ObjectAdapter[] argArray = args.toArray(new ObjectAdapter[]{});
-        
         return AdapterInvokeUtils.invoke(method, target, argArray);
     }
-    
+
+    private static void adjust(final Method method, final List<ObjectAdapter> args, final AdapterManager adapterManager) {
+        final Class<?>[] parameterTypes = method.getParameterTypes();
+        ListUtils.adjust(args, parameterTypes.length);
+        
+        for(int i=0; i<parameterTypes.length; i++) {
+            final Class<?> cls = parameterTypes[i];
+            if(args.get(i) == null && cls.isPrimitive()) {
+                final Object object = WrapperUtils.defaultFor(cls);
+                final ObjectAdapter adapter = adapterManager.adapterFor(object);
+                args.set(i, adapter);
+            }
+        }
+    }
+
     /**
      * Invokes the method, adjusting arguments as required.
      * 

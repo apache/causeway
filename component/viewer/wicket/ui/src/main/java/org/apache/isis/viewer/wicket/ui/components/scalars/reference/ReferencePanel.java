@@ -47,7 +47,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_NAME = "scalarName";
-    private static final String ID_FEEDBACK = "feedback";
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -87,6 +86,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         entityLink = (EntityLinkSelect2Panel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
         
+        setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
         

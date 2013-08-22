@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -32,10 +33,12 @@ import org.apache.isis.core.progmodel.facets.param.defaults.ActionParameterDefau
 public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaultsFacetAbstract implements ImperativeFacet {
 
     private final Method method;
+    private final AdapterManager adapterManager;
 
-    public ActionParameterDefaultsFacetViaMethod(final Method method, final FacetHolder holder) {
+    public ActionParameterDefaultsFacetViaMethod(final Method method, final FacetHolder holder, final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
+        this.adapterManager = adapterManager;
     }
 
     /**
@@ -59,7 +62,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     @Override
     public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
-        return AdapterInvokeUtils.invokeAutofit(method, target, argumentsIfAvailable);
+        return AdapterInvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
     }
 
 
@@ -67,6 +70,14 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     @Override
     protected String toStringValues() {
         return "method=" + method;
+    }
+
+    // /////////////////////////////////////////////////////////
+    // Dependencies
+    // /////////////////////////////////////////////////////////
+
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
 }
