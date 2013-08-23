@@ -33,6 +33,6 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
  */
 public interface PageClassList {
 
-    void registerPages(PageRegistrySpi pageRegistry);
+    void registerPages(PageClassRegistrySpi pageRegistry);
 
 }

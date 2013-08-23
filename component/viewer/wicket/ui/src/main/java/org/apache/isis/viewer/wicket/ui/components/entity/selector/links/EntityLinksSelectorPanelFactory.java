@@ -26,7 +26,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorPanelFactory;
 
 /**
  * {@link ComponentFactory} for {@link EntityLinksSelectorPanel}.

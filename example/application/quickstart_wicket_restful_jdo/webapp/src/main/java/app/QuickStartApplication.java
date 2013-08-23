@@ -39,8 +39,10 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebRequest;
 
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 
 
 /**
@@ -64,32 +66,47 @@ public class QuickStartApplication extends IsisWicketApplication {
 
     private static final long serialVersionUID = 1L;
 
-//
-// uncomment for a (slightly hacky) way of allowing logins using ?user=sven&pass=pass
-//
-// for demos only, obvious
+    /**
+     * uncomment for a (slightly hacky) way of allowing logins using query args, eg:
+     * 
+     * <tt>?user=sven&pass=pass</tt>
+     * 
+     * <p>
+     * for demos only, obvious.
+     */
+    private final static boolean DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS = false;
     
-//    @Override
-//    public Session newSession(final Request request, final Response response) {
-//        AuthenticatedWebSessionForIsis s = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
-//        final org.apache.wicket.util.string.StringValue user = request.getRequestParameters().getParameterValue("user");
-//        final org.apache.wicket.util.string.StringValue password = request.getRequestParameters().getParameterValue("pass");
-//        s.signIn(user.toString(), password.toString());
-//        return s;
-//    }
-//
-//    @Override
-//    public WebRequest newWebRequest(HttpServletRequest servletRequest, String filterPath) {
-//        try {
-//            String uname = servletRequest.getParameter("user");
-//            if (uname != null) {
-//                servletRequest.getSession().invalidate();
-//            }
-//        } catch (Exception e) {
-//        }
-//        WebRequest request = super.newWebRequest(servletRequest, filterPath);
-//        return request;
-//    }
+    @Override
+    public Session newSession(final Request request, final Response response) {
+        if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {
+            return super.newSession(request, response);
+        } 
+        
+        // else demo mode
+        final AuthenticatedWebSessionForIsis s = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
+        final org.apache.wicket.util.string.StringValue user = request.getRequestParameters().getParameterValue("user");
+        final org.apache.wicket.util.string.StringValue password = request.getRequestParameters().getParameterValue("pass");
+        s.signIn(user.toString(), password.toString());
+        return s;
+    }
+
+    @Override
+    public WebRequest newWebRequest(HttpServletRequest servletRequest, String filterPath) {
+        if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {
+            return super.newWebRequest(servletRequest, filterPath);
+        } 
+
+        // else demo mode
+        try {
+            String uname = servletRequest.getParameter("user");
+            if (uname != null) {
+                servletRequest.getSession().invalidate();
+            }
+        } catch (Exception e) {
+        }
+        WebRequest request = super.newWebRequest(servletRequest, filterPath);
+        return request;
+    }
     
     @Override
     protected Module newIsisWicketModule() {
@@ -99,6 +116,7 @@ public class QuickStartApplication extends IsisWicketApplication {
             @Override
             protected void configure() {
                 bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForQuickStart.class);
+                bind(PageClassList.class).to(PageClassListForQuickstart.class);
                 
                 bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Quick Start App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");

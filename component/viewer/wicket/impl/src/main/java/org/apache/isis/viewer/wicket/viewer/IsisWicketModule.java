@@ -46,7 +46,8 @@ import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault
  *     @Override
  *     protected void configure() {
  *         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForMyApp.class);
- *              
+ *         bind(PageClassList.class).to(PageClassListForMyApp.class);
+ *         ...  
  *         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("My App");
  *         bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("application.css");
  *         bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("application.js");

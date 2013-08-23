@@ -91,28 +91,27 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
 
         final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
+        
         final AbstractLink link = newLink(ID_ENTITY_LINK, pageClass, pageParameters);
         
-        String title = determineTitle();
-        label = new Label(ID_ENTITY_TITLE, title);
-        link.add(label);
-
-        final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
-        image = new Image(ID_ENTITY_ICON, imageResource) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected boolean shouldAddAntiCacheParameter() {
-                return false;
-            }
-        };
-        link.addOrReplace(image);
+        link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE));
+        link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapter));
         
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
         entityLinkWrapper.addOrReplace(link);
         return entityLinkWrapper;
     }
 
-    private String determineTitle() {
+    protected AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
+        return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
+    }
+
+    protected Label newLabel(final String id) {
+        final String title = determineTitle();
+        return new Label(id, title);
+    }
+
+    protected String determineTitle() {
         EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
          if (adapter != null) {
@@ -129,6 +128,20 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         }
     }
 
+    protected Image newImage(final String id, final ObjectAdapter adapter) {
+        Image image;
+        final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
+         
+        image = new Image(id, imageResource) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected boolean shouldAddAntiCacheParameter() {
+                return false;
+            }
+        };
+        return image;
+    }
+
     public ObjectAdapter getContextAdapterIfAny() {
         EntityModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
@@ -141,11 +154,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
             return str;
         }
         return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
-    }
-
-
-    private AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
-        return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }
 
     
@@ -165,7 +173,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
 
     @Inject
     private ImageResourceCache imageCache;
-
     protected ImageResourceCache getImageCache() {
         return imageCache;
     }

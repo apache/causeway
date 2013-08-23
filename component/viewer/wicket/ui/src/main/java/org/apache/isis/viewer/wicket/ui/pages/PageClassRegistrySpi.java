@@ -16,6 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.collectionContentsDropDownSelectorPanel select {
-	margin-bottom: 1em;
+
+package org.apache.isis.viewer.wicket.ui.pages;
+
+import org.apache.wicket.Page;
+
+import org.apache.isis.viewer.wicket.model.models.PageType;
+
+/**
+ * Used by {@link PageClassList} implementations to add pages into the registry.
+ */
+public interface PageClassRegistrySpi {
+
+    public void registerPage(PageType pageType, Class<? extends Page> pageClass);
+
 }

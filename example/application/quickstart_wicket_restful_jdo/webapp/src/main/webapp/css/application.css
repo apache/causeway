@@ -30,3 +30,22 @@ uncomment to add a logo (in an ../images directory relative to this file)
 	display: none;
 }
 */
+
+/*
+example: uncomment to hide the icon
+
+.entityIconAndTitlePanel a img {
+	display: none;
+}
+*/
+
+/*
+example: uncomment to hide the sliding bookmark panel
+
+#bookmarkedPagesSlidingDiv {
+	display: none;
+}
+.showPanelTab {
+	display: none;
+}
+*/

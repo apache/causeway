@@ -30,14 +30,14 @@ import org.apache.wicket.Page;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 
 /**
  * Default implementation of {@link PageClassRegistry}; just delegates to an
  * underlying {@link PageClassList}.
  */
 @Singleton
-public class PageClassRegistryDefault implements PageClassRegistry, PageRegistrySpi {
+public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
 
     private final Map<PageType, Class<? extends Page>> pagesByType = Maps.newHashMap();
 

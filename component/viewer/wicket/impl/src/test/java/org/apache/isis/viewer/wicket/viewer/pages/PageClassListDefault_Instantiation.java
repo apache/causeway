@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
-import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
@@ -60,7 +60,7 @@ public class PageClassListDefault_Instantiation {
         final PageClassList mockPageClassList = context.mock(PageClassList.class);
         context.checking(new Expectations() {
             {
-                mockPageClassList.registerPages(with(any(PageRegistrySpi.class)));
+                mockPageClassList.registerPages(with(any(PageClassRegistrySpi.class)));
             }
         });
         new PageClassRegistryDefault(mockPageClassList);

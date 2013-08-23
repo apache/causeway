@@ -34,8 +34,6 @@ import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActions
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons.CollectionContentsAsIconsPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsDropDownSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
@@ -45,7 +43,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombine
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.selector.dropdown.EntityDropDownSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisClobPanelFactory;
@@ -115,12 +112,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addLinksSelectorFactories(final ComponentFactoryList componentFactories) {
         componentFactories.add(new EntityLinksSelectorPanelFactory());
         componentFactories.add(new CollectionContentsLinksSelectorPanelFactory());
-    }
-
-    @SuppressWarnings("unused")
-    private void addDropDownSelectorFactories(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityDropDownSelectorPanelFactory());
-        componentFactories.add(new CollectionContentsDropDownSelectorPanelFactory());
     }
 
     protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {
