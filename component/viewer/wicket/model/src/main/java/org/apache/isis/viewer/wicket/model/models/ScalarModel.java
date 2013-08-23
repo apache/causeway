@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -611,6 +610,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
      */
     private List<LinkAndLabel> entityActions = Lists.newArrayList();
 
+    
     public void addEntityActions(List<LinkAndLabel> entityActions) {
         this.entityActions.addAll(entityActions);
     }
@@ -627,6 +627,49 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return kind.getAutoCompleteOrChoicesMinLength(this);
     }
 
+    /**
+     * @return
+     */
+    public ScalarModelWithPending asScalarModelWithPending() {
+        return new ScalarModelWithPending(){
 
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public ObjectAdapterMemento getPending() {
+                return ScalarModel.this.getPending();
+            }
+
+            @Override
+            public void setPending(ObjectAdapterMemento pending) {
+                ScalarModel.this.setPending(pending);
+            }
+
+            @Override
+            public ScalarModel getScalarModel() {
+                return ScalarModel.this;
+            }
+        };
+    }
+
+
+    // //////////////////////////////////////
+
+    /**
+     * transient because only temporary hint.
+     */
+    private transient ObjectAdapter[] actionArgsHint;
+
+    public void setActionArgsHint(ObjectAdapter[] actionArgsHint) {
+        this.actionArgsHint = actionArgsHint;
+    }
+
+    /**
+     * The initial call of choicesXxx() for any given scalar argument needs the current values
+     * of all args (possibly as initialized through a defaultNXxx().
+     */
+    public ObjectAdapter[] getActionArgsHint() {
+        return actionArgsHint;
+    }
 
 }

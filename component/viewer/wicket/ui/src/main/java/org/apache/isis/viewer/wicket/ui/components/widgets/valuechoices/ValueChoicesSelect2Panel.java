@@ -34,8 +34,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -44,16 +42,13 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-/**
- * Initial skeleton - trying to add support for value choices.
- */
-public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
-    private static final Logger LOG = LoggerFactory.getLogger(ValueChoicesSelect2Panel.class);
+public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending {
 
     private static final long serialVersionUID = 1L;
 
@@ -75,7 +70,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
     @Override
     protected FormComponentLabel addComponentForRegular() {
 
-        final IModel<ObjectAdapterMemento> modelObject = createModel();
+        final IModel<ObjectAdapterMemento> modelObject = Util.createModel(this);
         
         select2Field = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
         setChoices(null);
@@ -101,43 +96,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
     }
 
-    private Model<ObjectAdapterMemento> createModel() {
-        return new Model<ObjectAdapterMemento>() {
 
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public ObjectAdapterMemento getObject() {
-                if (pending != null) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("TextField: pending not null: " + pending.toString());
-                    }
-                    return pending;
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("TextField: pending is null");
-                }
-                final ObjectAdapter adapter = ValueChoicesSelect2Panel.this.getModelValue();
-                return ObjectAdapterMemento.createOrNull(adapter);
-            }
-
-            @Override
-            public void setObject(final ObjectAdapterMemento adapterMemento) {
-                if (adapterMemento != null) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("TextField: setting to: " + adapterMemento.toString());
-                    }
-                    pending = adapterMemento;
-                }
-                if (scalarModel != null && pending != null) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("TextField: setting to pending: " + pending.toString());
-                    }
-                    scalarModel.setObject(pending.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
-                }
-            }
-        };
-    }
 
     protected void addStandardSemantics() {
         setRequiredIfSpecified();
@@ -172,11 +131,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
         addOrReplace(labelIfCompact);
         return labelIfCompact;
-    }
-
-    protected ObjectAdapter getModelValue() {
-        pending = scalarModel.getObjectAdapterMemento();
-        return scalarModel.getObject();
     }
 
     
@@ -254,4 +208,17 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract {
         }
     }
 
+    
+    // //////////////////////////////////////
+
+    public ObjectAdapterMemento getPending() {
+        return pending;
+    }
+    public void setPending(ObjectAdapterMemento pending) {
+        this.pending = pending;
+    }
+
+    public ScalarModel getScalarModel() {
+        return scalarModel;
+    }
 }

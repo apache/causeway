@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -46,8 +46,8 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -74,21 +74,20 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private Link<String> entityDetailsLink;
     private Link<String> entityClearLink;
 
-    public EntityLinkSelect2Panel(final String id, final EntityModel entityModel) {
-        super(id, entityModel);
+    public EntityLinkSelect2Panel(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
         setType(ObjectAdapter.class);
         buildGui();
     }
 
-    public EntityModel getEntityModel() {
-        return (EntityModel) getModel();
+    public ScalarModel getScalarModel() {
+        return (ScalarModel) getModel();
     }
 
     /**
      * Builds the parts of the GUI that are not dynamic.
      */
     private void buildGui() {
-        //addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, this));
         syncWithInput();
     }
 
@@ -106,14 +105,14 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
      */
     public void syncVisibilityAndUsability() {
         
-        final boolean mutability = isEnableAllowed() && !getEntityModel().isViewMode();
+        final boolean mutability = isEnableAllowed() && !getScalarModel().isViewMode();
 
         if(entityClearLink != null) {
             entityClearLink.setVisible(mutability);
         }
 
         if(entityDetailsLink != null) {
-            entityDetailsLink.setVisible(getEntityModel().getRenderingHint() == RenderingHint.REGULAR);
+            entityDetailsLink.setVisible(getScalarModel().getRenderingHint() == RenderingHint.REGULAR);
         }
         
         if(select2Field != null) {
@@ -143,19 +142,19 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
      */
     @Override
     public String getInput() {
-        final ObjectAdapter pendingElseCurrentAdapter = getEntityModel().getPendingElseCurrentAdapter();
+        final ObjectAdapter pendingElseCurrentAdapter = getScalarModel().getPendingElseCurrentAdapter();
         return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
     }
 
     @Override
     protected void convertInput() {
 
-        if(getEntityModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
+        if(getScalarModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
             // flush changes to pending
             onSelected(select2Field.getConvertedInput());
         }
 
-        final ObjectAdapter pendingAdapter = getEntityModel().getPendingAdapter();
+        final ObjectAdapter pendingAdapter = getScalarModel().getPendingAdapter();
         setConvertedInput(pendingAdapter);
     }
 
@@ -187,24 +186,16 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             permanentlyHide(ID_AUTO_COMPLETE);
             return;
         }
-        
 
-        final ModelAbstract<ObjectAdapterMemento> model = new ModelAbstract<ObjectAdapterMemento>(){
-            private static final long serialVersionUID = 1L;
-            
-            @Override
-            protected ObjectAdapterMemento load() {
-                return ObjectAdapterMemento.createOrNull(getPendingElseCurrentAdapter());
-            }
-            
-        };
+        
+        final IModel<ObjectAdapterMemento> model = Util.createModel(getScalarModel().asScalarModelWithPending());       
 
         if(select2Field == null) {
             select2Field = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model);
-            setChoices(null);
-            if(!hasChoices()) {
+            setChoices(getScalarModel().getActionArgsHint());
+            if(!getScalarModel().hasChoices()) {
                 final Settings settings = select2Field.getSettings();
-                ScalarModel scalarModel = (ScalarModel) getEntityModel();
+                ScalarModel scalarModel = (ScalarModel) getScalarModel();
                 final int minLength = scalarModel.getAutoCompleteMinLength();
                 settings.setMinimumInputLength(minLength);
             }
@@ -223,7 +214,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
 
     private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
-        final EntityModel entityModel = getEntityModel();
+        final EntityModel entityModel = getScalarModel();
         return new ObjectAdapterMementoProviderAbstract() {
 
             private static final long serialVersionUID = 1L;
@@ -240,7 +231,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     }
 
     private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
-        final EntityModel entityModel = getEntityModel();
+        final EntityModel entityModel = getScalarModel();
         return new ObjectAdapterMementoProviderAbstract() {
             
             private static final long serialVersionUID = 1L;
@@ -265,7 +256,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
         
-        final ScalarModel scalarModel = (ScalarModel) getEntityModel();;
+        final ScalarModel scalarModel = (ScalarModel) getScalarModel();;
         final boolean hasChoices = scalarModel.hasChoices();
         if(!hasChoices) {
             return Collections.emptyList();
@@ -300,6 +291,12 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             permanentlyHide(ID_ENTITY_CLEAR_LINK);
             return;
         } 
+        
+        if(getScalarModel().isRequired()) {
+            permanentlyHide(ID_ENTITY_CLEAR_LINK);
+            return;
+        }
+        
         entityClearLink = new Link<String>(ID_ENTITY_CLEAR_LINK) {
             private static final long serialVersionUID = 1L;
 
@@ -314,8 +311,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private void addOrReplaceIconAndTitle(ObjectAdapter pendingOrCurrentAdapter) {
         final EntityModel entityModelForLink = new EntityModel(pendingOrCurrentAdapter);
-        entityModelForLink.setContextAdapterIfAny(getEntityModel().getContextAdapterIfAny());
-        entityModelForLink.setRenderingHint(getEntityModel().getRenderingHint());
+        entityModelForLink.setContextAdapterIfAny(getScalarModel().getContextAdapterIfAny());
+        entityModelForLink.setRenderingHint(getScalarModel().getRenderingHint());
         final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
         final Component component = componentFactory.createComponent(entityModelForLink);
         addOrReplace(component);
@@ -342,7 +339,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     }
 
     public void onSelected(final ObjectAdapterMemento selectedAdapterMemento) {
-        getEntityModel().setPending(selectedAdapterMemento);
+        getScalarModel().setPending(selectedAdapterMemento);
         renderSamePage();
     }
 
@@ -352,11 +349,11 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     @Override
     public void onCancel() {
-        getEntityModel().clearPending();
+        getScalarModel().clearPending();
     }
 
     private ObjectAdapter getPendingElseCurrentAdapter() {
-        return getEntityModel().getPendingElseCurrentAdapter();
+        return getScalarModel().getPendingElseCurrentAdapter();
     }
 
     private void renderSamePage() {
@@ -365,50 +362,30 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     
     private boolean isEditableWithEitherAutoCompleteOrChoices() {
         // never doesn't apply in compact rendering contexts (ie tables)
-        if(getEntityModel().getRenderingHint().isInTable()) {
+        if(getScalarModel().getRenderingHint().isInTable()) {
             return false;
         }
         // doesn't apply if not editable, either
-        if(getEntityModel().isViewMode()) {
+        if(getScalarModel().isViewMode()) {
             return false;
         }
-        return hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
-    }
-
-    private boolean hasChoices() {
-        final EntityModel entityModel = getEntityModel();
-        if (!(entityModel instanceof ScalarModel)) {
-            return false;
-        } 
-        final ScalarModel scalarModel = (ScalarModel) entityModel;
-        return scalarModel.hasChoices();
+        return getScalarModel().hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
     }
 
     private boolean hasParamOrPropertyAutoComplete() {
-        final EntityModel entityModel = getEntityModel();
-        if (!(entityModel instanceof ScalarModel)) {
-            return false;
-        } 
-        final ScalarModel scalarModel = (ScalarModel) entityModel;
-        return scalarModel.hasAutoComplete();
+        return getScalarModel().hasAutoComplete();
     }
 
     private boolean hasObjectAutoComplete() {
 
         // on property/param
-        final EntityModel entityModel = getEntityModel();
-        if (!(entityModel instanceof ScalarModel)) {
-            return false;
-        } 
-        final ScalarModel scalarModel = (ScalarModel) entityModel;
-        boolean hasAutoComplete = scalarModel.hasAutoComplete();
+        boolean hasAutoComplete = getScalarModel().hasAutoComplete();
         if(hasAutoComplete) {
             return true;
         }
-
         
         // else on underlying type
-        final ObjectSpecification typeOfSpecification = getEntityModel().getTypeOfSpecification();
+        final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
         final AutoCompleteFacet autoCompleteFacet = 
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
         return autoCompleteFacet != null;
@@ -427,7 +404,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private void setChoices(final ObjectAdapter[] argsIfAvailable) {
         
         final ChoiceProvider<ObjectAdapterMemento> provider;
-        if (hasChoices()) {
+        if (getScalarModel().hasChoices()) {
             final List<ObjectAdapterMemento> choiceMementos = getChoiceMementos(argsIfAvailable);
             provider = new ObjectAdapterMementoProviderAbstract() {
                 private static final long serialVersionUID = 1L;
@@ -436,10 +413,9 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                     return choiceMementos;
                 }
             };
-            select2Field.setProvider(provider);
-            getEntityModel().clearPending();
             final ObjectAdapterMemento curr = select2Field.getModelObject();
-            final ObjectAdapterMemento curr2 = getEntityModel().getObjectAdapterMemento();
+            select2Field.setProvider(provider);
+            getScalarModel().clearPending();
             if(curr == null || !curr.containedIn(choiceMementos)) {
                 final ObjectAdapterMemento newAdapterMemento = 
                         !choiceMementos.isEmpty() 
@@ -448,17 +424,15 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                         select2Field.getModel().setObject(newAdapterMemento);
                         getModel().setObject(
                                 newAdapterMemento != null? newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null);
-            } else {
-                //select2Field.getModel().setObject(curr);
             }
         } else if(hasParamOrPropertyAutoComplete()) {
             provider = providerForParamOrPropertyAutoComplete();
             select2Field.setProvider(provider);
-            getEntityModel().setPending(null);
+            getScalarModel().setPending(null);
         } else {
             provider = providerForObjectAutoComplete();
             select2Field.setProvider(provider);
-            getEntityModel().setPending(null);
+            getScalarModel().setPending(null);
         }
     }
 

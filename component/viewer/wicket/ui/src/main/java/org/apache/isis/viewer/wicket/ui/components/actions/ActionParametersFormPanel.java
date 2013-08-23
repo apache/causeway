@@ -127,6 +127,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 rv.add(container);
 
                 final ScalarModel argumentModel = actionModel.getArgumentModel(apm);
+                argumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
                 final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
                 final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
                 paramPanels.add(paramPanel);

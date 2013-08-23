@@ -482,6 +482,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             return hasPending ? getPendingAdapter() : entityModel.getObject();
         }
 
+        public ObjectAdapterMemento getPending() {
+            return pending;
+        }
+        
         public void setPending(ObjectAdapterMemento selectedAdapterMemento) {
             this.pending = selectedAdapterMemento;
             hasPending=true;
@@ -497,6 +501,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public ObjectAdapter getPendingAdapter() {
         return pendingModel.getPendingAdapter();
+    }
+    
+    public ObjectAdapterMemento getPending() {
+        return pendingModel.getPending();
     }
 
     public void setPending(ObjectAdapterMemento selectedAdapterMemento) {
