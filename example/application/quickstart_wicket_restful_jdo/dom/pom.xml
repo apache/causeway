@@ -43,6 +43,13 @@
                         <artifactId>datanucleus-core</artifactId>
                         <version>${datanucleus-core.version}</version>
                     </dependency>
+                    <dependency>
+                        <!-- Force the enhancer to use the "jdo-api" released "3.0.1" version instead 
+                                of the "3.0.1-SNAPSHOT" version -->
+                        <groupId>javax.jdo</groupId>
+                        <artifactId>jdo-api</artifactId>
+                        <version>3.0.1</version>
+                    </dependency>
                 </dependencies>
                 <configuration>
                 	<fork>false</fork>

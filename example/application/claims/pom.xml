@@ -33,6 +33,7 @@
         <isis-viewer-dnd.version>1.0.0-SNAPSHOT</isis-viewer-dnd.version>
         <isis-viewer-wicket.version>1.3.0-SNAPSHOT</isis-viewer-wicket.version>
         <isis-viewer-scimpi.version>1.0.0-SNAPSHOT</isis-viewer-scimpi.version>
+        <datanucleus-core.version>3.2.4</datanucleus-core.version>
     </properties>
 
 	<build>
