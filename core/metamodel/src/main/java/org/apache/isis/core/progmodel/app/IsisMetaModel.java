@@ -37,8 +37,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
-import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -82,7 +80,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private CollectionTypeRegistry collectionTypeRegistry;
     private ProgrammingModel programmingModel;
     private SpecificationTraverser specificationTraverser;
-    private MemberLayoutArranger memberLayoutArranger;
     private Set<FacetDecorator> facetDecorators;
     private MetaModelValidator metaModelValidator;
 
@@ -142,7 +139,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         setClassSubstitutor(new ClassSubstitutorAbstract() {});
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
         setSpecificationTraverser(new SpecificationTraverserDefault());
-        setMemberLayoutArranger(new MemberLayoutArrangerUsingMemberOrderFacet());
         setFacetDecorators(new TreeSet<FacetDecorator>());
         setProgrammingModelFacets(programmingModel);
 
@@ -173,7 +169,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     @Override
     public void init() {
         ensureNotInitialized();
-        reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+        reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
 
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
@@ -315,13 +311,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
      */
     public void setSpecificationTraverser(final SpecificationTraverser specificationTraverser) {
         this.specificationTraverser = specificationTraverser;
-    }
-
-    /**
-     * Optionally specify the {@link MemberLayoutArranger}.
-     */
-    public void setMemberLayoutArranger(final MemberLayoutArranger memberLayoutArranger) {
-        this.memberLayoutArranger = memberLayoutArranger;
     }
 
     /**

@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -76,7 +75,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         });
 
         runtimeContext = new RuntimeContextNoRuntime();
-        final ObjectReflectorDefault reflector = new ObjectReflectorDefault(mockConfiguration, new ClassSubstitutorAbstract() {}, new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new MemberLayoutArrangerUsingMemberOrderFacet(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
+        final ObjectReflectorDefault reflector = new ObjectReflectorDefault(mockConfiguration, new ClassSubstitutorAbstract() {}, new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorDefault());
         reflector.setRuntimeContext(runtimeContext);
         reflector.init();

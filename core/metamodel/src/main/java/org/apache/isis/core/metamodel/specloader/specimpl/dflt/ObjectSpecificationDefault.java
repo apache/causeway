@@ -54,12 +54,12 @@ import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
-import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -181,12 +181,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
 
         if(isNotIntrospected()) {
-            final DeweyOrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
+            final DeweyOrderSet associationOrderSet = createAssociationOrderSetFor(this, associationFacetedMethods);
             updateAssociations(asFlattenedAssociations(associationOrderSet));
         }
 
         if(isNotIntrospected()) {
-            final DeweyOrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
+            final DeweyOrderSet actionOrderSet = createActionOrderSetFor(this, actionFacetedMethods);
             updateObjectActions(asObjectActions(actionOrderSet));
         }
 
@@ -197,6 +197,33 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         if(isNotIntrospected()) {
             updateFromFacetValues();    
         }
+    }
+    
+    private static DeweyOrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
+        }
+
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associationMethods);
+        final MemberGroupLayoutFacet memberGroupLayoutFacet = spec.getFacet(MemberGroupLayoutFacet.class);
+        
+        if(memberGroupLayoutFacet != null) {
+            final List<String> groupOrder = Lists.newArrayList();
+            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
+            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
+            groupOrder.addAll(memberGroupLayoutFacet.getRight());
+            
+            orderSet.reorderChildren(groupOrder);
+        }
+        return orderSet;
+    }
+    
+    private static DeweyOrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createActionOrderSetFor " + spec.getFullIdentifier());
+        }
+
+        return DeweyOrderSet.createOrderSet(actionFacetedMethodList);
     }
 
     private boolean isNotIntrospected() {
@@ -530,10 +557,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ClassSubstitutor getClassSubstitutor() {
         return introspectionContext.getClassSubstitutor();
-    }
-
-    private MemberLayoutArranger getMemberLayoutArranger() {
-        return introspectionContext.getMemberLayoutArranger();
     }
 
 }

@@ -58,7 +58,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
-import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
@@ -174,7 +173,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private RuntimeContext runtimeContext;
 
     private final SpecificationTraverser specificationTraverser;
-    private final MemberLayoutArranger memberLayoutArranger;
 
     /**
      * Priming cache, optionally {@link #setServices(List) injected}.
@@ -195,14 +193,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     public ObjectReflectorDefault(
             final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, 
-            final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
+            final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser,
             final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
 
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(classSubstitutor, is(notNullValue()));
         ensureThatArg(collectionTypeRegistry, is(notNullValue()));
         ensureThatArg(specificationTraverser, is(notNullValue()));
-        ensureThatArg(memberLayoutArranger, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
         ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
@@ -212,7 +209,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         this.collectionTypeRegistry = collectionTypeRegistry;
         this.programmingModel = programmingModel;
         this.specificationTraverser = specificationTraverser;
-        this.memberLayoutArranger = memberLayoutArranger;
 
         this.facetDecoratorSet = new FacetDecoratorSet();
         for (final FacetDecorator facetDecorator : facetDecorators) {
@@ -261,7 +257,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
         injectInto(runtimeContext);
         injectInto(specificationTraverser);
-        injectInto(memberLayoutArranger);
         injectInto(metaModelValidator);
 
         // wire subcomponents into each other
@@ -546,7 +541,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             return new ObjectSpecificationForFreeStandingList(specContext, objectMemberContext);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
-            final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
+            final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor());
             final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser, facetProcessor);
@@ -759,10 +754,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     protected ProgrammingModel getProgrammingModelFacets() {
         return programmingModel;
-    }
-
-    protected MemberLayoutArranger getMemberLayoutArranger() {
-        return memberLayoutArranger;
     }
 
     protected MetaModelValidator getMetaModelValidator() {

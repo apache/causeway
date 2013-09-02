@@ -16,23 +16,16 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
 public class IntrospectionContext {
     private final ClassSubstitutor classSubstitutor;
-    private final MemberLayoutArranger memberLayoutArranger;
 
-    public IntrospectionContext(final ClassSubstitutor classSubstitutor, final MemberLayoutArranger memberLayoutArranger) {
+    public IntrospectionContext(final ClassSubstitutor classSubstitutor) {
         this.classSubstitutor = classSubstitutor;
-        this.memberLayoutArranger = memberLayoutArranger;
     }
 
     public ClassSubstitutor getClassSubstitutor() {
         return classSubstitutor;
-    }
-
-    public MemberLayoutArranger getMemberLayoutArranger() {
-        return memberLayoutArranger;
     }
 }
