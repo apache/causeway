@@ -23,9 +23,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -52,8 +50,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         String domainType = OidUtils.getDomainType(objectAdapter);
         String instanceId = OidUtils.getInstanceId(rendererContext, objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId;
-        final LinkBuilder builder = LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString());
-        return builder;
+        return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
     }
 
     private static enum Mode {
@@ -275,20 +272,13 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (!visibility.isAllowed()) {
                 continue;
             }
-            if (action.getType().isSet()) {
-                final ObjectActionSet objectActionSet = (ObjectActionSet) action;
-                final List<ObjectAction> subactions = objectActionSet.getActions();
-                addActions(objectAdapter, subactions, members);
+            final LinkFollowSpecs linkFollowSpecs = getLinkFollowSpecs().follow("members["+action.getId()+"]");
+            
+            final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), linkFollowSpecs, action.getId(), JsonRepresentation.newMap());
 
-            } else {
-                final LinkFollowSpecs linkFollowSpecs = getLinkFollowSpecs().follow("members["+action.getId()+"]");
-                
-                final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), linkFollowSpecs, action.getId(), JsonRepresentation.newMap());
+            renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);
 
-                renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);
-
-                members.mapPut(action.getId(), renderer.render());
-            }
+            members.mapPut(action.getId(), renderer.render());
         }
     }
 

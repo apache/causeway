@@ -49,14 +49,6 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectSpecification getOnType();
 
-    
-//    /**
-//     * Determine the real target for this action. If this action represents an
-//     * object action than the target is returned. If this action is on a service
-//     * then that service will be returned.
-//     */
-//    ObjectAdapter realTarget(ObjectAdapter target);
-
 
     boolean promptForParameters(ObjectAdapter target);
 
@@ -64,10 +56,6 @@ public interface ObjectAction extends ObjectMember {
     // Type
     // //////////////////////////////////////////////////////////////////
 
-    /**
-     * Returns the {@link ActionType type} of action: user, exploration,
-     * prototype or debug, or that it is a set of actions.
-     */
     ActionType getType();
 
     // //////////////////////////////////////////////////////////////////
@@ -119,19 +107,6 @@ public interface ObjectAction extends ObjectMember {
      * {@link Consent}.
      */
     Consent isProposedArgumentSetValid(ObjectAdapter object, ObjectAdapter[] proposedArguments);
-
-    // //////////////////////////////////////////////////////
-    // Actions (for action set)
-    // //////////////////////////////////////////////////////
-
-    /**
-     * Lists the sub-actions that are available under this name.
-     * 
-     * <p>
-     * If any actions are returned then this action is only a set and not an
-     * action itself.
-     */
-    List<ObjectAction> getActions();
 
     // //////////////////////////////////////////////////////
     // Parameters (declarative)

@@ -33,17 +33,6 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
 
     private static final Logger LOG = LoggerFactory.getLogger(MemberLayoutArrangerUsingMemberOrderFacet.class);
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // constructor
-    // ////////////////////////////////////////////////////////////////////////////
-
-    public MemberLayoutArrangerUsingMemberOrderFacet() {
-    }
-
-    // ////////////////////////////////////////////////////////////////////////////
-    // associations
-    // ////////////////////////////////////////////////////////////////////////////
-
     @Override
     public OrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
         if (LOG.isDebugEnabled()) {
@@ -64,14 +53,10 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
         return orderSet;
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // actions
-    // ////////////////////////////////////////////////////////////////////////////
-
     @Override
     public OrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
+            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createActionOrderSetFor " + spec.getFullIdentifier());
         }
 
         return DeweyOrderSet.createOrderSet(actionFacetedMethodList);

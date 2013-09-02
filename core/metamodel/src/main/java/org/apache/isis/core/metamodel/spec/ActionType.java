@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public enum ActionType {
-    DEBUG, SET, EXPLORATION, PROTOTYPE, USER;
+    DEBUG, EXPLORATION, PROTOTYPE, USER;
 
     public String getName() {
         return name();
@@ -37,10 +37,6 @@ public enum ActionType {
 
     public boolean isDebug() {
         return this == DEBUG;
-    }
-
-    public boolean isSet() {
-        return this == SET;
     }
 
     public boolean isExploration() {
@@ -55,5 +51,5 @@ public enum ActionType {
         return this == USER;
     }
 
-    public static final List<ActionType> ALL_EXCEPT_SET = Arrays.asList(DEBUG, EXPLORATION, PROTOTYPE, USER);
+    public static final List<ActionType> ALL_EXCEPT_SET = Arrays.asList(values());
 }

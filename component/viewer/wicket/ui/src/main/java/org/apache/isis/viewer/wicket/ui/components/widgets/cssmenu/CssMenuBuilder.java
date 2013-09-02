@@ -113,20 +113,7 @@ public class CssMenuBuilder {
     }
 
     private void addMenuItem(final CssMenuItem parent, final ObjectAction action) {
-        if (action.getType() == ActionType.SET) {
-            addMenuItemForActionSet(parent, action);
-        } else {
-            addMenuItemForAction(parent, action);
-        }
-    }
-
-    private void addMenuItemForActionSet(final CssMenuItem parent, final ObjectAction action) {
-        final Builder builder = parent.newSubMenuItem(action.getName());
-        final List<ObjectAction> actions = action.getActions();
-        addMenuItems(builder.itemBeingBuilt(), actions);
-        if (builder.itemBeingBuilt().hasSubMenuItems()) {
-            builder.build();
-        }
+        addMenuItemForAction(parent, action);
     }
 
     private void addMenuItemForAction(final CssMenuItem parent, final ObjectAction action) {

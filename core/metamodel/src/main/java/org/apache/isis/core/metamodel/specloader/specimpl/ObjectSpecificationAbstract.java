@@ -19,13 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -77,7 +75,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -92,7 +89,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -795,10 +791,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 addIfReturnsSubtype(serviceAction, matchingActionsToAppendTo);
             }
         }
-        if (matchingActionsToAppendTo.size() > 0) {
-            final ObjectActionSet set = new ObjectActionSet("id", serviceAdapter.titleString(), matchingActionsToAppendTo);
-            relatedActionsToAppendTo.add(set);
-        }
+        relatedActionsToAppendTo.addAll(matchingActionsToAppendTo);
     }
 
     private void addIfReturnsSubtype(final ObjectAction serviceAction, final List<ObjectAction> matchingActionsToAppendTo) {
@@ -937,7 +930,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return contributedActionSets;
     }
 
-    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, final List<ObjectAction> contributedActionSetsToAppendTo) {
+    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, final List<ObjectAction> contributedActionsToAppendTo) {
         final ObjectSpecification specification = serviceAdapter.getSpecification();
         if (specification == this) {
             return;
@@ -969,8 +962,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (contributeeActions.isEmpty()) {
             return;
         }
-        final ObjectActionSet contributedActionSet = new ObjectActionSet("id", serviceAdapter.titleString(null), contributeeActions);
-        contributedActionSetsToAppendTo.add(contributedActionSet);
+        contributedActionsToAppendTo.addAll(contributeeActions);
     }
 
     /**

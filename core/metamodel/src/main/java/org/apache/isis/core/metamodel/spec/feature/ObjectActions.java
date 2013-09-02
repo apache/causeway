@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 
 public final class ObjectActions {
 
@@ -47,22 +46,7 @@ public final class ObjectActions {
     }
 
     public static List<ObjectAction> flattenedActions(final List<ObjectAction> objectActions) {
-        final List<ObjectAction> actions = Lists.newArrayList();
-        for (final ObjectAction action : objectActions) {
-            if (!action.getType().isSet()) {
-                actions.add(action);
-            }
-        }
-        for (final ObjectAction action : objectActions) {
-            if (action.getType().isSet()) {
-                final ObjectActionSet actionSet = (ObjectActionSet) action;
-                final List<ObjectAction> subActions = actionSet.getActions();
-                for (final ObjectAction subAction : subActions) {
-                    actions.add(subAction);
-                }
-            }
-        }
-        return actions;
+        return objectActions;
     }
 
     public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {

@@ -62,7 +62,6 @@ import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
@@ -260,7 +259,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 }
             } else if (element instanceof OrderSet) {
                 final OrderSet set = ((OrderSet) element);
-                actions.add(createObjectActionSet(set));
+                actions.addAll(asObjectActions(set));
             } else {
                 throw new UnknownTypeException(element);
             }
@@ -280,9 +279,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return new ObjectActionImpl(facetedMethod, objectMemberContext);
     }
 
-    private ObjectActionSet createObjectActionSet(final OrderSet set) {
-        return new ObjectActionSet("", set.getGroupFullName(), asObjectActions(set));
-    }
 
     
 
@@ -372,30 +368,21 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type, final String actionName, final List<ObjectSpecification> parameters) {
         outer: for (int i = 0; i < availableActions.size(); i++) {
             final ObjectAction action = availableActions.get(i);
-            if (action.getActions().size() > 0) {
-                // deal with action set
-                final ObjectAction a = getAction(action.getActions(), type, actionName, parameters);
-                if (a != null) {
-                    return a;
-                }
-            } else {
-                // regular action
-                if (!action.getType().equals(type)) {
-                    continue outer;
-                }
-                if (actionName != null && !actionName.equals(action.getId())) {
-                    continue outer;
-                }
-                if (action.getParameters().size() != parameters.size()) {
-                    continue outer;
-                }
-                for (int j = 0; j < parameters.size(); j++) {
-                    if (!parameters.get(j).isOfType(action.getParameters().get(j).getSpecification())) {
-                        continue outer;
-                    }
-                }
-                return action;
+            if (!action.getType().equals(type)) {
+                continue outer;
             }
+            if (actionName != null && !actionName.equals(action.getId())) {
+                continue outer;
+            }
+            if (action.getParameters().size() != parameters.size()) {
+                continue outer;
+            }
+            for (int j = 0; j < parameters.size(); j++) {
+                if (!parameters.get(j).isOfType(action.getParameters().get(j).getSpecification())) {
+                    continue outer;
+                }
+            }
+            return action;
         }
         return null;
     }
@@ -404,27 +391,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         if (id == null) {
             return null;
         }
-        outer: for (int i = 0; i < availableActions.size(); i++) {
+        for (int i = 0; i < availableActions.size(); i++) {
             final ObjectAction action = availableActions.get(i);
-            if (action.getActions().size() > 0) {
-                // deal with action set
-                final ObjectAction a = getAction(action.getActions(), type, id);
-                if (a != null) {
-                    return a;
-                }
-            } else {
-                // regular action
-                if (!type.matchesTypeOf(action)) {
-                    continue outer;
-                }
-                if (id.equals(action.getIdentifier().toNameParmsIdentityString())) {
-                    return action;
-                }
-                if (id.equals(action.getIdentifier().toNameIdentityString())) {
-                    return action;
-                }
-                continue outer;
+            if (!type.matchesTypeOf(action)) {
+                continue;
             }
+            if (id.equals(action.getIdentifier().toNameParmsIdentityString())) {
+                return action;
+            }
+            if (id.equals(action.getIdentifier().toNameIdentityString())) {
+                return action;
+            }
+            continue;
         }
         return null;
     }

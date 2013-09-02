@@ -88,16 +88,9 @@ public class MethodsUtils {
 
     private static ObjectAction findAction(final List<ObjectAction> actions, final String methodName) {
         for (int i = 0; i < actions.size(); i++) {
-            if (actions.get(i).getActions().size() > 0) {
-                final ObjectAction action = findAction(actions.get(i).getActions(), methodName);
-                if (action != null) {
-                    return action;
-                }
-
-            } else {
-                if (actions.get(i).getId().equals(methodName)) {
-                    return actions.get(i);
-                }
+            final ObjectAction objectAction = actions.get(i);
+            if (objectAction.getId().equals(methodName)) {
+                return objectAction;
             }
         }
         return null;

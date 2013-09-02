@@ -68,23 +68,17 @@ public class OptionFactory {
 
     private static void menuOptions(final List<ObjectAction> actions, final ObjectAdapter target, final UserActionSet menuOptionSet) {
         for (int i = 0; i < actions.size(); i++) {
-            UserAction option = null;
-            if (actions.get(i).getActions().size() > 0) {
-                option = menuOptionSet.addNewActionSet(actions.get(i).getName());
-                menuOptions(actions.get(i).getActions(), target, (UserActionSet) option);
-
+            final UserAction option;
+            final int noOfParameters = actions.get(i).getParameterCount();
+            if (noOfParameters == 0) {
+                option = ImmediateObjectOption.createOption(actions.get(i), target);
+            } else if (false /*actions.get(i).isContributed() && noOfParameters == 1 && target != null && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())*/) {
+                option = ImmediateObjectOption.createServiceOption(actions.get(i), target);
             } else {
-                final int noOfParameters = actions.get(i).getParameterCount();
-                if (noOfParameters == 0) {
-                    option = ImmediateObjectOption.createOption(actions.get(i), target);
-                } else if (false /*actions.get(i).isContributed() && noOfParameters == 1 && target != null && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())*/) {
-                    option = ImmediateObjectOption.createServiceOption(actions.get(i), target);
-                } else {
-                    option = DialoggedObjectOption.createOption(actions.get(i), target);
-                }
-                if (option != null) {
-                    menuOptionSet.add(option);
-                }
+                option = DialoggedObjectOption.createOption(actions.get(i), target);
+            }
+            if (option != null) {
+                menuOptionSet.add(option);
             }
         }
     }

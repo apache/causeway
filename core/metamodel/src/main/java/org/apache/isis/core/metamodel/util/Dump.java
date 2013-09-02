@@ -280,60 +280,48 @@ public final class Dump {
     private static void actionDetails(final ObjectAction objectAction, final int indent, final int count, final DebugBuilder debugBuilder) {
         debugBuilder.appendln((count + 1) + "." + objectAction.getId() + " (" + objectAction.getClass().getName() + ")");
         debugBuilder.indent();
-        final int newIndent = indent + 4;
         try {
-            final List<ObjectAction> debActions = objectAction.getActions();
-            if (debActions.size() > 0) {
-                for (int i = 0; i < debActions.size(); i++) {
-                    actionDetails(debActions.get(i), newIndent, i, debugBuilder);
-                }
+            if (objectAction.getDescription() != null && !objectAction.getDescription().equals("")) {
+                debugBuilder.appendln("Description", objectAction.getDescription());
+            }
+            debugBuilder.appendln("ID", objectAction.getId());
 
+            debugBuilder.appendln(objectAction.debugData());
+            debugBuilder.appendln("On type", objectAction.getOnType());
+
+            final Class<? extends Facet>[] facets = objectAction.getFacetTypes();
+            if (facets.length > 0) {
+                debugBuilder.appendln("Facets");
+                debugBuilder.indent();
+                for (final Class<? extends Facet> facet : facets) {
+                    debugBuilder.appendln(objectAction.getFacet(facet).toString());
+                }
+                debugBuilder.unindent();
+            }
+
+            final ObjectSpecification returnType = objectAction.getReturnType();
+            debugBuilder.appendln("Returns", returnType == null ? "VOID" : returnType.toString());
+
+            final List<ObjectActionParameter> parameters = objectAction.getParameters();
+            if (parameters.size() == 0) {
+                debugBuilder.appendln("Parameters", "none");
             } else {
-                if (objectAction.getDescription() != null && !objectAction.getDescription().equals("")) {
-                    debugBuilder.appendln("Description", objectAction.getDescription());
-                }
-                debugBuilder.appendln("ID", objectAction.getId());
-                // debug.appendln(12, "Returns", f.getReturnType() == null ?
-                // "Nothing" :
-                // f.getReturnType().getFullName());
-
-                debugBuilder.appendln(objectAction.debugData());
-                debugBuilder.appendln("On type", objectAction.getOnType());
-
-                final Class<? extends Facet>[] facets = objectAction.getFacetTypes();
-                if (facets.length > 0) {
-                    debugBuilder.appendln("Facets");
+                debugBuilder.appendln("Parameters");
+                debugBuilder.indent();
+                final List<ObjectActionParameter> p = objectAction.getParameters();
+                for (int j = 0; j < parameters.size(); j++) {
+                    debugBuilder.append(p.get(j).getName());
+                    debugBuilder.append(" (");
+                    debugBuilder.append(parameters.get(j).getSpecification().getFullIdentifier());
+                    debugBuilder.appendln(")");
                     debugBuilder.indent();
-                    for (final Class<? extends Facet> facet : facets) {
-                        debugBuilder.appendln(objectAction.getFacet(facet).toString());
+                    final Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
+                    for (final Class<? extends Facet> parameterFacet : parameterFacets) {
+                        debugBuilder.appendln(p.get(j).getFacet(parameterFacet).toString());
                     }
                     debugBuilder.unindent();
                 }
-
-                final ObjectSpecification returnType = objectAction.getReturnType();
-                debugBuilder.appendln("Returns", returnType == null ? "VOID" : returnType.toString());
-
-                final List<ObjectActionParameter> parameters = objectAction.getParameters();
-                if (parameters.size() == 0) {
-                    debugBuilder.appendln("Parameters", "none");
-                } else {
-                    debugBuilder.appendln("Parameters");
-                    debugBuilder.indent();
-                    final List<ObjectActionParameter> p = objectAction.getParameters();
-                    for (int j = 0; j < parameters.size(); j++) {
-                        debugBuilder.append(p.get(j).getName());
-                        debugBuilder.append(" (");
-                        debugBuilder.append(parameters.get(j).getSpecification().getFullIdentifier());
-                        debugBuilder.appendln(")");
-                        debugBuilder.indent();
-                        final Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
-                        for (final Class<? extends Facet> parameterFacet : parameterFacets) {
-                            debugBuilder.appendln(p.get(j).getFacet(parameterFacet).toString());
-                        }
-                        debugBuilder.unindent();
-                    }
-                    debugBuilder.unindent();
-                }
+                debugBuilder.unindent();
             }
         } catch (final RuntimeException e) {
             debugBuilder.appendException(e);

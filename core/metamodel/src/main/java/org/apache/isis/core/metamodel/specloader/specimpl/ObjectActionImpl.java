@@ -135,11 +135,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     @Override
-    public List<ObjectAction> getActions() {
-        return Collections.emptyList();
-    }
-
-    @Override
     public ActionSemantics.Of getSemantics() {
         final ActionSemanticsFacet facet = getFacet(ActionSemanticsFacet.class);
         return facet != null? facet.value(): ActionSemantics.Of.NON_IDEMPOTENT;

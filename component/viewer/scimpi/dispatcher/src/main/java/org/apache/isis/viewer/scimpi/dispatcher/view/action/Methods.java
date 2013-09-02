@@ -24,13 +24,11 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
@@ -104,10 +102,10 @@ public class Methods extends AbstractElementProcessor {
         actions = inclusionList.includedActions(actions);
         for (int j = 0; j < actions.size(); j++) {
             final ObjectAction action = actions.get(j);
-            if (action instanceof ObjectActionSet) {
-                request.appendHtml("<div class=\"actions\">");
-                writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList, view, cancelTo);
-                request.appendHtml("</div>");
+            if (false /* action instanceof ObjectActionSet */) {
+//                request.appendHtml("<div class=\"actions\">");
+//                writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList, view, cancelTo);
+//                request.appendHtml("</div>");
             } else if (false /*action.isContributed()*/) {
 //                if (action.getParameterCount() == 1 && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
 //                    if (objectId != null) {
