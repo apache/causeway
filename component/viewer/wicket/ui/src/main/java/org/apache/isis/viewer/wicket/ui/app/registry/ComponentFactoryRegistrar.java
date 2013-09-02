@@ -19,12 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.app.registry;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -51,13 +49,32 @@ public interface ComponentFactoryRegistrar {
         }
 
         public void replace(final Class<? extends ComponentFactory> toReplace, final ComponentFactory replacementComponentFactory) {
-            removeExisting(matching(toReplace));
-            add(replacementComponentFactory);
+            int indexOfOldFactory = removeExisting(matching(toReplace));
+            insert(indexOfOldFactory, replacementComponentFactory);
         }
 
-        private void removeExisting(final Predicate<ComponentFactory> predicate) {
-            final Collection<ComponentFactory> matching = Collections2.filter(componentFactories, predicate);
-            componentFactories.removeAll(matching);
+        private void insert(final int indexToInsertInto, final ComponentFactory replacementComponentFactory) {
+            if (indexToInsertInto > -1 && indexToInsertInto < componentFactories.size()) {
+                componentFactories.add(indexToInsertInto, replacementComponentFactory);
+            } else {
+                componentFactories.add(replacementComponentFactory);
+            }
+        }
+
+        private int removeExisting(final Predicate<ComponentFactory> predicate) {
+            int indexOfFirst = -1;
+            for (int i = 0; i < componentFactories.size(); i++) {
+                ComponentFactory factory = componentFactories.get(i);
+                if (predicate.apply(factory)) {
+                    componentFactories.remove(i);
+                    if (indexOfFirst == -1) {
+                        indexOfFirst = i;
+                    }
+                    i--;
+                }
+            }
+
+            return indexOfFirst;
         }
 
         private static Predicate<ComponentFactory> matching(final ComponentType componentType) {
