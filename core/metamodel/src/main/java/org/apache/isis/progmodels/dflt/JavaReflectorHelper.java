@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
+import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 
 public final class JavaReflectorHelper  {
     
@@ -56,7 +56,7 @@ public final class JavaReflectorHelper  {
                                                            final Set<FacetDecorator> facetDecorators,
                                                            final MetaModelValidator mmv, 
                                                            final IsisConfiguration configuration) {
-        final MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerDefault();
+        final MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerUsingMemberOrderFacet();
         final SpecificationTraverser specificationTraverser = new SpecificationTraverserDefault();
         final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistryDefault();
         final ClassSubstitutor classSubstitutor = classSubstitutorFactory.createClassSubstitutor(configuration);

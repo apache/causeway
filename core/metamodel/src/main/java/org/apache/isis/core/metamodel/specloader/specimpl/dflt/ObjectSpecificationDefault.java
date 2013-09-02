@@ -58,8 +58,8 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
-import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -181,12 +181,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
 
         if(isNotIntrospected()) {
-            final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
+            final DeweyOrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
             updateAssociations(asFlattenedAssociations(associationOrderSet));
         }
 
         if(isNotIntrospected()) {
-            final OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
+            final DeweyOrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
             updateObjectActions(asObjectActions(actionOrderSet));
         }
 
@@ -217,7 +217,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private List<ObjectAssociation> asFlattenedAssociations(final OrderSet orderSet) {
+    private List<ObjectAssociation> asFlattenedAssociations(final DeweyOrderSet orderSet) {
         if (orderSet == null) {
             return null;
         }
@@ -227,7 +227,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return associations;
     }
 
-    private void addAssociations(final OrderSet orderSet, final List<ObjectAssociation> associations) {
+    private void addAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associations) {
         for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetMethod = (FacetedMethod) element;
@@ -236,9 +236,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 } else if (facetMethod.getFeatureType().isProperty()) {
                     associations.add(createProperty(facetMethod));
                 }
-            } else if (element instanceof OrderSet) {
+            } else if (element instanceof DeweyOrderSet) {
                 // just flatten.
-                OrderSet childOrderSet = (OrderSet) element;
+                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
                 addAssociations(childOrderSet, associations);
             } else {
                 throw new UnknownTypeException(element);
@@ -246,7 +246,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private List<ObjectAction> asObjectActions(final OrderSet orderSet) {
+    private List<ObjectAction> asObjectActions(final DeweyOrderSet orderSet) {
         if (orderSet == null) {
             return null;
         }
@@ -257,8 +257,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 if (facetedMethod.getFeatureType().isAction()) {
                     actions.add(createAction(facetedMethod));
                 }
-            } else if (element instanceof OrderSet) {
-                final OrderSet set = ((OrderSet) element);
+            } else if (element instanceof DeweyOrderSet) {
+                final DeweyOrderSet set = ((DeweyOrderSet) element);
                 actions.addAll(asObjectActions(set));
             } else {
                 throw new UnknownTypeException(element);

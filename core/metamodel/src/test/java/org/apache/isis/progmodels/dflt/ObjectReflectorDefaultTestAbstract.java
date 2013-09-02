@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -43,7 +44,6 @@ import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
-import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.unittestsupport.jmocking.InjectIntoJMockAction;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -76,7 +76,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         });
 
         runtimeContext = new RuntimeContextNoRuntime();
-        final ObjectReflectorDefault reflector = new ObjectReflectorDefault(mockConfiguration, new ClassSubstitutorAbstract() {}, new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
+        final ObjectReflectorDefault reflector = new ObjectReflectorDefault(mockConfiguration, new ClassSubstitutorAbstract() {}, new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new MemberLayoutArrangerUsingMemberOrderFacet(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorDefault());
         reflector.setRuntimeContext(runtimeContext);
         reflector.init();

@@ -27,8 +27,7 @@ import junit.framework.TestSuite;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.layout.OrderSet;
-import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
+import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
 
 public class DeweyOrderSetTest extends TestCase {
@@ -155,7 +154,7 @@ public class DeweyOrderSetTest extends TestCase {
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         final List<?> children = orderSet.children();
-        final OrderSet childOrderSet = (OrderSet) children.get(0);
+        final DeweyOrderSet childOrderSet = (DeweyOrderSet) children.get(0);
         assertEquals("Address", childOrderSet.getGroupName());
         assertEquals("address", childOrderSet.getGroupFullName());
         assertEquals("", childOrderSet.getGroupPath());
@@ -169,7 +168,7 @@ public class DeweyOrderSetTest extends TestCase {
         postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
-        final OrderSet childOrderSet = orderSet.children().get(0);
+        final DeweyOrderSet childOrderSet = orderSet.children().get(0);
         assertEquals(3, childOrderSet.size());
         assertEquals(0, childOrderSet.children().size());
     }
@@ -182,7 +181,7 @@ public class DeweyOrderSetTest extends TestCase {
         postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "4", postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
-        final OrderSet childOrderSet = orderSet.children().get(0);
+        final DeweyOrderSet childOrderSet = orderSet.children().get(0);
         assertEquals(postalTownMember, childOrderSet.elementList().get(0));
         assertEquals(streetNameMember, childOrderSet.elementList().get(1));
         assertEquals(houseNumberMember, childOrderSet.elementList().get(2));
@@ -198,7 +197,7 @@ public class DeweyOrderSetTest extends TestCase {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         assertEquals(firstNameMember, orderSet.elementList().get(0));
         assertEquals(lastNameMember, orderSet.elementList().get(1));
-        assertTrue(orderSet.elementList().get(2) instanceof OrderSet);
+        assertTrue(orderSet.elementList().get(2) instanceof DeweyOrderSet);
     }
 
     public void testDefaultGroupNeitherAnnotatedSize() {

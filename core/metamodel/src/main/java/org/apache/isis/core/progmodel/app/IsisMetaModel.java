@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
+import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -54,7 +55,6 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 
 /**
@@ -142,7 +142,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         setClassSubstitutor(new ClassSubstitutorAbstract() {});
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
         setSpecificationTraverser(new SpecificationTraverserDefault());
-        setMemberLayoutArranger(new MemberLayoutArrangerDefault());
+        setMemberLayoutArranger(new MemberLayoutArrangerUsingMemberOrderFacet());
         setFacetDecorators(new TreeSet<FacetDecorator>());
         setProgrammingModelFacets(programmingModel);
 

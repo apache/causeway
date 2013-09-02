@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
-import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutArranger {
@@ -34,7 +34,7 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
     private static final Logger LOG = LoggerFactory.getLogger(MemberLayoutArrangerUsingMemberOrderFacet.class);
 
     @Override
-    public OrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
+    public DeweyOrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
@@ -54,7 +54,7 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
     }
 
     @Override
-    public OrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
+    public DeweyOrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createActionOrderSetFor " + spec.getFullIdentifier());
         }

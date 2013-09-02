@@ -24,7 +24,7 @@ import java.util.Comparator;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.layout.OrderSet;
+import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 
 /**
  * Compares by {@link MemberOrderFacet} obtained from each {@link FacetedMethod}
@@ -58,13 +58,13 @@ public class MemberOrderComparator implements Comparator<Object> {
         if (o1 instanceof FacetedMethod && o2 instanceof FacetedMethod) {
             return compare((FacetedMethod) o1, (FacetedMethod) o2);
         }
-        if (o1 instanceof OrderSet && o2 instanceof OrderSet) {
-            return orderSetComparator.compare((OrderSet) o1, (OrderSet) o2);
+        if (o1 instanceof DeweyOrderSet && o2 instanceof DeweyOrderSet) {
+            return orderSetComparator.compare((DeweyOrderSet) o1, (DeweyOrderSet) o2);
         }
-        if (o1 instanceof FacetedMethod && o2 instanceof OrderSet) {
+        if (o1 instanceof FacetedMethod && o2 instanceof DeweyOrderSet) {
             return -1; // members before OrderSets.
         }
-        if (o1 instanceof OrderSet && o2 instanceof FacetedMethod) {
+        if (o1 instanceof DeweyOrderSet && o2 instanceof FacetedMethod) {
             return +1; // members before OrderSets.
         }
         throw new IllegalArgumentException("can only compare MemberPeers and OrderSets");

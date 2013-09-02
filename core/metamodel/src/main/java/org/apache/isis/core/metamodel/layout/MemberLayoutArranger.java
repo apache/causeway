@@ -23,16 +23,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Orders both associations (properties and collections) and also actions.
- * 
- * <p>
- * TODO: for now, 'arranging' means merely ordering. In the future, this might
- * evolve into a more general specification of a layout, eg columns and other
- * layouts.
  */
 public interface MemberLayoutArranger {
 
-    OrderSet createAssociationOrderSetFor(ObjectSpecification objectSpecification, List<FacetedMethod> associationFacetedMethods);
+    DeweyOrderSet createAssociationOrderSetFor(ObjectSpecification objectSpecification, List<FacetedMethod> associationFacetedMethods);
 
-    OrderSet createActionOrderSetFor(ObjectSpecification spec, List<FacetedMethod> actionFacetedMethods);
+    DeweyOrderSet createActionOrderSetFor(ObjectSpecification spec, List<FacetedMethod> actionFacetedMethods);
 
 }
