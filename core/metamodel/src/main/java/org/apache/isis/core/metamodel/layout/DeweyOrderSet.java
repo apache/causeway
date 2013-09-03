@@ -33,6 +33,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberIdentifierComparator;
@@ -73,25 +75,25 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
  */
 public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object>  {
     
-    public static DeweyOrderSet createOrderSet(final List<FacetedMethod> facetedMethods) {
+    public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> facetedMethods) {
 
-        final SortedMap<String, SortedSet<FacetedMethod>> sortedMembersByGroup = Maps.newTreeMap();
-        final SortedSet<FacetedMethod> nonAnnotatedGroup = Sets.newTreeSet(new MemberIdentifierComparator());
+        final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = Maps.newTreeMap();
+        final SortedSet<IdentifiedHolder> nonAnnotatedGroup = Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (final FacetedMethod facetedMethod : facetedMethods) {
+        for (final IdentifiedHolder facetedMethod : facetedMethods) {
             final MemberOrderFacet memberOrder = facetedMethod.getFacet(MemberOrderFacet.class);
             if (memberOrder == null) {
                 nonAnnotatedGroup.add(facetedMethod);
                 continue;
             }
-            final SortedSet<FacetedMethod> sortedMembersForGroup = getSortedSet(sortedMembersByGroup, memberOrder.name());
+            final SortedSet<IdentifiedHolder> sortedMembersForGroup = getSortedSet(sortedMembersByGroup, memberOrder.name());
             sortedMembersForGroup.add(facetedMethod);
         }
 
         // add the non-annotated group to the first "" group.
-        final SortedSet<FacetedMethod> defaultSet = getSortedSet(sortedMembersByGroup, "");
+        final SortedSet<IdentifiedHolder> defaultSet = getSortedSet(sortedMembersByGroup, "");
         defaultSet.addAll(nonAnnotatedGroup);
 
         // create OrderSets, wiring up parents and children.
@@ -158,11 +160,10 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * @param groupName
      * @return
      */
-    private static SortedSet<FacetedMethod> getSortedSet(final SortedMap<String, SortedSet<FacetedMethod>> sortedMembersByGroup, final String groupName) {
-        SortedSet<FacetedMethod> sortedMembersForGroup;
-        sortedMembersForGroup = sortedMembersByGroup.get(groupName);
+    private static SortedSet<IdentifiedHolder> getSortedSet(final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup, final String groupName) {
+        SortedSet<IdentifiedHolder> sortedMembersForGroup = sortedMembersByGroup.get(groupName);
         if (sortedMembersForGroup == null) {
-            sortedMembersForGroup = new TreeSet<FacetedMethod>(new MemberOrderComparator(true));
+            sortedMembersForGroup = new TreeSet<IdentifiedHolder>(new MemberOrderComparator(true));
             sortedMembersByGroup.put(groupName, sortedMembersForGroup);
         }
         return sortedMembersForGroup;
@@ -202,8 +203,6 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * <p>
      * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
      * this will return <tt>ghi</tt>.
-     * 
-     * @return
      */
     public String getGroupName() {
         return groupName;
@@ -216,8 +215,6 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * <p>
      * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
      * this will return the same string <tt>abc,def,ghi</tt>.
-     * 
-     * @return
      */
     public String getGroupFullName() {
         return groupFullName;
@@ -231,8 +228,6 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * <p>
      * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
      * this will return <tt>abc,def</tt>.
-     * 
-     * @return
      */
     public String getGroupPath() {
         return groupPath;
@@ -240,9 +235,6 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     /**
      * Splits name by comma, then title case the last component.
-     * 
-     * @param groupFullName
-     * @return
      */
     private static String deriveGroupName(final String groupFullName) {
         final StringTokenizer tokens = new StringTokenizer(groupFullName, ",", false);
@@ -260,10 +252,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     }
 
     /**
-     * Everything upto the last comma, else empty string if none.
-     * 
-     * @param groupFullName
-     * @return
+     * Everything up to the last comma, else empty string if none.
      */
     private static String deriveGroupPath(final String groupFullName) {
         final int lastComma = groupFullName.lastIndexOf(",");
@@ -301,8 +290,6 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     /**
      * Returns a copy of the elements, in sequence.
-     * 
-     * @return
      */
     public List<Object> elementList() {
         return new ArrayList<Object>(elements);
@@ -327,7 +314,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         }
     }
     
-    // ///////////////////////// compareTo //////////////////////
+    // ///////////////////////// reorderChildren //////////////////////
     
     public void reorderChildren(List<String> requiredOrder) {
         final LinkedHashMap<String,DeweyOrderSet> orderSets = Maps.newLinkedHashMap();
@@ -360,10 +347,9 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     }
 
 
-    
-
-
-    // ///////////////////////// compareTo //////////////////////
+    // //////////////////////////////////////
+    // compareTo, equals, hashCode, toString
+    // //////////////////////////////////////
 
     /**
      * Natural ordering is to compare by {@link #getGroupFullName()}.

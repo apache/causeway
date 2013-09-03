@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
@@ -181,13 +182,27 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
 
         if(isNotIntrospected()) {
-            final DeweyOrderSet associationOrderSet = createAssociationOrderSetFor(this, associationFacetedMethods);
-            updateAssociations(asFlattenedAssociations(associationOrderSet));
+            final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associationFacetedMethods);
+            final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
+            
+            if(memberGroupLayoutFacet != null) {
+                final List<String> groupOrder = Lists.newArrayList();
+                groupOrder.addAll(memberGroupLayoutFacet.getLeft());
+                groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
+                groupOrder.addAll(memberGroupLayoutFacet.getRight());
+                
+                orderSet.reorderChildren(groupOrder);
+            }
+            final List<ObjectAssociation> associations = Lists.newArrayList();
+            convertToAssociations(orderSet, associations);
+            updateAssociations(associations);
         }
 
         if(isNotIntrospected()) {
-            final DeweyOrderSet actionOrderSet = createActionOrderSetFor(this, actionFacetedMethods);
-            updateObjectActions(asObjectActions(actionOrderSet));
+            final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actionFacetedMethods);
+            final List<ObjectAction> actions = Lists.newArrayList();
+            convertToObjectActions(orderSet, actions);
+            updateObjectActions(actions);
         }
 
         if(isNotIntrospected()) {
@@ -199,33 +214,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
     
-    private static DeweyOrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
-        }
-
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associationMethods);
-        final MemberGroupLayoutFacet memberGroupLayoutFacet = spec.getFacet(MemberGroupLayoutFacet.class);
-        
-        if(memberGroupLayoutFacet != null) {
-            final List<String> groupOrder = Lists.newArrayList();
-            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
-            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
-            groupOrder.addAll(memberGroupLayoutFacet.getRight());
-            
-            orderSet.reorderChildren(groupOrder);
-        }
-        return orderSet;
-    }
-    
-    private static DeweyOrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createActionOrderSetFor " + spec.getFullIdentifier());
-        }
-
-        return DeweyOrderSet.createOrderSet(actionFacetedMethodList);
-    }
-
     private boolean isNotIntrospected() {
         return !(getIntrospectionState() == IntrospectionState.INTROSPECTED);
     }
@@ -244,54 +232,41 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private List<ObjectAssociation> asFlattenedAssociations(final DeweyOrderSet orderSet) {
-        if (orderSet == null) {
-            return null;
-        }
-        final List<ObjectAssociation> associations = Lists.newArrayList();
-        addAssociations(orderSet, associations);
-
-        return associations;
-    }
-
-    private void addAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associations) {
+    private void convertToAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
         for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetMethod = (FacetedMethod) element;
                 if (facetMethod.getFeatureType().isCollection()) {
-                    associations.add(createCollection(facetMethod));
+                    associationsToAppendTo.add(createCollection(facetMethod));
                 } else if (facetMethod.getFeatureType().isProperty()) {
-                    associations.add(createProperty(facetMethod));
+                    associationsToAppendTo.add(createProperty(facetMethod));
                 }
             } else if (element instanceof DeweyOrderSet) {
                 // just flatten.
                 DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
-                addAssociations(childOrderSet, associations);
+                convertToAssociations(childOrderSet, associationsToAppendTo);
             } else {
                 throw new UnknownTypeException(element);
             }
         }
     }
 
-    private List<ObjectAction> asObjectActions(final DeweyOrderSet orderSet) {
-        if (orderSet == null) {
-            return null;
-        }
-        final List<ObjectAction> actions = Lists.newArrayList();
+    private void convertToObjectActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
         for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetedMethod = (FacetedMethod) element;
                 if (facetedMethod.getFeatureType().isAction()) {
-                    actions.add(createAction(facetedMethod));
+                    actionsToAppendTo.add(createAction(facetedMethod));
                 }
             } else if (element instanceof DeweyOrderSet) {
                 final DeweyOrderSet set = ((DeweyOrderSet) element);
-                actions.addAll(asObjectActions(set));
+                final List<ObjectAction> actions = Lists.newArrayList();
+                convertToObjectActions(set, actions);
+                actionsToAppendTo.addAll(actions);
             } else {
                 throw new UnknownTypeException(element);
             }
         }
-        return actions;
     }
 
     private OneToOneAssociationImpl createProperty(final FacetedMethod facetedMethod) {

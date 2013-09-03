@@ -26,6 +26,7 @@ import junit.framework.TestSuite;
 
 import com.google.common.collect.ImmutableList;
 
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
@@ -64,14 +65,14 @@ public class DeweyOrderSetTest extends TestCase {
         }
     }
 
-    private final FacetedMethod lastNameMember = FacetedMethod.createForProperty(Customer.class, "Last Name");
-    private final FacetedMethod firstNameMember = FacetedMethod.createForProperty(Customer.class, "First Name");
-    private final FacetedMethod houseNumberMember = FacetedMethod.createForProperty(Customer.class, "House Number");
-    private final FacetedMethod streetNameMember = FacetedMethod.createForProperty(Customer.class, "Street Name");
-    private final FacetedMethod postalTownMember = FacetedMethod.createForProperty(Customer.class, "Postal Town");
-    private final List<FacetedMethod> lastNameAndFirstName = ImmutableList.of(lastNameMember, firstNameMember);
-    private final List<FacetedMethod> nameAndAddressMembers = ImmutableList.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
-    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = ImmutableList.of(lastNameMember, firstNameMember, postalTownMember);
+    private final IdentifiedHolder lastNameMember = FacetedMethod.createForProperty(Customer.class, "Last Name");
+    private final IdentifiedHolder firstNameMember = FacetedMethod.createForProperty(Customer.class, "First Name");
+    private final IdentifiedHolder houseNumberMember = FacetedMethod.createForProperty(Customer.class, "House Number");
+    private final IdentifiedHolder streetNameMember = FacetedMethod.createForProperty(Customer.class, "Street Name");
+    private final IdentifiedHolder postalTownMember = FacetedMethod.createForProperty(Customer.class, "Postal Town");
+    private final List<IdentifiedHolder> lastNameAndFirstName = ImmutableList.of(lastNameMember, firstNameMember);
+    private final List<IdentifiedHolder> nameAndAddressMembers = ImmutableList.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
+    private final List<IdentifiedHolder> lastNameFirstNameAndPostalTown = ImmutableList.of(lastNameMember, firstNameMember, postalTownMember);
 
     @Override
     protected void setUp() {
