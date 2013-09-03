@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -42,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 
 public final class Dump {
 
@@ -142,11 +142,6 @@ public final class Dump {
         debugBuilder.indent();
         specificationActionMethods(specification, debugBuilder);
         debugBuilder.unindent();
-
-        debugBuilder.appendln("Related Service Actions");
-        debugBuilder.indent();
-        specificationServiceMethods(specification, debugBuilder);
-        debugBuilder.unindent();
     }
 
     private static String[] specificationNames(final List<ObjectSpecification> specifications) {
@@ -159,22 +154,10 @@ public final class Dump {
 
     private static void specificationActionMethods(final ObjectSpecification specification, final DebugBuilder debugBuilder) {
         try {
-            final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED);
-            final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED);
-            final List<ObjectAction> prototypeActions = specification.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED);
-            final List<ObjectAction> debActions = specification.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED);
-            specificationMethods(userActions, explActions, prototypeActions, debActions, debugBuilder);
-        } catch (final RuntimeException e) {
-            debugBuilder.appendException(e);
-        }
-    }
-
-    private static void specificationServiceMethods(final ObjectSpecification specification, final DebugBuilder debugBuilder) {
-        try {
-            final List<ObjectAction> userActions = specification.getServiceActionsReturning(ActionType.USER);
-            final List<ObjectAction> explActions = specification.getServiceActionsReturning(ActionType.EXPLORATION);
-            final List<ObjectAction> prototypeActions = specification.getServiceActionsReturning(ActionType.PROTOTYPE);
-            final List<ObjectAction> debActions = specification.getServiceActionsReturning(ActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            final List<ObjectAction> prototypeActions = specification.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            final List<ObjectAction> debActions = specification.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any());
             specificationMethods(userActions, explActions, prototypeActions, debActions, debugBuilder);
         } catch (final RuntimeException e) {
             debugBuilder.appendException(e);
@@ -190,7 +173,7 @@ public final class Dump {
         }
         debugBuilder.unindent();
 
-        final List<ObjectAssociation> fields2 = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+        final List<ObjectAssociation> fields2 = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
         debugBuilder.appendln("Static");
         debugBuilder.indent();
         for (int i = 0; i < fields2.size(); i++) {

@@ -45,10 +45,6 @@ public final class ObjectActions {
         return "(no name)";
     }
 
-    public static List<ObjectAction> flattenedActions(final List<ObjectAction> objectActions) {
-        return objectActions;
-    }
-
     public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
         final String assocName = association.getName();
         final String assocId = association.getId();

@@ -18,83 +18,41 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetFilters;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
 public class ObjectActionFilters {
+    
+    private ObjectActionFilters(){}
 
-    public static final Filter<ObjectAction> WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE = new Filter<ObjectAction>() {
-        @Override
-        public boolean accept(final ObjectAction action) {
-            return !action.isAlwaysHidden();
-        }
-    };
+    @Deprecated
+    public static final Filter<ObjectAction> WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE = ObjectAction.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE;
 
+    @Deprecated
     public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
-        return new Filter<ObjectAction>() {
-            @Override
-            public boolean accept(final ObjectAction objectAction) {
-                final Consent visible = objectAction.isVisible(session, target, where);
-                return visible.isAllowed();
-            }
-        };
+        return ObjectAction.Filters.dynamicallyVisible(session, target, where);
     }
 
+    @Deprecated
     public static Filter<ObjectAction> withId(final String actionId) {
-        return new Filter<ObjectAction>(){
-            @Override
-            public boolean accept(ObjectAction objectAction) {
-                return objectAction.getId().equals(actionId);
-            }
-        };
+        return ObjectAction.Filters.withId(actionId);
     }
 
+    @Deprecated
     public static Filter<ObjectAction> withNoValidationRules() {
-        return new Filter<ObjectAction>(){
-            @Override
-            public boolean accept(final ObjectAction objectAction) {
-                final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters.isA(ValidatingInteractionAdvisor.class));
-                return validatingFacets.isEmpty();
-            }};
+        return ObjectAction.Filters.withNoValidationRules();
     }
 
-//    public static Filter<ObjectAction> contributedAnd1ParamAndVoid() {
-//        return new Filter<ObjectAction>(){
-//            @Override
-//            public boolean accept(final ObjectAction objectAction) {
-//                boolean contributed = objectAction.isContributed();
-//                boolean has1Param = objectAction.getParameterCount() == 1;
-//                boolean hasReturn = objectAction.hasReturn();
-//                return contributed && has1Param && !hasReturn;
-//            }
-//        };
-//    }
-
+    @Deprecated
     public static Filter<ObjectAction> filterOfType(final ActionType type) {
-        return new Filter<ObjectAction>(){
-            @Override
-            public boolean accept(ObjectAction oa) {
-                return oa.getType() == type;
-            }
-        };
+        return ObjectAction.Filters.ofType(type);
     }
 
+    @Deprecated
     public static Filter<ObjectAction> bulk() {
-        return new Filter<ObjectAction>(){
-
-            @Override
-            public boolean accept(ObjectAction oa) {
-                return oa.containsDoOpFacet(BulkFacet.class);
-            }};
+        return ObjectAction.Filters.bulk();
     }
 }

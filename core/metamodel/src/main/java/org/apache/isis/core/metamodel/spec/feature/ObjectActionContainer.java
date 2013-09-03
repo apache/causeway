@@ -62,25 +62,11 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    List<ObjectAction> getObjectActions(ActionType type, Contributed contributed);
+    List<ObjectAction> getObjectActions(ActionType type, Contributed contributee, Filter<ObjectAction> filter);
 
-    List<ObjectAction> getObjectActions(ActionType type, Contributed contributed, Filter<ObjectAction> filter);
+    List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributee, Filter<ObjectAction> filter);
 
-    /**
-     * Returns an array of actions of the specified types, including or
-     * excluding contributed actions as required.
-     */
-    List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed);
-
-    List<ObjectAction> getObjectActions(List<ActionType> requestedTypes, Contributed contributed, Filter<ObjectAction> filter);
-
-    /**
-     * Returns a list of all object actions, including or excluding contributed
-     * actions as required.
-     */
-    List<ObjectAction> getObjectActions(Contributed contributed);
-
-    List<ObjectAction> getServiceActionsReturning(ActionType type);
+    List<ObjectAction> getObjectActions(Contributed contributee);
 
     List<ObjectAction> getServiceActionsReturning(List<ActionType> type);
 

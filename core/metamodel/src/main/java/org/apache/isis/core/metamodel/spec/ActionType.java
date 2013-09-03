@@ -51,5 +51,5 @@ public enum ActionType {
         return this == USER;
     }
 
-    public static final List<ActionType> ALL_EXCEPT_SET = Arrays.asList(values());
+    public static final List<ActionType> ALL = Arrays.asList(values());
 }

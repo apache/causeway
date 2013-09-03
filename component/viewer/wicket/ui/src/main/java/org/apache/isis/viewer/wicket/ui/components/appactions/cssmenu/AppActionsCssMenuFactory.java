@@ -29,6 +29,7 @@ import com.google.common.collect.Maps;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
@@ -143,7 +144,8 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
      */
     private static void collateServiceActions(final ObjectAdapter serviceAdapter, ActionType actionType, List<LogicalServiceAction> serviceActions) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-        for (final ObjectAction objectAction : serviceSpec.getObjectActions(actionType, Contributed.INCLUDED)) {
+        for (final ObjectAction objectAction : serviceSpec.getObjectActions(
+                actionType, Contributed.INCLUDED, Filters.<ObjectAction>any())) {
             // skip if annotated to not be included in repository menu
             if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {
                 continue;

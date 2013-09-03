@@ -72,7 +72,7 @@ public class MethodsUtils {
             throw new ScimpiException("Object not specified when looking for " + methodName);
         }
 
-        final List<ObjectAction> actions = object.getSpecification().getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG), Contributed.INCLUDED);
+        final List<ObjectAction> actions = object.getSpecification().getObjectActions(Contributed.INCLUDED);
         final ObjectAction action = findAction(actions, methodName);
         /*
          * if (action == null) { actions =

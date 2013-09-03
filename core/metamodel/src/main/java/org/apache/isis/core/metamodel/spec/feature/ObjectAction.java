@@ -22,15 +22,20 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -166,4 +171,66 @@ public interface ObjectAction extends ObjectMember {
     ObjectAdapter[][] getChoices(ObjectAdapter target);
 
 
+    // //////////////////////////////////////////////////////
+    // Filters
+    // //////////////////////////////////////////////////////
+
+    public static class Filters {
+        
+        private Filters(){}
+        
+        public static final Filter<ObjectAction> WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE = new Filter<ObjectAction>() {
+            @Override
+            public boolean accept(final ObjectAction action) {
+                return !action.isAlwaysHidden();
+            }
+        };
+
+        public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
+            return new Filter<ObjectAction>() {
+                @Override
+                public boolean accept(final ObjectAction objectAction) {
+                    final Consent visible = objectAction.isVisible(session, target, where);
+                    return visible.isAllowed();
+                }
+            };
+        }
+
+        public static Filter<ObjectAction> withId(final String actionId) {
+            return new Filter<ObjectAction>(){
+                @Override
+                public boolean accept(ObjectAction objectAction) {
+                    return objectAction.getId().equals(actionId);
+                }
+            };
+        }
+
+        public static Filter<ObjectAction> withNoValidationRules() {
+            return new Filter<ObjectAction>(){
+                @Override
+                public boolean accept(final ObjectAction objectAction) {
+                    final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters.isA(ValidatingInteractionAdvisor.class));
+                    return validatingFacets.isEmpty();
+                }};
+        }
+
+        public static Filter<ObjectAction> ofType(final ActionType type) {
+            return new Filter<ObjectAction>(){
+                @Override
+                public boolean accept(ObjectAction oa) {
+                    return oa.getType() == type;
+                }
+            };
+        }
+
+        public static Filter<ObjectAction> bulk() {
+            return new Filter<ObjectAction>(){
+
+                @Override
+                public boolean accept(ObjectAction oa) {
+                    return oa.containsDoOpFacet(BulkFacet.class);
+                }};
+        }
+        
+    }
 }

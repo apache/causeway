@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -408,7 +409,7 @@ class TestMethodExists extends Test {
     @Override
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
-        final List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
+        final List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
         boolean methodExists = false;
         for (final ObjectAction objectAssociation : objectActions) {
             if (objectAssociation.getId().equals(attributeName)) {

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -76,16 +77,16 @@ public class Methods extends AbstractElementProcessor {
             final InclusionList inclusionList,
             final String view,
             final String cancelTo) {
-        List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
+        List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
         writeMethods(request, adapter, actions, objectId, showForms, inclusionList, view, cancelTo);
         // TODO determine if system is set up to display exploration methods
         if (true) {
-            actions = adapter.getSpecification().getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED);
+            actions = adapter.getSpecification().getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any());
             writeMethods(request, adapter, actions, objectId, showForms, inclusionList, view, cancelTo);
         }
         // TODO determine if system is set up to display debug methods
         if (true) {
-            actions = adapter.getSpecification().getObjectActions(ActionType.DEBUG, Contributed.INCLUDED);
+            actions = adapter.getSpecification().getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any());
             writeMethods(request, adapter, actions, objectId, showForms, inclusionList, view, cancelTo);
         }
     }

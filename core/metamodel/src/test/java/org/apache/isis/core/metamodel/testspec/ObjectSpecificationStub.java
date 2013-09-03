@@ -123,11 +123,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final ActionType type) {
-        return null;
-    }
-
-    @Override
     public List<ObjectAction> getServiceActionsReturning(final List<ActionType> types) {
         return null;
     }
@@ -221,11 +216,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public ObjectAction getObjectAction(final ActionType type, final String id) {
         final int openBracket = id.indexOf('(');
         return getObjectAction(type, id.substring(0, openBracket), null);
-    }
-
-    @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
-        return null;
     }
 
     @Override
@@ -479,17 +469,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, final Filter<ObjectAction> filter) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(ActionType type, Contributed contributed, Filter<ObjectAction> filter) {
-        return null;
-    }
-
-    @Override
-    public List<ObjectAction> getObjectActions(List<ActionType> requestedTypes, Contributed contributed, Filter<ObjectAction> filter) {
+    public List<ObjectAction> getObjectActions(List<ActionType> types, final Contributed contributed, final Filter<ObjectAction> filter) {
         return null;
     }
 

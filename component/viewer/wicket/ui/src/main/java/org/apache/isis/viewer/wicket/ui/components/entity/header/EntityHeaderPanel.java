@@ -136,7 +136,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
         @SuppressWarnings("unchecked")
         final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, 
                 Filters.and(memberOrderNameNotCollection(adapterSpec), dynamicallyVisibleFor(adapter)));
-        topLevelActions.addAll(ObjectActions.flattenedActions(userActions));
+        topLevelActions.addAll(userActions);
     }
     
     private Filter<ObjectAction> memberOrderNameNotCollection(final ObjectSpecification adapterSpec) {

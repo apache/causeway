@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -80,7 +81,8 @@ public class Members extends AbstractElementProcessor {
                 }
             }
             request.appendHtml("   --------------\n");
-            final List<ObjectAction> actions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED);
+            final List<ObjectAction> actions = specification.getObjectActions(
+                    ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
             ;
             for (final ObjectAction action : actions) {
                 request.appendHtml("   " + action.getId() + " (");

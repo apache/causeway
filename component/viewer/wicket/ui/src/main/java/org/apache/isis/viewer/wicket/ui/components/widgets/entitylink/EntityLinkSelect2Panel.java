@@ -319,21 +319,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     }
 
 
-    @SuppressWarnings("unused")
-    private static List<ObjectAction> findServiceActionsFor(final ObjectSpecification scalarTypeSpec) {
-        final List<ObjectAction> actionList = Lists.newArrayList();
-        addServiceActionsFor(scalarTypeSpec, ActionType.USER, actionList);
-        if (IsisContext.getDeploymentType() == DeploymentType.EXPLORATION) {
-            addServiceActionsFor(scalarTypeSpec, ActionType.EXPLORATION, actionList);
-        }
-        return actionList;
-    }
-
-    private static void addServiceActionsFor(final ObjectSpecification noSpec, final ActionType actionType, final List<ObjectAction> actionList) {
-        final List<ObjectAction> serviceActionsFor = noSpec.getServiceActionsReturning(actionType);
-        actionList.addAll(serviceActionsFor);
-    }
-
     @Override
     public void onClick(final ActionModel actionModel) {
     }

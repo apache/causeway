@@ -160,7 +160,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
             objectActions.addAll(debugActions);
         }
 
-        List<ObjectAction> flattenedActions = ObjectActions.flattenedActions(objectActions);
+        List<ObjectAction> flattenedActions = objectActions;
         
         return Lists.newArrayList(Iterables.filter(flattenedActions, BULK));
     }

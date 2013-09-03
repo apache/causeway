@@ -51,6 +51,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -527,7 +528,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         final AuthenticationSessionProvider authenticationSessionProvider = getRuntimeContext().getAuthenticationSessionProvider();
         final SpecificationLoader specificationLookup = getRuntimeContext().getSpecificationLoader();
-        final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
+        final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();/* new ServicesProviderAbstract(){
+
+            @Override
+            public List<ObjectAdapter> getServices() {
+                return ObjectReflectorDefault.this.services;
+            }
+        };*/
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
         // create contexts as inputs ...

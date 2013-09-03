@@ -38,7 +38,7 @@ public class OptionFactory {
     public static void addCreateOptions(final ObjectSpecification specification, final UserActionSet options) {
         // TODO do the same as addObjectMenuOptions and collect together all the
         // actions for all the types
-        final List<ObjectAction> actions = specification.getServiceActionsReturning(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG));
+        final List<ObjectAction> actions = specification.getServiceActionsReturning(ActionType.ALL);
         menuOptions(actions, null, options);
     }
 
@@ -48,7 +48,7 @@ public class OptionFactory {
         }
 
         final ObjectSpecification noSpec = adapter.getSpecification();
-        menuOptions(noSpec.getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG), Contributed.INCLUDED), adapter, options);
+        menuOptions(noSpec.getObjectActions(Contributed.INCLUDED), adapter, options);
 
         // TODO: this looks like a bit of a hack; can we improve it by looking
         // at the facets?

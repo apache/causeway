@@ -16,15 +16,48 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import com.google.common.base.Predicate;
+
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+
 
 /**
  * Marker interface indicating an a contributed association or action.
  */
-public interface ContributeeMember { 
+public interface ContributeeMember {
+    
+    public static class Predicates {
+        
+        private Predicates(){}
+        
+        /**
+         * Evaluates the supplied {@link ObjectMember} and includes either if it is not a {@link ContributeeMember}
+         * (ie is a regular member) or is a {@link ContributeeMember} and contributed are to be
+         * {@link Contributed#isIncluded() included}.  
+         */
+        public static <T extends ObjectMember> Predicate<T> regularElse(final Contributed contributed) {
+            return com.google.common.base.Predicates.or(regular(), is(contributed));
+        }
+        
+        public static <T extends ObjectMember> Predicate<T> regular() {
+            return new Predicate<T>() {
+                @Override
+                public boolean apply(ObjectMember input) {
+                    return !(input instanceof ContributeeMember);
+                }
+            };
+        }
+
+        public static <T extends ObjectMember> Predicate<T> is(final Contributed contributed) {
+            return new Predicate<T>() {
+                @Override
+                public boolean apply(ObjectMember input) {
+                    return input instanceof ContributeeMember && contributed.isIncluded();
+                }
+            };
+        }
+
+    }
+
 }

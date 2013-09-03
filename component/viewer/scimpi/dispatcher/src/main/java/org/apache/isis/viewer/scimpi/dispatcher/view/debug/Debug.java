@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugHtmlString;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -354,11 +355,11 @@ public class Debug extends AbstractElementProcessor {
 
         final List<ObjectAssociation> fields = spec.getAssociations(Contributed.EXCLUDED);
         specificationMembers(view, "Fields", fields);
-        final List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER, Contributed.INCLUDED);
+        final List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
         specificationMembers(view, "User Actions", userActions);
-        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED));
-        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED));
-        specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED));
+        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any()));
+        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any()));
+        specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any()));
         view.endSection();
 
         view.startSection("Fields");

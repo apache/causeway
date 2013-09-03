@@ -385,33 +385,31 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
-        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(Contributed.EXCLUDED), getContributedActions(type, Filters.<ObjectAction>any()));
-        return getAction(availableActions, type, id, parameters);
+        final List<ObjectAction> actions = 
+                getObjectActions(type, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        return firstAction(actions, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
-        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(type, Contributed.INCLUDED), getContributedActions(type, Filters.<ObjectAction>any()));
-        return getAction(availableActions, type, id);
+        final List<ObjectAction> actions = 
+                getObjectActions(type, Contributed.INCLUDED, Filters.<ObjectAction>any()); 
+        return firstAction(actions, id);
     }
 
     @Override
     public ObjectAction getObjectAction(final String id) {
-        for (final ActionType type : ActionType.values()) {
-            final ObjectAction action = getObjectAction(type, id);
-            if (action != null) {
-                return action;
-            }
-        }
-        return null;
+        final List<ObjectAction> actions = 
+                getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any()); 
+        return firstAction(actions, id);
     }
 
-    private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type, final String actionName, final List<ObjectSpecification> parameters) {
-        outer: for (int i = 0; i < availableActions.size(); i++) {
-            final ObjectAction action = availableActions.get(i);
-            if (!action.getType().equals(type)) {
-                continue outer;
-            }
+    private static ObjectAction firstAction(
+            final List<ObjectAction> candidateActions, 
+            final String actionName, 
+            final List<ObjectSpecification> parameters) {
+        outer: for (int i = 0; i < candidateActions.size(); i++) {
+            final ObjectAction action = candidateActions.get(i);
             if (actionName != null && !actionName.equals(action.getId())) {
                 continue outer;
             }
@@ -428,15 +426,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return null;
     }
 
-    private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type, final String id) {
+    private static ObjectAction firstAction(
+            final List<ObjectAction> candidateActions, 
+            final String id) {
         if (id == null) {
             return null;
         }
-        for (int i = 0; i < availableActions.size(); i++) {
-            final ObjectAction action = availableActions.get(i);
-            if (!type.matchesTypeOf(action)) {
-                continue;
-            }
+        for (int i = 0; i < candidateActions.size(); i++) {
+            final ObjectAction action = candidateActions.get(i);
             if (id.equals(action.getIdentifier().toNameParmsIdentityString())) {
                 return action;
             }
@@ -514,7 +511,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void catalogueActions(final Map<Method, ObjectMember> membersByMethod) {
-        final List<ObjectAction> userActions = getObjectActions(ActionType.USER, Contributed.INCLUDED);
+        final List<ObjectAction> userActions = getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction userAction = userActions.get(i);
             final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);

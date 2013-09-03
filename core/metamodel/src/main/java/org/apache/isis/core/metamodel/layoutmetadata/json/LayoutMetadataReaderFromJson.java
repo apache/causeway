@@ -308,20 +308,24 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     
     @SuppressWarnings("unchecked")
     private static List<ObjectAssociation> propertiesOf(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Contributed.EXCLUDED, Filters.and(ObjectAssociationFilters.PROPERTIES,  ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+        return objSpec.getAssociations(Contributed.EXCLUDED, 
+                Filters.and(ObjectAssociation.Filters.PROPERTIES, 
+                            ObjectAssociation.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
     }
     @SuppressWarnings("unchecked")
     private static List<ObjectAssociation> collectionsOf(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Contributed.EXCLUDED, Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+        return objSpec.getAssociations(Contributed.EXCLUDED, 
+                Filters.and(ObjectAssociation.Filters.COLLECTIONS, 
+                            ObjectAssociation.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
     }
     private static List<ObjectAction> actionsOf(final ObjectSpecification objSpec, final Set<String> excludedActionIds) {
-        return objSpec.getObjectActions(ActionType.ALL_EXCEPT_SET, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));
+        return objSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));
     }
 
     @SuppressWarnings("unchecked")
     private static Filter<ObjectAction> staticallyVisibleExcluding(final Set<String> excludedActionIds) {
         return Filters.and(
-                ObjectActionFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE, 
+                ObjectAction.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE, 
                 new Filter<ObjectAction>(){
                     @Override
                     public boolean accept(ObjectAction t) {
