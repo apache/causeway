@@ -75,21 +75,21 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
  */
 public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object>  {
     
-    public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> facetedMethods) {
+    public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> identifiedHolders) {
 
         final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = Maps.newTreeMap();
         final SortedSet<IdentifiedHolder> nonAnnotatedGroup = Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (final IdentifiedHolder facetedMethod : facetedMethods) {
-            final MemberOrderFacet memberOrder = facetedMethod.getFacet(MemberOrderFacet.class);
+        for (final IdentifiedHolder identifiedHolder : identifiedHolders) {
+            final MemberOrderFacet memberOrder = identifiedHolder.getFacet(MemberOrderFacet.class);
             if (memberOrder == null) {
-                nonAnnotatedGroup.add(facetedMethod);
+                nonAnnotatedGroup.add(identifiedHolder);
                 continue;
             }
             final SortedSet<IdentifiedHolder> sortedMembersForGroup = getSortedSet(sortedMembersByGroup, memberOrder.name());
-            sortedMembersForGroup.add(facetedMethod);
+            sortedMembersForGroup.add(identifiedHolder);
         }
 
         // add the non-annotated group to the first "" group.

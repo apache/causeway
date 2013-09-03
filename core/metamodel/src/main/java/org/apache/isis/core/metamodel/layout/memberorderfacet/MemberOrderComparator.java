@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 import java.util.Comparator;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
@@ -55,22 +56,22 @@ public class MemberOrderComparator implements Comparator<Object> {
 
     @Override
     public int compare(final Object o1, final Object o2) {
-        if (o1 instanceof FacetedMethod && o2 instanceof FacetedMethod) {
-            return compare((FacetedMethod) o1, (FacetedMethod) o2);
+        if (o1 instanceof IdentifiedHolder && o2 instanceof IdentifiedHolder) {
+            return compare((IdentifiedHolder) o1, (IdentifiedHolder) o2);
         }
         if (o1 instanceof DeweyOrderSet && o2 instanceof DeweyOrderSet) {
             return orderSetComparator.compare((DeweyOrderSet) o1, (DeweyOrderSet) o2);
         }
-        if (o1 instanceof FacetedMethod && o2 instanceof DeweyOrderSet) {
+        if (o1 instanceof IdentifiedHolder && o2 instanceof DeweyOrderSet) {
             return -1; // members before OrderSets.
         }
-        if (o1 instanceof DeweyOrderSet && o2 instanceof FacetedMethod) {
+        if (o1 instanceof DeweyOrderSet && o2 instanceof IdentifiedHolder) {
             return +1; // members before OrderSets.
         }
-        throw new IllegalArgumentException("can only compare MemberPeers and OrderSets");
+        throw new IllegalArgumentException("can only compare IdentifiedHolders and DeweyOrderSets");
     }
 
-    public int compare(final FacetedMethod o1, final FacetedMethod o2) {
+    public int compare(final IdentifiedHolder o1, final IdentifiedHolder o2) {
         final MemberOrderFacet m1 = getMemberOrder(o1);
         final MemberOrderFacet m2 = getMemberOrder(o2);
 
