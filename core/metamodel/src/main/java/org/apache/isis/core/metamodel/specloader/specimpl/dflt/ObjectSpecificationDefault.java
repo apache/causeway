@@ -72,6 +72,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -236,11 +238,17 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetMethod = (FacetedMethod) element;
-                if (facetMethod.getFeatureType().isCollection()) {
-                    associationsToAppendTo.add(createCollection(facetMethod));
-                } else if (facetMethod.getFeatureType().isProperty()) {
-                    associationsToAppendTo.add(createProperty(facetMethod));
+                final ObjectAssociation objectAssociation = createAssociation(facetMethod);
+                if(objectAssociation != null) {
+                    associationsToAppendTo.add(objectAssociation);
                 }
+                
+            } else if (element instanceof OneToManyAssociation) {
+                // positioning for DeweyOrderSet acting on OTOA, OTMA rather than FacetedMethods
+                associationsToAppendTo.add((ObjectAssociation) element);
+            } else if (element instanceof OneToOneAssociation) {
+                // positioning for DeweyOrderSet acting on OTOA, OTMA rather than FacetedMethods
+                associationsToAppendTo.add((ObjectAssociation) element);
             } else if (element instanceof DeweyOrderSet) {
                 // just flatten.
                 DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
@@ -255,10 +263,16 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (final Object element : orderSet) {
             if (element instanceof FacetedMethod) {
                 final FacetedMethod facetedMethod = (FacetedMethod) element;
-                if (facetedMethod.getFeatureType().isAction()) {
-                    actionsToAppendTo.add(createAction(facetedMethod));
+                final ObjectAction objectAction = createAction(facetedMethod);
+                if(objectAction != null) {
+                    actionsToAppendTo.add(objectAction);
                 }
-            } else if (element instanceof DeweyOrderSet) {
+            } else if(element instanceof ObjectAction) {
+                // positioning for DeweyOrderSet acting on ObjectActions rather than FacetedMethods
+                final ObjectAction objectAction = (ObjectAction) element;
+                actionsToAppendTo.add(objectAction);
+            }
+            else if (element instanceof DeweyOrderSet) {
                 final DeweyOrderSet set = ((DeweyOrderSet) element);
                 final List<ObjectAction> actions = Lists.newArrayList();
                 convertToObjectActions(set, actions);
@@ -269,20 +283,23 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private OneToOneAssociationImpl createProperty(final FacetedMethod facetedMethod) {
-        return new OneToOneAssociationImpl(facetedMethod, objectMemberContext);
-    }
-
-    private OneToManyAssociationImpl createCollection(final FacetedMethod facetedMethod) {
-        return new OneToManyAssociationImpl(facetedMethod, objectMemberContext);
+    private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
+        if (facetMethod.getFeatureType().isCollection()) {
+            return new OneToManyAssociationImpl(facetMethod, objectMemberContext);
+        } else if (facetMethod.getFeatureType().isProperty()) {
+            return new OneToOneAssociationImpl(facetMethod, objectMemberContext);
+        } else {
+            return null;
+        }
     }
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
-        return new ObjectActionImpl(facetedMethod, objectMemberContext);
+        if (facetedMethod.getFeatureType().isAction()) {
+            return new ObjectActionImpl(facetedMethod, objectMemberContext);
+        } else {
+            return null;
+        }
     }
-
-
-    
 
 
     // //////////////////////////////////////////////////////////////////////
