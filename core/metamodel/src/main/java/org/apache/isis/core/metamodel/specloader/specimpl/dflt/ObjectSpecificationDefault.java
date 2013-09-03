@@ -181,44 +181,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         // associations and actions
         if(isNotIntrospected()) {
-            final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods(properties);
-            final List<ObjectAssociation> associations = Lists.newArrayList();
-            for (FacetedMethod facetedMethod : associationFacetedMethods) {
-                final ObjectAssociation association = createAssociation(facetedMethod);
-                if(association != null) {
-                    associations.add(association);
-                }
-            }
-            
-            final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
-            final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
-            
-            if(memberGroupLayoutFacet != null) {
-                final List<String> groupOrder = Lists.newArrayList();
-                groupOrder.addAll(memberGroupLayoutFacet.getLeft());
-                groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
-                groupOrder.addAll(memberGroupLayoutFacet.getRight());
-                
-                orderSet.reorderChildren(groupOrder);
-            }
-            final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
-            sortAssociations(orderSet, orderedAssociations);
+            final List<ObjectAssociation> associations = createAssociations(properties);
+            final List<ObjectAssociation> orderedAssociations = sortAssociations(associations);
             updateAssociations(orderedAssociations);
         }
 
         if(isNotIntrospected()) {
-            final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
-            final List<ObjectAction> actions = Lists.newArrayList();
-            for (FacetedMethod facetedMethod : actionFacetedMethods) {
-                final ObjectAction action = createAction(facetedMethod);
-                if(action != null) {
-                    actions.add(action);
-                }
-            }
-            
-            final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actions);
-            final List<ObjectAction> orderedActions = Lists.newArrayList();
-            sortObjectActions(orderSet, orderedActions);
+            final List<ObjectAction> actions = createActions(properties);
+            final List<ObjectAction> orderedActions = sortActions(actions);
             updateObjectActions(orderedActions);
         }
 
@@ -229,10 +199,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         if(isNotIntrospected()) {
             updateFromFacetValues();    
         }
-    }
-    
-    private boolean isNotIntrospected() {
-        return !(getIntrospectionState() == IntrospectionState.INTROSPECTED);
     }
 
     private void addNamedFacetAndPluralFacetIfRequired() {
@@ -249,54 +215,22 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
-        for (final Object element : orderSet) {
-            if (element instanceof FacetedMethod) {
-                final FacetedMethod facetMethod = (FacetedMethod) element;
-                final ObjectAssociation objectAssociation = createAssociation(facetMethod);
-                if(objectAssociation != null) {
-                    associationsToAppendTo.add(objectAssociation);
-                }
-                
-            } else if (element instanceof OneToManyAssociation) {
-                // positioning for DeweyOrderSet acting on OTOA, OTMA rather than FacetedMethods
-                associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof OneToOneAssociation) {
-                // positioning for DeweyOrderSet acting on OTOA, OTMA rather than FacetedMethods
-                associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof DeweyOrderSet) {
-                // just flatten.
-                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
-                sortAssociations(childOrderSet, associationsToAppendTo);
-            } else {
-                throw new UnknownTypeException(element);
-            }
-        }
-    }
+    // //////////////////////////////////////////////////////////////////////
+    // create associations and actions
+    // //////////////////////////////////////////////////////////////////////
 
-    private void sortObjectActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
-        for (final Object element : orderSet) {
-            if (element instanceof FacetedMethod) {
-                final FacetedMethod facetedMethod = (FacetedMethod) element;
-                final ObjectAction objectAction = createAction(facetedMethod);
-                if(objectAction != null) {
-                    actionsToAppendTo.add(objectAction);
-                }
-            } else if(element instanceof ObjectAction) {
-                // positioning for DeweyOrderSet acting on ObjectActions rather than FacetedMethods
-                final ObjectAction objectAction = (ObjectAction) element;
-                actionsToAppendTo.add(objectAction);
-            }
-            else if (element instanceof DeweyOrderSet) {
-                final DeweyOrderSet set = ((DeweyOrderSet) element);
-                final List<ObjectAction> actions = Lists.newArrayList();
-                sortObjectActions(set, actions);
-                actionsToAppendTo.addAll(actions);
-            } else {
-                throw new UnknownTypeException(element);
+    private List<ObjectAssociation> createAssociations(Properties properties) {
+        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods(properties);
+        final List<ObjectAssociation> associations = Lists.newArrayList();
+        for (FacetedMethod facetedMethod : associationFacetedMethods) {
+            final ObjectAssociation association = createAssociation(facetedMethod);
+            if(association != null) {
+                associations.add(association);
             }
         }
+        return associations;
     }
+    
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
@@ -308,6 +242,19 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
+    private List<ObjectAction> createActions(Properties properties) {
+        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
+        final List<ObjectAction> actions = Lists.newArrayList();
+        for (FacetedMethod facetedMethod : actionFacetedMethods) {
+            final ObjectAction action = createAction(facetedMethod);
+            if(action != null) {
+                actions.add(action);
+            }
+        }
+        return actions;
+    }
+
+
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
             return new ObjectActionImpl(facetedMethod, objectMemberContext);
@@ -316,6 +263,66 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
+    // //////////////////////////////////////////////////////////////////////
+    // sorting
+    // //////////////////////////////////////////////////////////////////////
+    
+    private List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
+        final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
+        
+        if(memberGroupLayoutFacet != null) {
+            final List<String> groupOrder = Lists.newArrayList();
+            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
+            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
+            groupOrder.addAll(memberGroupLayoutFacet.getRight());
+            
+            orderSet.reorderChildren(groupOrder);
+        }
+        final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
+        sortAssociations(orderSet, orderedAssociations);
+        return orderedAssociations;
+    }
+
+    private List<ObjectAction> sortActions(final List<ObjectAction> actions) {
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actions);
+        final List<ObjectAction> orderedActions = Lists.newArrayList();
+        sortActions(orderSet, orderedActions);
+        return orderedActions;
+    }
+
+    private void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
+        for (final Object element : orderSet) {
+            if (element instanceof OneToManyAssociation) {
+                associationsToAppendTo.add((ObjectAssociation) element);
+            } else if (element instanceof OneToOneAssociation) {
+                associationsToAppendTo.add((ObjectAssociation) element);
+            } else if (element instanceof DeweyOrderSet) {
+                // just flatten.
+                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
+                sortAssociations(childOrderSet, associationsToAppendTo);
+            } else {
+                throw new UnknownTypeException(element);
+            }
+        }
+    }
+
+    private void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
+        for (final Object element : orderSet) {
+            if(element instanceof ObjectAction) {
+                final ObjectAction objectAction = (ObjectAction) element;
+                actionsToAppendTo.add(objectAction);
+            }
+            else if (element instanceof DeweyOrderSet) {
+                final DeweyOrderSet set = ((DeweyOrderSet) element);
+                final List<ObjectAction> actions = Lists.newArrayList();
+                sortActions(set, actions);
+                actionsToAppendTo.addAll(actions);
+            } else {
+                throw new UnknownTypeException(element);
+            }
+        }
+    }
 
     // //////////////////////////////////////////////////////////////////////
     // Whether a service or not

@@ -267,6 +267,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public void setIntrospectionState(IntrospectionState introspectationState) {
         this.introspected = introspectationState;
     }
+    
+    protected boolean isNotIntrospected() {
+        return !(getIntrospectionState() == IntrospectionState.INTROSPECTED);
+    }
+
 
     // //////////////////////////////////////////////////////////////////////
     // Introspection (part 1)
@@ -330,24 +335,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     /**
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
-     * .
      */
     protected void updateAssociations(final List<ObjectAssociation> associations) {
-        if (associations == null) {
-            return;
-        }
         this.associations.clear();
         this.associations.addAll(associations);
     }
 
     /**
      * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
-     * .
      */
     protected void updateObjectActions(final List<ObjectAction> objectActions) {
-        if (objectActions == null) {
-            return;
-        }
         this.objectActions.clear();
         this.objectActions.addAll(objectActions);
     }
