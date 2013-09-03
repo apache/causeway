@@ -60,7 +60,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
         
         final Class<?> cls = processClassContext.getCls();
 
-        final Properties properties = processClassContext.layoutProperties("memberGroupLayout");
+        final Properties properties = processClassContext.metadataProperties("memberGroupLayout");
         if(properties != null) {
             return new MemberGroupLayoutFacetProperties(properties, holder);
         }

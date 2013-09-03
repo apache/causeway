@@ -528,13 +528,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         final AuthenticationSessionProvider authenticationSessionProvider = getRuntimeContext().getAuthenticationSessionProvider();
         final SpecificationLoader specificationLookup = getRuntimeContext().getSpecificationLoader();
-        final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();/* new ServicesProviderAbstract(){
-
-            @Override
-            public List<ObjectAdapter> getServices() {
-                return ObjectReflectorDefault.this.services;
-            }
-        };*/
+        final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
         // create contexts as inputs ...

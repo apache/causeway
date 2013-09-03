@@ -39,6 +39,7 @@ import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -63,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -74,6 +76,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
@@ -129,17 +132,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     protected final ObjectMemberContext objectMemberContext;
 
 
-    private final List<ObjectAction> objectActions = Lists.newArrayList();
     private final List<ObjectAssociation> associations = Lists.newArrayList();
+    private final List<ObjectAction> objectActions = Lists.newArrayList();
+    
+    private boolean contributeeAssociationsAdded;
+    private boolean contributeeActionsAdded;
+    
     private final List<ObjectSpecification> interfaces = Lists.newArrayList();
     private final SubclassList subclasses = new SubclassList();
-
-    private List<ObjectAssociation> contributeeAssociations;
-
-    /**
-     * Lazily populated in {@link #getContributeeActions(ActionType)}.
-     */
-    private final Map<ActionType, List<ObjectAction>> contributeeActionsByType = Maps.newLinkedHashMap();
 
     private final Class<?> correspondingClass;
     private final String fullName;
@@ -332,20 +332,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.subclasses.addSubclass(subclass);
     }
 
-    /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
-     */
-    protected void updateAssociations(final List<ObjectAssociation> associations) {
+    protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
+        final List<ObjectAssociation> orderedAssociations = sortAssociations(associations);
         this.associations.clear();
-        this.associations.addAll(associations);
+        this.associations.addAll(orderedAssociations);
     }
 
-    /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
-     */
-    protected void updateObjectActions(final List<ObjectAction> objectActions) {
+    protected void sortAndUpdateActions(final List<ObjectAction> objectActions) {
+        final List<ObjectAction> orderedActions = sortActions(objectActions);
         this.objectActions.clear();
-        this.objectActions.addAll(objectActions);
+        this.objectActions.addAll(orderedActions);
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -653,10 +649,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public List<ObjectAssociation> getAssociations(final Contributed contributee) {
-        List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
-        if(contributee.isIncluded()) {
-            associations.addAll(getContributeeAssociations());
+        if(contributee.isIncluded() && !contributeeAssociationsAdded) {
+            List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
+            final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations();
+            associations.addAll(contributeeAssociations);
+            sortAndUpdateAssociations(associations);
+            contributeeAssociationsAdded = true;
         }
+        final List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
         return Lists.newArrayList(Iterables.filter(
                 associations, ContributeeMember.Predicates.regularElse(contributee)));
     }
@@ -697,7 +697,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public List<OneToOneAssociation> getProperties(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociationFilters.PROPERTIES);
+        final List list = getAssociations(contributed, ObjectAssociation.Filters.PROPERTIES);
         return list;
     }
 
@@ -714,6 +714,32 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public List<ObjectAction> getObjectActions(
+            final List<ActionType> types,
+            final Contributed contributed, 
+            final Filter<ObjectAction> filter) {
+        if(contributed.isIncluded() && !contributeeActionsAdded) {
+            final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
+            actions.addAll(createContributeeActions());
+            sortAndUpdateActions(actions);
+            contributeeActionsAdded = true;
+        }
+        
+        final List<ObjectAction> actions = Lists.newArrayList();
+        for (final ActionType type : types) {
+            @SuppressWarnings("unchecked")
+            final List<ObjectAction> filterActions = 
+                    Lists.newArrayList(Iterables.filter(
+                            objectActions, 
+                            Filters.asPredicate(Filters.and(
+                                    ObjectAction.Filters.ofType(type), filter))));
+            actions.addAll(filterActions);
+        }
+        return Lists.newArrayList(Iterables.filter(
+                actions, ContributeeMember.Predicates.regularElse(contributed)));
+    }
+    
+    @Override
+    public List<ObjectAction> getObjectActions(
             final Contributed contributed) {
         return getObjectActions(ActionType.ALL, contributed, Filters.<ObjectAction>any());
     }
@@ -726,34 +752,70 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return getObjectActions(Collections.singletonList(type), contributed, filter);
     }
 
-    @Override
-    public List<ObjectAction> getObjectActions(
-            final List<ActionType> types,
-            final Contributed contributed, 
-            final Filter<ObjectAction> filter) {
-        final List<ObjectAction> actions = Lists.newArrayList();
-        for (final ActionType type : types) {
-            addActions(type, contributed, filter, actions);
+    // //////////////////////////////////////////////////////////////////////
+    // sorting
+    // //////////////////////////////////////////////////////////////////////
+    
+    protected List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
+        final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
+        
+        if(memberGroupLayoutFacet != null) {
+            final List<String> groupOrder = Lists.newArrayList();
+            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
+            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
+            groupOrder.addAll(memberGroupLayoutFacet.getRight());
+            
+            orderSet.reorderChildren(groupOrder);
         }
-        return Lists.newArrayList(Iterables.filter(
-                actions, ContributeeMember.Predicates.regularElse(contributed)));
+        final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
+        sortAssociations(orderSet, orderedAssociations);
+        return orderedAssociations;
     }
 
-    private List<ObjectAction> addActions(final ActionType type, final Contributed contributee, final Filter<ObjectAction> filter, final List<ObjectAction> actionListToAppendTo) {
-        if(contributee.isIncluded()) {
-            actionListToAppendTo.addAll(getContributeeActions(type, filter));
+    private static void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
+        for (final Object element : orderSet) {
+            if (element instanceof OneToManyAssociation) {
+                associationsToAppendTo.add((ObjectAssociation) element);
+            } else if (element instanceof OneToOneAssociation) {
+                associationsToAppendTo.add((ObjectAssociation) element);
+            } else if (element instanceof DeweyOrderSet) {
+                // just flatten.
+                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
+                sortAssociations(childOrderSet, associationsToAppendTo);
+            } else {
+                throw new UnknownTypeException(element);
+            }
         }
-        actionListToAppendTo.addAll(filterActions(objectActions, type, filter));
-        return actionListToAppendTo;
     }
 
-    @SuppressWarnings("unchecked")
-    private static List<ObjectAction> filterActions(final List<ObjectAction> objectActions, final ActionType type, final Filter<ObjectAction> filter) {
-        return Lists.newArrayList(Iterables.filter(
-                objectActions, 
-                Filters.asPredicate(Filters.and(ObjectAction.Filters.ofType(type), filter))));
+    protected static List<ObjectAction> sortActions(final List<ObjectAction> actions) {
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actions);
+        final List<ObjectAction> orderedActions = Lists.newArrayList();
+        sortActions(orderSet, orderedActions);
+        return orderedActions;
     }
 
+    private static void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
+        for (final Object element : orderSet) {
+            if(element instanceof ObjectAction) {
+                final ObjectAction objectAction = (ObjectAction) element;
+                actionsToAppendTo.add(objectAction);
+            }
+            else if (element instanceof DeweyOrderSet) {
+                final DeweyOrderSet set = ((DeweyOrderSet) element);
+                final List<ObjectAction> actions = Lists.newArrayList();
+                sortActions(set, actions);
+                actionsToAppendTo.addAll(actions);
+            } else {
+                throw new UnknownTypeException(element);
+            }
+        }
+    }
+
+    // //////////////////////////////////////////////////////////////////////
+    // getServiceActionsReturning
+    // //////////////////////////////////////////////////////////////////////
 
     @Override
     public List<ObjectAction> getServiceActionsReturning(final List<ActionType> types) {
@@ -803,16 +865,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // contributee associations (properties and collections)
     // //////////////////////////////////////////////////////////////////////
 
-    private List<ObjectAssociation> getContributeeAssociations() {
+    private List<ObjectAssociation> createContributeeAssociations() {
         if (isService()) {
             return Collections.emptyList();
         }
-        if (contributeeAssociations == null) {
-            contributeeAssociations = Lists.newArrayList();
-            final List<ObjectAdapter> services = getServicesProvider().getServices();
-            for (final ObjectAdapter serviceAdapter : services) {
-                addContributeeAssociationsIfAny(serviceAdapter, contributeeAssociations);
-            }
+        
+        final List<ObjectAssociation> contributeeAssociations = Lists.newArrayList();
+        final List<ObjectAdapter> services = getServicesProvider().getServices();
+        for (final ObjectAdapter serviceAdapter : services) {
+            addContributeeAssociationsIfAny(serviceAdapter, contributeeAssociations);
         }
         return contributeeAssociations;
     }
@@ -877,44 +938,34 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * All contributee actions (each wrapping a service's contributed action) for this spec;
-     * these are lazily created and then cached.
+     * All contributee actions (each wrapping a service's contributed action) for this spec.
      * 
      * <p>
      * If this specification {@link #isService() is actually for} a service,
      * then returns an empty list.
      */
-    protected List<ObjectAction> getContributeeActions(final ActionType actionType, Filter<ObjectAction> filter) {
+    protected List<ObjectAction> createContributeeActions() {
         if (isService()) {
             return Collections.emptyList();
         }
-        List<ObjectAction> contributedActionSets = getContributeeActions(actionType);
-        return Lists.newArrayList(Iterables.filter(contributedActionSets, Filters.asPredicate(filter)));
-    }
-
-    private List<ObjectAction> getContributeeActions(final ActionType actionType) {
-        List<ObjectAction> contributeeActions = contributeeActionsByType.get(actionType);
-        if (contributeeActions == null) {
-            contributeeActions = Lists.newArrayList();
-            contributeeActionsByType.put(actionType, contributeeActions);
+        final List<ObjectAction> contributeeActions = Lists.newArrayList();
             
-            // populate an ActionSet with all actions contributed by each
-            // service
-            final List<ObjectAdapter> services = getServicesProvider().getServices();
-            for (final ObjectAdapter serviceAdapter : services) {
-                addContributeeActionsIfAny(serviceAdapter, actionType, contributeeActions);
-            }
+        final List<ObjectAdapter> services = getServicesProvider().getServices();
+        for (final ObjectAdapter serviceAdapter : services) {
+            addContributeeActionsIfAny(serviceAdapter, contributeeActions);
         }
         return contributeeActions;
     }
 
-    private void addContributeeActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, final List<ObjectAction> contributeeActionsToAppendTo) {
+    private void addContributeeActionsIfAny(
+            final ObjectAdapter serviceAdapter, 
+            final List<ObjectAction> contributeeActionsToAppendTo) {
         final ObjectSpecification specification = serviceAdapter.getSpecification();
         if (specification == this) {
             return;
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
         for (final ObjectAction serviceAction : serviceActions) {
             if (serviceAction.isAlwaysHidden()) {
                 continue;
@@ -926,13 +977,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(!(serviceAction instanceof ObjectActionImpl)) {
                 continue;
             }
-            ObjectActionImpl contributedAction = (ObjectActionImpl) serviceAction;
+            final ObjectActionImpl contributedAction = (ObjectActionImpl) serviceAction;
         
             // see if qualifies by inspecting all parameters
             final int contributeeParam = contributeeParameterMatchOf(contributedAction);
             if (contributeeParam != -1) {
                 ObjectActionContributee contributeeAction = 
                         new ObjectActionContributee(serviceAdapter, contributedAction, contributeeParam, this, objectMemberContext);
+
                 contributeeActions.add(contributeeAction);
             }
         }

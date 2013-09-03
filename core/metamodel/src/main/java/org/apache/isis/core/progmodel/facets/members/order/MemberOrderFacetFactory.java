@@ -41,7 +41,7 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract {
         final FacetedMethod holder = processMethodContext.getFacetHolder();
         
         MemberOrderFacet memberOrderFacet = null;
-        final Properties properties = processMethodContext.layoutProperties("memberOrder");
+        final Properties properties = processMethodContext.metadataProperties("memberOrder");
         if(properties != null) {
             memberOrderFacet = new MemberOrderFacetProperties(properties, holder);
         }

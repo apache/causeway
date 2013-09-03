@@ -55,11 +55,16 @@ public interface FacetFactory {
      * the meta-model.
      */
     List<FeatureType> getFeatureTypes();
+    
+    
+    // //////////////////////////////////////
+    // process class
+    // //////////////////////////////////////
 
     public static class ProcessClassContext extends AbstractProcessContext<FacetHolder> implements MethodRemover {
         private final Class<?> cls;
         private final MethodRemover methodRemover;
-        private final Properties properties;
+        private final Properties metadataProperties;
 
         /**
          * For testing only.
@@ -68,11 +73,15 @@ public interface FacetFactory {
             this(cls, null, methodRemover, facetHolder);
         }
 
-        public ProcessClassContext(final Class<?> cls, final Properties properties, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+        public ProcessClassContext(
+                final Class<?> cls, 
+                final Properties metadataProperties, 
+                final MethodRemover methodRemover, 
+                final FacetHolder facetHolder) {
             super(facetHolder);
             this.cls = cls;
             this.methodRemover = methodRemover;
-            this.properties = properties;
+            this.metadataProperties = metadataProperties;
         }
 
         /**
@@ -102,11 +111,11 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties layoutProperties(String prefix) {
-            if(properties == null) {
+        public Properties metadataProperties(String prefix) {
+            if(metadataProperties == null) {
                 return null;
             }
-            final Properties subsetProperties = PropertyUtil.subset(this.properties, prefix);
+            final Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix);
             return !subsetProperties.isEmpty() ? subsetProperties : null;
         }
     }
@@ -115,19 +124,30 @@ public interface FacetFactory {
      * Process the class, and return the correctly setup annotation if present.
      */
     void process(ProcessClassContext processClassContext);
+    
+    // //////////////////////////////////////
+    // process method
+    // //////////////////////////////////////
+
 
     public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover {
         private final Class<?> cls;
         private final FeatureType featureType;
-        private final Properties properties;
+        private final Properties metadataProperties;
         private final Method method;
         private final MethodRemover methodRemover;
 
-        public ProcessMethodContext(final Class<?> cls, FeatureType featureType, Properties properties, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod) {
+        public ProcessMethodContext(
+                final Class<?> cls, 
+                final FeatureType featureType, 
+                final Properties metadataProperties, 
+                final Method method, 
+                final MethodRemover methodRemover, 
+                final FacetedMethod facetedMethod) {
             super(facetedMethod);
             this.cls = cls;
             this.featureType = featureType;
-            this.properties = properties;
+            this.metadataProperties = metadataProperties;
             this.method = method;
             this.methodRemover = methodRemover;
         }
@@ -160,9 +180,9 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties layoutProperties(String prefix) {
+        public Properties metadataProperties(String prefix) {
             
-            if(properties == null) {
+            if(metadataProperties == null) {
                 return null;
             }
             Identifier identifier = featureType.identifierFor(getCls(), getMethod());
@@ -171,15 +191,14 @@ public interface FacetFactory {
             // bit of a hack; to distinguish between actions and properties that have same identifier
             // eg getPaidBy() and paidBy()
             if(featureType.isAction()) {
-                Properties subsetProperties = PropertyUtil.subset(this.properties, prefix+"."+id+"()");
+                Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix+"."+id+"()");
                 if (!subsetProperties.isEmpty()) {
                     return subsetProperties;
                 } 
-                
             }
 
             // otherwise, regular processing...
-            Properties subsetProperties = PropertyUtil.subset(this.properties, prefix+"."+id);
+            Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix+"."+id);
             if (!subsetProperties.isEmpty()) {
                 return subsetProperties;
             }
@@ -193,11 +212,19 @@ public interface FacetFactory {
      */
     void process(ProcessMethodContext processMethodContext);
 
+    
+    // //////////////////////////////////////
+    // process param
+    // //////////////////////////////////////
+
     public static class ProcessParameterContext extends AbstractProcessContext<FacetedMethodParameter> {
         private final Method method;
         private final int paramNum;
 
-        public ProcessParameterContext(final Method method, final int paramNum, final FacetedMethodParameter facetedMethodParameter) {
+        public ProcessParameterContext(
+                final Method method, 
+                final int paramNum, 
+                final FacetedMethodParameter facetedMethodParameter) {
             super(facetedMethodParameter);
             this.method = method;
             this.paramNum = paramNum;

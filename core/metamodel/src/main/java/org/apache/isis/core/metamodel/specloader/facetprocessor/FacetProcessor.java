@@ -276,19 +276,26 @@ public class FacetProcessor implements RuntimeContextAware {
      *            - class to process
      * @param facetHolder
      *            - holder to attach facets to.
-     * 
      */
-    public void process(final Class<?> cls, final Properties properties, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+    public void process(
+            final Class<?> cls, 
+            final Properties metadataProperties, 
+            final MethodRemover methodRemover, 
+            final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, properties, removerElseNullRemover(methodRemover), facetHolder));
+            facetFactory.process(new ProcessClassContext(cls, metadataProperties, removerElseNullRemover(methodRemover), facetHolder));
         }
     }
 
-    public void processPost(final Class<?> cls, Properties properties, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+    public void processPost(
+            final Class<?> cls, 
+            final Properties metadataProperties, 
+            final MethodRemover methodRemover, 
+            final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT_POST_PROCESSING);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, properties, removerElseNullRemover(methodRemover), facetHolder));
+            facetFactory.process(new ProcessClassContext(cls, metadataProperties, removerElseNullRemover(methodRemover), facetHolder));
         }
     }
 
@@ -313,12 +320,19 @@ public class FacetProcessor implements RuntimeContextAware {
      * @param featureType
      *            - what type of feature the method represents (property,
      *            action, collection etc)
-     * @param properties TODO
+     * @param metadataProperties 
+     *            - additional properties to parse and use 
      */
-    public void process(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod, final FeatureType featureType, Properties properties) {
+    public void process(
+            final Class<?> cls, 
+            final Method method, 
+            final MethodRemover methodRemover, 
+            final FacetedMethod facetedMethod, 
+            final FeatureType featureType, 
+            final Properties metadataProperties) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessMethodContext(cls, featureType, properties, method, removerElseNullRemover(methodRemover), facetedMethod));
+            facetFactory.process(new ProcessMethodContext(cls, featureType, metadataProperties, method, removerElseNullRemover(methodRemover), facetedMethod));
         }
     }
 
@@ -340,7 +354,10 @@ public class FacetProcessor implements RuntimeContextAware {
      * @param facetedMethodParameter
      *            - holder to attach facets to.
      */
-    public void processParams(final Method method, final int paramNum, final FacetedMethodParameter facetedMethodParameter) {
+    public void processParams(
+            final Method method, 
+            final int paramNum, 
+            final FacetedMethodParameter facetedMethodParameter) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
         for (final FacetFactory facetFactory : factoryList) {
             facetFactory.processParams(new ProcessParameterContext(method, paramNum, facetedMethodParameter));

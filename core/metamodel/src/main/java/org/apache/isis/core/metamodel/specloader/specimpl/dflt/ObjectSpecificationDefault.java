@@ -109,6 +109,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private FacetedMethodsBuilder facetedMethodsBuilder;
 
+    /**
+     * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
+     */
+    private Properties metadataProperties;
+
     // //////////////////////////////////////////////////////////////////////
     // Constructor
     // //////////////////////////////////////////////////////////////////////
@@ -126,10 +131,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     @Override
     public void introspectTypeHierarchyAndMembers() {
 
-        // class
-        Properties properties = null;
+        metadataProperties = null;
         if(isNotIntrospected()) {
-            properties = facetedMethodsBuilder.introspectClass();
+            metadataProperties = facetedMethodsBuilder.introspectClass();
         }
         
         // name
@@ -154,14 +158,15 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         // walk superinterfaces
 
+        //
         // REVIEW: the processing here isn't quite the same as with
-        // superclasses,
-        // in that with superclasses the superclass adds this type as its
-        // subclass,
-        // whereas here this type defines itself as the subtype.
+        // superclasses, in that with superclasses the superclass adds this type as its
+        // subclass, whereas here this type defines itself as the subtype.
+        //
         // it'd be nice to push the responsibility for adding subclasses to
         // the interface type... needs some tests around it, though, before
         // making that refactoring.
+        //
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
         final List<ObjectSpecification> interfaceSpecList = Lists.newArrayList();
         for (final Class<?> interfaceType : interfaceTypes) {
@@ -181,19 +186,17 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         // associations and actions
         if(isNotIntrospected()) {
-            final List<ObjectAssociation> associations = createAssociations(properties);
-            final List<ObjectAssociation> orderedAssociations = sortAssociations(associations);
-            updateAssociations(orderedAssociations);
+            final List<ObjectAssociation> associations = createAssociations(metadataProperties);
+            sortAndUpdateAssociations(associations);
         }
 
         if(isNotIntrospected()) {
-            final List<ObjectAction> actions = createActions(properties);
-            final List<ObjectAction> orderedActions = sortActions(actions);
-            updateObjectActions(orderedActions);
+            final List<ObjectAction> actions = createActions(metadataProperties);
+            sortAndUpdateActions(actions);
         }
 
         if(isNotIntrospected()) {
-            facetedMethodsBuilder.introspectClassPostProcessing(properties);    
+            facetedMethodsBuilder.introspectClassPostProcessing(metadataProperties);    
         }
         
         if(isNotIntrospected()) {
@@ -242,8 +245,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    private List<ObjectAction> createActions(Properties properties) {
-        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(properties);
+    private List<ObjectAction> createActions(Properties metadataProperties) {
+        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods(metadataProperties);
         final List<ObjectAction> actions = Lists.newArrayList();
         for (FacetedMethod facetedMethod : actionFacetedMethods) {
             final ObjectAction action = createAction(facetedMethod);
@@ -263,66 +266,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // sorting
-    // //////////////////////////////////////////////////////////////////////
-    
-    private List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
-        final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
-        
-        if(memberGroupLayoutFacet != null) {
-            final List<String> groupOrder = Lists.newArrayList();
-            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
-            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
-            groupOrder.addAll(memberGroupLayoutFacet.getRight());
-            
-            orderSet.reorderChildren(groupOrder);
-        }
-        final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
-        sortAssociations(orderSet, orderedAssociations);
-        return orderedAssociations;
-    }
-
-    private List<ObjectAction> sortActions(final List<ObjectAction> actions) {
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actions);
-        final List<ObjectAction> orderedActions = Lists.newArrayList();
-        sortActions(orderSet, orderedActions);
-        return orderedActions;
-    }
-
-    private void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
-        for (final Object element : orderSet) {
-            if (element instanceof OneToManyAssociation) {
-                associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof OneToOneAssociation) {
-                associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof DeweyOrderSet) {
-                // just flatten.
-                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
-                sortAssociations(childOrderSet, associationsToAppendTo);
-            } else {
-                throw new UnknownTypeException(element);
-            }
-        }
-    }
-
-    private void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
-        for (final Object element : orderSet) {
-            if(element instanceof ObjectAction) {
-                final ObjectAction objectAction = (ObjectAction) element;
-                actionsToAppendTo.add(objectAction);
-            }
-            else if (element instanceof DeweyOrderSet) {
-                final DeweyOrderSet set = ((DeweyOrderSet) element);
-                final List<ObjectAction> actions = Lists.newArrayList();
-                sortActions(set, actions);
-                actionsToAppendTo.addAll(actions);
-            } else {
-                throw new UnknownTypeException(element);
-            }
-        }
-    }
 
     // //////////////////////////////////////////////////////////////////////
     // Whether a service or not
@@ -380,7 +323,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     // //////////////////////////////////////////////////////////////////////
-    // Actions
+    // getObjectAction
     // //////////////////////////////////////////////////////////////////////
 
     @Override
