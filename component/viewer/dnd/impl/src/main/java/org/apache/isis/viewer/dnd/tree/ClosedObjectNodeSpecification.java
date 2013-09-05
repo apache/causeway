@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -68,7 +67,7 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
     @Override
     public int canOpen(final Content content) {
         final ObjectAdapter object = ((ObjectContent) content).getObject();
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where));
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object, where));
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).isOneToManyAssociation()) {
                 return CAN_OPEN;

@@ -30,6 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 public interface FacetFactory {
 
@@ -43,6 +45,11 @@ public interface FacetFactory {
         public T getFacetHolder() {
             return facetHolder;
         }
+    }
+    
+    public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
+        public Properties metadataProperties(String prefix);
+        public T getFacetHolder();
     }
 
     /**
@@ -61,7 +68,7 @@ public interface FacetFactory {
     // process class
     // //////////////////////////////////////
 
-    public static class ProcessClassContext extends AbstractProcessContext<FacetHolder> implements MethodRemover {
+    public static class ProcessClassContext extends AbstractProcessContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
         private final Class<?> cls;
         private final MethodRemover methodRemover;
         private final Properties metadataProperties;
@@ -130,7 +137,7 @@ public interface FacetFactory {
     // //////////////////////////////////////
 
 
-    public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover {
+    public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover, ProcessContextWithMetadataProperties<FacetedMethod> {
         private final Class<?> cls;
         private final FeatureType featureType;
         private final Properties metadataProperties;
@@ -212,7 +219,9 @@ public interface FacetFactory {
      */
     void process(ProcessMethodContext processMethodContext);
 
-    
+
+
+
     // //////////////////////////////////////
     // process param
     // //////////////////////////////////////

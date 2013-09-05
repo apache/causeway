@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

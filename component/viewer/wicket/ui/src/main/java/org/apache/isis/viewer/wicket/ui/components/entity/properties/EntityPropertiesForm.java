@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
@@ -236,7 +235,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     @SuppressWarnings("unchecked")
     private Filter<ObjectAssociation> visiblePropertyFilter(final ObjectAdapter adapter, Where where) {
-        return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
+        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
     }
 
     private void addButtons(MarkupContainer markupContainer) {
@@ -501,7 +500,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     @SuppressWarnings("unchecked")
     private Filter<ObjectAssociation> enabledAssociationFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
+        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
     }
 
     private void toEditMode(final AjaxRequestTarget target) {

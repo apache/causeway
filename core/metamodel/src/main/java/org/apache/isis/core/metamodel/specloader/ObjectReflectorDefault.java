@@ -532,7 +532,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
         // create contexts as inputs ...
-        final SpecificationContext specContext = new SpecificationContext(getDeploymentCategory(), authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup);
+        final SpecificationContext specContext = new SpecificationContext(getDeploymentCategory(), authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup, facetProcessor);
 
         final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
         final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);

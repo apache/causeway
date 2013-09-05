@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
@@ -124,7 +123,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
     @SuppressWarnings("unchecked")
 	private Filter<ObjectAssociation> visibleCollectionsFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociationFilters.COLLECTIONS, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLES));
+        return Filters.and(ObjectAssociation.Filters.COLLECTIONS, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLES));
     }
 
     private void requestRepaintPanel(final AjaxRequestTarget target) {

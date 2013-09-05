@@ -27,7 +27,6 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
@@ -43,7 +42,7 @@ public class TableAxisImpl implements TableAxis {
         // TODO create axis first, then after view built set up the axis
         // details?
         final ObjectSpecification elementSpecification = (content).getElementSpecification();
-        final List<ObjectAssociation> accessibleFields = elementSpecification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+        final List<ObjectAssociation> accessibleFields = elementSpecification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES);
 
         this.columns = tableFields(accessibleFields, content);
         widths = new int[columns.size()];

@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
@@ -80,7 +79,7 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
         } else {
             final CollectionContent collectionContent = (CollectionContent) requirement.getContent();
             final ObjectSpecification elementSpecification = collectionContent.getElementSpecification();
-            final List<ObjectAssociation> fields = elementSpecification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+            final List<ObjectAssociation> fields = elementSpecification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES);
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToOneAssociation()) {
                     return true;

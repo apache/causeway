@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -160,7 +159,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties(Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
     }
 
@@ -168,7 +167,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @SuppressWarnings("unchecked")
     public List<OneToManyAssociation> getCollections(Contributed contributed) {
         @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.COLLECTIONS);
+        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
         return new ArrayList<OneToManyAssociation>(list);
     }
 

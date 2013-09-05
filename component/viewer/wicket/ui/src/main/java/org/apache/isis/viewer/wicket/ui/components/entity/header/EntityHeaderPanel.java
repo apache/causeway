@@ -36,8 +36,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -135,13 +133,13 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
         final ObjectSpecification adapterSpec = adapter.getSpecification();
         @SuppressWarnings("unchecked")
         final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, 
-                Filters.and(memberOrderNameNotCollection(adapterSpec), dynamicallyVisibleFor(adapter)));
+                Filters.and(memberOrderNameNotAssociation(adapterSpec), dynamicallyVisibleFor(adapter)));
         topLevelActions.addAll(userActions);
     }
     
-    private Filter<ObjectAction> memberOrderNameNotCollection(final ObjectSpecification adapterSpec) {
+    private Filter<ObjectAction> memberOrderNameNotAssociation(final ObjectSpecification adapterSpec) {
 
-        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.EXCLUDED);
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
         final List<String> associationNames = Lists.transform(associations, ObjectAssociations.toName());
         final List<String> associationIds = Lists.transform(associations, ObjectAssociations.toId());
 
@@ -161,7 +159,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
 
 
     protected Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
-        return ObjectActionFilters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
+        return ObjectAction.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
     }
 
     @Override

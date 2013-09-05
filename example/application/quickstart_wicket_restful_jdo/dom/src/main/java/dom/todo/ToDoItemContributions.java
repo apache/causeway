@@ -18,7 +18,6 @@
  */
 package dom.todo;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -54,9 +53,8 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     // priority (contributed property)
     // //////////////////////////////////////
     
-    @DescribedAs("The relative priority of this item compared to others (using 'due by' date)")
+    @DescribedAs("The relative priority of this item compared to others not yet complete (using 'due by' date)")
     @NotInServiceMenu
-    @MemberOrder(sequence="1")
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ACTION)
     @Hidden(where=Where.ALL_TABLES)
@@ -65,21 +63,22 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             return null;
         }
 
-        // sort items ...
-        final List<ToDoItem> sortedNotYetComplete = 
-                ORDERING_DUE_BY
-                .compound(ORDERING_DESCRIPTION)
-                .sortedCopy(toDoItems.notYetComplete());
-        
-        // ... then locate this one
+        // sort items, then locate this one
         int i=1;
-        for (ToDoItem each : sortedNotYetComplete) {
+        for (ToDoItem each : sortedNotYetComplete()) {
             if(each == toDoItem) {
                 return i;
             }
             i++;
         }
         return null;
+    }
+
+
+    private List<ToDoItem> sortedNotYetComplete() {
+        return ORDERING_DUE_BY
+        .compound(ORDERING_DESCRIPTION)
+        .sortedCopy(toDoItems.notYetComplete());
     }
 
     private static Ordering<ToDoItem> ORDERING_DUE_BY = 
@@ -97,7 +96,38 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
                 return input.getDescription();
             }
         });
+
+
+    // //////////////////////////////////////
+    // Next, Previous (contributed actions)
+    // //////////////////////////////////////
+
+    @DescribedAs("The next item not yet completed")
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
+    @NotContributed(As.ASSOCIATION)
+    public ToDoItem next(final ToDoItem item) {
+        final Integer priority = priority(item);
+        int priorityOfNext = priority != null ? priority + 1 : 0;
+        return itemWithPriorityElse(priorityOfNext, item);
+    }
     
+    @DescribedAs("The previous item not yet completed")
+    @NotInServiceMenu
+    @ActionSemantics(Of.SAFE)
+    @NotContributed(As.ASSOCIATION)
+    public ToDoItem previous(final ToDoItem item) {
+        final Integer priority = priority(item);
+        int priorityOfPrevious = priority != null? priority - 1 : 0;
+        return itemWithPriorityElse(priorityOfPrevious, item);
+    }
+
+
+    private ToDoItem itemWithPriorityElse(int idx, final ToDoItem itemElse) {
+        final List<ToDoItem> items = sortedNotYetComplete();
+        return idx>=0 && items.size()>=idx? items.get(idx-1): itemElse;
+    }
+
     
     // //////////////////////////////////////
     // SimilarTo (contributed collection)
@@ -105,7 +135,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="1")
     @NotContributed(As.ACTION)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         if(false) {
@@ -144,7 +173,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
     @ActionSemantics(Of.IDEMPOTENT)
-    @MemberOrder(name="Subcategory", sequence="1")
     public ToDoItem updateCategory(
             final ToDoItem item, 
             final @Named("Category") Category category,

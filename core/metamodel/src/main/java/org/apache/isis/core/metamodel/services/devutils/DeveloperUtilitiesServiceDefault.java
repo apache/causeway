@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -83,7 +82,7 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
             if (exclude(spec)) {
                 continue;
             }
-            final List<ObjectAssociation> properties = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES);
+            final List<ObjectAssociation> properties = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
             for (ObjectAssociation property : properties) {
                 final OneToOneAssociation otoa = (OneToOneAssociation) property;
                 if (exclude(otoa)) {
@@ -91,7 +90,7 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
                 }
                 rows.add(new MetaModelRow(spec, otoa));
             }
-            final List<ObjectAssociation> associations = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.COLLECTIONS);
+            final List<ObjectAssociation> associations = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
             for (ObjectAssociation collection : associations) {
                 final OneToManyAssociation otma = (OneToManyAssociation) collection;
                 if (exclude(otma)) {

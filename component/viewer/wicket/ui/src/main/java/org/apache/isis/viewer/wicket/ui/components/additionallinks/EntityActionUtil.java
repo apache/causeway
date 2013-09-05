@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -86,7 +85,7 @@ public final class EntityActionUtil {
     private static Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
         final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
         AuthenticationSession authSession = asa.getAuthenticationSession();
-        return ObjectActionFilters.dynamicallyVisible(authSession, adapter, Where.ANYWHERE);
+        return ObjectAction.Filters.dynamicallyVisible(authSession, adapter, Where.ANYWHERE);
     }
 
 }

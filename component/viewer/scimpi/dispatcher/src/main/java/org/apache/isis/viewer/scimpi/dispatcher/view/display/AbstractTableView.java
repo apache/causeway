@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -89,7 +88,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        final List<ObjectAssociation> allFields = elementSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+        final List<ObjectAssociation> allFields = elementSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES);
         final TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
         write(request, collection, summary, rowBuilder, tableId, tableClass, rowClasses);
 

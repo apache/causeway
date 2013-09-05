@@ -68,7 +68,6 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -858,7 +857,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     public void enlistCreated(ObjectAdapter adapter) {
         enlist(adapter, ChangeKind.CREATE);
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
@@ -881,7 +880,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     public void enlistUpdating(ObjectAdapter adapter) {
         enlist(adapter, ChangeKind.UPDATE);
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
@@ -904,7 +903,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     public void enlistDeleting(ObjectAdapter adapter) {
         enlist(adapter, ChangeKind.DELETE);
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
+        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;

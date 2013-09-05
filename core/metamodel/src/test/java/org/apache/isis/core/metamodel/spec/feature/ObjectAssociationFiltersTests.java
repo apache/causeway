@@ -54,7 +54,7 @@ public class ObjectAssociationFiltersTests {
                 allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), with(equalTo(Where.ANYWHERE)));
             }
         });
-        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget, Where.ANYWHERE);
+        final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.dynamicallyVisible(mockSession, mockTarget, Where.ANYWHERE);
         filter.accept(mockAssociation);
     }
 

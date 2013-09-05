@@ -16,32 +16,23 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
-import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
@@ -51,6 +42,12 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     private final ObjectActionImpl serviceAction;
     private final int contributeeParam;
     private final ObjectSpecification contributeeType;
+    
+    /**
+     * Hold facets rather than delegate to the contributed action (different types might
+     * use layout metadata to position the contributee in different ways)
+     */
+    private final FacetHolder facetHolder = new FacetHolderImpl();
 
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
@@ -72,6 +69,9 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         this.serviceAction = serviceAction;
         this.contributeeType = contributeeType;
         this.contributeeParam = contributeeParam;
+
+        // copy over facets from contributed to own.
+        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
     }
 
     @Override
@@ -161,6 +161,56 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         return addElementToArray(arguments, contributeeParam, contributee, new ObjectAdapter[]{});
     }
 
+    // //////////////////////////////////////
+    // FacetHolder
+    // //////////////////////////////////////
+    
+    @Override
+    public Class<? extends Facet>[] getFacetTypes() {
+        return facetHolder.getFacetTypes();
+    }
+
+    @Override
+    public <T extends Facet> T getFacet(Class<T> cls) {
+        return facetHolder.getFacet(cls);
+    }
+    
+    @Override
+    public boolean containsFacet(Class<? extends Facet> facetType) {
+        return facetHolder.containsFacet(facetType);
+    }
+
+    @Override
+    public boolean containsDoOpFacet(java.lang.Class<? extends Facet> facetType) {
+        return facetHolder.containsDoOpFacet(facetType);
+    }
+
+    @Override
+    public List<Facet> getFacets(Filter<Facet> filter) {
+        return facetHolder.getFacets(filter);
+    }
+
+    @Override
+    public void addFacet(Facet facet) {
+        facetHolder.addFacet(facet);
+    }
+
+    @Override
+    public void addFacet(MultiTypedFacet facet) {
+        facetHolder.addFacet(facet);
+    }
+    
+    @Override
+    public void removeFacet(Facet facet) {
+        facetHolder.removeFacet(facet);
+    }
+
+    @Override
+    public void removeFacet(Class<? extends Facet> facetType) {
+        facetHolder.removeFacet(facetType);
+    }
+
+    
     // //////////////////////////////////////
 
     static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {

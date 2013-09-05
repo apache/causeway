@@ -169,16 +169,12 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         /**
          * Filters only properties that are visible statically, ie have not been
          * unconditionally hidden at compile time.
-         * 
-         * <p>
-         * Note this list will include
-         * properties marked as hidden once persisted and until persisted, but not
-         * those marked hidden always.
          */
-        public static final Filter<ObjectAssociation> WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE = new Filter<ObjectAssociation>() {
+        public static final Filter<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation property) {
-                return !property.isAlwaysHidden();
+                final HiddenFacet hiddenFacet = property.getFacet(HiddenFacet.class);
+                return hiddenFacet == null || hiddenFacet.when() != When.ALWAYS || hiddenFacet.where() != Where.ANYWHERE;
             }
         };
 

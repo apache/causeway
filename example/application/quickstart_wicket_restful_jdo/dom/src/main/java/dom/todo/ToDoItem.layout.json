@@ -23,14 +23,17 @@
                 members: {
                     description: {},
                     category: {},
-                    subcategory: {},
+                    subcategory: {
+                        actions: {
+                            updateCategory: {}
+                        }
+                    },
                     complete: {
                         actions: {
                             completed: {},
                             notYetCompleted: {}
                         }
-                    },
-                    rank: {}
+                    }
                 }
             },
             Misc: {
@@ -45,6 +48,12 @@
         memberGroups: {
             Detail: {
                 members: {
+                    priority: {
+                        actions: {
+                            previous: {},
+                            next: {}
+                        }
+                    },
                     dueBy: {},
                     cost: {
                         actions: {

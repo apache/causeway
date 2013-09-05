@@ -60,7 +60,6 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     @Mock
     private HiddenFacet facet;
 
-
     public static class Customer {
         private String firstName;
 
@@ -143,8 +142,6 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             {
                 allowing(facet).facetType();
                 will(returnValue(HiddenFacet.class));
-                allowing(facet).when();
-                will(returnValue(When.ALWAYS));
             }
         });
 
@@ -155,8 +152,12 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void alwaysHidden_forHiddenAlwaysEverywhere() throws Exception {
         context.checking(new Expectations() {
             {
+                allowing(facet).when();
+                will(returnValue(When.ALWAYS));
                 allowing(facet).where();
                 will(returnValue(Where.ANYWHERE));
+                allowing(facet).where();
+                will(returnValue(Where.OBJECT_FORMS));
             }
         });
         facetedMethod.addFacet(facet);
@@ -168,20 +169,24 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void alwaysHidden_forHiddenAlwaysObjectForm() throws Exception {
         context.checking(new Expectations() {
             {
+                allowing(facet).when();
+                will(returnValue(When.ALWAYS));
                 allowing(facet).where();
                 will(returnValue(Where.OBJECT_FORMS));
             }
         });
         facetedMethod.addFacet(facet);
-        assertTrue(objectAssociation.isAlwaysHidden());
+        assertFalse(objectAssociation.isAlwaysHidden());
     }
     
     @Test
-    public void alwaysHidden_forHiddenAlwaysNowhere() throws Exception {
+    public void alwaysHidden_forHiddenOncePersistedAnywhere() throws Exception {
         context.checking(new Expectations() {
             {
+                allowing(facet).when();
+                will(returnValue(When.ONCE_PERSISTED));
                 allowing(facet).where();
-                will(returnValue(Where.NOWHERE));
+                will(returnValue(Where.ANYWHERE));
             }
         });
         facetedMethod.addFacet(facet);

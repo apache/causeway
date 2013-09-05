@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayo
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
@@ -117,7 +116,7 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
             @SuppressWarnings("unchecked")
             private int numCollectionsOf(ObjectSpecification objectSpec) {
                 List<ObjectAssociation> objectCollections = objectSpec.getAssociations(
-                        Contributed.EXCLUDED, Filters.and(ObjectAssociationFilters.staticallyVisible(Where.OBJECT_FORMS), ObjectAssociationFilters.COLLECTIONS));
+                        Contributed.EXCLUDED, Filters.and(ObjectAssociation.Filters.staticallyVisible(Where.OBJECT_FORMS), ObjectAssociation.Filters.COLLECTIONS));
                 return objectCollections.size();
             }
         };

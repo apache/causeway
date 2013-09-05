@@ -52,10 +52,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 
 public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
@@ -310,13 +308,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     private static List<ObjectAssociation> propertiesOf(final ObjectSpecification objSpec) {
         return objSpec.getAssociations(Contributed.EXCLUDED, 
                 Filters.and(ObjectAssociation.Filters.PROPERTIES, 
-                            ObjectAssociation.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+                            ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES));
     }
     @SuppressWarnings("unchecked")
     private static List<ObjectAssociation> collectionsOf(final ObjectSpecification objSpec) {
         return objSpec.getAssociations(Contributed.EXCLUDED, 
                 Filters.and(ObjectAssociation.Filters.COLLECTIONS, 
-                            ObjectAssociation.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE));
+                            ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES));
     }
     private static List<ObjectAction> actionsOf(final ObjectSpecification objSpec, final Set<String> excludedActionIds) {
         return objSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));
@@ -325,7 +323,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     @SuppressWarnings("unchecked")
     private static Filter<ObjectAction> staticallyVisibleExcluding(final Set<String> excludedActionIds) {
         return Filters.and(
-                ObjectAction.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE, 
+                ObjectAction.Filters.VISIBLE_AT_LEAST_SOMETIMES, 
                 new Filter<ObjectAction>(){
                     @Override
                     public boolean accept(ObjectAction t) {

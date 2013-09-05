@@ -46,7 +46,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -104,7 +103,7 @@ public final class DomainResourceHelper {
 
     static boolean copyOverProperties(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final JsonRepresentation propertiesList) {
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final List<ObjectAssociation> properties = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES);
+        final List<ObjectAssociation> properties = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
         boolean allOk = true;
 
         for (final ObjectAssociation association : properties) {

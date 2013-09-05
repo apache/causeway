@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 
@@ -97,7 +96,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     private void cacheRepositoryAction() {
         try {
             final ObjectSpecification repositorySpec = specificationLoader.loadSpecification(repositoryClass);
-            final List<ObjectAction> objectActions = repositorySpec.getObjectActions(ActionType.USER, Contributed.EXCLUDED, ObjectActionFilters.withId(actionName));
+            final List<ObjectAction> objectActions = repositorySpec.getObjectActions(ActionType.USER, Contributed.EXCLUDED, ObjectAction.Filters.withId(actionName));
 
             repositoryAction = objectActions.size() == 1? objectActions.get(0): null;
         } finally {

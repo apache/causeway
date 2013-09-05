@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAbstract {
@@ -45,7 +44,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
     public String invalidReason(final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter adapter = context.getTarget();
-        for (final ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.PROPERTIES)) {
+        for (final ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             // ignore hidden properties
             if (property.isVisible(context.getSession(), adapter, where).isVetoed()) {
                 continue;

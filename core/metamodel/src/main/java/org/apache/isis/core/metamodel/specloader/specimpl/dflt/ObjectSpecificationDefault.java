@@ -38,15 +38,12 @@ import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
@@ -55,12 +52,10 @@ import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -72,8 +67,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -107,18 +100,19 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private final IntrospectionContext introspectionContext;
     private final CreateObjectContext createObjectContext;
 
-    private FacetedMethodsBuilder facetedMethodsBuilder;
+    private final FacetedMethodsBuilder facetedMethodsBuilder;
 
-    /**
-     * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
-     */
-    private Properties metadataProperties;
 
     // //////////////////////////////////////////////////////////////////////
     // Constructor
     // //////////////////////////////////////////////////////////////////////
 
-    public ObjectSpecificationDefault(final Class<?> correspondingClass, final FacetedMethodsBuilderContext facetedMethodsBuilderContext, final IntrospectionContext introspectionContext, final SpecificationContext specContext, final ObjectMemberContext objectMemberContext,
+    public ObjectSpecificationDefault(
+            final Class<?> correspondingClass,
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext, 
+            final IntrospectionContext introspectionContext, 
+            final SpecificationContext specContext, 
+            final ObjectMemberContext objectMemberContext,
             final CreateObjectContext createObjectContext) {
         super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberContext);
 

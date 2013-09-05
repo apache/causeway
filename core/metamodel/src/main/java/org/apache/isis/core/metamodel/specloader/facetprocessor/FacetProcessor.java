@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.MemberOrderingFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
@@ -52,7 +53,9 @@ import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFace
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 
 public class FacetProcessor implements RuntimeContextAware {
 
@@ -96,6 +99,15 @@ public class FacetProcessor implements RuntimeContextAware {
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
     private List<MethodFilteringFacetFactory> cachedMethodFilteringFactories;
+    
+    /**
+     * All registered {@link FacetFactory factories} that implement
+     * {@link MemberOrderingFacetFactory}.
+     * 
+     * <p>
+     * If <tt>null</tt>, indicates that the cache hasn't been built.
+     */
+    private List<MemberOrderingFacetFactory> cachedMemberOrderingFactories;
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -336,6 +348,16 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
+    
+    public void processMemberOrder(
+            final Properties metadataProperties, 
+            final ObjectMember facetHolder) {
+        cacheMemberOrderingFacetFactoriesIfRequired();
+        for (final MemberOrderingFacetFactory facetFactory : cachedMemberOrderingFactories) {
+            facetFactory.process(new MemberOrderingFacetFactory.ProcessMemberContext(metadataProperties, facetHolder));
+        }
+    }
+
     /**
      * Attaches all facets applicable to the provided
      * {@link FeatureType#ACTION_PARAMETER parameter}), to the supplied
@@ -364,6 +386,9 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
+
+    
+    
     private List<FacetFactory> getFactoryListByFeatureType(final FeatureType featureType) {
         cacheByFeatureTypeIfRequired();
         List<FacetFactory> list = factoryListByFeatureType.get(featureType);
@@ -417,6 +442,19 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
+    private synchronized void cacheMemberOrderingFacetFactoriesIfRequired() {
+        if (cachedMemberOrderingFactories != null) {
+            return;
+        }
+        cachedMemberOrderingFactories = Lists.newArrayList();
+        for (final FacetFactory factory : factories) {
+            if (factory instanceof MemberOrderingFacetFactory) {
+                final MemberOrderingFacetFactory memberOrderingFacetFactory = (MemberOrderingFacetFactory) factory;
+                cachedMemberOrderingFactories.add(memberOrderingFacetFactory);
+            }
+        }
+    }
+    
     private synchronized void cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired() {
         if (cachedPropertyOrCollectionIdentifyingFactories != null) {
             return;
@@ -474,5 +512,6 @@ public class FacetProcessor implements RuntimeContextAware {
     public void setRuntimeContext(final RuntimeContext runtimeContext) {
         this.runtimeContext = runtimeContext;
     }
+
 
 }

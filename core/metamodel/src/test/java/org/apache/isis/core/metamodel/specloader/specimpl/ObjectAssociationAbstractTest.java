@@ -142,7 +142,6 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void notPersistedWhenDerived() throws Exception {
-        // TODO: ISIS-5, need to reinstate DerivedFacet
         final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());

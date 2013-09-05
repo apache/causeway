@@ -38,7 +38,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -115,7 +114,7 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     
     @Test
     public void test() {
-        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.staticallyVisible(whereContext);
+        final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.staticallyVisible(whereContext);
         assertThat(filter.accept(mockObjectAssociation), is(expectedVisibility));
     }
 

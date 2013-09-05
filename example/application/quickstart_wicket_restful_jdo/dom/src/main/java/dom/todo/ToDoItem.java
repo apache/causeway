@@ -458,19 +458,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public Collection<ToDoItem> choices0Remove() {
         return getDependencies();
     }
-
-
-    // //////////////////////////////////////
-    // SimilarItems (derived collection)
-    // //////////////////////////////////////
-
     
-//    @NotPersisted
-//    @Render(Type.EAGERLY)
-//    @CssClass("x-info")
-//    public List<ToDoItem> getSimilarItems() {
-//        return toDoItems.similarTo(this);
-//    }
 
     // //////////////////////////////////////
     // Clone (action)

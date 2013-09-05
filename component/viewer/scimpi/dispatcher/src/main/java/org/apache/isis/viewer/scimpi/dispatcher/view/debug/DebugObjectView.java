@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractObjectProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -60,7 +59,7 @@ public class DebugObjectView extends AbstractObjectProcessor {
         request.appendAsHtmlEncoded("#" + version.sequence() + " - " + version.getUser() + " (" + version.getTime() + ")" );
         request.appendHtml("</div>");
 
-        final List<ObjectAssociation> fields = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.ALL);
+        final List<ObjectAssociation> fields = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.ALL);
 
         int row = 1;
         for (int i = 0; i < fields.size(); i++) {

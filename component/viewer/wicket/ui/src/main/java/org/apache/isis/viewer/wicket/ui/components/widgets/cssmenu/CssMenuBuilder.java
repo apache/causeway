@@ -28,9 +28,7 @@ import com.google.common.collect.Collections2;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -106,7 +104,7 @@ public class CssMenuBuilder {
     }
 
     private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions, final ActionType type) {
-        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectActionFilters.filterOfType(type)));
+        final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectAction.Filters.ofType(type)));
         for (final ObjectAction action : filterActionsOfType) {
             addMenuItem(parent, action);
         }

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -128,4 +129,18 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
  
 
+    
+    public static class Filters {
+        private Filters(){}
+        
+        /**
+         * Filters only parameters that are for objects (ie 1:1 associations)
+         */
+        public static final Filter<ObjectActionParameter> PARAMETER_ASSOCIATIONS = new Filter<ObjectActionParameter>() {
+            @Override
+            public boolean accept(final ObjectActionParameter parameter) {
+                return parameter.getSpecification().isNotCollection();
+            }
+        };
+    }
 }

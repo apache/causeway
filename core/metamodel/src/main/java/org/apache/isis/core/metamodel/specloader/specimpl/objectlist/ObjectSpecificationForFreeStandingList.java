@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

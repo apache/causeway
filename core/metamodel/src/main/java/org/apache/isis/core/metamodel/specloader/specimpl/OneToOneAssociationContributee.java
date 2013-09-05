@@ -16,8 +16,15 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.List;
+
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -30,6 +37,12 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
     
     private final NotPersistedFacet notPersistedFacet;
 
+    /**
+     * Hold facets rather than delegate to the contributed action (different types might
+     * use layout metadata to position the contributee in different ways)
+     */
+    private final FacetHolder facetHolder = new FacetHolderImpl();
+
     public OneToOneAssociationContributee(
             final ObjectAdapter serviceAdapter, 
             final ObjectActionImpl objectAction, 
@@ -39,6 +52,10 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         this.objectAction = objectAction;
         
         notPersistedFacet = new NotPersistedFacetAbstract(this) {};
+
+        // copy over facets from contributed to own.
+        FacetUtil.copyFacets(objectAction.getFacetedMethod(), facetHolder);
+        FacetUtil.addFacet(notPersistedFacet);
     }
 
     @Override
@@ -46,30 +63,58 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         return objectAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter});
     }
     
-    @SuppressWarnings("unchecked")
+
+    
+
+
+    
+    // //////////////////////////////////////
+    // FacetHolder
+    // //////////////////////////////////////
+    
+    @Override
+    public Class<? extends Facet>[] getFacetTypes() {
+        return facetHolder.getFacetTypes();
+    }
+
     @Override
     public <T extends Facet> T getFacet(Class<T> cls) {
-        if(cls == NotPersistedFacet.class) {
-            return (T) notPersistedFacet;
-        }
-        return super.getFacet(cls);
+        return facetHolder.getFacet(cls);
     }
 
     @Override
     public boolean containsFacet(Class<? extends Facet> facetType) {
-        if(facetType == NotPersistedFacet.class) {
-            return true;
-        }
-        return super.containsFacet(facetType);
+        return facetHolder.containsFacet(facetType);
+    }
+
+    @Override
+    public boolean containsDoOpFacet(java.lang.Class<? extends Facet> facetType) {
+        return facetHolder.containsDoOpFacet(facetType);
+    }
+
+    @Override
+    public List<Facet> getFacets(Filter<Facet> filter) {
+        return facetHolder.getFacets(filter);
+    }
+
+    @Override
+    public void addFacet(Facet facet) {
+        facetHolder.addFacet(facet);
+    }
+
+    @Override
+    public void addFacet(MultiTypedFacet facet) {
+        facetHolder.addFacet(facet);
     }
     
     @Override
-    public boolean containsDoOpFacet(Class<? extends Facet> facetType) {
-        if(facetType == NotPersistedFacet.class) {
-            return true;
-        }
-        return super.containsDoOpFacet(facetType);
+    public void removeFacet(Facet facet) {
+        facetHolder.removeFacet(facet);
     }
 
+    @Override
+    public void removeFacet(Class<? extends Facet> facetType) {
+        facetHolder.removeFacet(facetType);
+    }
 
 }

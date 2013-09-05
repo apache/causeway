@@ -150,4 +150,12 @@ public final class FacetUtil {
         return facetByType;
     }
 
+    public static void copyFacets(final FacetHolder source, final FacetHolder target) {
+        List<Facet> facets = source.getFacets(org.apache.isis.applib.filter.Filters.<Facet>any());
+        for (Facet facet : facets) {
+            target.addFacet(facet);
+        }
+    }
+
+
 }

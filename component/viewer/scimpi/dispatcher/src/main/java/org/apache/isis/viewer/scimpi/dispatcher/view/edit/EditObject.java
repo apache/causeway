@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.progmodel.facets.object.choices.enums.EnumFacet;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -113,7 +112,7 @@ public class EditObject extends AbstractElementProcessor {
         request.processUtilCloseTag();
 
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> viewFields = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, object, where));
+        List<ObjectAssociation> viewFields = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.dynamicallyVisible(session, object, where));
         viewFields = containedBlock.includedFields(viewFields);
         final InputField[] formFields = createFields(viewFields);
 

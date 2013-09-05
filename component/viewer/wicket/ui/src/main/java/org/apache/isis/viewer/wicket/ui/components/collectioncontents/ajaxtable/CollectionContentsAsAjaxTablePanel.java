@@ -43,10 +43,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -66,7 +63,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  */
 public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> {
 
-    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectActionFilters.bulk());
+    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
 
     private static final long serialVersionUID = 1L;
 
@@ -198,8 +195,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         
         @SuppressWarnings("unchecked")
         final Filter<ObjectAssociation> filter = Filters.and(
-                ObjectAssociationFilters.PROPERTIES, 
-                ObjectAssociationFilters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES),
+                ObjectAssociation.Filters.PROPERTIES, 
+                ObjectAssociation.Filters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES),
                 associationDoesNotReferenceParent(parentSpecIfAny));
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED, filter);
         for (final ObjectAssociation property : propertyList) {

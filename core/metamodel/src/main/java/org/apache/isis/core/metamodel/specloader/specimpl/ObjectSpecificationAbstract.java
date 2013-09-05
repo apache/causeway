@@ -21,19 +21,19 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NotPersistable;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Localization;
@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -88,15 +89,12 @@ import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForFreeStandingList;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 
@@ -129,6 +127,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLookup;
     
+    private final FacetProcessor facetProcessor;
+    
+    /**
+     * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
+     */
+    protected Properties metadataProperties;
+
     protected final ObjectMemberContext objectMemberContext;
 
 
@@ -168,13 +173,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     public ObjectSpecificationAbstract(
             final Class<?> introspectedClass, 
-            final String shortName, 
+            final String shortName,
             final SpecificationContext specificationContext, 
             final ObjectMemberContext objectMemberContext) {
 
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
+        
         this.isAbstract = JavaClassUtils.isAbstract(introspectedClass);
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
@@ -183,6 +189,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.servicesProvider = specificationContext.getServicesProvider();
         this.objectInstantiator = specificationContext.getObjectInstantiator();
         this.specificationLookup = specificationContext.getSpecificationLookup();
+        this.facetProcessor = specificationContext.getFacetProcessor();
         
         this.objectMemberContext = objectMemberContext;
     }
@@ -885,7 +892,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (specification == this) {
             return;
         }
-        final List<ObjectAssociation> contributeeAssociations = findContributeeAssociations(serviceAdapter);
+        final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations(serviceAdapter);
         contributeeAssociationsToAppendTo.addAll(contributeeAssociations);
     }
 
@@ -893,14 +900,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Synthesises {@link ObjectAssociation}s from matching {@link ObjectAction}s of any of the services
      * that accept one parameter
      */
-    private List<ObjectAssociation> findContributeeAssociations(final ObjectAdapter serviceAdapter) {
+    private List<ObjectAssociation> createContributeeAssociations(final ObjectAdapter serviceAdapter) {
         
         final ObjectSpecification specification = serviceAdapter.getSpecification();
         final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
         
         final List<ObjectActionImpl> contributedActions = Lists.newArrayList();
         for (final ObjectAction serviceAction : serviceActions) {
-            if (serviceAction.isAlwaysHidden()) {
+            if (isAlwaysHidden(serviceAction)) {
                 continue;
             }
             final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
@@ -919,17 +926,23 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             contributedActions.add((ObjectActionImpl) serviceAction);
         }
         
-        return Lists.newArrayList(Iterables.transform(contributedActions, new Function<ObjectActionImpl, ObjectAssociation>(){
+        return Lists.newArrayList(Iterables.transform(contributedActions, createContributeeAssociationFunctor(serviceAdapter)));
+    }
+
+
+    private Function<ObjectActionImpl, ObjectAssociation> createContributeeAssociationFunctor(
+            final ObjectAdapter serviceAdapter) {
+        return new Function<ObjectActionImpl, ObjectAssociation>(){
             @Override
             public ObjectAssociation apply(ObjectActionImpl input) {
                 final ObjectSpecification returnType = input.getReturnType();
-                if(returnType.isNotCollection()) {
-                    return new OneToOneAssociationContributee(serviceAdapter, input, objectMemberContext);
-                } else {
-                    return new OneToManyAssociationContributee(serviceAdapter, input, objectMemberContext);
-                }
+                final ObjectAssociationAbstract association = returnType.isNotCollection() 
+                        ? new OneToOneAssociationContributee(serviceAdapter, input, objectMemberContext) 
+                        : new OneToManyAssociationContributee(serviceAdapter, input, objectMemberContext);
+                facetProcessor.processMemberOrder(metadataProperties, association);
+                return association;
             }
-        }));
+        };
     }
 
 
@@ -967,7 +980,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAction> contributeeActions = Lists.newArrayList();
         final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
         for (final ObjectAction serviceAction : serviceActions) {
-            if (serviceAction.isAlwaysHidden()) {
+            if (isAlwaysHidden(serviceAction)) {
                 continue;
             }
             final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
@@ -984,16 +997,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (contributeeParam != -1) {
                 ObjectActionContributee contributeeAction = 
                         new ObjectActionContributee(serviceAdapter, contributedAction, contributeeParam, this, objectMemberContext);
-
+                facetProcessor.processMemberOrder(metadataProperties, contributeeAction);
                 contributeeActions.add(contributeeAction);
             }
         }
-        // only add if there are matching subactions.
-        if (contributeeActions.isEmpty()) {
-            return;
-        }
         contributeeActionsToAppendTo.addAll(contributeeActions);
     }
+    
+    private boolean isAlwaysHidden(final FacetHolder holder) {
+        final HiddenFacet hiddenFacet = holder.getFacet(HiddenFacet.class);
+        return hiddenFacet != null && hiddenFacet.when() == When.ALWAYS && hiddenFacet.where() == Where.ANYWHERE;
+    }
+
+    
 
     /**
      * @param the number of the parameter that matches, or -1 if none.

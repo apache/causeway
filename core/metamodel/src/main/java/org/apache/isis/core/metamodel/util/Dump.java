@@ -173,7 +173,7 @@ public final class Dump {
         }
         debugBuilder.unindent();
 
-        final List<ObjectAssociation> fields2 = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE);
+        final List<ObjectAssociation> fields2 = specification.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES);
         debugBuilder.appendln("Static");
         debugBuilder.indent();
         for (int i = 0; i < fields2.size(); i++) {

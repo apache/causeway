@@ -19,6 +19,7 @@ package org.apache.isis.core.metamodel.spec;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 public class SpecificationContext {
 
@@ -27,13 +28,21 @@ public class SpecificationContext {
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLookup;
+    private final FacetProcessor facetProcessor;
 
-    public SpecificationContext(final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator, final SpecificationLoader specificationLookup) {
+    public SpecificationContext(
+            final DeploymentCategory deploymentCategory, 
+            final AuthenticationSessionProvider authenticationSessionProvider, 
+            final ServicesProvider servicesProvider, 
+            final ObjectInstantiator objectInstantiator, 
+            final SpecificationLoader specificationLookup,
+            final FacetProcessor facetProcessor) {
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;
         this.specificationLookup = specificationLookup;
+        this.facetProcessor = facetProcessor;
     }
 
     public DeploymentCategory getDeploymentCategory() {
@@ -54,5 +63,9 @@ public class SpecificationContext {
 
     public SpecificationLoader getSpecificationLookup() {
         return specificationLookup;
+    }
+
+    public FacetProcessor getFacetProcessor() {
+        return facetProcessor;
     }
 }

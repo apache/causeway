@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
@@ -79,7 +78,7 @@ public class EditAction implements Action {
 
             final ObjectAdapter adapter = context.getMappedObject(objectId);
 
-            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociationFilters.dynamicallyVisible(session, adapter, where));
+            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.dynamicallyVisible(session, adapter, where));
 
             for (final ObjectAssociation objectAssociation : fields) {
                 if (objectAssociation.isVisible(session, adapter, where).isVetoed()) {

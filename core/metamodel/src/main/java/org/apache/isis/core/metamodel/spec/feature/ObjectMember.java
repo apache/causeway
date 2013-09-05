@@ -59,7 +59,7 @@ public interface ObjectMember extends ObjectFeature {
      * <p>
      * Determined as per the {@link HiddenFacet} being present and 
      * {@link HiddenFacet#when()} returning {@link When#ALWAYS}, and
-     * {@link HiddenFacet#where()} NOT returning {@link When#NOWHERE}.
+     * {@link HiddenFacet#where()} returning {@link When#ANYWHERE}.
      */
     boolean isAlwaysHidden();
 

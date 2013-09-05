@@ -22,14 +22,16 @@ package org.apache.isis.core.progmodel.facets.members.order;
 import java.util.Properties;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.MemberOrderingFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
-public class MemberOrderFacetFactory extends FacetFactoryAbstract {
+public class MemberOrderFacetFactory extends FacetFactoryAbstract implements MemberOrderingFacetFactory {
 
     public MemberOrderFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -38,23 +40,43 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        
-        MemberOrderFacet memberOrderFacet = null;
-        final Properties properties = processMethodContext.metadataProperties("memberOrder");
-        if(properties != null) {
-            memberOrderFacet = new MemberOrderFacetProperties(properties, holder);
-        }
+        MemberOrderFacet memberOrderFacet = getMemberOrderFromMetadataPropertiesIfPossible(processMethodContext);
 
         if(memberOrderFacet == null) {
             final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
             if (annotation != null) {
-                memberOrderFacet = new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), holder);
+                memberOrderFacet = new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), processMethodContext.getFacetHolder());
             }
         }
 
         // no-op if facet is null
         FacetUtil.addFacet(memberOrderFacet);
     }
+
+    /**
+     * For ordering of {@link ContributeeMember}s.
+     */
+    @Override
+    public void process(final ProcessMemberContext processMemberContext) {
+        final MemberOrderFacet memberOrderFacet = getMemberOrderFromMetadataPropertiesIfPossible(processMemberContext);
+
+        // no-op if facet is null
+        FacetUtil.addFacet(memberOrderFacet);
+    }
+
+    private static MemberOrderFacet getMemberOrderFromMetadataPropertiesIfPossible(final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
+        
+        final FacetHolder holder = pcwmp.getFacetHolder();
+        
+        final MemberOrderFacet memberOrderFacet;
+        final Properties properties = pcwmp.metadataProperties("memberOrder");
+        if(properties != null) {
+            memberOrderFacet = new MemberOrderFacetProperties(properties, holder);
+        } else {
+            memberOrderFacet = null;
+        }
+        return memberOrderFacet;
+    }
+
 
 }

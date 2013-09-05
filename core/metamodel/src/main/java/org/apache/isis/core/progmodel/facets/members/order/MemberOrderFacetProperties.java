@@ -22,11 +22,10 @@ package org.apache.isis.core.progmodel.facets.members.order;
 import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 public class MemberOrderFacetProperties extends MemberOrderFacetAbstract {
 
-    public MemberOrderFacetProperties(Properties properties, FacetedMethod holder) {
+    public MemberOrderFacetProperties(Properties properties, FacetHolder holder) {
         this(name(properties), sequence(properties), holder);
     }
 

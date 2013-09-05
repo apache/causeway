@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -30,6 +31,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
@@ -179,10 +182,11 @@ public interface ObjectAction extends ObjectMember {
         
         private Filters(){}
         
-        public static final Filter<ObjectAction> WHEN_VISIBLE_IRRESPECTIVE_OF_WHERE = new Filter<ObjectAction>() {
+        public static final Filter<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAction>() {
             @Override
             public boolean accept(final ObjectAction action) {
-                return !action.isAlwaysHidden();
+                final HiddenFacet hiddenFacet = action.getFacet(HiddenFacet.class);
+                return hiddenFacet == null || hiddenFacet.when() != When.ALWAYS || hiddenFacet.where() != Where.ANYWHERE;
             }
         };
 
