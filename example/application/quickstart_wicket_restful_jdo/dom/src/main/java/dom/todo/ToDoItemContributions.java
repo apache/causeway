@@ -37,13 +37,11 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
@@ -139,9 +137,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         if(false) {
             // the naive implementation ...
-            return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            return allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
                 @Override
-                public boolean accept(ToDoItem t) {
+                public boolean apply(final ToDoItem t) {
                     return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
                 }
             });

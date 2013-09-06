@@ -19,19 +19,11 @@
 package dom.todo;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
+import com.google.common.base.Predicate;
 
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
@@ -41,19 +33,12 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 
 @Named("ToDos")
@@ -82,9 +67,9 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         final List<ToDoItem> items;
         if(false) {
             // the naive implementation ...
-            items = allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            items = allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
                 @Override
-                public boolean accept(final ToDoItem t) {
+                public boolean apply(final ToDoItem t) {
                     return ownedByCurrentUser(t) && !t.isComplete();
                 }
             });
@@ -111,9 +96,9 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         final List<ToDoItem> items;
         if(false) {
             // the naive implementation ...
-            items = allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            items = allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
                 @Override
-                public boolean accept(final ToDoItem t) {
+                public boolean apply(final ToDoItem t) {
                     return ownedByCurrentUser(t) && t.isComplete();
                 }
             });
@@ -184,9 +169,9 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     public List<ToDoItem> autoComplete(final String description) {
         if(false) {
             // the naive implementation ...
-            return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            return allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
                 @Override
-                public boolean accept(final ToDoItem t) {
+                public boolean apply(final ToDoItem t) {
                     return ownedByCurrentUser(t) && t.getDescription().contains(description);
                 }
                 
