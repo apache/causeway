@@ -22,10 +22,13 @@ package org.apache.isis.core.metamodel.services.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.security.RoleMemento;
@@ -319,7 +322,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     }
 
     // //////////////////////////////////////////////////////////////////
-    // allInstances, allMatches
+    // allInstances
     // //////////////////////////////////////////////////////////////////
 
     @Override
@@ -327,18 +330,28 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return allMatches(new QueryFindAllInstances<T>(type, range));
     }
 
+    // //////////////////////////////////////////////////////////////////
+    // allMatches
+    // //////////////////////////////////////////////////////////////////
+    
     @Override
-    public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter, long... range) {
+    public <T> List<T> allMatches(final Class<T> cls, final Predicate<? super T> predicate, long... range) {
         final List<T> allInstances = allInstances(cls, range);
         final List<T> filtered = new ArrayList<T>();
         for (final T instance : allInstances) {
-            if (filter.accept(instance)) {
+            if (predicate.apply(instance)) {
                 filtered.add(instance);
             }
         }
         return filtered;
     }
 
+    @Deprecated
+    @Override
+    public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter, long... range) {
+        return allMatches(cls, Filters.asPredicate(filter), range);
+    }
+    
     @Override
     public <T> List<T> allMatches(final Class<T> type, final T pattern, long... range) {
         Assert.assertTrue("pattern not compatible with type", type.isAssignableFrom(pattern.getClass()));
@@ -362,16 +375,22 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
+    public <T> T firstMatch(final Class<T> cls, final Predicate<T> predicate) {
         final List<T> allInstances = allInstances(cls); // Have to fetch all, as matching is done in next loop
         for (final T instance : allInstances) {
-            if (filter.accept(instance)) {
+            if (predicate.apply(instance)) {
                 return instance;
             }
         }
         return null;
     }
 
+    @Deprecated
+    @Override
+    public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
+        return firstMatch(cls, Filters.asPredicate(filter));
+    }
+    
     @Override
     public <T> T firstMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern, 0, 1); // No need to fetch more than 1
@@ -397,6 +416,16 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // //////////////////////////////////////////////////////////////////
 
     @Override
+    public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
+        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
+        if (instances.size() > 1) {
+            throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
+        }
+        return firstInstanceElseNull(instances);
+    }
+
+    @Deprecated
+    @Override
     public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
         final List<T> instances = allMatches(type, filter, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
@@ -404,7 +433,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
         return firstInstanceElseNull(instances);
     }
-
+    
     @Override
     public <T> T uniqueMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern, 0, 2); // No need to fetch more than 2.

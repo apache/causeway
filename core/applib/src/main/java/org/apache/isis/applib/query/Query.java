@@ -21,8 +21,9 @@ package org.apache.isis.applib.query;
 
 import java.io.Serializable;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.filter.Filter;
 
 /**
  * For use by repository implementations, representing the values of a query.
@@ -33,15 +34,15 @@ import org.apache.isis.applib.filter.Filter;
  * <p>
  * Implementations are expected to implement the {@link #getStart()} and 
  * {@link #getCount()} methods, which are used to support range / paging
- * the data. Retutned result sets are expected to start from index "start",
+ * the data. Returned result sets are expected to start from index "start",
  * and no more than "count" items are expected. 
  * <p>
  * <b>Note:</b> that not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you
- * can use the {@link Filter} interface to similar effect, for example in
- * {@link DomainObjectContainer#allMatches(Class, Filter, long...)}). Note that the
- * filtering is done within the {@link DomainObjectContainer} rather than being
- * pushed back to the object store.
+ * can use the {@link Predicate} interface to similar effect, for example in
+ * {@link DomainObjectContainer#allMatches(Class, Predicate, long...)}). Note that the
+ * predicate is applied within the {@link DomainObjectContainer} (ie client-side)
+ * rather than being pushed back to the object store.
  */
 public interface Query<T> extends Serializable {
 

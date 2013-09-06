@@ -20,7 +20,12 @@
 package org.apache.isis.applib.filter;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
+/**
+ * @deprecated - use {@link Predicate} and {@link Predicates} instead.
+ */
+@Deprecated
 public final class Filters {
 
     private Filters() {

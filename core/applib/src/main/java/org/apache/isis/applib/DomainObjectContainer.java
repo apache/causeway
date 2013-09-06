@@ -21,6 +21,8 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
@@ -291,7 +293,7 @@ public interface DomainObjectContainer {
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
-     * the filter object accepts. If the optional range parameters are used, the 
+     * the predicate object accepts. If the optional range parameters are used, the 
      * dataset returned starts from (0 based) index, and consists of only up to 
      * count items. 
      * 
@@ -307,6 +309,29 @@ public interface DomainObjectContainer {
      * 
      * @param range 2 longs, specifying 0-based start and count.
      */
+    public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    
+    /**
+     * Returns all the instances of the specified type (including subtypes) that
+     * the filter object accepts. If the optional range parameters are used, the 
+     * dataset returned starts from (0 based) index, and consists of only up to 
+     * count items. 
+     * 
+     * <p>
+     * If there are no instances the list will be empty. This method creates a
+     * new {@link List} object each time it is called so the caller is free to
+     * use or modify the returned {@link List}, but the changes will not be
+     * reflected back to the repository.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to
+     * use {@link #allMatches(Query)} for production code.
+     * 
+     * @param range 2 longs, specifying 0-based start and count.
+     * 
+     * @deprecated - use {@link #allMatches(Class, Predicate, long...)} instead.
+     */
+    @Deprecated
     public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
 
     /**
@@ -361,6 +386,18 @@ public interface DomainObjectContainer {
      */
     <T> List<T> allMatches(Query<T> query);
 
+    // //////////////////////////////////////
+
+    /**
+     * Returns the first instance of the specified type (including subtypes)
+     * that matches the supplied {@link Predicate}, or <tt>null</tt> if none.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to
+     * use {@link #firstMatch(Query)} for production code.
+     */
+    public <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+    
     /**
      * Returns the first instance of the specified type (including subtypes)
      * that matches the supplied {@link Filter}, or <tt>null</tt> if none.
@@ -368,7 +405,10 @@ public interface DomainObjectContainer {
      * <p>
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #firstMatch(Query)} for production code.
+     * 
+     * @deprecated - use {@link #firstMatch(Class, Predicate)}
      */
+    @Deprecated
     public <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
 
     /**
@@ -409,8 +449,25 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #uniqueMatch(Query)} for production code.
      */
-    public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter);
+    public <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
+    /**
+     * Find the only instance of the specified type (including subtypes) that
+     * has the specified title.
+     * 
+     * <p>
+     * If no instance is found then <tt>null</tt> will be return, while if there
+     * is more that one instances a run-time exception will be thrown.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to
+     * use {@link #uniqueMatch(Query)} for production code.
+     * 
+     * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
+     */
+    @Deprecated
+    public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter);
+    
     /**
      * Find the only instance of the specified type (including subtypes) that
      * has the specified title.

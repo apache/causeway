@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.filter;
 
+import com.google.common.base.Predicate;
+
 
 /**
  * For use by repository implementations to allow a set of objects returned by a
@@ -31,7 +33,10 @@ package org.apache.isis.applib.filter;
  * an already-filtered set of rows. (For example, a Hibernate-based ObjectStore
  * would accept a representation of a HQL query; an XML-based objectstore might
  * accept an XPath query, etc.)
+ * 
+ * @deprecated - use {@link Predicate} instead.
  */
+@Deprecated
 public interface Filter<T> {
 
     /**

@@ -21,6 +21,8 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.filter.Filter;
@@ -68,9 +70,9 @@ public abstract class AbstractContainedObject {
     protected <T> T newAggregatedInstance(final Object parent, final Class<T> ofType) {
         return getContainer().newAggregatedInstance(parent, ofType);
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-    // {{ allInstances, allMatches
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
@@ -80,11 +82,25 @@ public abstract class AbstractContainedObject {
         return getContainer().allInstances(ofType, range);
     }
 
+    // //////////////////////////////////////
+
+    /**
+     * Convenience method that delegates to {@link DomainObjectContainer}.
+     * 
+     * @see DomainObjectContainer#allMatches(Class, Predicate, long...)
+     */
+    protected <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range) {
+        return getContainer().allMatches(ofType, predicate, range);
+    }
+    
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
      * @see DomainObjectContainer#allMatches(Class, Filter, long...)
+     * 
+     * @deprecated - use {@link #allMatches(Class, Predicate, long...)}
      */
+    @Deprecated
     protected <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range) {
         return getContainer().allMatches(ofType, filter, range);
     }
@@ -116,18 +132,30 @@ public abstract class AbstractContainedObject {
         return getContainer().allMatches(query);
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ firstMatch
+    /**
+     * Convenience method that delegates to {@link DomainObjectContainer}.
+     * 
+     * @see DomainObjectContainer#firstMatch(Class, Predicate)
+     * 
+     */
+    protected <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate) {
+        return getContainer().firstMatch(ofType, predicate);
+    }
+
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
      * @see DomainObjectContainer#firstMatch(Class, Filter)
+     * 
+     * @deprecated - use {@link #firstMatch(Class, Predicate)}
      */
+    @Deprecated
     protected <T> T firstMatch(final Class<T> ofType, final Filter<T> filter) {
         return getContainer().firstMatch(ofType, filter);
     }
-
+    
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
@@ -155,18 +183,30 @@ public abstract class AbstractContainedObject {
         return getContainer().firstMatch(query);
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ uniqueMatch
+
+    /**
+     * Convenience method that delegates to {@link DomainObjectContainer}.
+     * 
+     * @see DomainObjectContainer#uniqueMatch(Class, Predicate)
+     */
+    protected <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate) {
+        return getContainer().uniqueMatch(ofType, predicate);
+    }
+
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
      * @see DomainObjectContainer#uniqueMatch(Class, Filter)
+     * 
+     * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
      */
+    @Deprecated
     protected <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter) {
         return getContainer().uniqueMatch(ofType, filter);
     }
-
+    
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
@@ -194,9 +234,8 @@ public abstract class AbstractContainedObject {
         return getContainer().uniqueMatch(query);
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ isValid, validate
     /**
      * Convenience methods that delegates to {@link DomainObjectContainer}.
      * 
@@ -215,9 +254,8 @@ public abstract class AbstractContainedObject {
         return getContainer().validate(domainObject);
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ isPersistent, persist, remove
     /**
      * Whether the provided object is persistent.
      */
@@ -262,9 +300,8 @@ public abstract class AbstractContainedObject {
         return persistentDomainObject;
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ Error/Warning Methods
     /**
      * Display the specified message to the user, in a non-intrusive fashion.
      */
@@ -288,16 +325,14 @@ public abstract class AbstractContainedObject {
         getContainer().raiseError(message);
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ Security Methods
     protected UserMemento getUser() {
         return getContainer().getUser();
     }
 
-    // }}
+    // //////////////////////////////////////
 
-    // {{ Injected: Container
     /**
      * @uml.property name="container"
      * @uml.associationEnd

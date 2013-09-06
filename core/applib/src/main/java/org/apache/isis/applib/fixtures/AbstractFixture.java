@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -36,8 +38,8 @@ import org.apache.isis.applib.annotation.Programmatic;
  * {@link #setDate(int, int, int)} and {@link #setTime(int, int)}.
  * <li>create composite fixtures using {@link #addFixture(Object)}.
  * <li>search for existing objects using
- * {@link #firstMatch(Class, org.apache.isis.applib.Filter)} or
- * {@link #uniqueMatch(Class, org.apache.isis.applib.Filter)} (and various
+ * {@link #firstMatch(Class, Predicate)} or
+ * {@link #uniqueMatch(Class, Predicate)} (and various
  * overloads thereof).
  * </ul>
  * 
