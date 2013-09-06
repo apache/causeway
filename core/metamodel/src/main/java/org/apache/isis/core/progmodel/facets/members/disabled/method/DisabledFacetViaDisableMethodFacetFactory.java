@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -55,7 +55,7 @@ public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBased
     public static void attachDisabledFacetIfDisabledMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method disableMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, method.getParameterTypes());

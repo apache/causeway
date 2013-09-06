@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.viewer.wicket.model.util.Strings;
+import org.apache.isis.core.commons.lang.StringExtensions;
 
 /**
  * Enumerates the different types of {@link Component}s that can be constructed
@@ -157,7 +157,7 @@ public enum ComponentType {
     }
 
     public String getWicketId() {
-        return Strings.toCamelCase(name());
+        return StringExtensions.toCamelCase(name());
     }
 
     public static ComponentType lookup(final String id) {

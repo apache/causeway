@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.properties.modify;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -60,7 +60,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
     private static Method attachPropertyModifyFacetIfSetterIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
@@ -85,7 +85,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final Method getMethod = processMethodContext.getMethod();
         final FacetHolder property = processMethodContext.getFacetHolder();
 
-        final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
         final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
 
         if (clearMethod == null) {

@@ -30,7 +30,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.commons.lang.PathUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 
 public class RedirectFilter implements Filter {
 
@@ -50,7 +50,7 @@ public class RedirectFilter implements Filter {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        httpServletResponse.sendRedirect(PathUtils.combine(httpServletRequest.getContextPath(), redirectTo));
+        httpServletResponse.sendRedirect(StringExtensions.combinePath(httpServletRequest.getContextPath(), redirectTo));
     }
 
     @Override

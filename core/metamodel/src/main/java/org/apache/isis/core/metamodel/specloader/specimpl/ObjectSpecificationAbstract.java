@@ -40,8 +40,8 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ClassExtensions;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -181,7 +181,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
         
-        this.isAbstract = JavaClassUtils.isAbstract(introspectedClass);
+        this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
         this.deploymentCategory = specificationContext.getDeploymentCategory();

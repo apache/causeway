@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -79,7 +79,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
         this.id = id;
-        this.defaultName = NameUtils.naturalName(this.id);
+        this.defaultName = StringExtensions.asNaturalName2(this.id);
 
         this.deploymentCategory = objectMemberContext.getDeploymentCategory();
         this.authenticationSessionProvider = objectMemberContext.getAuthenticationSessionProvider();

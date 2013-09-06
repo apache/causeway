@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.lang.Types;
+import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -192,7 +192,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
 
     
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
-        return Types.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
+        return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
     }
 
     

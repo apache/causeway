@@ -38,8 +38,8 @@ import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -201,13 +201,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private void addNamedFacetAndPluralFacetIfRequired() {
         NamedFacet namedFacet = getFacet(NamedFacet.class);
         if (namedFacet == null) {
-            namedFacet = new NamedFacetInferred(NameUtils.naturalName(getShortIdentifier()), this);
+            namedFacet = new NamedFacetInferred(StringExtensions.asNaturalName2(getShortIdentifier()), this);
             addFacet(namedFacet);
         }
 
         PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
-            pluralFacet = new PluralFacetInferred(NameUtils.pluralName(namedFacet.value()), this);
+            pluralFacet = new PluralFacetInferred(StringExtensions.asPluralName(namedFacet.value()), this);
             addFacet(pluralFacet);
         }
     }

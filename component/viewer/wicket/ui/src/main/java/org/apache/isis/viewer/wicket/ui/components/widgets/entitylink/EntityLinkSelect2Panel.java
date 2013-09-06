@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
-import org.apache.isis.viewer.wicket.model.util.Mementos;
+import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
@@ -224,7 +224,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
                 final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
                 final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
-                return Lists.transform(results, Mementos.fromAdapter());
+                return Lists.transform(results, MementoFunctions.fromAdapter());
             }
 
         };
@@ -248,7 +248,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                     return Collections.emptyList();
                 }
                 // take a copy otherwise is only lazily evaluated
-                return Lists.newArrayList(Lists.transform(autoCompleteChoices, Mementos.fromAdapter()));
+                return Lists.newArrayList(Lists.transform(autoCompleteChoices, MementoFunctions.fromAdapter()));
             }
             
         };
@@ -266,7 +266,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             return Collections.emptyList();
         }
         // take a copy otherwise is only lazily evaluated
-        return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+        return Lists.newArrayList(Lists.transform(choices, MementoFunctions.fromAdapter()));
     }
 
     private void syncLinkWithInput(final ObjectAdapter adapter) {

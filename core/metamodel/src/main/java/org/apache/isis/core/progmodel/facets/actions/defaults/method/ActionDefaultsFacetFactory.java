@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.actions.defaults.method;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -77,7 +77,7 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType) {
 
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final String name = MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName;
 
         final Class<?> cls = processMethodContext.getCls();

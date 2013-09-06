@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nManager;
 
 /**
@@ -122,7 +123,7 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
         sb.append(identifier.getClassName()).append(".");
         sb.append(memberType);
         final String memberName = identifier.getMemberName();
-        if (!StringUtils.isNullOrEmpty(memberName)) {
+        if (!Strings.isNullOrEmpty(memberName)) {
             sb.append(".").append(memberName);
         }
         sb.append(".").append(textType);

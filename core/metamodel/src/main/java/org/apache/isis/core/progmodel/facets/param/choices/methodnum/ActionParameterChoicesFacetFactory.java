@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -107,7 +107,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
     private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n) {
         
         final Method actionMethod = processMethodContext.getMethod();
-        final List<Class<?>> paramTypes = ListUtils.mutableCopy(actionMethod.getParameterTypes());
+        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
         
         final Class<?> arrayOfParamType = (Array.newInstance(paramTypes.get(n), 0)).getClass();
         
@@ -139,7 +139,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
     private static Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int n, Class<?>[] paramTypes, final Class<?> returnType) {
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final String name = MethodPrefixConstants.CHOICES_PREFIX + n + capitalizedName;
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, paramTypes);
     }

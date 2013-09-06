@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -139,7 +139,7 @@ public class LabelBorder extends AbstractBorder {
 
     @Override
     public String toString() {
-        return wrappedView.toString() + "/" + ToString.name(this);
+        return wrappedView.toString() + "/" + ObjectExtensions.classBaseName(this);
     }
 
     public View getWrapped() {

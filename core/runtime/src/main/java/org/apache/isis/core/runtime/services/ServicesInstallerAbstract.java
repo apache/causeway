@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.services;
 
-import static org.apache.isis.core.commons.lang.CastUtils.collectionOf;
+import static org.apache.isis.core.commons.lang.ObjectExtensions.asCollectionT;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,7 +44,7 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
     public void addService(final Object service) {
         if (service instanceof Collection) {
             // unravel if necessary
-            final Collection<Object> services = collectionOf(service, Object.class);
+            final Collection<Object> services = asCollectionT(service, Object.class);
             for (final Object eachService : services) {
                 addService(eachService);
             }

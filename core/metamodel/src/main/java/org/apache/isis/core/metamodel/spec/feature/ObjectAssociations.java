@@ -24,83 +24,37 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 public final class ObjectAssociations {
 
     private ObjectAssociations() {
     }
 
-    public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification noSpec) {
-        return new Function<String, OneToOneAssociation>() {
-            @Override
-            public OneToOneAssociation apply(final String id) {
-                return (OneToOneAssociation) noSpec.getAssociation(id);
-            }
-        };
-    }
-
+    @Deprecated
     public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(List<ObjectAssociation> associations) {
-        Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
-        for(ObjectAssociation association: associations) {
-            addAssociationIntoGroup(associationsByGroup, association);
-        }
-        return associationsByGroup;
+        return ObjectAssociation.Util.groupByMemberOrderName(associations);
     }
 
-    private static void addAssociationIntoGroup(Map<String, List<ObjectAssociation>> associationsByGroup, ObjectAssociation association) {
-        final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
-        if(memberOrderFacet != null) {
-            final String name = memberOrderFacet.name();
-            if(!Strings.isNullOrEmpty(name)) {
-                getFrom(associationsByGroup, name).add(association);
-                return;
-            }
-        }
-        getFrom(associationsByGroup, "General").add(association);
-    }
-
-    private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
-        List<ObjectAssociation> list = associationsByGroup.get(groupName);
-        if(list == null) {
-            list = Lists.newArrayList();
-            associationsByGroup.put(groupName, list);
-        }
-        return list;
-    }
-
+    @Deprecated
     public static Function<ObjectAssociation, String> toName() {
-        return new Function<ObjectAssociation, String>() {
-            @Override
-            public String apply(final ObjectAssociation oa) {
-                return oa.getName();
-            }
-        };
+        return ObjectAssociation.Functions.toName();
     }
 
+    @Deprecated
     public static Function<ObjectAssociation, String> toId() {
-        return new Function<ObjectAssociation, String>() {
-            @Override
-            public String apply(final ObjectAssociation oa) {
-                return oa.getId();
-            }
-        };
+        return ObjectAssociation.Functions.toId();
     }
-    
+
+    @Deprecated
     public static Predicate<ObjectAssociation> being(final Contributed contributed) {
-        return new Predicate<ObjectAssociation>(){
-            @Override
-            public boolean apply(final ObjectAssociation t) {
-                return contributed.isIncluded() || 
-                       !(t instanceof ContributeeMember);
-            }
-        };
+        return ObjectAssociation.Predicates.being(contributed);
+    }
+
+    @Deprecated
+    public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification objSpec) {
+        return OneToOneAssociation.Functions.fromId(objSpec);
     }
 
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import static org.apache.isis.core.commons.lang.CastUtils.enumerationOver;
+import static org.apache.isis.core.commons.lang.ObjectExtensions.asEnumerationT;
 
 import java.util.Enumeration;
 
@@ -45,7 +45,7 @@ public class DebugDumpSnapshotOption extends UserActionAbstract {
 
     @Override
     public Consent disabled(final View component) {
-        final Enumeration<Logger> enumeration = enumerationOver(org.apache.log4j.Logger.getRootLogger().getAllAppenders(), Logger.class);
+        final Enumeration<Logger> enumeration = asEnumerationT(org.apache.log4j.Logger.getRootLogger().getAllAppenders(), Logger.class);
         while (enumeration.hasMoreElements()) {
             final org.apache.log4j.Appender appender = (org.apache.log4j.Appender) enumeration.nextElement();
             if (appender instanceof SnapshotAppender) {
@@ -58,7 +58,7 @@ public class DebugDumpSnapshotOption extends UserActionAbstract {
 
     @Override
     public void execute(final Workspace workspace, final View view, final Location at) {
-        final Enumeration<Logger> enumeration = enumerationOver(org.apache.log4j.Logger.getRootLogger().getAllAppenders(), Logger.class);
+        final Enumeration<Logger> enumeration = asEnumerationT(org.apache.log4j.Logger.getRootLogger().getAllAppenders(), Logger.class);
         while (enumeration.hasMoreElements()) {
             final org.apache.log4j.Appender appender = (org.apache.log4j.Appender) enumeration.nextElement();
             if (appender instanceof SnapshotAppender) {

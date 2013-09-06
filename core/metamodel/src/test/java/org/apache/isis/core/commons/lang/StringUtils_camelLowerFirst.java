@@ -28,11 +28,11 @@ public class StringUtils_camelLowerFirst {
 
     @Test
     public void asLowerCase() {
-        assertThat(StringUtils.camelLowerFirst("An Upper Case"), is("anUpperCase"));
-        assertThat(StringUtils.camelLowerFirst("a Lower Case"), is("aLowerCase"));
-        assertThat(StringUtils.camelLowerFirst("AnUpperCase"), is("anUpperCase"));
-        assertThat(StringUtils.camelLowerFirst("aLowerCase"), is("aLowerCase"));
-        assertThat(StringUtils.camelLowerFirst("a  Lower  Case"), is("aLowerCase"));
+        assertThat(StringExtensions.asCamelLowerFirst("An Upper Case"), is("anUpperCase"));
+        assertThat(StringExtensions.asCamelLowerFirst("a Lower Case"), is("aLowerCase"));
+        assertThat(StringExtensions.asCamelLowerFirst("AnUpperCase"), is("anUpperCase"));
+        assertThat(StringExtensions.asCamelLowerFirst("aLowerCase"), is("aLowerCase"));
+        assertThat(StringExtensions.asCamelLowerFirst("a  Lower  Case"), is("aLowerCase"));
     }
 
 }

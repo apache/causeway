@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.embedded;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
-import org.apache.isis.core.commons.lang.MapUtils;
+import org.apache.isis.core.commons.lang.MapUtil;
 import org.apache.isis.core.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.core.webapp.IsisSessionFilter;
@@ -43,7 +43,7 @@ final class EmbeddedWebViewerRestfulObjects extends EmbeddedWebViewer {
         webAppSpec.addContextParams(RestfulObjectsViewerInstaller.JAVAX_WS_RS_APPLICATION, RestfulObjectsApplication.class.getName());
 
         webAppSpec.addFilterSpecification(IsisSessionFilter.class, 
-                MapUtils.<String,String>asMap(
+                MapUtil.<String,String>asMap(
                         IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY, AuthenticationSessionStrategyTrusted.class.getName(),
                         IsisSessionFilter.WHEN_NO_SESSION_KEY, IsisSessionFilter.WhenNoSession.CONTINUE.name().toLowerCase()), 
                 RestfulObjectsViewerInstaller.EVERYTHING);

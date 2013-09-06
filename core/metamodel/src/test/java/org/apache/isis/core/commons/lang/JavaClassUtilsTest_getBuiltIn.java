@@ -27,15 +27,15 @@ public class JavaClassUtilsTest_getBuiltIn {
 
     @Test
     public void voidBuiltIns() throws ClassNotFoundException {
-        assertEquals(JavaClassUtils.getBuiltIn("void"), void.class);
-        assertEquals(JavaClassUtils.getBuiltIn("boolean"), boolean.class);
-        assertEquals(JavaClassUtils.getBuiltIn("byte"), byte.class);
-        assertEquals(JavaClassUtils.getBuiltIn("short"), short.class);
-        assertEquals(JavaClassUtils.getBuiltIn("int"), int.class);
-        assertEquals(JavaClassUtils.getBuiltIn("long"), long.class);
-        assertEquals(JavaClassUtils.getBuiltIn("char"), char.class);
-        assertEquals(JavaClassUtils.getBuiltIn("float"), float.class);
-        assertEquals(JavaClassUtils.getBuiltIn("double"), double.class);
+        assertEquals(ClassUtil.getBuiltIn("void"), void.class);
+        assertEquals(ClassUtil.getBuiltIn("boolean"), boolean.class);
+        assertEquals(ClassUtil.getBuiltIn("byte"), byte.class);
+        assertEquals(ClassUtil.getBuiltIn("short"), short.class);
+        assertEquals(ClassUtil.getBuiltIn("int"), int.class);
+        assertEquals(ClassUtil.getBuiltIn("long"), long.class);
+        assertEquals(ClassUtil.getBuiltIn("char"), char.class);
+        assertEquals(ClassUtil.getBuiltIn("float"), float.class);
+        assertEquals(ClassUtil.getBuiltIn("double"), double.class);
     }
 
 }

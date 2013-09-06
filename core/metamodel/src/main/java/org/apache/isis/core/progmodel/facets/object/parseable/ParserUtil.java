@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class ParserUtil {
@@ -36,14 +38,14 @@ public final class ParserUtil {
     static String parserNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = PARSER_NAME_KEY_PREFIX + type.getCanonicalName() + PARSER_NAME_KEY_SUFFIX;
         final String parserName = configuration.getString(key);
-        return !StringUtils.isNullOrEmpty(parserName) ? parserName : null;
+        return !Strings.isNullOrEmpty(parserName) ? parserName : null;
     }
 
     @SuppressWarnings("unchecked")
     public static Class<? extends Parser<?>> parserOrNull(final Class<?> candidateClass, final String classCandidateName) {
         @SuppressWarnings("rawtypes")
-        final Class type = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(), Parser.class, FacetHolder.class) : null;
-        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, Parser.class, FacetHolder.class);
+        final Class type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), Parser.class, FacetHolder.class) : null;
+        return type != null ? type : ClassUtil.implementingClassOrNull(classCandidateName, Parser.class, FacetHolder.class);
     }
 
 }

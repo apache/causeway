@@ -20,7 +20,7 @@
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -45,7 +45,7 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
 
         this.encoderDecoderClass = EncoderDecoderUtil.encoderDecoderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         if (isValid()) {
-            final EncoderDecoder<?> encoderDecoder = (EncoderDecoder<?>) ClassUtil.newInstance(encoderDecoderClass, FacetHolder.class, holder);
+            final EncoderDecoder<?> encoderDecoder = (EncoderDecoder<?>) ClassExtensions.newInstance(encoderDecoderClass, FacetHolder.class, holder);
             this.encodeableFacetUsingEncoderDecoder = new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterManager(), getDependencyInjector());
         } else {
             this.encodeableFacetUsingEncoderDecoder = null;

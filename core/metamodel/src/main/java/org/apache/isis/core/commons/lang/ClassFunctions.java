@@ -16,28 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.commons.lang;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import com.google.common.base.Function;
 
-public final class ThrowableUtils {
+public final class ClassFunctions {
+    
+    private ClassFunctions(){}
 
-    public static String stackTraceFor(final Throwable exception) {
-        ByteArrayOutputStream baos = null;
-        try {
-            baos = new ByteArrayOutputStream();
-            exception.printStackTrace(new PrintStream(baos));
-            return baos.toString();
-        } finally {
-            if (baos != null) {
-                try {
-                    baos.close();
-                } catch (final IOException ignore) {
-                }
+    public static <T> Function<Object, T> castTo(final Class<T> type) {
+        return new Function<Object, T>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public T apply(final Object input) {
+                return (T) input;
             }
-        }
+        };
     }
+
+
 }

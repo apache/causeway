@@ -48,8 +48,8 @@ import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
-import org.apache.isis.core.commons.lang.CastUtils;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.IsisInstallerRegistry;
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -114,7 +114,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         try {
             String line;
             while ((line = reader.readLine()) != null) {
-                final String className = StringUtils.firstWord(line);
+                final String className = StringExtensions.asFirstWord(line);
                 if (className.length() == 0 || className.startsWith("#")) {
                     continue;
                 }
@@ -291,7 +291,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     @SuppressWarnings("unchecked")
     public Installer getInstaller(final String implClassName) {
         try {
-            final Installer installer = CastUtils.cast(InstanceUtil.createInstance(implClassName));
+            final Installer installer = ObjectExtensions.asT(InstanceUtil.createInstance(implClassName));
             if (installer != null) {
                 mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);

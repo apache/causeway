@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.lang.PropertyUtil;
+import org.apache.isis.core.commons.lang.PropertiesExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -122,7 +122,7 @@ public interface FacetFactory {
             if(metadataProperties == null) {
                 return null;
             }
-            final Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix);
+            final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix);
             return !subsetProperties.isEmpty() ? subsetProperties : null;
         }
     }
@@ -198,14 +198,14 @@ public interface FacetFactory {
             // bit of a hack; to distinguish between actions and properties that have same identifier
             // eg getPaidBy() and paidBy()
             if(featureType.isAction()) {
-                Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix+"."+id+"()");
+                Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id+"()");
                 if (!subsetProperties.isEmpty()) {
                     return subsetProperties;
                 } 
             }
 
             // otherwise, regular processing...
-            Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix+"."+id);
+            Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id);
             if (!subsetProperties.isEmpty()) {
                 return subsetProperties;
             }

@@ -28,32 +28,32 @@ public class StringUtils_NaturalNameTest {
 
     @Test
     public void shouldCreateANaturalNameForABooleanPropertyAccessorName() {
-        assertThat(StringUtils.naturalName("isOutOfStock"), is("Out Of Stock"));
+        assertThat(StringExtensions.asNaturalName("isOutOfStock"), is("Out Of Stock"));
     }
 
     @Test
     public void shouldCreateANaturalNameForABooleanPropertyAccessorNameSingleWord() {
-        assertThat(StringUtils.naturalName("isBlacklisted"), is("Blacklisted"));
+        assertThat(StringExtensions.asNaturalName("isBlacklisted"), is("Blacklisted"));
     }
 
     @Test
     public void shouldCreateANaturalNameForANonBooleanPropertyAccessorName() {
-        assertThat(StringUtils.naturalName("getFirstName"), is("First Name"));
+        assertThat(StringExtensions.asNaturalName("getFirstName"), is("First Name"));
     }
 
     @Test
     public void shouldCreateANaturalNameForANonBooleanPropertyAccessorNameSingleWord() {
-        assertThat(StringUtils.naturalName("getAge"), is("Age"));
+        assertThat(StringExtensions.asNaturalName("getAge"), is("Age"));
     }
 
     @Test
     public void shouldCreateANaturalNameForAPropertyMutatorName() {
-        assertThat(StringUtils.naturalName("setFirstName"), is("First Name"));
+        assertThat(StringExtensions.asNaturalName("setFirstName"), is("First Name"));
     }
 
     @Test
     public void shouldCreateANaturalNameForAPropertyMutatorNameSingleWord() {
-        assertThat(StringUtils.naturalName("setAge"), is("Age"));
+        assertThat(StringExtensions.asNaturalName("setAge"), is("Age"));
     }
 
 }

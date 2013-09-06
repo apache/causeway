@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.View;
 

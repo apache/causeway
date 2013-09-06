@@ -28,32 +28,32 @@ public class StringUtils_StripNewLinesTest {
 
     @Test
     public void shouldDoNothingIfNone() {
-        assertThat(StringUtils.stripNewLines("abc"), is("abc"));
+        assertThat(StringExtensions.stripNewLines("abc"), is("abc"));
     }
 
     @Test
     public void shouldStripIfJustBackslashN() {
-        assertThat(StringUtils.stripNewLines("abc\n"), is("abc"));
+        assertThat(StringExtensions.stripNewLines("abc\n"), is("abc"));
     }
 
     @Test
     public void shouldStripIfBackslashRBackslashN() {
-        assertThat(StringUtils.stripNewLines("abc\r\n"), is("abc"));
+        assertThat(StringExtensions.stripNewLines("abc\r\n"), is("abc"));
     }
 
     @Test
     public void shouldStripIfJustBackslashR() {
-        assertThat(StringUtils.stripNewLines("abc\r"), is("abc"));
+        assertThat(StringExtensions.stripNewLines("abc\r"), is("abc"));
     }
 
     @Test
     public void shouldStripIfSeveral() {
-        assertThat(StringUtils.stripNewLines("abc\r\ndef\r\n"), is("abcdef"));
+        assertThat(StringExtensions.stripNewLines("abc\r\ndef\r\n"), is("abcdef"));
     }
 
     @Test
     public void shouldStripIfBackslashRBackslashNBackslashR() {
-        assertThat(StringUtils.stripNewLines("abc\n\r\ndef"), is("abcdef"));
+        assertThat(StringExtensions.stripNewLines("abc\n\r\ndef"), is("abcdef"));
     }
 
 }

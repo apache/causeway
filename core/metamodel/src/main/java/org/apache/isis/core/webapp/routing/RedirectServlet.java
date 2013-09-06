@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.commons.lang.PathUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 
 public class RedirectServlet extends HttpServlet {
 
@@ -42,7 +42,7 @@ public class RedirectServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
-        response.sendRedirect(PathUtils.combine(request.getContextPath(), redirectTo));
+        response.sendRedirect(StringExtensions.combinePath(request.getContextPath(), redirectTo));
     }
 
 }

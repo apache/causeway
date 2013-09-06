@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.border;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.viewer.dnd.view.Selectable;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAxis;

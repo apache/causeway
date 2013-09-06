@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.properties.modify;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -47,7 +47,7 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private void attachPropertyModifyFacetIfModifyMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
 
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };

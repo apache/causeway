@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,7 +35,7 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
     private static String parserName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Parseable annotation = annotatedClass.getAnnotation(Parseable.class);
         final String parserName = annotation.parserName();
-        if (!StringUtils.isNullOrEmpty(parserName)) {
+        if (!Strings.isNullOrEmpty(parserName)) {
             return parserName;
         }
         return ParserUtil.parserNameFromConfiguration(annotatedClass, configuration);

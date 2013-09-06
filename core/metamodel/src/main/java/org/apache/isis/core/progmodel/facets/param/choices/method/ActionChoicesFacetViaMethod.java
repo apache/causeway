@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ArrayUtil;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
@@ -81,7 +81,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             if (options[i] == null) {
                 results[i] = null;
             } else if (options[i].getClass().isArray()) {
-                results[i] = ArrayUtil.getObjectAsObjectArray(options[i]);
+                results[i] = ObjectExtensions.asArray(options[i]);
             } else {
                 final ObjectSpecification specification = getSpecificationLookup().loadSpecification(choicesType);
                 results[i] = CollectionUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());

@@ -27,7 +27,7 @@ import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.ArrayUtil;
+import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -86,7 +86,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
 
         final ProxyFactory proxyFactory = new ProxyFactory();
         proxyFactory.setSuperclass(cls);
-        proxyFactory.setInterfaces(ArrayUtil.combine(cls.getInterfaces(), new Class<?>[] { JavassistEnhanced.class }));
+        proxyFactory.setInterfaces(ArrayExtensions.combine(cls.getInterfaces(), new Class<?>[] { JavassistEnhanced.class }));
 
         proxyFactory.setFilter(new MethodFilter() {
             @Override

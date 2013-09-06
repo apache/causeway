@@ -32,9 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.core.commons.lang.InputStreamExtensions;
 import org.apache.isis.core.commons.lang.ResourceUtil;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 
 public class ResourceServlet extends HttpServlet {
 
@@ -52,7 +52,7 @@ public class ResourceServlet extends HttpServlet {
     }
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-        final String servletPath = StringUtils.stripLeadingSlash(request.getServletPath());
+        final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
         if (LOG.isInfoEnabled()) {
             LOG.info("request: " + servletPath);
         }
@@ -64,7 +64,7 @@ public class ResourceServlet extends HttpServlet {
                 LOG.debug("request: " + servletPath + " loaded from filesystem");
             }
             writeContentType(request, response);
-            IoUtils.copy(is2, response.getOutputStream());
+            InputStreamExtensions.copyTo(is2, response.getOutputStream());
             is2.close();
             return;
         }
@@ -76,7 +76,7 @@ public class ResourceServlet extends HttpServlet {
                 LOG.debug("request: " + servletPath + " loaded from classpath");
             }
             writeContentType(request, response);
-            IoUtils.copy(is, response.getOutputStream());
+            InputStreamExtensions.copyTo(is, response.getOutputStream());
             is.close();
             return;
         }

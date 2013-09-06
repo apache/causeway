@@ -27,9 +27,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
@@ -118,7 +118,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             if (e.getTargetException() instanceof IllegalStateException) {
                 throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " " + e.getTargetException().getMessage(), e.getTargetException());
             } else {
-                InvokeUtils.invocationException("Exception executing " + method, e);
+                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
                 return null;
             }
         } catch (final IllegalAccessException e) {

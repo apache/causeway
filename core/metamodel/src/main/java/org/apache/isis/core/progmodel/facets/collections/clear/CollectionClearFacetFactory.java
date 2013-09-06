@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.collections.clear;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -55,7 +55,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     private void attachCollectionClearFacets(final ProcessMethodContext processMethodContext) {
 
         final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, null);

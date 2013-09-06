@@ -19,20 +19,15 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.util.Locale;
+public class RunnableExtensions {
 
-public class LocaleUtils {
+    private RunnableExtensions() {
+    }
 
-    public static Locale findLocale(final String localeStr) {
-        if (localeStr != null) {
-            final Locale[] availableLocales = Locale.getAvailableLocales();
-            for (final Locale locale : availableLocales) {
-                if (locale.toString().equals(localeStr)) {
-                    return locale;
-                }
-            }
-        }
-        return null;
+    public static Thread startThread(final Runnable extendee, final String name) {
+        final Thread thread = new Thread(extendee, name);
+        thread.start();
+        return thread;
     }
 
 }

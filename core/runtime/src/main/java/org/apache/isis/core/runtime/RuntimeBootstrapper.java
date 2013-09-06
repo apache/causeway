@@ -27,7 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 
-import org.apache.isis.core.commons.lang.Threads;
+import org.apache.isis.core.commons.lang.RunnableExtensions;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.core.runtime.runner.IsisBootstrapper;
@@ -104,7 +104,7 @@ final class RuntimeBootstrapper implements IsisBootstrapper {
                     viewer.init();
                 }
             };
-            Threads.startThread(target, "Viewer");
+            RunnableExtensions.startThread(target, "Viewer");
         }
     }
 

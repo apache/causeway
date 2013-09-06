@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.members.hidden.staticmethod;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -61,7 +61,7 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
         final Class<?> type = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
 
-        final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Method alwaysHideMethod = MethodFinderUtils.findMethod(type, MethodScope.CLASS, MethodPrefixConstants.ALWAYS_HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
         if (alwaysHideMethod == null) {
@@ -81,7 +81,7 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
     private static Boolean invokeAlwaysHideMethod(final Method alwaysHideMethod) {
         Boolean alwaysHideMethodReturnValue = null;
         try {
-            alwaysHideMethodReturnValue = (Boolean) InvokeUtils.invokeStatic(alwaysHideMethod);
+            alwaysHideMethodReturnValue = (Boolean) MethodExtensions.invokeStatic(alwaysHideMethod);
         } catch (final ClassCastException ex) {
             // ignore
         }

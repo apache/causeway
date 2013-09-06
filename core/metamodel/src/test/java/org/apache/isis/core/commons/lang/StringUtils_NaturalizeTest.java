@@ -28,22 +28,22 @@ public class StringUtils_NaturalizeTest {
 
     @Test
     public void shouldNaturalizeMultipleCamelCase() {
-        assertThat(StringUtils.naturalize("thisIsACamelCasePhrase"), is("This Is A Camel Case Phrase"));
+        assertThat(StringExtensions.asNaturalized("thisIsACamelCasePhrase"), is("This Is A Camel Case Phrase"));
     }
 
     @Test
     public void shouldNaturalizeMultiplePascalCase() {
-        assertThat(StringUtils.naturalize("ThisIsAPascalCasePhrase"), is("This Is A Pascal Case Phrase"));
+        assertThat(StringExtensions.asNaturalized("ThisIsAPascalCasePhrase"), is("This Is A Pascal Case Phrase"));
     }
 
     @Test
     public void shouldNaturalizeSingleWordStartingWithLowerCase() {
-        assertThat(StringUtils.naturalize("foo"), is("Foo"));
+        assertThat(StringExtensions.asNaturalized("foo"), is("Foo"));
     }
 
     @Test
     public void shouldNaturalizeSingleWordStartingWithUpperCase() {
-        assertThat(StringUtils.naturalize("Foo"), is("Foo"));
+        assertThat(StringExtensions.asNaturalized("Foo"), is("Foo"));
     }
 
 }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.dnd.view.axis;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.viewer.dnd.view.ViewAxis;
 
 public class LabelAxis implements ViewAxis {

@@ -30,19 +30,19 @@ public class StringUtils_toLineSeparated {
 
     @Test
     public void convertsCarriageReturnToLineSeparator() throws Exception {
-        assertThat(StringUtils.lineSeparated("ok\n"), is("ok" + System.getProperty("line.separator")));
+        assertThat(StringExtensions.lineSeparated("ok\n"), is("ok" + System.getProperty("line.separator")));
     }
 
     @Test
     public void windowsStyleCarriageReturnLeftUnchanged() throws Exception {
         assumeThatRunningOnWindows(); // ie windows
-        assertThat(StringUtils.lineSeparated("ok\r\n"), is("ok" + System.getProperty("line.separator")));
+        assertThat(StringExtensions.lineSeparated("ok\r\n"), is("ok" + System.getProperty("line.separator")));
     }
 
     @Test
     public void macStyleCarriageReturnLeftUnchanged() throws Exception {
         assumeThatRunningOnWindows(); // ie windows
-        assertThat(StringUtils.lineSeparated("ok\r"), is("ok\r"));
+        assertThat(StringExtensions.lineSeparated("ok\r"), is("ok\r"));
     }
 
     private static void assumeThatRunningOnWindows() {

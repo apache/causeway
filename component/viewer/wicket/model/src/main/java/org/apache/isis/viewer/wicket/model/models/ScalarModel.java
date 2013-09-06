@@ -51,7 +51,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
-import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -512,16 +511,12 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return false;
     }
 
-    public Class<?> getScalarType() {
-        return ClassLoaders.forName(getTypeOfSpecification());
-    }
-
     public String getObjectAsString() {
         final ObjectAdapter adapter = getObject();
         if (adapter == null) {
             return null;
         }
-        return adapter.titleString();
+        return adapter.titleString(null);
     }
 
     @Override

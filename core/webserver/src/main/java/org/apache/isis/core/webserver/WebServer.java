@@ -27,8 +27,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
-import org.apache.isis.core.commons.lang.ArrayUtil;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.webserver.internal.OptionHandlerAddress;
@@ -66,7 +65,7 @@ public class WebServer {
     private Server jettyServer;
 
     public static void main(final String[] args) {
-        new WebServer().run(ArrayUtil.append(args, "--" + Constants.NO_SPLASH_LONG_OPT));
+        new WebServer().run(ArrayExtensions.append(args, "--" + Constants.NO_SPLASH_LONG_OPT));
     }
 
     /**
@@ -120,7 +119,7 @@ public class WebServer {
     private String baseFor(final Server jettyServer) {
         final Connector connector = jettyServer.getConnectors()[0];
         final String scheme = "http";
-        final String host = StringUtils.coalesce(connector.getHost(), "localhost");
+        final String host = ArrayExtensions.coalesce(connector.getHost(), "localhost");
         final int port = connector.getPort();
 
         final WebAppContext handler = (WebAppContext) jettyServer.getHandler();

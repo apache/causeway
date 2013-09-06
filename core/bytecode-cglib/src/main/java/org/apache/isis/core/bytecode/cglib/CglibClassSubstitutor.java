@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.bytecode.cglib;
 
-import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.CglibEnhanced;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 
@@ -35,7 +35,7 @@ public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
      */
     @Override
     public Class<?> getClass(final Class<?> cls) {
-        if (JavaClassUtils.directlyImplements(cls, CglibEnhanced.class)) {
+        if (ClassUtil.directlyImplements(cls, CglibEnhanced.class)) {
             return getClass(cls.getSuperclass());
         }
         return super.getClass(cls);

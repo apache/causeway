@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -85,7 +85,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 if(cssClass != null) {
                     item.add(new CssClassAppender(cssClass));
                 }
-                viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
+                viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);
                 item.addOrReplace(link);
             }

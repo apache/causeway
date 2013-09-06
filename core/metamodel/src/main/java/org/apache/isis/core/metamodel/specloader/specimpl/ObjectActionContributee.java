@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -121,7 +121,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             }
             this.parameters = contributeeParameters;
         }
-        return CastUtils.listOf(parameters, ObjectActionParameter.class);
+        return ObjectExtensions.asListT(parameters, ObjectActionParameter.class);
     }
 
     

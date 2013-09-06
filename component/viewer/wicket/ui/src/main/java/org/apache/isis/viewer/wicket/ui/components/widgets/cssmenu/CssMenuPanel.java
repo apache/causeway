@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
 
-import org.apache.isis.viewer.wicket.model.util.Strings;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -57,7 +57,7 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.MyModel> {
         };
         @Override
         public String toString() {
-            return Strings.toCamelCase(name());
+            return StringExtensions.toCamelCase(name());
         }
 
         public String getAppendValue() {

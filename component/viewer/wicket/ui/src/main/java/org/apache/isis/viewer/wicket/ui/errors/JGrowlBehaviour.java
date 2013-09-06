@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import com.google.common.base.Strings;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,7 +28,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 
@@ -49,7 +51,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     @Override
     protected void respond(AjaxRequestTarget target) {
         String feedbackMsg = JGrowlUtil.asJGrowlCalls(IsisContext.getMessageBroker());
-        if(!StringUtils.isNullOrEmpty(feedbackMsg)) {
+        if(!Strings.isNullOrEmpty(feedbackMsg)) {
             target.appendJavaScript(feedbackMsg);
         }
     }
@@ -58,7 +60,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
         String feedbackMsg = JGrowlUtil.asJGrowlCalls(IsisContext.getMessageBroker());
-        if(!StringUtils.isNullOrEmpty(feedbackMsg)) {
+        if(!Strings.isNullOrEmpty(feedbackMsg)) {
             response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
         }
     }

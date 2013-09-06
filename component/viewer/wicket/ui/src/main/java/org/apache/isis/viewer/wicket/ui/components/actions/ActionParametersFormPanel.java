@@ -38,7 +38,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.Mementos;
+import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -153,7 +153,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
 
         private List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
-            final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, Mementos.fromActionParameter());
+            final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, MementoFunctions.fromActionParameter());
             // we copy into a new array list otherwise we get lazy evaluation =
             // reference to a non-serializable object
             return Lists.newArrayList(parameterMementoList);

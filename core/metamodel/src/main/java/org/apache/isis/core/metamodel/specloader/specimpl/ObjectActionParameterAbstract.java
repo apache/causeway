@@ -30,9 +30,9 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.commons.lang.WrapperUtils;
+import org.apache.isis.core.commons.lang.ClassExtensions;
+import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -125,7 +125,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public String getId() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         if (facet != null && facet.value() != null) {
-            return StringUtils.camelLowerFirst(facet.value());
+            return StringExtensions.asCamelLowerFirst(facet.value());
         }
         final String name = getSpecification().getSingularName();
         final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Filter<ObjectActionParameter>() {
@@ -140,10 +140,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         });
         if (parameters.size() == 1) {
-            return StringUtils.camelLowerFirst(name);
+            return StringExtensions.asCamelLowerFirst(name);
         }
         final int indexOf = parameters.indexOf(this);
-        return StringUtils.camelLowerFirst(name + (indexOf + 1));
+        return StringExtensions.asCamelLowerFirst(name + (indexOf + 1));
     }
 
     @Override
@@ -294,7 +294,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
-        final List<ObjectAdapter> argListIfAvailable = ListUtils.mutableCopy(argumentsIfAvailable);
+        final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
         
         final ObjectAdapter target = targetForDefaultOrChoices(adapter, argListIfAvailable);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
@@ -373,8 +373,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final Class<? extends Object> choiceClass = object.getClass();
             final Class<?> paramClass = paramSpec.getCorrespondingClass();
             
-            final Class<? extends Object> choiceWrappedClass = WrapperUtils.wrapAsNecessary(choiceClass);
-            final Class<? extends Object> paramWrappedClass = WrapperUtils.wrapAsNecessary(paramClass);
+            final Class<? extends Object> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
+            final Class<? extends Object> paramWrappedClass = ClassExtensions.asWrappedIfNecessary(paramClass);
             
             final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
             final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);

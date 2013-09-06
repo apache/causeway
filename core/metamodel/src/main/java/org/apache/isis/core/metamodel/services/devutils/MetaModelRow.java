@@ -25,7 +25,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
@@ -219,7 +219,7 @@ public class MetaModelRow implements Comparable<MetaModelRow>{
         if (ignore(name)) {
             return "";
         } 
-        final String abbr = StringUtils.toAbbreviation(name);
+        final String abbr = StringExtensions.toAbbreviation(name);
         return abbr.length()>0 ? abbr : name;
     }
 

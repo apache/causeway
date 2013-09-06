@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
-import org.apache.isis.core.commons.lang.PathUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceAbstract;
 
 public class ResourceStreamSourceForWebInf extends ResourceStreamSourceAbstract {
@@ -50,7 +50,7 @@ public class ResourceStreamSourceForWebInf extends ResourceStreamSourceAbstract 
 
     @Override
     public InputStream doReadResource(final String resourcePath) throws IOException {
-        final String fullyQualifiedResourcePath = PathUtils.combine(configurationDirectory, resourcePath);
+        final String fullyQualifiedResourcePath = StringExtensions.combinePath(configurationDirectory, resourcePath);
         return servletContext.getResourceAsStream(fullyQualifiedResourcePath);
     }
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.dnd.interaction;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Offset;
 import org.apache.isis.viewer.dnd.drawing.Padding;

@@ -28,7 +28,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.lang.ArrayUtil;
+import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.core.webserver.WebServerConstants;
@@ -39,7 +39,7 @@ public final class OptionHandlerPort implements OptionHandler {
     static final String PORT_OPT = "p";
 
     public static String[] appendArg(final String[] args, final int port) {
-        return ArrayUtil.append(args, "--" + PORT_LONG_OPT, "" + port);
+        return ArrayExtensions.append(args, "--" + PORT_LONG_OPT, "" + port);
     }
 
     @Override

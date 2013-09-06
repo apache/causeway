@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.members.disabled.staticmethod;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -61,7 +61,7 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
         final Class<?> type = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
 
-        final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Method protectMethod = MethodFinderUtils.findMethodWithOrWithoutParameters(type, MethodScope.CLASS, MethodPrefixConstants.PROTECT_PREFIX + capitalizedName, boolean.class, paramTypes);
         if (protectMethod == null) {
@@ -82,7 +82,7 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
     private static Boolean invokeProtectMethod(final Method protectMethod) {
         Boolean protectMethodReturnValue = null;
         try {
-            protectMethodReturnValue = (Boolean) InvokeUtils.invokeStatic(protectMethod);
+            protectMethodReturnValue = (Boolean) MethodExtensions.invokeStatic(protectMethod);
         } catch (final ClassCastException ex) {
             // ignore
         }

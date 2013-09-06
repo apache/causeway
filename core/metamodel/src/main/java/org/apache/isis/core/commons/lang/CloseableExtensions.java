@@ -19,30 +19,22 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Closeable;
 
-public final class MapUtils {
+public final class CloseableExtensions {
 
-    private MapUtils() {
+    private CloseableExtensions() {
     }
 
-    /**
-     * Converts a list of objects [a, 1, b, 2] into a map {a -> 1; b -> 2}
-     */
-    @SuppressWarnings("unchecked")
-    public static <K,V> Map<K,V> asMap(Object... keyValPair){
-        Map<K,V> map = new HashMap<K,V>();
-
-        if(keyValPair.length % 2 != 0){
-            throw new IllegalArgumentException("Keys and values must be pairs.");
+    public static void closeSafely(final Closeable extendee) {
+        if (extendee != null) {
+            try {
+                extendee.close();
+            } catch (final Exception ignore) {
+                // ignore
+            }
         }
-
-        for(int i = 0; i < keyValPair.length; i += 2){
-            map.put((K) keyValPair[i], (V) keyValPair[i+1]);
-        }
-
-        return Collections.unmodifiableMap(map);
     }
+
+
 }

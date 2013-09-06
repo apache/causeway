@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets.param.defaults.methodnum;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -105,7 +105,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
     private static Method findDefaultNumMethod(ProcessMethodContext processMethodContext, int n) {
         
         final Method actionMethod = processMethodContext.getMethod();
-        final List<Class<?>> paramTypes = ListUtils.mutableCopy(actionMethod.getParameterTypes());
+        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
         
         final int numParamTypes = paramTypes.size();
         
@@ -127,7 +127,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
         final Class<?> returnType = actionMethod.getParameterTypes()[n];
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + n + capitalizedName, returnType, paramTypes);
     }
 

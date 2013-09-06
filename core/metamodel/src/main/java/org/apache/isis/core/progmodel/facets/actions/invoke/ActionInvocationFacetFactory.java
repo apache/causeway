@@ -21,8 +21,7 @@ package org.apache.isis.core.progmodel.facets.actions.invoke;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -106,7 +105,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     private void attachDebugFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         if (!capitalizedName.startsWith(DEBUG_PREFIX)) {
             return;
         }
@@ -117,7 +116,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     private void attachExplorationFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         if (!capitalizedName.startsWith(EXPLORATION_PREFIX)) {
             return;
         }
@@ -134,13 +133,13 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     private void attachNamedFacetInferredFromMethodName(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(method.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(method.getName());
 
         // this is nasty...
         String name = capitalizedName;
-        name = StringUtils.removePrefix(name, DEBUG_PREFIX);
-        name = StringUtils.removePrefix(name, EXPLORATION_PREFIX);
-        name = NameUtils.naturalName(name);
+        name = StringExtensions.removePrefix(name, DEBUG_PREFIX);
+        name = StringExtensions.removePrefix(name, EXPLORATION_PREFIX);
+        name = StringExtensions.asNaturalName2(name);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new NamedFacetInferred(name, facetedMethod));

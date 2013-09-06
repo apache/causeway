@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -63,7 +63,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
     private Class<?> attachAddToFacetAndRemoveFromFacet(final ProcessMethodContext processMethodContext) {
 
         final Method accessorMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseName(accessorMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(accessorMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
 
@@ -132,7 +132,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
     private void attachValidateAddToFacetIfValidateAddToMethodIsFound(final ProcessMethodContext processMethodContext, final Class<?> collectionType) {
 
         final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
@@ -152,7 +152,7 @@ public class CollectionAddRemoveAndValidateFacetFactory extends MethodPrefixBase
     private void attachValidateRemoveFacetIfValidateRemoveFromMethodIsFound(final ProcessMethodContext processMethodContext, final Class<?> collectionType) {
 
         final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);

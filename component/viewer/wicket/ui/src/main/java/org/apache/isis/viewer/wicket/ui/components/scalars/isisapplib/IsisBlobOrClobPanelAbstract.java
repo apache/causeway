@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -157,7 +157,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         } catch (IOException ex) {
             return null;
         } finally {
-            IoUtils.closeSafely(bais);
+            CloseableExtensions.closeSafely(bais);
         }
     }
 

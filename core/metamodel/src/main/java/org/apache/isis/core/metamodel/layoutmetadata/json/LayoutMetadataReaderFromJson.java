@@ -36,7 +36,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.lang.ResourceUtil;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
@@ -177,7 +177,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     // //////////////////////////////////////
 
     private LayoutMetadata readMetadata(Class<?> domainClass) throws IOException {
-        final String content = ResourceUtil.contentOf(domainClass, ".layout.json");
+        final String content = ClassExtensions.resourceContent(domainClass, ".layout.json");
         return readMetadata(content);
     }
 

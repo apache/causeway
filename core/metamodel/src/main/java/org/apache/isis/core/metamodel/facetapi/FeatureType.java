@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -125,7 +125,7 @@ public enum FeatureType {
     }
 
     private static Identifier propertyOrCollectionIdentifierFor(final Class<?> type, final Method method) {
-        final String capitalizedName = NameUtils.javaBaseName(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
         final String beanName = Introspector.decapitalize(capitalizedName);
         return Identifier.propertyOrCollectionIdentifier(type.getName(), beanName);
     }

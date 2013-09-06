@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets.param.named.staticmethod;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -71,7 +71,7 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
         }
 
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method namesMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String[].class, new Class[0]);
@@ -92,7 +92,7 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
     private static String[] invokeNamesMethod(final Method namesMethod, final int numElementsRequired) {
         String[] names = null;
         try {
-            names = (String[]) InvokeUtils.invokeStatic(namesMethod, new Object[0]);
+            names = (String[]) MethodExtensions.invokeStatic(namesMethod, new Object[0]);
         } catch (final ClassCastException ex) {
             // ignore
         }

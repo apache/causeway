@@ -17,31 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.commons.lang;
 
-public final class Strings {
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-    private Strings() {
+public final class MapUtil {
+
+    private MapUtil() {
     }
 
-    public static String toCamelCase(final String name) {
-        final String nameLower = name.toLowerCase();
-        final StringBuilder buf = new StringBuilder();
-        boolean capitalizeNext = false;
-        for (int i = 0; i < nameLower.length(); i++) {
-            final char ch = nameLower.charAt(i);
-            if (ch == '_') {
-                capitalizeNext = true;
-            } else {
-                if (capitalizeNext) {
-                    buf.append(Character.toUpperCase(ch));
-                } else {
-                    buf.append(ch);
-                }
-                capitalizeNext = false;
-            }
+    /**
+     * Converts a list of objects [a, 1, b, 2] into a map {a -> 1; b -> 2}
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> Map<K,V> asMap(Object... keyValPair){
+        Map<K,V> map = new HashMap<K,V>();
+
+        if(keyValPair.length % 2 != 0){
+            throw new IllegalArgumentException("Keys and values must be pairs.");
         }
-        return buf.toString();
-    }
 
+        for(int i = 0; i < keyValPair.length; i += 2){
+            map.put((K) keyValPair[i], (V) keyValPair[i+1]);
+        }
+
+        return Collections.unmodifiableMap(map);
+    }
 }

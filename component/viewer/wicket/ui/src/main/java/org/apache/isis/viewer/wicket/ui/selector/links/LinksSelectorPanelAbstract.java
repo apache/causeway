@@ -41,7 +41,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -213,7 +213,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                     };
                     String name = nameFor(componentFactory);
                     Label viewTitleLabel = new Label(ID_VIEW_TITLE, name);
-                    viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(name)));
+                    viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(name)));
                     link.add(viewTitleLabel);
                     item.add(link);
                     

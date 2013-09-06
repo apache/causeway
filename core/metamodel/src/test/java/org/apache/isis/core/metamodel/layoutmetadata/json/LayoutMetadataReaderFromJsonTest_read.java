@@ -26,7 +26,7 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.lang.ResourceUtil;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 
 public class LayoutMetadataReaderFromJsonTest_read {
     
@@ -42,7 +42,7 @@ public class LayoutMetadataReaderFromJsonTest_read {
         final Properties properties = reader.asProperties(ExampleDomainObject.class);
         assertThat(properties, is(not(nullValue())));
         
-        final Properties expectedProperties = ResourceUtil.propertiesFor(ExampleDomainObject.class, ".layout.properties");
+        final Properties expectedProperties = ClassExtensions.resourceProperties(ExampleDomainObject.class, ".layout.properties");
         for (Object expectedKey : expectedProperties.keySet()) {
             final String key = (String) expectedKey;
             final String expectedValue = expectedProperties.getProperty(key);

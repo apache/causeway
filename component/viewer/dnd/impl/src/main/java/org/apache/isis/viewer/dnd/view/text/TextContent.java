@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
 public class TextContent {

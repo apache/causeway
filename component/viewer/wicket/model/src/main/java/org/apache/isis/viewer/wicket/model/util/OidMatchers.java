@@ -19,41 +19,45 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
-import com.google.common.base.Function;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
-public final class Pojos {
+public final class OidMatchers {
 
-    private Pojos() {
+    private OidMatchers() {
     }
 
-    public static Function<Object, Oid> toOid() {
-        return new Function<Object, Oid>() {
+    public static Matcher<Oid> isTransient() {
+        return new TypeSafeMatcher<Oid>() {
+
             @Override
-            public Oid apply(final Object pojo) {
-                final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
-                return adapter.getOid();
+            public boolean matchesSafely(final Oid item) {
+                return item.isTransient();
             }
 
-        };
-    }
-
-    public static Function<ObjectAdapter, Object> forAdapter() {
-        return new Function<ObjectAdapter, Object>() {
-
             @Override
-            public Object apply(final ObjectAdapter from) {
-                return from.getObject();
+            public void describeTo(final Description description) {
+                description.appendText("is transient");
             }
         };
     }
 
-    private static AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+    public static Matcher<Oid> isPersistent() {
+        return new TypeSafeMatcher<Oid>() {
+
+            @Override
+            public boolean matchesSafely(final Oid item) {
+                return !item.isTransient();
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("is persistent");
+            }
+        };
     }
 
 }

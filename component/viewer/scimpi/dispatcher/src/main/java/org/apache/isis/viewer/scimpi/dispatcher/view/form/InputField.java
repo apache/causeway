@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 
 public class InputField {
     public static final int REFERENCE = 1;

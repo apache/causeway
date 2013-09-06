@@ -27,8 +27,8 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.viewer.wicket.model.util.Strings;
 
 public enum PageParameterNames {
 
@@ -103,7 +103,7 @@ public enum PageParameterNames {
      */
     @Override
     public String toString() {
-        return Strings.toCamelCase(name());
+        return StringExtensions.toCamelCase(name());
     }
 
     public String getStringFrom(final PageParameters pageParameters) {

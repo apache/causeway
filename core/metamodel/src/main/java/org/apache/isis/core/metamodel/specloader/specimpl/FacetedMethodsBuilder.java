@@ -36,8 +36,9 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.commons.lang.MethodUtil;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -52,7 +53,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
-import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -77,12 +77,12 @@ public class FacetedMethodsBuilder {
 
         @Override
         public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            MethodFinderUtils.removeMethod(methods, methodScope, methodName, returnType, parameterTypes);
+            MethodUtil.removeMethod(methods, methodScope, methodName, returnType, parameterTypes);
         }
 
         @Override
         public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
-            return MethodFinderUtils.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
+            return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
         @Override
@@ -380,7 +380,7 @@ public class FacetedMethodsBuilder {
         }
         final List<FacetedMethod> actionFacetedMethods1 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP, metadataProperties);
         final List<FacetedMethod> actionFacetedMethods2 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP, metadataProperties);
-        return ListUtils.combine(actionFacetedMethods1, actionFacetedMethods2);
+        return ListExtensions.combineWith(actionFacetedMethods1, actionFacetedMethods2);
     }
 
     private List<FacetedMethod> findActionFacetedMethods(
@@ -459,7 +459,7 @@ public class FacetedMethodsBuilder {
             final MethodScope methodScope, 
             final RecognisedHelpersStrategy recognisedHelpersStrategy) {
 
-        if (!MethodFinderUtils.inScope(methodScope, actionMethod)) {
+        if (!MethodUtil.inScope(actionMethod, methodScope)) {
             return false;
         }
 
@@ -547,7 +547,7 @@ public class FacetedMethodsBuilder {
      * 
      * @param objectFactory
      * 
-     * @see MethodFinderUtils#removeMethods(Method[], boolean, String, Class,
+     * @see MethodUtil#removeMethods(Method[], boolean, String, Class,
      *      boolean, int, ClassSubstitutor)
      */
     private List<Method> findAndRemovePrefixedMethods(
@@ -556,7 +556,7 @@ public class FacetedMethodsBuilder {
             final Class<?> returnType, 
             final boolean canBeVoid, 
             final int paramCount) {
-        return MethodFinderUtils.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
+        return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
     }
 
     // ////////////////////////////////////////////////////////////////////////////

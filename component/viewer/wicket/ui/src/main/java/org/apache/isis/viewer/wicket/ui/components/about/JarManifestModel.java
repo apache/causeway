@@ -35,7 +35,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
@@ -70,7 +70,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         } catch (Exception ex) {
             // ignore
         } finally {
-            IoUtils.closeSafely(metaInfManifestIs);
+            CloseableExtensions.closeSafely(metaInfManifestIs);
         }
         
         Enumeration<?> resEnum;
@@ -95,7 +95,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             } catch(Exception e3) {
                 // ignore
             } finally {
-                IoUtils.closeSafely(is);
+                CloseableExtensions.closeSafely(is);
             }
         }
         

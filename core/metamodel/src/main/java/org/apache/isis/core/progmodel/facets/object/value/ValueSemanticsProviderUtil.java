@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.value;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class ValueSemanticsProviderUtil {
@@ -36,14 +38,14 @@ public final class ValueSemanticsProviderUtil {
     public static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);
-        return !StringUtils.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
+        return !Strings.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
     }
 
     @SuppressWarnings("unchecked")
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
         @SuppressWarnings("rawtypes")
-        final Class clazz = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class) : null;
-        return clazz != null ? clazz : JavaClassUtils.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+        final Class clazz = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class) : null;
+        return clazz != null ? clazz : ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
     }
 
 }

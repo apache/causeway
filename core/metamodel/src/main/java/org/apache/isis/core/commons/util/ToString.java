@@ -17,45 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.lang;
+package org.apache.isis.core.commons.util;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.isis.core.commons.lang.DateExtensions;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 
 public final class ToString {
 
-    public static String createName(final Object forObject) {
-        final StringBuffer buffer = new StringBuffer();
-        createName(forObject, buffer);
-        return buffer.toString();
-    }
-
-    private static void createName(final Object forObject, final StringBuffer string) {
-        string.append(name(forObject));
-        string.append("@");
-        string.append(Integer.toHexString(forObject.hashCode()));
-    }
-
-    public static String name(final Object forObject) {
-        final String name = forObject.getClass().getName();
-        return name.substring(name.lastIndexOf('.') + 1);
-    }
-
-    public static String timestamp(final Date date) {
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmssSSS");
-        return date == null ? "" : simpleDateFormat.format(date);
-    }
-
-    public static ToString createWithIdentifier(final Object object) {
-        return new ToString(object);
-    }
 
     public static ToString createAnonymous(final Object object) {
         final ToString string = new ToString();
-        string.append(name(object));
+        string.append(ObjectExtensions.classBaseName(object));
         string.append("[");
         return string;
     }
+
+    // //////////////////////////////////////
 
     private boolean addComma = false;
     private final StringBuffer buf;
@@ -67,13 +46,13 @@ public final class ToString {
 
     public ToString(final Object forObject) {
         buf = new StringBuffer();
-        createName(forObject, buf);
+        ObjectExtensions.appendToString(forObject, buf);
         buf.append("[");
     }
 
     public ToString(final Object forObject, final int id) {
         buf = new StringBuffer();
-        buf.append(name(forObject));
+        buf.append(ObjectExtensions.classBaseName(forObject));
         buf.append("#");
         buf.append(id);
         buf.append("[");
@@ -84,6 +63,8 @@ public final class ToString {
         buf.append(text);
         addComma = text.length() > 0;
     }
+
+    // //////////////////////////////////////
 
     public ToString append(final String text) {
         buf.append(text);
@@ -152,7 +133,7 @@ public final class ToString {
     }
 
     public void appendAsTimestamp(final String name, final Date date) {
-        final String dateString = timestamp(date);
+        final String dateString = DateExtensions.asTimestamp(date);
         append(name, dateString);
     }
 
@@ -172,6 +153,8 @@ public final class ToString {
     public void setUseLineBreaks(final boolean useLineBreaks) {
         this.useLineBreaks = useLineBreaks;
     }
+
+    // //////////////////////////////////////
 
     @Override
     public String toString() {

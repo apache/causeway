@@ -59,7 +59,7 @@ public class StringUtils_NormalizedTest {
 
     @Test
     public void normalizesOk() {
-        assertThat(StringUtils.normalized(input), is(expected));
+        assertThat(StringExtensions.normalized(input), is(expected));
     }
 
 }

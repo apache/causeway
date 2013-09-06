@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.parseable;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -47,7 +47,7 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     }
 
     private ParseableFacetUsingParser createParser(final FacetHolder holder, DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
-        final Parser<?> parser = (Parser<?>) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
+        final Parser<?> parser = (Parser<?>) ClassExtensions.newInstance(parserClass, FacetHolder.class, holder);
         return new ParseableFacetUsingParser(parser, holder, deploymentCategory, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 

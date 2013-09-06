@@ -138,10 +138,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
      */
     private boolean entityDetailsVisible;
 
-    /**
-     * Set by {@link #setMemberGroupsHint(List)}
-     */
-    private List<String> memberGroupsHint;
 
     /**
      * {@link ConcurrencyException}, if any, that might have occurred previously

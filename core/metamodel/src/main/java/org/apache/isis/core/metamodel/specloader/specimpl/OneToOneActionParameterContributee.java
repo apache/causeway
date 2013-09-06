@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -61,10 +61,10 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
 
     protected List<ObjectAdapter> argsForDefaultOrChoices(final ObjectAdapter contributee, final List<ObjectAdapter> argumentsIfAvailable) {
 
-        final List<ObjectAdapter> suppliedArgs = ListUtils.mutableCopy(argumentsIfAvailable);
+        final List<ObjectAdapter> suppliedArgs = ListExtensions.mutableCopy(argumentsIfAvailable);
         
         final int contributeeParam = contributeeAction.getContributeeParam();
-        ListUtils.insert(suppliedArgs, contributeeParam, contributee);
+        ListExtensions.insert(suppliedArgs, contributeeParam, contributee);
         
         return suppliedArgs;
     }

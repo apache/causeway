@@ -19,6 +19,15 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -26,7 +35,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -92,12 +103,54 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     boolean isMandatory();
 
 
+    // //////////////////////////////////////////////////////
+    // Functions
+    // //////////////////////////////////////////////////////
+
+    public static class Functions {
+        private Functions(){}
+        
+        public static Function<ObjectAssociation, String> toName() {
+            return new Function<ObjectAssociation, String>() {
+                @Override
+                public String apply(final ObjectAssociation oa) {
+                    return oa.getName();
+                }
+            };
+        }
+
+        public static Function<ObjectAssociation, String> toId() {
+            return new Function<ObjectAssociation, String>() {
+                @Override
+                public String apply(final ObjectAssociation oa) {
+                    return oa.getId();
+                }
+            };
+        }
+    }
+    
+    // //////////////////////////////////////////////////////
+    // Predicates
+    // //////////////////////////////////////////////////////
+
+    public static class Predicates {
+        private Predicates(){}
+        
+        public static Predicate<ObjectAssociation> being(final Contributed contributed) {
+            return new Predicate<ObjectAssociation>(){
+                @Override
+                public boolean apply(final ObjectAssociation t) {
+                    return contributed.isIncluded() || 
+                           !(t instanceof ContributeeMember);
+                }
+            };
+        }
+    }
     
     // //////////////////////////////////////////////////////
     // Filters
     // //////////////////////////////////////////////////////
 
-    
     public static class Filters {
 
         private Filters() {
@@ -215,4 +268,40 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     }
 
+    // //////////////////////////////////////////////////////
+    // Util
+    // //////////////////////////////////////////////////////
+
+    public static class Util {
+        private Util(){}
+        
+        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(List<ObjectAssociation> associations) {
+            Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
+            for(ObjectAssociation association: associations) {
+                addAssociationIntoGroup(associationsByGroup, association);
+            }
+            return associationsByGroup;
+        }
+
+        private static void addAssociationIntoGroup(Map<String, List<ObjectAssociation>> associationsByGroup, ObjectAssociation association) {
+            final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
+            if(memberOrderFacet != null) {
+                final String name = memberOrderFacet.name();
+                if(!Strings.isNullOrEmpty(name)) {
+                    getFrom(associationsByGroup, name).add(association);
+                    return;
+                }
+            }
+            getFrom(associationsByGroup, "General").add(association);
+        }
+
+        private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
+            List<ObjectAssociation> list = associationsByGroup.get(groupName);
+            if(list == null) {
+                list = Lists.newArrayList();
+                associationsByGroup.put(groupName, list);
+            }
+            return list;
+        }
+    }
 }

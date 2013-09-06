@@ -30,7 +30,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.runtime.installerregistry.InstallerRepository;
 import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -64,7 +64,7 @@ public class OptionHandlerViewer extends OptionHandlerAbstract {
 
     @Override
     public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        isisConfigurationBuilder.add(SystemConstants.VIEWER_KEY, ListUtils.listToString(viewerNames));
+        isisConfigurationBuilder.add(SystemConstants.VIEWER_KEY, ListExtensions.listToString(viewerNames));
     }
 
     public List<String> getViewerNames() {

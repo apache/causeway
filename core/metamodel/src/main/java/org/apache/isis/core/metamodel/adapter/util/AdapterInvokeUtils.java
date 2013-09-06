@@ -24,8 +24,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.commons.lang.WrapperUtils;
+import org.apache.isis.core.commons.lang.ClassExtensions;
+import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 
@@ -35,15 +37,15 @@ public final class AdapterInvokeUtils {
     }
 
     public static void invokeAll(final List<Method> methods, final ObjectAdapter adapter) {
-        InvokeUtils.invoke(methods, AdapterUtils.unwrap(adapter));
+        MethodUtil.invoke(methods, AdapterUtils.unwrap(adapter));
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter) {
-        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter));
+        return MethodExtensions.invoke(method, AdapterUtils.unwrap(adapter));
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final Object arg0) {
-        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter), new Object[] {arg0});
+        return MethodExtensions.invoke(method, AdapterUtils.unwrap(adapter), new Object[] {arg0});
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter arg0Adapter) {
@@ -51,7 +53,7 @@ public final class AdapterInvokeUtils {
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
-        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter), AdapterUtils.unwrap(argumentAdapters));
+        return MethodExtensions.invoke(method, AdapterUtils.unwrap(adapter), AdapterUtils.unwrap(argumentAdapters));
     }
     
     /**
@@ -78,12 +80,12 @@ public final class AdapterInvokeUtils {
 
     private static void adjust(final Method method, final List<ObjectAdapter> args, final AdapterManager adapterManager) {
         final Class<?>[] parameterTypes = method.getParameterTypes();
-        ListUtils.adjust(args, parameterTypes.length);
+        ListExtensions.adjust(args, parameterTypes.length);
         
         for(int i=0; i<parameterTypes.length; i++) {
             final Class<?> cls = parameterTypes[i];
             if(args.get(i) == null && cls.isPrimitive()) {
-                final Object object = WrapperUtils.defaultFor(cls);
+                final Object object = ClassExtensions.toDefault(cls);
                 final ObjectAdapter adapter = adapterManager.adapterFor(object);
                 args.set(i, adapter);
             }

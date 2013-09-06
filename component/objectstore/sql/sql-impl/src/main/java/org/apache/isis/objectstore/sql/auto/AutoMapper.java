@@ -29,12 +29,12 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
@@ -226,7 +226,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                             final ObjectSpecification specification = patternAssoc.getSpecification();
 
                             method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
-                            final Object res = InvokeUtils.invoke(method, o);
+                            final Object res = MethodExtensions.invoke(method, o);
 
                             if (specification.isValue()) {
                                 // If the property (memberName) is a value type,

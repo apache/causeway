@@ -17,20 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.commons.lang;
 
-public final class Generics {
+import com.google.common.base.Function;
 
-    private Generics() {
+public final class StringFunctions {
+    
+    private StringFunctions() {
     }
 
-    public static <T> T coalesce(final T... candidates) {
-        for (final T t : candidates) {
-            if (t != null) {
-                return t;
+    public static Function<String, String> toLowerCase() {
+        return new Function<String, String>() {
+            @Override
+            public String apply(String input) {
+                return input != null? input.toLowerCase(): null;
             }
-        }
-        return null;
+        };
+    }
+    
+    public static Function<String, String> toUpperCase() {
+        return new Function<String, String>() {
+            @Override
+            public String apply(String input) {
+                return input != null? input.toUpperCase(): null;
+            }
+        };
     }
 
 }

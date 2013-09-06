@@ -29,7 +29,7 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.core.commons.lang.InputStreamExtensions;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
@@ -43,7 +43,7 @@ public class ClientConnectionTest {
     public void setup() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        input = IoUtils.asUtf8ByteStream("org.domain.Class false true 1025\n{data...}\n\n102334");
+        input = InputStreamExtensions.asUtf8ByteStream("org.domain.Class false true 1025\n{data...}\n\n102334");
         output = new ByteArrayOutputStream();
         connection = new ClientConnection(input, output);
     }
@@ -95,28 +95,28 @@ public class ClientConnectionTest {
 
     @Test
     public void validateResponseOk() throws Exception {
-        input = IoUtils.asUtf8ByteStream("ok xx xx\n{data...}");
+        input = InputStreamExtensions.asUtf8ByteStream("ok xx xx\n{data...}");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
 
     @Test(expected = RemotingException.class)
     public void validateResponseError() throws Exception {
-        input = IoUtils.asUtf8ByteStream("error message about it\n");
+        input = InputStreamExtensions.asUtf8ByteStream("error message about it\n");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
 
     @Test(expected = ObjectNotFoundException.class)
     public void validateObjectNotFound() throws Exception {
-        input = IoUtils.asUtf8ByteStream("not-found message about it\n");
+        input = InputStreamExtensions.asUtf8ByteStream("not-found message about it\n");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
 
     @Test(expected = ConcurrencyException.class)
     public void validateConcurrencyException() throws Exception {
-        input = IoUtils.asUtf8ByteStream("concurrency message about it\n");
+        input = InputStreamExtensions.asUtf8ByteStream("concurrency message about it\n");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }

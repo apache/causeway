@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
-import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.ListExtensions;
 
 public class ListUtilsTest_mutableCopy {
     
@@ -37,7 +37,7 @@ public class ListUtilsTest_mutableCopy {
     public void mutableCopyOfList_whenNotNull() throws Exception {
         List<Integer> input = Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
         
-        final List<Integer> list = ListUtils.mutableCopy(input);
+        final List<Integer> list = ListExtensions.mutableCopy(input);
         
         assertThat(list.size(), is(3));
         assertThat(list.get(0), is(Integer.valueOf(0)));
@@ -52,7 +52,7 @@ public class ListUtilsTest_mutableCopy {
     public void mutableCopyOfList_whenNull() throws Exception {
         List<Integer> input = null;
         
-        final List<Integer> list = ListUtils.mutableCopy(input);
+        final List<Integer> list = ListExtensions.mutableCopy(input);
         
         assertThat(list, is(not(nullValue())));
         assertThat(list.size(), is(0));
@@ -65,7 +65,7 @@ public class ListUtilsTest_mutableCopy {
     public void mutableCopyOfArray_whenNotNull() throws Exception {
         Integer[] input = {Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE};
         
-        final List<Integer> list = ListUtils.mutableCopy(input);
+        final List<Integer> list = ListExtensions.mutableCopy(input);
         
         assertThat(list.size(), is(3));
         assertThat(list.get(0), is(Integer.valueOf(0)));
@@ -80,7 +80,7 @@ public class ListUtilsTest_mutableCopy {
     public void mutableCopyOfArray_whenNull() throws Exception {
         Integer[] input = null;
         
-        final List<Integer> list = ListUtils.mutableCopy(input);
+        final List<Integer> list = ListExtensions.mutableCopy(input);
         
         assertThat(list, is(not(nullValue())));
         assertThat(list.size(), is(0));

@@ -48,12 +48,12 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
@@ -392,9 +392,9 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             
             // unlike shutdown, we don't swallow exceptions; would rather fail early
             if(numParams == 0) {
-                InvokeUtils.invoke(method, service);
+                MethodExtensions.invoke(method, service);
             } else {
-                InvokeUtils.invoke(method, service, new Object[]{props});
+                MethodExtensions.invoke(method, service, new Object[]{props});
             }
         }
         if(!found) {
@@ -423,7 +423,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             found = true;
             LOG.info("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
             try {
-                InvokeUtils.invoke(method, service);
+                MethodExtensions.invoke(method, service);
             } catch(Exception ex) {
                 // do nothing
                 LOG.warn("... @PreDestroy method threw exception - continuing anyway", ex);
@@ -558,7 +558,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     private Class<?> loadBuiltIn(final String className) throws ClassNotFoundException {
-        final Class<?> builtIn = JavaClassUtils.getBuiltIn(className);
+        final Class<?> builtIn = ClassUtil.getBuiltIn(className);
         if (builtIn != null) {
             return builtIn;
         }

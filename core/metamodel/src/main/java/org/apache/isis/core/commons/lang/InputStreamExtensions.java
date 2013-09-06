@@ -20,17 +20,16 @@
 package org.apache.isis.core.commons.lang;
 
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-public final class IoUtils {
+public final class InputStreamExtensions {
 
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
-    private IoUtils() {
+    private InputStreamExtensions() {
     }
 
     /**
@@ -40,7 +39,7 @@ public final class IoUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      * 
-     * @param input
+     * @param extendee
      *            the <code>InputStream</code> to read from
      * @param output
      *            the <code>OutputStream</code> to write to
@@ -51,8 +50,8 @@ public final class IoUtils {
      *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static int copy(final InputStream input, final OutputStream output) throws IOException {
-        if (input == null) {
+    public static int copyTo(final InputStream extendee, final OutputStream output) throws IOException {
+        if (extendee == null) {
             throw new IllegalArgumentException("InputStream cannot be null");
         }
         if (output == null) {
@@ -61,7 +60,7 @@ public final class IoUtils {
         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
-        while (-1 != (n = input.read(buffer))) {
+        while (-1 != (n = extendee.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
         }
@@ -72,16 +71,6 @@ public final class IoUtils {
         final byte[] data = string.getBytes("utf-8");
         final InputStream in = new ByteArrayInputStream(data);
         return in;
-    }
-
-    public static void closeSafely(final Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (final Exception ignore) {
-                // ignore
-            }
-        }
     }
 
 }

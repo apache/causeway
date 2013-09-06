@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.members.disabled.forsession;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -56,7 +56,7 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
     public static void attachDisableFacetIfDisableMethodForSessionIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method disableForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] { UserMemento.class });

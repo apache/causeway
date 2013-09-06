@@ -46,25 +46,25 @@ public class TypesTest_filteredList {
     
     @Test
     public void empty() throws ClassNotFoundException {
-        final Collection<Object> filtered = Types.filtered(Collections.emptyList(), Object.class);
+        final Collection<Object> filtered = ListExtensions.filtered(Collections.emptyList(), Object.class);
         assertThat(filtered.isEmpty(), is(true));
     }
 
     @Test
     public void subtype() throws ClassNotFoundException {
-        final Collection<Square> filtered = Types.filtered(shapes, Square.class);
+        final Collection<Square> filtered = ListExtensions.filtered(shapes, Square.class);
         assertThat(filtered.size(), is(2));
     }
 
     @Test
     public void supertype() throws ClassNotFoundException {
-        final Collection<Shape> filtered = Types.filtered(shapes, Shape.class);
+        final Collection<Shape> filtered = ListExtensions.filtered(shapes, Shape.class);
         assertThat(filtered.size(), is(3));
     }
 
     @Test
     public void subtype_whenNonMatching() throws ClassNotFoundException {
-        final Collection<Rectangle> filtered = Types.filtered(shapes, Rectangle.class);
+        final Collection<Rectangle> filtered = ListExtensions.filtered(shapes, Rectangle.class);
         assertThat(filtered.size(), is(0));
     }
 

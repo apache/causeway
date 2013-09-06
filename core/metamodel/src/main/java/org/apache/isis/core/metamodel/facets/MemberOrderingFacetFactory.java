@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.Properties;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.lang.PropertyUtil;
+import org.apache.isis.core.commons.lang.PropertiesExtensions;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -55,14 +55,14 @@ public interface MemberOrderingFacetFactory extends FacetFactory {
             // bit of a hack; to distinguish between actions and properties that have same identifier
             // eg getPaidBy() and paidBy()
             if(getFacetHolder() instanceof ObjectAction) {
-                Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix+"."+id+"()");
+                Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id+"()");
                 if (!subsetProperties.isEmpty()) {
                     return subsetProperties;
                 } 
             }
 
             // otherwise, regular processing...
-            Properties subsetProperties = PropertyUtil.subset(this.metadataProperties, prefix+"."+id);
+            Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id);
             if (!subsetProperties.isEmpty()) {
                 return subsetProperties;
             }

@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
-import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.ListExtensions;
 
 public class ListUtilsTest_adjust {
     
@@ -37,7 +37,7 @@ public class ListUtilsTest_adjust {
     @Test
     public void sameLength() throws Exception {
         final List<Integer> list = Lists.newArrayList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
-        ListUtils.adjust(list, 3);
+        ListExtensions.adjust(list, 3);
         
         assertThat(list.size(), is(3));
         assertThat(list.get(0), is(Integer.valueOf(0)));
@@ -48,7 +48,7 @@ public class ListUtilsTest_adjust {
     @Test
     public void ifLonger() throws Exception {
         final List<Integer> list = Lists.newArrayList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
-        ListUtils.adjust(list, 4);
+        ListExtensions.adjust(list, 4);
         
         assertThat(list.size(), is(4));
         assertThat(list.get(0), is(Integer.valueOf(0)));
@@ -60,7 +60,7 @@ public class ListUtilsTest_adjust {
     @Test
     public void ifShorter() throws Exception {
         final List<Integer> list = Lists.newArrayList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
-        ListUtils.adjust(list, 2);
+        ListExtensions.adjust(list, 2);
         
         assertThat(list.size(), is(2));
         assertThat(list.get(0), is(Integer.valueOf(0)));

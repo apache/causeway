@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -75,7 +75,7 @@ public class UserProfileContentWriter implements ContentWriter {
     }
 
     private void writeOptions(final StringBuffer xml, final Options options, final String name1, final int level) {
-        final String spaces = StringUtils.repeat("  ", level);
+        final String spaces = StringExtensions.repeat("  ", level);
 
         final Iterator<String> names = options.names();
         if (level == 0 || names.hasNext()) {

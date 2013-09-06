@@ -32,7 +32,7 @@ import com.google.inject.Inject;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -84,7 +84,7 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
         } catch (final IOException e) {
             throw new IsisException("Failed to read password file: " + FileAuthenticationConstants.PASSWORDS_FILE + " from " + resourceStreamSource.getName());
         } finally {
-            IoUtils.closeSafely(reader);
+            CloseableExtensions.closeSafely(reader);
         }
 
     }

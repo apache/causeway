@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.choices.enums;
 
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
@@ -44,7 +44,7 @@ public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemantic
     }
 
     protected Class<T> asT(final Class<?> cls) {
-        return CastUtils.cast(cls);
+        return ObjectExtensions.asT(cls);
     }
 
 }

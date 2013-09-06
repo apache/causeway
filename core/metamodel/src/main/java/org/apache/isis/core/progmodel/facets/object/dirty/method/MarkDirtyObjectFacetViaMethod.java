@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.progmodel.facets.object.dirty.MarkDirtyObjectFacetAbstract;
@@ -55,7 +55,7 @@ public class MarkDirtyObjectFacetViaMethod extends MarkDirtyObjectFacetAbstract 
 
     @Override
     public void invoke(final ObjectAdapter object) {
-        InvokeUtils.invokeStatic(method);
+        MethodExtensions.invokeStatic(method);
     }
 
 }

@@ -19,19 +19,15 @@
 
 package org.apache.isis.core.commons.lang;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Properties;
-
-import com.google.common.io.InputSupplier;
-import com.google.common.io.Resources;
 
 /**
  * Adapted from Ibatis Common, now with some additional guava stuff.
  */
 public class ResourceUtil {
+    
+    private ResourceUtil(){}
 
     /**
      * Returns the URL, or null if not available.
@@ -88,24 +84,6 @@ public class ResourceUtil {
         } catch (final NullPointerException ignore) {
             return null;
         }
-    }
-
-
-    public static Properties propertiesFor(final Class<?> cls, final String suffix) {
-        try {
-            final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
-            final InputSupplier<InputStream> inputSupplier = com.google.common.io.Resources.newInputStreamSupplier(url);
-            final Properties properties = new Properties();
-            properties.load(inputSupplier.getInput());
-            return properties;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public static String contentOf(final Class<?> cls, final String suffix) throws IOException {
-        final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
-        return Resources.toString(url, Charset.defaultCharset());
     }
 
 }

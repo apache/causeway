@@ -19,10 +19,9 @@
 
 package org.apache.isis.core.wrapper.internal;
 
-import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
-
 import java.util.Map;
 
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {
@@ -31,14 +30,14 @@ class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, 
         super(collectionToProxy, collectionName, handler, otma);
 
         try {
-            intercept(getMethod(collectionToProxy, "containsKey", Object.class));
-            intercept(getMethod(collectionToProxy, "containsValue", Object.class));
-            intercept(getMethod(collectionToProxy, "size"));
-            intercept(getMethod(collectionToProxy, "isEmpty"));
-            veto(getMethod(collectionToProxy, "put", Object.class, Object.class));
-            veto(getMethod(collectionToProxy, "remove", Object.class));
-            veto(getMethod(collectionToProxy, "putAll", Map.class));
-            veto(getMethod(collectionToProxy, "clear"));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "containsKey", Object.class));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "containsValue", Object.class));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "size"));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "isEmpty"));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "put", Object.class, Object.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "remove", Object.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "putAll", Map.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "clear"));
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF
             throw new RuntimeException("A Collection method could not be found: " + e.getMessage());

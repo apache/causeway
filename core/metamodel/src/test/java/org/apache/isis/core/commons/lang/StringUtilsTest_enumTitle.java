@@ -28,14 +28,14 @@ public class StringUtilsTest_enumTitle {
 
     @Test
     public void enumTitle() {
-        assertThat(StringUtils.enumTitle("FOO"), is("Foo"));
-        assertThat(StringUtils.enumTitle("FOO_BAR"), is("Foo Bar"));
+        assertThat(StringExtensions.enumTitle("FOO"), is("Foo"));
+        assertThat(StringExtensions.enumTitle("FOO_BAR"), is("Foo Bar"));
     }
 
     @Test
     public void enumDeTitle() {
-        assertThat(StringUtils.enumDeTitle("Foo"), is("FOO"));
-        assertThat(StringUtils.enumDeTitle("Foo Bar"), is("FOO_BAR"));
+        assertThat(StringExtensions.enumDeTitle("Foo"), is("FOO"));
+        assertThat(StringExtensions.enumDeTitle("Foo Bar"), is("FOO_BAR"));
     }
 
 }

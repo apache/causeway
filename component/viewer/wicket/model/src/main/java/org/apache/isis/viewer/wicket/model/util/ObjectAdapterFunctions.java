@@ -29,16 +29,16 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
-public final class ObjectAdapters {
+public final class ObjectAdapterFunctions {
 
-    private ObjectAdapters() {
+    private ObjectAdapterFunctions() {
     }
 
-    public static Function<Object, ObjectAdapter> fromPojo() {
+    public static Function<Object, ObjectAdapter> fromPojo(final AdapterManager adapterManager) {
         return new Function<Object, ObjectAdapter>() {
             @Override
             public ObjectAdapter apply(final Object pojo) {
-                return getAdapterManager().adapterFor(pojo);
+                return adapterManager.adapterFor(pojo);
             }
         };
     }
@@ -60,16 +60,6 @@ public final class ObjectAdapters {
                 return ObjectAdapterMemento.createOrNull(from);
             }
             
-        };
-    }
-
-    public static Function<Oid, ObjectAdapter> fromOid() {
-        return new Function<Oid, ObjectAdapter>() {
-            @Override
-            public ObjectAdapter apply(final Oid from) {
-                final ObjectAdapter adapterFor = getAdapterManager().getAdapterFor(from);
-                return adapterFor;
-            }
         };
     }
 

@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.lang.MapUtils;
+import org.apache.isis.core.commons.lang.MapUtil;
 
 /**
  * Defines what servlets, mappings etc are required from an embedded web server.
@@ -45,7 +45,7 @@ public final class WebAppSpecification {
     // ///////////////////////////////////////////////////////////
 
     public void addContextParams(final String... contextParams) {
-        this.contextParams = MapUtils.asMap(contextParams);
+        this.contextParams = MapUtil.asMap(contextParams);
     }
 
     public Map<String, String> getContextParams() {

@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.progmodel.facets.object.defaults.annotation;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetAbstract;
@@ -32,7 +34,7 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
     private static String providerName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
-        if (!StringUtils.isNullOrEmpty(providerName)) {
+        if (!Strings.isNullOrEmpty(providerName)) {
             return providerName;
         }
         return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(annotatedClass, configuration);

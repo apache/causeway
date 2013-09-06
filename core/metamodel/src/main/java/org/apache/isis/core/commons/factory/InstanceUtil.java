@@ -20,7 +20,7 @@
 package org.apache.isis.core.commons.factory;
 
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 
 public final class InstanceUtil {
 
@@ -47,7 +47,7 @@ public final class InstanceUtil {
         Class<? extends T> defaultType = null;
         if (defaultTypeName != null) {
             try {
-                defaultType = CastUtils.cast(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
+                defaultType = ObjectExtensions.asT(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
                 if (defaultType == null) {
                     throw new InstanceCreationClassException("Failed to load default type '" + defaultTypeName + "'");
                 }
@@ -65,7 +65,7 @@ public final class InstanceUtil {
         if (defaultTypeName != null) {
             defaultType = loadClass(defaultTypeName, requiredType);
             try {
-                defaultType = CastUtils.cast(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
+                defaultType = ObjectExtensions.asT(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
                 if (defaultType == null) {
                     throw new InstanceCreationClassException("Failed to load default type '" + defaultTypeName + "'");
                 }
@@ -101,7 +101,7 @@ public final class InstanceUtil {
         Assert.assertNotNull("Class to instantiate must be specified", cls);
         try {
             if (requiredType == null || requiredType.isAssignableFrom(cls)) {
-                final Class<T> tClass = CastUtils.cast(cls);
+                final Class<T> tClass = ObjectExtensions.asT(cls);
                 return tClass.newInstance();
             } else {
                 throw new InstanceCreationClassException("Class '" + cls.getName() + "' is not of type '" + requiredType + "'");
@@ -133,7 +133,7 @@ public final class InstanceUtil {
             if (requiredType != null && !requiredType.isAssignableFrom(loadedClass)) {
                 throw new InstanceCreationClassException("Class '" + className + "' is not of type '" + requiredType + "'");
             }
-            return CastUtils.cast(loadedClass);
+            return ObjectExtensions.asT(loadedClass);
         } catch (final NoClassDefFoundError e) {
             throw new InstanceCreationClassException("Default type '" + className + "' found, but is missing a dependent class: " + e.getMessage(), e);
         }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.objectstore.nosql;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;

@@ -37,7 +37,7 @@ import org.hamcrest.core.StringContains;
 import org.hamcrest.core.StringEndsWith;
 import org.hamcrest.core.StringStartsWith;
 
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 
 /**
  * Hamcrest {@link Matcher} implementations.
@@ -50,11 +50,11 @@ public final class IsisMatchers {
 
     @Factory
     public static Matcher<String> containsStripNewLines(final String expected) {
-        final String strippedExpected = StringUtils.stripNewLines(expected);
+        final String strippedExpected = StringExtensions.stripNewLines(expected);
         return new StringContains(strippedExpected) {
             @Override
             public boolean matchesSafely(final String actual) {
-                return super.matchesSafely(StringUtils.stripNewLines(actual));
+                return super.matchesSafely(StringExtensions.stripNewLines(actual));
             }
 
             @Override
@@ -66,12 +66,12 @@ public final class IsisMatchers {
 
     @Factory
     public static Matcher<String> equalToStripNewLines(final String expected) {
-        final String strippedExpected = StringUtils.stripNewLines(expected);
+        final String strippedExpected = StringExtensions.stripNewLines(expected);
         return new IsEqual<String>(strippedExpected) {
             @Override
             public boolean matches(final Object actualObj) {
                 final String actual = (String) actualObj;
-                return super.matches(StringUtils.stripNewLines(actual));
+                return super.matches(StringExtensions.stripNewLines(actual));
             }
 
             @Override
@@ -83,11 +83,11 @@ public final class IsisMatchers {
 
     @Factory
     public static StringStartsWith startsWithStripNewLines(final String expected) {
-        final String strippedExpected = StringUtils.stripNewLines(expected);
+        final String strippedExpected = StringExtensions.stripNewLines(expected);
         return new StringStartsWith(strippedExpected) {
             @Override
             public boolean matchesSafely(final String actual) {
-                return super.matchesSafely(StringUtils.stripNewLines(actual));
+                return super.matchesSafely(StringExtensions.stripNewLines(actual));
             }
 
             @Override
@@ -99,11 +99,11 @@ public final class IsisMatchers {
 
     @Factory
     public static Matcher<String> endsWithStripNewLines(final String expected) {
-        final String strippedExpected = StringUtils.stripNewLines(expected);
+        final String strippedExpected = StringExtensions.stripNewLines(expected);
         return new StringEndsWith(strippedExpected) {
             @Override
             public boolean matchesSafely(final String actual) {
-                return super.matchesSafely(StringUtils.stripNewLines(actual));
+                return super.matchesSafely(StringExtensions.stripNewLines(actual));
             }
 
             @Override

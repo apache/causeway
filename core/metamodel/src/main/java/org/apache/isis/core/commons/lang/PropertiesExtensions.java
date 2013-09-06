@@ -20,24 +20,24 @@ import java.util.Properties;
 
 import com.google.common.base.Joiner;
 
-public class PropertyUtil {
+public class PropertiesExtensions {
     
-    private PropertyUtil(){}
+    private PropertiesExtensions(){}
 
-    public static Properties subset(Properties properties, String... prefix) {
+    public static Properties subset(Properties extendee, String... prefix) {
         final String prefices = Joiner.on(".").join(prefix);
-        return subsetOf(properties, prefices+".");
+        return subsetOf(extendee, prefices+".");
     }
     
-    private static Properties subsetOf(Properties properties, String prefix) {
+    private static Properties subsetOf(Properties extendee, String prefix) {
         final int prefixLength = prefix.length();
     
         final Properties subsetProperties = new Properties();
-        for(Object keyObj: properties.keySet()) {
+        for(Object keyObj: extendee.keySet()) {
             final String key = (String)keyObj;
             if (key.startsWith(prefix)) {
                 final String keySuffix = key.substring(prefixLength);
-                subsetProperties.put(keySuffix, properties.get(key));
+                subsetProperties.put(keySuffix, extendee.get(key));
             }
         }
         return subsetProperties;

@@ -19,15 +19,11 @@
 
 package org.apache.isis.core.commons.lang;
 
-public class Threads {
+public class StringBuilderExtensions {
 
-    private Threads() {
+    public static void appendFormattedStr(final StringBuilder extendee, final String formatString, final Object... args) {
+        extendee.append(String.format(formatString, args));
     }
 
-    public static Thread startThread(final Runnable target, final String name) {
-        final Thread thread = new Thread(target, name);
-        thread.start();
-        return thread;
-    }
 
 }

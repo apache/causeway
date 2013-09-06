@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.Debuggable;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
@@ -46,7 +46,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
      */
     public static FacetedMethod createForProperty(final Class<?> declaringType, final String propertyName) {
         try {
-            final Method method = declaringType.getMethod("get" + StringUtils.pascal(propertyName));
+            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
             return FacetedMethod.createForProperty(declaringType, method);
         } catch (final SecurityException e) {
             throw new RuntimeException(e);
@@ -60,7 +60,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
      */
     public static FacetedMethod createForCollection(final Class<?> declaringType, final String collectionName) {
         try {
-            final Method method = declaringType.getMethod("get" + StringUtils.pascal(collectionName));
+            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
             return FacetedMethod.createForCollection(declaringType, method);
         } catch (final SecurityException e) {
             throw new RuntimeException(e);

@@ -23,7 +23,7 @@ import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**

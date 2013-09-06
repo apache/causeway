@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -41,7 +41,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         this.dependencyInjector = dependencyInjector;
         if (isValid()) {
-            final DefaultsProvider<?> defaultsProvider = (DefaultsProvider<?>) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
+            final DefaultsProvider<?> defaultsProvider = (DefaultsProvider<?>) ClassExtensions.newInstance(defaultsProviderClass, FacetHolder.class, holder);
             this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
         } else {
             this.defaultedFacetUsingDefaultsProvider = null;

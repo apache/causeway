@@ -36,9 +36,9 @@ import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
-public final class Mementos {
+public final class MementoFunctions {
 
-    private Mementos() {
+    private MementoFunctions() {
     }
 
     public static Function<ObjectSpecification, ObjectSpecId> fromSpec() {
@@ -87,11 +87,11 @@ public final class Mementos {
         };
     }
 
-    public static Function<Object, ObjectAdapterMemento> fromPojo() {
+    public static Function<Object, ObjectAdapterMemento> fromPojo(final AdapterManager adapterManager) {
         return new Function<Object, ObjectAdapterMemento>() {
             @Override
             public ObjectAdapterMemento apply(final Object pojo) {
-                final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+                final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
         };
@@ -106,8 +106,5 @@ public final class Mementos {
         };
     }
 
-    private static AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
-    }
 
 }

@@ -21,8 +21,8 @@ package org.apache.isis.viewer.dnd.view.message;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.commons.lang.ThrowableUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -43,9 +43,9 @@ public class ExceptionMessageContent implements MessageContent {
     public ExceptionMessageContent(final Throwable error) {
         String fullName = error.getClass().getName();
         fullName = fullName.substring(fullName.lastIndexOf('.') + 1);
-        name = NameUtils.naturalName(fullName);
+        name = StringExtensions.asNaturalName2(fullName);
         message = error.getMessage();
-        trace = ThrowableUtils.stackTraceFor(error);
+        trace = ThrowableExtensions.stackTraceFor(error);
         if (trace.indexOf("\tat") != -1) {
             trace = trace.substring(trace.indexOf("\tat"));
         }

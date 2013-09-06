@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ArrayUtil;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
@@ -77,7 +77,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
             return new Object[0];
         }
         if (options.getClass().isArray()) {
-            return ArrayUtil.getObjectAsObjectArray(options);
+            return ObjectExtensions.asArray(options);
         } else {
             final ObjectSpecification specification = getSpecification(choicesType);
             return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterManager());

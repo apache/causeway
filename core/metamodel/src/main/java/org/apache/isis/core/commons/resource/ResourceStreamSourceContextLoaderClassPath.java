@@ -21,7 +21,7 @@ package org.apache.isis.core.commons.resource;
 
 import java.io.InputStream;
 
-import org.apache.isis.core.commons.lang.PathUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 
 /**
  * Loads the properties from the ContextClassLoader.
@@ -50,7 +50,7 @@ public class ResourceStreamSourceContextLoaderClassPath extends ResourceStreamSo
     @Override
     protected InputStream doReadResource(final String resourcePath) {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        final String path = PathUtils.combine(prefix, resourcePath);
+        final String path = StringExtensions.combinePath(prefix, resourcePath);
         return classLoader.getResourceAsStream(path);
     }
 

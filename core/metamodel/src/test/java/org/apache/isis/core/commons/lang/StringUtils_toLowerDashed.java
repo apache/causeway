@@ -28,9 +28,9 @@ public class StringUtils_toLowerDashed {
 
     @Test
     public void toLowerDashed() {
-        assertThat(StringUtils.toLowerDashed("An Upper Case"), is("an-upper-case"));
-        assertThat(StringUtils.toLowerDashed("An   Upper   Case"), is("an-upper-case"));
-        assertThat(StringUtils.toLowerDashed("An\nUpper\tCase"), is("an-upper-case"));
+        assertThat(StringExtensions.asLowerDashed("An Upper Case"), is("an-upper-case"));
+        assertThat(StringExtensions.asLowerDashed("An   Upper   Case"), is("an-upper-case"));
+        assertThat(StringExtensions.asLowerDashed("An\nUpper\tCase"), is("an-upper-case"));
     }
 
 }

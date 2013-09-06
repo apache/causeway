@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.lang.LocaleUtils;
+import org.apache.isis.core.commons.lang.LocaleUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -287,7 +287,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private Locale findLocale() {
         final String localeStr = getConfiguration().getString(ConfigurationConstants.ROOT + "locale");
 
-        final Locale findLocale = LocaleUtils.findLocale(localeStr);
+        final Locale findLocale = LocaleUtil.findLocale(localeStr);
         return findLocale != null ? findLocale : Locale.getDefault();
     }
 

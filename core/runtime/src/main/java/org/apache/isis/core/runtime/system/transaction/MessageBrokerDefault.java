@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.ArrayExtensions;
 
 public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle {
 
@@ -94,7 +94,7 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
     @Override
     public String getMessagesCombined() {
         final List<String> x = messages;
-        final String string = StringUtils.combine(x);
+        final String string = ArrayExtensions.asSemicolonDelimitedStr(x);
         return string;
     }
 
@@ -115,7 +115,7 @@ public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle 
     @Override
     public String getWarningsCombined() {
         final List<String> x = warnings;
-        final String string = StringUtils.combine(x);
+        final String string = ArrayExtensions.asSemicolonDelimitedStr(x);
         return string;
     }
 

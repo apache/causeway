@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.util.Oids;
+import org.apache.isis.viewer.wicket.model.util.OidMatchers;
 
 public class ObjectAdapterMemento implements Serializable {
 
@@ -211,7 +211,7 @@ public class ObjectAdapterMemento implements Serializable {
     private Memento transientMemento;
 
     private ObjectAdapterMemento(final RootOid rootOid) {
-        Ensure.ensureThatArg(rootOid, Oids.isPersistent());
+        Ensure.ensureThatArg(rootOid, OidMatchers.isPersistent());
         this.persistentOidStr = rootOid.enString(getOidMarshaller());
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;

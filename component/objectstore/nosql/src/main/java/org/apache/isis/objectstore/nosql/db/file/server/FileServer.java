@@ -60,7 +60,7 @@ import org.apache.commons.configuration.SystemConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.objectstore.nosql.NoSqlStoreException;
 
 public class FileServer {
@@ -90,7 +90,7 @@ public class FileServer {
 
         final String mode = cmd.getOptionValue("m");
 
-        final List<String> argList = CastUtils.cast(cmd.getArgList());
+        final List<String> argList = ObjectExtensions.asT(cmd.getArgList());
         if ("recovery".equals(mode)) {
             final FileServer fileServer = new FileServer();
             fileServer.startRecovery(argList);

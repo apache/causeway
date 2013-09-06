@@ -74,7 +74,7 @@ public class IoUtils_CopyTest {
     public void handlesNullInputStream() throws Exception {
         final ByteArrayInputStream bais = null;
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IoUtils.copy(bais, baos);
+        InputStreamExtensions.copyTo(bais, baos);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -82,7 +82,7 @@ public class IoUtils_CopyTest {
         final byte[] bytes = createByteArray(10);
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final ByteArrayOutputStream baos = null;
-        IoUtils.copy(bais, baos);
+        InputStreamExtensions.copyTo(bais, baos);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class IoUtils_CopyTest {
         final byte[] bytes = createByteArray(0);
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IoUtils.copy(bais, baos);
+        InputStreamExtensions.copyTo(bais, baos);
         assertThat(baos.toByteArray(), arrayEqualTo(bytes));
     }
 
@@ -99,7 +99,7 @@ public class IoUtils_CopyTest {
         final byte[] bytes = createByteArray(BUF_INTERNAL_SIZE - 1);
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IoUtils.copy(bais, baos);
+        InputStreamExtensions.copyTo(bais, baos);
         assertThat(baos.toByteArray(), arrayEqualTo(bytes));
     }
 
@@ -108,7 +108,7 @@ public class IoUtils_CopyTest {
         final byte[] bytes = createByteArray(BUF_INTERNAL_SIZE + 1);
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IoUtils.copy(bais, baos);
+        InputStreamExtensions.copyTo(bais, baos);
         assertThat(baos.toByteArray(), arrayEqualTo(bytes));
     }
 
@@ -117,7 +117,7 @@ public class IoUtils_CopyTest {
         final byte[] bytes = createByteArray(BUF_INTERNAL_SIZE);
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IoUtils.copy(bais, baos);
+        InputStreamExtensions.copyTo(bais, baos);
         assertThat(baos.toByteArray(), arrayEqualTo(bytes));
     }
 

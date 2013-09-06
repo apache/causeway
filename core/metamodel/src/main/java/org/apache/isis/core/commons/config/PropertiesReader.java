@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.isis.core.commons.lang.IoUtils;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 /**
@@ -43,7 +43,7 @@ class PropertiesReader {
             }
             properties.load(in);
         } finally {
-            IoUtils.closeSafely(in);
+            CloseableExtensions.closeSafely(in);
         }
     }
 

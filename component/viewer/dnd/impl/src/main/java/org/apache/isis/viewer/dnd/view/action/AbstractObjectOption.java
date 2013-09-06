@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;

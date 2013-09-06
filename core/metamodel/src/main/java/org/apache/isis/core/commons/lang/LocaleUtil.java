@@ -19,18 +19,20 @@
 
 package org.apache.isis.core.commons.lang;
 
-public class StringBuilderUtils {
+import java.util.Locale;
 
-    public static void appendBuf(final StringBuilder buf, final String formatString, final Object... args) {
-        buf.append(String.format(formatString, args));
-    }
+public class LocaleUtil {
 
-    /**
-     * @deprecated - use a {@link StringBuilder} instead!
-     */
-    @Deprecated
-    public static void appendBuf(final StringBuffer buf, final String formatString, final Object... args) {
-        buf.append(String.format(formatString, args));
+    public static Locale findLocale(final String localeStr) {
+        if (localeStr != null) {
+            final Locale[] availableLocales = Locale.getAvailableLocales();
+            for (final Locale locale : availableLocales) {
+                if (locale.toString().equals(localeStr)) {
+                    return locale;
+                }
+            }
+        }
+        return null;
     }
 
 }

@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.members.describedas.staticmethod;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -62,7 +62,7 @@ public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPref
     public static void attachDescribedAsFacetIfDescriptionMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method descriptionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX + capitalizedName, String.class, new Class[0]);
@@ -80,7 +80,7 @@ public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPref
     private static String invokeDescriptionMethod(final Method descriptionMethod) {
         String description = null;
         try {
-            description = (String) InvokeUtils.invokeStatic(descriptionMethod);
+            description = (String) MethodExtensions.invokeStatic(descriptionMethod);
         } catch (final ClassCastException ex) {
             // ignore
         }

@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 
@@ -216,7 +216,7 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
     }
 
     private String getUser() {
-        return StringUtils.removeTabs(user.getText()).trim();
+        return StringExtensions.removeTabs(user.getText()).trim();
     }
 
     public void setUserName(final String name) {
@@ -224,7 +224,7 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
     }
 
     private String getPassword() {
-        return StringUtils.removeTabs(password.getText()).trim();
+        return StringExtensions.removeTabs(password.getText()).trim();
     }
 
     public AuthenticationSession getSession() {

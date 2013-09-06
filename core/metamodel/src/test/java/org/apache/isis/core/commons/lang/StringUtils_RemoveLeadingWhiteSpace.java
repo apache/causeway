@@ -26,25 +26,25 @@ public class StringUtils_RemoveLeadingWhiteSpace {
 
     @Test
     public void whenHasLeadingWhiteSpace() {
-        final String removed = StringUtils.removeLeadingWhiteSpace(" 	 foo");
+        final String removed = StringExtensions.removeLeadingWhiteSpace(" 	 foo");
         Assert.assertThat(removed, CoreMatchers.is("foo"));
     }
 
     @Test
     public void whenNoLeadingWhiteSpace() {
-        final String removed = StringUtils.removeLeadingWhiteSpace("foo");
+        final String removed = StringExtensions.removeLeadingWhiteSpace("foo");
         Assert.assertThat(removed, CoreMatchers.is("foo"));
     }
 
     @Test
     public void empty() {
-        final String removed = StringUtils.removeLeadingWhiteSpace("");
+        final String removed = StringExtensions.removeLeadingWhiteSpace("");
         Assert.assertThat(removed, CoreMatchers.is(""));
     }
 
     @Test
     public void whenNull() {
-        final String removed = StringUtils.removeLeadingWhiteSpace(null);
+        final String removed = StringExtensions.removeLeadingWhiteSpace(null);
         Assert.assertThat(removed, CoreMatchers.is(CoreMatchers.nullValue()));
     }
 

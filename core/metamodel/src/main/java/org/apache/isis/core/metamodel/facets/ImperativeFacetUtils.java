@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -46,7 +46,7 @@ public final class ImperativeFacetUtils {
             return (ImperativeFacet) facet;
         }
         if (facet instanceof DecoratingFacet) {
-            final DecoratingFacet<?> decoratingFacet = CastUtils.cast(facet);
+            final DecoratingFacet<?> decoratingFacet = ObjectExtensions.asT(facet);
             return getImperativeFacet(decoratingFacet.getDecoratedFacet());
         }
         return null;

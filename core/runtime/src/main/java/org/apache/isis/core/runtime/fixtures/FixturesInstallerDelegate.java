@@ -32,7 +32,7 @@ import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
 import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -117,7 +117,7 @@ public class FixturesInstallerDelegate {
      */
     public void addFixture(final Object fixture) {
         if (fixture instanceof List) {
-            final List<Object> fixtureList = CastUtils.listOf(fixture, Object.class);
+            final List<Object> fixtureList = ObjectExtensions.asListT(fixture, Object.class);
             for (final Object eachFixture : fixtureList) {
                 addFixture(eachFixture);
             }

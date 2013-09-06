@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets.param.mandatory.staticmethod;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -67,7 +67,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
         }
 
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method optionalMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX + capitalizedName, boolean[].class, new Class[0]);
@@ -91,7 +91,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
     private static boolean[] invokeOptionalsMethod(final Method optionalMethod, final int numElementsRequired) {
         boolean[] optionals = null;
         try {
-            optionals = (boolean[]) InvokeUtils.invokeStatic(optionalMethod, new Object[0]);
+            optionals = (boolean[]) MethodExtensions.invokeStatic(optionalMethod, new Object[0]);
         } catch (final ClassCastException ex) {
             // ignore, test below
         }

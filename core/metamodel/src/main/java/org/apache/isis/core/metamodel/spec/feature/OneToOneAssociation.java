@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import com.google.common.base.Function;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -27,6 +29,7 @@ import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Provides reflective access to a field on a domain object that is used to
@@ -92,5 +95,20 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
     @Deprecated
     void clearAssociation(ObjectAdapter inObject);
 
+    
+    // //////////////////////////////////////////////////////
+    // Functions
+    // //////////////////////////////////////////////////////
+    
+    public static class Functions {
+        public static Function<String, OneToOneAssociation> fromId(final ObjectSpecification noSpec) {
+            return new Function<String, OneToOneAssociation>() {
+                @Override
+                public OneToOneAssociation apply(final String id) {
+                    return (OneToOneAssociation) noSpec.getAssociation(id);
+                }
+            };
+        }
+    }
 
 }

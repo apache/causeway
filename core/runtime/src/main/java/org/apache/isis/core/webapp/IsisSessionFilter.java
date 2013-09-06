@@ -41,7 +41,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.commons.lang.PathUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -132,7 +132,7 @@ public class IsisSessionFilter implements Filter {
     };
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
-        httpResponse.sendRedirect(PathUtils.combine(httpRequest.getContextPath(), redirectTo));
+        httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
     }
 
     public enum WhenNoSession {

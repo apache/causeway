@@ -25,17 +25,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-public final class ListUtils {
+public final class ListExtensions {
     private static final String DEFAULT_DELIMITER = ",";
 
-    private ListUtils() {
+    private ListExtensions() {
     }
 
-    public static <T> List<T> combine(final List<T> list, final List<T> list2) {
-        final List<T> combinedList = new ArrayList<T>();
-        combinedList.addAll(list);
+    public static <T> List<T> combineWith(final List<T> extendee, final List<T> list2) {
+        final List<T> combinedList = Lists.newArrayList();
+        combinedList.addAll(extendee);
         combinedList.addAll(list2);
         return combinedList;
     }
@@ -43,43 +44,15 @@ public final class ListUtils {
     /**
      * Returns list1 with everything in list2, ignoring duplicates.
      */
-    public static <T> List<T> merge(final List<T> list1, final List<T> list2) {
+    public static <T> List<T> mergeWith(final List<T> extendee, final List<T> list2) {
         for (final T obj : list2) {
-            if (!(list1.contains(obj))) {
-                list1.add(obj);
+            if (!(extendee.contains(obj))) {
+                extendee.add(obj);
             }
         }
-        return list1;
+        return extendee;
     }
 
-    public static List<String> merge(final String[] array1, final String[] array2) {
-        final List<String> prefixes = new ArrayList<String>();
-        addNoDuplicates(array1, prefixes);
-        addNoDuplicates(array2, prefixes);
-        return prefixes;
-    }
-
-    private static void addNoDuplicates(final String[] array, final List<String> list) {
-        for (int i = 0; i < array.length; i++) {
-            if (!list.contains(array[i])) {
-                list.add(array[i]);
-            }
-        }
-    }
-
-    public static List<Object> asList(final Object[] objectArray) {
-        final List<Object> list = new ArrayList<Object>();
-        for (final Object element : objectArray) {
-            if (Collection.class.isAssignableFrom(element.getClass())) {
-                @SuppressWarnings("rawtypes")
-                final Collection collection = (Collection) element;
-                list.addAll(asList(collection.toArray()));
-            } else {
-                list.add(element);
-            }
-        }
-        return list;
-    }
 
     /**
      * @see #listToString(List, String)
@@ -168,6 +141,12 @@ public final class ListUtils {
         for(int i=list.size(); i<requiredLength; i++) {
             list.add(null);
         }
+    }
+
+    public static <T> Collection<T> filtered(final List<Object> extendee, final Class<T> type) {
+        return Collections2.transform(
+                    Collections2.filter(extendee, ClassPredicates.isOfType(type)),
+                ClassFunctions.castTo(type));
     }
 
     

@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.param.choices.method;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -93,7 +93,7 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
         final Method actionMethod = processMethodContext.getMethod();
         final MethodScope methodScope = MethodScope.scopeFor(actionMethod);
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
         final String name = MethodPrefixConstants.CHOICES_PREFIX + capitalizedName;
         choicesMethod = MethodFinderUtils.findMethod(cls, methodScope, name, returnType2, new Class[0]);

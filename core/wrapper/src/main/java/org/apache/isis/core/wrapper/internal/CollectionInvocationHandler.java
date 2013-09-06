@@ -19,11 +19,10 @@
 
 package org.apache.isis.core.wrapper.internal;
 
-import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
-
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHandler<T, R> {
@@ -32,18 +31,18 @@ class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHand
         super(collectionToProxy, collectionName, handler, otma);
 
         try {
-            intercept(getMethod(collectionToProxy, "contains", Object.class));
-            intercept(getMethod(collectionToProxy, "size"));
-            intercept(getMethod(collectionToProxy, "isEmpty"));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "contains", Object.class));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "size"));
+            intercept(ObjectExtensions.getMethod(collectionToProxy, "isEmpty"));
             if (collectionToProxy instanceof List) {
-                intercept(getMethod(collectionToProxy, "get", int.class));
+                intercept(ObjectExtensions.getMethod(collectionToProxy, "get", int.class));
             }
-            veto(getMethod(collectionToProxy, "add", Object.class));
-            veto(getMethod(collectionToProxy, "remove", Object.class));
-            veto(getMethod(collectionToProxy, "addAll", Collection.class));
-            veto(getMethod(collectionToProxy, "removeAll", Collection.class));
-            veto(getMethod(collectionToProxy, "retainAll", Collection.class));
-            veto(getMethod(collectionToProxy, "clear"));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "add", Object.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "remove", Object.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "addAll", Collection.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "removeAll", Collection.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "retainAll", Collection.class));
+            veto(ObjectExtensions.getMethod(collectionToProxy, "clear"));
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF
             throw new RuntimeException("A Collection method could not be found: " + e.getMessage());

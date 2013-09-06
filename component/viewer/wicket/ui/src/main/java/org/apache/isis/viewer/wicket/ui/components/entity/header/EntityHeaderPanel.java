@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.header;
 
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -30,6 +32,8 @@ import org.apache.wicket.Component;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.commons.lang.StringFunctions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -140,8 +144,8 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
     private Filter<ObjectAction> memberOrderNameNotAssociation(final ObjectSpecification adapterSpec) {
 
         final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
-        final List<String> associationNames = Lists.transform(associations, ObjectAssociations.toName());
-        final List<String> associationIds = Lists.transform(associations, ObjectAssociations.toId());
+        final List<String> associationNames = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
+        final List<String> associationIds = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
 
         return new Filter<ObjectAction>() {
 
@@ -151,12 +155,12 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
                 if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
                     return true;
                 }
-                String memberOrderName = memberOrderFacet.name();
+                String memberOrderName = StringFunctions.toLowerCase().apply(memberOrderFacet.name());
                 return !associationNames.contains(memberOrderName) && !associationIds.contains(memberOrderName);
             }
         };
     }
-
+    
 
     protected Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
         return ObjectAction.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);

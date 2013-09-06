@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.properties.mandatory.staticmethod;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -49,7 +49,7 @@ public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryA
     private static void attachMandatoryFacetIfOptionalMethodIsFound(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
 
-        final String capitalizedName = NameUtils.javaBaseName(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
         final Class<?> returnType = method.getReturnType();
 
         final Class<?> cls = processMethodContext.getCls();
@@ -70,7 +70,7 @@ public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryA
         if (method != null) {
             Boolean optionalMethodReturnValue = null;
             try {
-                optionalMethodReturnValue = (Boolean) InvokeUtils.invoke(method, new Object[0]);
+                optionalMethodReturnValue = (Boolean) MethodExtensions.invoke(method, new Object[0]);
             } catch (final ClassCastException ex) {
                 // ignore
             }

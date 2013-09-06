@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.object.named.staticmethod;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -45,7 +45,7 @@ public class NamedFacetViaSingularNameStaticMethodFacetFactory extends MethodPre
 
         final Method method = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.SINGULAR_NAME, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            final String name = (String) InvokeUtils.invokeStatic(method);
+            final String name = (String) MethodExtensions.invokeStatic(method);
             processClassContext.removeMethod(method);
             FacetUtil.addFacet(new NamedFacetViaSingularNameStaticMethod(name, facetHolder));
         }

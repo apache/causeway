@@ -30,7 +30,7 @@ public class LocaleUtilsTest {
 
     @Test
     public void canFindEnGB() throws Exception {
-        assertThat(LocaleUtils.findLocale("en_GB"), is(not(nullValue())));
+        assertThat(LocaleUtil.findLocale("en_GB"), is(not(nullValue())));
 
     }
 }

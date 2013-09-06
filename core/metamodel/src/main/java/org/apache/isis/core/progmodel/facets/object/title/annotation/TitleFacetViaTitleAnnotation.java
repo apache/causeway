@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
@@ -134,7 +134,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                     // (mostly for benefit of testing...)
                     title = titlePart.toString().trim();
                 }
-                if(StringUtils.isNullOrEmpty(title)) {
+                if(Strings.isNullOrEmpty(title)) {
                     continue;
                 }
                 stringBuilder.append(component.getPrepend());

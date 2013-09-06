@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.View;
 

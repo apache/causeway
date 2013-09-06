@@ -21,8 +21,8 @@ package org.apache.isis.core.progmodel.facets.members.named.staticmethod;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -64,7 +64,7 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
 
     public static void attachNamedFacetIfNamedMethodIsFound(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
         final Method nameMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String.class, new Class[0]);
@@ -83,7 +83,7 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
     private static String invokeNameMethod(final Method nameMethod) {
         String name = null;
         try {
-            name = (String) InvokeUtils.invokeStatic(nameMethod);
+            name = (String) MethodExtensions.invokeStatic(nameMethod);
         } catch (final ClassCastException e) {
             // ignore
         }

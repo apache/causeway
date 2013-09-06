@@ -17,27 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.commons.lang;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public final class Classes {
 
-    public static Matcher<?> isSubclassOf(final Class<?> superClass) {
-        return new BaseMatcher<Object>() {
-            @Override
-            public boolean matches(final Object item) {
-                final Class<?> cls = (Class<?>) item;
-                return superClass.isAssignableFrom(cls);
-            }
+public final class DateExtensions {
+    
+    private DateExtensions(){}
 
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("is subclass of " + superClass.getName());
-            }
-        };
+    public static String asTimestamp(final Date date) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmssSSS");
+        return date == null ? "" : simpleDateFormat.format(date);
     }
 
 }

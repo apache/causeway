@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.object.title;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -70,7 +70,7 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
             if (method == null) {
                 return;
             }
-            if (JavaClassUtils.isJavaClass(method.getDeclaringClass())) {
+            if (ClassExtensions.isJavaClass(method.getDeclaringClass())) {
                 return;
             }
             processClassContext.removeMethod(method);

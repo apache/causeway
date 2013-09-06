@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.object.value.annotation;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
@@ -26,7 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -110,7 +112,7 @@ public class ValueFacetFactory extends FacetFactoryAbstract implements IsisConfi
 
         // otherwise, try to create from configuration, if present
         final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, configuration);
-        if (!StringUtils.isNullOrEmpty(semanticsProviderName)) {
+        if (!Strings.isNullOrEmpty(semanticsProviderName)) {
             final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;

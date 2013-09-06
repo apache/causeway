@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.lang.CastUtils;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
@@ -114,7 +114,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     private void addServices(final List<Object> services) {
         for (final Object service : services) {
             if (service instanceof List) {
-                final List<Object> serviceList = CastUtils.listOf(service, Object.class);
+                final List<Object> serviceList = ObjectExtensions.asListT(service, Object.class);
                 addServices(serviceList);
             } else {
                 addService(service);

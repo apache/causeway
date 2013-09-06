@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -66,7 +68,7 @@ public class EncodableAnnotationFacetFactory extends FacetFactoryAbstract implem
 
         // otherwise, try to create from configuration, if present
         final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls, getIsisConfiguration());
-        if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
+        if (!Strings.isNullOrEmpty(encoderDecoderName)) {
             final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, servicesInjector);
             if (facet.isValid()) {
                 return facet;

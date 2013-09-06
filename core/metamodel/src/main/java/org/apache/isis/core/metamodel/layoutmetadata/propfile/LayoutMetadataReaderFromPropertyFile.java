@@ -18,14 +18,14 @@ package org.apache.isis.core.metamodel.layoutmetadata.propfile;
 
 import java.util.Properties;
 
-import org.apache.isis.core.commons.lang.ResourceUtil;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 
 public class LayoutMetadataReaderFromPropertyFile implements LayoutMetadataReader {
 
     @Override
     public Properties asProperties(Class<?> domainClass) throws ReaderException {
-        return ResourceUtil.propertiesFor(domainClass, ".layout.properties");
+        return ClassExtensions.resourceProperties(domainClass, ".layout.properties");
     }
 
     @Override

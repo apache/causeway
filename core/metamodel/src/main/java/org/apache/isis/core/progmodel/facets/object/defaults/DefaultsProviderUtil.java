@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.JavaClassUtils;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class DefaultsProviderUtil {
@@ -36,12 +38,12 @@ public final class DefaultsProviderUtil {
     public static String defaultsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
         final String defaultsProviderName = configuration.getString(key);
-        return !StringUtils.isNullOrEmpty(defaultsProviderName) ? defaultsProviderName : null;
+        return !Strings.isNullOrEmpty(defaultsProviderName) ? defaultsProviderName : null;
     }
 
     public static Class<?> defaultsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        final Class<?> type = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(), DefaultsProvider.class, FacetHolder.class) : null;
-        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, DefaultsProvider.class, FacetHolder.class);
+        final Class<?> type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), DefaultsProvider.class, FacetHolder.class) : null;
+        return type != null ? type : ClassUtil.implementingClassOrNull(classCandidateName, DefaultsProvider.class, FacetHolder.class);
     }
 
 }

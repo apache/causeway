@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -92,7 +92,7 @@ public class ActionParameterAutoCompleteFacetFactory extends MethodPrefixBasedFa
 
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final String name = MethodPrefixConstants.AUTO_COMPLETE_PREFIX + i + capitalizedName;
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, paramType, new Class[]{String.class});
     }

@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.runtime.runner.IsisBootstrapper;
 import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.webapp.WebAppConstants;
@@ -113,7 +113,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
 
     @SuppressWarnings("unused")
     private void copyDeploymentTypeIntoInitParams(final WebAppContext context) {
-        Map<String, String> initParams = CastUtils.cast(context.getInitParams());
+        Map<String, String> initParams = ObjectExtensions.asT(context.getInitParams());
         initParams = new HashMap<String, String>(initParams);
         context.setInitParams(initParams);
     }

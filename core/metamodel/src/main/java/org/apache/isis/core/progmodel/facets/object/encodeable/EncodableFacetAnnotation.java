@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -31,7 +33,7 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
     private static String encoderDecoderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Encodable annotation = annotatedClass.getAnnotation(Encodable.class);
         final String encoderDecoderName = annotation.encoderDecoderName();
-        if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
+        if (!Strings.isNullOrEmpty(encoderDecoderName)) {
             return encoderDecoderName;
         }
         return EncoderDecoderUtil.encoderDecoderNameFromConfiguration(annotatedClass, configuration);

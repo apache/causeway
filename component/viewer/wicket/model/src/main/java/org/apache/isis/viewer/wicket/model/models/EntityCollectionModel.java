@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,10 +27,10 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Component;
-
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
@@ -39,14 +38,12 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
-import org.apache.isis.viewer.wicket.model.util.Mementos;
-import org.apache.isis.viewer.wicket.model.util.ObjectAdapters;
+import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
+import org.apache.isis.viewer.wicket.model.util.ObjectAdapterFunctions;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -74,12 +71,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         STANDALONE {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-                return Lists.transform(entityCollectionModel.mementoList, ObjectAdapters.fromMemento());
+                return Lists.transform(entityCollectionModel.mementoList, ObjectAdapterFunctions.fromMemento());
             }
 
             @Override
             void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list) {
-                entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapters.toMemento()));
+                entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapterFunctions.toMemento()));
             }
 
             @Override
@@ -108,7 +105,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                     Collections.sort(objectList, comparator);
                 }
 
-                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapters.fromPojo());
+                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapterFunctions.fromPojo(getAdapterManagerStatic()));
                 final List<ObjectAdapter> adapterList = Lists.newArrayList(adapterIterable);
 
                 return adapterList;
@@ -145,7 +142,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public static EntityCollectionModel createStandalone(final ObjectAdapter collectionAsAdapter) {
         final Iterable<Object> iterable = EntityCollectionModel.asIterable(collectionAsAdapter);
 
-        final Iterable<ObjectAdapterMemento> oidIterable = Iterables.transform(iterable, Mementos.fromPojo());
+        final Iterable<ObjectAdapterMemento> oidIterable = Iterables.transform(iterable, MementoFunctions.fromPojo(getAdapterManagerStatic()));
         final List<ObjectAdapterMemento> mementoList = Lists.newArrayList(oidIterable);
 
         final ObjectSpecification elementSpec = collectionAsAdapter.getElementSpecification();
@@ -224,13 +221,19 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     private EntityCollectionModel(final ObjectAdapterMemento parentAdapterMemento, final OneToManyAssociation collection) {
         this.type = Type.PARENTED;
-        this.typeOf = ClassLoaders.forName(collection.getSpecification());
+        this.typeOf = forName(collection.getSpecification());
         this.parentObjectAdapterMemento = parentAdapterMemento;
         this.collectionMemento = new CollectionMemento(collection);
         this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
         final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
         this.sortedBy = sortedByFacet != null?sortedByFacet.value(): null;
     }
+    
+    private static Class<?> forName(final ObjectSpecification objectSpec) {
+        final String fullName = objectSpec.getFullIdentifier();
+        return ClassUtil.forName(fullName);
+    }
+
 
     private static int pageSize(final PagedFacet pagedFacet, final int defaultPageSize) {
         return pagedFacet != null ? pagedFacet.value(): defaultPageSize;
@@ -328,4 +331,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public EntityCollectionModel asDummy() {
         return new EntityCollectionModel(typeOf, Collections.<ObjectAdapterMemento>emptyList(), pageSize);
     }
+    
+    // //////////////////////////////////////
+
+    private static AdapterManager getAdapterManagerStatic() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
 }

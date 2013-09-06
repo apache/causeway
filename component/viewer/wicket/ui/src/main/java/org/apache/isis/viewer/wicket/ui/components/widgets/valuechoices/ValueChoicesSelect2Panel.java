@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
-import org.apache.isis.viewer.wicket.model.util.Mementos;
+import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -93,7 +93,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         final List<ObjectAdapter> choices = scalarModel.getChoices(argumentsIfAvailable);
         
         // take a copy otherwise is only lazily evaluated
-        return Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+        return Lists.newArrayList(Lists.transform(choices, MementoFunctions.fromAdapter()));
     }
 
 

@@ -26,7 +26,7 @@ import java.util.Date;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.DateExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 
@@ -210,7 +210,7 @@ public class Version implements Serializable, Encodable {
  
     @Override
     public String toString() {
-        return "#" + sequence + " " + getUser() + " " + ToString.timestamp(getTime());
+        return "#" + sequence + " " + getUser() + " " + DateExtensions.asTimestamp(getTime());
     }
     
     /**

@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
@@ -50,7 +50,7 @@ public class RemoveSuperclassMethodsFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        if (!JavaClassUtils.isJavaClass(type)) {
+        if (!ClassExtensions.isJavaClass(type)) {
             removeSuperclassMethods(type.getSuperclass(), methodRemover);
             return;
         }

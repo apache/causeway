@@ -17,45 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.core.commons.lang;
 
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+public final class ClassMatchers {
 
-public final class Oids {
-
-    private Oids() {
-    }
-
-    public static Matcher<Oid> isTransient() {
-        return new TypeSafeMatcher<Oid>() {
-
+    public static Matcher<?> isSubclassOf(final Class<?> superClass) {
+        return new BaseMatcher<Object>() {
             @Override
-            public boolean matchesSafely(final Oid item) {
-                return item.isTransient();
+            public boolean matches(final Object item) {
+                final Class<?> cls = (Class<?>) item;
+                return superClass.isAssignableFrom(cls);
             }
 
             @Override
             public void describeTo(final Description description) {
-                description.appendText("is transient");
-            }
-        };
-    }
-
-    public static Matcher<Oid> isPersistent() {
-        return new TypeSafeMatcher<Oid>() {
-
-            @Override
-            public boolean matchesSafely(final Oid item) {
-                return !item.isTransient();
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("is persistent");
+                description.appendText("is subclass of " + superClass.getName());
             }
         };
     }
