@@ -35,6 +35,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.guice.GuiceComponentInjector;
@@ -46,6 +47,7 @@ import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
@@ -75,6 +77,7 @@ import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
@@ -172,6 +175,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     private BookmarkedPagesModel bookmarkedPagesModel;
 
+    private DeploymentTypeWicketAbstract deploymentType;
+
 
     // /////////////////////////////////////////////////
     // constructor, init
@@ -198,9 +203,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
         getResourceSettings().setParentFolderPlaceholder("$up$");
 
-        final DeploymentType deploymentType = determineDeploymentType();
-
         final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+
+        determineDeploymentTypeIfRequired();
 
         final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
@@ -211,18 +216,48 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         initWicketComponentInjection(injector);
     }
     
+    private void determineDeploymentTypeIfRequired() {
+        if(deploymentType != null) {
+            return;
+        }
+        
+        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+        final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+        String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
+        deploymentType = determineDeploymentType(deploymentTypeFromConfig);
+    }
+
     @Override
     protected void onDestroy() {
         IsisContext.shutdown();
         super.onDestroy();
     }
 
+    @Override
+    public RuntimeConfigurationType getConfigurationType() {
+        determineDeploymentTypeIfRequired();
+        return deploymentType.getConfigurationType();
+    }
+    
+    
     protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         return new IsisInjectModule(deploymentType, isisConfigurationBuilder);
     }
 
-    private DeploymentType determineDeploymentType() {
-        return usesDevelopmentConfig() ? new WicketServerPrototype() : new WicketServer();
+    private DeploymentTypeWicketAbstract determineDeploymentType(String deploymentTypeFromConfig) {
+        final DeploymentTypeWicketAbstract prototype = new WicketServerPrototype();
+        final DeploymentTypeWicketAbstract deployment = new WicketServer();
+        
+        if(deploymentTypeFromConfig != null) {
+            final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeFromConfig);
+            return !deploymentType.getDeploymentCategory().isProduction() 
+                    ? prototype 
+                    : deployment;
+        } else {
+            return usesDevelopmentConfig() 
+                    ? prototype 
+                    : deployment;
+        }
     }
 
     private IsisConfigurationBuilder createConfigBuilder() {

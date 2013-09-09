@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketUnsecuredApplication;
  * depending on the value of Wicket's own
  * {@link Application#getConfigurationType() configuration mode}. 
  */
-public class WicketServerPrototype extends DeploymentTypeAbstract {
+public class WicketServerPrototype extends DeploymentTypeWicketAbstract {
 
     public WicketServerPrototype() {
         super("WICKET_SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);

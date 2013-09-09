@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
-import org.apache.wicket.settings.def.ApplicationSettings;
+import org.apache.wicket.Application;
+import org.apache.wicket.RuntimeConfigurationType;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -35,10 +36,15 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketUnsecuredApplication;
  * depending on the value of Wicket's own
  * {@link Application#getConfigurationType() configuration mode}. 
  */
-public class WicketServer extends DeploymentTypeWicketAbstract {
+public class DeploymentTypeWicketAbstract extends DeploymentTypeAbstract {
 
-    public WicketServer() {
-        super("WICKET_SERVER", DeploymentCategory.PRODUCTION);
+    public DeploymentTypeWicketAbstract(
+            final String name, final DeploymentCategory deploymentCategory) {
+        super(name, deploymentCategory);
+    }
+
+    public RuntimeConfigurationType getConfigurationType() {
+        return getDeploymentCategory().isProduction()? RuntimeConfigurationType.DEPLOYMENT: RuntimeConfigurationType.DEVELOPMENT;
     }
 
 }

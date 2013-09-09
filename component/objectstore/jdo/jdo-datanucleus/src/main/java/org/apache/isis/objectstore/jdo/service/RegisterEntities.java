@@ -25,7 +25,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jdo.annotations.PersistenceCapable;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -67,10 +69,30 @@ public class RegisterEntities {
             Set<Class<?>> entityTypes = 
                     reflections.getTypesAnnotatedWith(PersistenceCapable.class);
             
+            if(noEntitiesIn(entityTypes)) {
+                LOG.error("Could not locate any PersistenceCapable entities in " + packagePrefix);
+            }
             for (Class<?> entityType : entityTypes) {
                 IsisContext.getSpecificationLoader().loadSpecification(entityType);
             }
         }
+    }
+
+    /**
+     * {@link Reflections} seems to return a set with 1 null element if none can be found.
+     */
+    private static boolean noEntitiesIn(Set<Class<?>> entityTypes) {
+        return Iterables.filter(entityTypes, nullClass()).iterator().hasNext();
+    }
+
+    private static Predicate<Class<?>> nullClass() {
+        return new Predicate<Class<?>>() {
+
+            @Override
+            public boolean apply(Class<?> input) {
+                return input == null;
+            }
+        };
     }
     
     
