@@ -49,7 +49,6 @@
                 <module>core</module>
         
                 <module>component/objectstore/xml</module>
-                <module>component/objectstore/sql</module>
                 <module>component/objectstore/nosql</module>
                 <module>component/objectstore/jdo</module>
                 <module>component/progmodel/groovy</module>

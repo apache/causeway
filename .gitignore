@@ -14,12 +14,11 @@ logs/
 JArchitectOut/
 *.jdproj
 
-component/objectstore/sql/sql-tests-common/hsql-db/
-component/objectstore/sql/sql-tests-common/xml/
+mothballed/component/objectstore/sql/sql-tests-common/hsql-db/
+mothballed/component/objectstore/sql/sql-tests-common/xml/
 component/objectstore/xml/tmp/objects/
 component/objectstore/xml/xml/objects/
 component/objectstore/xml/tmp/tests/
-component/security/sql/hsql-db/
 
 # log files
 datanucleus.log
