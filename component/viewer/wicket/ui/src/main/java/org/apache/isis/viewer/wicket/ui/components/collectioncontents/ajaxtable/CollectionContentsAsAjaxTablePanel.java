@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -46,8 +47,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
@@ -86,7 +89,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         List<ObjectAction> bulkActions = determineBulkActions();
 
         addToggleboxColumnIfRequired(columns, bulkActions);
-        addTitleColumn(columns, model.getParentObjectAdapterMemento());
+        addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
         addPropertyColumnsIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
@@ -181,8 +184,9 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
 
 
-    private static void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny) {
-        columns.add(new ObjectAdapterTitleColumn(parentAdapterMementoIfAny));
+    private void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleParented, int maxTitleStandalone) {
+        int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
+        columns.add(new ObjectAdapterTitleColumn(parentAdapterMementoIfAny, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
@@ -234,6 +238,13 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     @Override
     protected void onModelChanged() {
         buildGui();
+    }
+
+
+    @Inject
+    private WicketViewerSettings settings;
+    protected WicketViewerSettings getSettings() {
+        return settings;
     }
 
 }

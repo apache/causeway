@@ -116,16 +116,21 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = model.getObject();
          if (adapter != null) {
             String titleString = adapter.titleString(getContextAdapterIfAny());
-            if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
-                return abbreviated(titleString, getSettings().getMaxTitleLengthInStandaloneTables());
-            }
-            if(model.getRenderingHint().isInParentedTableTitleColumn()) {
-                return abbreviated(titleString, getSettings().getMaxTitleLengthInParentedTables());
-            }
-            return titleString;
+            int maxTitleLength = abbreviateTo(model, titleString);
+            return abbreviated(titleString, maxTitleLength);
         } else {
             return "(no object)";
         }
+    }
+
+    private int abbreviateTo(EntityModel model, String titleString) {
+        if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
+            return getSettings().getMaxTitleLengthInStandaloneTables();
+        } 
+        if(model.getRenderingHint().isInParentedTableTitleColumn()) {
+            return getSettings().getMaxTitleLengthInParentedTables();
+        }
+        return titleString.length();
     }
 
     protected Image newImage(final String id, final ObjectAdapter adapter) {

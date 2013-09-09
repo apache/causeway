@@ -36,12 +36,15 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     private static final long serialVersionUID = 1L;
     private final ObjectAdapterMemento parentAdapterMementoIfAny;
 
-    private static String columnName(ObjectAdapterMemento parentAdapterMementoIfAny) {
+    private static String columnName(ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleLength) {
+        if(maxTitleLength == 0) {
+            return "";
+        }
         return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
     }
 
-    public ObjectAdapterTitleColumn(ObjectAdapterMemento parentAdapterMementoIfAny) {
-        super(columnName(parentAdapterMementoIfAny)); // i18n
+    public ObjectAdapterTitleColumn(ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleLength) {
+        super(columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n
         this.parentAdapterMementoIfAny = parentAdapterMementoIfAny;
     }
 
@@ -59,5 +62,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
         return componentFactory.createComponent(id, model);
     }
+
+    
 
 }
