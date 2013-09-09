@@ -85,7 +85,6 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
         syncWithInput();
     }
 
-
     @Override
     protected void onBeforeRender() {
         syncWithInput();
@@ -120,6 +119,11 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
     public void onCancel() {
     }
 
+    @Override
+    public void validate() {
+        // no-op since immutable
+    }
+    
     private ObjectAdapter getPendingElseCurrentAdapter() {
         return getEntityModel().getPendingElseCurrentAdapter();
     }
