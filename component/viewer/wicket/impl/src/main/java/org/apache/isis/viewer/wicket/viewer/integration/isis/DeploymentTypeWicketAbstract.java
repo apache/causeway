@@ -47,4 +47,5 @@ public class DeploymentTypeWicketAbstract extends DeploymentTypeAbstract {
         return getDeploymentCategory().isProduction()? RuntimeConfigurationType.DEPLOYMENT: RuntimeConfigurationType.DEVELOPMENT;
     }
 
+
 }

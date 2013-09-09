@@ -202,14 +202,17 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         getRequestCycleListeners().add(new WebRequestCycleForIsis());
 
         getResourceSettings().setParentFolderPlaceholder("$up$");
-
-        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-
+        
         determineDeploymentTypeIfRequired();
+        
+        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
 
         final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
+        
+        final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+        this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
         this.bookmarkedPagesModel = new BookmarkedPagesModel();
 
@@ -226,6 +229,12 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
         deploymentType = determineDeploymentType(deploymentTypeFromConfig);
     }
+    
+    private boolean determineStripWicketTags(IsisConfiguration configuration) {
+        final boolean strip = configuration.getBoolean("isis.viewer.wicket.stripWicketTags", true);
+        return strip;
+    }
+    
 
     @Override
     protected void onDestroy() {
@@ -238,7 +247,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         determineDeploymentTypeIfRequired();
         return deploymentType.getConfigurationType();
     }
-    
     
     protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         return new IsisInjectModule(deploymentType, isisConfigurationBuilder);
