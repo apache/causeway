@@ -24,4 +24,6 @@ $(document).ready(function() {
     $('.buttons .okButton:not(.noVeil)').click(showVeil);
     $('.buttons .ok:not(.noVeil)').click(showVeil);
     $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(showVeil);
+    
+    $('.first-field input').focus();
 });

@@ -25,6 +25,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -55,7 +57,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -71,7 +72,6 @@ import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 
 class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
@@ -99,6 +99,8 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private Button okButton;
     private Button cancelButton;
     private FeedbackPanel feedback;
+    
+    private boolean renderedFirstField;
 
     public EntityPropertiesForm(final String id, final EntityModel entityModel, final Component owningPanel) {
         super(id, entityModel);
@@ -119,6 +121,8 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         final EntityModel entityModel = (EntityModel) getModel();
         final ColumnSpans columnSpans = entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class).getColumnSpans();
 
+        renderedFirstField = false;
+        
         // left column
         MarkupContainer leftColumn = new WebMarkupContainer(ID_LEFT_COLUMN);
         add(leftColumn);
@@ -187,7 +191,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
-        Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociations.groupByMemberOrderName(associations);
+        Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
         
@@ -202,7 +206,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
 
             final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
-            final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
             memberGroupRvContainer.add(propertyRv);
 
             @SuppressWarnings("unused")
@@ -210,7 +213,6 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             for (final ObjectAssociation association : associationsInGroup) {
                 final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
                 propertyRv.add(propertyRvContainer);
-                propertyRvContainer.add(eo.nextClass());
                 addPropertyToForm(entityModel, association, propertyRvContainer);
             }
         }
@@ -226,7 +228,12 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 		final PropertyMemento pm = new PropertyMemento(otoa);
 
 		final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-		getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+		final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+		
+		if(!renderedFirstField) {
+		    component.add(new CssClassAppender("first-field"));
+		    renderedFirstField = true;
+		}
 	}
 
     private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
@@ -267,8 +274,23 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             protected void onError(final AjaxRequestTarget target, final Form<?> form) {
                 toEditMode(target);
             }
-            
+        
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                attributes.getAjaxCallListeners().add(new org.apache.wicket.ajax.attributes.AjaxCallListener(){
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public CharSequence getSuccessHandler(Component component) {
+                        return "$('.first-field input').focus();";
+                    }
+                });
+            }
         };
+        
+        
         markupContainer.add(editButton);
 
         

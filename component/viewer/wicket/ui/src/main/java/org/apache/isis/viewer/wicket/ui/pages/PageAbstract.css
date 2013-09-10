@@ -532,10 +532,6 @@ table.contents th {
 
 
 
-.even, .odd {
-	background-color: #ffffff; 
-}
-
 
 .property, .propertyOrCollection, .parameter {
 	clear: both;
@@ -592,10 +588,6 @@ table.contents th {
 	width: 160px;
 }
 .scalarValue {
-}
-
-div.odd, div.even {
-	display: block;
 }
 
 div.scalarPanel {

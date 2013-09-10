@@ -39,7 +39,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -83,14 +82,12 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final List<ObjectAssociation> associations = visibleCollections(adapter, noSpec);
 
         final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
-        final EvenOrOddCssClassAppenderFactory eo = new EvenOrOddCssClassAppenderFactory();
         add(collectionRv);
 
         for (final ObjectAssociation association : associations) {
 
             final WebMarkupContainer collectionRvContainer = new WebMarkupContainer(collectionRv.newChildId());
             collectionRv.add(collectionRvContainer);
-            collectionRvContainer.add(eo.nextClass());
             
             addCollectionToForm(entityModel, association, collectionRvContainer);
         }

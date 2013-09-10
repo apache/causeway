@@ -55,6 +55,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
@@ -89,6 +90,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         private static final String ID_FEEDBACK = "feedback";
         
         private final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
+
+        private boolean renderedFirstField;
 
         public ActionParameterForm(final String id, final ActionModel actionModel) {
             super(id, actionModel);
@@ -134,6 +137,11 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 if(paramPanel != null) {
                     paramPanel.setOutputMarkupId(true);
                     paramPanel.notifyOnChange(this);
+                }
+                
+                if(!renderedFirstField) {
+                    component.add(new CssClassAppender("first-field"));
+                    renderedFirstField = true;
                 }
             }
         }

@@ -54,7 +54,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociations;
 
 public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
@@ -224,7 +223,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
     private static void updateColumnMemberGroups(ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, ColumnRepr columnRepr, Set<String> actionIdsForAssociations) {
         final List<ObjectAssociation> objectAssociations = propertiesOf(objectSpec);
-        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociations.groupByMemberOrderName(objectAssociations);
+        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(objectAssociations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objectSpec, associationsByGroup.keySet(), hint);
         
