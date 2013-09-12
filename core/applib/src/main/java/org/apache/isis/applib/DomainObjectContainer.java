@@ -29,8 +29,9 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 
 /**
- * Represents a container that the domain objects work within. It provides
- * access to the persistence mechanism and user interface.
+ * A domain service that acts as a framework's container for managing the 
+ * domain objects, and which provides functionality to those domain objects
+ * in order that they might interact or have knowledge of with the "outside world".
  */
 public interface DomainObjectContainer {
 
@@ -38,6 +39,10 @@ public interface DomainObjectContainer {
     // titleOf
     // ////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the title of the object, as rendered in the UI by the 
+     * Isis viewers.
+     */
     String titleOf(Object domainObject);
 
     // ////////////////////////////////////////////////////////////////
@@ -50,7 +55,14 @@ public interface DomainObjectContainer {
      * <p>
      * This forces the lazy loading mechanism to load the object if it is not
      * already loaded.
+     * 
+     * <p>
+     * This method has been deprecated because lazy loading is now typically performed
+     * by the framework, rather than by application code.
+     * 
+     * @deprecated
      */
+    @Deprecated
     void resolve(Object domainObject);
 
     /**
@@ -60,13 +72,27 @@ public interface DomainObjectContainer {
      * <p>
      * This forces the lazy loading mechanism to load the object if it is not
      * already loaded.
+     * 
+     * <p>
+     * This method has been deprecated because lazy loading is now typically performed
+     * by the framework, rather than by application code.
+     * 
+     * @deprecated
      */
+    @Deprecated
     void resolve(Object domainObject, Object field);
 
     /**
      * Flags that the specified object's state has changed and its changes need
      * to be saved.
+     * 
+     * <p>
+     * This method has been deprecated because object dirtying is now typically performed
+     * by the framework, rather than by application code.
+     * 
+     * @deprecated
      */
+    @Deprecated
     void objectChanged(Object domainObject);
 
     // ////////////////////////////////////////////////////////////////
@@ -103,7 +129,29 @@ public interface DomainObjectContainer {
 
     /**
      * Create a new instance of the specified class, but do not persist it.
+     *
+     * <p>
+     * It is recommended that the object be initially instantiated using
+     * this method, though the framework will also handle the case when 
+     * the object is simply <i>new()</i>ed up.  The benefits of using
+     * {@link #newTransientInstance(Class)} are:
+     * <ul>
+     * <li>any services will be injected into the object immediately
+     *     (otherwise they will not be injected until the framework
+     *     becomes aware of the object, typically when it is 
+     *     {@link #persist(Object) persist}ed</li>
+     * <li>the default value for any properties (usually as specified by 
+     *     <tt>default<i>Xxx</i>()</tt> supporting methods) will not be
+     *     used</li>
+     * <li>the <tt>created()</tt> callback will not be called.
+     * </ul>
      * 
+     * <p>
+     * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt> 
+     * supporting methods or the <tt>created()</tt> callback, then you can
+     * alternatively just <i>new()</i> up the object rather than call this
+     * method. 
+
      * <p>
      * If the type is annotated with {@link Aggregated}, then as per
      * {@link #newAggregatedInstance(Object, Class)}.  Otherwise will be an
@@ -117,19 +165,41 @@ public interface DomainObjectContainer {
     /**
      * Create a new instance that will be persisted as part of the specified
      * parent (ie will be a part of a larger aggregate).
+     * 
+     * <p>
+     * <b>Note:</b> not every objectstore implementation supports the concept
+     * of aggregated instances.
      */
     <T> T newAggregatedInstance(Object parent, Class<T> ofType);
 
     /**
      * Returns a new instance of the specified class that will have been
      * persisted.
+     * 
+     * <p>
+     * This method has been deprecated because in almost all cases the
+     * workflow is to {@link #newTransientInstance(Class)}, populate the object
+     * (eg with the arguments to an action) and then to 
+     * {@link #persist(Object) persist) the object.  It is exceptionally rare for
+     * an object to be created, and with no further data required - be in a state
+     * to be persisted immediately.
+     *  
+     * @deprecated
      */
+    @Deprecated
     <T> T newPersistentInstance(final Class<T> ofType);
 
     /**
-     * Returns a new instance of the specified class that has the sane persisted
-     * state as the specified object.
+     * Returns a new instance of the specified class that has the same persisted
+     * state (either transient or persisted) as the provided object.
+     * 
+     * <p>
+     * This method has been deprecated because it is a rare use case, causing
+     * unnecessary interface bloat for very little gain.
+     * 
+     * @deprecated
      */
+    @Deprecated
     <T> T newInstance(final Class<T> ofType, final Object object);
 
     // ////////////////////////////////////////////////////////////////
@@ -166,22 +236,34 @@ public interface DomainObjectContainer {
     boolean isPersistent(Object domainObject);
 
     /**
-     * Make the specified transient object persistent.
+     * Persist the specified transient object.
      * 
      * <p>
-     * Throws an exception if object is already persistent.
+     * It is recommended that the object be initially instantiated using
+     * {@link #newTransientInstance(Class)}.  However, the framework will also
+     * handle the case when the object is simply <i>new()</i>ed up.  See
+     * {@link #newTransientInstance(Class)} for more information.
      * 
+     * <p>
+     * Throws an exception if object is already persistent, or if the object
+     * is not yet known to the framework.
+     * 
+     * @see #newTransientInstance(Class)
      * @see #isPersistent(Object)
      * @see #persistIfNotAlready(Object)
      */
-    void persist(Object transientDomainObject);
+    void persist(Object domainObject);
 
     /**
-     * Make the specified object persistent if not already.
+     * Persist the specified object (or do nothing if already persistent).
      * 
      * <p>
-     * Does nothing otherwise.
-     * 
+     * It is recommended that the object be initially instantiated using
+     * {@link #newTransientInstance(Class)}.  However, the framework will also
+     * handle the case when the object is simply <i>new()</i>ed up.  See
+     * {@link #newTransientInstance(Class)} for more information.
+     *
+     * @see #newTransientInstance(Class)
      * @see #isPersistent(Object)
      * @see #persist(Object)
      */
@@ -262,9 +344,6 @@ public interface DomainObjectContainer {
 
     /**
      * Get the details about the current user.
-     * 
-     * @uml.property name="user"
-     * @uml.associationEnd
      */
     UserMemento getUser();
 
@@ -436,6 +515,8 @@ public interface DomainObjectContainer {
      * <tt>null</tt> if none.
      */
     <T> T firstMatch(Query<T> query);
+
+    // //////////////////////////////////////
 
     /**
      * Find the only instance of the specified type (including subtypes) that

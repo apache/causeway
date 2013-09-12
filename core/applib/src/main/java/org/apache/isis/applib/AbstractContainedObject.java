@@ -37,7 +37,39 @@ import org.apache.isis.applib.security.UserMemento;
  */
 public abstract class AbstractContainedObject {
 
-    // {{ factory methods
+    /**
+     * Create a new instance of the specified class, but do not persist it.
+     *
+     * <p>
+     * It is recommended that the object be initially instantiated using
+     * this method, though the framework will also handle the case when 
+     * the object is simply <i>new()</i>ed up.  The benefits of using
+     * {@link #newTransientInstance(Class)} are:
+     * <ul>
+     * <li>any services will be injected into the object immediately
+     *     (otherwise they will not be injected until the framework
+     *     becomes aware of the object, typically when it is 
+     *     {@link #persist(Object) persist}ed</li>
+     * <li>the default value for any properties (usually as specified by 
+     *     <tt>default<i>Xxx</i>()</tt> supporting methods) will not be
+     *     used</li>
+     * <li>the <tt>created()</tt> callback will not be called.
+     * </ul>
+     * 
+     * <p>
+     * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt> 
+     * supporting methods or the <tt>created()</tt> callback, then you can
+     * alternatively just <i>new()</i> up the object rather than call this
+     * method. 
+
+     * <p>
+     * If the type is annotated with {@link Aggregated}, then as per
+     * {@link #newAggregatedInstance(Object, Class)}.  Otherwise will be an
+     * aggregate root.
+     * 
+     * @see #newPersistentInstance(Class)
+     * @see #newAggregatedInstance(Object, Class)
+     */
     @Hidden
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
@@ -257,7 +289,8 @@ public abstract class AbstractContainedObject {
     // //////////////////////////////////////
 
     /**
-     * Whether the provided object is persistent.
+     * Determines if the specified object is persistent (that it is stored
+     * permanently outside of the virtual machine).
      */
     @Hidden
     protected boolean isPersistent(final Object domainObject) {
@@ -265,12 +298,20 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Save provided object to the persistent object store.
+     * Persist the specified transient object.
      * 
      * <p>
-     * If the object {@link #isPersistent(Object) is persistent} already, then
-     * will throw an exception.
+     * It is recommended that the object be initially instantiated using
+     * {@link #newTransientInstance(Class)}.  However, the framework will also
+     * handle the case when the object is simply <i>new()</i>ed up.  See
+     * {@link #newTransientInstance(Class)} for more information.
      * 
+     * <p>
+     * Throws an exception if object is already persistent, or if the object
+     * is not yet known to the framework.
+     * 
+     * @see #newTransientInstance(Class)
+     * @see #isPersistent(Object)
      * @see #persistIfNotAlready(Object)
      */
     @Hidden
@@ -280,10 +321,16 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Saves the object, but only if not already {@link #isPersistent()
-     * persistent}.
+     * Persist the specified object (or do nothing if already persistent).
      * 
-     * @see #isPersistent()
+     * <p>
+     * It is recommended that the object be initially instantiated using
+     * {@link #newTransientInstance(Class)}.  However, the framework will also
+     * handle the case when the object is simply <i>new()</i>ed up.  See
+     * {@link #newTransientInstance(Class)} for more information.
+     *
+     * @see #newTransientInstance(Class)
+     * @see #isPersistent(Object)
      * @see #persist(Object)
      */
     @Hidden

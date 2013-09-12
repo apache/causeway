@@ -132,7 +132,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     }
 
     /**
-     * Returns a new instance of the specified class that has the sane persisted
+     * Returns a new instance of the specified class that has the same persisted
      * state as the specified object.
      */
     @Override
@@ -236,19 +236,29 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return adapter.representsPersistent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void persist(final Object transientObject) {
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(transientObject);
-        // TODO check aggregation is supported
+    public void persist(final Object domainObject) {
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+
+        if(adapter == null) {
+            throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
+        }
         if (adapter.isParented()) {
+            // TODO check aggregation is supported
             return;
         }
-        if (isPersistent(transientObject)) {
-            throw new PersistFailedException("Object already persistent: " + adapter);
+        if (isPersistent(domainObject)) {
+            throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
         getObjectPersistor().makePersistent(adapter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void persistIfNotAlready(final Object object) {
         if (isPersistent(object)) {
