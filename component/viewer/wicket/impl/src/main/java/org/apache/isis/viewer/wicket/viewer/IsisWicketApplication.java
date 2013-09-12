@@ -175,6 +175,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     private BookmarkedPagesModel bookmarkedPagesModel;
 
+    private boolean determiningDeploymentType;
     private DeploymentTypeWicketAbstract deploymentType;
 
 
@@ -224,10 +225,15 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             return;
         }
         
-        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-        final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
-        String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
-        deploymentType = determineDeploymentType(deploymentTypeFromConfig);
+        determiningDeploymentType = true;
+        try {
+            final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+            final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+            String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
+            deploymentType = determineDeploymentType(deploymentTypeFromConfig);
+        } finally {
+            determiningDeploymentType = false;
+        }
     }
     
     private boolean determineStripWicketTags(IsisConfiguration configuration) {
@@ -244,6 +250,11 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     @Override
     public RuntimeConfigurationType getConfigurationType() {
+        if(determiningDeploymentType) {
+            // avoiding an infinite loop; have already passed through here once before
+            // this time around, just delegate to web-inf
+            return super.getConfigurationType();
+        }
         determineDeploymentTypeIfRequired();
         return deploymentType.getConfigurationType();
     }
@@ -275,10 +286,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected IsisConfigurationBuilder createConfigBuilder(final ServletContext servletContext) {
         
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
-        final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(
-                new ResourceStreamSourceForWebInf(servletContext),
-                ResourceStreamSourceContextLoaderClassPath.create(),
-                new ResourceStreamSourceCurrentClassClassPath());
+        final ResourceStreamSourceForWebInf rssWebInf = new ResourceStreamSourceForWebInf(servletContext);
+        final ResourceStreamSourceContextLoaderClassPath rssContextLoaderClassPath = ResourceStreamSourceContextLoaderClassPath.create();
+        final ResourceStreamSourceCurrentClassClassPath rssCurrentClassPath = new ResourceStreamSourceCurrentClassClassPath();
+        final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(rssWebInf, rssContextLoaderClassPath, rssCurrentClassPath);
 
         if ( configLocation != null ) {
             LOG.info( "Config override location: " + configLocation );
