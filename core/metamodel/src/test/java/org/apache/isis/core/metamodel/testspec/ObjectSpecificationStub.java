@@ -155,6 +155,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return fields;
     }
 
+    @Deprecated
+    @Override
+    public List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter) {
+        return getAssociations(Contributed.INCLUDED, filter);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties(Contributed contributed) {

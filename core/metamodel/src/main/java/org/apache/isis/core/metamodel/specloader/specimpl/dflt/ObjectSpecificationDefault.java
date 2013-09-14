@@ -507,4 +507,5 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return introspectionContext.getClassSubstitutor();
     }
 
+
 }

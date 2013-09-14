@@ -694,6 +694,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         throw new ObjectSpecificationException("No association called '" + id + "' in '" + getSingularName() + "'");
     }
 
+    @Deprecated
+    @Override
+    public List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter) {
+        return getAssociations(Contributed.INCLUDED, filter);
+    }
+
     @Override
     public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
         final List<ObjectAssociation> allAssociations = getAssociations(contributed);
