@@ -65,7 +65,7 @@ public class TextFieldWithDatePicker<T> extends TextField<T> implements IConvert
      *
      * @param behavior the {@link JQueryBehavior}
      */
-    protected void onConfigure(JQueryBehavior behavior)
+    public void onConfigure(JQueryBehavior behavior)
     {
     }
     
@@ -109,7 +109,11 @@ public class TextFieldWithDatePicker<T> extends TextField<T> implements IConvert
         this.add(newWidgetBehavior); //cannot be in ctor as the markupId may be set manually afterward
     }
 
-    
+    // IJQueryWidget //
+    @Override
+    public void onBeforeRender(JQueryBehavior behavior) {
+    }
+
     // IJQueryWidget //
     @Override
     public JQueryBehavior newWidgetBehavior(String selector)
