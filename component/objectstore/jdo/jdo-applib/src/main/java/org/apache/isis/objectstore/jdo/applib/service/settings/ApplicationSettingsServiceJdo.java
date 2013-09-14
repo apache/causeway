@@ -24,7 +24,6 @@ import java.util.List;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
@@ -42,7 +41,6 @@ import org.apache.isis.applib.services.settings.SettingType;
 @Named("Application Settings")
 public class ApplicationSettingsServiceJdo extends AbstractService implements ApplicationSettingsServiceRW {
 
-    @Hidden
     @Override
     public ApplicationSetting find(@Named("Key") String key) {
         return firstMatch(

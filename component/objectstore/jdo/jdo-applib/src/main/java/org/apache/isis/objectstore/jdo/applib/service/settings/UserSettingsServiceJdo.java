@@ -29,7 +29,6 @@ import com.google.common.collect.Sets;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
@@ -47,7 +46,6 @@ import org.apache.isis.applib.services.settings.UserSettingsServiceRW;
 @Named("User Settings")
 public class UserSettingsServiceJdo extends AbstractService implements UserSettingsServiceRW {
 
-    @Hidden
     @Override
     public UserSetting find(
             @Named("User") String user, 
