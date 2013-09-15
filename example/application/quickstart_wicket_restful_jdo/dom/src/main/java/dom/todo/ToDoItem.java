@@ -19,6 +19,7 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -95,6 +96,12 @@ import org.apache.isis.applib.value.Blob;
 @Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
+    /**
+     * It isn't common for entities to log, but they can if required.  
+     * Isis uses the slf4j internally, and is the recommended API to use. 
+     */
+    private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItem.class);
+    
     // //////////////////////////////////////
     // Identification in the UI
     // //////////////////////////////////////
@@ -306,9 +313,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     @Named("Update")
     public ToDoItem updateCost(@Named("New cost") final BigDecimal cost) {
+        LOG.debug("%s: cost updated: %s -> %s", this.container.titleOf(this), getCost(), cost);
         setCost(cost);
         return this;
     }
+
     // provide a default value
     public BigDecimal default0UpdateCost() {
         return getCost();
