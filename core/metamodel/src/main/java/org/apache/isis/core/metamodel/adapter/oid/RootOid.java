@@ -50,8 +50,6 @@ public interface RootOid extends TypedOid {
     
     void setVersion(Version version);
 
-    void checkLock(String currentUser, RootOid oid);
-
 
     /**
      * Returns a new RootOid for the same {@link #getObjectSpecId()}, but persistent and with the specified {@link #getIdentifier() identifier}.

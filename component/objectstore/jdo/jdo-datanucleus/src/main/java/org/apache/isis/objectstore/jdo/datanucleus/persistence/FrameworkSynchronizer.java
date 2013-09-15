@@ -19,19 +19,15 @@
 package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -45,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -75,43 +70,57 @@ public class FrameworkSynchronizer {
             public void run() {
                 final Version datastoreVersion = getVersionIfAny(pojo);
                 
-                final RootOid oid ;
-                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-                if(adapter != null) {
+                final RootOid originalOid ;
+                ObjectAdapter originalAdapter = getAdapterManager().getAdapterFor(pojo);
+                if(originalAdapter != null) {
                     ensureRootObject(pojo);
-                    oid = (RootOid) adapter.getOid();
+                    originalOid = (RootOid) originalAdapter.getOid();
 
-                    final Version previousVersion = adapter.getVersion();
+                    final Version originalVersion = originalAdapter.getVersion();
 
                     // sync the pojo held by the adapter with that just loaded
-                    getPersistenceSession().remapRecreatedPojo(adapter, pojo);
-
+                    getPersistenceSession().remapRecreatedPojo(originalAdapter, pojo);
+                    
                     // since there was already an adapter, do concurrency check
-                    if(previousVersion != null && datastoreVersion != null) {
-                        if(previousVersion.different(datastoreVersion)) {
-                            getCurrentTransaction().setAbortCause(new ConcurrencyException(getAuthenticationSession().getUserName(), oid, previousVersion, datastoreVersion));
+                    // (but don't set abort cause if checking is suppressed through thread-local)
+                    final RootOid thisOid = originalOid;
+                    final Version thisVersion = originalVersion;
+                    final Version otherVersion = datastoreVersion;
+                    
+                    if(thisVersion != null && 
+                       otherVersion != null && 
+                       thisVersion.different(otherVersion)) {
+
+                        if(ConcurrencyException.concurrencyChecking.get().isChecking()) {
+                            LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
+                            final String currentUser = getAuthenticationSession().getUserName();
+                            final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
+                            getCurrentTransaction().setAbortCause(abortCause);
+
+                        } else {
+                            LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
                         }
                     }
                 } else {
                     final OidGenerator oidGenerator = getOidGenerator();
-                    oid = oidGenerator.createPersistent(pojo, null);
+                    originalOid = oidGenerator.createPersistent(pojo, null);
                     
                     // it appears to be possible that there is already an adapter for this Oid, 
                     // ie from ObjectStore#resolveImmediately()
-                    adapter = getAdapterManager().getAdapterFor(oid);
-                    if(adapter != null) {
-                        getPersistenceSession().remapRecreatedPojo(adapter, pojo);
+                    originalAdapter = getAdapterManager().getAdapterFor(originalOid);
+                    if(originalAdapter != null) {
+                        getPersistenceSession().remapRecreatedPojo(originalAdapter, pojo);
                     } else {
-                        adapter = getPersistenceSession().mapRecreatedPojo(oid, pojo);
+                        originalAdapter = getPersistenceSession().mapRecreatedPojo(originalOid, pojo);
                     }
                 }
-                if(!adapter.isResolved()) {
-                    PersistorUtil.startResolving(adapter);
-                    PersistorUtil.toEndState(adapter);
+                if(!originalAdapter.isResolved()) {
+                    PersistorUtil.startResolving(originalAdapter);
+                    PersistorUtil.toEndState(originalAdapter);
                 }
-                adapter.setVersion(datastoreVersion);
+                originalAdapter.setVersion(datastoreVersion);
                 if(pojo.jdoIsDeleted()) {
-                    adapter.changeState(ResolveState.DESTROYED);
+                    originalAdapter.changeState(ResolveState.DESTROYED);
                 }
 
                 ensureFrameworksInAgreement(pojo);
@@ -344,19 +353,6 @@ public class FrameworkSynchronizer {
 
     private Version getVersionIfAny(final PersistenceCapable pojo) {
         return Utils.getVersionIfAny(pojo, getAuthenticationSession());
-    }
-
-    @SuppressWarnings("unused")
-    private static Filter<ObjectAssociation> dirtyFieldFilterFor(final PersistenceCapable pojo) {
-        String[] dirtyFields = NucleusJDOHelper.getDirtyFields(pojo, JDOHelper.getPersistenceManager(pojo));
-        final List<String> dirtyFieldList = Arrays.asList(dirtyFields);
-        Filter<ObjectAssociation> dirtyFieldsFilter = new Filter<ObjectAssociation>() {
-            @Override
-            public boolean accept(final ObjectAssociation t) {
-                String id = t.getId();
-                return dirtyFieldList.contains(id);
-            }};
-        return dirtyFieldsFilter;
     }
 
     @SuppressWarnings("unused")

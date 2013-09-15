@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -91,7 +92,8 @@ public class ActionAction implements Action {
                 session = new AnonymousSession();
             }
 
-            object.checkLock(context.getVersion(version));
+            final Version originalVersion = context.getVersion(version);
+            object.checkLock(originalVersion);
             if (entryState.isValid()) {
                 final boolean hasResult = invokeMethod(context, resultName, object, action, entryState);
                 String view = context.getParameter(hasResult ? "_" + VIEW : "_" + VOID);

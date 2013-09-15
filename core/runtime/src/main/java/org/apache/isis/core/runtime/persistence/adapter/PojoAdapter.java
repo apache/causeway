@@ -331,13 +331,24 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             getAggregateRoot().checkLock(otherVersion);
             return;
         }
-        final Version version = getOid().getVersion();
-        if (otherVersion != null && version != null && version.different(otherVersion)) {
-            LOG.info("concurrency conflict on " + this + " (" + otherVersion + ")");
-            throw new ConcurrencyException(getAuthenticationSession().getUserName(), getOid(), version, otherVersion);
+        
+        Oid thisOid = getOid();
+        final Version thisVersion = thisOid.getVersion();
+        
+        // check for exception, but don't throw if suppressed through thread-local
+        if(thisVersion != null && 
+           otherVersion != null && 
+           thisVersion.different(otherVersion)) {
+            
+            if(ConcurrencyException.concurrencyChecking.get().isChecking()) {
+                LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
+                final String currentUser = getAuthenticationSession().getUserName();
+                throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
+            } else {
+                LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
+            }
         }
     }
-
 
     @Override
     public void setVersion(final Version version) {

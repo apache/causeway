@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -61,6 +62,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -312,19 +314,34 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         if(adapterOid instanceof RootOid) {
             final RootOid recreatedOid = (RootOid) adapterOid;
             final RootOid originalOid = (RootOid) typedOid;
+            
             try {
-                if(concurrencyChecking == ConcurrencyChecking.CHECK) {
-                    recreatedOid.checkLock(getAuthenticationSession().getUserName(), originalOid);
+                if(concurrencyChecking.isChecking()) {
+                    
+                    // check for exception, but don't throw if suppressed through thread-local
+                    final Version otherVersion = originalOid.getVersion();
+                    final Version thisVersion = recreatedOid.getVersion();
+                    if(thisVersion != null && 
+                       otherVersion != null && 
+                       thisVersion.different(otherVersion)) {
+                        
+                        if(ConcurrencyException.concurrencyChecking.get().isChecking()) {
+                            LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
+                            final String currentUser = getAuthenticationSession().getUserName();
+                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
+                        } else {
+                            LOG.warn("concurrency conflict detected but suppressed, on " + recreatedOid + " (" + otherVersion + ")");
+                        }
+                    }
                 }
             } finally {
-                originalOid.setVersion(recreatedOid.getVersion());
+                final Version recreatedVersion = recreatedOid.getVersion();
+                originalOid.setVersion(recreatedVersion);
             }
         }
 
         return adapter;
     }
-
-    
 
     @Override
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {

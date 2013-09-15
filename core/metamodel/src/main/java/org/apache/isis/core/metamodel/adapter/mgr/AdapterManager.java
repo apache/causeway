@@ -79,6 +79,9 @@ public interface AdapterManager extends Injectable {
                     : ConcurrencyChecking.CHECK;
         }
 
+        public boolean isChecking() {
+            return this == CHECK;
+        }
     }
 
     /**
