@@ -68,6 +68,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -335,6 +336,11 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     /**
+     * Maximum number of times we attempt to flush the transaction before giving up.
+     */
+    private final static int MAX_FLUSH_ATTEMPTS = 10;
+    
+    /**
      * Mandatory hook method for subclasses to persist all pending changes.
      * 
      * <p>
@@ -359,30 +365,48 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     private void doFlush() {
         
-        try {
-            
-            objectStore.execute(Collections.unmodifiableList(commands));
-            
-            for (final PersistenceCommand command : commands) {
-                if (command instanceof DestroyObjectCommand) {
-                    final ObjectAdapter adapter = command.onAdapter();
-                    adapter.setVersion(null);
-                    if(!adapter.isDestroyed()) {
-                        adapter.changeState(ResolveState.DESTROYED);
+        int i = 0;
+        //
+        // it's possible that in executing these commands that more will be created.
+        // so we keep flushing until no more are available (ISIS-533)
+        //
+        // this is a do...while rather than a while... just for backward compatibilty
+        // with previous algorithm that always went through the execute phase at least once.
+        //
+        do {
+            // We take a copy of the commands to be executed (executing these
+            // might add to this.commands).
+            final List<PersistenceCommand> commandsPrior = 
+                    Collections.unmodifiableList(Lists.newArrayList(commands));
+            try {
+                objectStore.execute(commandsPrior);
+                for (final PersistenceCommand command : commandsPrior) {
+                    if (command instanceof DestroyObjectCommand) {
+                        final ObjectAdapter adapter = command.onAdapter();
+                        adapter.setVersion(null);
+                        if(!adapter.isDestroyed()) {
+                            adapter.changeState(ResolveState.DESTROYED);
+                        }
                     }
                 }
+                commands.removeAll(commandsPrior);
+            } catch(final RuntimeException ex) {
+                // if there's an exception, we want to make sure that 
+                // all commands are cleared and propagate
+                commands.clear();
+                throw ex;
             }
-        } finally {
-            // even if there's an exception, we want to clear the commands
-            // this is because the Wicket viewer uses an implementation of IsisContext 
-            // whereby there are several threads which could be sharing the same context
-            // if the first fails, we don't want the others to pick up the same command list
-            // and try again
+        } while(!commands.isEmpty() && i++ < MAX_FLUSH_ATTEMPTS);
+        
+        if(!commands.isEmpty()) {
+            // must have hit max flush
+            final List<PersistenceCommand> commandsStillToFlush = 
+                    Collections.unmodifiableList(Lists.newArrayList(commands));
             commands.clear();
+            throw new ObjectPersistenceException("Failed to flush transaction after " + MAX_FLUSH_ATTEMPTS + " attempts; commands still to flush:\n " + commandsStillToFlush.toString());
         }
     }
 
-    
     protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
         if(auditingService == null) {
             return;
