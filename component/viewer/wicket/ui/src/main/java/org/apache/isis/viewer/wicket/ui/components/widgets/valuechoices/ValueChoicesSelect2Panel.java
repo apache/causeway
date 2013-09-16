@@ -70,10 +70,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     @Override
     protected FormComponentLabel addComponentForRegular() {
 
-        final IModel<ObjectAdapterMemento> modelObject = Util.createModel(this);
-        
+        final IModel<ObjectAdapterMemento> modelObject = ScalarModelWithPending.Util.createModel(this);
+        final ObjectAdapter[] actionArgsHint = getScalarModel().getActionArgsHint();
         select2Field = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
-        setChoices(null);
+        setChoices(actionArgsHint);
 
         addStandardSemantics();
 

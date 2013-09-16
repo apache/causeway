@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -29,7 +28,6 @@ import com.vaynberg.wicket.select2.Settings;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -37,16 +35,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
 import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -66,10 +61,13 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private static final String ID_AUTO_COMPLETE = "autoComplete";
 
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
-    private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
+    //private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
 
     private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
     
+    /**
+     * This component may be null if there are no choices or autoComplete, or if in read-only mode.
+     */
     private Select2Choice<ObjectAdapterMemento> select2Field;
     private Link<String> entityDetailsLink;
     private Link<String> entityClearLink;
@@ -170,9 +168,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
         syncLinkWithInput(adapter);
 
-        // represent no object by a simple label displaying '(null)'
-        syncEntityTitleNullWithInput(adapter);
-
         syncEntityClearLinksWithInput(adapter);
 
         doSyncWithInputIfAutoCompleteOrChoices();
@@ -187,21 +182,20 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             return;
         }
 
-        
-        final IModel<ObjectAdapterMemento> model = Util.createModel(getScalarModel().asScalarModelWithPending());       
+        final IModel<ObjectAdapterMemento> model = ScalarModelWithPending.Util.createModel(getScalarModel().asScalarModelWithPending());       
 
         if(select2Field == null) {
             select2Field = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model);
-            setChoices(getScalarModel().getActionArgsHint());
+            setProviderAndCurrAndPending(select2Field, getScalarModel().getActionArgsHint());
             if(!getScalarModel().hasChoices()) {
                 final Settings settings = select2Field.getSettings();
-                ScalarModel scalarModel = (ScalarModel) getScalarModel();
+                ScalarModel scalarModel = getScalarModel();
                 final int minLength = scalarModel.getAutoCompleteMinLength();
                 settings.setMinimumInputLength(minLength);
+                settings.setPlaceholder(scalarModel.getName());
             }
             addOrReplace(select2Field);
         }
-        
         
         
         // no need for link, since can see in drop-down
@@ -209,7 +203,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
         // no need for the 'null' title, since if there is no object yet
         // can represent this fact in the drop-down
-        permanentlyHide(ID_ENTITY_TITLE_NULL);
+        // permanentlyHide(ID_ENTITY_TITLE_NULL);
     }
 
 
@@ -238,14 +232,10 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             
             @Override
             protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                final List<ObjectAdapter> autoCompleteChoices = Lists.newArrayList();
                 final ScalarModel scalarModel = (ScalarModel) entityModel;
-                final boolean hasAutoComplete = scalarModel.hasAutoComplete();
-                if(!hasAutoComplete) {
-                    return Collections.emptyList();
-                }
-                final List<ObjectAdapter> autoCompleteChoices = scalarModel.getAutoComplete(term);
-                if(autoCompleteChoices.isEmpty()) {
-                    return Collections.emptyList();
+                if(scalarModel.hasAutoComplete()) {
+                    autoCompleteChoices.addAll(scalarModel.getAutoComplete(term));
                 }
                 // take a copy otherwise is only lazily evaluated
                 return Lists.newArrayList(Lists.transform(autoCompleteChoices, MementoFunctions.fromAdapter()));
@@ -256,14 +246,10 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
         
+        final List<ObjectAdapter> choices = Lists.newArrayList();
         final ScalarModel scalarModel = (ScalarModel) getScalarModel();;
-        final boolean hasChoices = scalarModel.hasChoices();
-        if(!hasChoices) {
-            return Collections.emptyList();
-        }
-        final List<ObjectAdapter> choices = scalarModel.getChoices(argsIfAvailable);
-        if(choices.isEmpty()) {
-            return Collections.emptyList();
+        if(scalarModel.hasChoices()) {
+            choices.addAll(scalarModel.getChoices(argsIfAvailable));
         }
         // take a copy otherwise is only lazily evaluated
         return Lists.newArrayList(Lists.transform(choices, MementoFunctions.fromAdapter()));
@@ -274,14 +260,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
             addOrReplaceIconAndTitle(adapter);
         } else {
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
-        }
-    }
-
-    private void syncEntityTitleNullWithInput(final ObjectAdapter adapter) {
-        if (adapter != null) {
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
-        } else {
-            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, ""));
         }
     }
 
@@ -325,6 +303,10 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     public void onSelected(final ObjectAdapterMemento selectedAdapterMemento) {
         getScalarModel().setPending(selectedAdapterMemento);
+        getScalarModel().setObject(selectedAdapterMemento!=null?selectedAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null);
+        if(this.select2Field != null) {
+            select2Field.getModel().setObject(selectedAdapterMemento);
+        }
         renderSamePage();
     }
 
@@ -379,45 +361,56 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     // //////////////////////////////////////
 
     public void addFormComponentBehavior(Behavior behavior) {
-        select2Field.add(behavior);
+        if(select2Field != null) {
+            select2Field.add(behavior);
+        }
     }
 
     public void updateChoices(ObjectAdapter[] argsIfAvailable) {
-        setChoices(argsIfAvailable);
+        if(select2Field != null) {
+            setProviderAndCurrAndPending(select2Field, argsIfAvailable);
+        }
     }
     
-    private void setChoices(final ObjectAdapter[] argsIfAvailable) {
+    private void setProviderAndCurrAndPending(
+            final Select2Choice<ObjectAdapterMemento> select2Field, 
+            final ObjectAdapter[] argsIfAvailable) {
         
-        final ChoiceProvider<ObjectAdapterMemento> provider;
         if (getScalarModel().hasChoices()) {
             final List<ObjectAdapterMemento> choiceMementos = getChoiceMementos(argsIfAvailable);
-            provider = new ObjectAdapterMementoProviderAbstract() {
-                private static final long serialVersionUID = 1L;
-                @Override
-                protected List<ObjectAdapterMemento> obtainMementos(String unused) {
-                    return choiceMementos;
-                }
-            };
-            final ObjectAdapterMemento curr = select2Field.getModelObject();
-            select2Field.setProvider(provider);
+            select2Field.setProvider(providerForChoices(choiceMementos));
             getScalarModel().clearPending();
-            if(curr == null || !curr.containedIn(choiceMementos)) {
-                final ObjectAdapterMemento newAdapterMemento = 
-                        !choiceMementos.isEmpty() 
-                        ? choiceMementos.get(0) 
-                                : null;
-                        select2Field.getModel().setObject(newAdapterMemento);
-                        getModel().setObject(
-                                newAdapterMemento != null? newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null);
-            }
+            resetIfCurrentNotInChoices(select2Field, choiceMementos);
         } else if(hasParamOrPropertyAutoComplete()) {
-            provider = providerForParamOrPropertyAutoComplete();
-            select2Field.setProvider(provider);
-            getScalarModel().setPending(null);
+            select2Field.setProvider(providerForParamOrPropertyAutoComplete());
+            getScalarModel().clearPending();
         } else {
-            provider = providerForObjectAutoComplete();
-            select2Field.setProvider(provider);
-            getScalarModel().setPending(null);
+            select2Field.setProvider(providerForObjectAutoComplete());
+            getScalarModel().clearPending();
+        }
+    }
+
+    private ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
+        return new ObjectAdapterMementoProviderAbstract() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String unused) {
+                return choiceMementos;
+            }
+        };
+    }
+
+    private void resetIfCurrentNotInChoices(final Select2Choice<ObjectAdapterMemento> select2Field, final List<ObjectAdapterMemento> choiceMementos) {
+        final ObjectAdapterMemento curr = select2Field.getModelObject();
+        if(curr == null || !curr.containedIn(choiceMementos)) {
+            if(!choiceMementos.isEmpty()) {
+                final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
+                select2Field.getModel().setObject(newAdapterMemento);
+                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+            } else {
+                select2Field.getModel().setObject(null);
+                getModel().setObject(null);
+            }
         }
     }
 

@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -53,6 +54,9 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
     private List<ObjectActionParameterContributee> parameters;
+    
+    
+    private final Identifier identifier;
 
     /**
      * @param contributeeParam - the parameter number which corresponds to the contributee, and so should be suppressed.
@@ -72,6 +76,12 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
         // copy over facets from contributed to own.
         FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
+
+        // calculate the identifier
+        final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
+        final String memberName = contributorIdentifier.getMemberName();
+        List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
+        identifier = Identifier.actionIdentifier(getOnType().getCorrespondingClass().getName(), memberName, memberParameterNames);
     }
 
     @Override
@@ -210,6 +220,16 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         facetHolder.removeFacet(facetType);
     }
 
+    
+    // //////////////////////////////////////
+    
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()
+     */
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
+    }
     
     // //////////////////////////////////////
 

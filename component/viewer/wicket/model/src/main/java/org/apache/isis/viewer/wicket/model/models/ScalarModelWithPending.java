@@ -61,19 +61,15 @@ public interface ScalarModelWithPending extends Serializable {
                     final ObjectAdapterMemento objectAdapterMemento = owner.getScalarModel().getObjectAdapterMemento();
                     owner.setPending(objectAdapterMemento);
 
-//                    final ObjectAdapter adapter = scalarModel.getObject(); 
-//                    return ObjectAdapterMemento.createOrNull(adapter);
                     return objectAdapterMemento;
                 }
 
                 @Override
                 public void setObject(final ObjectAdapterMemento adapterMemento) {
-                    if (adapterMemento != null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("setting to: " + adapterMemento.toString());
-                        }
-                        owner.setPending(adapterMemento);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("setting to: " + adapterMemento!=null?adapterMemento.toString():null);
                     }
+                    owner.setPending(adapterMemento);
                     if (owner.getScalarModel() != null && owner.getPending() != null) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("setting to pending: " + owner.getPending().toString());

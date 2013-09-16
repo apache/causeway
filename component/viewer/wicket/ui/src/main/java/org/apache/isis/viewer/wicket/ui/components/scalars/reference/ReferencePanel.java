@@ -160,7 +160,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = (EntityLinkSelect2Panel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        final Component entityLinkComponent = getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entityLink = (EntityLinkSelect2Panel) entityLinkComponent;
         
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));

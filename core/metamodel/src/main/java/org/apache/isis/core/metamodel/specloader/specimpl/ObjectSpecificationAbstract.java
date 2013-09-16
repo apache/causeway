@@ -932,19 +932,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             contributedActions.add((ObjectActionImpl) serviceAction);
         }
         
-        return Lists.newArrayList(Iterables.transform(contributedActions, createContributeeAssociationFunctor(serviceAdapter)));
+        return Lists.newArrayList(Iterables.transform(contributedActions, createContributeeAssociationFunctor(serviceAdapter, this)));
     }
 
 
     private Function<ObjectActionImpl, ObjectAssociation> createContributeeAssociationFunctor(
-            final ObjectAdapter serviceAdapter) {
+            final ObjectAdapter serviceAdapter, final ObjectSpecification contributeeType) {
         return new Function<ObjectActionImpl, ObjectAssociation>(){
             @Override
             public ObjectAssociation apply(ObjectActionImpl input) {
                 final ObjectSpecification returnType = input.getReturnType();
                 final ObjectAssociationAbstract association = returnType.isNotCollection() 
-                        ? new OneToOneAssociationContributee(serviceAdapter, input, objectMemberContext) 
-                        : new OneToManyAssociationContributee(serviceAdapter, input, objectMemberContext);
+                        ? new OneToOneAssociationContributee(serviceAdapter, input, contributeeType, objectMemberContext) 
+                        : new OneToManyAssociationContributee(serviceAdapter, input, contributeeType, objectMemberContext);
                 facetProcessor.processMemberOrder(metadataProperties, association);
                 return association;
             }

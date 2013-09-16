@@ -168,6 +168,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     // UpdateCategory (contributed action)
     // //////////////////////////////////////
 
+    @Named("Update")
     @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
     @ActionSemantics(Of.IDEMPOTENT)

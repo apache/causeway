@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -27,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
@@ -42,31 +44,41 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
      * use layout metadata to position the contributee in different ways)
      */
     private final FacetHolder facetHolder = new FacetHolderImpl();
+    
+    private final Identifier identifier;
 
     public OneToOneAssociationContributee(
             final ObjectAdapter serviceAdapter, 
-            final ObjectActionImpl objectAction, 
+            final ObjectActionImpl servceAction, 
+            final ObjectSpecification contributeeType,
             final ObjectMemberContext objectMemberContext) {
-        super(objectAction.getFacetedMethod(), objectAction.getReturnType(), objectMemberContext);
+        super(servceAction.getFacetedMethod(), servceAction.getReturnType(), objectMemberContext);
         this.serviceAdapter = serviceAdapter;
-        this.objectAction = objectAction;
+        this.objectAction = servceAction;
         
         notPersistedFacet = new NotPersistedFacetAbstract(this) {};
 
         // copy over facets from contributed to own.
-        FacetUtil.copyFacets(objectAction.getFacetedMethod(), facetHolder);
+        FacetUtil.copyFacets(servceAction.getFacetedMethod(), facetHolder);
         FacetUtil.addFacet(notPersistedFacet);
+        
+        // calculate the identifier
+        final Identifier contributorIdentifier = servceAction.getFacetedMethod().getIdentifier();
+        final String memberName = contributorIdentifier.getMemberName();
+        List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
+        
+        identifier = Identifier.actionIdentifier(contributeeType.getCorrespondingClass().getName(), memberName, memberParameterNames);
     }
 
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
         return objectAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter});
     }
-    
 
-    
-
-
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
+    }
     
     // //////////////////////////////////////
     // FacetHolder
