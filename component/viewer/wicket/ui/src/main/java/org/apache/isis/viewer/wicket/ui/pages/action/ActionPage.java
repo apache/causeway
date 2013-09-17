@@ -42,7 +42,7 @@ public class ActionPage extends PageAbstract {
         super(new PageParameters(), ComponentType.ACTION);
         addChildComponents(model);
 
-        if(model.hasSafeActionSemantics()) {
+        if(model.isBookmarkable()) {
             bookmarkPage(model);
         }
         addBookmarkedPages();

@@ -184,7 +184,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             
             resultType.addResults(this, resultAdapter);
 
-            if (actionModel.hasSafeActionSemantics()) {
+            if (actionModel.isBookmarkable()) {
                 bookmarkPage(actionModel);
             }
 

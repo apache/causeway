@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 
 /**
- * Corresponds to annotating the class with the {@link Bookmarkable} annotation.
+ * Corresponds to annotating the class or an action with the {@link Bookmarkable} annotation.
  */
 public interface BookmarkPolicyFacet extends SingleValueFacet<BookmarkPolicy> {
 

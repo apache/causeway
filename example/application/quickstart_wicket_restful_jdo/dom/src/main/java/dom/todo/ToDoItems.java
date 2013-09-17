@@ -33,6 +33,7 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
@@ -61,6 +62,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     // NotYetComplete (action)
     // //////////////////////////////////////
     
+    @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
@@ -144,22 +146,14 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "4")
     public List<ToDoItem> allToDos() {
-        return allToDos(NotifyUserIfNone.YES);
-    }
-
-    public enum NotifyUserIfNone { YES, NO }
-    
-    @Programmatic
-    public List<ToDoItem> allToDos(NotifyUserIfNone notifyUser) {
         final String currentUser = currentUserName();
         final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
         Collections.sort(items);
-        if(notifyUser == NotifyUserIfNone.YES && items.isEmpty()) {
+        if(items.isEmpty()) {
             getContainer().warnUser("No to-do items found.");
         }
         return items;
     }
-
 
     // //////////////////////////////////////
     // AutoComplete

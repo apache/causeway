@@ -32,12 +32,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -525,9 +527,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             argumentModel.setObject((ObjectAdapter)null);
         }
     }
-    
-    public boolean hasSafeActionSemantics() {
-        return getActionMemento().getAction().getSemantics() == ActionSemantics.Of.SAFE;
+
+    /**
+     * Bookmarkable if the {@link ObjectAction action} has a {@link BookmarkPolicyFacet bookmark} policy
+     * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
+     */
+    public boolean isBookmarkable() {
+        final ObjectAction action = getActionMemento().getAction();
+        final BookmarkPolicyFacet bookmarkPolicy = action.getFacet(BookmarkPolicyFacet.class);
+        final boolean safeSemantics = action.getSemantics() == ActionSemantics.Of.SAFE;
+        return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
 
     

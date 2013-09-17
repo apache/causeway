@@ -32,13 +32,19 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyF
 public class BookmarkableAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public BookmarkableAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_AND_ACTIONS);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processClassContext.getCls(), Bookmarkable.class);
         FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+    }
+
+    @Override
+    public void process(final ProcessMethodContext processMethodContext) {
+        final Bookmarkable annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Bookmarkable.class);
+        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {

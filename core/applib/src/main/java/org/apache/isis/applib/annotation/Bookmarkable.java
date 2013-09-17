@@ -26,14 +26,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the policy by which the entity can be bookmarked.
+ * Indicates the policy by which the entity or action can be bookmarked.
  * 
  * <p>
- * Three policies are defined, which control how bookmarked entities are organized.
- * 
+ * Three {@link BookmarkPolicy policies} are defined, which control how bookmarked entities are organized.
+ * These have no meaning for bookmarkable actions.  
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Bookmarkable {
     

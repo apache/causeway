@@ -104,6 +104,7 @@ public enum FeatureType {
     public final static List<FeatureType> MEMBERS = ImmutableList.of(PROPERTY, COLLECTION, ACTION);
     public final static List<FeatureType> OBJECTS_AND_PROPERTIES = ImmutableList.of(OBJECT, PROPERTY);
     public final static List<FeatureType> OBJECTS_AND_COLLECTIONS = ImmutableList.of(OBJECT, COLLECTION);
+    public final static List<FeatureType> OBJECTS_AND_ACTIONS = ImmutableList.of(OBJECT, ACTION);
     public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableList.of(OBJECT, PROPERTY, COLLECTION);
     public final static List<FeatureType> OBJECTS_POST_PROCESSING_ONLY = ImmutableList.of(OBJECT_POST_PROCESSING);
 

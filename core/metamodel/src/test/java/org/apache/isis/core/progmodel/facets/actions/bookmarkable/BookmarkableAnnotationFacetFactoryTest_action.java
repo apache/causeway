@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.bookmarkable;
+package org.apache.isis.core.progmodel.facets.actions.bookmarkable;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacetFallback;
-import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotation;
+import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacetAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.bookmarkable.annotation.BookmarkableAnnotationFacetFactory;
 
-public class BookmarkableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class BookmarkableAnnotationFacetFactoryTest_action extends AbstractFacetFactoryTest {
 
     private BookmarkableAnnotationFacetFactory facetFactory;
 
@@ -50,33 +48,18 @@ public class BookmarkableAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testBookmarkableAnnotationPickedUpOnClass() {
-        @Bookmarkable(BookmarkPolicy.AS_CHILD)
         class Customer {
+            @Bookmarkable(BookmarkPolicy.AS_CHILD)
+            public void placeOrder(){}
         }
+        final Method actionMethod = findMethod(Customer.class, "placeOrder");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BookmarkPolicyFacetViaBookmarkableAnnotation);
-        BookmarkPolicyFacet bookmarkableFacet = (BookmarkPolicyFacet) facet;
-        assertThat(bookmarkableFacet.value(), is(BookmarkPolicy.AS_CHILD));
-        
-        assertNoMethodsRemoved();
-    }
+        assertTrue(facet instanceof BookmarkPolicyFacetAbstract);
 
-    public void testBookmarkablePolicyInferredPickedUpOnClassAndDefaultsToAlways() {
-        class Customer {
-        }
-
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BookmarkPolicyFacetFallback);
-        BookmarkPolicyFacet bookmarkableFacet = (BookmarkPolicyFacet) facet;
-        assertThat(bookmarkableFacet.value(), is(BookmarkPolicy.NEVER));
-        
         assertNoMethodsRemoved();
     }
 
