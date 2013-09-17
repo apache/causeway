@@ -22,36 +22,38 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
+/**
+ * @deprecated - use {@link ObjectAdapter.Util} instead
+ */
+@Deprecated
 public final class ObjectAdapterUtils {
 
     private ObjectAdapterUtils() {
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util} instead
+     */
+    @Deprecated
     public static Object unwrapObject(final ObjectAdapter adapter) {
-        if (adapter == null) {
-            return null;
-        }
-        return adapter.getObject();
+        return ObjectAdapter.Util.unwrap(adapter);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util} instead
+     */
+    @Deprecated
     public static String unwrapObjectAsString(final ObjectAdapter adapter) {
-        final Object obj = unwrapObject(adapter);
-        if (obj == null) {
-            return null;
-        }
-        if (!(obj instanceof String)) {
-            return null;
-        }
-        return (String) obj;
+        return ObjectAdapter.Util.unwrapAsString(adapter);
     }
 
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util} instead
+     */
+    @Deprecated
     public static List<Object> unwrapObjects(final List<ObjectAdapter> adapters) {
-        List<Object> objects = Lists.newArrayList();
-        for (ObjectAdapter adapter : adapters) {
-            objects.add(unwrapObject(adapter));
-        }
-        return objects;
+        return ObjectAdapter.Util.unwrap(adapters);
     }
 
 }

@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -36,7 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
@@ -237,8 +239,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
     @Override
     public boolean hasChoices() {
-        final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        return propertyChoicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
+        return getFacet(PropertyChoicesFacet.class) != null;
     }
 
     @Override
@@ -246,14 +247,14 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
         final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLookup());
         if (pojoOptions != null) {
-            final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
-            for (int i = 0; i < options.length; i++) {
-                options[i] = getAdapterManager().adapterFor(pojoOptions[i]);
-            }
-            return options;
-        } else if (BoundedFacetUtils.isBoundedSet(getSpecification())) {
+            List<ObjectAdapter> adapters = Lists.transform(
+                    Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
+            return adapters.toArray(new ObjectAdapter[]{});
+        } 
+        // // now incorporated into above choices processing (BoundedFacet is no more)
+        /* else if (BoundedFacetUtils.isBoundedSet(getSpecification())) {
             return options();
-        }
+        } */
         return null;
     }
 

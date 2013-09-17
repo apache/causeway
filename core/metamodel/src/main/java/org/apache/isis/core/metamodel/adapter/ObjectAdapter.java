@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
@@ -238,6 +243,62 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
     boolean respondToChangesInPersistentObjects();
 
 
+    
+    
+    public final class Util {
+
+        private Util() {
+        }
+
+        public static Object unwrap(final ObjectAdapter adapter) {
+            return adapter != null ? adapter.getObject() : null;
+        }
+
+        public static String unwrapAsString(final ObjectAdapter adapter) {
+            final Object obj = unwrap(adapter);
+            if (obj == null) {
+                return null;
+            }
+            if (!(obj instanceof String)) {
+                return null;
+            }
+            return (String) obj;
+        }
+
+
+        public static List<Object> unwrap(final List<ObjectAdapter> adapters) {
+            List<Object> objects = Lists.newArrayList();
+            for (ObjectAdapter adapter : adapters) {
+                objects.add(unwrap(adapter));
+            }
+            return objects;
+        }
+
+    }
+
+    
+    public static class Functions {
+        
+        private Functions(){}
+
+        public static Function<ObjectAdapter, Object> getObject() {
+            return new Function<ObjectAdapter, Object>() {
+                @Override
+                public Object apply(ObjectAdapter input) {
+                    return Util.unwrap(input);
+                }
+            };
+        }
+        
+        public static Function<Object, ObjectAdapter> adapterForUsing(final AdapterManager adapterManager) {
+            return new Function<Object, ObjectAdapter>() {
+                @Override
+                public ObjectAdapter apply(final Object pojo) {
+                    return adapterManager.adapterFor(pojo);
+                }
+            };
+        }
+    }
 
 
 }

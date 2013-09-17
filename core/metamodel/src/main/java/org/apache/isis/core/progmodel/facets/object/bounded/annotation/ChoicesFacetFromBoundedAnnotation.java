@@ -17,16 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.bounded;
+package org.apache.isis.core.progmodel.facets.object.bounded.annotation;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.bounded.ChoicesFacetFromBoundedAbstract;
 
-public class BoundedFacetUtils {
+public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAbstract {
 
-    private BoundedFacetUtils() {
+    public ChoicesFacetFromBoundedAnnotation(final FacetHolder holder, QuerySubmitter querySubmitter) {
+        super(holder, querySubmitter);
     }
 
-    public static boolean isBoundedSet(final ObjectSpecification specification) {
-        return specification.getFacet(BoundedFacet.class) != null;
-    }
+
 }

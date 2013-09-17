@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -73,7 +73,10 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
                 return CAN_OPEN;
             }
 
-            if (showObjectContents && fields.get(i).isOneToOneAssociation() && !(BoundedFacetUtils.isBoundedSet(object.getSpecification()))) {
+            // TODO: rather than looking for the ChoicesFacet on the type, 
+            // should look for the appropriate PropertyChoicesFacet, ActionParameterChoicesFacet or 
+            // PropertyAutoCompleteFacet or ActionParameterAutoCompleteFacet
+            if (showObjectContents && fields.get(i).isOneToOneAssociation() && !(ChoicesFacetUtils.hasChoices(object.getSpecification()))) {
                 return CAN_OPEN;
             }
         }

@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.progmodel.facets.object.bounded.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
@@ -269,9 +270,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 adapters.add(getAdapterMap().adapterFor(choice));
             }
         }
-        if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
+        /* // now incorporated into above choices processing (BoundedFacet is no more)
+        if (adapters.size() == 0 && ChoicesFacetUtils.hasChoices(getSpecification())) {
             addAllInstancesForType(adapters);
         }
+        */
         return adapters.toArray(new ObjectAdapter[0]);
     }
 
@@ -289,7 +292,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public boolean hasChoices() {
         final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-        return choicesFacet != null || BoundedFacetUtils.isBoundedSet(getSpecification());
+        return choicesFacet != null;
     }
 
     @Override
@@ -313,9 +316,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 adapters.add(getAdapterMap().adapterFor(choice));
             }
         }
-        if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
+        // now incorporated into above choices processing (BoundedFacet is no more)
+        /* 
+           if (adapters.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
             addAllInstancesForType(adapters);
         }
+        */
         return adapters.toArray(new ObjectAdapter[0]);
     }
     
@@ -385,6 +391,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
+    /**
+     * unused - incorporated into the {@link ChoicesFacetFromBoundedAbstract}
+     */
+    @SuppressWarnings("unused")
     private <T> void addAllInstancesForType(final List<ObjectAdapter> adapters) {
         final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
         final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);

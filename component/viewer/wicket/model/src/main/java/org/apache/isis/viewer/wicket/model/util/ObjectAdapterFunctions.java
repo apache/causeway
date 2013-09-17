@@ -24,9 +24,6 @@ import com.google.common.base.Function;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 public final class ObjectAdapterFunctions {
@@ -34,13 +31,12 @@ public final class ObjectAdapterFunctions {
     private ObjectAdapterFunctions() {
     }
 
+    /**
+     * Use {@link ObjectAdapter.Functions}
+     */
+    @Deprecated
     public static Function<Object, ObjectAdapter> fromPojo(final AdapterManager adapterManager) {
-        return new Function<Object, ObjectAdapter>() {
-            @Override
-            public ObjectAdapter apply(final Object pojo) {
-                return adapterManager.adapterFor(pojo);
-            }
-        };
+        return ObjectAdapter.Functions.adapterForUsing(adapterManager);
     }
 
     public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento() {
@@ -61,14 +57,6 @@ public final class ObjectAdapterFunctions {
             }
             
         };
-    }
-
-    private static AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
-    private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
     }
 
 }

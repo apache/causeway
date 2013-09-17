@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
@@ -454,7 +454,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
-            } else if (BoundedFacetUtils.isBoundedSet(paramSpec)) {
+            } else 
+                // now incorporated into above choices processing (BoundedFacet is no more) 
+                /*if (BoundedFacetUtils.isBoundedSet(paramSpec)) {
                 final QueryFindAllInstances<ObjectAdapter> query = new QueryFindAllInstances<ObjectAdapter>(paramSpec.getFullIdentifier());
                 final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
                 parameterChoicesAdapters[i] = new ObjectAdapter[allInstancesAdapter.size()];
@@ -462,7 +464,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 for (final ObjectAdapter adapter : allInstancesAdapter) {
                     parameterChoicesAdapters[i][j++] = adapter;
                 }
-            } else if (paramSpec.isNotCollection()) {
+            } else */ if (paramSpec.isNotCollection()) {
                 parameterChoicesAdapters[i] = new ObjectAdapter[0];
             } else {
                 throw new UnknownTypeException(paramSpec);

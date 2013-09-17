@@ -17,20 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.bounded;
+package org.apache.isis.core.metamodel.facets.object.bounded;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class BoundedFacetImpl extends BoundedFacetAbstract {
+public class ChoicesFacetUtils {
 
-    public BoundedFacetImpl(final FacetHolder holder) {
-        super(holder);
+    private ChoicesFacetUtils() {
     }
 
-    @Override
-    public String disabledReason(final ObjectAdapter inObject) {
-        return "Bounded";
+    /**
+     * 
+     * @deprecated - use {@link ChoicesFacet.Util}
+     */
+    @Deprecated
+    public static boolean hasChoices(final ObjectSpecification specification) {
+        return ChoicesFacet.Util.hasChoices(specification);
     }
 
 }

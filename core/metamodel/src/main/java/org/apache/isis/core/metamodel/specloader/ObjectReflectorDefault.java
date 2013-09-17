@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
@@ -656,7 +656,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             StringBuffer str = new StringBuffer();
             str.append(spec.isAbstract() ? "A" : ".");
             str.append(spec.isService() ? "S" : ".");
-            str.append(BoundedFacetUtils.isBoundedSet(spec) ? "B" : ".");
+            str.append(ChoicesFacetUtils.hasChoices(spec) ? "B" : ".");
             str.append(spec.isParentedOrFreeCollection() ? "C" : ".");
             str.append(spec.isNotCollection() ? "O" : ".");
             str.append(spec.isParseable() ? "P" : ".");

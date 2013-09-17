@@ -20,27 +20,36 @@
 package org.apache.isis.core.progmodel.facets.object.bounded.annotation;
 
 import org.apache.isis.applib.annotation.Bounded;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
+import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 
-public class BoundedAnnotationFacetFactory extends FacetFactoryAbstract {
+public class BoundedAnnotationFacetFactory extends FacetFactoryAbstract implements QuerySubmitterAware {
+
+    private QuerySubmitter querySubmitter;
 
     public BoundedAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final Bounded annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Bounded.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final Bounded annotation = Annotations.getAnnotation(processClassContext.getCls(), Bounded.class);
+        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
-    private BoundedFacet create(final Bounded annotation, final FacetHolder holder) {
-        return annotation == null ? null : new BoundedFacetAnnotation(holder);
+    private ChoicesFacet create(final Bounded annotation, final FacetHolder holder) {
+        return annotation == null ? null : new ChoicesFacetFromBoundedAnnotation(holder, querySubmitter);
+    }
+
+    @Override
+    public void setQuerySubmitter(final QuerySubmitter querySubmitter) {
+        this.querySubmitter = querySubmitter;
     }
 
 }

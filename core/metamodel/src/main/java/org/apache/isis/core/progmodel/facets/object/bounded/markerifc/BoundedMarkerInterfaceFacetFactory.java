@@ -22,13 +22,17 @@ package org.apache.isis.core.progmodel.facets.object.bounded.markerifc;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
+import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 
-public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
+public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract implements QuerySubmitterAware {
+
+    private QuerySubmitter querySubmitter;
 
     public BoundedMarkerInterfaceFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -40,12 +44,17 @@ public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(create(implementsMarker, processClassContaxt.getFacetHolder()));
     }
 
-    private BoundedFacet create(final boolean implementsMarker, final FacetHolder holder) {
-        return implementsMarker ? new BoundedFacetMarkerInterface(holder) : null;
+    private ChoicesFacet create(final boolean implementsMarker, final FacetHolder holder) {
+        return implementsMarker ? new ChoicesFacetFromBoundedFacetMarkerInterface(holder, querySubmitter) : null;
     }
 
     public boolean recognizes(final Method method) {
         return false;
+    }
+
+    @Override
+    public void setQuerySubmitter(QuerySubmitter querySubmitter) {
+        this.querySubmitter = querySubmitter;
     }
 
 }

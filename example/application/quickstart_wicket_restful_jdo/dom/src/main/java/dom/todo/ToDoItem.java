@@ -19,7 +19,6 @@
 package dom.todo;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,7 +33,8 @@ import javax.jdo.annotations.VersionStrategy;
 import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
@@ -50,7 +50,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -62,8 +61,6 @@ import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -93,6 +90,7 @@ import org.apache.isis.applib.value.Blob;
 @Audited
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
+//@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
 @Bookmarkable
 public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
 
@@ -541,39 +539,38 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Filters (static methods)
     // //////////////////////////////////////
 
-    @SuppressWarnings("unchecked")
-    public static Filter<ToDoItem> thoseDue() {
-        return Filters.and(Filters.not(thoseComplete()), new Filter<ToDoItem>() {
+    public static Predicate<ToDoItem> thoseDue() {
+        return Predicates.and(Predicates.not(thoseComplete()), new Predicate<ToDoItem>() {
             @Override
-            public boolean accept(final ToDoItem t) {
+            public boolean apply(final ToDoItem t) {
                 return t.isDue();
             }
         });
     }
 
-    public static Filter<ToDoItem> thoseComplete() {
-        return new Filter<ToDoItem>() {
+    public static Predicate<ToDoItem> thoseComplete() {
+        return new Predicate<ToDoItem>() {
             @Override
-            public boolean accept(final ToDoItem t) {
+            public boolean apply(final ToDoItem t) {
                 return t.isComplete();
             }
         };
     }
 
-    public static Filter<ToDoItem> thoseOwnedBy(final String currentUser) {
-        return new Filter<ToDoItem>() {
+    public static Predicate<ToDoItem> thoseOwnedBy(final String currentUser) {
+        return new Predicate<ToDoItem>() {
             @Override
-            public boolean accept(final ToDoItem toDoItem) {
+            public boolean apply(final ToDoItem toDoItem) {
                 return Objects.equal(toDoItem.getOwnedBy(), currentUser);
             }
 
         };
     }
 
-    public static Filter<ToDoItem> thoseSimilarTo(final ToDoItem toDoItem) {
-        return new Filter<ToDoItem>() {
+    public static Predicate<ToDoItem> thoseSimilarTo(final ToDoItem toDoItem) {
+        return new Predicate<ToDoItem>() {
             @Override
-            public boolean accept(final ToDoItem eachToDoItem) {
+            public boolean apply(final ToDoItem eachToDoItem) {
                 return Objects.equal(toDoItem.getCategory(), eachToDoItem.getCategory()) && 
                        Objects.equal(toDoItem.getOwnedBy(), eachToDoItem.getOwnedBy()) &&
                        eachToDoItem != toDoItem;

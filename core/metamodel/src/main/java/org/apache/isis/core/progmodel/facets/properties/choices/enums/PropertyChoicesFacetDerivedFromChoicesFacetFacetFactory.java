@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
@@ -38,7 +39,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fac
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
 
-        if (!returnType.isEnum()) {
+        if(!getSpecificationLoader().loadSpecification(returnType).containsDoOpFacet(ChoicesFacet.class)) {
             return;
         }
 

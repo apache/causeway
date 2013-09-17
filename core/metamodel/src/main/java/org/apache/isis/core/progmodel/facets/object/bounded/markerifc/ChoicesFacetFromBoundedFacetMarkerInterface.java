@@ -17,23 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.bounded;
+package org.apache.isis.core.progmodel.facets.object.bounded.markerifc;
 
-import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.bounded.ChoicesFacetFromBoundedAbstract;
 
-/**
- * Whether the number of instances of this class is bounded.
- * 
- * <p>
- * Typically viewers will interpret this information by displaying all instances
- * of the class in a drop-down list box or similar widget.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>@Bounded</tt>.
- */
-public interface BoundedFacet extends MarkerFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+public class ChoicesFacetFromBoundedFacetMarkerInterface extends ChoicesFacetFromBoundedAbstract {
+
+    public ChoicesFacetFromBoundedFacetMarkerInterface(
+            final FacetHolder holder, final QuerySubmitter querySubmitter) {
+        super(holder, querySubmitter);
+    }
 
 }

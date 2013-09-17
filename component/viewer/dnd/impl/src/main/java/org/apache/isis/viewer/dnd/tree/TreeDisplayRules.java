@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.tree;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserAction;
@@ -80,8 +80,11 @@ public class TreeDisplayRules {
         return showCollectionsOnly;
     }
 
-    public static boolean canDisplay(final ObjectAdapter object) {
-        final boolean lookupView = object != null && BoundedFacetUtils.isBoundedSet(object.getSpecification());
+    private static boolean canDisplay(final ObjectAdapter object) {
+        // TODO: rather than looking for the ChoicesFacet on the type, 
+        // should look for the appropriate PropertyChoicesFacet, ActionParameterChoicesFacet or 
+        // PropertyAutoCompleteFacet or ActionParameterAutoCompleteFacet
+        final boolean lookupView = object != null && ChoicesFacetUtils.hasChoices(object.getSpecification());
         final boolean showNonCollections = !TreeDisplayRules.isCollectionsOnly();
         final boolean objectView = object instanceof ObjectAdapter && showNonCollections;
         final boolean collectionView = object.getSpecification().isParentedOrFreeCollection();

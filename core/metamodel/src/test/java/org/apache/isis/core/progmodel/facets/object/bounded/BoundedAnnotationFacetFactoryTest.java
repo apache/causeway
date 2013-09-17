@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.bounded;
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
+import org.apache.isis.core.metamodel.facets.choices.ChoicesFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.bounded.annotation.BoundedAnnotationFacetFactory;
 
@@ -50,9 +50,9 @@ public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
 
         facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(BoundedFacet.class);
+        final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BoundedFacetAbstract);
+        assertTrue(facet instanceof ChoicesFacetFromBoundedAbstract);
 
         assertNoMethodsRemoved();
     }
