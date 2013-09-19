@@ -36,6 +36,7 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
@@ -56,6 +57,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ACTION)
     @Hidden(where=Where.ALL_TABLES)
+    @Disabled(reason="Relative priority, derived from due date")
     public Integer priority(final ToDoItem toDoItem) {
         if(toDoItem.isComplete()) {
             return null;

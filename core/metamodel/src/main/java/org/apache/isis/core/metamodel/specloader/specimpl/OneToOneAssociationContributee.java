@@ -19,6 +19,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -31,13 +33,14 @@ import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstr
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetImpl;
 
 public class OneToOneAssociationContributee extends OneToOneAssociationImpl implements ContributeeMember {
 
     private final ObjectAdapter serviceAdapter;
     private final ObjectAction objectAction;
     
-    private final NotPersistedFacet notPersistedFacet;
 
     /**
      * Hold facets rather than delegate to the contributed action (different types might
@@ -49,25 +52,39 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
 
     public OneToOneAssociationContributee(
             final ObjectAdapter serviceAdapter, 
-            final ObjectActionImpl servceAction, 
+            final ObjectActionImpl serviceAction, 
             final ObjectSpecification contributeeType,
             final ObjectMemberContext objectMemberContext) {
-        super(servceAction.getFacetedMethod(), servceAction.getReturnType(), objectMemberContext);
+        super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberContext);
         this.serviceAdapter = serviceAdapter;
-        this.objectAction = servceAction;
+        this.objectAction = serviceAction;
         
-        notPersistedFacet = new NotPersistedFacetAbstract(this) {};
-
         // copy over facets from contributed to own.
-        FacetUtil.copyFacets(servceAction.getFacetedMethod(), facetHolder);
+        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
+        
+        final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
+        final DisabledFacet disabledFacet = disabledFacet();
+        
         FacetUtil.addFacet(notPersistedFacet);
+        FacetUtil.addFacet(disabledFacet);
         
         // calculate the identifier
-        final Identifier contributorIdentifier = servceAction.getFacetedMethod().getIdentifier();
+        final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();
         List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
         
         identifier = Identifier.actionIdentifier(contributeeType.getCorrespondingClass().getName(), memberName, memberParameterNames);
+    }
+
+    private DisabledFacet disabledFacet() {
+        final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
+        if( originalFacet != null && 
+            originalFacet.when() == When.ALWAYS && 
+            originalFacet.where() == Where.ANYWHERE) {
+            return originalFacet;
+        }
+        // ensure that the contributed association is always disabled
+        return new DisabledFacetImpl(When.ALWAYS, Where.ANYWHERE, "Contributed property", this);
     }
 
     @Override

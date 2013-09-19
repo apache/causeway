@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.disabled;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -64,6 +67,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
 
+        final DisabledFacet disabledFacet = (DisabledFacet) facet;
+        assertThat(disabledFacet.disabledReason(null), is("Always disabled"));
+        
         assertNoMethodsRemoved();
     }
 
@@ -81,6 +87,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
+
+        final DisabledFacet disabledFacet = (DisabledFacet) facet;
+        assertThat(disabledFacet.disabledReason(null), is("Always disabled"));
 
         assertNoMethodsRemoved();
     }
@@ -102,6 +111,27 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         assertNoMethodsRemoved();
     }
 
+    public void testDisabledAnnotationWithReason() {
+        class Customer {
+            @Disabled(reason="Oh no you don't!")
+            public int getNumberOfOrders() {
+                return 0;
+            }
+        }
+        final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof DisabledFacetAbstract);
+
+        final DisabledFacet disabledFacet = (DisabledFacet) facet;
+        assertThat(disabledFacet.disabledReason(null), is("Oh no you don't!"));
+        
+        assertNoMethodsRemoved();
+    }
+
     public void testDisabledWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
             @Disabled(when = When.ALWAYS)
@@ -114,6 +144,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
+
+        final DisabledFacet disabledFacet = (DisabledFacet) facet;
+        assertThat(disabledFacet.disabledReason(null), is("Always disabled"));
 
         assertEquals(When.ALWAYS, disabledFacetAbstract.when());
     }

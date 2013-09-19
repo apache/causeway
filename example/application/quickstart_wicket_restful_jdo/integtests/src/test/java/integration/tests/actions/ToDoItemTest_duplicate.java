@@ -54,7 +54,7 @@ public class ToDoItemTest_duplicate extends ToDoIntegTest {
         // given
         final LocalDate todaysDate = Clock.getTimeAsLocalDate();
         toDoItem.setDueBy(todaysDate);
-        toDoItem.setCost(new BigDecimal("123.45"));
+        toDoItem.updateCost(new BigDecimal("123.45"));
         
         duplicateToDoItem = toDoItem.duplicate(
                 unwrap(toDoItem).default0Duplicate(), 

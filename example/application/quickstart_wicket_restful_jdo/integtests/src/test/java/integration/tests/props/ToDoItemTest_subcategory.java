@@ -47,9 +47,7 @@ public class ToDoItemTest_subcategory extends ToDoIntegTest {
     public void cannotModify() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage(containsString("Always disabled"));
+        expectedExceptions.expectMessage(containsString("Reason: Use action to update both category and subcategory."));
         toDoItem.setSubcategory(Subcategory.Chores);
     }
-
-
 }

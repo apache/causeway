@@ -213,7 +213,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private Category category;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled
+    @Disabled(reason="Use action to update both category and subcategory")
     public Category getCategory() {
         return category;
     }
@@ -227,7 +227,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private Subcategory subcategory;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled
+    @Disabled(reason="Use action to update both category and subcategory")
     public Subcategory getSubcategory() {
         return subcategory;
     }
@@ -301,24 +301,31 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
+    @Disabled(reason="Update using action")
     public BigDecimal getCost() {
         return cost;
     }
 
     public void setCost(final BigDecimal cost) {
-        this.cost = cost;
+        this.cost = cost!=null?cost.setScale(2):null;
     }
     
     @Named("Update")
-    public ToDoItem updateCost(@Named("New cost") final BigDecimal cost) {
+    public ToDoItem updateCost(@Named("New cost") @Optional final BigDecimal cost) {
         LOG.debug("%s: cost updated: %s -> %s", this.container.titleOf(this), getCost(), cost);
         setCost(cost);
         return this;
     }
 
-    // provide a default value
+    // provide a default value for argument #0
     public BigDecimal default0UpdateCost() {
         return getCost();
+    }
+    
+    // validate action arguments
+    public String validateUpdateCost(final BigDecimal proposedCost) {
+        if(proposedCost == null) { return null; }
+        return proposedCost.compareTo(BigDecimal.ZERO) < 0? "Cost must be positive": null;
     }
 
     // //////////////////////////////////////

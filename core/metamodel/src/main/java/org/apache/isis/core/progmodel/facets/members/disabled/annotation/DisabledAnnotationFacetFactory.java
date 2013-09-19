@@ -40,7 +40,7 @@ public class DisabledAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     private DisabledFacet create(final Disabled annotation, final FacetHolder holder) {
-        return annotation == null ? null : new DisabledFacetAnnotation(annotation.when(), annotation.where(), holder);
+        return annotation == null ? null : new DisabledFacetAnnotation(annotation.when(), annotation.where(), annotation.reason(), holder);
     }
 
 }

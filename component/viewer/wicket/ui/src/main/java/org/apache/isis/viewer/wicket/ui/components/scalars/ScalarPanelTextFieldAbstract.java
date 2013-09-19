@@ -49,8 +49,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
-    private static final String ID_FEEDBACK = "feedback";
-
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     protected final Class<T> cls;

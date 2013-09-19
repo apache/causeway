@@ -26,8 +26,8 @@ import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetImpl;
 
 public class DisabledFacetAnnotation extends DisabledFacetImpl {
 
-    public DisabledFacetAnnotation(final When when, Where where, final FacetHolder holder) {
-        super(when, where, holder);
+    public DisabledFacetAnnotation(final When when, Where where, String reason, final FacetHolder holder) {
+        super(when, where, reason, holder);
     }
 
 }

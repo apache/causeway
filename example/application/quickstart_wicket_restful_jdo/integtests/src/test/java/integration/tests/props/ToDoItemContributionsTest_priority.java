@@ -43,7 +43,7 @@ public class ToDoItemContributionsTest_priority extends ToDoIntegTest {
         scenarioExecution().install(new ToDoItemsFixture());
 
         final ToDoItems toDoItems = wrap(service(ToDoItems.class));
-        toDoItemContributions = wrap(service(ToDoItemContributions.class));
+        toDoItemContributions = service(ToDoItemContributions.class);
         notYetComplete = toDoItems.notYetComplete();
     }
 

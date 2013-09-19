@@ -47,9 +47,7 @@ public class ToDoItemTest_category extends ToDoIntegTest {
     public void cannotModify() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage(containsString("Always disabled"));
+        expectedExceptions.expectMessage(containsString("Reason: Use action to update both category and subcategory."));
         toDoItem.setCategory(Category.Professional);
     }
-
-
 }

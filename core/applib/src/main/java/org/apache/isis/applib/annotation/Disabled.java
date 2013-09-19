@@ -34,4 +34,5 @@ import java.lang.annotation.Target;
 public @interface Disabled {
     When when() default When.ALWAYS;
     Where where() default Where.ANYWHERE;
+    String reason() default "";
 }

@@ -53,7 +53,7 @@ public class ToDoItemTest_cost extends ToDoIntegTest {
         final BigDecimal newCost = new BigDecimal("123.45");
         
         // when
-        toDoItem.setCost(newCost);
+        toDoItem.updateCost(newCost);
         
         // then
         assertThat(toDoItem.getCost(), is(newCost));
@@ -75,7 +75,7 @@ public class ToDoItemTest_cost extends ToDoIntegTest {
     public void canBeNull() throws Exception {
         
         // when
-        toDoItem.setCost((BigDecimal)null);
+        toDoItem.updateCost((BigDecimal)null);
         
         // then
         assertThat(toDoItem.getCost(), is((BigDecimal)null));

@@ -76,7 +76,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
         
+        setTitleAttribute(disableReason);
+
         entityLink.syncVisibilityAndUsability();
+    }
+
+    private void setTitleAttribute(final String titleAttribute) {
+        entityLink.add(new AttributeModifier("title", Model.of(titleAttribute)));
     }
 
     @Override

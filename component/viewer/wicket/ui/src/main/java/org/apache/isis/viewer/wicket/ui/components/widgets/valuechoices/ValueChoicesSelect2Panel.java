@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
@@ -172,6 +173,16 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         select2Field.setEnabled(true);
     }
 
+    @Override
+    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+        super.onBeforeRenderWhenDisabled(disableReason);
+        setTitleAttribute(disableReason);
+    }
+
+    private void setTitleAttribute(final String titleAttribute) {
+        getComponentForRegular().add(new AttributeModifier("title", Model.of(titleAttribute)));
+    }
+
     
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
@@ -207,6 +218,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
                     newAdapterMemento != null? newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null);
         }
     }
+
+    
 
     
     // //////////////////////////////////////
