@@ -70,6 +70,10 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             this.serviceAdapterMemento = ObjectAdapterMemento.createOrNull(serviceAdapter);
             this.objectAction = objectAction;
         }
+        @Override
+        public String toString() {
+            return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+        }
     }
 
     public AppActionsCssMenuFactory() {
@@ -100,8 +104,11 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
         
-        final List<String> serviceNamesInOrder = serviceNamesInOrder(serviceActions);
+        final List<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
         final Map<String, List<LogicalServiceAction>> serviceActionsByName = groupByServiceName(serviceActions);
+        
+        // prune any service names that have no service actions
+        serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
         
         return buildMenuItems(serviceNamesInOrder, serviceActionsByName);
     }
@@ -162,9 +169,19 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
     /**
      * The unique service names, as they appear in order of the provided List of {@link LogicalServiceAction}s.
+     * @param serviceAdapters 
      */
-    private List<String> serviceNamesInOrder(final List<LogicalServiceAction> serviceActions) {
+    private List<String> serviceNamesInOrder(
+            final List<ObjectAdapter> serviceAdapters, final List<LogicalServiceAction> serviceActions) {
         final List<String> serviceNameOrder = Lists.newArrayList();
+
+        // first, order as defined in isis.properties
+        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+            String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
+            serviceNameOrder.add(serviceName);
+        }
+        // then, any other services (eg due to misspellings, at the end)
         for (LogicalServiceAction serviceAction : serviceActions) {
             if(!serviceNameOrder.contains(serviceAction.serviceName)) {
                 serviceNameOrder.add(serviceAction.serviceName);
@@ -177,7 +194,9 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
      * Group the provided {@link LogicalServiceAction}s by their service name. 
      */
     private static Map<String, List<LogicalServiceAction>> groupByServiceName(final List<LogicalServiceAction> serviceActions) {
-        final Map<String, List<LogicalServiceAction>> serviceActionsByName = Maps.newTreeMap(); 
+        final Map<String, List<LogicalServiceAction>> serviceActionsByName = Maps.newTreeMap();
+        
+        // map available services
         for (LogicalServiceAction serviceAction : serviceActions) {
             List<LogicalServiceAction> serviceActionsForName = serviceActionsByName.get(serviceAction.serviceName);
             if(serviceActionsForName == null) {
@@ -186,6 +205,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             }
             serviceActionsForName.add(serviceAction);
         }
+        
         return serviceActionsByName;
     }
 
