@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.services.bookmarks;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -31,29 +33,63 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
 
     private DomainObjectServices domainObjectServices;
     
+    /**
+     * Contributed action contributed to
+     * any class that implements {@link BookmarkHolder}.
+     * 
+     * <p>
+     * If required, applications can suppress by subclassing and annotating the
+     * overridden method with <tt>@Hidden</tt>:
+     * <pre>
+     * @Hidden
+     * public Object lookup(final BookmarkHolder bookmarkHolder) {
+     *     return super.lookup(bookmarkHolder);
+     * }
+     * </pre>
+     */
     @Override
     @NotInServiceMenu
-    public Object lookup(BookmarkHolder bookmarkHolder) {
+    @NotContributed(As.ASSOCIATION)
+    public Object lookup(final BookmarkHolder bookmarkHolder) {
         Bookmark bookmark = bookmarkHolder.bookmark();
         return lookup(bookmark);
     }
 
+    /**
+     * Contributed property (named '<tt>Object</tt>'), contributed to
+     * any class that implements {@link BookmarkHolder}.
+     * 
+     * <p>
+     * If required, applications can suppress by subclassing and annotating the
+     * overridden method with <tt>@Hidden</tt>:
+     * <pre>
+     * @Hidden
+     * public Object object(final BookmarkHolder bookmarkHolder) {
+     *     return super.object(bookmarkHolder);
+     * }
+     * </pre>
+     */
+    @NotInServiceMenu
+    @NotContributed(As.ACTION)
+    public Object object(final BookmarkHolder bookmarkHolder) {
+        return lookup(bookmarkHolder);
+    }
+    
     @Hidden
-    public Object lookup(Bookmark bookmark) {
-        Object lookup = domainObjectServices.lookup(bookmark);
-        return lookup;
+    public Object lookup(final Bookmark bookmark) {
+        return domainObjectServices.lookup(bookmark);
     }
 
 
     @Override
     @Programmatic
-    public void setDomainObjectServices(DomainObjectServices domainObjectServices) {
+    public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
     }
 
     @Override
     @Hidden
-    public Bookmark bookmarkFor(Object domainObject) {
+    public Bookmark bookmarkFor(final Object domainObject) {
         return domainObjectServices.bookmarkFor(domainObject);
     }
 
