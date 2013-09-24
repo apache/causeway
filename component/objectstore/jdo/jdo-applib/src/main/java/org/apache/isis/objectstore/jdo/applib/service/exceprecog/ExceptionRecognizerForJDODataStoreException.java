@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 public class ExceptionRecognizerForJDODataStoreException extends ExceptionRecognizerForType {
 
     public ExceptionRecognizerForJDODataStoreException() {
-        super(javax.jdo.JDODataStoreException.class, 
+        super(ofTypeExcluding(javax.jdo.JDODataStoreException.class, "NOT NULL check constraint"), 
             prefix("Unable to save changes.  " +
             	   "Does similar data already exist, or has referenced data been deleted?"));
     }

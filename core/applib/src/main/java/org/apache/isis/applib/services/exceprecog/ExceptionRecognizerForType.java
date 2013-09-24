@@ -18,8 +18,11 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
+import java.util.List;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
 
 import org.apache.isis.applib.annotation.Hidden;
@@ -37,7 +40,11 @@ import org.apache.isis.applib.annotation.Hidden;
 @Hidden
 public class ExceptionRecognizerForType extends ExceptionRecognizerDelegating {
 
-    private final static Predicate<Throwable> ofType(final Class<? extends Throwable> exceptionType) {
+    protected final static Predicate<Throwable> ofTypeExcluding(final Class<? extends Throwable> exceptionType, final String... messages) {
+        return Predicates.and(ofType(exceptionType), excluding(messages));
+    }
+
+    protected final static Predicate<Throwable> ofType(final Class<? extends Throwable> exceptionType) {
         return new Predicate<Throwable>() {
             @Override
             public boolean apply(Throwable input) {
@@ -45,9 +52,39 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerDelegating {
             }
         };
     }
+    
+    /**
+     * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if the message(s)
+     * supplied do <i>NOT</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
+     * (recursively).
+     * 
+     * <p>
+     * Intended to prevent too eager matching of an overly general exception type.
+     */
+    protected final static Predicate<Throwable> excluding(final String... messages) {
+        return new Predicate<Throwable>() {
+            @Override
+            public boolean apply(Throwable input) {
+                final List<Throwable> causalChain = Throwables.getCausalChain(input);
+                for (String message : messages) {
+                    for (Throwable throwable : causalChain) {
+                        final String throwableMessage = throwable.getMessage();
+                        if(throwableMessage != null && throwableMessage.contains(message)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        };
+    }
 
     public ExceptionRecognizerForType(final Class<? extends Exception> exceptionType, final Function<String,String> messageParser) {
-        super(new ExceptionRecognizerGeneral(ofType(exceptionType), messageParser));
+        this(ofType(exceptionType), messageParser);
+    }
+    
+    public ExceptionRecognizerForType(final Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+        super(new ExceptionRecognizerGeneral(predicate, messageParser));
     }
     
     public ExceptionRecognizerForType(Class<? extends Exception> exceptionType) {
