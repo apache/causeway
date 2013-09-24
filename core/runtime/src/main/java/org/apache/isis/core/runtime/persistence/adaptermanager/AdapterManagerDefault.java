@@ -325,7 +325,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
                        otherVersion != null && 
                        thisVersion.different(otherVersion)) {
                         
-                        if(ConcurrencyException.concurrencyChecking.get().isChecking()) {
+                        if(ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
                             final String currentUser = getAuthenticationSession().getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);

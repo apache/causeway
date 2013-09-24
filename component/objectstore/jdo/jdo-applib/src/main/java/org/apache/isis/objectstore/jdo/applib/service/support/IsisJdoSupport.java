@@ -62,6 +62,21 @@ public interface IsisJdoSupport {
     @Programmatic
     Integer executeUpdate(String sql);
 
+    /**
+     * Force the deletion of all instances of the specified class.
+     * 
+     * <p>
+     * Note: this is intended primarily for testing purposes, eg clearing existing data as part of
+     * installing fixtures.  It will generate a <tt>SQL DELETE</tt> for each instance.  To perform
+     * a bulk deletion with a single <tt>SQL DELETE</tt>, use {@link #executeUpdate(String)}.  
+     * 
+     * <p>
+     * Implementation note: It can occasionally be the case that Isis' internal adapter for the domain object is
+     * still in memory.  JDO/DataNucleus seems to bump up the version of the object prior to its deletion, 
+     * which under normal circumstances would cause Isis to throw a concurrency exception.  Therefore
+     * To prevent this from happening (ie to <i>force</i> the deletion of all instances), concurrency checking
+     * is temporarily disabled while this method is performed. 
+     */
     @Programmatic
     void deleteAll(Class<?>... pcClasses);
 

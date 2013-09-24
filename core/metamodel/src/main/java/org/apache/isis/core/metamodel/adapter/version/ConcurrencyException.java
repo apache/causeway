@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.adapter.version;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 
@@ -28,26 +27,6 @@ public class ConcurrencyException extends IsisException {
     
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Provides a mechanism to temporarily disable concurrency checking.
-     * 
-     * <p>
-     * This thread-local is not used by this class, but is defined here as a central point for other methods
-     * to read/write.  The idea is that if concurrency checking is to be temporarily disabled, then the caller can
-     * set this threadlocal to {@link ConcurrencyChecking#NO_CHECK no-check}, and then the code that would normally
-     * detect the concurrency problem and throw this exception would instead consult this thread local and suppress
-     * the exception being raised.
-
-     * <p>
-     * In this design, it is the responsibility of the caller that is disabling concurrency exception handling to reinstate it
-     * afterwards.  This should normally be done using a try...finally.
-     */
-    public static ThreadLocal<ConcurrencyChecking> concurrencyChecking = new ThreadLocal<ConcurrencyChecking>(){
-        protected ConcurrencyChecking initialValue() {
-            return ConcurrencyChecking.CHECK;
-        };
-    };
-    
     private static String buildMessage(String currentUser, Oid oid, Version staleVersion, Version datastoreVersion) {
         
         final StringBuilder buf = new StringBuilder();

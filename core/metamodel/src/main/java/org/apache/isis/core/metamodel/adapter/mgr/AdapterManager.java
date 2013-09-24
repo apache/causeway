@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.adapter.mgr;
 
+import java.util.concurrent.Callable;
+
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -73,14 +75,48 @@ public interface AdapterManager extends Injectable {
         NO_CHECK,
         CHECK;
         
+        public boolean isChecking() {
+            return this == CHECK;
+        }
+        
         public static ConcurrencyChecking concurrencyCheckingFor(ActionSemantics.Of actionSemantics) {
             return actionSemantics == ActionSemantics.Of.SAFE
                     ? ConcurrencyChecking.NO_CHECK
                     : ConcurrencyChecking.CHECK;
         }
 
-        public boolean isChecking() {
-            return this == CHECK;
+        /**
+         * Provides a mechanism to temporarily disable concurrency checking.
+         * 
+         * <p>
+         * A {@link ThreadLocal} is used because typically there is JDO/DataNucleus code between the Isis code
+         * that wishes to disable the concurrency checking and the code (an Isis callback) that needs to
+         * check if checking has been disabled.
+         */
+        private static ThreadLocal<ConcurrencyChecking> concurrencyChecking = new ThreadLocal<ConcurrencyChecking>(){
+            protected ConcurrencyChecking initialValue() {
+                return CHECK;
+            };
+        };
+        
+        /**
+         * Whether concurrency checking is currently disabled.
+         */
+        public static boolean isCurrentlyEnabled() {
+            return concurrencyChecking.get().isChecking();
+        }
+
+        /**
+         * Allows a caller to temporarily disable concurrency checking for the current thread.
+         */
+        public static <T> T executeWithConcurrencyCheckingDisabled(final Callable<T> callable) throws Exception {
+            final ConcurrencyChecking prior = ConcurrencyChecking.concurrencyChecking.get();
+            try {
+                ConcurrencyChecking.concurrencyChecking.set(ConcurrencyChecking.NO_CHECK);
+                return callable.call();
+            } finally {
+                ConcurrencyChecking.concurrencyChecking.set(prior);
+            }
         }
     }
 

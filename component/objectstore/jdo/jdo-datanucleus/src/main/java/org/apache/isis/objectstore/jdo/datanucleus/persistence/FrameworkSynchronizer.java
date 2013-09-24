@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -91,7 +92,7 @@ public class FrameworkSynchronizer {
                        otherVersion != null && 
                        thisVersion.different(otherVersion)) {
 
-                        if(ConcurrencyException.concurrencyChecking.get().isChecking()) {
+                        if(ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
                             final String currentUser = getAuthenticationSession().getUserName();
                             final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);

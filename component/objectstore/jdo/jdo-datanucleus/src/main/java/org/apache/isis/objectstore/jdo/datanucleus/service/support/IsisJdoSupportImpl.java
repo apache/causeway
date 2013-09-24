@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
@@ -34,10 +35,13 @@ import javax.jdo.datastore.JDOConnection;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -156,7 +160,19 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
         for (Class<?> pcClass : pcClasses) {
             final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
             final List<Object> instances = Lists.newArrayList(extent.iterator());
-            getJdoPersistenceManager().deletePersistentAll(instances);
+            
+            // temporarily disable concurrency checking while this method is performed
+            try {
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Void>(){
+                    @Override
+                    public Void call() {
+                        getJdoPersistenceManager().deletePersistentAll(instances);
+                        return null;
+                    }
+                });
+            } catch (Exception e) {
+                throw new ApplicationException(e);
+            }
         }
     }
 
