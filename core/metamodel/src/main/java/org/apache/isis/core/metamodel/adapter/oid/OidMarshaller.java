@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -83,7 +85,7 @@ public class OidMarshaller {
 	private static final String SEPARATOR_COLLECTION = "$";
 	private static final String SEPARATOR_VERSION = "^";
 
-	private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_COLLECTION + "\\" + SEPARATOR_VERSION + "@#" + "]+";
+	private static final String WORD = "[^" + SEPARATOR + SEPARATOR_NESTING + SEPARATOR_COLLECTION + "\\" + SEPARATOR_VERSION + "#" + "]+";
 	private static final String DIGITS = "\\d+";
 	
 	private static final String WORD_GROUP = "(" + WORD + ")";
@@ -169,7 +171,7 @@ public class OidMarshaller {
         final String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
         
         final String versionSequence = getGroup(matcher, 10);
-        final String versionUser = getGroup(matcher, 11);
+        final String versionUser = getGroup(matcher, 11); 
         final String versionUtcTimestamp = getGroup(matcher, 12);
         final Version version = Version.create(versionSequence, versionUser, versionUtcTimestamp);
 
@@ -193,6 +195,8 @@ public class OidMarshaller {
             return (T)new CollectionOid(parentOid, collectionName);
         }
     }
+
+
 
     private static class AggregateOidPart {
         AggregateOidPart(String objectType, String localId) {
@@ -265,15 +269,13 @@ public class OidMarshaller {
         if(version == null) {
             return "";
         }
-        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + Strings.nullToEmpty(version.getUser()) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
+        final String versionUser = version.getUser();
+        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + Strings.nullToEmpty(versionUser) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
     }
+
+
     private static String nullToEmpty(Object obj) {
         return obj == null? "": "" + obj;
     }
-
-
-
-
-    
 
 }
