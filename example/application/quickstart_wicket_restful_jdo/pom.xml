@@ -37,7 +37,7 @@
 		<isis-security-shiro.version>1.1.1</isis-security-shiro.version>
 
         <!-- must be consistent with the version defined by the JDO Objecstore -->
-        <datanucleus-core.version>3.2.4</datanucleus-core.version>
+        <datanucleus-core.version>3.2.7</datanucleus-core.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

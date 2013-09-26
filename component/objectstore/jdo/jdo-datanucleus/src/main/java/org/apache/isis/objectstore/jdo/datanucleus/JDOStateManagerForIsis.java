@@ -27,6 +27,7 @@ import org.datanucleus.cache.CachedPC;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.JDOStateManager;
 import org.datanucleus.state.ObjectProvider;
+import org.datanucleus.state.ReferentialJDOStateManager;
 import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
 
@@ -34,7 +35,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 
-public class JDOStateManagerForIsis extends JDOStateManager implements StateManager, ObjectProvider {
+public class JDOStateManagerForIsis extends ReferentialJDOStateManager implements StateManager, ObjectProvider {
 
     public JDOStateManagerForIsis(ExecutionContext ec, AbstractClassMetaData cmd) {
         super(ec, cmd);

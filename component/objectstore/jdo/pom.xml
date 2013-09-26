@@ -29,9 +29,9 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <datanucleus-core.version>3.2.4</datanucleus-core.version>
-        <datanucleus-api-jdo.version>3.2.3</datanucleus-api-jdo.version>
-        <datanucleus-rdbms.version>3.2.3</datanucleus-rdbms.version>
+        <datanucleus-core.version>3.2.7</datanucleus-core.version>
+        <datanucleus-rdbms.version>3.2.6</datanucleus-rdbms.version>
+        <datanucleus-api-jdo.version>3.2.4</datanucleus-api-jdo.version>
         <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
         
 		<siteBaseDir>.</siteBaseDir>
@@ -188,14 +188,4 @@
 
 		</dependencies>
 	</dependencyManagement>
-    
-    <profiles>
-        <profile>
-            <id>apache-release</id>
-            <properties>
-                <!-- workaround for http://jira.codehaus.org/browse/MRRESOURCES-58 -->
-                <datanucleus.version>3.2.3</datanucleus.version>
-            </properties>
-        </profile>        
-    </profiles>
 </project>
