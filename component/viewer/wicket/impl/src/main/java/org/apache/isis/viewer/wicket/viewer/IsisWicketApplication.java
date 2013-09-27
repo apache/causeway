@@ -193,31 +193,38 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      */
     @Override
     protected void init() {
-        super.init();
+        try {
+            super.init();
+    
+            final String webInfDir = getServletContext().getRealPath("/WEB-INF");
+            loggingConfigurer.configureLogging(webInfDir, new String[0]);
+    
+            getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
+    
+            getRequestCycleListeners().add(new WebRequestCycleForIsis());
+    
+            getResourceSettings().setParentFolderPlaceholder("$up$");
+            
+            determineDeploymentTypeIfRequired();
+            
+            final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+    
+            final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
+            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
+            injector.injectMembers(this);
+            
+            final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+            this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
+    
+            this.bookmarkedPagesModel = new BookmarkedPagesModel();
+    
+            initWicketComponentInjection(injector);
+        } catch(RuntimeException ex) {
+            // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
+            LOG.error("Failed to initialize", ex);
+            throw ex;
+        }
 
-        final String webInfDir = getServletContext().getRealPath("/WEB-INF");
-        loggingConfigurer.configureLogging(webInfDir, new String[0]);
-
-        getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
-
-        getRequestCycleListeners().add(new WebRequestCycleForIsis());
-
-        getResourceSettings().setParentFolderPlaceholder("$up$");
-        
-        determineDeploymentTypeIfRequired();
-        
-        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-
-        final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
-        final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
-        injector.injectMembers(this);
-        
-        final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
-        this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
-
-        this.bookmarkedPagesModel = new BookmarkedPagesModel();
-
-        initWicketComponentInjection(injector);
     }
     
     private void determineDeploymentTypeIfRequired() {
@@ -244,8 +251,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     @Override
     protected void onDestroy() {
-        IsisContext.shutdown();
-        super.onDestroy();
+        try {
+            IsisContext.shutdown();
+            super.onDestroy();
+        } catch(final RuntimeException ex) {
+            // symmetry with #init()
+            LOG.error("Failed to destroy", ex);
+            throw ex;
+        }
     }
 
     @Override
