@@ -48,15 +48,15 @@ public class RegisterEntities {
     @PostConstruct
     public void init(Map<String,String> props) {
         packagePrefixes = props.get(PACKAGE_PREFIX_KEY);
+        
+        registerAllPersistenceCapables();
     }
 
     @PreDestroy
     public void shutdown() {
     }
 
-    
-    @PostConstruct
-    public void registerAllPersistenceCapables() {
+    private void registerAllPersistenceCapables() {
 
         if(packagePrefixes == null) {
             LOG.warn("Did not find key '" + PACKAGE_PREFIX_KEY + "' and so entities will not be eagerly registered in the Isis metamodel");

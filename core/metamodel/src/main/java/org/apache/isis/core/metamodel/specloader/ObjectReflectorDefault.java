@@ -181,11 +181,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private List<Object> services = Lists.newArrayList();
 
     private final MetaModelValidator metaModelValidator;
-
-    /**
-     * Defaulted in the constructor.
-     */
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
+    private final ServiceInitializer serviceInitializer = new ServiceInitializer();
 
 
     // /////////////////////////////////////////////////////////////
@@ -369,69 +366,14 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     protected void initServices(IsisConfiguration configuration) {
         final List<Object> services = getServices();
-        Map<String, String> props = configuration.asMap();
-        LOG.info("calling @PostConstruct on all domain services");
-        for (Object service : services) {
-            callPostConstructIfExists(service, props);
-        }
-    }
-
-    private void callPostConstructIfExists(Object service, Map<String, String> props) {
-        LOG.debug("looking for @PostConstruct methods on " + service.getClass().getName());
-        Method[] methods = service.getClass().getMethods();
-        boolean found = false;
-        for (Method method : methods) {
-            PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
-            if(postConstruct == null) {
-                continue;
-            }
-            found = true;
-            LOG.info("... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
-
-            final int numParams = method.getParameterTypes().length;
-            
-            // unlike shutdown, we don't swallow exceptions; would rather fail early
-            if(numParams == 0) {
-                MethodExtensions.invoke(method, service);
-            } else {
-                MethodExtensions.invoke(method, service, new Object[]{props});
-            }
-        }
-        if(!found) {
-            LOG.info("... found no @PostConstruct methods on " + service.getClass().getName());
-        }
+        
+        serviceInitializer.init(configuration, services);
+        serviceInitializer.postConstruct();
     }
 
 
     protected void shutdownServices() {
-        final List<Object> services = getServices();
-        LOG.info("calling @PreDestroy on all domain services");
-        for (Object service : services) {
-            callPreDestroyIfExists(service);
-        }
-    }
-
-    private void callPreDestroyIfExists(Object service) {
-        LOG.debug("looking for @PreDestroy methods on " + service.getClass().getName());
-        final Method[] methods = service.getClass().getMethods();
-        boolean found = false;
-        for (Method method : methods) {
-            final PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
-            if(preDestroy == null) {
-                continue;
-            }
-            found = true;
-            LOG.info("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
-            try {
-                MethodExtensions.invoke(method, service);
-            } catch(Exception ex) {
-                // do nothing
-                LOG.warn("... @PreDestroy method threw exception - continuing anyway", ex);
-            }
-        }
-        if(!found) {
-            LOG.info("... found no @PreDestroy methods on " + service.getClass().getName());
-        }
+        serviceInitializer.preDestroy();
     }
 
 
