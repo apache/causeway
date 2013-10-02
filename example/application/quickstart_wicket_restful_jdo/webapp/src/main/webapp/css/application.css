@@ -49,3 +49,24 @@ example: uncomment to hide the sliding bookmark panel
 	display: none;
 }
 */
+
+
+.entityActions .cssMenuPanel .menuh li.x-caution a,
+li.x-caution a {
+    background-color: #DBB437;
+}
+.entityActions .cssMenuPanel .menuh li.x-caution a:hover {
+    background-color:#20B5C2;
+}	
+
+/*.entityActions .cssMenuPanel .menuh a:hover*/
+
+.entityActions .cssMenuPanel .menuh li.x-highlight a,
+li.x-highlight a {
+    background-color: #51A95C;
+}
+
+div.x-key span.scalarName {
+	color: red;
+}
+}
