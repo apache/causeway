@@ -34,7 +34,7 @@ public class HomePage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     public HomePage() {
-        super(new PageParameters(), ComponentType.WELCOME);
+        super(new PageParameters(), ApplicationActions.INCLUDE, ComponentType.WELCOME);
         addBookmarkedPages();
         addChildComponents(null);
     }

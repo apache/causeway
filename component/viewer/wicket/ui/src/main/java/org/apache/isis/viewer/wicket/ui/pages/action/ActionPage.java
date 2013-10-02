@@ -39,7 +39,7 @@ public class ActionPage extends PageAbstract {
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
     public ActionPage(final ActionModel model) {
-        super(new PageParameters(), ComponentType.ACTION);
+        super(new PageParameters(), ApplicationActions.INCLUDE, ComponentType.ACTION);
         addChildComponents(model);
 
         if(model.isBookmarkable()) {
@@ -49,7 +49,7 @@ public class ActionPage extends PageAbstract {
     }
 
     public ActionPage(final PageParameters pageParameters) {
-        super(pageParameters, ComponentType.ACTION);
+        super(pageParameters, ApplicationActions.INCLUDE, ComponentType.ACTION);
         final ActionModel model = buildModel();
         addChildComponents(model);
         

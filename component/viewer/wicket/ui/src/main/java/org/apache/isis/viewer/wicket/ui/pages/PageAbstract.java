@@ -65,6 +65,7 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -121,10 +122,14 @@ public abstract class PageAbstract extends WebPage {
     @Named("applicationJs")
     private String applicationJs;
 
+    protected enum ApplicationActions {
+        INCLUDE,
+        EXCLUDE
+    }
     
-    public PageAbstract(final PageParameters pageParameters, final ComponentType... childComponentIds) {
+    public PageAbstract(final PageParameters pageParameters, ApplicationActions applicationActions, final ComponentType... childComponentIds) {
         try {
-            addApplicationActionsComponent();
+            addApplicationActionsComponent(applicationActions);
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
             addHomePageLinkAndApplicationName();
@@ -242,9 +247,13 @@ public abstract class PageAbstract extends WebPage {
         return pageParameters;
     }
 
-    private void addApplicationActionsComponent() {
+    private void addApplicationActionsComponent(final ApplicationActions applicationActions) {
+        if(applicationActions == ApplicationActions.INCLUDE) {
         final ApplicationActionsModel model = new ApplicationActionsModel();
-        addComponent(ComponentType.APPLICATION_ACTIONS, model);
+            addComponent(ComponentType.APPLICATION_ACTIONS, model);
+        } else {
+            Components.permanentlyHide(this, ComponentType.APPLICATION_ACTIONS);
+        }
     }
 
     /**
