@@ -130,14 +130,9 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     protected void addStandardSemantics() {
-        // removed because change introduced in 
-        // https://issues.apache.org/jira/browse/WICKET-5289
-        // interferes with the veil.
-        // setRequiredIfSpecified();
-        setTextFieldSizeIfSpecified(textField);
+         setRequiredIfSpecified();
     }
 
-    @SuppressWarnings("unused")
     private void setRequiredIfSpecified() {
         final ScalarModel scalarModel = getModel();
         final boolean required = scalarModel.isRequired();

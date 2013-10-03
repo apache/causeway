@@ -83,8 +83,8 @@
     }
     ],
     actions: {
-        delete: {},
-        duplicate: {}
+        duplicate: {},
+        delete: {}
     }
 }
  

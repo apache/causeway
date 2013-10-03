@@ -40,9 +40,9 @@
         <siteBaseDir>.</siteBaseDir>
         <relativeUrl />
 
-        <wicket.version>6.10.0</wicket.version>
-        <wicket-jquery-ui.version>6.10.0</wicket-jquery-ui.version>
-        <wicketstuff.version>6.10.0</wicketstuff.version>
+        <wicket.version>6.11.0</wicket.version>
+        <wicket-jquery-ui.version>6.11.0</wicket-jquery-ui.version>
+        <wicketstuff.version>6.11.0</wicketstuff.version>
         <wicket-select2.version>2.2.2</wicket-select2.version>
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>

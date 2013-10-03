@@ -483,7 +483,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
-    @CssClass("x-caution")
     public ToDoItem duplicate(
             @Named("Description") 
             String description,
@@ -517,6 +516,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     @Bulk
+    @CssClass("x-caution")
     public List<ToDoItem> delete() {
         container.removeIfNotAlready(this);
         container.informUser("Deleted " + container.titleOf(this));
