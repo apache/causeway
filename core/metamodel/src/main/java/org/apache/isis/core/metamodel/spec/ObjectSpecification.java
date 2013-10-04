@@ -340,6 +340,15 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // Service
     // //////////////////////////////////////////////////////////////
 
+    /**
+     * Whether or not this specification represents a domain service (as opposed
+     * to a domain entity or a value etc).
+     * 
+     * <p>
+     * <b>WARNING</b>: this only returns <tt>true</tt> once the metamodel has been
+     * fully built, and a <tt>PersistenceSession</tt> has been opened.  This should
+     * probably be improved upon; for now, beware... 
+     */
     boolean isService();
 
     public void markAsService();

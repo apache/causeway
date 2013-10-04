@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package webapp.services;
+package webapp.prototyping;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Blob;

@@ -44,7 +44,6 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @Named("By Category")
-@Bounded
 @Bookmarkable
 public class ToDoItemsByCategoryViewModel 
         extends AbstractViewModel 
@@ -134,7 +133,7 @@ public class ToDoItemsByCategoryViewModel
      */
     @Render(Type.EAGERLY)
     public List<ToDoItem> getItemsNotYetComplete() {
-        final List<ToDoItem> notYetComplete = toDoItems.notYetComplete();
+        final List<ToDoItem> notYetComplete = toDoItems.notYetCompleteNoUi();
         return Lists.newArrayList(Iterables.filter(notYetComplete, ToDoItem.Predicates.thoseCategorised(getCategory())));
     }
 
@@ -145,7 +144,7 @@ public class ToDoItemsByCategoryViewModel
      */
     @Render(Type.EAGERLY)
     public List<ToDoItem> getItemsComplete() {
-        final List<ToDoItem> complete = toDoItems.complete();
+        final List<ToDoItem> complete = toDoItems.completeNoUi();
         return Lists.newArrayList(Iterables.filter(complete, ToDoItem.Predicates.thoseCategorised(getCategory())));
     }
 
@@ -164,17 +163,6 @@ public class ToDoItemsByCategoryViewModel
     }
     
     
-    
-    // //////////////////////////////////////
-    // misc business rules
-    // //////////////////////////////////////
-
-    /**
-     * Equivalent to annotating every property and collection with {@link Disabled}.
-     */
-    public String disabled(Identifier.Type type) {
-        return type == Identifier.Type.PROPERTY_OR_COLLECTION? "Read-only": null;
-    }
 
     // //////////////////////////////////////
     // compareTo

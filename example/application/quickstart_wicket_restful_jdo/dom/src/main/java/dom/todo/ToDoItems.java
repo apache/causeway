@@ -35,6 +35,7 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.Dashboard;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
@@ -67,15 +68,22 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
+        final List<ToDoItem> items = notYetCompleteNoUi();
+        if(items.isEmpty()) {
+            getContainer().informUser("All to-do items have been completed :-)");
+        }
+        return items;
+    }
+
+    @Programmatic
+    public List<ToDoItem> notYetCompleteNoUi() {
         final List<ToDoItem> items;
         if(false) {
             // the naive implementation ...
-            items = allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
-                @Override
-                public boolean apply(final ToDoItem t) {
-                    return ownedByCurrentUser(t) && !t.isComplete();
-                }
-            });
+            items = allMatches(ToDoItem.class, 
+                    Predicates.and(
+                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                        ToDoItem.Predicates.thoseNotYetComplete()));
         } else {
             // the JDO implementation ...
             items = allMatches(
@@ -83,11 +91,9 @@ public class ToDoItems extends AbstractFactoryAndRepository {
                             "todo_notYetComplete", 
                             "ownedBy", currentUserName()));
         }
-        if(items.isEmpty()) {
-            getContainer().informUser("All to-do items have been completed :-)");
-        }
         return items;
     }
+
     
     // //////////////////////////////////////
     // Complete (action)
@@ -96,24 +102,28 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     public List<ToDoItem> complete() {
+        final List<ToDoItem> items = completeNoUi();
+        if(items.isEmpty()) {
+            getContainer().informUser("No to-do items have yet been completed :-(");
+        }
+        return items;
+    }
+
+    @Programmatic
+    public List<ToDoItem> completeNoUi() {
         final List<ToDoItem> items;
         if(false) {
             // the naive implementation ...
-            items = allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
-                @Override
-                public boolean apply(final ToDoItem t) {
-                    return ownedByCurrentUser(t) && t.isComplete();
-                }
-            });
+            items = allMatches(ToDoItem.class, 
+                    Predicates.and(
+                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                        ToDoItem.Predicates.thoseComplete()));
         } else {
             // the JDO implementation ...
             items = allMatches(
                     new QueryDefault<ToDoItem>(ToDoItem.class, 
                             "todo_complete", 
                             "ownedBy", currentUserName()));
-        }
-        if(items.isEmpty()) {
-            getContainer().informUser("No to-do items have yet been completed :-(");
         }
         return items;
     }
@@ -166,8 +176,8 @@ public class ToDoItems extends AbstractFactoryAndRepository {
             // the naive implementation ...
             return allMatches(ToDoItem.class, 
                     Predicates.and(
-                    ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
-                    ToDoItem.Predicates.thoseWithSimilarDescription(description)));
+                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                        ToDoItem.Predicates.thoseWithSimilarDescription(description)));
         } else {
             // the JDO implementation ...
             return allMatches(

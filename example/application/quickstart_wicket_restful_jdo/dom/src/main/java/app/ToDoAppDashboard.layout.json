@@ -1,0 +1,26 @@
+{
+  "columns": [
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 12,
+      "collections": {
+        "analysisByCategory": {}
+      }
+    }
+  ],
+  "actions": {
+    "downloadLayout": {},
+    "refreshLayout": {}
+  }
+}

@@ -127,12 +127,18 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         MarkupContainer leftColumn = new WebMarkupContainer(ID_LEFT_COLUMN);
         add(leftColumn);
         
-        boolean added = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
-        addButtons(leftColumn);
-        addFeedbackGui(leftColumn);
-        if(!added) {
+        boolean addedProperties;
+        if(columnSpans.getLeft() > 0) {
+            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
+            addButtons(leftColumn);
+            addFeedbackGui(leftColumn);
+        } else {
+            Components.permanentlyHide(this, ID_LEFT_COLUMN);
+            addedProperties = false;
+        }
+        if(!addedProperties) {
             // a bit hacky...
-            Components.permanentlyHide(this, editButton.getId(), okButton.getId(), cancelButton.getId(), ID_FEEDBACK);
+            Components.permanentlyHide(this, ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON, ID_FEEDBACK);
         }
         
         // middle column
@@ -503,9 +509,15 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     void toViewMode(final AjaxRequestTarget target) {
         getEntityModel().toViewMode();
-        editButton.setVisible(isAnythingEditable());
-        okButton.setVisible(false);
-        cancelButton.setVisible(false);
+        if(editButton != null) {
+            editButton.setVisible(isAnythingEditable());
+        }
+        if(okButton != null) {
+            okButton.setVisible(false);
+        }
+        if(cancelButton != null) {
+            cancelButton.setVisible(false);
+        }
         requestRepaintPanel(target);
     }
 

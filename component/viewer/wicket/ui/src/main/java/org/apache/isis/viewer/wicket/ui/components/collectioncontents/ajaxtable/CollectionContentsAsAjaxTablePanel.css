@@ -116,6 +116,11 @@
 	float: right;
 }
 
+.collectionContentsAsAjaxTablePanel table.contents img {
+    width: 32px;
+    height: 32px;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents .navigator  a.first,
 .collectionContentsAsAjaxTablePanel table.contents .navigator  a.prev,
 .collectionContentsAsAjaxTablePanel table.contents .navigator  a.next, 

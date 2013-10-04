@@ -128,6 +128,10 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         }
         return buf.toString();
     }
+    
+    public String iconName() {
+        return "ToDoItem-" + (!isComplete() ? "todo" : "done");
+    }
 
     // //////////////////////////////////////
     // Description (property)
@@ -304,7 +308,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return complete ? "Already completed" : null;
     }
 
-    @Named("Undo")
+    @Named("Not done")
     @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
@@ -569,22 +573,16 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     public static class Predicates {
-
-        public static Predicate<ToDoItem> thoseNotCompleteAndDue() {
-            return com.google.common.base.Predicates.and(
-                    com.google.common.base.Predicates.not(thoseComplete()), 
-                    thoseDue());
-        }
-
-        public static Predicate<ToDoItem> thoseDue() {
-            return new Predicate<ToDoItem>() {
-                        @Override
-                        public boolean apply(final ToDoItem t) {
-                            return t.isDue();
-                        }
-                    };
-        }
         
+        public static Predicate<ToDoItem> thoseOwnedBy(final String currentUser) {
+            return new Predicate<ToDoItem>() {
+                @Override
+                public boolean apply(final ToDoItem toDoItem) {
+                    return Objects.equal(toDoItem.getOwnedBy(), currentUser);
+                }
+            };
+        }
+
         public static Predicate<ToDoItem> thoseNotYetComplete() {
             return com.google.common.base.Predicates.not(thoseComplete());
         }
@@ -598,32 +596,28 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
             };
         }
 
-        public static Predicate<ToDoItem> thoseOwnedBy(final String currentUser) {
-            return new Predicate<ToDoItem>() {
-                @Override
-                public boolean apply(final ToDoItem toDoItem) {
-                    return Objects.equal(toDoItem.getOwnedBy(), currentUser);
-                }
-            };
-        }
-
         public static Predicate<ToDoItem> thoseWithSimilarDescription(final String description) {
             return new Predicate<ToDoItem>() {
                 @Override
                 public boolean apply(final ToDoItem t) {
                     return t.getDescription().contains(description);
                 }
-                
             };
         }
 
+        @SuppressWarnings("unchecked")
         public static Predicate<ToDoItem> thoseSimilarTo(final ToDoItem toDoItem) {
+            return com.google.common.base.Predicates.and(
+                    thoseNot(toDoItem),
+                    thoseOwnedBy(toDoItem.getOwnedBy()),
+                    thoseCategorised(toDoItem.getCategory()));
+        }
+
+        public static Predicate<ToDoItem> thoseNot(final ToDoItem toDoItem) {
             return new Predicate<ToDoItem>() {
                 @Override
                 public boolean apply(final ToDoItem t) {
-                    return Objects.equal(toDoItem.getCategory(), t.getCategory()) && 
-                           Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy()) &&
-                           t != toDoItem;
+                    return t != toDoItem;
                 }
             };
         }

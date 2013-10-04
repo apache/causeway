@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
@@ -964,7 +965,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * then returns an empty list.
      */
     protected List<ObjectAction> createContributeeActions() {
-        if (isService()) {
+        if (isService() && !containsFacet(DashboardFacet.class)) {
             return Collections.emptyList();
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();

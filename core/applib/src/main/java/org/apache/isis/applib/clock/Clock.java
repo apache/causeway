@@ -109,8 +109,6 @@ public abstract class Clock {
     }
 
     public static LocalDate getTimeAsLocalDate() {
-        
-        //final DateTimeZone timeZone = Defaults.getTimeZone();
         final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
         return new LocalDate(getTime(), timeZone);
     }

@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
@@ -282,7 +283,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      */
     @Override
     public void markAsService() {
-        ensureServiceHasNoAssociations();
+        // the dashboard service can contain associations; no other. 
+        if(!containsFacet(DashboardFacet.class)) {
+            ensureServiceHasNoAssociations();
+        }
         isService = true;
     }
 

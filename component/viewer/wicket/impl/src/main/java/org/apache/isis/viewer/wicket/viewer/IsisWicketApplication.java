@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -56,6 +57,10 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -399,6 +404,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         return pageClassRegistry;
     }
 
+    
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
      */
@@ -406,6 +412,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     public Class<? extends Page> getHomePage() {
         return getPageClassRegistry().getPageClass(PageType.HOME);
     }
+
 
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.

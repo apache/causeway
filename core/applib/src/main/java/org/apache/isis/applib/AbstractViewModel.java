@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib;
 
+import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.ViewModel;
 
 /**
@@ -38,4 +39,12 @@ public abstract class AbstractViewModel extends AbstractContainedObject implemen
     
     @Override
     public abstract void viewModelInit(final String memento);
+    
+    /**
+     * Equivalent to annotating every property and collection with {@link Disabled}.
+     */
+    public String disabled(Identifier.Type type) {
+        return type == Identifier.Type.PROPERTY_OR_COLLECTION? "Read-only": null;
+    }
+
 }

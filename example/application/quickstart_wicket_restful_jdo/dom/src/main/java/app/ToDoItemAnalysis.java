@@ -24,18 +24,27 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
+import org.joda.time.LocalDate;
+
+import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 
-@Named("Analysis")
+import services.ClockService;
+
+@Hidden
 public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
 
     // //////////////////////////////////////
@@ -54,11 +63,8 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
     // //////////////////////////////////////
     // ByCategory (action)
     // //////////////////////////////////////
-    
-    @Named("By Category")
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "1")
+
+    @Programmatic
     public List<ToDoItemsByCategoryViewModel> toDoItemsByCategory() {
         final List<Category> categories = Arrays.asList(Category.values());
         return Lists.newArrayList(Iterables.transform(categories, byCategory()));
@@ -77,6 +83,38 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
     }
 
     // //////////////////////////////////////
+    // ByDateRange (action)
+    // //////////////////////////////////////
+    
+    public enum DateRange {
+        OverDue,
+        Today,
+        Tomorrow,
+        ThisWeek,
+        Later,
+        Unknown,
+    }
+    
+    @Programmatic
+    public List<ToDoItemsByDateRangeViewModel> toDoItemsByDateRange() {
+        final List<DateRange> dateRanges = Arrays.asList(DateRange.values());
+        return Lists.newArrayList(Iterables.transform(dateRanges, byDateRange()));
+    }
+
+    private Function<DateRange, ToDoItemsByDateRangeViewModel> byDateRange() {
+        return new Function<DateRange, ToDoItemsByDateRangeViewModel>(){
+             @Override
+             public ToDoItemsByDateRangeViewModel apply(final DateRange dateRange) {
+                 final ToDoItemsByDateRangeViewModel byDateRange = 
+                     getContainer().newViewModelInstance(ToDoItemsByDateRangeViewModel.class, dateRange.name());
+                 byDateRange.setDateRange(dateRange);
+                 return byDateRange;
+             }
+         };
+    }
+    
+    
+    // //////////////////////////////////////
     // ForCategory (programmatic)
     // //////////////////////////////////////
 
@@ -84,5 +122,6 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
     public ToDoItemsByCategoryViewModel toDoItemsForCategory(Category category) {
         return byCategory().apply(category);
     }
+    
 
 }
