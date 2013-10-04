@@ -166,7 +166,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
             return existingOrValueAdapter;
         }
         
-        final ObjectAdapter newAdapter = createTransientRootAdapter(pojo);
+        final ObjectAdapter newAdapter = createTransientOrViewModelRootAdapter(pojo);
         
         return mapAndInjectServices(newAdapter);
     }
@@ -218,7 +218,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
             final AggregatedOid aggregatedOid = getOidGenerator().createAggregateOid(pojo, parentAdapter);
             newAdapter = createAggregatedAdapter(pojo, aggregatedOid);
         } else {
-            newAdapter = createTransientRootAdapter(pojo);
+            newAdapter = createTransientOrViewModelRootAdapter(pojo);
         }
         
         return mapAndInjectServices(newAdapter);
@@ -492,7 +492,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
             persistedRootOid = hintRootOid;
         } else {
             // normal flow - delegate to OidGenerator to obtain a persistent root oid
-            persistedRootOid = getOidGenerator().createPersistent(adapter.getObject(), transientRootOid);
+            persistedRootOid = getOidGenerator().createPersistentOrViewModelOid(adapter.getObject(), transientRootOid);
         }
         
         // associate root adapter with the new Oid, and remap
@@ -590,9 +590,9 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      * <p>
      * Has <tt>protected</tt> visibility just so can be used by subclasses if required.
      */
-    protected final ObjectAdapter createTransientRootAdapter(final Object pojo) {
-        final RootOid transientRootOid = getOidGenerator().createTransientOid(pojo);
-        return createRootAdapterAndInferResolveState(pojo, transientRootOid);
+    protected final ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
+        final RootOid rootOid = getOidGenerator().createTransientOrViewModelOid(pojo);
+        return createRootAdapterAndInferResolveState(pojo, rootOid);
     }
 
     /**

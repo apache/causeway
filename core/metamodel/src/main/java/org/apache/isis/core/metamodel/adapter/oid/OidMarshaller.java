@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -43,6 +41,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <dd>persistent root</dd>
  * <dt>!CUS:123</dt>
  * <dd>transient root</dd>
+ * <dt>*CUS:123</dt>
+ * <dd>view model root</dd>
  * <dt>CUS:123$items</dt>
  * <dd>collection of persistent root</dd>
  * <dt>!CUS:123$items</dt>
@@ -64,6 +64,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <dl>
  * <dt>!</dt>
  * <dd>precedes root object type, indicates transient</dd>
+ * <dt>*</dt>
+ * <dd>precedes root object type, indicates transient</dd>
  * <dt>:</dt>
  * <dd>precedes root object identifier</dd>
  * <dt>~</dt>
@@ -80,6 +82,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 public class OidMarshaller {
 
 	private static final String TRANSIENT_INDICATOR = "!";
+    private static final String VIEWMODEL_INDICATOR = "*";
 	private static final String SEPARATOR = ":";
 	private static final String SEPARATOR_NESTING = "~";
 	private static final String SEPARATOR_COLLECTION = "$";
@@ -95,7 +98,7 @@ public class OidMarshaller {
             Pattern.compile(
             		"^(" +
             		   "(" +
-            		     "([" + TRANSIENT_INDICATOR + "])?" +
+            		     "([" + TRANSIENT_INDICATOR + VIEWMODEL_INDICATOR + "])?" +
             		     WORD_GROUP + SEPARATOR + WORD_GROUP + 
             		   ")" +
             		   "(" + 
@@ -143,8 +146,15 @@ public class OidMarshaller {
             throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
         }
 
-        final String isTransientStr = getGroup(matcher, 3);
-        boolean isTransient = TRANSIENT_INDICATOR.equals(isTransientStr);
+        final String isTransientOrViewModelStr = getGroup(matcher, 3);
+        final State state;
+        if("!".equals(isTransientOrViewModelStr)) {
+            state = State.TRANSIENT;
+        } else if("*".equals(isTransientOrViewModelStr)) {
+            state = State.VIEWMODEL;
+        } else {
+            state = State.PERSISTENT;
+        }
         
         final String rootOidStr = getGroup(matcher, 2);
         
@@ -178,7 +188,7 @@ public class OidMarshaller {
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOidDefault.class); 
-                return (T)new RootOidDefault(ObjectSpecId.of(rootObjectType), rootIdentifier, State.valueOf(isTransient), version);
+                return (T)new RootOidDefault(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
             } else {
                 ensureCorrectType(oidStr, requestedType, AggregatedOid.class);
                 final AggregateOidPart lastPart = aggregateOidParts.remove(aggregateOidParts.size()-1);
@@ -246,7 +256,9 @@ public class OidMarshaller {
     }
 
     public final String marshalNoVersion(RootOid rootOid) {
-        return (rootOid.isTransient()? TRANSIENT_INDICATOR : "") + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
+        final String transientIndicator = rootOid.isTransient()? TRANSIENT_INDICATOR : "";
+        final String viewModelIndicator = rootOid.isViewModel()? VIEWMODEL_INDICATOR : "";
+        return transientIndicator + viewModelIndicator + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
 
     public final String marshal(CollectionOid collectionOid) {

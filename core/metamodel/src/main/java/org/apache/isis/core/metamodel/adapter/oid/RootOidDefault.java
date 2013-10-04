@@ -124,8 +124,8 @@ public final class RootOidDefault implements Serializable, RootOid {
     public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Version version) {
         Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
-        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))));
-        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))));
+        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
+        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))), "identifier '" + identifier + "' contains an '@' symbol");
         Ensure.ensureThatArg(state, is(not(nullValue())));
         
         this.objectSpecId = objectSpecId;
@@ -209,6 +209,16 @@ public final class RootOidDefault implements Serializable, RootOid {
         return state.isTransient();
     }
 
+    @Override
+    public boolean isViewModel() {
+        return state.isViewModel();
+    }
+    
+    @Override
+    public boolean isPersistent() {
+        return state.isPersistent();
+    }
+    
 
     // ////////////////////////////////////////////
     // asPersistent
@@ -293,6 +303,11 @@ public final class RootOidDefault implements Serializable, RootOid {
     public int hashCode() {
         return cachedHashCode;
     }
+
+    
+    // /////////////////////////////////////////////////////////
+    // toString
+    // /////////////////////////////////////////////////////////
 
     @Override
     public String toString() {

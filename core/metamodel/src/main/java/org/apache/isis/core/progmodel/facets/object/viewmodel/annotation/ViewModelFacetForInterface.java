@@ -21,26 +21,18 @@ package org.apache.isis.core.progmodel.facets.object.viewmodel.annotation;
 
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetAbstract;
 
-public class ViewModelAnnotationFacetFactory extends FacetFactoryAbstract {
+public class ViewModelFacetForInterface extends ViewModelFacetAbstract {
 
-    public ViewModelAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    public ViewModelFacetForInterface(final FacetHolder holder) {
+        super(holder);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final ViewModel annotation = Annotations.getAnnotation(processClassContaxt.getCls(), ViewModel.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
-    }
-
-    private ViewModelFacet create(final ViewModel annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ViewModelFacetAnnotation(holder);
+    public void initialize(Object pojo, String memento) {
+        final ViewModel viewModel = (ViewModel)pojo;
+        viewModel.viewModelInit(memento);
     }
 
 }

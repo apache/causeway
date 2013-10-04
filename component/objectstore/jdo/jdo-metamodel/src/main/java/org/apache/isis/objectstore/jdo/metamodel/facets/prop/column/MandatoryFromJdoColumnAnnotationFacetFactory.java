@@ -21,6 +21,8 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 import java.util.List;
 
 import javax.jdo.annotations.Column;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Strings;
 
@@ -41,6 +43,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.MandatoryFacetExplicitForProperty;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
 
 
@@ -118,9 +122,18 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
             private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 
-                List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+                final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
+                if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
+                    return;
+                }
+                
+                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
                 for (ObjectAssociation association : associations) {
                     
+                    // skip checks if annotated with JDO @NotPersistent
+                    if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
+                        return;
+                    }
                     
                     MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
 

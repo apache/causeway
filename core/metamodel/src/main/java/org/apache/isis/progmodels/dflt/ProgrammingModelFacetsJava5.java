@@ -124,7 +124,7 @@ import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObje
 import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.value.annotation.ValueFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelIntefaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFactory;
@@ -354,7 +354,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(ImmutableMarkerInterfaceFacetFactory.class);
 
-        addFactory(ViewModelAnnotationFacetFactory.class);
+        addFactory(ViewModelIntefaceFacetFactory.class);
 
         addFactory(MaxLengthAnnotationForTypeFacetFactory.class);
         addFactory(MaxLengthAnnotationForPropertyFacetFactory.class);

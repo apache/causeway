@@ -22,7 +22,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
@@ -41,7 +45,6 @@ public final class OidUtils {
     // REVIEW: it's a bit hokey to join these together just to split them out again.
     public static String joinAsOid(final String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
-        
         return getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
     }
 
@@ -62,7 +65,16 @@ public final class OidUtils {
      * @throws {@link ObjectNotFoundException} if not found
      */
     public static ObjectAdapter getObjectAdapterElseThrowNotFound(final RendererContext resourceContext, final String domainType, final String instanceId) throws ObjectNotFoundException {
-        final String oidStr = joinAsOid(domainType, instanceId);
+        String oidStr = joinAsOid(domainType, instanceId);
+        
+        // REVIEW: this is all rather disgusting...
+        final ObjectSpecId specId = ObjectSpecId.of(domainType);
+        final ObjectSpecification spec = IsisContext.getSpecificationLoader().lookupBySpecId(specId);
+        if(spec.containsFacet(ViewModelFacet.class)) {
+            // TODO: use the static in OidMarshaller
+            oidStr = "*" + oidStr;
+        }
+
         return getObjectAdapterForUnencodedElseThrowNotFound(resourceContext, oidStr);
     }
 
@@ -89,7 +101,8 @@ public final class OidUtils {
 
     private static ObjectAdapter getObjectAdapterForUnencodedElseThrowNotFound(final RendererContext resourceContext, final String oidStr) {
         final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
-        return resourceContext.getPersistenceSession().loadObject(rootOid);
+        //return resourceContext.getPersistenceSession().loadObject(rootOid);
+        return resourceContext.getPersistenceSession().getAdapterManager().adapterFor(rootOid);
     }
 
     private static OidMarshaller getOidMarshaller() {

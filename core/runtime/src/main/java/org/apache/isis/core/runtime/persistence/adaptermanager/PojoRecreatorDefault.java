@@ -19,7 +19,9 @@
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -28,7 +30,25 @@ public class PojoRecreatorDefault implements PojoRecreator {
 
     public Object recreatePojo(final TypedOid oid) {
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
-        return spec.createObject();
+        final Object pojo = spec.createObject();
+        if(oid.isViewModel()) {
+            // initialize the view model pojo from the oid's identifier
+            
+            final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
+            if(facet == null) {
+                throw new IllegalArgumentException("spec does not have ViewModelFacet; " + oid.toString() + "; spec is " + spec.getFullIdentifier());
+            }
+
+            // a slight compromise? close enough.
+            if(!(oid instanceof RootOid)) {
+                throw new IllegalArgumentException("oid is view model but not a RootOid; " + oid.toString());
+            }
+            final RootOid rootOid = (RootOid) oid;
+            final String memento = rootOid.getIdentifier();
+
+            facet.initialize(pojo, memento);
+        }
+        return pojo;
     }
 
     

@@ -27,6 +27,7 @@ import com.google.common.base.Predicate;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.query.Query;
@@ -58,6 +59,7 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -105,6 +107,21 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends ViewModel> T newViewModelInstance(Class<T> ofClass, String memento) {
+        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
+        if (!spec.containsFacet(ViewModelFacet.class)) {
+            throw new IsisException("Type must be a ViewModel: " + ofClass);
+        }
+        final ObjectAdapter adapter = doCreateViewModelInstance(spec, memento);
+        if(adapter.getOid().isViewModel()) {
+            return (T)adapter.getObject();
+        } else {
+            throw new IsisException("Object instantiated but was not given a ViewModel Oid; please report as a possible defect in Isis: " + ofClass);
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
@@ -149,6 +166,10 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
         return getDomainObjectServices().createTransientInstance(spec);
+    }
+
+    protected ObjectAdapter doCreateViewModelInstance(final ObjectSpecification spec, final String memento) {
+        return getDomainObjectServices().createViewModelInstance(spec, memento);
     }
 
     private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {
@@ -578,6 +599,5 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         this.localizationProvider = localizationProvider;
     }
 
-    
 
 }

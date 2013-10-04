@@ -16,32 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
-package org.apache.isis.applib.annotation;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
 
 
-/**
- * Indicates that a domain object is intended to be used as a view model.
- */
-public interface ViewModel {
+public class NotPersistedFacetDerivedFromJdoNotPersistentAnnotation extends NotPersistedFacetAbstract {
 
-    /**
-     * Obtain a memento of the view model.
-     *
-     * <p>
-     * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
-     * for example a bunch of JSON.
-     * 
-     * <p>
-     * This method is called by the framework in order that the view model may be recreated subsequently
-     * through {@link #viewModelInit(String)}.
-     */
-    @Hidden
-    public String viewModelMemento();
-    
-    /**
-     * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
-     */
-    @Hidden
-    public void viewModelInit(String memento);
+    public NotPersistedFacetDerivedFromJdoNotPersistentAnnotation(final FacetHolder holder) {
+        super(holder);
+    }
+
 }

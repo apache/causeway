@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import org.apache.isis.applib.annotation.Aggregated;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,6 +29,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -59,10 +62,12 @@ public class OidGenerator implements DebuggableWithTitle {
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
      */
-    public final RootOid createTransientOid(final Object pojo) {
+    public final RootOid createTransientOrViewModelOid(final Object pojo) {
         final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
         final String transientIdentifier = identifierGenerator.createTransientIdentifierFor(objectSpecId, pojo);
-        return createTransient(objectSpecId, transientIdentifier);
+        final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
+        final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
+        return new RootOidDefault(objectSpecId, transientIdentifier, state);
     }
 
     /**
@@ -91,22 +96,22 @@ public class OidGenerator implements DebuggableWithTitle {
      * @param pojo - being persisted
      * @param transientRootOid - the oid for the pojo when transient.
      */
-    public final RootOid createPersistent(Object pojo, RootOid transientRootOid) {
+    public final RootOid createPersistentOrViewModelOid(Object pojo, RootOid transientRootOid) {
 
         final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
         final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo, transientRootOid);
         
-        return RootOidDefault.create(objectSpecId, persistentIdentifier);
+        final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
+        final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.PERSISTENT;
+        return new RootOidDefault(objectSpecId, persistentIdentifier, state);
     }
+
+    
 
 
     // //////////////////////////////////////////////////////////////
     // Helpers
     // //////////////////////////////////////////////////////////////
-
-    private RootOid createTransient(final ObjectSpecId objectSpecId, final String transientIdentifier) {
-        return RootOidDefault.createTransient(objectSpecId, transientIdentifier);
-    }
 
     private ObjectSpecId objectSpecIdFor(final Object pojo) {
         final Class<? extends Object> cls = pojo.getClass();

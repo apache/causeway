@@ -24,18 +24,17 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.util.TitleBuffer;
 
-@ViewModel
-public class SimpleViewModel extends AbstractDomainObject {
 
-    // {{ title
+public class SimpleViewModel extends AbstractDomainObject implements ViewModel {
+
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(name);
         return buf.toString();
     }
-    // }}
     
-    // {{ Name
+    // //////////////////////////////////////
+
     private String name;
 
     @MemberOrder(sequence = "1")
@@ -46,6 +45,17 @@ public class SimpleViewModel extends AbstractDomainObject {
     public void setName(final String name) {
         this.name = name;
     }
-    // }}
+    
+    // //////////////////////////////////////
+
+    @Override
+    public String viewModelMemento() {
+        return name;
+    }
+
+    @Override
+    public void viewModelInit(final String memento) {
+        setName(memento);
+    }
 
 }

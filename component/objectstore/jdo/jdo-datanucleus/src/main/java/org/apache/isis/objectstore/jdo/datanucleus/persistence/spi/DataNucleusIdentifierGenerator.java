@@ -26,6 +26,7 @@ import javax.jdo.spi.PersistenceCapable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -47,6 +48,12 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
 
     @Override
     public String createTransientIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
+        
+        if(pojo instanceof ViewModel) {
+            ViewModel viewModel = (ViewModel) pojo;
+            return viewModel.viewModelMemento();
+        }
+
         return UUID.randomUUID().toString();
     }
 
@@ -65,8 +72,11 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
             return "1";
         }
         
+        if(pojo instanceof ViewModel) {
+            ViewModel viewModel = (ViewModel) pojo;
+            return viewModel.viewModelMemento();
+        }
         final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
-        
         return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
     }
 

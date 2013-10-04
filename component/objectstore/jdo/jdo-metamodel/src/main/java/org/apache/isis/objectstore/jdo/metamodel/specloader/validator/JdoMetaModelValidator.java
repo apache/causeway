@@ -75,12 +75,17 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                 if(identityType == IdentityType.APPLICATION) {
                     // ok
                     
+                } else if(identityType == IdentityType.NONDURABLE) {
+                    // ok; for use with view models (http://www.datanucleus.org/products/accessplatform_3_2/datastores/rdbms_views.html)
+                    
                 } else if(identityType == IdentityType.DATASTORE || identityType == IdentityType.UNSPECIFIED) {
                     
                     // TODO: ensure that DATASTORE has recognised @DatastoreIdentity attribute
                     
                 } else {
-                    validationFailures.add("DataNucleus object store: %s must be annotated with @PersistenceCapable, with an identityType of either DATASTORE or UNSPECIFIED or APPLICATION (has an identityType of %s)", objSpec.getFullIdentifier(), identityType);
+                    // in fact, at the time of writing there are no others, so this is theoretical in case there is 
+                    // a future change to the JDO spec
+                    validationFailures.add("DataNucleus object store: %s is annotated with @PersistenceCapable but with an unrecognized identityType (%s)", objSpec.getFullIdentifier(), identityType);
                 }
                 
                 return true;

@@ -16,32 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
-package org.apache.isis.applib.annotation;
+import javax.jdo.annotations.PrimaryKey;
+
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
 
 /**
- * Indicates that a domain object is intended to be used as a view model.
+ * Corresponds to the property with the {@link PrimaryKey} annotation.
+ * <p>
+ * The JDO {@link PrimaryKey} annotation is used internally the JDO object store to
+ * create the {@link Oid}.
  */
-public interface ViewModel {
+public interface JdoNotPersistentFacet extends MarkerFacet {
 
-    /**
-     * Obtain a memento of the view model.
-     *
-     * <p>
-     * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
-     * for example a bunch of JSON.
-     * 
-     * <p>
-     * This method is called by the framework in order that the view model may be recreated subsequently
-     * through {@link #viewModelInit(String)}.
-     */
-    @Hidden
-    public String viewModelMemento();
-    
-    /**
-     * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
-     */
-    @Hidden
-    public void viewModelInit(String memento);
 }

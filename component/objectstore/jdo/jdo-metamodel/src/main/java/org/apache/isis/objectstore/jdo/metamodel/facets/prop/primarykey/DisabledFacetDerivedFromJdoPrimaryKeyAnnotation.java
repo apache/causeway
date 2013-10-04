@@ -25,7 +25,7 @@ import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetImpl;
 
 
 /**
- * Derived from being {@link Transient}.
+ * Derived by the presence of the primary key.
  */
 public class DisabledFacetDerivedFromJdoPrimaryKeyAnnotation extends DisabledFacetImpl {
 

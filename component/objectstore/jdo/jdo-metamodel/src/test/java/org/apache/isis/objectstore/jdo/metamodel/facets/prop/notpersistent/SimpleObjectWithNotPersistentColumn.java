@@ -16,16 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
-package org.apache.isis.core.progmodel.facets.object.viewmodel.annotation;
+import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetAbstract;
 
-public class ViewModelFacetAnnotation extends ViewModelFacetAbstract {
+public class SimpleObjectWithNotPersistentColumn {
 
-    public ViewModelFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    private Long someColumn;
+
+    @NotPersistent
+    public Long getSomeColumn() {
+        return someColumn;
     }
 
+    public void setSomeColumn(final Long someColumn) {
+        this.someColumn = someColumn;
+    }
 }

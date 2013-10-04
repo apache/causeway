@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey;
+package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import junit.framework.Assert;
@@ -29,18 +30,22 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.DisabledFacetDerivedFromJdoPrimaryKeyAnnotation;
+import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
+import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
 
-public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private JdoPrimaryKeyAnnotationFacetFactory facetFactory;
+    private JdoNotPersistentAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoPrimaryKeyAnnotationFacetFactory();
+        facetFactory = new JdoNotPersistentAnnotationFacetFactory();
     }
 
     @Override
@@ -58,79 +63,68 @@ public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest extends AbstractFacetF
         assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
-    public void testIdAnnotationPickedUpOnProperty() throws Exception {
-        final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        final Method method = cls.getMethod("getId");
+    public void testNotPersistentAnnotationPickedUpOnProperty() throws Exception {
+        final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
+        final Method method = cls.getMethod("getSomeColumn");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(JdoPrimaryKeyFacet.class);
+        final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof JdoPrimaryKeyFacet);
+        assertTrue(facet instanceof JdoNotPersistentFacet);
     }
 
-    public void testOptionalDerivedFromId() throws Exception {
-        final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        final Method method = cls.getMethod("getId");
+    public void testNotPersistedDerived() throws Exception {
+        final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
+        final Method method = cls.getMethod("getSomeColumn");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof OptionalFacetDerivedFromJdoPrimaryKeyAnnotation);
-    }
-
-    public void testDisabledDerivedFromId() throws Exception {
-        final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        final Method method = cls.getMethod("getId");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetDerivedFromJdoPrimaryKeyAnnotation);
+        assertTrue(facet instanceof NotPersistedFacetDerivedFromJdoNotPersistentAnnotation);
     }
 
     public void testIfNoIdAnnotationThenNoFacet() throws Exception {
 
         class Customer {
-            private Long id;
+            private Long someColumn;
 
-            // @Id missing
+            // @NotPersistent missing
             @SuppressWarnings("unused")
-            public Long getId() {
-                return id;
+            public Long getSomeColumn() {
+                return someColumn;
             }
 
             @SuppressWarnings("unused")
-            public void setId(final Long id) {
-                this.id = id;
+            public void setSomeColumn(final Long someColumn) {
+                this.someColumn = someColumn;
             }
         }
 
         final Class<?> cls = Customer.class;
-        final Method method = cls.getMethod("getId");
+        final Method method = cls.getMethod("getSomeColumn");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(JdoPrimaryKeyFacet.class);
+        final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNull(facet);
     }
 
     public void testNoMethodsRemoved() throws Exception {
         class Customer {
-            private Long id;
+            private Long someColumn;
 
-            @SuppressWarnings("unused")
-            @PrimaryKey
-            public Long getId() {
-                return id;
+            @NotPersistent
+            public Long getSomeColumn() {
+                return someColumn;
             }
 
             @SuppressWarnings("unused")
-            public void setId(final Long id) {
-                this.id = id;
+            public void setSomeColumn(final Long someColumn) {
+                this.someColumn = someColumn;
             }
         }
 
         final Class<?> cls = Customer.class;
-        final Method method = cls.getMethod("getId");
+        final Method method = cls.getMethod("getSomeColumn");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, null, method, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();

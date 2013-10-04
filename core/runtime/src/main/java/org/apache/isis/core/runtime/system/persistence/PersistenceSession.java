@@ -35,6 +35,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -60,6 +61,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
@@ -331,7 +333,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     // ///////////////////////////////////////////////////////////////////////////
-    // Factory (for transient instance)
+    // Factory
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -340,6 +342,17 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             LOG.debug("creating transient instance of " + objectSpec);
         }
         final Object pojo = objectSpec.createObject();
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+        return objectSpec.initialize(adapter);
+    }
+
+    public ObjectAdapter createViewModelInstance(ObjectSpecification objectSpec, String memento) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("creating view model instance of " + objectSpec);
+        }
+        final Object pojo = objectSpec.createObject();
+        ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+        facet.initialize(pojo, memento);
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
         return objectSpec.initialize(adapter);
     }
@@ -646,6 +659,14 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
     @Override
     public ObjectAdapter loadObject(final TypedOid oid) {
+        
+        // REVIEW: 
+        // this method does not account for the oid possibly being a view model
+        // alternatively, can call getAdapterManager().adapterFor(oid); this code
+        // delegates to the PojoRecreator which *does* take view models into account
+        //
+        // it's possible, therefore, that existing callers to this method (the Scimpi viewer)
+        // could be refactored to use getAdapterManager().adapterFor(...)
         ensureThatArg(oid, is(notNullValue()));
 
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
@@ -1189,4 +1210,5 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
+
 }

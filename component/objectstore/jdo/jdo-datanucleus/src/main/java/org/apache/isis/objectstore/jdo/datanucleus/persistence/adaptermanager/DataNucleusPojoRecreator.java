@@ -32,7 +32,7 @@ public class DataNucleusPojoRecreator implements PojoRecreator {
     
     @Override
     public Object recreatePojo(TypedOid oid) {
-        if(oid.isTransient()) {
+        if(oid.isTransient() || oid.isViewModel()) {
             return delegate.recreatePojo(oid);
         }
         return getObjectStore().loadPojo(oid);

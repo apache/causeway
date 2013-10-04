@@ -161,14 +161,5 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
 
 
-    // /////////////////////////////////////////////////////////
-    // toString
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return enString(new OidMarshaller());
-    }
-
 
 }

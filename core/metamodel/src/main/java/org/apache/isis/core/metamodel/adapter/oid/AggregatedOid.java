@@ -175,14 +175,6 @@ public final class AggregatedOid extends ParentedOid implements TypedOid, Serial
     }
 
 
-    // /////////////////////////////////////////////////////////
-    // toString
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return enString(new OidMarshaller());
-    }
 
 
 

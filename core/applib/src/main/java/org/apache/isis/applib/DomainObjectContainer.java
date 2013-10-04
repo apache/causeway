@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.Aggregated;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
@@ -160,7 +161,14 @@ public interface DomainObjectContainer {
      * @see #newPersistentInstance(Class)
      * @see #newAggregatedInstance(Object, Class)
      */
-    <T> T newTransientInstance(Class<T> ofType);
+    <T> T newTransientInstance(final Class<T> ofType);
+
+    
+    /**
+     * Create a new instance of the specified {@link ViewModel} class, initializing with the
+     * specified {@link ViewModel#viewModelMemento() memento}.
+     */
+    <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento);
 
     /**
      * Create a new instance that will be persisted as part of the specified

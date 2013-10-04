@@ -186,7 +186,12 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
+            @Override
+            public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
             @Override
             public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");

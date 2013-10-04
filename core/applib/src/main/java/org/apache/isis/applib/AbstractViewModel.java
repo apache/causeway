@@ -17,31 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib;
 
+import org.apache.isis.applib.annotation.ViewModel;
 
 /**
- * Indicates that a domain object is intended to be used as a view model.
+ * Convenience super class for all view models that wish to interact with the
+ * container.
+ * 
+ * <p>
+ * Subclassing is NOT mandatory; the methods in this superclass can be pushed
+ * down into domain objects and another superclass used if required.
+ * 
+ * @see org.apache.isis.applib.DomainObjectContainer
  */
-public interface ViewModel {
+public abstract class AbstractViewModel extends AbstractContainedObject implements ViewModel {
 
-    /**
-     * Obtain a memento of the view model.
-     *
-     * <p>
-     * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
-     * for example a bunch of JSON.
-     * 
-     * <p>
-     * This method is called by the framework in order that the view model may be recreated subsequently
-     * through {@link #viewModelInit(String)}.
-     */
-    @Hidden
-    public String viewModelMemento();
+    @Override
+    public abstract String viewModelMemento();
     
-    /**
-     * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
-     */
-    @Hidden
-    public void viewModelInit(String memento);
+    @Override
+    public abstract void viewModelInit(final String memento);
 }

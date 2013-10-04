@@ -24,18 +24,18 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelIntefaceFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelFacetForInterface;
 
-public class ViewModelAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class ViewModelInteraceFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private ViewModelAnnotationFacetFactory facetFactory;
+    private ViewModelIntefaceFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ViewModelAnnotationFacetFactory();
+        facetFactory = new ViewModelIntefaceFacetFactory();
     }
 
     @Override
@@ -45,15 +45,24 @@ public class ViewModelAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testStableAnnotationPickedUpOnClassAndDefaultsToAlways() {
-        @ViewModel
-        class Customer {
+        class Customer implements ViewModel {
+
+            @Override
+            public String viewModelMemento() {
+                return null;
+            }
+
+            @Override
+            public void viewModelInit(String memento) {
+            }
+
         }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ViewModelFacetAnnotation);
+        assertTrue(facet instanceof ViewModelFacetForInterface);
 
         assertNoMethodsRemoved();
     }

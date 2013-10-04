@@ -40,6 +40,8 @@ public interface DomainObjectServices extends Injectable {
      */
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
+    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
+
     /**
      * Create an instance of an aggregated object that will be persisted within the
      * parent adapter.
@@ -155,6 +157,7 @@ public interface DomainObjectServices extends Injectable {
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     List<String> getPropertyNames();
+
 
 
 }

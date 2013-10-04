@@ -186,6 +186,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
+            public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
+                return getPersistenceSession().createViewModelInstance(spec, memento);
+            }
+
+            @Override
             public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
                 return getPersistenceSession().createAggregatedInstance(spec, parent);
             };
@@ -245,6 +250,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public List<String> getPropertyNames() {
                 return RuntimeContextFromSession.this.getPropertyNames();
             }
+
 
         };
         this.querySubmitter = new QuerySubmitterAbstract() {

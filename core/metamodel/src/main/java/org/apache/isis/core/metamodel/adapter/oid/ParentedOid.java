@@ -58,7 +58,26 @@ public abstract class ParentedOid implements Oid {
     public boolean isTransient() {
         return getParentOid().isTransient();
     }
+    
+    @Override
+    public boolean isViewModel() {
+        return getParentOid().isViewModel();
+    }
+    
+    @Override
+    public boolean isPersistent() {
+        return getParentOid().isPersistent();
+    }
 
+
+    // /////////////////////////////////////////////////////////
+    // toString
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return enString(new OidMarshaller());
+    }
 
 
 }

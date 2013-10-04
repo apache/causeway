@@ -44,7 +44,8 @@ public interface Oid extends Encodable {
     void setVersion(Version version);
 
     /**
-     * Flags whether this OID is for a transient (not-yet-persisted) object.
+     * Flags whether this OID is for a transient (not-yet-persisted) object, 
+     * or a view model object, or for a persistent object.
      * 
      * <p>
      * In the case of an {@link AggregatedOid}, is determined by the state 
@@ -52,8 +53,14 @@ public interface Oid extends Encodable {
      */
     boolean isTransient();
 
+    boolean isViewModel();
+    
+    boolean isPersistent();
+
     public static enum State {
-        PERSISTENT("P"), TRANSIENT("T");
+        PERSISTENT("P"), 
+        TRANSIENT("T"),
+        VIEWMODEL("V");
         
         private final String code;
         private State(final String code) {
@@ -63,9 +70,11 @@ public interface Oid extends Encodable {
         public boolean isTransient() {
             return this == TRANSIENT;
         }
-
-        public static State valueOf(boolean isTransient) {
-            return isTransient? TRANSIENT: PERSISTENT;
+        public boolean isViewModel() {
+            return this == VIEWMODEL;
+        }
+        public boolean isPersistent() {
+            return this == PERSISTENT;
         }
 
         public String getCode() {

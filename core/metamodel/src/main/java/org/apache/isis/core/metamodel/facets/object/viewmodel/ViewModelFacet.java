@@ -31,4 +31,6 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
  */
 public interface ViewModelFacet extends MarkerFacet {
 
+    void initialize(Object pojo, String memento);
+
 }
