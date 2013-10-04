@@ -16,6 +16,7 @@
  */
 package integration;
 
+import app.ToDoItemAnalysis;
 import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
 
@@ -55,6 +56,7 @@ public class ToDoSystemInitializer {
             
             withServices(
                     new ToDoItems(),
+                    new ToDoItemAnalysis(),
                     new ToDoItemContributions(),
                     new WrapperFactoryDefault(),
                     new RegisterEntities(),

@@ -20,8 +20,6 @@ package integration.tests;
 
 import integration.ToDoSystemInitializer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.BeforeClass;
 
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;

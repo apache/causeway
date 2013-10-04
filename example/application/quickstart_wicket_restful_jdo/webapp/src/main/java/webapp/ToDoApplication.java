@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app;
+package webapp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,13 +56,13 @@ import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefaul
  *    &lt;filter-class>org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class>
  *    &lt;init-param>
  *      &lt;param-name>applicationClassName&lt;/param-name>
- *      &lt;param-value>app.QuickStartApplication&lt;/param-value>
+ *      &lt;param-value>webapp.ToDoApplication&lt;/param-value>
  *    &lt;/init-param>
  * &lt;/filter>
  * </pre>
  * 
  */
-public class QuickStartApplication extends IsisWicketApplication {
+public class ToDoApplication extends IsisWicketApplication {
 
     private static final long serialVersionUID = 1L;
 
@@ -115,8 +115,8 @@ public class QuickStartApplication extends IsisWicketApplication {
         final Module quickstartOverrides = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForQuickStart.class);
-                bind(PageClassList.class).to(PageClassListForQuickstart.class);
+                bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForToDoApp.class);
+                bind(PageClassList.class).to(PageClassListForToDoApp.class);
                 
                 bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Quick Start App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
@@ -132,7 +132,7 @@ public class QuickStartApplication extends IsisWicketApplication {
 
     private static String readLines(final String resourceName) {
         try {
-            List<String> readLines = Resources.readLines(Resources.getResource(QuickStartApplication.class, resourceName), Charset.defaultCharset());
+            List<String> readLines = Resources.readLines(Resources.getResource(ToDoApplication.class, resourceName), Charset.defaultCharset());
             final String aboutText = Joiner.on("\n").join(readLines);
             return aboutText;
         } catch (IOException e) {

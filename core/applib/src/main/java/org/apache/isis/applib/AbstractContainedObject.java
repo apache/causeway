@@ -347,6 +347,14 @@ public abstract class AbstractContainedObject {
         return persistentDomainObject;
     }
 
+    /**
+     * Delete the provided object from the persistent object store.
+     */
+    protected <T> T removeIfNotAlready(final T persistentDomainObject) {
+        getContainer().removeIfNotAlready(persistentDomainObject);
+        return persistentDomainObject;
+    }
+    
     // //////////////////////////////////////
 
     /**

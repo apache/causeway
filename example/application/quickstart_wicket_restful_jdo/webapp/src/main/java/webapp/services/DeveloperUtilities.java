@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package app.services;
+package webapp.services;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Blob;
@@ -27,13 +27,13 @@ import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServic
  */
 public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
 
-    @MemberOrder(name="Fixtures", sequence="90")
+    @MemberOrder(name="Prototyping", sequence="90")
     @Override
     public Clob downloadMetaModel() {
         return super.downloadMetaModel();
     }
     
-    @MemberOrder(name="Fixtures", sequence="92")
+    @MemberOrder(name="Prototyping", sequence="92")
     @Override
     public Blob downloadLayouts() {
         return super.downloadLayouts();

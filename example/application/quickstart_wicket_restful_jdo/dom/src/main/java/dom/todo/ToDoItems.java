@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
@@ -147,7 +148,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     @MemberOrder(sequence = "4")
     public List<ToDoItem> allToDos() {
         final String currentUser = currentUserName();
-        final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
+        final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.Predicates.thoseOwnedBy(currentUser));
         Collections.sort(items);
         if(items.isEmpty()) {
             getContainer().warnUser("No to-do items found.");
@@ -163,13 +164,10 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     public List<ToDoItem> autoComplete(final String description) {
         if(false) {
             // the naive implementation ...
-            return allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
-                @Override
-                public boolean apply(final ToDoItem t) {
-                    return ownedByCurrentUser(t) && t.getDescription().contains(description);
-                }
-                
-            });
+            return allMatches(ToDoItem.class, 
+                    Predicates.and(
+                    ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                    ToDoItem.Predicates.thoseWithSimilarDescription(description)));
         } else {
             // the JDO implementation ...
             return allMatches(
@@ -179,6 +177,7 @@ public class ToDoItems extends AbstractFactoryAndRepository {
                             "description", description));
         }
     }
+
 
     // //////////////////////////////////////
     // Programmatic Helpers

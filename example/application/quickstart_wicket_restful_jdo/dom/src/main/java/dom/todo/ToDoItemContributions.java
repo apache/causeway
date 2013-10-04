@@ -21,7 +21,6 @@ package dom.todo;
 import java.util.List;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -139,12 +138,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         if(false) {
             // the naive implementation ...
-            return allMatches(ToDoItem.class, new Predicate<ToDoItem>() {
-                @Override
-                public boolean apply(final ToDoItem t) {
-                    return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
-                }
-            });
+            return allMatches(ToDoItem.class, ToDoItem.Predicates.thoseSimilarTo(toDoItem));
         } else {
             // the JDO implementation ...
             final List<ToDoItem> similarToDoItems = allMatches(
@@ -155,6 +149,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             return Lists.newArrayList(Iterables.filter(similarToDoItems, excluding(toDoItem)));
         }
     }
+
 
     private static Predicate<ToDoItem> excluding(final ToDoItem toDoItem) {
         return new Predicate<ToDoItem>() {

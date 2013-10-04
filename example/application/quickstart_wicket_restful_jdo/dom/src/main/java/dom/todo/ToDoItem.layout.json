@@ -22,10 +22,12 @@
             General: {
                 members: {
                     description: {},
-                    category: {},
+                    category: {
+                    },
                     subcategory: {
                         actions: {
-                            updateCategory: {}
+                            updateCategory: {},
+                            analyseCategory: {}
                         }
                     },
                     complete: {

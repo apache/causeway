@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app;
+package webapp;
 
 import com.google.inject.Singleton;
 
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 
 @Singleton
-public class ComponentFactoryRegistrarForQuickStart extends ComponentFactoryRegistrarDefault {
+public class ComponentFactoryRegistrarForToDoApp extends ComponentFactoryRegistrarDefault {
 
     @Override
     public void addComponentFactories(ComponentFactoryList componentFactories) {

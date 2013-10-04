@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app.services;
+package webapp.services;
 
 import java.util.List;
 
@@ -34,11 +34,11 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 /**
  * Enables fixtures to be installed from the application.
  */
-@Named("Fixtures")
+@Named("Prototyping") // has the effect of defining a "Prototyping" menu item
 public class ToDoItemsFixturesService extends AbstractService {
 
     @Prototype
-    public String install() {
+    public String installFixtures() {
         installFixturesFor(null); // ie current user
         return "Example fixtures installed";
     }
@@ -46,22 +46,22 @@ public class ToDoItemsFixturesService extends AbstractService {
     // //////////////////////////////////////
 
     @Prototype
-    public String installFor(@Named("User") String user) {
+    public String installFixturesForUser(@Named("User") String user) {
         installFixturesFor(user);
         return "Example fixtures installed for " + user;
     }
-    public String default0InstallFor() {
+    public String default0InstallFixturesForUser() {
         return "guest";
     }
-    public List<String> choices0InstallFor() {
-        return Lists.newArrayList("guest", "dick", "bob", "joe");
+    public List<String> choices0InstallFixturesForUser() {
+        return Lists.newArrayList("guest", "sven", "dick", "bob", "joe");
     }
 
     // //////////////////////////////////////
 
     @Prototype
-    public ToDoItem installAndReturnFirst() {
-        install();
+    public ToDoItem installFixturesAndReturnFirst() {
+        installFixtures();
         List<ToDoItem> notYetComplete = toDoItems.notYetComplete();
         return !notYetComplete.isEmpty() ? notYetComplete.get(0) : null;
     }

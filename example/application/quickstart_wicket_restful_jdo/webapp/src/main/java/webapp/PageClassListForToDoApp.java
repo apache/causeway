@@ -14,14 +14,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package app;
+package webapp;
 
 import org.apache.wicket.Page;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 
-public class PageClassListForQuickstart extends PageClassListDefault {
+public class PageClassListForToDoApp extends PageClassListDefault {
 
     @Override
     protected Class<? extends Page> getSignInPageClass() {
