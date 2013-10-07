@@ -56,7 +56,7 @@ public class ObjectFixtureFilePersistorTest {
 
     private static final String DATEFORMAT_PATTERN = "dd-MMM-yyyy HH:mm z";
     
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATEFORMAT_PATTERN);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATEFORMAT_PATTERN, Locale.US);
     
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
