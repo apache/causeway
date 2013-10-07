@@ -48,6 +48,7 @@ public class ToDoAppDashboard extends AbstractFactoryAndRepository {
     // getAnalysisByCategory
     // //////////////////////////////////////
 
+    @Named("By Category")
     @Render(Type.EAGERLY)
     @Disabled
     public List<ToDoItemsByCategoryViewModel> getAnalysisByCategory() {
@@ -58,6 +59,7 @@ public class ToDoAppDashboard extends AbstractFactoryAndRepository {
     // getAnalysisByDateRange
     // //////////////////////////////////////
     
+    @Named("By Date Range")
     @Render(Type.EAGERLY)
     @Disabled
     public List<ToDoItemsByDateRangeViewModel> getAnalysisByDateRange() {

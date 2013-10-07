@@ -24,27 +24,18 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 
-import org.joda.time.LocalDate;
-
-import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
-import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 
-import services.ClockService;
-
-@Hidden
+@Named("Analysis")
 public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
 
     // //////////////////////////////////////
@@ -63,8 +54,11 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
     // //////////////////////////////////////
     // ByCategory (action)
     // //////////////////////////////////////
-
-    @Programmatic
+    
+    @Named("By Category")
+    @Bookmarkable
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "1")
     public List<ToDoItemsByCategoryViewModel> toDoItemsByCategory() {
         final List<Category> categories = Arrays.asList(Category.values());
         return Lists.newArrayList(Iterables.transform(categories, byCategory()));
@@ -95,7 +89,10 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
         Unknown,
     }
     
-    @Programmatic
+    @Named("By Date Range")
+    @Bookmarkable
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "1")
     public List<ToDoItemsByDateRangeViewModel> toDoItemsByDateRange() {
         final List<DateRange> dateRanges = Arrays.asList(DateRange.values());
         return Lists.newArrayList(Iterables.transform(dateRanges, byDateRange()));
