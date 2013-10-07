@@ -28,18 +28,27 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
+public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, MetaModelValidatorRefiner {
+
+    private static final String TITLE_METHOD_NAME = "title";
 
     private AdapterManager adapterManager;
 
@@ -136,5 +145,52 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     @Override
     public void setAdapterManager(final AdapterManager adapterMap) {
         this.adapterManager = adapterMap;
+    }
+
+    /**
+     * Violation if there is a class that has both a <tt>title()</tt> method and also any non-inherited method 
+     * annotated with <tt>@Title</tt>.
+     * 
+     * <p>
+     * If there are only inherited methods annotated with <tt>@Title</tt> then this is <i>not</i> a violation; but 
+     * (from the implementation of {@link TitleMethodFacetFactory} the imperative <tt>title()</tt> method will take
+     * precedence.
+     */
+    @Override
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+
+            @Override
+            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+                final Class<?> cls = objectSpec.getCorrespondingClass();
+
+                final Method titleMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE_METHOD_NAME, String.class, null);
+                if (titleMethod == null) {
+                    return true;
+                }
+                
+                // determine if cls contains an @Title annotated method, not inherited from superclass
+                final Class<?> supClass = cls.getSuperclass();
+                if (supClass == null) {
+                    return true;
+                }
+                
+                final List<Method> methods = methodsWithTitleAnnotation(cls);
+                final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
+                if (methods.size() > superClassMethods.size()) {
+                    validationFailures.add(
+                            "Conflict for determining a strategy for retrieval of title for class %s "
+                            + "that contains a method '%s' and an annotation '@%s'", 
+                            objectSpec.getIdentifier().getClassName(), TITLE_METHOD_NAME, Title.class.getName());
+                }
+
+                return true;
+            }
+
+            private List<Method> methodsWithTitleAnnotation(final Class<?> cls) {
+                return MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Title.class);
+            }
+
+        }));
     }
 }

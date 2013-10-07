@@ -51,19 +51,18 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        // may have a facet by virtue of @Title, say.
-        final TitleFacet existingTitleFacet = facetHolder.getFacet(TitleFacet.class);
-        if(existingTitleFacet != null && !existingTitleFacet.isNoop()) {
-            return;
-        }
-        
         Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE, String.class, null);
         if (method != null) {
             processClassContext.removeMethod(method);
             FacetUtil.addFacet(new TitleFacetViaTitleMethod(method, facetHolder));
             return;
         }
-        
+
+        // may have a facet by virtue of @Title, say.
+        final TitleFacet existingTitleFacet = facetHolder.getFacet(TitleFacet.class);
+        if(existingTitleFacet != null && !existingTitleFacet.isNoop()) {
+            return;
+        }
 
         try {
             method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TO_STRING, String.class, null);
