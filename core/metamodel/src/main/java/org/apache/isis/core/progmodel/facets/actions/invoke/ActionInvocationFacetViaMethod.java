@@ -27,6 +27,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -39,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProvider
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
 
@@ -92,7 +95,22 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             }
 
             final Object object = unwrap(inObject);
-            final Object result = method.invoke(object, executionParameters);
+            
+            final Object result;
+            
+            final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
+            if(bulkFacet != null && Bulk.InteractionContext.current.get() == null) {
+                // make sure that the Bulk interaction context is set if not already
+                try {
+                    Bulk.InteractionContext.current.set(new InteractionContext(object));
+                    result = method.invoke(object, executionParameters);
+                } finally {
+                    Bulk.InteractionContext.current.set(null);
+                }
+            } else {
+                result = method.invoke(object, executionParameters);
+            }
+            
             if (LOG.isDebugEnabled()) {
                 LOG.debug(" action result " + result);
             }

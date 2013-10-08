@@ -43,10 +43,10 @@ import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
@@ -311,6 +311,18 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @CssClass("x-highlight")
     public ToDoItem completed() {
         setComplete(true);
+        
+        // demonstrating the use of ... 
+        final InteractionContext ctxt = InteractionContext.current.get();
+        @SuppressWarnings("unused")
+        List<Object> allObjects = ctxt.getDomainObjects();
+        
+        LOG.debug("completed: "
+                + ctxt.getIndex() +
+                " [" + ctxt.getSize() + "]"
+                + (ctxt.isFirst() ? " (first)" : "")
+                + (ctxt.isLast() ? " (last)" : ""));
+
         return this;
     }
     // disable action dependent on state of object
@@ -323,6 +335,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @Bulk
     public ToDoItem notYetCompleted() {
         setComplete(false);
+
         return this;
     }
     // disable action dependent on state of object

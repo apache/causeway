@@ -24,6 +24,8 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Indicates the (entity) action should be used only against many objects
@@ -46,4 +48,77 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Bulk {
+    
+    public static class InteractionContext {
+
+        /**
+         * Intended only to be set only by the framework.
+         * 
+         * <p>
+         * Will be populated while a bulk action is being invoked.
+         * 
+         * <p>
+         * <b>Note</b>: the original design was for this field to be defined within {@link Bulk}.  However,
+         * this <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6982543">javac bug</a> unfortunately
+         * means that this field must live outside the annotation.
+         */
+        public static final ThreadLocal<InteractionContext> current = new ThreadLocal<InteractionContext>();
+
+        private final List<Object> domainObjects;
+        private final int size;
+        
+        private int index;
+
+        public InteractionContext(Object... domainObjects) {
+            this(Arrays.asList(domainObjects));
+        }
+
+        public InteractionContext(List<Object> domainObjects) {
+            this.domainObjects = domainObjects;
+            this.size = domainObjects.size();
+        }
+
+        public List<Object> getDomainObjects() {
+            return domainObjects;
+        }
+        
+        /**
+         * Will be a value in range [0, {@link #getSize() size}).
+         */
+        public int getIndex() {
+            return index;
+        }
+        
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setIndex(int index) {
+            this.index = index;
+        }
+        
+        public int getSize() {
+            return size;
+        }
+
+        public boolean isFirst() {
+            return this.index == 0;
+        }
+        
+        public boolean isLast() {
+            return this.index == (size-1);
+        }
+
+        /**
+         * @param runnable
+         */
+        public static void with(Runnable runnable, Object... domainObjects) {
+            try {
+                Bulk.InteractionContext.current.set(new Bulk.InteractionContext(domainObjects));
+                runnable.run();
+            } finally {
+                Bulk.InteractionContext.current.set(null);
+            }
+        }
+
+    }
 }

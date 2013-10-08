@@ -22,6 +22,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.Bulk;
+
 public class ToDoTest_completed {
 
     private ToDoItem toDoItem;
@@ -38,7 +40,12 @@ public class ToDoTest_completed {
         assertThat(toDoItem.disableCompleted(), is(nullValue()));
         
         // when
-        toDoItem.completed();
+        Bulk.InteractionContext.with(new Runnable() {
+            @Override
+            public void run() {
+                toDoItem.completed();
+            }
+        }, toDoItem);
         
         // then
         assertThat(toDoItem.isComplete(), is(true));

@@ -35,6 +35,7 @@ import dom.todo.ToDoItems;
 import org.jmock.Expectations;
 import org.junit.Assert;
 
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
@@ -71,8 +72,19 @@ public class ToDoItemGlue extends CukeGlueAbstract {
     
     @When("^mark the item as complete$")
     public void mark_it_as_complete() throws Throwable {
-        ToDoItem toDoItem = getVar(null, "toDoItem", ToDoItem.class);
-        wrap(toDoItem).completed();
+        final ToDoItem toDoItem = getVar(null, "toDoItem", ToDoItem.class);
+        if(supportsMocks()) {
+            Bulk.InteractionContext.with(new Runnable(){
+                @Override
+                public void run() {
+                    toDoItem.completed();
+                }
+            }, toDoItem);
+        } else {
+            // can just call directly; 
+            // framework will take care of setting the Bulk.InteractionContext.
+            wrap(toDoItem).completed();
+        }
     }
     
     @Then("^the item is no longer listed as incomplete$")
@@ -81,8 +93,6 @@ public class ToDoItemGlue extends CukeGlueAbstract {
         whetherNotYetCompletedContains(toDoItem, false);
     }
 
-    
-    
     @Given("^.*completed .*item$")
     public void a_completed_ToDo_item() throws Throwable {
         if(supportsMocks()) {
