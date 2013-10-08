@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
@@ -67,27 +68,20 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
                     final ObjectAdapter entityAdapter = entityAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
                     int numParameters = objectAction.getParameterCount();
-                    if(false /*objectAction.isContributed() */) {
-                        // a contributed action
-                        if(numParameters != 1) {
-                            return;
-                        }
-                        if(serviceAdapterMemento == null) {
-                            // not expected
-                            return;
-                        }
-                        final ObjectAdapter serviceAdapter = serviceAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                        objectAction.execute(serviceAdapter, new ObjectAdapter[]{entityAdapter});
-                    } else {
-                        // an entity action
-                        if(numParameters != 0) {
-                            return;
-                        }
-                        objectAction.execute(entityAdapter, new ObjectAdapter[]{});
+                    if(numParameters != 0) {
+                        return;
                     }
+                    objectAction.execute(entityAdapter, new ObjectAdapter[]{});
                 }
+                
                 model.clearToggleMementosList();
-                model.setObject(persistentAdaptersWithin(model.getObject()));
+                final ActionModel actionModelHint = model.getActionModelHint();
+                if(actionModelHint != null) {
+                    ObjectAdapter resultAdapter = actionModelHint.getObject();
+                    model.setObjectList(resultAdapter);
+                } else {
+                    model.setObject(persistentAdaptersWithin(model.getObject()));
+                }
             }
 
             private List<ObjectAdapter> persistentAdaptersWithin(List<ObjectAdapter> adapters) {

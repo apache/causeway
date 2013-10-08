@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Ascii;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -140,16 +142,40 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      * Factory.
      */
     public static EntityCollectionModel createStandalone(final ObjectAdapter collectionAsAdapter) {
-        final Iterable<Object> iterable = EntityCollectionModel.asIterable(collectionAsAdapter);
-
-        final Iterable<ObjectAdapterMemento> oidIterable = Iterables.transform(iterable, MementoFunctions.fromPojo(getAdapterManagerStatic()));
-        final List<ObjectAdapterMemento> mementoList = Lists.newArrayList(oidIterable);
+        final List<ObjectAdapterMemento> mementoList = asMementoList(collectionAsAdapter);
 
         final ObjectSpecification elementSpec = collectionAsAdapter.getElementSpecification();
         final Class<?> elementType = elementSpec.getCorrespondingClass();
         int pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
         
         return new EntityCollectionModel(elementType, mementoList, pageSize);
+    }
+
+    private static List<ObjectAdapterMemento> asMementoList(final ObjectAdapter collectionAsAdapter) {
+        final Iterable<Object> iterable = EntityCollectionModel.asIterable(collectionAsAdapter);
+        return Lists.newArrayList(
+                Iterables.transform(iterable, MementoFunctions.fromPojo(getAdapterManagerStatic())));
+    }
+
+    /**
+     * The {@link ActionModel model} of the {@link ObjectAction action} 
+     * that generated this {@link EntityCollectionModel}.
+     * 
+     * <p>
+     * Populated only for {@link Type#STANDALONE standalone} collections.
+     * 
+     * @see #setActionHint(ActionModel)
+     */
+    public ActionModel getActionModelHint() {
+        return actionModelHint;
+    }
+    /**
+     * Called only for {@link Type#STANDALONE standalone} collections.
+     * 
+     * @see #getActionModelHint()
+     */
+    public void setActionHint(ActionModel actionModelHint) {
+        this.actionModelHint = actionModelHint;
     }
 
     /**
@@ -202,6 +228,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      * Optionally populated only if {@link Type#PARENTED}.
      */
     private Class<? extends Comparator<?>> sortedBy;
+
+    /**
+     * Optionally populated, only if {@link Type#STANDALONE} (ie called from an action).
+     */
+    private ActionModel actionModelHint;
 
     private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList, final int pageSize) {
         this.type = Type.STANDALONE;
@@ -282,6 +313,13 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
     
     /**
+     * Not API, but to refresh the model list.
+     */
+    public void setObjectList(ObjectAdapter resultAdapter) {
+        this.mementoList = asMementoList(resultAdapter);
+    }
+
+    /**
      * Populated only if {@link Type#PARENTED}.
      */
     public ObjectAdapterMemento getParentObjectAdapterMemento() {
@@ -337,5 +375,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     private static AdapterManager getAdapterManagerStatic() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
+
+
 
 }

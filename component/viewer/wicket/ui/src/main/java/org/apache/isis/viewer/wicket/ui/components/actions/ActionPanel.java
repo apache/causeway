@@ -358,6 +358,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
             private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
+                collectionModel.setActionHint(panel.getActionModel());
                 final ComponentFactoryRegistry componentFactoryRegistry = panel.getComponentFactoryRegistry();
                 componentFactoryRegistry.addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
 
