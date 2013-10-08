@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Apache Isis&trade; Simple (Wicket/Restful/JDO/Shiro) App</title>
+        
+        <style type="text/css">
+body {
+    background-color: #1A467B;
+    font-family: Verdana, Helvetica, Arial;
+    font-size: 90%;
+}
+
+li {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px;
+    border-style: solid;
+    border-color: lightgray;
+}
+th, td {
+    padding: 10px;
+}
+#wrapper {
+    background-color: #ffffff;
+    width: 900px;
+    margin: 8px auto;
+    padding: 12px;
+}
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <img alt="Isis Logo" src="about/images/isis-logo.png" />
+             
+            <p>
+            <a href="http://isis.apache.org">Apache Isis</a>&trade; is a framework to let you rapidly develop 
+            domain-driven apps in Java.  This app has been generated using Isis' 
+            <a href="http://isis.apache.org/getting-started/simple-archetype.html">simple</a> archetype, 
+            which configures Isis' most commonly used components as part of a very simple and purposefully minimal 
+            application.
+            
+            <p>
+            The app itself consists of a single domain class, 
+            <a href="https://github.com/apache/isis/blob/master/example/application/simple_wicket_restful_jdo/dom/src/main/java/dom/simple/SimpleObject.java"  target="_blank"><tt>SimpleObject</tt></a>, 
+            along with an equally simple (factory/repository) domain service, <a href="https://github.com/apache/isis/blob/master/example/application/simple_wicket_restful_jdo/dom/src/main/java/dom/simple/SimpleObjects.java"  target="_blank"><tt>SimpleObjects</tt></a>.
+            </p>
+            
+            <p>
+            Alternatively, if you'd like to start from a slightly richer starting point, you might want to use the
+            <a href="http://isis.apache.org/getting-started/quickstart-archetype.html">quickstart</a> archetype, which
+            generates a straightforward &quot;todo&quot; app.
+            </p>
+            
+            <p>
+            The Isis components that are configured in this app are:
+            </p>
+            
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Access URL</th>
+                    <th>Description</th>
+                    <th>Further info on the Isis website</th>
+                </tr>
+                <tr>
+                    <td>Wicket Viewer</td>
+                    <td><a href="wicket/">wicket/</a></td>
+                    <td>Provides a generic UI for end-users, built with <a href="http://wicket.apache.org">Apache Wicket</a>&trade;</td>
+                    <td><a href="http://isis.apache.org/components/viewers/wicket/about.html">wicket viewer</a></td>
+                </tr>
+                <tr>
+                    <td>RestfulObjects Viewer</td>
+                    <td><a href="restful/">restful/</a></td>
+                    <td>Provides a RESTful API conformant with the <a href="http://restfulobjects.org">Restful Objects</a> spec</td>
+                    <td><a href="http://isis.apache.org/components/viewers/restfulobjects/about.html">restfulobjects viewer</a></td>
+                </tr>
+                <tr>
+                    <td>JDO Object&nbsp;Store</td>
+                    <td>n/a</td>
+                    <td>Persists objects using JDO/DataNucleus; configured to use HSQLDB in-memory database</td>
+                    <td><a href="http://isis.apache.org/components/objectstores/jdo/about.html">jdo&nbsp;objectstore</a></td>
+                </tr>
+                <tr>
+                    <td>Shiro Security</td>
+                    <td>n/a</td>
+                    <td>Provides authentication and authorization, using <a href="http://shiro.apache.org">Apache Shiro</a>&trade;</td>
+                    <td><a href="http://isis.apache.org/components/security/shiro/about.html">shiro security</a></td>
+                </tr>
+            </table>
+            
+        </div>
+    </body>
+</html>

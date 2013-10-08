@@ -34,11 +34,7 @@ import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Ordering;
-
-import dom.todo.ToDoItem.Category;
-import dom.todo.ToDoItem.Subcategory;
 
 import org.joda.time.LocalDate;
 
@@ -69,35 +65,48 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
-@javax.jdo.annotations.Queries( {
-        @javax.jdo.annotations.Query(
-                name = "todo_all", language = "JDOQL",
-                value = "SELECT FROM dom.todo.ToDoItem "
-                        + "WHERE ownedBy == :ownedBy"),
-        @javax.jdo.annotations.Query(
-                name = "todo_notYetComplete", language = "JDOQL",
-                value = "SELECT FROM dom.todo.ToDoItem "
-                        + "WHERE ownedBy == :ownedBy "
-                        + "   && complete == false"),
-        @javax.jdo.annotations.Query(
-                name = "todo_complete", language = "JDOQL",
-                value = "SELECT FROM dom.todo.ToDoItem "
-                        + "WHERE ownedBy == :ownedBy "
-                        + "&& complete == true"),
-        @javax.jdo.annotations.Query(
-                name = "todo_similarTo", language = "JDOQL",
-                value = "SELECT FROM dom.todo.ToDoItem "
-                        + "WHERE ownedBy == :ownedBy "
-                        + "&& category == :category"),
-        @javax.jdo.annotations.Query(
-                name = "todo_autoComplete", language = "JDOQL",
-                value = "SELECT FROM dom.todo.ToDoItem "
-                        + "WHERE ownedBy == :ownedBy && "
-                        + "description.indexOf(:description) >= 0")
+@javax.jdo.annotations.DatastoreIdentity(
+        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
+         column="id")
+@javax.jdo.annotations.Version(
+        strategy=VersionStrategy.VERSION_NUMBER, 
+        column="version")
+@javax.jdo.annotations.Uniques({
+    @javax.jdo.annotations.Unique(
+            name="ToDoItem_description_must_be_unique", 
+            members={"ownedBy","description"})
 })
-@javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
-@javax.jdo.annotations.Unique(name="ToDoItem_description_must_be_unique", members={"ownedBy","description"})
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+            name = "todo_all", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM dom.todo.ToDoItem "
+                    + "WHERE ownedBy == :ownedBy"),
+    @javax.jdo.annotations.Query(
+            name = "todo_notYetComplete", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM dom.todo.ToDoItem "
+                    + "WHERE ownedBy == :ownedBy "
+                    + "   && complete == false"),
+    @javax.jdo.annotations.Query(
+            name = "todo_complete", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM dom.todo.ToDoItem "
+                    + "WHERE ownedBy == :ownedBy "
+                    + "&& complete == true"),
+    @javax.jdo.annotations.Query(
+            name = "todo_similarTo", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM dom.todo.ToDoItem "
+                    + "WHERE ownedBy == :ownedBy "
+                    + "&& category == :category"),
+    @javax.jdo.annotations.Query(
+            name = "todo_autoComplete", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM dom.todo.ToDoItem "
+                    + "WHERE ownedBy == :ownedBy && "
+                    + "description.indexOf(:description) >= 0")
+})
 @ObjectType("TODO")
 @Audited
 @PublishedObject(ToDoItemChangedPayloadFactory.class)
@@ -430,9 +439,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     
 
-    @javax.jdo.annotations.Persistent(table="TODO_DEPENDENCIES")
-    @javax.jdo.annotations.Join(column="DEPENDING_TODO_ID")
-    @javax.jdo.annotations.Element(column="DEPENDENT_TODO_ID")
+    @javax.jdo.annotations.Persistent(table="ToDoItemDependencies")
+    @javax.jdo.annotations.Join(column="dependingId")
+    @javax.jdo.annotations.Element(column="dependentId")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @SortedBy(DependenciesComparator.class)

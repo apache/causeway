@@ -49,7 +49,7 @@ public class ToDoItemsFixture extends AbstractFixture {
 
         final String ownedBy = this.user != null? this.user : getContainer().getUser().getName();
         
-        isisJdoSupport.executeUpdate("delete from TODOITEM where OWNEDBY = '" + ownedBy + "'");
+        isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + ownedBy + "'");
 
         installFor(ownedBy);
         

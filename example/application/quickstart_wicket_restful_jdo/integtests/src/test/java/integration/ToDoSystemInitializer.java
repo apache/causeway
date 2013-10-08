@@ -75,6 +75,8 @@ public class ToDoSystemInitializer {
             
             testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.cache.level2.type","none");
 
+            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.identifier.case", "PreserveCase");
+
             return testConfiguration;
         }
 
