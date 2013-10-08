@@ -38,15 +38,15 @@ public class SimpleAppSystemInitializer {
     public static IsisSystemForTest initIsft() {
         IsisSystemForTest isft = IsisSystemForTest.getElseNull();
         if(isft == null) {
-            isft = new ToDoSystemBuilder().build().setUpSystem();
+            isft = new SimpleAppSystemBuilder().build().setUpSystem();
             IsisSystemForTest.set(isft);
         }
         return isft;
     }
 
-    private static class ToDoSystemBuilder extends IsisSystemForTest.Builder {
+    private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
 
-        public ToDoSystemBuilder() {
+        public SimpleAppSystemBuilder() {
             //withFixtures( ... reference data fixtures ...); // if we had any...
             withLoggingAt(org.apache.log4j.Level.INFO);
             with(testConfiguration());

@@ -73,4 +73,19 @@ public class ToDoItemTest_description extends ToDoIntegTest {
         toDoItem.setDescription(null);
     }
 
+    @Test
+    public void onlyJustShortEnough() throws Exception {
+        
+        // when, then
+        toDoItem.setDescription("123456789012345678901234567890");
+    }
+
+    @Test
+    public void tooLong() throws Exception {
+        
+        // when, then
+        expectedExceptions.expectMessage("The value proposed exceeds the maximum length of 30");
+        toDoItem.setDescription("1234567890123456789012345678901");
+    }
+
 }
