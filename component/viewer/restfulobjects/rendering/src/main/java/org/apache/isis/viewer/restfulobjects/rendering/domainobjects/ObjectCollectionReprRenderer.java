@@ -47,7 +47,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     public JsonRepresentation render() {
 
         renderMemberContent();
-        if (mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.representsPersistent()) {
+        
+        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
+        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY;
+        
+        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.representsPersistent()) {
             addValue();
         }
         if(!mode.isEventSerialization()) {

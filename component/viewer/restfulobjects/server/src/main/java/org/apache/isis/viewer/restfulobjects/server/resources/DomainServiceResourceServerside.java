@@ -30,6 +30,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.annotations.ClientResponseType;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -39,6 +41,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceR
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.MemberMode;
+import org.apache.isis.viewer.restfulobjects.server.resources.ResourceAbstract.Caching;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
@@ -96,6 +99,19 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
         return helper.propertyDetails(propertyId, MemberMode.NOT_MUTATING, Caching.ONE_DAY, getResourceContext().getWhere());
+    }
+
+    @Override
+    @GET
+    @Path("/{serviceId}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
+    public Response accessCollection(@PathParam("serviceId") final String serviceId, @PathParam("collectionId") String collectionId) {
+        init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES);
+
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter);
+
+        return helper.collectionDetails(collectionId, MemberMode.NOT_MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
     // //////////////////////////////////////////////////////////
@@ -169,5 +185,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         return helper.invokeAction(actionId, arguments, getResourceContext().getWhere());
     }
+
 
 }

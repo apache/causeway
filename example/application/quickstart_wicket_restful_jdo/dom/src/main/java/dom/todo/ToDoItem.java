@@ -65,6 +65,8 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
 
+import services.ClockService;
+
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
@@ -694,7 +696,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
 
     // //////////////////////////////////////
-    // Injected
+    // Injected Services
     // //////////////////////////////////////
 
     private DomainObjectContainer container;
@@ -709,6 +711,10 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.toDoItems = toDoItems;
     }
 
+    private ClockService clockService;
+    public void injectClockService(ClockService clockService) {
+        this.clockService = clockService;
+    }
     
     // //////////////////////////////////////
     // Extensions

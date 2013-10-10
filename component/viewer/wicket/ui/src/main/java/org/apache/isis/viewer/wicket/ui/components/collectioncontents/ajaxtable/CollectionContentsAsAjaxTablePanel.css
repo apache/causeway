@@ -117,8 +117,12 @@
 }
 
 .collectionContentsAsAjaxTablePanel table.contents img {
-    width: 32px;
-    height: 32px;
+    width: 16px;
+    height: 16px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tbody td:first-child {
+    min-width: 20px;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents .navigator  a.first,

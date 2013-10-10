@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/services")
@@ -60,8 +62,21 @@ public interface DomainServiceResource {
     @GET
     @Path("/{serviceId}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType = String.class)
     public Response propertyDetails(@PathParam("serviceId") final String serviceId, @PathParam("propertyId") final String propertyId);
 
+
+    // //////////////////////////////////////////////////////////
+    // domain service collection
+    // //////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{serviceId}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType = String.class)
+    public Response accessCollection(@PathParam("serviceId") final String serviceId, @PathParam("collectionId") final String collectionId);
+
+    
     // //////////////////////////////////////////////////////////
     // domain service action
     // //////////////////////////////////////////////////////////
