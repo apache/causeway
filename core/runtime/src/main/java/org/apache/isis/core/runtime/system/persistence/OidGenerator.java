@@ -63,10 +63,10 @@ public class OidGenerator implements DebuggableWithTitle {
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
      */
     public final RootOid createTransientOrViewModelOid(final Object pojo) {
-        final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
+        ObjectSpecification spec = getSpecificationLookup().loadSpecification(pojo.getClass());
+        final ObjectSpecId objectSpecId = spec.getSpecId();
         final String transientIdentifier = identifierGenerator.createTransientIdentifierFor(objectSpecId, pojo);
-        final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
-        final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
+        final State state = spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
         return new RootOidDefault(objectSpecId, transientIdentifier, state);
     }
 

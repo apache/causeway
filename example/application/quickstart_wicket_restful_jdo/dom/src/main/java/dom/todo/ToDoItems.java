@@ -22,8 +22,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import dom.todo.ToDoItem.Category;
@@ -31,12 +29,10 @@ import dom.todo.ToDoItem.Subcategory;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Dashboard;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;

@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
@@ -47,7 +46,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.common.NoResultsHandler;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -247,24 +245,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return objectAction.promptForParameters(contextAdapter)?Mode.PARAMETERS:Mode.RESULTS;
     }
 
-//	private static void addActionParamContextIfPossible(final ObjectAction objectAction, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
-//        if (contextAdapter == null) {
-//            return;
-//        }
-//        if(!objectAction.isContributed()) {
-//            return;
-//        }
-//        int i = 0;
-//        for (final ObjectActionParameter actionParam : objectAction.getParameters()) {
-//            if (ObjectActionParameters.compatibleWith(contextAdapter, actionParam)) {
-//                final String oidKeyValue = "" + i + "=" + contextAdapter.getOid().enString(getOidMarshaller());
-//                PageParameterNames.ACTION_PARAM_CONTEXT.addStringTo(pageParameters, oidKeyValue);
-//                return;
-//            }
-//            i++;
-//        }
-//    }
-
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getIdentifier();
         if (identifier != null) {
@@ -283,8 +263,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private Mode actionMode;
     private final SingleResultsMode singleResultsMode;
 
-    private NoResultsHandler noResultsHandler;
-
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
@@ -296,18 +274,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
         setArgumentsIfPossible(pageParameters);
         setContextArgumentIfPossible(pageParameters);
-
-        // TODO: if #args < param count, then change the actionMode
-
-        setNoResultsHandler(new NoResultsHandler() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onNoResults(final Component context) {
-                reset();
-                context.setResponsePage(context.getPage());
-            }
-        });
     }
 
     private static ActionMemento newActionMementoFrom(final PageParameters pageParameters) {
@@ -320,7 +286,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters) {
         RootOid oid = oidFor(pageParameters);
         if(oid.isTransient()) {
-            //return ObjectAdapterMemento.
             return null;
         } else {
             return ObjectAdapterMemento.createPersistent(oid);
@@ -494,18 +459,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return arguments;
     }
 
-
-    /**
-     * The {@link NoResultsHandler}, if any,
-     */
-    public NoResultsHandler getNoResultsHandler() {
-        return noResultsHandler;
-    }
-
-    public void setNoResultsHandler(final NoResultsHandler noResultsHandler) {
-        this.noResultsHandler = noResultsHandler;
-    }
-
     public ActionExecutor getExecutor() {
         return executor;
     }
@@ -539,8 +492,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
 
-    
-    
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
@@ -548,7 +499,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     protected static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
-
 
 
 }

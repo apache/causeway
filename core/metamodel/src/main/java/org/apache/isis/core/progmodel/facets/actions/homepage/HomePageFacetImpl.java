@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.common;
+package org.apache.isis.core.progmodel.facets.actions.homepage;
 
-import java.io.Serializable;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacetAbstract;
 
-import org.apache.wicket.Component;
+public class HomePageFacetImpl extends HomePageFacetAbstract {
 
-/**
- * Decouples the mechanism for letting the user acknowledge that no results
- * returned from action (eg an 'OK' button).
- */
-public interface NoResultsHandler extends Serializable {
-
-    void onNoResults(Component context);
+    public HomePageFacetImpl(final FacetHolder holder) {
+        super(holder);
+    }
 
 }

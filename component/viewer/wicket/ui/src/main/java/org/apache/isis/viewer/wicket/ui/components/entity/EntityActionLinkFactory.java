@@ -103,9 +103,11 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         final ObjectAdapter contextAdapter = entityModel.getObject();
 
         // use NO concurrency checking because the link is rendered on the entity page.
-        // REVIEW: is this good enough.  On the one hand we need it because otherwise a change done by this user basically prevents all actions from working
-        // on the other hand, if a change were made by some other user, then this user would want to know...
-        // perhaps the generated bookmarks need to subscribe to the EntityModel that backs the page?
+        
+        // REVIEW: is this good enough?  
+        // - On the one hand we need it because otherwise a change done by this user basically prevents all actions from working
+        // - on the other hand, if a change were made by some other user, then this user would want to know...
+        //   perhaps the generated bookmarks need to subscribe to the EntityModel that backs the page?
         final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, contextAdapter, ActionModel.SingleResultsMode.REDIRECT, ConcurrencyChecking.NO_CHECK);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);

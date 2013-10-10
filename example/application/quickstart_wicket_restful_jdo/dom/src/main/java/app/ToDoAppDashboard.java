@@ -20,29 +20,38 @@ package app;
 
 import java.util.List;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.Dashboard;
+import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
 
-@Dashboard
-@Named("Dashboard")
-public class ToDoAppDashboard extends AbstractFactoryAndRepository {
+public class ToDoAppDashboard extends AbstractViewModel {
 
-    // //////////////////////////////////////
-    // Identification in the UI
-    // //////////////////////////////////////
-
-    @Override
-    public String getId() {
-        return "dashboard";
+    public String title() {
+        return "Dashboard";
     }
-
+    
     public String iconName() {
         return "Dashboard";
     }
+    
+    // //////////////////////////////////////
+    // ViewModel contract
+    // //////////////////////////////////////
+
+    private String memento;
+    
+    @Override
+    public String viewModelMemento() {
+        return memento;
+    }
+
+    @Override
+    public void viewModelInit(String memento) {
+        this.memento = memento;
+    }
+
 
     // //////////////////////////////////////
     // getAnalysisByCategory
@@ -72,8 +81,10 @@ public class ToDoAppDashboard extends AbstractFactoryAndRepository {
     // //////////////////////////////////////
     
     private ToDoItemAnalysis toDoItemAnalysis;
+    
     public void injectToDoItemAnalysis(ToDoItemAnalysis toDoItemAnalysis) {
         this.toDoItemAnalysis = toDoItemAnalysis;
     }
+
 
 }

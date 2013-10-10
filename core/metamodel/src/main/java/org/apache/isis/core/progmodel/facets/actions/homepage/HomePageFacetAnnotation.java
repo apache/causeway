@@ -17,20 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.dashboard;
+package org.apache.isis.core.progmodel.facets.actions.homepage;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class DashboardFacetAbstract extends MarkerFacetAbstract implements DashboardFacet {
+public class HomePageFacetAnnotation extends HomePageFacetImpl {
 
-    public static Class<? extends Facet> type() {
-        return DashboardFacet.class;
-    }
-
-    public DashboardFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+    public HomePageFacetAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
 }

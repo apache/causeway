@@ -17,23 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.dashboard;
+package org.apache.isis.core.progmodel.facets.actions.homepage;
 
-import org.apache.isis.applib.annotation.Dashboard;
+import java.lang.reflect.Method;
+
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
-public class DashboardAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class HomePageAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private DashboardAnnotationFacetFactory facetFactory;
+    private HomePageAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DashboardAnnotationFacetFactory();
+        facetFactory = new HomePageAnnotationFacetFactory();
     }
 
     @Override
@@ -42,17 +45,19 @@ public class DashboardAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         super.tearDown();
     }
 
-    public void testDashboardAnnotationPickedUpOnClass() {
-        @Dashboard
-        class Customer {
+    public void testHomePageAnnotationPickedUpOnAction() {
+        class HomePageService {
+            @HomePage
+            public Object lookup() { return null; }
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        final Method actionMethod = findMethod(HomePageService.class, "lookup");
 
-        final Facet facet = facetedMethod.getFacet(DashboardFacet.class);
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(HomePageFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DashboardFacetAnnotation);
-        final DashboardFacetAnnotation notPersistableFacetAnnotation = (DashboardFacetAnnotation) facet;
+        assertTrue(facet instanceof HomePageFacetAnnotation);
 
         assertNoMethodsRemoved();
     }

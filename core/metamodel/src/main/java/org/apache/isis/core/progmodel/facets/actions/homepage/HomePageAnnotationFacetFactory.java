@@ -17,42 +17,45 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.dashboard;
+package org.apache.isis.core.progmodel.facets.actions.homepage;
 
 import java.util.List;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.Dashboard;
+import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class DashboardAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner{
+public class HomePageAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner{
 
-    public DashboardAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    public HomePageAnnotationFacetFactory() {
+        super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final Dashboard annotation = Annotations.getAnnotation(processClassContext.getCls(), Dashboard.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
-    }
-
-    private DashboardFacet create(final Dashboard annotation, final FacetHolder holder) {
-        return annotation != null ? new DashboardFacetAnnotation(holder) : null;
+    public void process(ProcessMethodContext processMethodContext) {
+        final HomePage annotation = Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class);
+        if (annotation == null) {
+            return;
+        } 
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+        FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
     }
 
     /* (non-Javadoc)
@@ -70,13 +73,21 @@ public class DashboardAnnotationFacetFactory extends FacetFactoryAbstract implem
             
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                if(objectSpec.containsFacet(DashboardFacet.class)) {
-                    final String fullIdentifier = objectSpec.getFullIdentifier();
-                    
-                    // TODO: it would good to flag if the facet is found on any non-services, however
-                    // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
-                    // this ought to be improved upon at some point...
-                    annotated.add(fullIdentifier);
+                final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
+                if(objectSpec.getCorrespondingClass() == AbstractHomePageDashboardService.class) {
+                    // ignore this one
+                    return true;
+                }
+                for (ObjectAction objectAction : objectActions) {
+                    if(objectAction.containsFacet(HomePageFacet.class)) {
+                        final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
+                        
+                        // TODO: it would good to flag if the facet is found on any non-services, however
+                        // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
+                        // this ought to be improved upon at some point...
+                        annotated.add(fullIdentifier);
+                        
+                    }
                 }
                 return true; // keep searching
             }
@@ -86,8 +97,8 @@ public class DashboardAnnotationFacetFactory extends FacetFactoryAbstract implem
                 if(annotated.size()>1) {
                     final String nonServiceNamesStr = Joiner.on(", ").join(annotated);
                     validationFailures.add(
-                            "Only one service can be specified as the dashboard; "
-                            + "found DashboardFacet on these classes: %s", nonServiceNamesStr);
+                            "Only one service action can be specified as the dashboard; "
+                            + "found HomePageFacet on these actions: %s", nonServiceNamesStr);
                 }
             }
         };

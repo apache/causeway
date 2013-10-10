@@ -17,20 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.metamodel.facets.actions.homepage;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-/**
- * Indicates that the domain service on which it is annotated should be rendered as the
- * home page, representing  dashboard of commonly accessed objects and invoked actions. 
- */
-@Inherited
-@Target({ ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Dashboard {
+public abstract class HomePageFacetAbstract extends MarkerFacetAbstract implements HomePageFacet {
+
+    public static Class<? extends Facet> type() {
+        return HomePageFacet.class;
+    }
+
+    public HomePageFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
+
 }

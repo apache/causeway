@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
@@ -59,7 +60,6 @@ import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
-import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
@@ -965,7 +965,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * then returns an empty list.
      */
     protected List<ObjectAction> createContributeeActions() {
-        if (isService() && !containsFacet(DashboardFacet.class)) {
+        if (isService()) {
             return Collections.emptyList();
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();

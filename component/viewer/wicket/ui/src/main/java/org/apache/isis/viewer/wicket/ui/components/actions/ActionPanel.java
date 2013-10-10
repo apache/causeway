@@ -78,7 +78,14 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * 
      * @see #hideAllBut(ComponentType)
      */
-    private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(ComponentType.PARAMETERS, ComponentType.ENTITY_LINK, ComponentType.ENTITY, ComponentType.VALUE, ComponentType.EMPTY_COLLECTION, ComponentType.VOID_RETURN, ComponentType.COLLECTION_CONTENTS);
+    private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(
+            ComponentType.PARAMETERS, 
+            ComponentType.ENTITY_LINK, 
+            ComponentType.ENTITY, 
+            ComponentType.VALUE, 
+            ComponentType.EMPTY_COLLECTION, 
+            ComponentType.VOID_RETURN, 
+            ComponentType.COLLECTION_CONTENTS);
 
     private static final String ID_ACTION_NAME = "actionName";
 
@@ -161,6 +168,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         }
     }
 
+    /**
+     * @return whether to clear args or not (they aren't if there was a validation exception)
+     */
     private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, MarkupContainer feedbackForm) {
 
         // validate the action parameters (if any)
@@ -181,7 +191,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             getTransactionManager().flushTransaction();
             
             final ResultType resultType = ResultType.determineFor(resultAdapter);
-            
             resultType.addResults(this, resultAdapter);
 
             if (actionModel.isBookmarkable()) {

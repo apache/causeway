@@ -187,3 +187,8 @@
     color: #000;
     background-color:#E3E3D9;
 }
+
+/* bootstrap seems to set to 'pointer' */
+.collectionContentsAsAjaxTablePanel label:hover {
+	cursor: default;
+}

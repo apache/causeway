@@ -16,15 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package app;
 
-package org.apache.isis.core.progmodel.facets.object.dashboard;
+import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.HomePage;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+@Hidden
+public class ToDoAppDashboardService extends AbstractService {
 
-public class DashboardFacetAnnotation extends DashboardFacetImpl {
+    private static final String ID = "dashboard";
 
-    public DashboardFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public String getId() {
+        return ID;
     }
+
+    public String iconName() {
+        return ID;
+    }
+
+    // //////////////////////////////////////
+
+    @ActionSemantics(Of.SAFE)
+    @HomePage
+    public ToDoAppDashboard lookup() {
+        return newViewModelInstance(ToDoAppDashboard.class, ID);
+    }
+
 
 }

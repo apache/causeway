@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.empty;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.common.NoResultsHandler;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -41,11 +40,7 @@ public class EmptyCollectionPanelFactory extends ComponentFactoryAbstract implem
         if (!(model instanceof ActionModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ActionModel actionModel = (ActionModel) model;
-
-        final NoResultsHandler hasNoResultsHandler = actionModel.getNoResultsHandler();
-        // fail fast if a NoResultsHandler has not been specified
-        return appliesIf(hasNoResultsHandler != null);
+        return ApplicationAdvice.APPLIES;
     }
 
     @Override

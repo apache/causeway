@@ -405,7 +405,14 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     @Override
     public ObjectSpecification loadSpecification(final Class<?> type) {
-        return internalLoadSpecification(type);
+        final ObjectSpecification spec = internalLoadSpecification(type);
+        if(spec == null) {
+            return null;
+        }
+        if(getCache().isInitialized() && getCache().getByObjectType(spec.getSpecId()) == null) {
+            getCache().recache(spec.getSpecId(), spec);
+        }
+        return spec;
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {

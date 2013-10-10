@@ -17,18 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.dashboard;
+package org.apache.isis.applib.annotation;
 
-import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Indicates that the domain service on which it is annotated should be rendered as the
- * home page, representing  dashboard of commonly accessed objects and invoked actions. 
+ * Indicates that the (no-arg) action (on a domain service) to be invoked automatically
+ * and the contents used for the home page.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
- * applying the <tt>@Dashboard</tt> annotation at the class level.
+ * Typically this action would return a {@link ViewModel} representing a dashboard
+ * (from which the user can navigate to commonly used objects and invoked actions);
+ * it might also simply invoke an action that returns a list.
  */
-public interface DashboardFacet extends MarkerFacet {
-
+@Inherited
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface HomePage {
 }

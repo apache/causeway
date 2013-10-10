@@ -17,15 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.dashboard;
+package org.apache.isis.core.metamodel.facets.actions.homepage;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
-public class DashboardFacetImpl extends DashboardFacetAbstract {
-
-    public DashboardFacetImpl(final FacetHolder holder) {
-        super(holder);
-    }
+/**
+ * Indicates that the (no-arg) action (on a domain service) to be invoked automatically
+ * and the contents used for the home page.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * applying the <tt>@HomePage</tt> annotation at the class level.
+ */
+public interface HomePageFacet extends MarkerFacet {
 
 }

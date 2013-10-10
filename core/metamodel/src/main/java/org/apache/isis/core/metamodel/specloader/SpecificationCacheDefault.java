@@ -52,14 +52,14 @@ class SpecificationCacheDefault {
     }
 
     public ObjectSpecification getByObjectType(ObjectSpecId objectSpecID) {
-        if (specById == null) {
+        if (!isInitialized()) {
             throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
         }
         return specById.get(objectSpecID);
     }
 
     /**
-     * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
+     * Populated as a result of running {@link MetaModelValidator#validate() validation} after xxxallxxx most specs have been loaded. 
      */
     void setCacheBySpecId(Map<ObjectSpecId, ObjectSpecification> specById) {
         this.specById = Maps.newHashMap();
@@ -81,6 +81,10 @@ class SpecificationCacheDefault {
      */
     public void recache(ObjectSpecId specId, ObjectSpecification spec) {
         specById.put(specId, spec);
+    }
+    
+    boolean isInitialized() {
+        return specById != null;
     }
 
 }

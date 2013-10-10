@@ -25,6 +25,7 @@ import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
@@ -73,6 +74,17 @@ public abstract class AbstractContainedObject {
     @Hidden
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
+    }
+
+    /**
+     * Create a new {@link ViewModel} of specified type, identified by memento.
+     * 
+     * @param ofType
+     * @param memento
+     * @return
+     */
+    protected <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento) {
+        return getContainer().newViewModelInstance(ofType, memento);
     }
 
     /**

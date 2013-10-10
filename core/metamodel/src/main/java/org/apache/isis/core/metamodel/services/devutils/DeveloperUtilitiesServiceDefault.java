@@ -43,7 +43,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.facets.object.dashboard.DashboardFacet;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -171,8 +171,7 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
             @Override
             public boolean apply(ObjectSpecification input) {
                 return  !input.isAbstract() && 
-                        (!input.isService() || 
-                          input.isService() && input.containsFacet(DashboardFacet.class)) && 
+                        !input.isService() && 
                         !input.isValue() && 
                         !input.isParentedOrFreeCollection();
             }});

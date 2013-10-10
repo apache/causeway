@@ -26,6 +26,7 @@ import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotat
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.homepage.HomePageAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
@@ -76,7 +77,6 @@ import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallb
 import org.apache.isis.core.progmodel.facets.object.callbacks.update.UpdateCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.choices.enums.EnumFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.cssclass.CssClassAnnotationForTypeFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.dashboard.DashboardAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.defaults.annotation.DefaultedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.describedas.annotation.DescribedAsAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
@@ -317,7 +317,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(AggregatedAnnotationFacetFactory.class);
         addFactory(BookmarkableAnnotationFacetFactory.class);
-        addFactory(DashboardAnnotationFacetFactory.class);
+        addFactory(HomePageAnnotationFacetFactory.class);
         addFactory(BoundedAnnotationFacetFactory.class);
         addFactory(BoundedMarkerInterfaceFacetFactory.class);
         addFactory(DebugAnnotationFacetFactory.class);

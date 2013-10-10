@@ -55,7 +55,7 @@ example: uncomment to hide the sliding bookmark panel
 li.x-caution a {
     background-color: #C94316;
 }
-.entityActions .cssMenuPanel .menuh li.x-caution a:hover {
+.entityCombined .entityActions .cssMenuPanel .menuh li.x-caution a:hover {
     background-color:#20B5C2;
 }	
 
@@ -65,6 +65,9 @@ li.x-caution a {
 li.x-highlight a {
     background-color: #51A95C;
 }
+.entityCombined .entityActions .cssMenuPanel .menuh li.x-highlight a:hover {
+    background-color:#20B5C2;
+}   
 
 div.x-key span.scalarName {
 	color: red;
