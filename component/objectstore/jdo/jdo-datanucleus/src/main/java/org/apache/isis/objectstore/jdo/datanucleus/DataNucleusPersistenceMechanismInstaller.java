@@ -122,6 +122,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         putIfNotPresent(props, "datanucleus.autoCreateSchema", "true");
         putIfNotPresent(props, "datanucleus.validateSchema", "true");
         putIfNotPresent(props, "datanucleus.cache.level2.type", "none");
+        
+        putIfNotPresent(props, "datanucleus.persistenceUnitLoadClasses", "true");
 
         String connectionFactoryName = props.get("datanucleus.ConnectionFactoryName");
         if(connectionFactoryName != null) {
