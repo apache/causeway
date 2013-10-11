@@ -141,14 +141,14 @@ public class ToDoItems {
         final String ownedBy = currentUserName();
         return newToDo(description, category, subcategory, ownedBy, dueBy, cost);
     }
-    public LocalDate default3NewToDo() {
-        return new LocalDate(Clock.getTime()).plusDays(14);
-    }
     public Category default1NewToDo() {
         return Category.Professional;
     }
     public Subcategory default2NewToDo() {
         return Category.Professional.subcategories().get(0);
+    }
+    public LocalDate default3NewToDo() {
+        return clockService.now().plusDays(14);
     }
     public List<Subcategory> choices2NewToDo(
             final String description, final Category category) {

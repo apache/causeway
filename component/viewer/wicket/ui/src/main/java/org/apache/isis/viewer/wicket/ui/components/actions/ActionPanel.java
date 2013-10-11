@@ -108,12 +108,33 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
 
     private void buildGuiForParameters(ActionModel actionModel) {
-        hideAllBut(ComponentType.PARAMETERS, ComponentType.ENTITY_ICON_AND_TITLE);
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(getActionModel().getTargetAdapter()));
 
-        final String actionName = getActionModel().getActionMemento().getAction().getName();
-        addOrReplace(new Label(ID_ACTION_NAME, Model.of(actionName)));
+
+        ObjectAdapter targetAdapter = null;
+        try {
+            targetAdapter = getActionModel().getTargetAdapter();
+            
+            hideAllBut(ComponentType.PARAMETERS, ComponentType.ENTITY_ICON_AND_TITLE);
+            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
+            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
+
+            final String actionName = getActionModel().getActionMemento().getAction().getName();
+            addOrReplace(new Label(ID_ACTION_NAME, Model.of(actionName)));
+            
+        } catch (final ConcurrencyException ex) {
+
+            // second attempt should succeed, because the Oid would have
+            // been updated in the attempt
+            if (targetAdapter == null) {
+                targetAdapter = getModel().getTargetAdapter();
+            }
+            
+            // forward onto the target page with the concurrency exception
+            ResultType.OBJECT.addResults(this, targetAdapter, ex);
+
+            getMessageBroker().addWarning(ex.getMessage());
+
+        }
     }
 
     protected void bookmarkPage(BookmarkableModel<?> model) {
@@ -153,8 +174,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
                 
                 // forward onto the target page with the concurrency exception
-                
-                // REVIEW: doesn't seem to get rendered
                 ResultType.OBJECT.addResults(this, targetAdapter, ex);
 
                 getMessageBroker().addWarning(ex.getMessage());

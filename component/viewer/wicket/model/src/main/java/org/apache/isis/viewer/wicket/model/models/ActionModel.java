@@ -117,7 +117,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final Mode actionMode = determineActionMode(objectAction, contextAdapter);
         PageParameterNames.ACTION_MODE.addEnumTo(pageParameters, actionMode);
 
-        //addActionParamContextIfPossible(objectAction, contextAdapter, pageParameters);
         return pageParameters;
     }
 

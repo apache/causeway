@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -153,6 +154,11 @@ public interface AdapterManager extends Injectable {
      * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version} 
      * of the {@link TypedOid oid} of the recreated adapter is the same as that of the provided {@link TypedOid oid}.
      * If the version differs, then a {@link ConcurrencyException} is thrown.
+     * 
+     * <p>
+     * ALSO, even if a {@link ConcurrencyException}, then the provided {@link TypedOid oid}'s {@link Version version}
+     * will be {@link TypedOid#setVersion(org.apache.isis.core.metamodel.adapter.version.Version) set} to the current 
+     * value.  This allows the client to retry if they wish.
      * 
      * @throws {@link ObjectNotFoundException} if the object does not exist.
      */
