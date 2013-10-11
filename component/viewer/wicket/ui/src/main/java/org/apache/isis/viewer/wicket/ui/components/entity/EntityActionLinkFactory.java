@@ -99,14 +99,22 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         }
     }
 
+    /**
+     * Creates a link to the {@link ActionPage} (ie the {@link PageClassRegistry registered page} for 
+     * {@link PageType#ACTION action}s) with the appropriate {@link PageParameters} to either render the action's
+     * parameter form (if it takes arguments) or to invoke the action directly.
+     * 
+     * <p>
+     * If the action's {@link ObjectAction#getSemantics() semantics} are {@link ActionSemantics.Of#SAFE safe}, then
+     * concurrency checking is disabled; otherwise it is enforced.
+     */
     private AbstractLink createLinkForPersistent(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         final ObjectAdapter contextAdapter = entityModel.getObject();
 
         // use the action semantics to determine whether invoking this action will require a concurrency check or not
         // if it's "safe", then we'll just continue without any checking. 
-        final ConcurrencyChecking concurrencyChecking = 
-                action.getSemantics() == ActionSemantics.Of.SAFE? ConcurrencyChecking.NO_CHECK: ConcurrencyChecking.CHECK;
+        final ConcurrencyChecking concurrencyChecking = ConcurrencyChecking.concurrencyCheckingFor(action.getSemantics());
         final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, contextAdapter, ActionModel.SingleResultsMode.REDIRECT, concurrencyChecking);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);

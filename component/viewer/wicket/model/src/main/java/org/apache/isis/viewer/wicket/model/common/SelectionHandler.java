@@ -22,20 +22,23 @@ package org.apache.isis.viewer.wicket.model.common;
 import java.io.Serializable;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 
 /**
  * Decouples the mechanism for selecting entities returned in collections.
  */
 public interface SelectionHandler extends Serializable {
 
-    /**
-     * The entity that has been selected.
-     * 
-     * @param context
-     *            TODO
-     */
-    void onSelected(Component context, ObjectAdapter selectedAdapter);
+    void onSelected(
+            Component context, ObjectAdapter selectedAdapter,
+            AjaxRequestTarget ajaxRequestTarget);
+
+    void onConcurrencyException(
+            Component context, ObjectAdapter selectedAdapter, 
+            ConcurrencyException ex,
+            AjaxRequestTarget ajaxRequestTarget);
 
 }

@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.model.mementos;
 import java.io.Serializable;
 import java.util.List;
 
+import com.google.common.base.Function;
+
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -33,6 +35,10 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -346,6 +352,105 @@ public class ObjectAdapterMemento implements Serializable {
     }
 
 
+    //////////////////////////////////////////////////
+    // Functions
+    //////////////////////////////////////////////////
+    
+    
+    public final static class Functions {
+
+        private Functions() {
+        }
+
+        public static Function<ObjectSpecification, ObjectSpecId> fromSpec() {
+            return new Function<ObjectSpecification, ObjectSpecId>() {
+
+                @Override
+                public ObjectSpecId apply(final ObjectSpecification from) {
+                    return from.getSpecId();
+                }
+            };
+        }
+
+        public static Function<OneToOneAssociation, PropertyMemento> fromProperty() {
+            return new Function<OneToOneAssociation, PropertyMemento>() {
+                @Override
+                public PropertyMemento apply(final OneToOneAssociation from) {
+                    return new PropertyMemento(from);
+                }
+            };
+        }
+
+        public static Function<OneToManyAssociation, CollectionMemento> fromCollection() {
+            return new Function<OneToManyAssociation, CollectionMemento>() {
+                @Override
+                public CollectionMemento apply(final OneToManyAssociation from) {
+                    return new CollectionMemento(from);
+                }
+            };
+        }
+
+        public static Function<ObjectAction, ActionMemento> fromAction() {
+            return new Function<ObjectAction, ActionMemento>() {
+                @Override
+                public ActionMemento apply(final ObjectAction from) {
+                    return new ActionMemento(from);
+                }
+            };
+        }
+
+        public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
+            return new Function<ObjectActionParameter, ActionParameterMemento>() {
+                @Override
+                public ActionParameterMemento apply(final ObjectActionParameter from) {
+                    return new ActionParameterMemento(from);
+                }
+            };
+        }
+
+        public static Function<Object, ObjectAdapterMemento> fromPojo(final AdapterManager adapterManager) {
+            return new Function<Object, ObjectAdapterMemento>() {
+                @Override
+                public ObjectAdapterMemento apply(final Object pojo) {
+                    final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
+                    return ObjectAdapterMemento.createOrNull(adapter);
+                }
+            };
+        }
+
+        public static Function<ObjectAdapter, ObjectAdapterMemento> fromAdapter() {
+            return new Function<ObjectAdapter, ObjectAdapterMemento>() {
+                @Override
+                public ObjectAdapterMemento apply(final ObjectAdapter adapter) {
+                    return ObjectAdapterMemento.createOrNull(adapter);
+                }
+            };
+        }
+
+
+        public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(final ConcurrencyChecking concurrencyChecking) {
+            return new Function<ObjectAdapterMemento, ObjectAdapter>() {
+                @Override
+                public ObjectAdapter apply(final ObjectAdapterMemento from) {
+                    return from.getObjectAdapter(concurrencyChecking);
+                }
+            };
+        }
+
+        public static Function<ObjectAdapter, ObjectAdapterMemento> toMemento() {
+            return new Function<ObjectAdapter, ObjectAdapterMemento>() {
+
+                @Override
+                public ObjectAdapterMemento apply(ObjectAdapter from) {
+                    return ObjectAdapterMemento.createOrNull(from);
+                }
+                
+            };
+        }
+
+    }
+
+    
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////

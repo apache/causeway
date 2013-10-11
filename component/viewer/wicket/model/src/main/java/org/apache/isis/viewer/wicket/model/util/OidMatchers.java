@@ -19,45 +19,33 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
+/**
+ * @deprecated - use {@link Oid.Matchers}
+ */
+@Deprecated
 public final class OidMatchers {
 
     private OidMatchers() {
     }
 
+    /**
+     * @deprecated - use {@link Oid.Matchers}
+     */
+    @Deprecated
     public static Matcher<Oid> isTransient() {
-        return new TypeSafeMatcher<Oid>() {
-
-            @Override
-            public boolean matchesSafely(final Oid item) {
-                return item.isTransient();
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("is transient");
-            }
-        };
+        return Oid.Matchers.isTransient();
     }
 
+    /**
+     * @deprecated - use {@link Oid.Matchers}
+     */
+    @Deprecated
     public static Matcher<Oid> isPersistent() {
-        return new TypeSafeMatcher<Oid>() {
-
-            @Override
-            public boolean matchesSafely(final Oid item) {
-                return !item.isTransient();
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("is persistent");
-            }
-        };
+        return Oid.Matchers.isPersistent();
     }
 
 }

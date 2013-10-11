@@ -24,13 +24,18 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
@@ -70,13 +75,23 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
-                final EntityModel o = (EntityModel) rowModel;
-                final ObjectAdapter selectedAdapter = o.load(ConcurrencyChecking.NO_CHECK);
-                handler.onSelected(this, selectedAdapter);
+                final EntityModel entityModel = (EntityModel) rowModel;
+                ObjectAdapter selectedAdapter = null;
+                try {
+                    selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
+                    handler.onSelected(this, selectedAdapter, target);
+                } catch(ConcurrencyException ex) {
+
+                    // should work second time, because the previous attempt will have updated the OAM's OIDs version.
+                    selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
+                    handler.onConcurrencyException(this, selectedAdapter, ex, target);
+                }
             }
         };
         rowToggles.add(toggle);
         toggle.setOutputMarkupId(true);
         cellItem.add(toggle);
     }
+
+
 }

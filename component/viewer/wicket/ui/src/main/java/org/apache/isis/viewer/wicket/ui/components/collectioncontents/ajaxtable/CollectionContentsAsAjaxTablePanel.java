@@ -28,15 +28,21 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
@@ -93,7 +99,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         addPropertyColumnsIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
-        dataTable = new MyAjaxFallbackDefaultDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
+        dataTable = new IsisAjaxFallbackDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
 
         buildEntityActionsGui(bulkActions);
 
@@ -101,8 +107,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
     
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
-        final EntityCollectionModel model = getModel();
-        if(bulkActions.isEmpty() || model.isParented()) {
+        final EntityCollectionModel entityCollectionModel = getModel();
+        if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
             return;
         }
         
@@ -111,8 +117,24 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSelected(final Component context, final ObjectAdapter selectedAdapter) {
-                model.toggleSelectionOn(selectedAdapter);
+            public void onSelected(
+                    final Component context, final ObjectAdapter selectedAdapter,
+                    AjaxRequestTarget ajaxRequestTarget) {
+                entityCollectionModel.toggleSelectionOn(selectedAdapter);
+            }
+
+            @Override
+            public void onConcurrencyException(
+                    final Component context, ObjectAdapter selectedAdapter, 
+                    ConcurrencyException ex,
+                    AjaxRequestTarget ajaxRequestTarget) {
+                
+                // this causes the row to be repainted
+                // but it isn't possible (yet) to raise any warning
+                // because that only gets flushed on page refresh.
+                //
+                // perhaps something to tackle in a separate ticket....
+                ajaxRequestTarget.add(dataTable);
             }
         }));
     }
@@ -245,6 +267,10 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
+    }
+
+    protected MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
     }
 
 }

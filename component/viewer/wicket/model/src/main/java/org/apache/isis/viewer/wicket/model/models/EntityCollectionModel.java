@@ -73,12 +73,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         STANDALONE {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-                return Lists.transform(entityCollectionModel.mementoList, ObjectAdapterFunctions.fromMemento());
+                return Lists.transform(entityCollectionModel.mementoList, ObjectAdapterMemento.Functions.fromMemento(ConcurrencyChecking.NO_CHECK));
             }
 
             @Override
             void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list) {
-                entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapterFunctions.toMemento()));
+                entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapterMemento.Functions.toMemento()));
             }
 
             @Override

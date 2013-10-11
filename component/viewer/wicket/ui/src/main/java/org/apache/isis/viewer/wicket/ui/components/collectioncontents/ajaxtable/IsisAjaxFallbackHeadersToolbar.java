@@ -28,11 +28,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
  */
-public class MyAjaxFallbackHeadersToolbar<S> extends MyHeadersToolbar<S>
+public class IsisAjaxFallbackHeadersToolbar<S> extends MyHeadersToolbar<S>
 {
     private static final long serialVersionUID = 1L;
 
-    public MyAjaxFallbackHeadersToolbar(final DataTable<?, S> table, final ISortStateLocator<S> stateLocator)
+    public IsisAjaxFallbackHeadersToolbar(final DataTable<?, S> table, final ISortStateLocator<S> stateLocator)
     {
         super(table, stateLocator);
         table.setOutputMarkupId(true);

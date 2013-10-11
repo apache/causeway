@@ -29,17 +29,17 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 
-public class MyAjaxFallbackDefaultDataTable<T, S> extends DataTable<T, S>
+public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S>
 {
     private static final long serialVersionUID = 1L;
 
-    public MyAjaxFallbackDefaultDataTable(final String id, final List<? extends IColumn<T, S>> columns,
+    public IsisAjaxFallbackDataTable(final String id, final List<? extends IColumn<T, S>> columns,
         final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
     {
         super(id, columns, dataProvider, rowsPerPage);
         setOutputMarkupId(true);
         setVersioned(false);
-        addTopToolbar(new MyAjaxFallbackHeadersToolbar<S>(this, dataProvider));
+        addTopToolbar(new IsisAjaxFallbackHeadersToolbar<S>(this, dataProvider));
         addBottomToolbar(new AjaxNavigationToolbar(this));
         addBottomToolbar(new NoRecordsToolbar(this));
     }

@@ -26,37 +26,37 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
+/**
+ * @deprecated - use {@link ObjectAdapter.Functions} or {@link ObjectAdapterMemento.Functions}
+ */
+@Deprecated
 public final class ObjectAdapterFunctions {
 
     private ObjectAdapterFunctions() {
     }
 
     /**
-     * Use {@link ObjectAdapter.Functions}
+     * @deprecated - use {@link ObjectAdapter.Functions}
      */
     @Deprecated
     public static Function<Object, ObjectAdapter> fromPojo(final AdapterManager adapterManager) {
         return ObjectAdapter.Functions.adapterForUsing(adapterManager);
     }
 
-    public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento() {
-        return new Function<ObjectAdapterMemento, ObjectAdapter>() {
-            @Override
-            public ObjectAdapter apply(final ObjectAdapterMemento from) {
-                return from.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-            }
-        };
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
+    public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(final ConcurrencyChecking concurrencyChecking) {
+        return ObjectAdapterMemento.Functions.fromMemento(concurrencyChecking);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<ObjectAdapter, ObjectAdapterMemento> toMemento() {
-        return new Function<ObjectAdapter, ObjectAdapterMemento>() {
-
-            @Override
-            public ObjectAdapterMemento apply(ObjectAdapter from) {
-                return ObjectAdapterMemento.createOrNull(from);
-            }
-            
-        };
+        return ObjectAdapterMemento.Functions.toMemento();
     }
 
 }

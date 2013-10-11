@@ -36,75 +36,69 @@ import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
+/**
+ * @deprecated - use {@link ObjectAdapterMemento.Functions}
+ */
+@Deprecated
 public final class MementoFunctions {
 
     private MementoFunctions() {
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<ObjectSpecification, ObjectSpecId> fromSpec() {
-        return new Function<ObjectSpecification, ObjectSpecId>() {
-
-            @Override
-            public ObjectSpecId apply(final ObjectSpecification from) {
-                return from.getSpecId();
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromSpec();
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<OneToOneAssociation, PropertyMemento> fromProperty() {
-        return new Function<OneToOneAssociation, PropertyMemento>() {
-            @Override
-            public PropertyMemento apply(final OneToOneAssociation from) {
-                return new PropertyMemento(from);
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromProperty();
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<OneToManyAssociation, CollectionMemento> fromCollection() {
-        return new Function<OneToManyAssociation, CollectionMemento>() {
-            @Override
-            public CollectionMemento apply(final OneToManyAssociation from) {
-                return new CollectionMemento(from);
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromCollection();
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<ObjectAction, ActionMemento> fromAction() {
-        return new Function<ObjectAction, ActionMemento>() {
-            @Override
-            public ActionMemento apply(final ObjectAction from) {
-                return new ActionMemento(from);
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromAction();
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
-        return new Function<ObjectActionParameter, ActionParameterMemento>() {
-            @Override
-            public ActionParameterMemento apply(final ObjectActionParameter from) {
-                return new ActionParameterMemento(from);
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromActionParameter();
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<Object, ObjectAdapterMemento> fromPojo(final AdapterManager adapterManager) {
-        return new Function<Object, ObjectAdapterMemento>() {
-            @Override
-            public ObjectAdapterMemento apply(final Object pojo) {
-                final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
-                return ObjectAdapterMemento.createOrNull(adapter);
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromPojo(adapterManager);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapterMemento.Functions}
+     */
+    @Deprecated
     public static Function<ObjectAdapter, ObjectAdapterMemento> fromAdapter() {
-        return new Function<ObjectAdapter, ObjectAdapterMemento>() {
-            @Override
-            public ObjectAdapterMemento apply(final ObjectAdapter adapter) {
-                return ObjectAdapterMemento.createOrNull(adapter);
-            }
-        };
+        return ObjectAdapterMemento.Functions.fromAdapter();
     }
-
 
 }
