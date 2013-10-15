@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -418,6 +419,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
             final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
+            if(property.containsDoOpFacet(NotPersistedFacet.class)) {
+                // ignore derived properties
+                continue;
+            }
             final ObjectAdapter associate = scalarModel.getObject();
             property.set(adapter, associate);
         }
