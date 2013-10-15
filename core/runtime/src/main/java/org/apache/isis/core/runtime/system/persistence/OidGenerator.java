@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Aggregated;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

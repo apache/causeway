@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.viewmodel.annotation;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetAbstract;
 

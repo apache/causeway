@@ -20,7 +20,6 @@
 package org.apache.isis.applib;
 
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.ViewModel;
 
 /**
  * Convenience super class for all view models that wish to interact with the

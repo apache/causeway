@@ -25,7 +25,6 @@ import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;

@@ -17,7 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib;
+
+import org.apache.isis.applib.annotation.Hidden;
 
 
 /**

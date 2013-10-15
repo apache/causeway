@@ -329,7 +329,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     // disable action dependent on state of object
     public String disableCompleted() {
-        return complete ? "Already completed" : null;
+        return isComplete() ? "Already completed" : null;
     }
 
     @Named("Not done")

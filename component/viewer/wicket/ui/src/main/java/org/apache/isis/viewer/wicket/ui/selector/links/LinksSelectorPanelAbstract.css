@@ -72,12 +72,6 @@ span.ViewLinkItem.hide {
 	background-repeat:no-repeat;
 }
 
-a span.ViewLinkItem.calendar {
-	background-image:url('images/icon_calendar_off.png');
-	background-position: center center;
-	background-repeat:no-repeat;
-}
-
 span.ViewLinkItem.table {
 	background-image:url('images/icon_table_on.png');
 	background-position: center center;
@@ -86,12 +80,6 @@ span.ViewLinkItem.table {
 
 a span.ViewLinkItem.hide {
 	background-image:url('images/icon_hide_off.png');
-	background-position: center center;
-	background-repeat:no-repeat;
-}
-
-span.ViewLinkItem.calendar {
-	background-image:url('images/icon_calendar_on.png');
 	background-position: center center;
 	background-repeat:no-repeat;
 }

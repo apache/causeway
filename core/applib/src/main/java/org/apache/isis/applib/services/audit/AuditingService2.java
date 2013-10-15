@@ -22,30 +22,18 @@ import org.apache.isis.applib.annotation.Hidden;
 
 /**
  * Will be called whenever an object has changed its state.
- * 
- * <p>
- * Deprecated because the {@link #audit(String, long, String, String, String, String)} method does not include details
- * of the object association being modified.
- * 
- * @see AuditingService2
- * 
- * @deprecated
  */
-@Deprecated
-public interface AuditingService {
-
-    @Deprecated
+public interface AuditingService2 extends AuditingService {
+    
     @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
+    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String propertyId, String preValue, String postValue);
     
     
-    @Deprecated
-    public static class Stderr implements AuditingService {
+    public static class Stderr extends AuditingService.Stderr implements AuditingService2 {
 
-        @Deprecated
         @Hidden
-        public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
-            String auditMessage = objectType + ":" + identifier + " by " + user + ": " + preValue + " -> " + postValue;
+        public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String propertyId, String preValue, String postValue) {
+            String auditMessage = objectType + ":" + identifier + " by " + user + ", " + propertyId +": " + preValue + " -> " + postValue;
             System.err.println(auditMessage);
         }
     }

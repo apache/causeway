@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.stable;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;

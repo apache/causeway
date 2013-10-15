@@ -20,8 +20,8 @@
 package org.apache.isis.core.tck.dom.viewmodels;
 
 import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.util.TitleBuffer;
 
 

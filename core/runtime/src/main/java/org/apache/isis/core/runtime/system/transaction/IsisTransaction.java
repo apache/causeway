@@ -46,6 +46,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.audit.AuditingService2;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
@@ -189,6 +190,11 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     private final AuditingService auditingService;
     /**
+     * could be null if none has been registered, or if the service provided does not
+     * implement the {@link AuditingService2} sub-interface.
+     */
+    private final AuditingService2 auditingService2;
+    /**
      * could be null if none has been registered
      */
     private final PublishingServiceWithDefaultPayloadFactories publishingService;
@@ -210,8 +216,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
         this.auditingService = auditingService;
+        this.auditingService2 = (AuditingService2) (auditingService instanceof AuditingService2? auditingService: null);
         this.publishingService = publishingService;
-
 
         this.guid = UUID.randomUUID();
         this.eventSequence = 0;
@@ -538,7 +544,12 @@ public class IsisTransaction implements TransactionScopedComponent {
         final PreAndPostValues papv = auditEntry.getValue();
         final String preValue = asString(papv.getPre());
         final String postValue = asString(papv.getPost());
-        auditingService.audit(currentUser, currentTimestampEpoch, objectType, identifier, preValue, postValue);
+        final String propertyId = aap.getProperty().getId();
+        if(auditingService2 != null) {
+            auditingService2.audit(currentUser, currentTimestampEpoch, objectType, identifier, propertyId, preValue, postValue);
+        } else {
+            auditingService.audit(currentUser, currentTimestampEpoch, objectType, identifier, preValue, postValue);
+        }
     }
 
     private static String asString(Object object) {

@@ -19,11 +19,11 @@
 package org.apache.isis.applib.services.homepage;
 
 import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.ViewModel;
 
 /**
  * Convenience domain service to create a view model (eg a dashboard) to be rendered automatically
