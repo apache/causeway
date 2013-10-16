@@ -30,6 +30,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
@@ -41,6 +42,7 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -50,10 +52,12 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel.ResultType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -173,16 +177,33 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             final ActionModel actionModel = getActionModel();
             
             final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
-            System.out.println(pendingArguments);
-
-            final ObjectAction action = actionModel.getActionMemento().getAction();
-            final int numParams = action.getParameterCount();
-            for (int i = 0; i < numParams; i++) {
-                final ScalarPanelAbstract paramPanel = paramPanels.get(i);
-                if(paramPanel != null) {
-                    paramPanel.updateChoices(pendingArguments);
-                    target.add(paramPanel);
+            
+            try {
+                final ObjectAction action = actionModel.getActionMemento().getAction();
+                final int numParams = action.getParameterCount();
+                for (int i = 0; i < numParams; i++) {
+                    final ScalarPanelAbstract paramPanel = paramPanels.get(i);
+                    if(paramPanel != null) {
+                        // this could throw a ConcurrencyException as we may have to reload the 
+                        // object adapter of the action in order to compute the choices
+                        // (and that object adapter might have changed)
+                        paramPanel.updateChoices(pendingArguments);
+                        target.add(paramPanel);
+                    }
                 }
+            } catch(ConcurrencyException ex) {
+                
+                // second attempt should succeed, because the Oid would have
+                // been updated in the attempt
+                ObjectAdapter targetAdapter = getActionModel().getTargetAdapter();
+
+                // forward onto the target page with the concurrency exception
+                final EntityPage entityPage = new EntityPage(targetAdapter, ex);
+                
+                ActionParametersFormPanel.this.setResponsePage(entityPage);
+                
+                getAuthenticationSession().getMessageBroker().addWarning(ex.getMessage());
+                return;
             }
             
         }

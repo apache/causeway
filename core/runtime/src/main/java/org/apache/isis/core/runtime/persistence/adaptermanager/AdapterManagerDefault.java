@@ -335,8 +335,16 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
                     }
                 }
             } finally {
+                
+                final Version originalVersion = originalOid.getVersion();
                 final Version recreatedVersion = recreatedOid.getVersion();
-                originalOid.setVersion(recreatedVersion);
+                if(recreatedVersion != null && (
+                        originalVersion == null || 
+                        recreatedVersion.different(originalVersion))
+                    ) {
+                   LOG.info("updating version in oid, on " + originalOid + " (" + originalVersion + ") to (" + recreatedVersion +")");
+                   originalOid.setVersion(recreatedVersion);
+                }
             }
         }
 

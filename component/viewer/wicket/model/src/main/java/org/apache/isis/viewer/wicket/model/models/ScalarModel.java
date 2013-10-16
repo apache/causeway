@@ -301,7 +301,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             public List<ObjectAdapter> getChoices(final ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), argumentsIfAvailable);
+                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK), argumentsIfAvailable);
                 return choicesAsList(choices);
             }
 
