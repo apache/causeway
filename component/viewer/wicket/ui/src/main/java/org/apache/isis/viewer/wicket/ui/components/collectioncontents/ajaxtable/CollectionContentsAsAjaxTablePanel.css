@@ -35,6 +35,15 @@
 	background-color:#D2F0F3;
 }
 
+.collectionContentsAsAjaxTablePanel table.contents tr.reloaded-after-concurrency-exception {
+    background-color: yellow;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.reloaded-after-concurrency-exception:hover td {
+    background-color: orange;
+}
+
+
 .collectionContentsAsAjaxTablePanel table.contents tr td { 
 	padding-left: 8px; 
 	padding-right: 10px; 

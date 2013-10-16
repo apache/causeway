@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -39,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAdapter> {
 
@@ -71,6 +73,14 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
             
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
+        final MarkupContainer row = cellItem.getParent().getParent();
+        row.setOutputMarkupId(true);
+        final EntityModel entityModel = (EntityModel) rowModel;
+        String concurrencyExceptionIfAny = entityModel.getAndClearConcurrencyExceptionIfAny();
+        if(concurrencyExceptionIfAny != null) {
+            row.add(new CssClassAppender("reloaded-after-concurrency-exception"));
+        }
+        
         final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -85,6 +95,8 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
                     // should work second time, because the previous attempt will have updated the OAM's OIDs version.
                     selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
                     handler.onConcurrencyException(this, selectedAdapter, ex, target);
+                    
+                    entityModel.setException(ex);
                 }
             }
         };

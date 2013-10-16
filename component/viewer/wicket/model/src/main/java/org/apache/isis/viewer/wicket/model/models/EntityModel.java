@@ -518,12 +518,48 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     // //////////////////////////////////////////////////////////
+    // equals, hashCode
+    // //////////////////////////////////////////////////////////
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((adapterMemento == null) ? 0 : adapterMemento.hashCode());
+        return result;
+    }
+
+    /**
+     * In order that <tt>IsisAjaxFallbackDataTable</tt> can use a
+     * <tt>ReuseIfModelsEqualStrategy</tt> to preserve any concurrency exception
+     * information in original model. 
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        EntityModel other = (EntityModel) obj;
+        if (adapterMemento == null) {
+            if (other.adapterMemento != null)
+                return false;
+        } else if (!adapterMemento.equals(other.adapterMemento))
+            return false;
+        return true;
+    }
+    
+    // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
     protected static OidMarshaller getOidMarshaller() {
 		return IsisContext.getOidMarshaller();
 	}
+
+
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();

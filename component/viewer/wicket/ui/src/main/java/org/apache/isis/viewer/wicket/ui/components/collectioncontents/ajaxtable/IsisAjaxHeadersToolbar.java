@@ -42,7 +42,7 @@ import org.apache.wicket.util.string.Strings;
 /**
  * Adapted from Wicket's own {@link HeadersToolbar}.
  */
-public class MyHeadersToolbar<S> extends AbstractToolbar
+public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 {
     private static final long serialVersionUID = 1L;
 
@@ -76,7 +76,7 @@ public class MyHeadersToolbar<S> extends AbstractToolbar
      * @param stateLocator
      *            locator for the ISortState implementation used by sortable headers
      */
-    public <T> MyHeadersToolbar(final DataTable<T, S> table, final ISortStateLocator<S> stateLocator)
+    public <T> IsisAjaxHeadersToolbar(final DataTable<T, S> table, final ISortStateLocator<S> stateLocator)
     {
         super(table);
 

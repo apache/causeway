@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
  */
-public class IsisAjaxFallbackHeadersToolbar<S> extends MyHeadersToolbar<S>
+public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
 {
     private static final long serialVersionUID = 1L;
 

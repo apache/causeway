@@ -26,4 +26,14 @@ $(document).ready(function() {
     $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(showVeil);
     
     $('.first-field input').focus();
+    
+    
+    $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception') 
+        .livequery(function(){
+            x=$(this);
+            $(this).animate({ "backgroundColor": "#FFF" }, 1000, "linear", function() {
+                $(x).css('background-color','').removeClass("reloaded-after-concurrency-exception");
+            }); 
+        }); 
+    
 });
