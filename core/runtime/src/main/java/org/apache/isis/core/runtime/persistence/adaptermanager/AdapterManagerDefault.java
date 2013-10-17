@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -62,7 +63,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -325,7 +325,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
                        otherVersion != null && 
                        thisVersion.different(otherVersion)) {
                         
-                        if(ConcurrencyChecking.isCurrentlyEnabled()) {
+                        if(isConcurrencyCheckingGloballyEnabled() && ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
                             final String currentUser = getAuthenticationSession().getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
@@ -393,6 +393,11 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
             createdAdapter = createAggregatedAdapter(pojo, aggregatedOid);
         }
         return createdAdapter;
+    }
+
+    private boolean isConcurrencyCheckingGloballyEnabled() {
+        final boolean disabled = getConfiguration().getBoolean("isis.persistor.disableConcurrencyChecking", false);
+        return !disabled;
     }
 
 
@@ -843,6 +848,10 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         return IsisContext.getAuthenticationSession();
     }
     
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+
 
 
 }

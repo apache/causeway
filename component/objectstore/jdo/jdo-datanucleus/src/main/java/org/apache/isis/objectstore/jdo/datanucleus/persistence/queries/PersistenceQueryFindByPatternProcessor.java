@@ -37,23 +37,6 @@ public class PersistenceQueryFindByPatternProcessor extends
 
     public List<ObjectAdapter> process(
             final PersistenceQueryFindByPattern persistenceQuery) {
-
-        
-
-        
-//        final Object pojoPattern = persistenceQuery.getPattern().getObject();
-//        
-//        final CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-//        
-//        
-//        final CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
-//        
-//        final Query query = getEntityManager().createQuery(criteriaQuery);
-//        final List<?> results = query.getResultList();
-//        return loadAdapters(persistenceQuery.getSpecification(), results);
-        
         throw new NotYetImplementedException();
     }
 }
-
-// Copyright (c) Naked Objects Group Ltd.

@@ -41,23 +41,6 @@ public class PersistenceQueryFindByTitleProcessor extends PersistenceQueryProces
     }
 
     private <Z> List<ObjectAdapter> process(final PersistenceQueryFindByTitle persistenceQuery, Class<Z> correspondingClass) {
-        // TODO
         throw new NotYetImplementedException();
-
-//        final CriteriaQuery<Z> criteriaQuery = getEntityManager().getCriteriaBuilder().createQuery(correspondingClass);
-//
-//        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
-//        final Root<Z> from = criteriaQuery.from(correspondingClass);
-//        
-//        final EntityType<Z> model = from.getModel();
-//        final SingularAttribute<? super Z, String> titleAttribute = model.getSingularAttribute("title", String.class);
-//        final Path<String> titlePath = from.get(titleAttribute);
-//        titlePath.equals(persistenceQuery.getTitle());
-//        
-//        final TypedQuery<Z> query = getPersistenceManager().createQuery(criteriaQuery);
-//        final List<Z> pojos = query.getResultList();
-//        return loadAdapters(objectSpec, pojos);
     }
 }
-
-// Copyright (c) Naked Objects Group Ltd.

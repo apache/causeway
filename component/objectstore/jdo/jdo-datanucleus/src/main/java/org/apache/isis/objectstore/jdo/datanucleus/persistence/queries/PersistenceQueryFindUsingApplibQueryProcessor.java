@@ -27,17 +27,23 @@ import javax.jdo.Query;
 
 import com.google.common.collect.Maps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
     
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
+
     public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
         super(persistenceManager, frameworkSynchronizer);
     }
@@ -50,16 +56,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         
         final List<?> results;
         if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
-            // special case handling
-            final Class<?> cls = objectSpec.getCorrespondingClass();
-            if(!JdoPropertyUtils.hasPrimaryKeyProperty(objectSpec)) {
-                throw new UnsupportedOperationException("cannot search by primary key for DataStore-assigned entities");
-            }
-            final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
-            String pkOtoaId = pkOtoa.getId();
-            final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
-            final Query jdoQuery = getPersistenceManager().newQuery(cls, filter);
-            results = (List<?>) jdoQuery.execute();
+            results = getResultsPk(queryName, map, objectSpec);
         } else {
             results = getResults(objectSpec, queryName, map, cardinality);
         }
@@ -67,11 +64,33 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         return loadAdapters(objectSpec, results);
     }
 
+    // special case handling
+    private List<?> getResultsPk(final String queryName, final Map<String, Object> map, final ObjectSpecification objectSpec) {
+        final Class<?> cls = objectSpec.getCorrespondingClass();
+        if(!JdoPropertyUtils.hasPrimaryKeyProperty(objectSpec)) {
+            throw new UnsupportedOperationException("cannot search by primary key for DataStore-assigned entities");
+        }
+        final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
+        final String pkOtoaId = pkOtoa.getId();
+        final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
+        final Query jdoQuery = getPersistenceManager().newQuery(cls, filter);
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("query: " + queryName + ", filter: " + filter);
+        }
+        
+        return (List<?>) jdoQuery.execute();
+    }
+
     private List<?> getResults(ObjectSpecification objectSpec, final String queryName, final Map<String, Object> argumentsByParameterName, final QueryCardinality cardinality) {
         
         final PersistenceManager persistenceManager = getJdoObjectStore().getPersistenceManager();
         final Class<?> cls = objectSpec.getCorrespondingClass();
         final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("query: " + queryName + ", args: " + argumentsByParameterName);
+        }
         
         final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
         if (cardinality == QueryCardinality.MULTIPLE) {
@@ -84,7 +103,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final Map<String, Object> argumentsByParameterName = Maps.newHashMap();
         for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
             final ObjectAdapter argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
-            final Object argument = ObjectAdapterUtils.unwrapObject(argumentAdapter);
+            final Object argument = ObjectAdapter.Util.unwrap(argumentAdapter);
             argumentsByParameterName.put(parameterName, argument);
         }
         return argumentsByParameterName;

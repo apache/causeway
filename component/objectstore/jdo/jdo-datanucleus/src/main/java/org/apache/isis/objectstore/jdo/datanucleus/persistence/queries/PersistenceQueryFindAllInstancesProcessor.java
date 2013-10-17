@@ -42,16 +42,15 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
 
         final ObjectSpecification specification = persistenceQuery.getSpecification();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("getInstances: class=" + specification.getFullIdentifier());
-        }
         
         Class<?> cls = specification.getCorrespondingClass();
         final Query query = getPersistenceManager().newQuery(cls);
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("allInstances(): class=" + specification.getFullIdentifier());
+        }
         
         final List<?> pojos = (List<?>) query.execute();
         return loadAdapters(specification, pojos);
     }
 }
-
-// Copyright (c) Naked Objects Group Ltd.
