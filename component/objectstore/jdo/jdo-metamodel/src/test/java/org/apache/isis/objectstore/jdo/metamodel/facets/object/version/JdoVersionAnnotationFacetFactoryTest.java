@@ -16,31 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
+package org.apache.isis.objectstore.jdo.metamodel.facets.object.version;
 
 import java.util.List;
 
-import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
-
-import junit.framework.Assert;
+import javax.jdo.annotations.Version;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
-public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private JdoDiscriminatorAnnotationFacetFactory facetFactory;
+    private JdoVersionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoDiscriminatorAnnotationFacetFactory();
+        facetFactory = new JdoVersionAnnotationFacetFactory();
     }
 
     @Override
@@ -58,50 +54,27 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
-    public void testDiscriminatorValueAnnotationPickedUpOnClass() {
-        @Discriminator("CUS")
+    public void testVersionAnnotationPickedUpOnClass() {
+        @Version
         class Customer {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(JdoDiscriminatorFacet.class);
+        final Facet facet = facetHolder.getFacet(JdoVersionFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof JdoDiscriminatorFacetDefault);
+        assertTrue(facet instanceof JdoVersionFacetFromAnnotation);
     }
 
-    public void testObjectSpecIdAnnotationPickedUpOnClass() {
-        @Discriminator("CUS")
-        class Customer {
-        }
-        
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
-        
-        final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation);
-    }
-    
-    public void testIfNoEntityAnnotationThenNoFacet() {
+    public void testIfNoAnnotationThenNoFacet() {
 
         class Customer {
         }
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        final Facet facet = facetHolder.getFacet(JdoVersionFacet.class);
         assertNull(facet);
-    }
-
-    public void testAnnotationValue() {
-        @Discriminator("CUS")
-        class Customer {
-        }
-
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
-
-        final ObjectSpecIdFacet discriminatorValueFacet = facetHolder.getFacet(ObjectSpecIdFacet.class);
-        assertEquals(ObjectSpecId.of("CUS"), discriminatorValueFacet.value());
     }
 
     public void testNoMethodsRemoved() {

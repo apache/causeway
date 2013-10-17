@@ -69,7 +69,8 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                final Version datastoreVersion = getVersionIfAny(pojo);
+                final PersistenceCapable pc = pojo;
+                final Version datastoreVersion = getVersionIfAny(pc);
                 
                 final RootOid originalOid ;
                 ObjectAdapter originalAdapter = getAdapterManager().getAdapterFor(pojo);

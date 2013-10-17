@@ -14,4 +14,4 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
+package org.apache.isis.objectstore.jdo.metamodel.facets.object.version;

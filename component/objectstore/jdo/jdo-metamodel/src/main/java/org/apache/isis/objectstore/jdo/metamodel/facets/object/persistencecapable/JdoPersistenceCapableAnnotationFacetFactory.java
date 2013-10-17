@@ -24,7 +24,6 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;

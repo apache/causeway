@@ -34,6 +34,20 @@ public final class Annotations  {
         return cls.equals(String.class);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T extends Annotation> T getDeclaredAnnotation(Class<?> cls, Class<T> annotationClass) {
+        final Annotation[] declaredAnnotations = cls.getDeclaredAnnotations();
+        if(declaredAnnotations == null) {
+            return null;
+        }
+        for (Annotation annotation : declaredAnnotations) {
+            if(annotationClass.isAssignableFrom(annotation.getClass())) {
+                return (T) annotation;
+            }
+        }
+        return null;
+    }
+
     /**
      * Searches for annotation on provided class, and if not found for the
      * superclass.
