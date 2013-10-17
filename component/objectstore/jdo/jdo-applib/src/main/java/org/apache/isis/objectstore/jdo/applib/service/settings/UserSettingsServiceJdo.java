@@ -52,25 +52,19 @@ public class UserSettingsServiceJdo extends AbstractService implements UserSetti
             @Named("Key") String key) {
         return firstMatch(
                 new QueryDefault<UserSettingJdo>(UserSettingJdo.class, 
-                        "usersetting_by_id", 
+                        "findByUserAndKey", 
                         "user",user,
                         "key", key));
     }
 
-    // //////////////////////////////////////
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<UserSetting> listAll() {
-        return (List)allMatches(
-                new QueryDefault<UserSettingJdo>(UserSettingJdo.class, 
-                        "usersetting_all"));
-    }
+    // //////////////////////////////////////
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public List<UserSetting> listAllFor(String user) {
         return (List)allMatches(
                 new QueryDefault<UserSettingJdo>(UserSettingJdo.class, 
-                        "usersetting_by_user", 
+                        "findByUser", 
                         "user", user));
     }
     public List<String> choices0ListAllFor() {
@@ -87,6 +81,15 @@ public class UserSettingsServiceJdo extends AbstractService implements UserSetti
             return input.getUser();
         }
     };
+
+    // //////////////////////////////////////
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public List<UserSetting> listAll() {
+        return (List)allMatches(
+                new QueryDefault<UserSettingJdo>(UserSettingJdo.class, 
+                        "findAll"));
+    }
 
 
     // //////////////////////////////////////

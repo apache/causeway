@@ -26,10 +26,20 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.services.settings.ApplicationSetting;
 import org.apache.isis.applib.services.settings.SettingType;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION, table="APPLICATION_SETTING")
+@javax.jdo.annotations.PersistenceCapable(
+        identityType = IdentityType.APPLICATION,
+        table="ApplicationSetting")
 @javax.jdo.annotations.Queries({ 
-     @javax.jdo.annotations.Query(name = "applicationsetting_by_id", language = "JDOQL", value = "SELECT FROM org.apache.isis.objectstore.jdo.applib.service.settings.ApplicationSettingJdo WHERE key == :key") 
-    ,@javax.jdo.annotations.Query(name = "applicationsetting_all", language = "JDOQL", value = "SELECT FROM org.apache.isis.objectstore.jdo.applib.service.settings.ApplicationSettingJdo ORDER BY key") 
+     @javax.jdo.annotations.Query(
+             name = "findByKey", language = "JDOQL", 
+             value = "SELECT "
+                     + "FROM org.apache.isis.objectstore.jdo.applib.service.settings.ApplicationSettingJdo "
+                     + "WHERE key == :key"),
+     @javax.jdo.annotations.Query(
+            name = "findAll", language = "JDOQL", 
+            value = "SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.settings.ApplicationSettingJdo "
+                    + "ORDER BY key")
 })
 @Named("Application Setting")
 public class ApplicationSettingJdo extends SettingAbstractJdo implements ApplicationSetting {

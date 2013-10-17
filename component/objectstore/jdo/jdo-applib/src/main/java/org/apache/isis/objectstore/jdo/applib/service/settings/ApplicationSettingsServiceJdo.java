@@ -45,7 +45,7 @@ public class ApplicationSettingsServiceJdo extends AbstractService implements Ap
     public ApplicationSetting find(@Named("Key") String key) {
         return firstMatch(
                 new QueryDefault<ApplicationSettingJdo>(ApplicationSettingJdo.class, 
-                        "applicationsetting_by_id", 
+                        "findByKey", 
                         "key", key));
     }
 
@@ -56,7 +56,7 @@ public class ApplicationSettingsServiceJdo extends AbstractService implements Ap
     public List<ApplicationSetting> listAll() {
         return (List)allMatches(
                 new QueryDefault<ApplicationSettingJdo>(ApplicationSettingJdo.class, 
-                        "applicationsetting_all"));
+                        "findAll"));
     }
 
     // //////////////////////////////////////

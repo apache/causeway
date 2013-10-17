@@ -30,11 +30,28 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.settings.SettingType;
 import org.apache.isis.applib.services.settings.UserSetting;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION, table="USER_SETTING", objectIdClass=UserSettingPrimaryKey.class)
+@javax.jdo.annotations.PersistenceCapable(
+        identityType = IdentityType.APPLICATION, 
+        objectIdClass=UserSettingPrimaryKey.class,
+        table="UserSetting")
 @javax.jdo.annotations.Queries({ 
-    @javax.jdo.annotations.Query(name = "usersetting_by_id", language = "JDOQL", value = "SELECT FROM org.apache.isis.objectstore.jdo.applib.service.settings.UserSettingJdo WHERE user == :user AND key == :key ") 
-    ,@javax.jdo.annotations.Query(name = "usersetting_by_user", language = "JDOQL", value = "SELECT FROM org.apache.isis.objectstore.jdo.applib.service.settings.UserSettingJdo WHERE user == :user ORDER BY key") 
-    ,@javax.jdo.annotations.Query(name = "usersetting_all", language = "JDOQL", value = "SELECT FROM org.apache.isis.objectstore.jdo.applib.service.settings.UserSettingJdo ORDER BY user, key") 
+    @javax.jdo.annotations.Query(
+            name = "findByUserAndKey", language = "JDOQL", 
+            value = "SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.settings.UserSettingJdo "
+                    + "WHERE user == :user "
+                    + "&& key == :key ") 
+    ,@javax.jdo.annotations.Query(
+            name = "findByUser", language = "JDOQL", 
+            value = "SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.settings.UserSettingJdo "
+                    + "WHERE user == :user "
+                    + "ORDER BY key") 
+    ,@javax.jdo.annotations.Query(
+            name = "findAll", language = "JDOQL", 
+            value = "SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.settings.UserSettingJdo "
+                    + "ORDER BY user, key") 
 })
 // can't see how to specify this order in the primary key; however HSQLDB objects :-(
 //@javax.jdo.annotations.Unique(name="USER_KEY_IDX", members={"user","key"}) 
