@@ -310,7 +310,7 @@ class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 try {
                     getEntityModel().load(ConcurrencyChecking.CHECK); // could have also just called #getObject(), since CHECK is the default
 
-                } catch(RuntimeException ex){
+                } catch(ConcurrencyException ex){
                     String recognizedErrorMessage = recognizeException(ex);
                     if(recognizedErrorMessage == null) {
                         throw ex;

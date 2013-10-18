@@ -110,15 +110,32 @@ public interface AdapterManager extends Injectable {
         /**
          * Allows a caller to temporarily disable concurrency checking for the current thread.
          */
-        public static <T> T executeWithConcurrencyCheckingDisabled(final Callable<T> callable) throws Exception {
+        public static <T> T executeWithConcurrencyCheckingDisabled(final Callable<T> callable) {
             final ConcurrencyChecking prior = ConcurrencyChecking.concurrencyChecking.get();
             try {
                 ConcurrencyChecking.concurrencyChecking.set(ConcurrencyChecking.NO_CHECK);
                 return callable.call();
+            } catch(Exception ex) {
+                throw new RuntimeException(ex);
             } finally {
                 ConcurrencyChecking.concurrencyChecking.set(prior);
             }
         }
+        
+        /**
+         * Allows a caller to temporarily disable concurrency checking for the current thread.
+         */
+        public static void executeWithConcurrencyCheckingDisabled(final Runnable runnable) {
+            final ConcurrencyChecking prior = ConcurrencyChecking.concurrencyChecking.get();
+            try {
+                ConcurrencyChecking.concurrencyChecking.set(ConcurrencyChecking.NO_CHECK);
+                runnable.run();
+            } finally {
+                ConcurrencyChecking.concurrencyChecking.set(prior);
+            }
+        }
+
+
     }
 
     /**
