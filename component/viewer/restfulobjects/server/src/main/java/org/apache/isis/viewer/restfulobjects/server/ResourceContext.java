@@ -275,6 +275,11 @@ public class ResourceContext implements RendererContext {
         return specificationLookup;
     }
 
+    @Override
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+    
     public Where getWhere() {
         return where;
     }

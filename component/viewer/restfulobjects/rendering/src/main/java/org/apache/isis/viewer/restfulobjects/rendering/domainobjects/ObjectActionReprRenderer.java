@@ -31,9 +31,11 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
+
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
@@ -118,12 +120,6 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object argValueFor(final int i) {
-        if (false /*objectMember.isContributed() */) {
-            final ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
-            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-                return DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, objectAdapter).build();
-            }
-        }
         // force a null into the map
         return NullNode.getInstance();
     }
@@ -133,12 +129,24 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     // ///////////////////////////////////////////////////
 
     private ObjectActionReprRenderer addParameterDetails() {
-        final List<Object> parameters = Lists.newArrayList();
-        for (int i = 0; i < objectMember.getParameterCount(); i++) {
-            final ObjectActionParameter param = objectMember.getParameters().get(i);
-            parameters.add(paramDetails(param));
+        boolean gsoc2013 = getRendererContext().getConfiguration().getBoolean("isis.viewer.restfulobjects.gsoc2013.legacyParamDetails", false);
+        if(gsoc2013) {
+            final List<Object> parameters = Lists.newArrayList();
+            for (int i = 0; i < objectMember.getParameterCount(); i++) {
+                final ObjectActionParameter param = objectMember.getParameters().get(i);
+                final Object paramDetails = paramDetails(param);
+                parameters.add(paramDetails);
+            }
+            representation.mapPut("parameters", parameters);
+        } else {
+            final Map<String,Object> parameters = Maps.newLinkedHashMap();
+            for (int i = 0; i < objectMember.getParameterCount(); i++) {
+                final ObjectActionParameter param = objectMember.getParameters().get(i);
+                final Object paramDetails = paramDetails(param);
+                parameters.put(param.getId(), paramDetails);
+            }
+            representation.mapPut("parameters", parameters);
         }
-        representation.mapPut("parameters", parameters);
         return this;
     }
 

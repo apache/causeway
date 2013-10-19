@@ -28,6 +28,7 @@ import com.google.common.collect.Sets;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -61,6 +62,11 @@ public class EventSerializerRendererContext implements RendererContext {
     }
 
     @Override
+    public IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+
+    @Override
     public AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -86,6 +92,7 @@ public class EventSerializerRendererContext implements RendererContext {
         final Oid oid = objectAdapter.getOid();
         return rendered.add(oid);
     }
+
     
 
 }
