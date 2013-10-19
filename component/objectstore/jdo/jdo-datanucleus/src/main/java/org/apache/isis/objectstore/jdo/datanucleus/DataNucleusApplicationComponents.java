@@ -62,7 +62,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         
         final Set<String> classesToBePersisted = catalogClassesToBePersisted(objectSpecs);
 
-        createSchema(props, classesToBePersisted);
+        final boolean createSchema = Boolean.parseBoolean( props.get("datanucleus.autoCreateSchema") );
+        if(createSchema) {
+            createSchema(props, classesToBePersisted);
+        }
 
         namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries(objectSpecs));
 
