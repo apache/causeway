@@ -216,7 +216,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 bookmarkPage(actionModel);
             }
 
-            return true;
+            //return true;
+            // change in policy: never clear args (need them, even after successful execution, for bulk actions).
+            return false;
 
         } catch (RuntimeException ex) {
 
