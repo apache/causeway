@@ -653,11 +653,12 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     // ///////////////////////////////////////////////////////////////////////
 
     public void debugData(final DebugBuilder debug) {
-        throw new NotYetImplementedException();
+        // no-op
+        debug.append("this object store does not currently provide any debug data");
     }
 
     public String debugTitle() {
-        throw new NotYetImplementedException();
+        return "JDO (DataNucleus) ObjectStore";
     }
 
     // ///////////////////////////////////////////////////////////////////////
