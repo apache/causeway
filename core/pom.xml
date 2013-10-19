@@ -71,9 +71,16 @@
 
         <projectUrl>${project.url}</projectUrl>
 
-		<license.additional-notes>In addition, Isis includes a copy of JQuery core and JQuery UI.  These are both licensed under the MIT license [1].
+		<license.additional-notes>In addition, Isis uses some Javascript libraries:
+* JQuery core and JQuery UI, licensed under the MIT license [1].
+* Twitter Bootstrap, licensed under ASL v2 [2]
+* JGrowl (JQuery plugin), licensed under an ASL-style license [3]
+* LiveQuery (JQuery plugin), licensed under MIT license [4]
 
-[1] http://jquery.org/license/</license.additional-notes>        
+[1] http://jquery.org/license/
+[2] http://getbootstrap.com/2.3.2/
+[3] https://github.com/stanlemon/jGrowl/blob/master/LICENSE
+[4] https://github.com/brandonaaron/livequery#license</license.additional-notes>        
     </properties>
 
     <scm>
@@ -1163,7 +1170,7 @@ ${license.additional-notes}
             <dependency>
 	    		<groupId>joda-time</groupId>
 	    		<artifactId>joda-time</artifactId>
-	            <version>2.2</version>
+	            <version>2.3</version>
             </dependency>
 
             <!-- Logging -->
@@ -1214,7 +1221,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>14.0.1</version>
+                <version>15.0</version>
             </dependency>
 
             <!-- Google Guice (dependency injection) -->
@@ -1261,7 +1268,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
-                <version>1.4.4</version>
+                <version>1.4.5</version>
             </dependency>
 
 
@@ -1284,7 +1291,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
-                <version>2.2.1</version>
+                <version>2.2.4</version>
             </dependency>
             <!--
             seemingly unused. 
@@ -1300,7 +1307,7 @@ ${license.additional-notes}
             <dependency>
               <groupId>org.hsqldb</groupId>
               <artifactId>hsqldb</artifactId>
-              <version>2.2.9</version>
+              <version>2.3.1</version>
             </dependency>
 
 			<dependency>
@@ -1314,7 +1321,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-jaxrs</artifactId>
-                <version>2.3.6.Final</version>
+                <version>2.3.7.Final</version>
                 <exclusions>
                     <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
                     <exclusion>
@@ -1418,12 +1425,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>info.cukes</groupId>
                 <artifactId>cucumber-java</artifactId>
-                <version>1.1.4</version>
+                <version>1.1.5</version>
             </dependency>
             <dependency>
                 <groupId>info.cukes</groupId>
                 <artifactId>cucumber-junit</artifactId>
-                <version>1.1.4</version>
+                <version>1.1.5</version>
             </dependency>
 
             <!-- Testing libraries (scope=test) -->
