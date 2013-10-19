@@ -136,7 +136,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     private void setRequiredIfSpecified() {
         final ScalarModel scalarModel = getModel();
         final boolean required = scalarModel.isRequired();
-        textField.setRequired(required);
+        // have removed this because it seems to trip up rendering of any choices fields
+        //textField.setRequired(required);
     }
 
     protected void setTextFieldSizeIfSpecified(AbstractTextComponent<T> textField) {

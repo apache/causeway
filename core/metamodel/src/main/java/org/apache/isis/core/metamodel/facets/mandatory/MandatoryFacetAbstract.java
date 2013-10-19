@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
@@ -58,12 +59,12 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
     @Override
     public final boolean isRequiredButNull(final ObjectAdapter adapter) {
         if(!isInvertedSemantics()) {
-            final Object object = ObjectAdapterUtils.unwrapObject(adapter);
+            final Object object = ObjectAdapter.Util.unwrap(adapter);
             if (object == null) {
                 return true;
             }
             // special case string handling.
-            final String str = ObjectAdapterUtils.unwrapObjectAsString(adapter);
+            final String str = ObjectAdapter.Util.unwrapAsString(adapter);
             return str != null && str.length() == 0;
         } else {
             return false;
@@ -86,6 +87,13 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) context;
-        return isRequiredButNull(proposedHolder.getProposed()) ? "Mandatory" : null;
+        final boolean required = isRequiredButNull(proposedHolder.getProposed());
+        if (required) {
+            final NamedFacet namedFacet = getFacetHolder().getFacet(NamedFacet.class);
+            final String name = namedFacet != null? namedFacet.value(): null;
+            return name != null? name + " is mandatory":"Mandatory";
+        } else {
+            return null;
+        }
     }
 }
