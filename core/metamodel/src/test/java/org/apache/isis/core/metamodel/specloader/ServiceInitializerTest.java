@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -141,7 +141,8 @@ public class ServiceInitializerTest {
     public void init_when_postConstructMultiple() {
         final DomainServiceWithMultiplePostConstruct d1 = new DomainServiceWithMultiplePostConstruct();
         expectedException.expectMessage(
-                "Found more than one @PostConstruct method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePostConstruct, found x and y");
+                containsString(
+                "Found more than one @PostConstruct method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePostConstruct, found"));
         serviceInitializer.init(configuration, listOf(d1));
     }
 
@@ -161,7 +162,8 @@ public class ServiceInitializerTest {
     public void init_when_preDestroyMultiple() {
         final DomainServiceWithMultiplePreDestroy d1 = new DomainServiceWithMultiplePreDestroy();
         expectedException.expectMessage(
-                "Found more than one @PreDestroy method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePreDestroy, found x and y");
+                containsString(
+                "Found more than one @PreDestroy method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePreDestroy, found"));
         serviceInitializer.init(configuration, listOf(d1));
     }
 

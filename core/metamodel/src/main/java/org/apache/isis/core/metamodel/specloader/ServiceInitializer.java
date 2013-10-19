@@ -38,7 +38,6 @@ class ServiceInitializer {
     private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
     private Map<String, String> props;
-    private List<Object> services;
     
     static class ServiceInitMethods {
         Object service;
@@ -54,7 +53,6 @@ class ServiceInitializer {
 
     public void init(final IsisConfiguration configuration, final List<Object> services) {
         this.props = configuration.asMap();
-        this.services = services;
         
         for (final Object service : services) {
             LOG.debug("checking for @PostConstruct and @PostDestroy methods on " + service.getClass().getName());
@@ -77,7 +75,7 @@ class ServiceInitializer {
                 case 0:
                     break;
                 case 1:
-                    if(!Map.class.isAssignableFrom(parameterTypes[0])) {
+                    if(Map.class != parameterTypes[0]) {
                         throw new RuntimeException("@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: " + service.getClass().getName() + "#" + method.getName());
                     }
                     break;
@@ -141,8 +139,6 @@ class ServiceInitializer {
             final Method method = entry.getValue();
             
             LOG.info("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
-            
-            final int numParams = method.getParameterTypes().length;
             
             try {
                 MethodExtensions.invoke(method, service);
