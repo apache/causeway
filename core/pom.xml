@@ -20,9 +20,9 @@
     </parent>
 
     <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis</artifactId>
     <version>1.3.0-SNAPSHOT</version>
     
-    <artifactId>isis</artifactId>
     <packaging>pom</packaging>
 
     <name>Apache Isis Core</name>
@@ -74,12 +74,12 @@
 		<license.additional-notes>In addition, Isis uses some Javascript libraries:
 * JQuery core and JQuery UI, licensed under the MIT license [1].
 * Twitter Bootstrap, licensed under ASL v2 [2]
-* JGrowl (JQuery plugin), licensed under an ASL-style license [3]
+* JGrowl (JQuery plugin), licensed under MIT license [3]
 * LiveQuery (JQuery plugin), licensed under MIT license [4]
 
 [1] http://jquery.org/license/
 [2] http://getbootstrap.com/2.3.2/
-[3] https://github.com/stanlemon/jGrowl/blob/master/LICENSE
+[3] https://github.com/stanlemon/jGrowl/blob/master/jquery.jgrowl.js
 [4] https://github.com/brandonaaron/livequery#license</license.additional-notes>        
     </properties>
 
@@ -338,7 +338,7 @@
 	                        <licenseFamilyName>MIT  </licenseFamilyName>
 	                        <notes />
 	                        <patterns>
-	                          <pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
+	                          <pattern>Dual licensed under the MIT</pattern>
 	                        </patterns>
 	                      </license>
 	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -1477,7 +1477,7 @@ ${license.additional-notes}
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>1.7.1</version>
             </dependency>
-
+        
            <dependency>
                <groupId>org.picocontainer</groupId>
                <artifactId>picocontainer</artifactId>

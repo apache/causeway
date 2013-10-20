@@ -37,6 +37,10 @@
         <siteBaseDir>.</siteBaseDir>
 		<relativeUrl />
 		<shiro.version>1.2.1</shiro.version>
+        <!-- 
+        staying with 1.2.1 for now; see ISIS-574
+		<shiro.version>1.2.2</shiro.version>
+         -->
 	</properties>
 
     <!-- used in Site generation for relative references. -->

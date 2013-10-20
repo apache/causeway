@@ -77,6 +77,7 @@
 	                    	 -->
 	                        <exclude>**/target/**</exclude>
 	                        <exclude>**/target-ide/**</exclude>
+	                        <exclude>**/.log</exclude>
 
 	                        <exclude>**/*.project</exclude>
 	                        <exclude>**/.classpath</exclude>
@@ -152,7 +153,6 @@
 	            </exclusions>
 	        </dependency>
 
-
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-core</artifactId>
@@ -173,19 +173,6 @@
 	            <artifactId>datanucleus-jodatime</artifactId>
                 <version>${datanucleus-jodatime.version}</version>
 	        </dependency>
-
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jta_1.1_spec</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-	    
-	        <dependency>
-	            <groupId>org.hsqldb</groupId>
-	            <artifactId>hsqldb</artifactId>
-	            <version>2.2.9</version>
-	        </dependency>
-
 		</dependencies>
 	</dependencyManagement>
 </project>
