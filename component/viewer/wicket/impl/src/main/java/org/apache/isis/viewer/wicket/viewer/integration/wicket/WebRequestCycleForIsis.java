@@ -82,7 +82,9 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
-        LOG.info("onRequestHandlerExecuted: handler: " + handler);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("onRequestHandlerExecuted: handler: " + handler);
+        }
         
         final IsisSession session = getIsisContext().getSessionInstance();
         if (session != null) {
