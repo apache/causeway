@@ -29,32 +29,27 @@
 	<name>Quickstart Wicket/Restful/JDO Integration Tests</name>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <includes>
-                            <include>**/*.java</include>
-                        </includes>
-                        <excludes>
-                            <exclude>**/*Abstract*.java</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>  
     </build>
-	<dependencies>
+  	<dependencies>
 	
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>${rootArtifactId}-fixture</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>${rootArtifactId}-objstore-jdo</artifactId>
 		</dependency>
 
         <dependency>
@@ -66,10 +61,23 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-integtestsupport</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-specsupport</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
         </dependency>
 
         <dependency>
@@ -77,7 +85,38 @@
             <artifactId>hsqldb</artifactId>
         </dependency>
 
-		
+        <!-- 
+        uncomment to enable enhanced cucumber-jvm reporting
+        http://www.masterthought.net/section/cucumber-reporting
+        <dependency>  
+            <groupId>com.googlecode.totallylazy</groupId>  
+            <artifactId>totallylazy</artifactId>  
+            <version>991</version>  
+        </dependency>
+
+        <dependency>
+            <groupId>net.masterthought</groupId>
+            <artifactId>cucumber-reporting</artifactId>
+            <version>0.0.21</version>
+        </dependency>
+        <dependency>
+            <groupId>net.masterthought</groupId>
+            <artifactId>maven-cucumber-reporting</artifactId>
+            <version>0.0.4</version>
+        </dependency>  
+        -->
 	</dependencies>
+
+    <!-- 
+    uncomment for enhanced cucumber-jvm reporting
+    http://www.masterthought.net/section/cucumber-reporting
+    <repositories>  
+        <repository>  
+            <id>repo.bodar.com</id>  
+            <url>http://repo.bodar.com</url>  
+        </repository>  
+    </repositories>  
+     -->
+  
 
 </project>

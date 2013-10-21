@@ -34,6 +34,10 @@ public class ToDoItemChangedPayloadFactory implements PayloadFactory{
             super(changed);
         }
         
+        /**
+         * Expose the item's {@link ToDoItem${symbol_pound}getDescription() description} more explicitly
+         * in the payload.
+         */
         public String getDescription() {
             return getChanged().getDescription();
         }

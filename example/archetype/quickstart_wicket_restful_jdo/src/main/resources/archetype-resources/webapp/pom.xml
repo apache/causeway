@@ -167,21 +167,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- objectstore/domain service/repository implementations (brings in dependency to objectstore-jdo)-->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>${rootArtifactId}-objstore-jdo</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         
         <!-- other isis components -->
+        <dependency>
+            <groupId>org.apache.isis.objectstore</groupId>
+            <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-impl</artifactId>
@@ -273,26 +264,33 @@
         <!-- 
         GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
         <dependency>
-            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <groupId>com.danhaywood.isis.wicket</groupId>
             <artifactId>danhaywood-isis-wicket-gmap3-ui</artifactId>
         </dependency>
          -->
         <!-- 
         WICKEDCHARTS: uncomment to use https://github.com/danhaywood/isis-wicket-wickedcharts
         <dependency>
-            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <groupId>com.danhaywood.isis.wicket</groupId>
             <artifactId>danhaywood-isis-wicket-wickedcharts-scalarchart</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <groupId>com.danhaywood.isis.wicket</groupId>
             <artifactId>danhaywood-isis-wicket-wickedcharts-summarycharts</artifactId>
         </dependency>
          -->
         <!-- 
         EXCEL: uncomment to use https://github.com/danhaywood/isis-wicket-excel
         <dependency>
-            <groupId>com.danhaywood.isis.wicket.ui.components</groupId>
+            <groupId>com.danhaywood.isis.wicket</groupId>
             <artifactId>danhaywood-isis-wicket-excel</artifactId>
+        </dependency>
+         -->
+        <!-- 
+        FULLCALENDAR: uncomment to use https://github.com/danhaywood/isis-wicket-fullcalendar
+        <dependency>
+            <groupId>com.danhaywood.isis.wicket</groupId>
+            <artifactId>danhaywood-isis-wicket-fullcalendar</artifactId>
         </dependency>
          -->
          

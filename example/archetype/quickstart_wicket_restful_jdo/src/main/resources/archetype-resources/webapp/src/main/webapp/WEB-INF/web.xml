@@ -156,7 +156,7 @@
         <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>app.QuickStartApplication</param-value>
+            <param-value>webapp.ToDoApplication</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -238,6 +238,16 @@
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
     </filter-mapping>
 
+    <filter>
+        <filter-name>IsisTransactionFilterForRestfulObjects</filter-name>
+        <filter-class>org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>IsisTransactionFilterForRestfulObjects</filter-name>
+        <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+    </filter-mapping>
+
+
     <servlet>
         <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
@@ -273,18 +283,5 @@
         <res-auth>Container</res-auth>
     </resource-ref>
      -->
-
-
-    <!-- 
-    ActiveMQ/RA Publishing Service
-    see: https://github.com/danhaywood/isis-publishingservice-activemq-ra
-    ??? is this necessary, though ???
-    <resource-ref> 
-        <description>JMS Connection Factory</description> 
-        <res-ref-name>ConnectionFactory</res-ref-name> 
-        <res-type>javax.jms.ConnectionFactory</res-type> 
-        <res-auth>Container</res-auth> 
-    </resource-ref> 
-    -->
 
 </web-app>

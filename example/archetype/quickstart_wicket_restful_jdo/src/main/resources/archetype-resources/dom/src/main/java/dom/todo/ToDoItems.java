@@ -25,30 +25,34 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Objects;
+import com.google.common.base.Predicates;
 
 import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.query.QueryDefault;
+
+import services.ClockService;
 
 @Named("ToDos")
-public class ToDoItems extends AbstractFactoryAndRepository {
+public class ToDoItems {
 
-    // {{ Id, iconName
-    @Override
+    // //////////////////////////////////////
+    // Identification in the UI
+    // //////////////////////////////////////
+
     public String getId() {
         return "toDoItems";
     }
@@ -56,103 +60,164 @@ public class ToDoItems extends AbstractFactoryAndRepository {
     public String iconName() {
         return "ToDoItem";
     }
-    // }}
 
-    // {{ notYetComplete (action)
+    // //////////////////////////////////////
+    // NotYetComplete (action)
+    // //////////////////////////////////////
+    
+    @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
-        List<ToDoItem> items = doNotYetComplete();
+        final List<ToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {
-            getContainer().informUser("All to-do items have been completed :-)");
+            container.informUser("All to-do items have been completed :-)");
         }
         return items;
     }
 
-    protected List<ToDoItem> doNotYetComplete() {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && !t.isComplete();
-            }
-        });
+    @Programmatic
+    public List<ToDoItem> notYetCompleteNoUi() {
+        final List<ToDoItem> items;
+        if(false) {
+            // the naive implementation ...
+            items = container.allMatches(ToDoItem.class, 
+                    Predicates.and(
+                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                        ToDoItem.Predicates.thoseNotYetComplete()));
+        } else {
+            // the JDO implementation ...
+            items = container.allMatches(
+                    new QueryDefault<ToDoItem>(ToDoItem.class, 
+                            "todo_notYetComplete", 
+                            "ownedBy", currentUserName()));
+        }
+        return items;
     }
-    // }}
 
-    // {{ complete (action)
+    
+    // //////////////////////////////////////
+    // Complete (action)
+    // //////////////////////////////////////
+    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     public List<ToDoItem> complete() {
-        List<ToDoItem> items = doComplete();
+        final List<ToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
-            getContainer().informUser("No to-do items have yet been completed :-(");
+            container.informUser("No to-do items have yet been completed :-(");
         }
         return items;
     }
 
-    protected List<ToDoItem> doComplete() {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && t.isComplete();
-            }
-        });
+    @Programmatic
+    public List<ToDoItem> completeNoUi() {
+        final List<ToDoItem> items;
+        if(false) {
+            // the naive implementation ...
+            items = container.allMatches(ToDoItem.class, 
+                    Predicates.and(
+                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                        ToDoItem.Predicates.thoseComplete()));
+        } else {
+            // the JDO implementation ...
+            items = container.allMatches(
+                    new QueryDefault<ToDoItem>(ToDoItem.class, 
+                            "todo_complete", 
+                            "ownedBy", currentUserName()));
+        }
+        return items;
     }
-    // }}
 
-    
-    // {{ newToDo  (action)
+
+    // //////////////////////////////////////
+    // NewToDo (action)
+    // //////////////////////////////////////
+
     @MemberOrder(sequence = "3")
     public ToDoItem newToDo(
-            @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") // words, spaces and selected punctuation
-            @Named("Description") String description, 
-            @Named("Category") Category category,
-            @Optional
-            @Named("Due by") LocalDate dueBy,
-            @Optional
-            @Named("Cost") BigDecimal cost) {
+            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
+            final @Named("Category") Category category,
+            final @Named("Subcategory") Subcategory subcategory,
+            final @Optional @Named("Due by") LocalDate dueBy,
+            final @Optional @Named("Cost") BigDecimal cost) {
         final String ownedBy = currentUserName();
-        return newToDo(description, category, ownedBy, dueBy, cost);
+        return newToDo(description, category, subcategory, ownedBy, dueBy, cost);
     }
-    public LocalDate default2NewToDo() {
-        return new LocalDate(Clock.getTime()).plusDays(14);
+    public Category default1NewToDo() {
+        return Category.Professional;
     }
-    // }}
+    public Subcategory default2NewToDo() {
+        return Category.Professional.subcategories().get(0);
+    }
+    public LocalDate default3NewToDo() {
+        return clockService.now().plusDays(14);
+    }
+    public List<Subcategory> choices2NewToDo(
+            final String description, final Category category) {
+        return Subcategory.listFor(category);
+    }
+    public String validateNewToDo(
+            final String description, 
+            final Category category, final Subcategory subcategory, 
+            final LocalDate dueBy, final BigDecimal cost) {
+        return Subcategory.validate(category, subcategory);
+    }
 
+    // //////////////////////////////////////
+    // AllToDos (action)
+    // //////////////////////////////////////
 
-    // {{ allToDos (action)
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "4")
     public List<ToDoItem> allToDos() {
-        return allToDos(NotifyUserIfNone.YES);
-    }
-
-    public enum NotifyUserIfNone { YES, NO }
-    
-    @Programmatic
-    public List<ToDoItem> allToDos(NotifyUserIfNone notifyUser) {
         final String currentUser = currentUserName();
-        final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
+        final List<ToDoItem> items = container.allMatches(ToDoItem.class, ToDoItem.Predicates.thoseOwnedBy(currentUser));
         Collections.sort(items);
-        if(notifyUser == NotifyUserIfNone.YES && items.isEmpty()) {
-            getContainer().warnUser("No to-do items found.");
+        if(items.isEmpty()) {
+            container.warnUser("No to-do items found.");
         }
         return items;
     }
-    // }}
+
+    // //////////////////////////////////////
+    // AutoComplete
+    // //////////////////////////////////////
+
+    @Programmatic // not part of metamodel
+    public List<ToDoItem> autoComplete(final String description) {
+        if(false) {
+            // the naive implementation ...
+            return container.allMatches(ToDoItem.class, 
+                    Predicates.and(
+                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                        ToDoItem.Predicates.thoseWithSimilarDescription(description)));
+        } else {
+            // the JDO implementation ...
+            return container.allMatches(
+                    new QueryDefault<ToDoItem>(ToDoItem.class, 
+                            "todo_autoComplete", 
+                            "ownedBy", currentUserName(), 
+                            "description", description));
+        }
+    }
 
 
-    // {{ newToDo  (hidden)
-    @Hidden // for use by fixtures
+    // //////////////////////////////////////
+    // Programmatic Helpers
+    // //////////////////////////////////////
+
+    @Programmatic // for use by fixtures
     public ToDoItem newToDo(
             final String description, 
             final Category category, 
-            final String userName,
-            final LocalDate dueBy, 
-            final BigDecimal cost) {
-        final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
+            final Subcategory subcategory,
+            final String userName, 
+            final LocalDate dueBy, final BigDecimal cost) {
+        final ToDoItem toDoItem = container.newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
+        toDoItem.setSubcategory(subcategory);
         toDoItem.setOwnedBy(userName);
         toDoItem.setDueBy(dueBy);
         toDoItem.setCost(cost);
@@ -163,53 +228,34 @@ public class ToDoItems extends AbstractFactoryAndRepository {
         //    new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
         //
         
-        persist(toDoItem);
+        container.persist(toDoItem);
         return toDoItem;
     }
     
     private static double random(double from, double to) {
         return Math.random() * (to-from) + from;
     }
-    // }}
 
+    private String currentUserName() {
+        return container.getUser().getName();
+    }
 
     
-    // {{ similarTo (action)
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "5")
-    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(ToDoItem t) {
-                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
-            }
-        });
-    }
-    // }}
-    
-    
-    // {{ autoComplete (hidden)
-    @Hidden
-    public List<ToDoItem> autoComplete(final String description) {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(final ToDoItem t) {
-                return ownedByCurrentUser(t) && t.getDescription().contains(description);
-            }
+    // //////////////////////////////////////
+    // Injected Services
+    // //////////////////////////////////////
 
-        });
-    }
-    // }}
+    
+    private DomainObjectContainer container;
 
-    // {{ helpers
-    protected boolean ownedByCurrentUser(final ToDoItem t) {
-        return Objects.equal(t.getOwnedBy(), currentUserName());
+    public void injectDomainObjectContainer(final DomainObjectContainer container) {
+        this.container = container;
     }
-    protected String currentUserName() {
-        return getContainer().getUser().getName();
+
+    private ClockService clockService;
+    public void injectClockService(ClockService clockService) {
+        this.clockService = clockService;
     }
-    // }}
 
 
 }
