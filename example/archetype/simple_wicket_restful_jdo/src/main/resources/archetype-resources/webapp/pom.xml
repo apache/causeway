@@ -20,12 +20,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.example.application</groupId>
-        <artifactId>simple_wicket_restful_jdo</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}</artifactId>
+        <version>${version}</version>
     </parent>
 
-    <artifactId>simple_wicket_restful_jdo-webapp</artifactId>
+    <artifactId>${artifactId}</artifactId>
     <name>Simple Wicket/Restful/JDO Webapp</name>
 
     <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
@@ -123,15 +123,9 @@
                             <pluginExecutions>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            build-helper-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.5,)
-                                        </versionRange>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>build-helper-maven-plugin</artifactId>
+                                        <versionRange>[1.5,)</versionRange>
                                         <goals>
                                             <goal>maven-version</goal>
                                         </goals>
@@ -153,7 +147,7 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>simple_wicket_restful_jdo-dom</artifactId>
+            <artifactId>${rootArtifactId}-dom</artifactId>
             <exclusions>
                 <exclusion>
                     <!-- so don't pick up transitive dependency to asm 4.0.0 -->
@@ -164,7 +158,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>simple_wicket_restful_jdo-fixture</artifactId>
+            <artifactId>${rootArtifactId}-fixture</artifactId>
             <exclusions>
                 <exclusion>
                     <!-- so don't pick up transitive dependency to asm 4.0.0 -->

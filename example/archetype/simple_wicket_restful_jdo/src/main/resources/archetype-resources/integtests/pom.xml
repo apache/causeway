@@ -16,27 +16,24 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<groupId>org.apache.isis.example.application</groupId>
-        <artifactId>simple_wicket_restful_jdo</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+    	<groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}</artifactId>
+        <version>${version}</version>
     </parent>
 
-	<artifactId>simple_wicket_restful_jdo-integtests</artifactId>
+	<artifactId>${artifactId}</artifactId>
 	<name>Simple Wicket/Restful/JDO Integration Tests</name>
 
     <build>
         <testResources>
             <testResource>
-                <filtering>false</filtering>
                 <directory>src/test/resources</directory>
             </testResource>
             <testResource>
-                <filtering>false</filtering>
                 <directory>src/test/java</directory>
                 <includes>
                     <include>**</include>
@@ -45,47 +42,14 @@
                     <exclude>**/*.java</exclude>
                 </excludes>
             </testResource>
-        </testResources>
-        <plugins>
-            <!-- 
-            uncomment for enhanced cucumber-jvm reporting
-            http://www.masterthought.net/section/cucumber-reporting
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testfailureignore>true</testfailureignore>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>net.masterthought</groupId>
-                <artifactId>maven-cucumber-reporting</artifactId>
-                <version>0.0.3</version>
-                <executions>
-                    <execution>
-                        <id>execution</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <projectname>cucumber-jvm-example</projectname>
-                            <outputdirectory>${project.build.directory}/cucumber-reports</outputdirectory>
-                            <cucumberoutput>${project.build.directory}/cucumber.json</cucumberoutput>
-                            <enableflashcharts>false</enableflashcharts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>  
-            -->
-        </plugins>  
+        </testResources>  
     </build>
   	<dependencies>
 	
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>simple_wicket_restful_jdo-fixture</artifactId>
+			<artifactId>${rootArtifactId}-fixture</artifactId>
 		</dependency>
 
         <dependency>

@@ -22,9 +22,10 @@ import javax.xml.transform.*
 import javax.xml.transform.stream.*
 
 
-def cli = new CliBuilder(usage: 'updateGeneratedArchetypeSources.groovy -v [version]')
+def cli = new CliBuilder(usage: 'updateGeneratedArchetypeSources.groovy -n [name] -v [version]')
 cli.with {
-    v longOpt: 'version', args: 1, required: true, argName: 'version', 'Isis core version to use as parent POM'
+    n(longOpt: 'name', args: 1, required: true, argName: 'name', 'Application name (eg \'simple\' or \'quickstart\')')
+    v(longOpt: 'version', args: 1, required: true, argName: 'version', 'Isis core version to use as parent POM')
 }
 
 
@@ -97,6 +98,7 @@ if (!options) {
     return
 }
 
+application_name=options.n
 isis_version=options.v
 
 /////////////////////////////////////////////////////
@@ -194,7 +196,7 @@ new File(ROOT+"archetype-resources/").eachDirRecurse() { dir ->
         def launchXml = new XmlSlurper().parseText(launchFile.text)
         def projectAttr = launchXml.stringAttribute.find { it.@key=="org.eclipse.jdt.launching.PROJECT_ATTR" }
         String oldValue=projectAttr.@value
-        def newValue = oldValue.replaceAll("quickstart[^-]*-","\\\${rootArtifactId}-")
+        def newValue = oldValue.replaceAll("${application_name}[^-]*-","\\\${rootArtifactId}-")
         projectAttr.@value=newValue
 
         launchFile.text = """#set( \$symbol_pound = '#' )
