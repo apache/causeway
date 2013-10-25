@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import com.google.inject.Inject;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -96,6 +97,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         
         link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE));
         link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapter));
+        
+        link.add(new AttributeModifier("title", adapter.getSpecification().getSingularName()));
         
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
         entityLinkWrapper.addOrReplace(link);
