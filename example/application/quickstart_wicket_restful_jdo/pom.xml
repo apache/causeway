@@ -23,18 +23,18 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>quickstart_wicket_restful_jdo</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.4.0-SNAPSHOT</version>
 
     <name>Quickstart Wicket/Restful/JDO App</name>
 
     <packaging>pom</packaging>
 
 	<properties>
-        <isis.version>1.3.0</isis.version>
-		<isis-objectstore-jdo.version>1.3.0</isis-objectstore-jdo.version>
-		<isis-viewer-wicket.version>1.3.0</isis-viewer-wicket.version>
-		<isis-viewer-restfulobjects.version>2.1.0</isis-viewer-restfulobjects.version>
-		<isis-security-shiro.version>1.3.0</isis-security-shiro.version>
+        <isis.version>1.4.0-SNAPSHOT</isis.version>
+		<isis-objectstore-jdo.version>1.4.0-SNAPSHOT</isis-objectstore-jdo.version>
+		<isis-viewer-wicket.version>1.4.0-SNAPSHOT</isis-viewer-wicket.version>
+		<isis-viewer-restfulobjects.version>2.2.0-SNAPSHOT</isis-viewer-restfulobjects.version>
+		<isis-security-shiro.version>1.4.0-SNAPSHOT</isis-security-shiro.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-core.version>3.2.7</datanucleus-core.version>
