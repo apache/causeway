@@ -20,17 +20,17 @@ $(document).ready(function(){
  
     var showBookmarks = function(){
         $('#bookmarkedPagesSlidingDiv').stop().animate(
-            {width:"400px", opacity:0.95}, 250, 
+            {width:"300px", opacity:0.95}, 100, 
             function() {
-                $('.content').fadeIn('125');
+                $('.content').fadeIn('50');
             });
         $('.showPanelTab').animate({opacity: 0.5});
     };
 
     var hideBookmarks = function(){
-        $('.content').fadeOut('125', 
+        $('.content').fadeOut('0', 
             function() { 
-                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0.1}, 125);
+                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0.1}, 0);
             });
          $('.showPanelTab').animate({opacity: 1.0});
      };

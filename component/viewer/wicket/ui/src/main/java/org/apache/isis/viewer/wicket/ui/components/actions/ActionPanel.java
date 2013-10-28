@@ -225,6 +225,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             String message = recognizeException(ex, feedbackForm);
             
             if (message != null) {
+                // no need to add to message broker, should already have been added...
+                
                 if(feedbackForm == null) {
                     // forward on instead to void page
                     // (otherwise, we'll have rendered an action parameters page 

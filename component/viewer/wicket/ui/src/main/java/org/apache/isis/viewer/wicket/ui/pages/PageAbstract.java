@@ -186,7 +186,8 @@ public abstract class PageAbstract extends WebPage {
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if (!Strings.isNullOrEmpty(feedbackMsg)) {
-            response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
+            final OnDomReadyHeaderItem forScript = OnDomReadyHeaderItem.forScript(feedbackMsg);
+            response.render(forScript);
         }
         
         if(applicationCss != null) {
