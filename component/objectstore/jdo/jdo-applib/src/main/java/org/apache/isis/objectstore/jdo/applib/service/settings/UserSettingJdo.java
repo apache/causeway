@@ -61,8 +61,9 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     
     private String user;
 
+    @javax.jdo.annotations.Column(length=50)
+    @javax.jdo.annotations.PrimaryKey
     @Title(sequence="5", append=": ")
-    @PrimaryKey
     @MemberOrder(sequence = "5")
     public String getUser() {
         return user;
@@ -74,8 +75,9 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
 
     // //////////////////////////////////////
 
+    @javax.jdo.annotations.Column(length=128)
+    @javax.jdo.annotations.PrimaryKey
     @Title(sequence="10")
-    @PrimaryKey
     @Override
     public String getKey() {
         return super.getKey();
@@ -87,7 +89,8 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
 
     // //////////////////////////////////////
 
-    @Persistent
+    @javax.jdo.annotations.Column(length=254)
+    @javax.jdo.annotations.Persistent
     @Override
     public String getDescription() {
         return super.getDescription();
@@ -100,13 +103,12 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     // //////////////////////////////////////
 
     @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Persistent
     @Title(prepend=" = ", sequence="30")
-    @Persistent
     @Override
     public String getValueRaw() {
         return super.getValueRaw();
     }
-    @Persistent
     @Override
     public void setValueRaw(String valueAsRaw) {
         super.setValueRaw(valueAsRaw);
@@ -114,8 +116,8 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(allowsNull="false")
-    @Persistent
+    @javax.jdo.annotations.Column(allowsNull="false", length=20)
+    @javax.jdo.annotations.Persistent
     @Override
     public SettingType getType() {
         return super.getType();

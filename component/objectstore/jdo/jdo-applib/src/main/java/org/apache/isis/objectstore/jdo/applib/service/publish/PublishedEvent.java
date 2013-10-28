@@ -54,7 +54,7 @@ public class PublishedEvent {
 
     private String title;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="false", length=50)
     @Title
     @Hidden
     public String getTitle() {
@@ -82,6 +82,7 @@ public class PublishedEvent {
 
     private String id;
 
+    @javax.jdo.annotations.Column(length=32)
     @javax.jdo.annotations.PrimaryKey
     @MemberOrder(sequence = "2")
     public String getId() {
@@ -99,6 +100,7 @@ public class PublishedEvent {
     /**
      * Programmatic because information also available in the {@link #getId() id}.
      */
+    @javax.jdo.annotations.Column(length=32)
     @Programmatic
     public String getTransactionId() {
         return transactionId;
@@ -142,7 +144,7 @@ public class PublishedEvent {
 
     private String user;
     
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="false", length=50)
     @MemberOrder(sequence = "4")
     public String getUser() {
         return user;
@@ -156,7 +158,7 @@ public class PublishedEvent {
 
     private State state;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="false", length=20)
     @MemberOrder(sequence = "5")
     public State getState() {
         return state;

@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.settings.SettingType;
 @Named("Application Setting")
 public class ApplicationSettingJdo extends SettingAbstractJdo implements ApplicationSetting {
 
+    @javax.jdo.annotations.Column(length=128)
     @javax.jdo.annotations.PrimaryKey
     public String getKey() {
         return super.getKey();
@@ -55,7 +56,8 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
 
     // //////////////////////////////////////
 
-    @Persistent
+    @javax.jdo.annotations.Column(length=254)
+    @javax.jdo.annotations.Persistent
     @Override
     public String getDescription() {
         return super.getDescription();
@@ -68,7 +70,7 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
     // //////////////////////////////////////
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Persistent
+    @javax.jdo.annotations.Persistent
     @Override
     public String getValueRaw() {
         return super.getValueRaw();
@@ -80,8 +82,8 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
     
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(allowsNull="false")
-    @Persistent
+    @javax.jdo.annotations.Column(allowsNull="false", length=20)
+    @javax.jdo.annotations.Persistent
     @Override
     public SettingType getType() {
         return super.getType();
