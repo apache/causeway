@@ -36,7 +36,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
     
     public ExceptionRecognizerCompositeForJdoObjectStore() {
         // most specific ones first
-        add(new ExceptionRecognizerForSQLIntegrityConstraintViolationException());
+        add(new ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException());
         add(new ExceptionRecognizerForJDOObjectNotFoundException());
         add(new ExceptionRecognizerForJDODataStoreException());
     }

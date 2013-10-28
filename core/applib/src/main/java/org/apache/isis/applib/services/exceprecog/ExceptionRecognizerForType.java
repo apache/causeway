@@ -44,6 +44,10 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerDelegating {
         return Predicates.and(ofType(exceptionType), excluding(messages));
     }
 
+    protected final static Predicate<Throwable> ofTypeIncluding(final Class<? extends Throwable> exceptionType, final String... messages) {
+        return Predicates.and(ofType(exceptionType), including(messages));
+    }
+    
     protected final static Predicate<Throwable> ofType(final Class<? extends Throwable> exceptionType) {
         return new Predicate<Throwable>() {
             @Override
@@ -75,6 +79,32 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerDelegating {
                     }
                 }
                 return true;
+            }
+        };
+    }
+
+    /**
+     * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if at least one of the message(s)
+     * supplied <i>DO</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
+     * (recursively).
+     * 
+     * <p>
+     * Intended to prevent more precise matching of a specific general exception type.
+     */
+    protected final static Predicate<Throwable> including(final String... messages) {
+        return new Predicate<Throwable>() {
+            @Override
+            public boolean apply(Throwable input) {
+                final List<Throwable> causalChain = Throwables.getCausalChain(input);
+                for (String message : messages) {
+                    for (Throwable throwable : causalChain) {
+                        final String throwableMessage = throwable.getMessage();
+                        if(throwableMessage != null && throwableMessage.contains(message)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
         };
     }
