@@ -50,22 +50,25 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
     public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
         final String queryName = persistenceQuery.getQueryName();
-        final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
-        final QueryCardinality cardinality = persistenceQuery.getCardinality();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
         
         final List<?> results;
         if((objectSpec.getFullIdentifier() + "#pk").equals(queryName)) {
-            results = getResultsPk(queryName, map, objectSpec);
+            results = getResultsPk(persistenceQuery);
         } else {
-            results = getResults(objectSpec, queryName, map, cardinality);
+            results = getResults(persistenceQuery);
         }
         
         return loadAdapters(objectSpec, results);
     }
 
     // special case handling
-    private List<?> getResultsPk(final String queryName, final Map<String, Object> map, final ObjectSpecification objectSpec) {
+    private List<?> getResultsPk(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
+
+        final String queryName = persistenceQuery.getQueryName();
+        final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
+        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
+
         final Class<?> cls = objectSpec.getCorrespondingClass();
         if(!JdoPropertyUtils.hasPrimaryKeyProperty(objectSpec)) {
             throw new UnsupportedOperationException("cannot search by primary key for DataStore-assigned entities");
@@ -82,11 +85,19 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         return (List<?>) jdoQuery.execute();
     }
 
-    private List<?> getResults(ObjectSpecification objectSpec, final String queryName, final Map<String, Object> argumentsByParameterName, final QueryCardinality cardinality) {
+    private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
         
+        final String queryName = persistenceQuery.getQueryName();
+        final Map<String, Object> argumentsByParameterName = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
+        final QueryCardinality cardinality = persistenceQuery.getCardinality();
+        final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
+
         final PersistenceManager persistenceManager = getJdoObjectStore().getPersistenceManager();
         final Class<?> cls = objectSpec.getCorrespondingClass();
         final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
+        if(persistenceQuery.hasRange()) {
+            jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
+        }
         
         if (LOG.isDebugEnabled()) {
             LOG.debug("query: " + queryName + ", args: " + argumentsByParameterName);

@@ -97,6 +97,22 @@ public class QueryDefault<T> extends QueryAbstract<T> {
         return Collections.unmodifiableMap(argumentsByParameterName);
     }
 
+    public QueryDefault<T> withStart(final long start) {
+        if(start<0) {
+            throw new IllegalArgumentException("require start>=0");
+        }
+        this.start = start;
+        return this;
+    }
+
+    public QueryDefault<T> withCount(final long count) {
+        if(count<=0) {
+            throw new IllegalArgumentException("require count>0");
+        }
+        this.count = count;
+        return this;
+    }
+    
     @Override
     public String getDescription() {
         return getQueryName() + " with " + getArgumentsByParameterName();

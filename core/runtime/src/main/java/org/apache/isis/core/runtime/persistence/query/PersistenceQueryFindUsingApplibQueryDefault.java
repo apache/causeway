@@ -94,4 +94,15 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
         str.append("spec", getSpecification().getShortIdentifier());
         return str.toString();
     }
+
+    public long getEnd() {
+        // we default to Integer.MAX_VALUE because HSQLDB blows up 
+        // (with a ClassCastException from Long to Integer) 
+        // if we return Long.MAX_VALUE 
+        return getCount() != 0? getStart() + getCount(): Integer.MAX_VALUE;
+    }
+
+    public boolean hasRange() {
+        return getStart() != 0 || getCount() != 0;
+    }
 }

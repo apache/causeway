@@ -27,8 +27,8 @@ package org.apache.isis.applib.query;
  */
 public abstract class QueryAbstract<T> implements Query<T> {
 
-    private final long start;
-    private final long count;
+    protected long start;
+    protected long count;
     private static final long serialVersionUID = 1L;
 
     private final String resultTypeName;
