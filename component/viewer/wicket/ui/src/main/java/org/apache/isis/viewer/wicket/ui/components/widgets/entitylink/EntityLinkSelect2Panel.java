@@ -199,6 +199,24 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 settings.setPlaceholder(scalarModel.getName());
             }
             addOrReplace(select2Field);
+        } else {
+            //
+            // the select2Field already exists, so the widget has been rendered before.  If it is
+            // being re-rendered now, it may be because some other property/parameter was invalid.
+            // when the form was submitted, the selected object (its oid as a string) would have
+            // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
+            // would be correctly converted and processed by the select2Field's choiceProvider.  However,
+            // an invalid property/parameter means that the webpage is re-rendered in another request,
+            // and the rawInput can no longer be interpreted.  The net result is that the field appears
+            // with no input.
+            //
+            // The fix is therefore (I think) simply to clear any rawInput, so that the select2Field
+            // renders its state from its model.
+            //
+            // see: FormComponent#getInputAsArray()
+            // see: Select2Choice#renderInitializationScript()
+            //
+            select2Field.clearInput();
         }
         
         
@@ -222,7 +240,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                 final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
                 final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
                 final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
-                return Lists.transform(results, MementoFunctions.fromAdapter());
+                return Lists.transform(results, ObjectAdapterMemento.Functions.fromAdapter());
             }
 
         };

@@ -66,10 +66,16 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         final IModel<ObjectAdapterMemento> modelObject = ScalarModelWithPending.Util.createModel(this);
         final ObjectAdapter[] actionArgsHint = getScalarModel().getActionArgsHint();
-        select2Field = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
-        setChoices(actionArgsHint);
+        
+        // same pattern as in EntityLinkSelect2Panel
+        if(select2Field == null) {
+            select2Field = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
+            setChoices(actionArgsHint);
+            addStandardSemantics();
+        } else {
+            select2Field.clearInput();
+        }
 
-        addStandardSemantics();
 
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         if(getModel().isRequired()) {
@@ -154,6 +160,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         };
         return provider;
+    }
+
+    @Override
+    protected boolean alwaysRebuildGui() {
+        return true;
     }
 
     @Override

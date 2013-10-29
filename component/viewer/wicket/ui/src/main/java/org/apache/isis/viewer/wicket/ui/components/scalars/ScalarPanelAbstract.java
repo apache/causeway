@@ -143,7 +143,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     @Override
     protected void onBeforeRender() {
-        if (!hasBeenRendered()) {
+        if (!hasBeenRendered() || alwaysRebuildGui()) {
             buildGui();
         }
         final ScalarModel scalarModel = getModel();
@@ -158,6 +158,17 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             }
         }
         super.onBeforeRender();
+    }
+
+    /**
+     * hook for highly dynamic components, eg conditional choices.
+     * 
+     * <p>
+     * Returning <tt>true</tt> means that the component is always rebuilt prior to
+     * every {@link #onBeforeRender() render}ing.
+     */
+    protected boolean alwaysRebuildGui() {
+        return false;
     }
 
     /**
