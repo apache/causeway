@@ -388,9 +388,12 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         }
     }
 
-    public void updateChoices(ObjectAdapter[] argsIfAvailable) {
+    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
         if(select2Field != null) {
             setProviderAndCurrAndPending(select2Field, argsIfAvailable);
+            return true;
+        } else {
+            return false;
         }
     }
     

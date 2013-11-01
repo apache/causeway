@@ -197,8 +197,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     // //////////////////////////////////////
 
     @Override
-    public void updateChoices(ObjectAdapter[] argsIfAvailable) {
+    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
         setChoices(argsIfAvailable);
+        return true;
     }
 
     /**

@@ -188,8 +188,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     }
 
     @Override
-    public void updateChoices(ObjectAdapter[] argsIfAvailable) {
-        entityLink.updateChoices(argsIfAvailable);
+    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
+        return entityLink.updateChoices(argsIfAvailable);
     }
 
 }

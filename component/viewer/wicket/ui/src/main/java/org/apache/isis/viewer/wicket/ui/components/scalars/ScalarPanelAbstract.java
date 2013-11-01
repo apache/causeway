@@ -290,8 +290,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     /**
      * Optional hook method
+     * 
+     * @return true - indicates has been updated, so update dynamically via ajax
      */
-    public void updateChoices(ObjectAdapter[] pendingArguments) {
+    public boolean updateChoices(ObjectAdapter[] pendingArguments) {
+        return false;
     }
 
 
