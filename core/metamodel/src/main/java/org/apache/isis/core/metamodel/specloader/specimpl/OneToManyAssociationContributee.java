@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetImpl;
+import org.apache.isis.core.progmodel.facets.members.resolve.RenderFacetAnnotation;
 
 public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
 
@@ -72,12 +73,10 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         // copy over facets from contributed to own.
         FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
         
-        final RenderFacet renderFacet = new RenderFacetAbstract(Render.Type.EAGERLY, this) {};
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
         final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {}; 
         
-        FacetUtil.addFacet(renderFacet);
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
         FacetUtil.addFacet(typeOfFacet);
