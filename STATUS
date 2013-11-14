@@ -18,6 +18,10 @@ Description
 
 TLP releases:
 
+  * isis-viewer-wicket-1.3.1                       : 07 Nov 2013
+  * quickstart-wicket-restful_jdo-archetype-1.3.1  : 07 Nov 2013
+  * simple-wicket-restful_jdo-archetype-1.3.1      : 07 Nov 2013
+
   * isis-1.3.0                                     : 25 Oct 2013
   * isis-objectstore-jdo-1.3.0                     : 25 Oct 2013
   * isis-security-shiro-1.3.0                      : 25 Oct 2013
@@ -83,4 +87,5 @@ Team:
   PMC, Committer       mnour        Mohammad Nour El-Din (CLA on file)
   PMC, Committer       themalkolm   Alexander Krasnukhin (CLA on file)
   PMC, Committer       dslaughter   David Slaughter (CLA on file)
-  Committer            madytyoo     Maurizio Taverna (CLA on file)
+  PMC, Committer       madytyoo     Maurizio Taverna (CLA on file)
+  PMC, Committer       oscarbou     Oscar Bou (CLA on file)
