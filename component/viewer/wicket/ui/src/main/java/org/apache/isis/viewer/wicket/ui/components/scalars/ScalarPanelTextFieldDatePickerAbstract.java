@@ -23,10 +23,12 @@ import java.io.Serializable;
 
 import com.google.inject.Inject;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -83,7 +85,10 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         model.setObject(object);
         
         textField.setEnabled(false);
-        setTextFieldSize(textField, converter.getDateTimePattern(getLocale()).length());
+        
+        final String dateTimePattern = converter.getDateTimePattern(getLocale());
+        final int length = dateTimePattern.length() + 1; // adding 1 because seemed to truncate in tables in certain circumstances
+        textField.add(new AttributeModifier("size", Model.of("" + length)));
         
         addOrReplace(textField);
         return textField;

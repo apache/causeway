@@ -35,22 +35,11 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        final int numberOfLines = getNumberOfLines(scalarModel);
-        if (numberOfLines > 1) {
-            return new MultiLineStringPanel(id, scalarModel, numberOfLines);
+        final MultiLineFacet multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
+        if (multiLineFacet != null) {
+            return new MultiLineStringPanel(id, scalarModel);
         } else {
             return new StringPanel(id, scalarModel);
         }
-    }
-    
-    public int getNumberOfLines(final ScalarModel scalarModel) {
-        final MultiLineFacet multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
-        int numberOfLines = 1;
-        
-        if (multiLineFacet != null) {
-            numberOfLines = multiLineFacet.numberOfLines();
-        }
-        
-        return numberOfLines;
     }
 }

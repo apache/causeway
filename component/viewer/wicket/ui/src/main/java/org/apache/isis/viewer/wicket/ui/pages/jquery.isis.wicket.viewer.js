@@ -37,3 +37,17 @@ $(document).ready(function() {
         }); 
     
 });
+
+/**
+ * enables 'maxlength' to work as an attribute on 'textarea'
+ * 
+ * as per: see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
+ */
+$(function() {  
+    $("textarea[maxlength]").bind('input propertychange', function() {  
+        var maxLength = $(this).attr('maxlength');  
+        if ($(this).val().length > maxLength) {  
+            $(this).val($(this).val().substring(0, maxLength));  
+        }  
+    })  
+});

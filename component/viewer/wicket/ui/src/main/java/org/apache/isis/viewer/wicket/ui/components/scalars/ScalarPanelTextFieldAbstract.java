@@ -32,6 +32,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -131,6 +132,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     protected void addStandardSemantics() {
          setRequiredIfSpecified();
+         setTextFieldSizeAndMaxLengthIfSpecified(textField);
     }
 
     private void setRequiredIfSpecified() {
@@ -139,30 +141,28 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setRequired(required);
     }
 
-    protected void setTextFieldSizeIfSpecified(AbstractTextComponent<T> textField) {
-        final Integer size = determineSize();
-        if (size != null) {
-            setTextFieldSize(textField, size);
+    protected void setTextFieldSizeAndMaxLengthIfSpecified(AbstractTextComponent<T> textField) {
+
+        final Integer maxLength = getValueOf(getModel(), MaxLengthFacet.class);
+        Integer typicalLength = getValueOf(getModel(), TypicalLengthFacet.class);
+
+        // doesn't make sense for typical length to be > maxLength 
+        if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
+            typicalLength = maxLength;
+        }
+        
+        if (typicalLength != null) {
+            textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
+        }
+        
+        if(maxLength != null) {
+            textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
         }
     }
 
-    protected void setTextFieldSize(AbstractTextComponent<T> textField, int size) {
-        textField.add(new AttributeModifier("size", Model.of("" + size)));
-    }
-    
-    @SuppressWarnings("unchecked")
-    protected Integer determineSize() {
-        return firstValueOf(getModel(), TypicalLengthFacet.class, MaxLengthFacet.class);
-    }
-    
-    private Integer firstValueOf(ScalarModel model, Class<? extends SingleIntValueFacet>... facetTypes) {
-        for(Class<? extends SingleIntValueFacet> facetType: facetTypes) {
+    private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
         final SingleIntValueFacet facet = model.getFacet(facetType);
-            if (facet != null) {
-                return facet.value();
-            }
-        }
-        return null;
+        return facet != null ? facet.value() : null;
     }
     
     /**

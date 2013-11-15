@@ -20,10 +20,15 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
@@ -35,13 +40,9 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     private static final long serialVersionUID = 1L;
     
     private static final String ID_SCALAR_VALUE = "scalarValue";
-    private static final int COLS = 35;
     
-    private int numberOfLines;
-    
-    public MultiLineStringPanel(final String id, final ScalarModel scalarModel, final int numberOfLines) {
+    public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
         super(id, ID_SCALAR_VALUE, scalarModel);
-        this.numberOfLines = numberOfLines;
     }
 
     @Override
@@ -63,10 +64,41 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
                 }
             }
         });
-        textField.add(AttributeModifier.replace("cols", Integer.toString(COLS)));
-        textField.add(AttributeModifier.replace("rows", Integer.toString(numberOfLines)));
+        
+
+        final MultiLineFacet multiLineFacet = getModel().getFacet(MultiLineFacet.class);
+        setAttribute(textField, "rows", multiLineFacet.numberOfLines());
+        
+        
+        final Integer maxLength = getValueOf(getModel(), MaxLengthFacet.class);
+        if(maxLength != null) {
+            // in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
+            setAttribute(textField, "maxlength", maxLength);
+        }
+
         return textField;
     }
-    
+
+    private Component setAttribute(final TextArea<String> textField, final String attributeName, final int i) {
+        return textField.add(AttributeModifier.replace(attributeName, ""+i));
+    }
+
+    private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
+        final SingleIntValueFacet facet = model.getFacet(facetType);
+        return facet != null ? facet.value() : null;
+    }
+
+
+    public int getNumberOfLines(final ScalarModel scalarModel) {
+        final MultiLineFacet multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
+        int numberOfLines = 1;
+        
+        if (multiLineFacet != null) {
+            numberOfLines = multiLineFacet.numberOfLines();
+        }
+        
+        return numberOfLines;
+    }
 
 }

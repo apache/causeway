@@ -55,7 +55,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         model.setObject(object);
         
         textField.setEnabled(false);
-        setTextFieldSizeIfSpecified(textField);
+        setTextFieldSizeAndMaxLengthIfSpecified(textField);
         
         addOrReplace(textField);
         return textField;
