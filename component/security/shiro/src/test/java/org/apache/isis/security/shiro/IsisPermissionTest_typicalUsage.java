@@ -58,6 +58,9 @@ public class IsisPermissionTest_typicalUsage {
         assertThat(viewCustomerChangeAddress, permittedBy("com.mycompany.myapp:Customer:changeAddress:*"));
         assertThat(viewCustomerChangeAddress, permittedBy("com.mycompany.myapp:Customer:*:r"));
         assertThat(viewCustomerChangeAddress, permittedBy("com.mycompany.myapp:*:*:r"));
+        assertThat(viewCustomerChangeAddress, permittedBy("com.mycompany.myapp:*:*"));
+        assertThat(viewCustomerChangeAddress, permittedBy("com.mycompany.myapp:*"));
+        assertThat(viewCustomerChangeAddress, permittedBy("com.mycompany.myapp"));
         assertThat(viewCustomerChangeAddress, permittedBy("*:*:*:r"));
         assertThat(viewCustomerChangeAddress, permittedBy("*:*:*:*"));
         assertThat(viewCustomerChangeAddress, permittedBy("*:*:*"));
@@ -65,10 +68,14 @@ public class IsisPermissionTest_typicalUsage {
         assertThat(viewCustomerChangeAddress, permittedBy("*"));
         assertThat(viewCustomerChangeAddress, permittedBy("*:Customer:*:r"));
 
+
         assertThat(useCustomerChangeAddress, permittedBy("com.mycompany.myapp:Customer:changeAddress:w"));
         assertThat(useCustomerChangeAddress, permittedBy("com.mycompany.myapp:Customer:changeAddress:*"));
 
         // and these are some counterexamples
+        assertThat(viewCustomerChangeAddress, not(permittedBy("com.mycompany"))); // packages are NOT recursive
+        assertThat(viewCustomerChangeAddress, not(permittedBy("com.mycompany.*"))); // can't use regex wildcards for packages either
+        
         assertThat(viewCustomerChangeAddress, not(permittedBy("com.mycompany.myapp:Customer:changeAddress:w")));
         assertThat(useCustomerChangeAddress, not(permittedBy("com.mycompany.myapp:Customer:changeAddress:r")));
 

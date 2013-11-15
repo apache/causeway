@@ -31,12 +31,18 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapContext;
 
+import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
+import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
+import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
 import org.apache.isis.security.shiro.util.Util;
+
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.shiro.realm.ldap.LdapContextFactory;
 import org.apache.shiro.realm.ldap.LdapUtils;
+import org.apache.shiro.realm.text.IniRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.StringUtils;
 
@@ -74,14 +80,42 @@ import com.google.common.collect.Sets;
  *    GLOBAL_ADMIN: admin_role,\
  *    DEMOS: self-install_role
  * 
+ * securityManager.realms = $ldapRealm
+ * </pre>
+ * 
+ * <p>
+ * The permissions for each role can be specified using the
+ * {@link #setResourcePath(String)} to an 'ini' file with a [roles] section, eg:
+ * 
+ * <pre>
+ * ldapRealm.resourcePath=classpath:webapp/myroles.ini
+ * </pre>
+ *
+ * <p>
+ * where <tt>myroles.ini</tt> is in <tt>src/main/resources/webapp</tt>, and takes the form:
+ * 
+ * <pre>
+ * [roles]
+ * user_role = *:ToDoItemsJdo:*:*,\
+ *             *:ToDoItem:*:*
+ * self-install_role = *:ToDoItemsFixturesService:install:*
+ * admin_role = *
+ * </pre>
+ * 
+ * <p>
+ * This 'ini' file can then be referenced by other realms (if multiple realm are configured
+ * with the Shiro security manager). 
+ * 
+ * <p>
+ * Alternatively, permissions can be set directly using {@link #setPermissionsByRole(String)},
+ * where the string is the same information, formatted thus:
+ * 
+ * <re>
  * ldapRealm.permissionsByRole=\
  *    user_role = *:ToDoItemsJdo:*:*,\
  *                *:ToDoItem:*:*; \
  *    self-install_role = *:ToDoItemsFixturesService:install:* ; \
  *    admin_role = *
- * 
- * securityManager.realms = $ldapRealm
- * 
  * </pre>
  */
 public class IsisLdapRealm extends JndiLdapRealm {
@@ -99,8 +133,9 @@ public class IsisLdapRealm extends JndiLdapRealm {
     private String uniqueMemberAttributeValueSuffix;
     
     private final Map<String,String> rolesByGroup = Maps.newLinkedHashMap();
-    private final Map<String,List<String>> permissionsByRole = Maps.newLinkedHashMap();
     
+    private PermissionToRoleMapper permissionToRoleMapper;
+
     public IsisLdapRealm() {
         setGroupObjectClass("groupOfUniqueNames");
         setUniqueMemberAttribute("uniqueMember");
@@ -185,7 +220,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     private Set<String> permsFor(Set<String> roleNames) {
         Set<String> perms = Sets.newLinkedHashSet(); // preserve order
         for(String role: roleNames) {
-            List<String> permsForRole = permissionsByRole.get(role);
+            List<String> permsForRole = getPermissionsByRole().get(role);
             if(permsForRole != null) {
                 perms.addAll(permsForRole);
             }
@@ -228,7 +263,67 @@ public class IsisLdapRealm extends JndiLdapRealm {
         this.rolesByGroup.putAll(rolesByGroup);
     }
 
-    public void setPermissionsByRole(String permissionsByRoleStr) {
-        permissionsByRole.putAll(Util.parse(permissionsByRoleStr));
+    /**
+     * Retrieves permissions by role set using either
+     * {@link #setPermissionsByRole(String)} or {@link #setResourcePath(String)}.
+     */
+    private Map<String,List<String>> getPermissionsByRole() {
+        if(permissionToRoleMapper == null) {
+            throw new IllegalStateException("Permissions by role not yet set.");
+        } 
+        return permissionToRoleMapper.getPermissionsByRole();
     }
+    
+    /**
+     * <pre>
+     * ldapRealm.resourcePath=classpath:webapp/myroles.ini
+     * </pre>
+     *
+     * <p>
+     * where <tt>myroles.ini</tt> is in <tt>src/main/resources/webapp</tt>, and takes the form:
+     * 
+     * <pre>
+     * [roles]
+     * user_role = *:ToDoItemsJdo:*:*,\
+     *             *:ToDoItem:*:*
+     * self-install_role = *:ToDoItemsFixturesService:install:*
+     * admin_role = *
+     * </pre>
+     * 
+     * <p>
+     * This 'ini' file can then be referenced by other realms (if multiple realm are configured
+     * with the Shiro security manager). 
+     * 
+     * @see #setResourcePath(String)
+     */
+    public void setResourcePath(String resourcePath) {
+        if(permissionToRoleMapper != null) {
+            throw new IllegalStateException("Permissions already set, " + permissionToRoleMapper.getClass().getName());
+        } 
+        final Ini ini = Ini.fromResourcePath(resourcePath);
+        this.permissionToRoleMapper = new PermissionToRoleMapperFromIni(ini);
+    }
+
+    /**
+     * Specify permissions for each role using a formatted string.
+     *
+     * <pre>
+     * ldapRealm.permissionsByRole=\
+     *    user_role = *:ToDoItemsJdo:*:*,\
+     *                *:ToDoItem:*:*; \
+     *    self-install_role = *:ToDoItemsFixturesService:install:* ; \
+     *    admin_role = *
+     * </pre>
+     * 
+     * @see #setResourcePath(String)
+     */
+    @Deprecated
+    public void setPermissionsByRole(String permissionsByRoleStr) {
+        if(permissionToRoleMapper != null) {
+            throw new IllegalStateException("Permissions already set, " + permissionToRoleMapper.getClass().getName());
+        } 
+        this.permissionToRoleMapper = new PermissionToRoleMapperFromString(permissionsByRoleStr);
+    }
+
+
 }
