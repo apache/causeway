@@ -32,9 +32,27 @@ $(document).ready(function(){
             function() { 
                 $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0.1}, 0);
             });
-         $('.showPanelTab').animate({opacity: 1.0});
+        $('.showPanelTab').animate({opacity: 1.0});
      };
+
+     var hideBookmarksQuickly = function(){
+         $('.content').hide();
+         $('#bookmarkedPagesSlidingDiv').css({width:"0"}, 0);
+         $('.showPanelTab').css({opacity: 1.0});
+      };
 
     $('.showPanelTab').mouseenter(showBookmarks);
     $('#bookmarkedPagesSlidingDiv').mouseleave(hideBookmarks);
+    
+    $('body').keydown(function(e) {
+        
+        // alt+]
+        if(e.which === 221 && e.altKey) {
+            if($('#bookmarkedPagesSlidingDiv .content').is(":visible")) {
+                hideBookmarksQuickly();
+            } else {
+                showBookmarks();
+            }
+        }
+      });
 });
