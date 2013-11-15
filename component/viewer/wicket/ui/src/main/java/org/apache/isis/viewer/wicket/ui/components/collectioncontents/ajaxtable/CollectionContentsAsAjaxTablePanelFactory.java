@@ -37,7 +37,7 @@ public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryA
     private static final String NAME = "table";
 
     public CollectionContentsAsAjaxTablePanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
+        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsAjaxTablePanel.class);
     }
 
     @Override
@@ -50,4 +50,6 @@ public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryA
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
         return new CollectionContentsAsAjaxTablePanel(id, collectionModel);
     }
+    
+
 }

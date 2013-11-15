@@ -38,12 +38,12 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
 
     private static final long serialVersionUID = 1L;
 
-    public EntityComponentFactoryAbstract(final ComponentType componentType) {
-        super(componentType);
+    public EntityComponentFactoryAbstract(final ComponentType componentType, final @SuppressWarnings("rawtypes") Class... classes) {
+        super(componentType, classes);
     }
 
-    public EntityComponentFactoryAbstract(final ComponentType componentType, final String name) {
-        super(componentType, name);
+    public EntityComponentFactoryAbstract(final ComponentType componentType, final String name, final @SuppressWarnings("rawtypes") Class... classes) {
+        super(componentType, name, classes);
     }
 
     @Override

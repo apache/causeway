@@ -26,12 +26,12 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
-public class ValueChoicesSelect2PanelComponentFactory extends ComponentFactoryAbstract {
+public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValueChoicesSelect2PanelComponentFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE);
+    public ValueChoicesSelect2PanelFactory() {
+        super(ComponentType.SCALAR_NAME_AND_VALUE, ValueChoicesSelect2Panel.class);
     }
 
     @Override

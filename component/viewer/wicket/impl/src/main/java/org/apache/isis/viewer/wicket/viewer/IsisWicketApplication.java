@@ -20,18 +20,21 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -40,10 +43,15 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.html.IPackageResourceGuard;
+import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -57,10 +65,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -78,10 +82,15 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
@@ -200,7 +209,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected void init() {
         try {
             super.init();
-    
+            
             final String webInfDir = getServletContext().getRealPath("/WEB-INF");
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
     
@@ -224,6 +233,17 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             this.bookmarkedPagesModel = new BookmarkedPagesModel();
     
             initWicketComponentInjection(injector);
+
+            // must be done after injected componentFactoryRegistry into the app itself
+            buildCssBundle();
+
+            IPackageResourceGuard guard = getResourceSettings().getPackageResourceGuard();
+            if (guard instanceof SecurePackageResourceGuard)
+            {
+                SecurePackageResourceGuard secureGuard = (SecurePackageResourceGuard) guard;
+                secureGuard.addPattern("+org/apache/wicket/merged-resources");
+            }
+            
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             LOG.error("Failed to initialize", ex);
@@ -231,7 +251,32 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         }
 
     }
-    
+
+    private void buildCssBundle() {
+        final Set<CssResourceReference> references = cssResourceReferencesForAllComponents();
+        getResourceBundles().addCssBundle(
+                IsisWicketApplication.class, "isis-wicket-viewer-bundle.css", 
+                references.toArray(new CssResourceReference[]{}));
+    }
+
+    private final static Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences = 
+            new Function<ComponentFactory, Iterable<CssResourceReference>>(){
+                @Override
+                public Iterable<CssResourceReference> apply(final ComponentFactory input) {
+                   return input.getCssResourceReferences();
+                }
+             };
+
+    private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
+        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
+        return Sets.newLinkedHashSet(
+                Iterables.concat(
+                        Iterables.transform(
+                                componentFactories, 
+                                getCssResourceReferences)));
+    }
+
+
     private void determineDeploymentTypeIfRequired() {
         if(deploymentType != null) {
             return;

@@ -33,7 +33,7 @@ public class IsisTimeStampPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public IsisTimeStampPanelFactory() {
-        super(org.apache.isis.applib.value.TimeStamp.class);
+        super(IsisTimeStampPanel.class, org.apache.isis.applib.value.TimeStamp.class);
     }
 
     @Override

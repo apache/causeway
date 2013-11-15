@@ -32,7 +32,7 @@ public class EmptyCollectionPanelFactory extends ComponentFactoryAbstract implem
     private static final long serialVersionUID = 1L;
 
     public EmptyCollectionPanelFactory() {
-        super(ComponentType.EMPTY_COLLECTION);
+        super(ComponentType.EMPTY_COLLECTION, EmptyCollectionPanel.class);
     }
 
     @Override

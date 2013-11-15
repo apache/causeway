@@ -18,9 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import java.util.List;
+
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -37,11 +41,38 @@ public final class PanelUtil {
      * Factored out for reuse by {@link LinksSelectorPanelAbstract}.
      */
     public static void renderHead(final IHeaderResponse response, final Class<?> cls) {
+        final CssResourceReference cssResourceReference = cssResourceReferenceFor(cls);
+        if(cssResourceReference == null) {
+            return;
+        }
+        final CssReferenceHeaderItem forReference = CssHeaderItem.forReference(cssResourceReference);
+        response.render(forReference);
+    }
+
+    private static CssResourceReference cssResourceReferenceFor(final Class<?> cls) {
+        final String url = cssFor(cls);
+        if(url == null) {
+            return null;
+        }
+        return new CssResourceReference(cls, url);
+    }
+
+    public static Iterable<CssResourceReference> cssResourceReferencesFor(final Class<?>... classes) {
+        final List<CssResourceReference> cssResourceReferences = Lists.newArrayList();
+        for (Class<?> cls : classes) {
+            final CssResourceReference cssResourceReference = cssResourceReferenceFor(cls);
+            if(cssResourceReference != null) {
+                cssResourceReferences.add(cssResourceReference);
+            }
+        }
+        return cssResourceReferences;
+    }
+    
+    private static String cssFor(final Class<?> cls) {
         String simpleName = cls.getSimpleName();
         if(Strings.isNullOrEmpty(simpleName)) {
-            return; // eg inner classes
+            return null; // eg inner classes
         }
-        final String url = simpleName + ".css";
-        response.render(CssHeaderItem.forReference(new CssResourceReference(cls, url)));
+        return simpleName + ".css";
     }
 }

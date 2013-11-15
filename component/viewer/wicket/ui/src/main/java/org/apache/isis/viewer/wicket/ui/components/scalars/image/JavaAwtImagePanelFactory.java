@@ -33,7 +33,7 @@ public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public JavaAwtImagePanelFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE);
+        super(ComponentType.SCALAR_NAME_AND_VALUE, JavaAwtImagePanel.class);
     }
 
     @Override

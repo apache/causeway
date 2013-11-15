@@ -21,10 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 /**
  * {@link ComponentFactory} for {@link AboutPanel}.
@@ -34,7 +37,7 @@ public class AboutPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public AboutPanelFactory() {
-        super(ComponentType.ABOUT);
+        super(ComponentType.ABOUT, AboutPanel.class);
     }
 
     @Override
@@ -46,5 +49,6 @@ public class AboutPanelFactory extends ComponentFactoryAbstract {
     public Component createComponent(final String id, final IModel<?> model) {
         return new AboutPanel(id);
     }
+
 
 }

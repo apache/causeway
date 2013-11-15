@@ -79,7 +79,7 @@ import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFac
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2PanelComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2PanelFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -224,7 +224,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new ValuePanelFactory());
 
         // or for choices
-        componentFactories.add(new ValueChoicesSelect2PanelComponentFactory());
+        componentFactories.add(new ValueChoicesSelect2PanelFactory());
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {

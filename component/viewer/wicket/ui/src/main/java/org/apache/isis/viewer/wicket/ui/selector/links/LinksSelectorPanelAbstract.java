@@ -32,7 +32,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -269,12 +268,6 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
 
     protected List<ComponentFactory> ordered(List<ComponentFactory> otherFactories) {
         return otherFactories;
-    }
-
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-        renderHead(response, LinksSelectorPanelAbstract.class);
     }
 
 }

@@ -33,7 +33,7 @@ public class BooleanPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public BooleanPanelFactory() {
-        super(boolean.class, Boolean.class);
+        super(BooleanPanel.class, boolean.class, Boolean.class);
     }
 
     @Override

@@ -168,4 +168,9 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
         return iterator.hasNext() ? iterator.next() : null;
     }
 
+    @Override
+    public Collection<ComponentFactory> listComponentFactories() {
+        return componentFactoriesByType.values();
+    }
+
 }

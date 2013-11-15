@@ -34,7 +34,7 @@ public class JodaDateTimePanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public JodaDateTimePanelFactory() {
-        super(DateTime.class);
+        super(JodaDateTimePanel.class, DateTime.class);
     }
 
     @Override

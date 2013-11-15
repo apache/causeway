@@ -19,8 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
+import java.util.Collections;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.
@@ -32,14 +37,21 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     private final ComponentType componentType;
     private final String name;
 
-    public ComponentFactoryAbstract(final ComponentType componentType) {
-        this.componentType = componentType;
-        this.name = getClass().getSimpleName();
+    private final Class<?>[] cssClasses;
+
+    public ComponentFactoryAbstract(final ComponentType componentType, @SuppressWarnings("rawtypes") Class... classes) {
+        this(componentType, null, classes);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
+    public ComponentFactoryAbstract(final ComponentType componentType, final String name, @SuppressWarnings("rawtypes") Class... cssClasses) {
         this.componentType = componentType;
-        this.name = name;
+        this.name = name != null ? name : getClass().getSimpleName();
+        for (Class<?> cls : cssClasses) {
+            if(ComponentFactory.class.isAssignableFrom(cls)) {
+                throw new IllegalArgumentException("specified a ComponentFactory as a cssClass... you probably meant the component instead? cls = " + cls.getName());
+            }
+        }
+        this.cssClasses = cssClasses;
     }
 
     @Override
@@ -88,6 +100,21 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Iterable<CssResourceReference> getCssResourceReferences() {
+        if (cssClasses!=null && cssClasses.length>0) {
+            return cssResourceReferencesFor(cssClasses);
+        } else {
+            return Collections.<CssResourceReference>emptyList();
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static Iterable<CssResourceReference> cssResourceReferencesFor(
+            final Class... classes) {
+        return PanelUtil.cssResourceReferencesFor(classes);
     }
 
 }

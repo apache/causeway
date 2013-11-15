@@ -33,7 +33,7 @@ public class CharacterPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public CharacterPanelFactory() {
-        super(char.class, Character.class);
+        super(CharacterPanel.class, char.class, Character.class);
     }
 
     @Override

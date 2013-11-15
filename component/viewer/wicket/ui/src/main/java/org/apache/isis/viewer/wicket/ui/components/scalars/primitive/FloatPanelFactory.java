@@ -33,7 +33,7 @@ public class FloatPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public FloatPanelFactory() {
-        super(float.class, Float.class);
+        super(FloatPanel.class, float.class, Float.class);
     }
 
     @Override

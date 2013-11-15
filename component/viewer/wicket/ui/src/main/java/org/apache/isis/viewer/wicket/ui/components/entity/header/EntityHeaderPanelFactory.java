@@ -35,7 +35,7 @@ public class EntityHeaderPanelFactory extends EntityComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityHeaderPanelFactory() {
-        super(ComponentType.ENTITY_SUMMARY);
+        super(ComponentType.ENTITY_SUMMARY, EntityHeaderPanel.class);
     }
 
     @Override

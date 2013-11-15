@@ -33,7 +33,7 @@ public class IsisColorPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public IsisColorPanelFactory() {
-        super(org.apache.isis.applib.value.Color.class);
+        super(IsisColorPanel.class, org.apache.isis.applib.value.Color.class);
     }
 
     @Override

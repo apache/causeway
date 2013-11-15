@@ -33,7 +33,7 @@ public class BytePanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public BytePanelFactory() {
-        super(byte.class, Byte.class);
+        super(BytePanel.class, byte.class, Byte.class);
     }
 
     @Override

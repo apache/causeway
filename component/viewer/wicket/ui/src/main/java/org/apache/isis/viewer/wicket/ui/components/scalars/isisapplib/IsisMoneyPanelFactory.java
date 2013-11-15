@@ -33,7 +33,7 @@ public class IsisMoneyPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public IsisMoneyPanelFactory() {
-        super(org.apache.isis.applib.value.Money.class);
+        super(IsisMoneyPanel.class, org.apache.isis.applib.value.Money.class);
     }
 
     @Override

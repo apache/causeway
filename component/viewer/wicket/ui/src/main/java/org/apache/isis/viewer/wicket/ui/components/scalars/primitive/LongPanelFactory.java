@@ -33,7 +33,7 @@ public class LongPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public LongPanelFactory() {
-        super(long.class, Long.class);
+        super(LongPanel.class, long.class, Long.class);
     }
 
     @Override

@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 
@@ -100,5 +101,7 @@ public interface ComponentFactory extends Serializable {
      * Used for rendering in drop-downs.
      */
     String getName();
+
+    Iterable<CssResourceReference> getCssResourceReferences();
 
 }

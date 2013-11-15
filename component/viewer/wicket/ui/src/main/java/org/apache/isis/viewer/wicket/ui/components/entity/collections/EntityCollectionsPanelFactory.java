@@ -35,7 +35,7 @@ public class EntityCollectionsPanelFactory extends EntityComponentFactoryAbstrac
     private static final long serialVersionUID = 1L;
 
     public EntityCollectionsPanelFactory() {
-        super(ComponentType.ENTITY_COLLECTIONS);
+        super(ComponentType.ENTITY_COLLECTIONS, EntityCollectionsPanel.class);
     }
 
     @Override

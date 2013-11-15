@@ -21,11 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 /**
  * {@link ComponentFactory} for {@link CollectionContentsLinksSelectorPanel}.
@@ -39,7 +41,8 @@ public class CollectionContentsLinksSelectorPanelFactory extends ComponentFactor
     private static final long serialVersionUID = 1L;
 
     public CollectionContentsLinksSelectorPanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS);
+        super(ComponentType.COLLECTION_CONTENTS, 
+                CollectionContentsLinksSelectorPanel.class, LinksSelectorPanelAbstract.class);
     }
 
     @Override
@@ -52,4 +55,5 @@ public class CollectionContentsLinksSelectorPanelFactory extends ComponentFactor
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
         return new CollectionContentsLinksSelectorPanel(id, collectionModel, this);
     }
+
 }

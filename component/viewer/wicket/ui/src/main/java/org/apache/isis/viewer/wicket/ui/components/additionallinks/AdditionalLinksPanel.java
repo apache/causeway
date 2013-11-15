@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 import java.util.List;
 
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -31,7 +32,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -92,5 +95,15 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         };
         container.addOrReplace(listView);
     }
-    
+
+    /**
+     * Because there is no {@link ComponentFactory} for this component,
+     * its CSS must be contributed in this way instead (also meaning its CSS is not bundled).
+     */
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        PanelUtil.renderHead(response, this.getClass());
+    }
+
+
 }

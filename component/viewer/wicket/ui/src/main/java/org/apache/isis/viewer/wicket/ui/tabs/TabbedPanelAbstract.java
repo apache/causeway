@@ -23,6 +23,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * Adapter class for tabbed panels; does very little in itself, but does ensure
@@ -39,7 +40,7 @@ public abstract class TabbedPanelAbstract<T extends IModel<?>> extends PanelAbst
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        renderHead(response, TabbedPanelAbstract.class);
+        PanelUtil.renderHead(response, TabbedPanelAbstract.class);
     }
 
 }

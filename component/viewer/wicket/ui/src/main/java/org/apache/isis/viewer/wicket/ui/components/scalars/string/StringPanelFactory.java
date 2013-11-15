@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
@@ -29,8 +31,11 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    @SuppressWarnings("rawtypes")
     public StringPanelFactory() {
-        super(String.class);
+        super(
+            Lists.<Class>newArrayList(StringPanel.class, MultiLineStringPanel.class), 
+            String.class);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class WelcomePanelFactory extends ComponentFactoryAbstract {
 
 
     public WelcomePanelFactory() {
-        super(ComponentType.WELCOME);
+        super(ComponentType.WELCOME, WelcomePanel.class);
     }
 
     @Override

@@ -19,10 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * Package-level adapter for menu items and submenu-items.
@@ -38,6 +41,15 @@ abstract class CssMenuItemPanelAbstract<T extends IModel<?>> extends PanelAbstra
 
     protected void addSubMenuItems(final WebMarkupContainer markupContainer, final CssMenuItem cssMenuItem) {
         cssMenuItem.addTo(markupContainer);
+    }
+
+    /**
+     * Because there is no {@link ComponentFactory} for (the subclasses of) this component,
+     * its CSS must be contributed in this way instead (also meaning its CSS is not bundled).
+     */
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        PanelUtil.renderHead(response, this.getClass());
     }
 
 }

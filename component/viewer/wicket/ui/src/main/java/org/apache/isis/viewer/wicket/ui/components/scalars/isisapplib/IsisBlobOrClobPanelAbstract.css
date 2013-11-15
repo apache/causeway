@@ -17,42 +17,7 @@
  *  under the License.
  */
 
-.isisBlobPanel .scalarValue span.downloadTitle,
-.isisBlobPanel .scalarValue span.uploadTitle,
-.isisBlobPanel .scalarValue span.clearTitle {
-    margin-right: 10px;
-    margin-bottom:10px;
-    float:left;
-    display:block;
-    border: 0px;
-    padding:5px 10px;
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    background-color:#FFFFFF;
-    color:#46413B;
-    font-style:normal !important;
-    text-transform: uppercase;
-    font-size: 0.9em;
-}
-
-.isisBlobPanel .scalarValue a span.downloadTitle,
-.isisBlobPanel .scalarValue span.uploadTitle,
-.isisBlobPanel .scalarValue a span.clearTitle {
-    background-color:#F0EFEA;
-    text-decoration:none;
-}
- 
-.isisBlobPanel .scalarValue a:hover span.downloadTitle,
-.isisBlobPanel .scalarValue span.uploadTitle:hover,
-.isisBlobPanel .scalarValue span.uploadTitle input:hover,
-.isisBlobPanel .scalarValue a:hover span.clearTitle {
-	background-color:#40C0CB;
-	color: white;
-    text-decoration:none;
-    cursor: pointer;
-}
- 
+/* REVIEW: what is this, exactly */ 
 .yourBtn{
    position: relative;
        top: 150px;
@@ -67,23 +32,3 @@
    cursor:pointer;
 }
 
-
-.isisBlobPanel .scalarValue {
-	height: 30px;
-	line-height: 30px;
-}
-
-.isisBlobPanel .scalarValue span.uploadTitle,
-.isisBlobPanel .scalarValue span.downloadTitle,
-.isisBlobPanel .scalarValue span.clearTitle {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    font-weight: bold;
-}
-
-
-.isisBlobPanel .scalarImage {
-	float:left;
-	margin-right: 10px;
-	margin-bottom: 10px;
-}

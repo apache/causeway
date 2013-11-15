@@ -35,7 +35,7 @@ public class EntityPropertiesPanelFactory extends EntityComponentFactoryAbstract
     private static final long serialVersionUID = 1L;
 
     public EntityPropertiesPanelFactory() {
-        super(ComponentType.ENTITY_PROPERTIES);
+        super(ComponentType.ENTITY_PROPERTIES, EntityPropertiesPanel.class);
     }
 
     @Override

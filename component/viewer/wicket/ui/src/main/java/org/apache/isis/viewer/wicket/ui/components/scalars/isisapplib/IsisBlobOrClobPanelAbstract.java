@@ -162,11 +162,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     @Override
-    protected void renderHead(IHeaderResponse response, Class<?> cls) {
-        super.renderHead(response, IsisBlobOrClobPanelAbstract.class); // don't use the subclass
-    }
-
-    @Override
     protected Component addComponentForCompact() {
         final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);

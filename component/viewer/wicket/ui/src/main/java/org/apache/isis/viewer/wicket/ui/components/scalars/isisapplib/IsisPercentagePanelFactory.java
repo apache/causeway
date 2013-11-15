@@ -33,7 +33,7 @@ public class IsisPercentagePanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public IsisPercentagePanelFactory() {
-        super(org.apache.isis.applib.value.Percentage.class);
+        super(IsisPercentagePanel.class, org.apache.isis.applib.value.Percentage.class);
     }
 
     @Override

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionlink;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -36,7 +37,7 @@ public class ActionLinkPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ActionLinkPanelFactory() {
-        super(ComponentType.ACTION_LINK);
+        super(ComponentType.ACTION_LINK, ActionLinkPanel.class);
     }
 
     @Override
@@ -54,5 +55,6 @@ public class ActionLinkPanelFactory extends ComponentFactoryAbstract {
         final ActionModel actionModel = (ActionModel) model;
         return new ActionLinkPanel(id, actionModel);
     }
+
 
 }

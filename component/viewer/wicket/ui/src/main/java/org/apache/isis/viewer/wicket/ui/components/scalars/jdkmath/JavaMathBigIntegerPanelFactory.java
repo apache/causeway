@@ -33,7 +33,7 @@ public class JavaMathBigIntegerPanelFactory extends ComponentFactoryScalarAbstra
     private static final long serialVersionUID = 1L;
 
     public JavaMathBigIntegerPanelFactory() {
-        super(java.math.BigInteger.class);
+        super(JavaMathBigIntegerPanel.class, java.math.BigInteger.class);
     }
 
     @Override

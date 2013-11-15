@@ -33,7 +33,7 @@ public class JavaSqlDatePanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public JavaSqlDatePanelFactory() {
-        super(java.sql.Date.class);
+        super(JavaSqlDatePanel.class, java.sql.Date.class);
     }
 
     @Override

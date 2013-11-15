@@ -29,6 +29,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -38,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -117,20 +119,25 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Automatically reference any corresponding CSS.
+     * Renders the corresponding CSS for this panel.
+     * 
+     * <p>
+     * For most subclasses of {@link PanelAbstract} - specifically those that have their own {@link ComponentFactory}, 
+     * it is additionally the responsibility (via {@link ComponentFactory#getCssResourceReferences()}) of the factory
+     * to declare the {@link CssResourceReference}(s) to be included.  These are then all bundled up into
+     * a single unit, as part of the application bootstrapping (<tt>IsisWicketApplication#init</tt>).
+     * 
+     * <p>
+     * This is done because some browsers (we're looking at you, IE!) have a limit of only 31 CSS files.
+     * 
+     * <p>
+     * For subclasses that do not have a {@link ComponentFactory}, their CSS will simply be referenced standalone.
      */
     @Override
     public void renderHead(final IHeaderResponse response) {
-        renderHead(response, this.getClass());
+        PanelUtil.renderHead(response, this.getClass());
     }
 
-    /**
-     * Factored out to allow non-concrete subclasses to additionally render
-     * their own CSS if required.
-     */
-    protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
-        PanelUtil.renderHead(response, cls);
-    }
 
 
     // ///////////////////////////////////////////////////////////////////

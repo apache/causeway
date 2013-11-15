@@ -39,7 +39,7 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
     private static final String NAME = "icons";
 
     public CollectionContentsAsIconsPanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
+        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsIconsPanel.class);
     }
 
     @Override

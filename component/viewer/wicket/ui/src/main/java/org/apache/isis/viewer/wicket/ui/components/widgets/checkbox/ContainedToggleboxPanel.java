@@ -26,11 +26,14 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * A button contained within its own form.
@@ -84,4 +87,14 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
         checkbox.setModelObject(!checkbox.getModelObject());
         onSubmit(target);
     }
+    
+    /**
+     * Because there is no {@link ComponentFactory} for this component,
+     * its CSS must be contributed in this way instead (also meaning its CSS is not bundled).
+     */
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        PanelUtil.renderHead(response, this.getClass());
+    }
+    
 }

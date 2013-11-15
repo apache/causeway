@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.app.registry;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -80,5 +81,7 @@ public interface ComponentFactoryRegistry {
     Component createComponent(ComponentType componentType, String id, IModel<?> model);
 
     ComponentFactory findComponentFactoryElseFailFast(ComponentType componentType, IModel<?> model);
+
+    Collection<ComponentFactory> listComponentFactories();
 
 }

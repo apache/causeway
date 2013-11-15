@@ -33,7 +33,7 @@ public class IsisPasswordPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public IsisPasswordPanelFactory() {
-        super(org.apache.isis.applib.value.Password.class);
+        super(IsisPasswordPanel.class, org.apache.isis.applib.value.Password.class);
     }
 
     @Override

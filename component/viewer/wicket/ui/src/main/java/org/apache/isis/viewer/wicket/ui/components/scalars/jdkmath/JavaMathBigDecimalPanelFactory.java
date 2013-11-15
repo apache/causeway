@@ -33,7 +33,7 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
     private static final long serialVersionUID = 1L;
 
     public JavaMathBigDecimalPanelFactory() {
-        super(java.math.BigDecimal.class);
+        super(JavaMathBigDecimalPanel.class, java.math.BigDecimal.class);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public ValuePanelFactory() {
-        super(); // not asking the supertype to validate types, so can just pass in nothing here.
+        super(ValuePanel.class); // not asking the supertype to validate types, so no value types need be provided.
     }
 
     @Override

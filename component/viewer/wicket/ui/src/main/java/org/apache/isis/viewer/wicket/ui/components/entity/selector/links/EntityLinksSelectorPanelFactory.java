@@ -26,6 +26,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 /**
  * {@link ComponentFactory} for {@link EntityLinksSelectorPanel}.
@@ -39,7 +40,8 @@ public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstr
     private static final long serialVersionUID = 1L;
 
     public EntityLinksSelectorPanelFactory() {
-        super(ComponentType.ENTITY);
+        super(ComponentType.ENTITY, 
+                EntityLinksSelectorPanel.class, LinksSelectorPanelAbstract.class);
     }
 
     @Override
@@ -47,4 +49,5 @@ public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstr
         final EntityModel entityModel = (EntityModel) model;
         return new EntityLinksSelectorPanel(id, entityModel, this);
     }
+    
 }

@@ -33,7 +33,7 @@ public class JavaUtilDatePanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public JavaUtilDatePanelFactory() {
-        super(java.util.Date.class);
+        super(JavaUtilDatePanel.class, java.util.Date.class);
     }
 
     @Override

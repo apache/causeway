@@ -34,7 +34,7 @@ public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public VoidReturnPanelFactory() {
-        super(ComponentType.VOID_RETURN);
+        super(ComponentType.VOID_RETURN, VoidReturnPanel.class);
     }
 
     @Override

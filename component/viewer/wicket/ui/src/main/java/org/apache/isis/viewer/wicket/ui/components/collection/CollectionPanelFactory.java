@@ -37,7 +37,7 @@ public class CollectionPanelFactory extends ComponentFactoryAbstract {
     private static final String NAME = "labelled";
 
     public CollectionPanelFactory() {
-        super(ComponentType.COLLECTION_NAME_AND_CONTENTS, NAME);
+        super(ComponentType.COLLECTION_NAME_AND_CONTENTS, NAME, CollectionPanel.class);
     }
 
     @Override

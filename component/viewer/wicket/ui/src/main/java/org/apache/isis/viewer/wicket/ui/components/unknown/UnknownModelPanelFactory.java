@@ -21,14 +21,15 @@ package org.apache.isis.viewer.wicket.ui.components.unknown;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 public class UnknownModelPanelFactory implements ComponentFactory {
 
     private static final long serialVersionUID = 1L;
-
 
     @Override
     public ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model) {
@@ -53,6 +54,11 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     @Override
     public String getName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public Iterable<CssResourceReference> getCssResourceReferences() {
+        return PanelUtil.cssResourceReferencesFor(UnknownModelPanel.class);
     }
 
 }

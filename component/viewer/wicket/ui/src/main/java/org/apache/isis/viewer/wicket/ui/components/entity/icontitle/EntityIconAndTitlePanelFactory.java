@@ -35,7 +35,7 @@ public class EntityIconAndTitlePanelFactory extends EntityComponentFactoryAbstra
     private static final long serialVersionUID = 1L;
 
     public EntityIconAndTitlePanelFactory() {
-        super(ComponentType.ENTITY_ICON_AND_TITLE);
+        super(ComponentType.ENTITY_ICON_AND_TITLE, EntityIconAndTitlePanel.class);
     }
 
     @Override

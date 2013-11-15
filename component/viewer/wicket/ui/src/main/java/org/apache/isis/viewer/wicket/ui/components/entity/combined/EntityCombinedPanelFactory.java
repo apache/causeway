@@ -37,7 +37,7 @@ public class EntityCombinedPanelFactory extends EntityComponentFactoryAbstract {
     private static final String NAME = "combined";
 
     public EntityCombinedPanelFactory() {
-        super(ComponentType.ENTITY, NAME);
+        super(ComponentType.ENTITY, NAME, EntityCombinedPanel.class);
     }
 
     @Override

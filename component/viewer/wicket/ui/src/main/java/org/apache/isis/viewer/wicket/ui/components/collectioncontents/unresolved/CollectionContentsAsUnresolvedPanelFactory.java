@@ -37,7 +37,7 @@ public class CollectionContentsAsUnresolvedPanelFactory extends ComponentFactory
     private static final String NAME = "show...";
 
     public CollectionContentsAsUnresolvedPanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
+        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsUnresolvedPanel.class);
     }
 
     @Override

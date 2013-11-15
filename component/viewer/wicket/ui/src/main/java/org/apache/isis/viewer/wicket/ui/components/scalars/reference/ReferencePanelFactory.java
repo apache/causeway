@@ -37,7 +37,7 @@ public class ReferencePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ReferencePanelFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE);
+        super(ComponentType.SCALAR_NAME_AND_VALUE, ReferencePanel.class);
     }
 
     @Override
