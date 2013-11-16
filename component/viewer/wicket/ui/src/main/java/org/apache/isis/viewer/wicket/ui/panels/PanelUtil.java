@@ -18,10 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import java.util.List;
-
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -49,7 +46,7 @@ public final class PanelUtil {
         response.render(forReference);
     }
 
-    private static CssResourceReference cssResourceReferenceFor(final Class<?> cls) {
+    public static CssResourceReference cssResourceReferenceFor(final Class<?> cls) {
         final String url = cssFor(cls);
         if(url == null) {
             return null;
@@ -57,18 +54,10 @@ public final class PanelUtil {
         return new CssResourceReference(cls, url);
     }
 
-    public static Iterable<CssResourceReference> cssResourceReferencesFor(final Class<?>... classes) {
-        final List<CssResourceReference> cssResourceReferences = Lists.newArrayList();
-        for (Class<?> cls : classes) {
-            final CssResourceReference cssResourceReference = cssResourceReferenceFor(cls);
-            if(cssResourceReference != null) {
-                cssResourceReferences.add(cssResourceReference);
-            }
-        }
-        return cssResourceReferences;
-    }
-    
     private static String cssFor(final Class<?> cls) {
+        if(cls == null) {
+            return null;
+        }
         String simpleName = cls.getSimpleName();
         if(Strings.isNullOrEmpty(simpleName)) {
             return null; // eg inner classes

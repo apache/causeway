@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
-import java.util.Collections;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -37,21 +35,27 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     private final ComponentType componentType;
     private final String name;
 
-    private final Class<?>[] cssClasses;
+    private final Class<?> componentClass;
 
-    public ComponentFactoryAbstract(final ComponentType componentType, @SuppressWarnings("rawtypes") Class... classes) {
-        this(componentType, null, classes);
+    public ComponentFactoryAbstract(final ComponentType componentType) {
+        this(componentType, null, null);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, final String name, @SuppressWarnings("rawtypes") Class... cssClasses) {
+    public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
+        this(componentType, name, null);
+    }
+    
+    public ComponentFactoryAbstract(final ComponentType componentType, @SuppressWarnings("rawtypes") Class componentClass) {
+        this(componentType, null, componentClass);
+    }
+
+    public ComponentFactoryAbstract(final ComponentType componentType, final String name, @SuppressWarnings("rawtypes") Class componentClass) {
         this.componentType = componentType;
         this.name = name != null ? name : getClass().getSimpleName();
-        for (Class<?> cls : cssClasses) {
-            if(ComponentFactory.class.isAssignableFrom(cls)) {
-                throw new IllegalArgumentException("specified a ComponentFactory as a cssClass... you probably meant the component instead? cls = " + cls.getName());
-            }
+        if(componentClass != null && ComponentFactory.class.isAssignableFrom(componentClass)) {
+            throw new IllegalArgumentException("specified a ComponentFactory as a componentClass... you probably meant the component instead? componentClass = " + componentClass.getName());
         }
-        this.cssClasses = cssClasses;
+        this.componentClass = componentClass;
     }
 
     @Override
@@ -103,18 +107,9 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     }
 
     @Override
-    public Iterable<CssResourceReference> getCssResourceReferences() {
-        if (cssClasses!=null && cssClasses.length>0) {
-            return cssResourceReferencesFor(cssClasses);
-        } else {
-            return Collections.<CssResourceReference>emptyList();
-        }
+    public CssResourceReference getCssResourceReferences() {
+        return PanelUtil.cssResourceReferenceFor(componentClass);
     }
 
-    @SuppressWarnings("rawtypes")
-    private static Iterable<CssResourceReference> cssResourceReferencesFor(
-            final Class... classes) {
-        return PanelUtil.cssResourceReferencesFor(classes);
-    }
 
 }

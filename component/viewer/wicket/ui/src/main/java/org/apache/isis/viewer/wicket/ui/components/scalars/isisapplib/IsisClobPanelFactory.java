@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import com.google.common.collect.Lists;
-
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -35,8 +33,7 @@ public class IsisClobPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public IsisClobPanelFactory() {
-        super(Lists.<Class>newArrayList(IsisClobPanel.class, IsisBlobOrClobPanelAbstract.class), org.apache.isis.applib.value.Clob.class);
-        //super(IsisClobPanel.class, org.apache.isis.applib.value.Clob.class);
+        super(IsisClobPanel.class, org.apache.isis.applib.value.Clob.class);
     }
 
     @Override

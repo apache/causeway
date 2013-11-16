@@ -45,7 +45,7 @@
 	-webkit-border-radius:0px 4px 4px 0px;
 }
 
-a span.ViewLinkItem {
+.linksSelectorPanel a span.ViewLinkItem {
 	color:#46423C;
 	background-color:#F0EFEA;
 	float:left;
@@ -54,7 +54,7 @@ a span.ViewLinkItem {
 	line-height:30px;
 }
 
-span.ViewLinkItem {
+.linksSelectorPanel span.ViewLinkItem {
 	color:#FFFFFF;
 	background-color:#20B5C2;
 	float:left;
@@ -66,31 +66,31 @@ span.ViewLinkItem {
 	text-indent:-999em;
 }
 
-span.ViewLinkItem.hide {
+.linksSelectorPanel span.ViewLinkItem.hide {
 	background-image:url('images/icon_hide_on.png');
 	background-position: center center;
 	background-repeat:no-repeat;
 }
 
-span.ViewLinkItem.table {
+.linksSelectorPanel span.ViewLinkItem.table {
 	background-image:url('images/icon_table_on.png');
 	background-position: center center;
 	background-repeat:no-repeat;
 }
 
-a span.ViewLinkItem.hide {
+.linksSelectorPanel a span.ViewLinkItem.hide {
 	background-image:url('images/icon_hide_off.png');
 	background-position: center center;
 	background-repeat:no-repeat;
 }
 
-a span.ViewLinkItem.table {
+.linksSelectorPanel a span.ViewLinkItem.table {
 	background-image:url('images/icon_table_off.png');
 	background-position: center center;
 	background-repeat:no-repeat;
 }
 
-.ViewLinkItem {
+.linksSelectorPanel .ViewLinkItem {
 	padding:0px 10px;
 	font-weight:bold;
 	text-transform:uppercase;

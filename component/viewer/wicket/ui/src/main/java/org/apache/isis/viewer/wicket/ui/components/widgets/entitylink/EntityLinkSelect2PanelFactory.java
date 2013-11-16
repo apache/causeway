@@ -33,7 +33,7 @@ public class EntityLinkSelect2PanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityLinkSelect2PanelFactory() {
-        super(ComponentType.ENTITY_LINK);
+        super(ComponentType.ENTITY_LINK, EntityLinkSelect2Panel.class);
     }
 
     @Override

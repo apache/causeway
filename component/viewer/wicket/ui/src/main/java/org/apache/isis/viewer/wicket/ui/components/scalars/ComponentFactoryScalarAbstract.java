@@ -19,9 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
@@ -36,15 +33,9 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
     private final Class<?>[] scalarTypes;
 
     public ComponentFactoryScalarAbstract(
-            final @SuppressWarnings("rawtypes") Class panelClass, 
+            final @SuppressWarnings("rawtypes") Class componentClass, 
             final Class<?>... scalarTypes) {
-        this(Collections.singletonList(panelClass), scalarTypes);
-    }
-    
-    public ComponentFactoryScalarAbstract(
-            final @SuppressWarnings("rawtypes") List<Class> panelClasses, 
-            final Class<?>... scalarTypes) {
-        super(ComponentType.SCALAR_NAME_AND_VALUE, panelClasses.toArray(new Class[]{}));
+        super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
         this.scalarTypes = scalarTypes;
     }
 

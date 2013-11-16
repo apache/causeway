@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-.bookmarkedPagesPanel {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder {
 	font-size: 0.7em;
 	text-transform:uppercase;
 	font-weight:bold;
@@ -25,17 +25,17 @@
 	margin-bottom:5px;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesList {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList {
     margin-top:30px;
 	
 }
 
-.bookmarkedPagesPanel .bookmarkedPageItem {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPageItem {
     margin-top:10px;
     margin-bottom:10px;
 }
 
-.bookmarkedPagesPanel span.bookmarkedPageImageAndTitle {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder span.bookmarkedPageImageAndTitle {
     margin-right: 5px;
     margin-bottom:5px;
 
@@ -47,11 +47,11 @@
     padding:10px 10px 3px 10px;
 }
 
-.bookmarkedPagesPanel span.bookmarkedPageImageAndTitle:hover {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder span.bookmarkedPageImageAndTitle:hover {
     background-color:#FFFFFF;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesList a img.bookmarkedPageImage {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList a img.bookmarkedPageImage {
     /*float:left;*/
     background-color: transparent;
     width: 16px;
@@ -59,27 +59,27 @@
     /*padding:3px 0px 0px 3px;*/
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesList span.bookmarkedPageTitle {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList span.bookmarkedPageTitle {
 	font-style:normal !important;
     
     vertical-align: top;
     padding-left: 5px;
 }
 
-.bookmarkedPagesPanel span.bookmarkedPageTitle {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder span.bookmarkedPageTitle {
 	background-color:#F0EFEA;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
 	text-decoration:none;
     background-color:#FFFFFF;
 }
 
-.bookmarkedPagesPanel .clearBookmarks {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .clearBookmarks {
 	color: rgb(128,0,0);
 }
 
-.bookmarkedPagesPanel .clearBookmarks {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .clearBookmarks {
 	border-radius: 4px 4px 4px 4px;
 	color: #46413B;
 	display: block;
@@ -89,13 +89,12 @@
 	margin-right: 5px;
 }
 
-.bookmarkedPagesPanel .currentBookmark span.bookmarkedPageImageAndTitle,
-.bookmarkedPagesPanel .currentBookmark span.bookmarkedPageTitle {
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .currentBookmark span.bookmarkedPageImageAndTitle,
+.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .currentBookmark span.bookmarkedPageTitle {
     background-color:#FFFFFF;
 }
 
-
-.showPanelTab {
+.bookmarkedPagesPanel .showPanelTab {
     border-radius: 0px 8px 8px 0px;
 	width:10px;
     height:200px;
@@ -111,7 +110,7 @@
     font-weight:bold;
 }
 
-#bookmarkedPagesSlidingDiv {
+.bookmarkedPagesPanel #bookmarkedPagesSlidingDiv {
     border-radius: 0px 8px 8px 0px;
     position:fixed;
     left:0px;
@@ -121,7 +120,8 @@
     width:0;/*new line*/
     z-index: 998;
 }
-#bookmarkedPagesSlidingDiv .content {
+
+.bookmarkedPagesPanel #bookmarkedPagesSlidingDiv .content {
     width:290px;
     margin-left:30px;
     
@@ -129,26 +129,26 @@
 }
 
 
-.bookmarkDepth0 {
+.bookmarkedPagesPanel .bookmarkDepth0 {
     padding-left: 0px;	
 }
-.bookmarkDepth1 {
+.bookmarkedPagesPanel .bookmarkDepth1 {
     padding-left: 20px;  
 }
-.bookmarkDepth2 {
+.bookmarkedPagesPanel .bookmarkDepth2 {
     padding-left: 40px;  
 }
-.bookmarkDepth3 {
+.bookmarkedPagesPanel .bookmarkDepth3 {
     padding-left: 60px;  
 }
-.bookmarkDepth4 {
+.bookmarkedPagesPanel .bookmarkDepth4 {
     padding-left: 80px;  
 }
-.bookmarkDepth5 {
+.bookmarkedPagesPanel .bookmarkDepth5 {
     padding-left: 100px;  
 }
 
-.clearBookmarkPlaceHolder {
+.bookmarkedPagesPanel .clearBookmarkPlaceHolder {
 	position: relative;
 	top: -7px;
     width: 20px;
@@ -156,11 +156,11 @@
     padding-bottom: 40px;
 }
 
-.clearBookmark,
-.clearBookmarks {
+.bookmarkedPagesPanel .clearBookmark,
+.bookmarkedPagesPanel .clearBookmarks {
     background: url('images/clear_bookmarks.png') no-repeat;
 }
 
-.clearBookmarks span {
+.bookmarkedPagesPanel .clearBookmarks span {
 	padding-left: 25px;
 }

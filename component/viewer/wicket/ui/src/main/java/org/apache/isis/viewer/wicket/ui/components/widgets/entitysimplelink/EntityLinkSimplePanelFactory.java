@@ -34,7 +34,7 @@ public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityLinkSimplePanelFactory() {
-        super(ComponentType.ENTITY_LINK);
+        super(ComponentType.ENTITY_LINK, EntityLinkSimplePanel.class);
     }
 
     @Override

@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -82,15 +82,14 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
@@ -249,21 +248,54 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             LOG.error("Failed to initialize", ex);
             throw ex;
         }
-
     }
 
     private void buildCssBundle() {
+        // get the css for all components built by component factories
         final Set<CssResourceReference> references = cssResourceReferencesForAllComponents();
+        
+        // some additional special cases.
+        addSpecialCasesToCssBundle(references);
+        
+        // create the bundle
         getResourceBundles().addCssBundle(
                 IsisWicketApplication.class, "isis-wicket-viewer-bundle.css", 
                 references.toArray(new CssResourceReference[]{}));
+    }
+
+    /**
+     * Additional special cases to be included in the main CSS bundle.
+     * 
+     * <p>
+     * These are typically either superclasses or components that don't have their own ComponentFactory, or
+     * for {@link ComponentFactory}s (such as <tt>StringPanelFactory</tt>) that don't quite follow the usual pattern
+     * (because they create different types of panels).
+     * 
+     * <p>
+     * Note that it doesn't really matter if we miss one or two; their CSS will simply be served up individually. 
+     */
+    private void addSpecialCasesToCssBundle(final Set<CssResourceReference> references) {
+        
+        // abstract classes
+        
+        // ... though it turns out we cannot add this particular one to the bundle, because 
+        // it has CSS image links intended to be resolved relative to LinksSelectorPanelAbstract.class.
+        // Adding them into the bundle would mean these CSS links are resolved relative to IsisWicketApplication.class 
+        // instead.
+        // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
+        
+        // non-conforming component factories
+        references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));
     }
 
     private final static Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences = 
             new Function<ComponentFactory, Iterable<CssResourceReference>>(){
                 @Override
                 public Iterable<CssResourceReference> apply(final ComponentFactory input) {
-                   return input.getCssResourceReferences();
+                   final CssResourceReference cssResourceReference = input.getCssResourceReferences();
+                   return cssResourceReference != null? 
+                           Collections.singletonList(cssResourceReference): 
+                           Collections.<CssResourceReference>emptyList();
                 }
              };
 

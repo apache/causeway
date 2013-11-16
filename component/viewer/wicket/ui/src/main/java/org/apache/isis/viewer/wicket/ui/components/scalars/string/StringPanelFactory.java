@@ -34,7 +34,7 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
     @SuppressWarnings("rawtypes")
     public StringPanelFactory() {
         super(
-            Lists.<Class>newArrayList(StringPanel.class, MultiLineStringPanel.class), 
+            StringPanel.class, 
             String.class);
     }
 
