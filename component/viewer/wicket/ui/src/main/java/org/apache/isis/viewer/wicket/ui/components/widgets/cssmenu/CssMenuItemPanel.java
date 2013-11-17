@@ -24,7 +24,7 @@ import org.apache.wicket.model.Model;
 /**
  * Panel containing a single {@link CssMenuItem}.
  */
-class CssMenuItemPanel extends CssMenuItemPanelAbstract<CssMenuItemPanel.MyModel> {
+public class CssMenuItemPanel extends CssMenuItemPanelAbstract<CssMenuItemPanel.MyModel> {
 
     private static final long serialVersionUID = 1L;
 

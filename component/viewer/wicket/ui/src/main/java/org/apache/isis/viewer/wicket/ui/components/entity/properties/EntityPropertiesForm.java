@@ -73,7 +73,7 @@ import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
+public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 

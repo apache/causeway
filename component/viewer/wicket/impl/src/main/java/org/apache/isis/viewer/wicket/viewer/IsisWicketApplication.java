@@ -43,8 +43,9 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.guice.GuiceComponentInjector;
-import org.apache.wicket.markup.html.IPackageResourceGuard;
-import org.apache.wicket.markup.html.SecurePackageResourceGuard;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -82,14 +83,16 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesForm;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
@@ -236,13 +239,18 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();
 
-            IPackageResourceGuard guard = getResourceSettings().getPackageResourceGuard();
-            if (guard instanceof SecurePackageResourceGuard)
+            // filters Javascript header contributions so rendered to bottom of page
+            setHeaderResponseDecorator(new IHeaderResponseDecorator()
             {
-                SecurePackageResourceGuard secureGuard = (SecurePackageResourceGuard) guard;
-                secureGuard.addPattern("+org/apache/wicket/merged-resources");
-            }
-            
+                @Override
+                public IHeaderResponse decorate(IHeaderResponse response)
+                {
+                    // use this header resource decorator to load all JavaScript resources in the page
+                    // footer (after </body>)
+                    return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
+                }
+            });
+
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             LOG.error("Failed to initialize", ex);
@@ -283,6 +291,12 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         // Adding them into the bundle would mean these CSS links are resolved relative to IsisWicketApplication.class 
         // instead.
         // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
+        
+        // components without factories
+        references.add(PanelUtil.cssResourceReferenceFor(AdditionalLinksPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(CssSubMenuItemsPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(CssMenuItemPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(EntityPropertiesForm.class));
         
         // non-conforming component factories
         references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));

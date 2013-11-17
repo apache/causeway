@@ -35,6 +35,8 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.filter.FilteredHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -142,6 +144,9 @@ public abstract class PageAbstract extends WebPage {
             addAboutLink();
             add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
             
+            // ensure that all collected JavaScript contributions are loaded at the page footer
+            add(new HeaderResponseContainer("footerJS", "footerJS"));
+            
         } catch(RuntimeException ex) {
 
             LOG.error("Failed to construct page, going back to sign in page", ex);
@@ -180,9 +185,9 @@ public abstract class PageAbstract extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
-        response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS)));
-        response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS)));
-        response.render(new PriorityHeaderItem(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS)));
+        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
+        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
+        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if (!Strings.isNullOrEmpty(feedbackMsg)) {
