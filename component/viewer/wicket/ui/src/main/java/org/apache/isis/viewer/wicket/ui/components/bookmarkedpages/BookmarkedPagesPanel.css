@@ -158,7 +158,7 @@
 
 .bookmarkedPagesPanel .clearBookmark,
 .bookmarkedPagesPanel .clearBookmarks {
-    background: url('images/clear_bookmarks.png') no-repeat;
+    background: url('../org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanel/images/clear_bookmarks.png') no-repeat;
 }
 
 .bookmarkedPagesPanel .clearBookmarks span {

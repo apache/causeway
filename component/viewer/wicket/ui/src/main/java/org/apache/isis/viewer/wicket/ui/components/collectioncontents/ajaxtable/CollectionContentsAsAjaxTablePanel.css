@@ -72,18 +72,18 @@
 
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown {
 	background-color: #20B5C2; 
-	background-image: url(images/arrow_down.png); 
+	background-image: url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel/images/arrow_down.png"); 
     background-position: right;
     background-repeat: no-repeat;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp {
 	background-color: #20B5C2; 
-	background-image: url(images/arrow_up.png);
+	background-image: url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel/images/arrow_up.png");
     background-position: right;
     background-repeat: no-repeat;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderNone {
-	background-image: url(images/arrow_off.png);
+	background-image: url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel/images/arrow_off.png");
 	background-position: right;
     background-repeat: no-repeat;
 }
