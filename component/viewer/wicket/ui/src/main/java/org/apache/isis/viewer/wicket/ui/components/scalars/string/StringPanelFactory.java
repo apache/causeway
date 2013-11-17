@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
-import com.google.common.collect.Lists;
-
 import org.apache.wicket.Component;
 
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
@@ -31,7 +29,6 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("rawtypes")
     public StringPanelFactory() {
         super(
             StringPanel.class, 
@@ -41,7 +38,7 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
         final MultiLineFacet multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
-        if (multiLineFacet != null) {
+        if (multiLineFacet != null && !multiLineFacet.isNoop()) {
             return new MultiLineStringPanel(id, scalarModel);
         } else {
             return new StringPanel(id, scalarModel);

@@ -59,6 +59,7 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.SortedBy;
+import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -151,8 +152,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     private String description;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=30)
+    @javax.jdo.annotations.Column(allowsNull="false", length=100)
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
+    @TypicalLength(50)
     public String getDescription() {
         return description;
     }
