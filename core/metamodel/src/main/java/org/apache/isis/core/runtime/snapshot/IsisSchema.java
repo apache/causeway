@@ -65,7 +65,7 @@ final class IsisSchema {
      * 
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
-    public static final String NS_PREFIX = "nof";
+    public static final String NS_PREFIX = "isis";
     /**
      * URI representing the namespace of ObjectAdapter framework's metamodel.
      * 
@@ -85,7 +85,7 @@ final class IsisSchema {
     }
 
     /**
-     * Creates an element in the NOF namespace, appends to parent, and adds NOF
+     * Creates an element in the &quot;isis&quot; namespace, appends to parent, and adds &quot;isis&quot;
      * namespace to the root element if required.
      */
     Element appendElement(final Element parentElement, final String localName) {
@@ -96,10 +96,10 @@ final class IsisSchema {
     }
 
     /**
-     * Appends an <code>nof:title</code> element with the supplied title string
+     * Appends an <code>isis:title</code> element with the supplied title string
      * to the provided element.
      */
-    public void appendNofTitle(final Element element, final String titleStr) {
+    public void appendIsisTitle(final Element element, final String titleStr) {
         final Document doc = helper.docFor(element);
         final Element titleElement = appendElement(element, "title");
         titleElement.appendChild(doc.createTextNode(titleStr));
@@ -139,8 +139,8 @@ final class IsisSchema {
     }
 
     /**
-     * Adds <code>nof:feature=&quot;reference&quot;</code> attribute and
-     * <code>nof:type=&quote;...&quot;</code> for the supplied element.
+     * Adds <code>isis:feature=&quot;reference&quot;</code> attribute and
+     * <code>isis:type=&quote;...&quot;</code> for the supplied element.
      */
     void setAttributesForReference(final Element element, final String prefix, final String fullyQualifiedClassName) {
         setAttribute(element, "feature", FEATURE_REFERENCE);
@@ -148,8 +148,8 @@ final class IsisSchema {
     }
 
     /**
-     * Adds <code>nof:feature=&quot;value&quot;</code> attribute and
-     * <code>nof:datatype=&quote;...&quot;</code> for the supplied element.
+     * Adds <code>isis:feature=&quot;value&quot;</code> attribute and
+     * <code>isis:datatype=&quote;...&quot;</code> for the supplied element.
      */
     void setAttributesForValue(final Element element, final String datatypeName) {
         setAttribute(element, "feature", FEATURE_VALUE);
@@ -157,7 +157,7 @@ final class IsisSchema {
     }
 
     /**
-     * Adds an <code>nof:isEmpty</code> attribute for the supplied class to the
+     * Adds an <code>isis:isEmpty</code> attribute for the supplied class to the
      * supplied element.
      */
     void setIsEmptyAttribute(final Element element, final boolean isEmpty) {
@@ -165,9 +165,9 @@ final class IsisSchema {
     }
 
     /**
-     * Adds <code>nof:feature=&quot;collection&quot;</code> attribute, the
-     * <code>nof:type=&quote;...&quot;</code> and the
-     * <code>nof:size=&quote;...&quot;</code> for the supplied element.
+     * Adds <code>isis:feature=&quot;collection&quot;</code> attribute, the
+     * <code>isis:type=&quote;...&quot;</code> and the
+     * <code>isis:size=&quote;...&quot;</code> for the supplied element.
      * 
      * Additionally, if the <code>addOids</code> parameter is set, also adds
      * <code>&lt;oids&gt;</code> child elements.

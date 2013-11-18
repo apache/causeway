@@ -20,9 +20,16 @@
 package org.apache.isis.applib.snapshot;
 
 /**
- * Marker interface for domain objects that can be snapshot using
- * <xx>XmlSnapshot</tt>.
+ * Unused.
+ * 
+ * <p>
+ * Previously it was necessary for domain objects to implement this marker interface
+ * in order to be used with <tt>XmlSnapshot</tt>.  The new {@link XmlSnapshotService} lifts
+ * this restriction.
+ * 
+ * @deprecated 
  */
+@Deprecated
 public interface Snapshottable {
 
 }

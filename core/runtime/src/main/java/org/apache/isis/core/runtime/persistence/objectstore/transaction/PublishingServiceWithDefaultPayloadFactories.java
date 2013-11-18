@@ -85,7 +85,7 @@ public class PublishingServiceWithDefaultPayloadFactories {
                 ? payloadFactoryIfAny
                 : defaultObjectPayloadFactory;
         final EventPayload payload = payloadFactoryToUse.payloadFor(
-                ObjectAdapterUtils.unwrapObject(undeletedElseEmpty(changedAdapter)), changeKind);
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(changedAdapter)), changeKind);
         payload.withStringifier(stringifier);
         publishingService.publish(metadata, payload);
     }
@@ -104,9 +104,9 @@ public class PublishingServiceWithDefaultPayloadFactories {
         List<ObjectAdapter> parameters = currentInvocation.getParameters();
         final EventPayload payload = payloadFactoryToUse.payloadFor(
                 currentInvocation.getAction().getIdentifier(),
-                ObjectAdapterUtils.unwrapObject(undeletedElseEmpty(target)), 
-                ObjectAdapterUtils.unwrapObjects(undeletedElseEmpty(parameters)), 
-                ObjectAdapterUtils.unwrapObject(undeletedElseEmpty(result)));
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(target)), 
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)), 
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(result)));
         payload.withStringifier(stringifier);
         publishingService.publish(metadata, payload);
     }

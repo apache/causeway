@@ -65,11 +65,11 @@ public final class XsMetaModel {
      */
     public static final String W3_ORG_XSI_PREFIX = "xsi";
 
-    private final IsisSchema nofMeta;
+    private final IsisSchema isisMeta;
 
     public XsMetaModel() {
         this.helper = new Helper();
-        this.nofMeta = new IsisSchema();
+        this.isisMeta = new IsisSchema();
     }
 
     /**
@@ -92,7 +92,7 @@ public final class XsMetaModel {
 
         xsSchemaElement.setAttribute("elementFormDefault", "qualified");
 
-        nofMeta.addNamespace(xsSchemaElement);
+        isisMeta.addNamespace(xsSchemaElement);
 
         xsdDoc.appendChild(xsSchemaElement);
         final Element xsImportElement = createXsElement(xsdDoc, "import");
@@ -140,50 +140,50 @@ public final class XsMetaModel {
     // }
 
     /**
-     * Creates an xs:attribute ref="nof:xxx" element, and appends to specified
+     * Creates an xs:attribute ref="isis:xxx" element, and appends to specified
      * owning element.
      */
-    Element addXsNofAttribute(final Element parentXsElement, final String nofAttributeRef) {
-        return addXsNofAttribute(parentXsElement, nofAttributeRef, null);
+    Element addXsIsisAttribute(final Element parentXsElement, final String isisAttributeRef) {
+        return addXsIsisAttribute(parentXsElement, isisAttributeRef, null);
     }
 
     /**
-     * Adds <code>xs:attribute ref="nof:xxx" fixed="yyy"</code> element, and
+     * Adds <code>xs:attribute ref="isis:xxx" fixed="yyy"</code> element, and
      * appends to specified parent XSD element.
      */
-    Element addXsNofAttribute(final Element parentXsElement, final String nofAttributeRef, final String fixedValue) {
-        return addXsNofAttribute(parentXsElement, nofAttributeRef, fixedValue, true);
+    Element addXsIsisAttribute(final Element parentXsElement, final String isisAttributeRef, final String fixedValue) {
+        return addXsIsisAttribute(parentXsElement, isisAttributeRef, fixedValue, true);
     }
 
     /**
-     * Adds <code>xs:attribute ref="nof:xxx" default="yyy"</code> element, and
+     * Adds <code>xs:attribute ref="isis:xxx" default="yyy"</code> element, and
      * appends to specified parent XSD element.
      * 
      * The last parameter determines whether to use <code>fixed="yyy"</code>
      * rather than <code>default="yyy"</code>.
      */
-    Element addXsNofAttribute(final Element parentXsElement, final String nofAttributeRef, final String value, final boolean useFixed) {
-        final Element xsNofAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
-        xsNofAttributeElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + nofAttributeRef);
-        parentXsElement.appendChild(xsNofAttributeElement);
+    Element addXsIsisAttribute(final Element parentXsElement, final String isisAttributeRef, final String value, final boolean useFixed) {
+        final Element xsIsisAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
+        xsIsisAttributeElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + isisAttributeRef);
+        parentXsElement.appendChild(xsIsisAttributeElement);
         if (value != null) {
             if (useFixed) {
-                xsNofAttributeElement.setAttribute("fixed", value);
+                xsIsisAttributeElement.setAttribute("fixed", value);
             } else {
-                xsNofAttributeElement.setAttribute("default", value);
+                xsIsisAttributeElement.setAttribute("default", value);
             }
         }
         return parentXsElement;
     }
 
     /**
-     * Adds <code>xs:attribute ref="nof:feature" fixed="(feature)"</code>
+     * Adds <code>xs:attribute ref="isis:feature" fixed="(feature)"</code>
      * element as child to supplied XSD element, presumed to be an
      * <xs:complexType</code>.
      */
-    Element addXsNofFeatureAttributeElements(final Element parentXsElement, final String feature) {
+    Element addXsIsisFeatureAttributeElements(final Element parentXsElement, final String feature) {
         final Element xsNofFeatureAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
-        xsNofFeatureAttributeElement.setAttribute("ref", "nof:feature");
+        xsNofFeatureAttributeElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":feature");
         xsNofFeatureAttributeElement.setAttribute("fixed", feature);
         parentXsElement.appendChild(xsNofFeatureAttributeElement);
         return xsNofFeatureAttributeElement;

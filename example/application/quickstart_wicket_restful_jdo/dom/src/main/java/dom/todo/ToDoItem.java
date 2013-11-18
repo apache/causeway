@@ -62,6 +62,7 @@ import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -737,4 +738,16 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //        this.location = location;
 //    }
 
+    
+    
+    public String asSnapshot() {
+        final String str = xmlSnapshotService.snapshotFor(this).getXmlDocumentAsString();
+        return str;
+    }
+    
+    private XmlSnapshotService xmlSnapshotService;
+    public void injectXmlSnapshotService(XmlSnapshotService xmlSnapshotService) {
+        this.xmlSnapshotService = xmlSnapshotService;
+    }
+    
 }

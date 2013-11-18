@@ -28,6 +28,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
+
 /**
  * Represents the schema for the derived snapshot.
  */
@@ -37,7 +39,7 @@ public final class XmlSchema {
     private final String uriBase;
     private String uri;
 
-    private final IsisSchema nofMeta;
+    private final IsisSchema isisMeta;
     private final XsMetaModel xsMeta;
     private final Helper helper;
 
@@ -58,7 +60,7 @@ public final class XmlSchema {
      *            the prefix for the application namespace's prefix
      */
     public XmlSchema(final String uriBase, final String prefix) {
-        this.nofMeta = new IsisSchema();
+        this.isisMeta = new IsisSchema();
         this.xsMeta = new XsMetaModel();
         this.helper = new Helper();
 
@@ -144,10 +146,10 @@ public final class XmlSchema {
      */
     Element createElement(final Document doc, final String localName, final String fullyQualifiedClassName, final String singularName, final String pluralName) {
         final Element element = doc.createElementNS(getUri(), getPrefix() + ":" + localName);
-        element.setAttributeNS(IsisSchema.NS_URI, "nof:fqn", fullyQualifiedClassName);
-        element.setAttributeNS(IsisSchema.NS_URI, "nof:singular", singularName);
-        element.setAttributeNS(IsisSchema.NS_URI, "nof:plural", pluralName);
-        nofMeta.addNamespace(element); // good a place as any
+        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":fqn", fullyQualifiedClassName);
+        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":singular", singularName);
+        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":plural", pluralName);
+        isisMeta.addNamespace(element); // good a place as any
 
         addNamespace(element, getPrefix(), getUri());
         return element;
@@ -183,14 +185,14 @@ public final class XmlSchema {
         // <xs:element name="AO11ConfirmAnimalRegistration">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element ref="nof:title"/>
+        // <xs:element ref="isis:title"/>
         // <!-- placeholder -->
         // </xs:sequence>
-        // <xs:attribute ref="nof:feature"
+        // <xs:attribute ref="isis:feature"
         // default="class"/>
-        // <xs:attribute ref="nof:oid"/>
-        // <xs:attribute ref="nof:annotation"/>
-        // <xs:attribute ref="nof:fqn"/>
+        // <xs:attribute ref="isis:oid"/>
+        // <xs:attribute ref="isis:annotation"/>
+        // <xs:attribute ref="isis:fqn"/>
         // </xs:complexType>
         // </xs:element>
 
@@ -203,7 +205,7 @@ public final class XmlSchema {
         final Element xsComplexTypeElement = xsMeta.complexTypeFor(xsElementForNofClassElement);
         final Element xsSequenceElement = xsMeta.sequenceFor(xsComplexTypeElement);
 
-        // xs:element/xs:complexType/xs:sequence/xs:element ref="nof:title"
+        // xs:element/xs:complexType/xs:sequence/xs:element ref="isis:title"
         final Element xsTitleElement = xsMeta.createXsElement(helper.docFor(xsSequenceElement), "element");
         xsTitleElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "title");
         xsSequenceElement.appendChild(xsTitleElement);
@@ -213,12 +215,12 @@ public final class XmlSchema {
         addXsElementForAppExtensions(xsSequenceElement, extensions);
 
         // xs:element/xs:complexType/xs:attribute ...
-        xsMeta.addXsNofFeatureAttributeElements(xsComplexTypeElement, "class");
-        xsMeta.addXsNofAttribute(xsComplexTypeElement, "oid");
-        xsMeta.addXsNofAttribute(xsComplexTypeElement, "fqn");
-        xsMeta.addXsNofAttribute(xsComplexTypeElement, "singular");
-        xsMeta.addXsNofAttribute(xsComplexTypeElement, "plural");
-        xsMeta.addXsNofAttribute(xsComplexTypeElement, "annotation");
+        xsMeta.addXsIsisFeatureAttributeElements(xsComplexTypeElement, "class");
+        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "oid");
+        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "fqn");
+        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "singular");
+        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "plural");
+        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "annotation");
 
         Place.setXsdElement(element, xsElementForNofClassElement);
 
@@ -252,7 +254,7 @@ public final class XmlSchema {
         // </xs:complexType>
         // </xs:element>
 
-        // xs:element name="nof-extensions"
+        // xs:element name="isis-extensions"
         // xs:element/xs:complexType/xs:sequence
         final Element xsExtensionsSequenceElement = addExtensionsElement(parentXsElementElement);
 
@@ -262,14 +264,14 @@ public final class XmlSchema {
     }
 
     /**
-     * Adds an nof-extensions element and a complexType and sequence elements
+     * Adds an isis-extensions element and a complexType and sequence elements
      * underneath.
      * 
      * <p>
      * Returns the sequence element so that it can be appended to.
      */
     private Element addExtensionsElement(final Element parentXsElement) {
-        final Element xsExtensionsElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsElement), "nof-extensions");
+        final Element xsExtensionsElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsElement), "isis-extensions");
         parentXsElement.appendChild(xsExtensionsElementElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
@@ -306,7 +308,7 @@ public final class XmlSchema {
         // <xs:element name="%%field object%%">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element name="nof-extensions">
+        // <xs:element name="isis-extensions">
         // <xs:complexType>
         // <xs:sequence>
         // <xs:element name="%extensionClassShortName%"
@@ -320,10 +322,10 @@ public final class XmlSchema {
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
-        // <xs:attribute ref="nof:feature" fixed="value"/>
-        // <xs:attribute ref="nof:datatype" fixed="nof:%datatype%"/>
-        // <xs:attribute ref="nof:isEmpty"/>
-        // <xs:attribute ref="nof:annotation"/>
+        // <xs:attribute ref="isis:feature" fixed="value"/>
+        // <xs:attribute ref="isis:datatype" fixed="isis:%datatype%"/>
+        // <xs:attribute ref="isis:isEmpty"/>
+        // <xs:attribute ref="isis:annotation"/>
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
@@ -349,14 +351,14 @@ public final class XmlSchema {
         final Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // name="nof-extensions"
+        // name="isis-extensions"
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
         addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
 
-        xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "value");
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "datatype", datatype);
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "isEmpty");
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
+        xsMeta.addXsIsisFeatureAttributeElements(xsFieldComplexTypeElement, "value");
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "datatype", datatype);
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "isEmpty");
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "annotation");
 
         return xsFieldElementElement;
     }
@@ -396,8 +398,8 @@ public final class XmlSchema {
         // <xs:element name="%%field object%%">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element ref="nof:title" minOccurs="0"/>
-        // <xs:element name="nof-extensions">
+        // <xs:element ref="isis:title" minOccurs="0"/>
+        // <xs:element name="isis-extensions">
         // <xs:complexType>
         // <xs:sequence>
         // <xs:element name="app:%extension class short name%" minOccurs="0"
@@ -412,10 +414,10 @@ public final class XmlSchema {
         // </xs:element>
         // <xs:sequence minOccurs="0" maxOccurs="1"/>
         // </xs:sequence>
-        // <xs:attribute ref="nof:feature" fixed="reference"/>
-        // <xs:attribute ref="nof:type" default="%%appX%%:%%type%%"/>
-        // <xs:attribute ref="nof:isEmpty"/>
-        // <xs:attribute ref="nof:annotation"/>
+        // <xs:attribute ref="isis:feature" fixed="reference"/>
+        // <xs:attribute ref="isis:type" default="%%appX%%:%%type%%"/>
+        // <xs:attribute ref="isis:isEmpty"/>
+        // <xs:attribute ref="isis:annotation"/>
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
@@ -436,14 +438,14 @@ public final class XmlSchema {
         final Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // ref="nof:title"
+        // ref="isis:title"
         final Element xsFieldTitleElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
         xsFieldTitleElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "title");
         xsFieldSequenceElement.appendChild(xsFieldTitleElement);
         xsMeta.setXsCardinality(xsFieldTitleElement, 0, 1);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // name="nof-extensions"
+        // name="isis-extensions"
         addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:sequence
@@ -452,10 +454,10 @@ public final class XmlSchema {
         final Element xsReferencedElementSequenceElement = xsMeta.sequenceFor(xsFieldSequenceElement);
         xsMeta.setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
-        xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "reference");
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "isEmpty");
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
+        xsMeta.addXsIsisFeatureAttributeElements(xsFieldComplexTypeElement, "reference");
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "isEmpty");
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "annotation");
 
         return xsFieldElementElement;
     }
@@ -476,13 +478,13 @@ public final class XmlSchema {
         // <xs:element name="%%field object%%">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element ref="nof:oids" minOccurs="0" maxOccurs="1"/>
+        // <xs:element ref="isis:oids" minOccurs="0" maxOccurs="1"/>
         // <!-- nested element definitions go here -->
         // </xs:sequence>
-        // <xs:attribute ref="nof:feature" fixed="collection"/>
-        // <xs:attribute ref="nof:type" fixed="%%appX%%:%%type%%"/>
-        // <xs:attribute ref="nof:size"/>
-        // <xs:attribute ref="nof:annotation"/>
+        // <xs:attribute ref="isis:feature" fixed="collection"/>
+        // <xs:attribute ref="isis:type" fixed="%%appX%%:%%type%%"/>
+        // <xs:attribute ref="isis:size"/>
+        // <xs:attribute ref="isis:annotation"/>
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
@@ -504,7 +506,7 @@ public final class XmlSchema {
         final Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // ref="nof:oids"
+        // ref="isis:oids"
         final Element xsFieldOidsElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
         xsFieldOidsElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "oids");
         xsFieldSequenceElement.appendChild(xsFieldOidsElement);
@@ -526,10 +528,10 @@ public final class XmlSchema {
         // sequenceFor(xsFieldSequenceElement);
         // setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
-        xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "size");
-        xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
+        xsMeta.addXsIsisFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "size");
+        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "annotation");
 
         return xsFieldElementElement;
     }

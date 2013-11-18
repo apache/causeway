@@ -70,6 +70,11 @@ public class FrameworkSynchronizer {
             @Override
             public void run() {
                 final PersistenceCapable pc = pojo;
+                
+                // need to do eagerly, because (if a viewModel then) a
+                // viewModel's #viewModelMemento might need to use services 
+                getPersistenceSession().getServicesInjector().injectServicesInto(pojo);
+                
                 final Version datastoreVersion = getVersionIfAny(pc);
                 
                 final RootOid originalOid ;

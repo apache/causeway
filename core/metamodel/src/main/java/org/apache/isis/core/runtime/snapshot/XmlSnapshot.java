@@ -19,15 +19,31 @@
 
 package org.apache.isis.core.runtime.snapshot;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +52,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -64,19 +82,19 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * 
  * <pre>
  * XmlSnapshot snapshot = new XmlSnapshot(customer); // where customer is a
- *                                                   // reference to an
- *                                                   // ObjectAdapter
+ * // reference to an
+ * // ObjectAdapter
  * Element customerAsXml = snapshot.toXml(); // returns customer's fields, titles
- *                                           // of simple references, number of
- *                                           // items in collections
+ * // of simple references, number of
+ * // items in collections
  * snapshot.include(&quot;placeOfBirth&quot;); // navigates to another object represented by
- *                                   // simple reference &quot;placeOfBirth&quot;
+ * // simple reference &quot;placeOfBirth&quot;
  * snapshot.include(&quot;orders/product&quot;); // navigates to all &lt;tt&gt;Order&lt;/tt&gt;s of
- *                                     // &lt;tt&gt;Customer&lt;/tt&gt;, and from them for
- *                                     // their &lt;tt&gt;Product&lt;/tt&gt;s
+ * // &lt;tt&gt;Customer&lt;/tt&gt;, and from them for
+ * // their &lt;tt&gt;Product&lt;/tt&gt;s
  * </pre>
  */
-public class XmlSnapshot {
+public class XmlSnapshot implements Snapshot {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlSnapshot.class);
 
@@ -110,7 +128,9 @@ public class XmlSnapshot {
 
     /**
      * Start a snapshot at the root object, using own namespace manager.
-     * @param oidMarshaller TODO
+     * 
+     * @param oidMarshaller
+     *            TODO
      */
     public XmlSnapshot(final ObjectAdapter rootAdapter, OidMarshaller oidMarshaller) {
         this(rootAdapter, new XmlSchema(), oidMarshaller);
@@ -118,7 +138,9 @@ public class XmlSnapshot {
 
     /**
      * Start a snapshot at the root object, using supplied namespace manager.
-     * @param oidMarshaller TODO
+     * 
+     * @param oidMarshaller
+     *            TODO
      */
     public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema, final OidMarshaller oidMarshaller) {
 
@@ -243,7 +265,7 @@ public class XmlSnapshot {
      * present. If the object is not yet persistent, then the hashCode is used
      * instead.
      * 
-     * The parentElement must have an owner document, and should define the nof
+     * The parentElement must have an owner document, and should define the &quot;isis&quot;
      * namespace. Additionally, the supplied schemaManager must be populated
      * with any application-level namespaces referenced in the document that the
      * parentElement resides within. (Normally this is achieved simply by using
@@ -500,7 +522,7 @@ public class XmlSnapshot {
                 LOG.debug("includeField(Pl, Vec, Str): 1->M: " + log("collection.size", "" + facet.size(collection)));
             }
             boolean allFieldsNavigated = true;
-            for(final ObjectAdapter referencedObject: facet.iterable(collection)) {
+            for (final ObjectAdapter referencedObject : facet.iterable(collection)) {
                 final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for " + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
@@ -589,22 +611,22 @@ public class XmlSnapshot {
         return childElement;
     }
 
-    Place objectToElement(final ObjectAdapter object) {
+    Place objectToElement(final ObjectAdapter adapter) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("objectToElement(" + log("object", object) + ")");
+            LOG.debug("objectToElement(" + log("object", adapter) + ")");
         }
 
-        final ObjectSpecification nos = object.getSpecification();
+        final ObjectSpecification nos = adapter.getSpecification();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("objectToElement(NO): create element and nof:title");
+            LOG.debug("objectToElement(NO): create element and isis:title");
         }
         final Element element = schema.createElement(getXmlDocument(), nos.getShortIdentifier(), nos.getFullIdentifier(), nos.getSingularName(), nos.getPluralName());
-        isisMetaModel.appendNofTitle(element, object.titleString());
+        isisMetaModel.appendIsisTitle(element, adapter.titleString());
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("objectToElement(NO): create XS element for NOF class");
+            LOG.debug("objectToElement(NO): create XS element for Isis class");
         }
         final Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten, FacetUtil.getFacetsByType(nos));
 
@@ -612,9 +634,9 @@ public class XmlSnapshot {
         // cardinality setting.
         topLevelElementWritten = true;
 
-        final Place place = new Place(object, element);
+        final Place place = new Place(adapter, element);
 
-        isisMetaModel.setAttributesForClass(element, oidAsString(object).toString());
+        isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
         final List<ObjectAssociation> fields = nos.getAssociations(Contributed.EXCLUDED);
         if (LOG.isDebugEnabled()) {
@@ -678,7 +700,7 @@ public class XmlSnapshot {
 
                 ObjectAdapter value;
                 try {
-                    value = valueAssociation.get(object);
+                    value = valueAssociation.get(adapter);
 
                     final ObjectSpecification valueNos = value.getSpecification();
 
@@ -728,13 +750,13 @@ public class XmlSnapshot {
                 ObjectAdapter referencedObjectAdapter;
 
                 try {
-                    referencedObjectAdapter = oneToOneAssociation.get(object);
+                    referencedObjectAdapter = oneToOneAssociation.get(adapter);
 
                     // XML
                     isisMetaModel.setAttributesForReference(xmlReferenceElement, schema.getPrefix(), fullyQualifiedClassName);
 
                     if (referencedObjectAdapter != null) {
-                        isisMetaModel.appendNofTitle(xmlReferenceElement, referencedObjectAdapter.titleString());
+                        isisMetaModel.appendIsisTitle(xmlReferenceElement, referencedObjectAdapter.titleString());
                     } else {
                         isisMetaModel.setIsEmptyAttribute(xmlReferenceElement, true);
                     }
@@ -753,11 +775,15 @@ public class XmlSnapshot {
                 }
 
                 final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
-                final Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
+                final Element xmlCollectionElement = xmlFieldElement; // more
+                                                                      // meaningful
+                                                                      // locally
+                                                                      // scoped
+                                                                      // name
 
                 ObjectAdapter collection;
                 try {
-                    collection = oneToManyAssociation.get(object);
+                    collection = oneToManyAssociation.get(adapter);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getSpecification();
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 
@@ -799,8 +825,22 @@ public class XmlSnapshot {
         return place;
     }
 
+    
+    private final Map<ObjectAdapter, String> viewModelFakeOids = Maps.newHashMap();
+    
     private String oidAsString(final ObjectAdapter adapter) {
-        return adapter.getOid().enString(oidMarshaller);
+        if(adapter.getObject() instanceof ViewModel) {
+            // return a fake oid for view models; 
+            // a snapshot may be being used to create the memento/OID 
+            String fakeOid = viewModelFakeOids.get(adapter);
+            if(fakeOid == null) {
+                fakeOid = "viewmodel-fakeoid-" + UUID.randomUUID().toString();
+                viewModelFakeOids.put(adapter, fakeOid);
+            }
+            return fakeOid;
+        } else {
+            return adapter.getOid().enString(oidMarshaller);
+        }
     }
 
     /**
@@ -819,5 +859,39 @@ public class XmlSnapshot {
         this.xmlElement = xmlElement;
     }
 
+    @Override
+    public String getXmlDocumentAsString() {
+        final Document doc = getXmlDocument();
+        return asString(doc);
+    }
+
+    @Override
+    public String getXsdDocumentAsString() {
+        final Document doc = getXsdDocument();
+        return asString(doc);
+    }
+    
+    private static String asString(final Document doc) {
+        try {
+            final DOMSource domSource = new DOMSource(doc);
+            final StringWriter writer = new StringWriter();
+            final StreamResult result = new StreamResult(writer);
+            final TransformerFactory tf = TransformerFactory.newInstance();
+            final Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(domSource, result);
+            
+            return writer.toString();
+        } catch (TransformerConfigurationException e) {
+            throw new IsisException(e);
+        } catch (TransformerException e) {
+            throw new IsisException(e);
+        }
+    }
+    
 
 }
