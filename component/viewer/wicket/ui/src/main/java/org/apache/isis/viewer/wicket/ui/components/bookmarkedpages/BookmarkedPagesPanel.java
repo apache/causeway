@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
@@ -117,58 +118,65 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
             @Override
             protected void populateItem(ListItem<BookmarkTreeNode> item) {
                 final BookmarkTreeNode node = item.getModelObject();
-                final PageParameters pageParameters = node.getPageParameters();
-                
-                final PageType pageType = node.getPageType();
-                final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
+                try {
+                    final PageParameters pageParameters = node.getPageParameters();
 
-                final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
+                    final PageType pageType = node.getPageType();
+                    final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
 
-                    private static final long serialVersionUID = 1L;
-                    
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        bookmarkedPagesModel.remove(node);
-                        if(bookmarkedPagesModel.isEmpty()) {
-                            permanentlyHide(CLEAR_BOOKMARKS);
+                    final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
+
+                        private static final long serialVersionUID = 1L;
+                        
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            bookmarkedPagesModel.remove(node);
+                            if(bookmarkedPagesModel.isEmpty()) {
+                                permanentlyHide(CLEAR_BOOKMARKS);
+                            }
+                            target.add(container, clearAllBookmarksLink);
                         }
-                        target.add(container, clearAllBookmarksLink);
+                        
+                    };
+                    if(node.getDepth() == 0) {
+                        clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
+                    } else {
+                        clearBookmarkLink.setEnabled(true);
                     }
+                    item.add(clearBookmarkLink);
                     
-                };
-                if(node.getDepth() == 0) {
-                    clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
-                } else {
-                    clearBookmarkLink.setEnabled(true);
-                }
-                item.add(clearBookmarkLink);
-                
-                final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
+                    final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
 
-                final RootOid oid = BookmarkedPagesModel.oidFrom(pageParameters);
-                ObjectSpecification objectSpec = null;
-                if(oid != null) {
-                    ObjectSpecId objectSpecId = oid.getObjectSpecId();
-                    objectSpec = getSpecificationLoader().lookupBySpecId(objectSpecId);
-                }
-                final ResourceReference imageResource = imageCache.resourceReferenceForSpec(objectSpec);
-                final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    protected boolean shouldAddAntiCacheParameter() {
-                        return false;
+                    final RootOid oid = BookmarkedPagesModel.oidFrom(pageParameters);
+                    ObjectSpecification objectSpec = null;
+                    if(oid != null) {
+                        ObjectSpecId objectSpecId = oid.getObjectSpecId();
+                        objectSpec = getSpecificationLoader().lookupBySpecId(objectSpecId);
                     }
-                };
-                link.addOrReplace(image);
+                    final ResourceReference imageResource = imageCache.resourceReferenceForSpec(objectSpec);
+                    final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
+                        private static final long serialVersionUID = 1L;
+                        @Override
+                        protected boolean shouldAddAntiCacheParameter() {
+                            return false;
+                        }
+                    };
+                    link.addOrReplace(image);
 
-                String title = node.getTitle();
-                final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
-                link.add(label);
-                item.add(link);
-                if(bookmarkedPagesModel.isCurrent(pageParameters)) {
-                    item.add(new CssClassAppender("currentBookmark"));
+                    String title = node.getTitle();
+                    final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
+                    link.add(label);
+                    item.add(link);
+                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
+                        item.add(new CssClassAppender("currentBookmark"));
+                    }
+                    item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
+                } catch(ObjectNotFoundException ex) {
+                    // ignore
+                    // this is a partial fix for an infinite redirect loop.
+                    // should be a bit smarter here, though; see ISIS-596.
                 }
-                item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
+
             }
         };
         container.add(listView);
