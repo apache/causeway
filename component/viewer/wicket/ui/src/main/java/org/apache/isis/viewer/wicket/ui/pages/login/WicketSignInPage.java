@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -47,6 +48,7 @@ public class WicketSignInPage extends WebPage {
     
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_PAGE_TITLE = "pageTitle";
     private static final String ID_APPLICATION_NAME = "applicationName";
 
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
@@ -90,6 +92,7 @@ public class WicketSignInPage extends WebPage {
     }
 
     public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+        addPageTitle();
         addApplicationName();
         addSignInPanel();
         
@@ -98,6 +101,10 @@ public class WicketSignInPage extends WebPage {
         } else {
             add(new WebMarkupContainer(ID_EXCEPTION_STACK_TRACE).setVisible(false));
         }
+    }
+
+    private MarkupContainer addPageTitle() {
+        return add(new Label(ID_PAGE_TITLE, applicationName));
     }
 
     private void addApplicationName() {
