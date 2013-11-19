@@ -58,7 +58,6 @@ public class SimpleObjects extends AbstractFactoryAndRepository {
     // Create (action)
     // //////////////////////////////////////
     
-    @Bookmarkable
     @MemberOrder(sequence = "2")
     public SimpleObject create(
             final @Named("Name") String name) {
