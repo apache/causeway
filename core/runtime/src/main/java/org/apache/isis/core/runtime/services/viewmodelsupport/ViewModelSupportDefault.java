@@ -1,0 +1,77 @@
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package org.apache.isis.core.runtime.services.viewmodelsupport;
+
+import java.nio.charset.Charset;
+
+import com.google.common.io.BaseEncoding;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport;
+
+public class ViewModelSupportDefault implements ViewModelSupport {
+
+    static class MementoDefault implements Memento {
+
+        private Document doc;
+
+        MementoDefault(Document doc) {
+            this.doc = doc;
+        }
+        
+        MementoDefault() {
+            this(DocumentHelper.createDocument());
+            doc.addElement("memento");
+        }
+        
+        @Override
+        public Memento set(String name, Object value) {
+            final Element el = doc.getRootElement();
+            Dom4jUtil.addChild(el, name, value);
+            return this;
+        }
+
+        @Override
+        public <T> T get(String name, Class<T> cls) {
+            final Element el = doc.getRootElement();
+            return Dom4jUtil.getChild(el, name, cls);
+        }
+
+        @Override
+        public String asString() {
+            final String xmlStr = Dom4jUtil.asString(doc);
+            return BaseEncoding.base64Url().encode(xmlStr.getBytes(Charset.forName("UTF-8")));
+        }
+    }
+    
+    @Override
+    public Memento create() {
+        return new MementoDefault();
+    }
+
+    @Override
+    public Memento parse(String str) {
+        final byte[] bytes = BaseEncoding.base64Url().decode(str);
+        String xmlStr = new String(bytes, Charset.forName("UTF-8"));
+        final Document doc = Dom4jUtil.parse(xmlStr);
+        return new MementoDefault(doc);
+    }
+
+}

@@ -39,10 +39,12 @@ import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
@@ -738,16 +740,5 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //        this.location = location;
 //    }
 
-    
-    
-    public String asSnapshot() {
-        final String str = xmlSnapshotService.snapshotFor(this).getXmlDocumentAsString();
-        return str;
-    }
-    
-    private XmlSnapshotService xmlSnapshotService;
-    public void injectXmlSnapshotService(XmlSnapshotService xmlSnapshotService) {
-        this.xmlSnapshotService = xmlSnapshotService;
-    }
     
 }
