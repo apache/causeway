@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -39,8 +38,8 @@ import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -83,13 +82,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             // the
             // memento for the transient ObjectAdapter can be accessed.
         }
-        
-        PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ENTITY);
-        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, adapter.titleString(null));
-
         return pageParameters;
     }
-
 
 
     public enum RenderingHint {
@@ -181,10 +175,14 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     //////////////////////////////////////////////////
 
     @Override
-    public PageParameters asPageParameters() {
+    public PageParameters getPageParameters() {
         return createPageParameters(getObject());
     }
 
+    @Override
+    public String getTitle() {
+        return getObject().titleString(null);
+    }
 
     public boolean hasAsRootPolicy() {
         return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
@@ -564,6 +562,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 
 }

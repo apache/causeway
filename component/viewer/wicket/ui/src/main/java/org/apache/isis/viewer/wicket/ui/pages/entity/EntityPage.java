@@ -45,8 +45,12 @@ public class EntityPage extends PageAbstract {
      * {@link BookmarkablePageLink bookmarkable} links.
      */
     public EntityPage(final PageParameters pageParameters) {
-        super(pageParameters, ApplicationActions.INCLUDE, ComponentType.ENTITY);
-        this.model = new EntityModel(pageParameters);
+        this(pageParameters, new EntityModel(pageParameters));
+    }
+    
+    private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
+        super(pageParameters, ApplicationActions.INCLUDE, entityModel.getObject().titleString(null), ComponentType.ENTITY);
+        this.model = entityModel;
         addChildComponents(model);
         
         bookmarkPage(model);
@@ -62,7 +66,7 @@ public class EntityPage extends PageAbstract {
      * (eg from an action invocation) is show.
      */
     public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, ComponentType.ENTITY);
+        super(new PageParameters(), ApplicationActions.INCLUDE, adapter.titleString(null), ComponentType.ENTITY);
         this.model = new EntityModel(adapter);
         model.setException(exIfAny);
         addChildComponents(model);

@@ -102,6 +102,6 @@ public interface ComponentFactory extends Serializable {
      */
     String getName();
 
-    CssResourceReference getCssResourceReferences();
+    CssResourceReference getCssResourceReference();
 
 }

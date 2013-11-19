@@ -36,7 +36,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -48,7 +47,6 @@ public class WicketSignInPage extends WebPage {
     
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_PAGE_TITLE = "pageTitle";
     private static final String ID_APPLICATION_NAME = "applicationName";
 
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
@@ -92,7 +90,6 @@ public class WicketSignInPage extends WebPage {
     }
 
     public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
-        addPageTitle(parameters);
         addApplicationName();
         addSignInPanel();
         
@@ -101,10 +98,6 @@ public class WicketSignInPage extends WebPage {
         } else {
             add(new WebMarkupContainer(ID_EXCEPTION_STACK_TRACE).setVisible(false));
         }
-    }
-
-    private void addPageTitle(final PageParameters parameters) {
-        add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(parameters, applicationName)));
     }
 
     private void addApplicationName() {

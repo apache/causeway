@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -70,5 +71,11 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
         return new CollectionContentsAsSummary(id, collectionModel);
+    }
+    
+    @Override
+    public CssResourceReference getCssResourceReference() {
+        // do not bundle, because of relative CSS images...
+        return null;
     }
 }

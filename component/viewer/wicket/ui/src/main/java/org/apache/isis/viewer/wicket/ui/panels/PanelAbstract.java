@@ -123,7 +123,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      * 
      * <p>
      * For most subclasses of {@link PanelAbstract} - specifically those that have their own {@link ComponentFactory}, 
-     * it is additionally the responsibility (via {@link ComponentFactory#getCssResourceReferences()}) of the factory
+     * it is additionally the responsibility (via {@link ComponentFactory#getCssResourceReference()}) of the factory
      * to declare the {@link CssResourceReference}(s) to be included.  These are then all bundled up into
      * a single unit, as part of the application bootstrapping (<tt>IsisWicketApplication#init</tt>).
      * 

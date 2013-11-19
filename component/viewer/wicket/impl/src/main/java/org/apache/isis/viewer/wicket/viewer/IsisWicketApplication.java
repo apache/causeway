@@ -42,6 +42,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
@@ -49,6 +50,7 @@ import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.slf4j.Logger;
@@ -92,6 +94,7 @@ import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
@@ -251,11 +254,20 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                 }
             });
 
+            // prettier URLs
+            mountPage("/entity/${objectOid}/", PageType.ENTITY);
+            mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}/${actionSingleResultsMode}/#{actionArgs}", PageType.ACTION);
+            
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             LOG.error("Failed to initialize", ex);
             throw ex;
         }
+    }
+
+    private void mountPage(final String mountPath, final PageType entity) {
+        final Class<? extends Page> entityPageClass = this.pageClassRegistry.getPageClass(entity);
+        mount(new MountedMapper(mountPath, entityPageClass));
     }
 
     private void buildCssBundle() {
@@ -306,7 +318,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             new Function<ComponentFactory, Iterable<CssResourceReference>>(){
                 @Override
                 public Iterable<CssResourceReference> apply(final ComponentFactory input) {
-                   final CssResourceReference cssResourceReference = input.getCssResourceReferences();
+                   final CssResourceReference cssResourceReference = input.getCssResourceReference();
                    return cssResourceReference != null? 
                            Collections.singletonList(cssResourceReference): 
                            Collections.<CssResourceReference>emptyList();

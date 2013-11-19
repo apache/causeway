@@ -107,7 +107,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     }
 
     @Override
-    public CssResourceReference getCssResourceReferences() {
+    public CssResourceReference getCssResourceReference() {
         return PanelUtil.cssResourceReferenceFor(componentClass);
     }
 

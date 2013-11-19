@@ -57,7 +57,7 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     }
 
     @Override
-    public CssResourceReference getCssResourceReferences() {
+    public CssResourceReference getCssResourceReference() {
         return PanelUtil.cssResourceReferenceFor(UnknownModelPanel.class);
     }
 

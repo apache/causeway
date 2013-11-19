@@ -51,22 +51,17 @@ public enum PageParameterNames {
     ACTION_OWNING_SPEC, 
     
     /**
-     * 
+     * Whether user, exploration, prototype etc.
      */
     ACTION_TYPE, 
     
     /**
-     * 
+     * The name of the action, along with its parameters.
      */
     ACTION_ID, 
     
     /**
-     * 
-     */
-    ACTION_MODE, 
-    
-    /**
-     * 
+     * When a single object is returned, whether to redirect to it or simply inline it.
      */
     ACTION_SINGLE_RESULTS_MODE,
     
@@ -79,16 +74,6 @@ public enum PageParameterNames {
      */
     ACTION_PARAM_CONTEXT,
 
-    /**
-     * To render as the page title
-     */
-    PAGE_TITLE,
-
-    /**
-     * Whether this bookmarks an action or entity, etc, as per {@link BookmarkablePageType}.
-     */
-    PAGE_TYPE,
-    
     /**
      * Action argument(s), if known.
      */

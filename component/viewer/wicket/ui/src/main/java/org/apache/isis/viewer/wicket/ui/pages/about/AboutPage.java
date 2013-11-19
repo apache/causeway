@@ -32,7 +32,7 @@ public class AboutPage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     public AboutPage() {
-        super(new PageParameters(), ApplicationActions.INCLUDE, ComponentType.ABOUT);
+        super(new PageParameters(), ApplicationActions.INCLUDE, null, ComponentType.ABOUT);
         addBookmarkedPages();
         addChildComponents(null);
     }

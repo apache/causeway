@@ -133,7 +133,7 @@ public abstract class PageAbstract extends WebPage {
         EXCLUDE
     }
     
-    public PageAbstract(final PageParameters pageParameters, ApplicationActions applicationActions, final ComponentType... childComponentIds) {
+    public PageAbstract(final PageParameters pageParameters, ApplicationActions applicationActions, final String title, final ComponentType... childComponentIds) {
         try {
             addApplicationActionsComponent(applicationActions);
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
@@ -142,7 +142,7 @@ public abstract class PageAbstract extends WebPage {
             addUserName();
             addLogoutLink();
             addAboutLink();
-            add(new Label(ID_PAGE_TITLE, PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters, applicationName)));
+            add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
             
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));

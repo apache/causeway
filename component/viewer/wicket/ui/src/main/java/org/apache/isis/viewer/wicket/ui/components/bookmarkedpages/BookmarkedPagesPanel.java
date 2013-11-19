@@ -119,7 +119,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 final BookmarkTreeNode node = item.getModelObject();
                 final PageParameters pageParameters = node.getPageParameters();
                 
-                final PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(pageParameters, PageType.class);
+                final PageType pageType = node.getPageType();
                 final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
 
                 final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
@@ -161,7 +161,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                 };
                 link.addOrReplace(image);
 
-                String title = BookmarkedPagesModel.titleFrom(pageParameters);
+                String title = node.getTitle();
                 final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
                 link.add(label);
                 item.add(link);
@@ -172,8 +172,6 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
             }
         };
         container.add(listView);
-
-
     }
     
     // ///////////////////////////////////////////////

@@ -20,11 +20,9 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -46,9 +44,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
 
         final PageParameters candidatePP = bookmarkableModel.getPageParameters();
-        if(!isValidParameters(candidatePP)) {
-            return;
-        }
 
         boolean foundInGraph = false;
         for (BookmarkTreeNode eachNode : rootNodes) {
@@ -67,27 +62,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         return;
     }
 
-
-    /**
-     * @return whether the {@link PageParameters} contain all required fields.
-     */
-    private static boolean isValidParameters(final PageParameters candidatePP) {
-
-        // ignore if doesn't provide a page type for subsequent disambiguation
-        PageType pageType = PageParameterNames.PAGE_TYPE.getEnumFrom(candidatePP, PageType.class);
-        if(pageType==null) {
-            return false;
-        }
-        
-        // ignore if doesn't provide a title for rendering
-        String candidateTitle = PageParameterNames.PAGE_TITLE.getStringFrom(candidatePP);
-        if(candidateTitle==null) {
-            return false;
-        }
-        
-        return true;
-    }
-
     @Override
     protected List<BookmarkTreeNode> load() {
         List<BookmarkTreeNode> depthFirstGraph = Lists.newArrayList();
@@ -99,10 +73,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
 
     public boolean isCurrent(PageParameters pageParameters) {
         return Objects.equal(current, pageParameters);
-    }
-
-    public static String titleFrom(final PageParameters pageParameters) {
-        return PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters);
     }
 
     public static RootOid oidFrom(final PageParameters pageParameters) {
@@ -125,6 +95,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
     public void remove(BookmarkTreeNode rootNode) {
         this.rootNodes.remove(rootNode);
     }
+
 
 
 }

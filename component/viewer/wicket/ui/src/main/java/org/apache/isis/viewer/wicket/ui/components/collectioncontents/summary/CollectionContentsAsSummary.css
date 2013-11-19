@@ -68,13 +68,13 @@
 
 
 a span.ViewLinkItem.summary {
-    background-image:url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsSummary/icon_summary_on.png");
+    background-image:url("icon_summary_on.png");
     background-position: center center;
     background-repeat:no-repeat;
 }
 
 span.ViewLinkItem.summary {
-    background-image:url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsSummary/icon_summary_off.png");
+    background-image:url("icon_summary_off.png");
     background-position: center center;
     background-repeat:no-repeat;
 }

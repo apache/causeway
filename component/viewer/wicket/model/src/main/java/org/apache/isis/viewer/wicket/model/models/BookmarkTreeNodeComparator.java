@@ -34,35 +34,41 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
     
     @Override
     public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
-        PageType pageType1 = PageParameterNames.PAGE_TYPE.getEnumFrom(o1.pageParameters, PageType.class);
-        PageType pageType2 = PageParameterNames.PAGE_TYPE.getEnumFrom(o2.pageParameters, PageType.class);
+        
+        final PageType pageType1 = o1.getPageType();
+        final PageType pageType2 = o2.getPageType();
         
         final int pageTypeComparison = pageType1.compareTo(pageType2);
         if(pageTypeComparison != 0) {
             return pageTypeComparison;
         }
         
-        if(pageType1 == PageType.ENTITY) {
-            // sort by entity type
-            final String className1 = classNameOf(o1.pageParameters);
-            final String className2 = classNameOf(o2.pageParameters);
-            
-            final int classNameComparison = className1.compareTo(className2);
-            if(classNameComparison != 0) {
-                return classNameComparison;
-            }
+        final RootOid oid1 = oidOf(o1.getPageParameters());
+        final RootOid oid2 = oidOf(o2.getPageParameters());
+        
+        // sort by entity type
+        final String className1 = classNameOf(oid1);
+        final String className2 = classNameOf(oid2);
+        
+        final int classNameComparison = className1.compareTo(className2);
+        if(classNameComparison != 0) {
+            return classNameComparison;
         }
-        String title1 = PageParameterNames.PAGE_TITLE.getStringFrom(o1.pageParameters);
-        String title2 = PageParameterNames.PAGE_TITLE.getStringFrom(o2.pageParameters);
+        
+        final String title1 = o1.getTitle();
+        final String title2 = o2.getTitle();
+        
         return title1.compareTo(title2);
     }
 
-    private String classNameOf(PageParameters pp) {
-        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pp);
-        RootOid oid = getOidMarshaller().unmarshal(oidStr, RootOid.class);
+    private String classNameOf(RootOid oid) {
         ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        final String className = getSpecificationLoader().lookupBySpecId(objectSpecId).getIdentifier().getClassName();
-        return className;
+        return getSpecificationLoader().lookupBySpecId(objectSpecId).getIdentifier().getClassName();
+    }
+
+    private RootOid oidOf(PageParameters pp) {
+        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pp);
+        return getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
     
     //////////////////////////////////////////////////

@@ -30,6 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -41,24 +42,40 @@ public class BookmarkTreeNode implements Serializable {
         
         public static final Function<? super BookmarkTreeNode, ? extends PageParameters> AS_PAGE_PARAMETERS = new Function<BookmarkTreeNode, PageParameters>() {
             public PageParameters apply(BookmarkTreeNode node) {
-                return node.pageParameters;
+                return node.getPageParameters();
             }
         };
-        final PageParameters pageParameters;
         private final List<BookmarkTreeNode> children = Lists.newArrayList();
-
         private final int depth;
+
+        private final BookmarkableModel<?> bookmarkableModel;
+
+        private String title;
         
         public static BookmarkTreeNode newRoot(BookmarkableModel<?> bookmarkableModel) {
             return new BookmarkTreeNode(bookmarkableModel, 0);
         }
 
-        private BookmarkTreeNode(BookmarkableModel<?> node, int depth) {
+        private BookmarkTreeNode(BookmarkableModel<?> bookmarkableModel, int depth) {
+            this.bookmarkableModel = bookmarkableModel;
             this.depth = depth;
-            this.pageParameters = node.getPageParameters();
+            this.title = bookmarkableModel.getTitle();
         }
+        public PageType getPageType() {
+            return bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+        private void setTitle(String title) {
+            this.title = title;
+        }
+
+
         public PageParameters getPageParameters() {
-            return pageParameters;
+            //return pageParameters;
+            return bookmarkableModel.getPageParameters();
         }
         public List<BookmarkTreeNode> getChildren() {
             return children;
@@ -91,9 +108,10 @@ public class BookmarkTreeNode implements Serializable {
 
             boolean inGraph = false;
 
-            // attempt to match this node.
-            final PageParameters candidatePP = candidateBookmarkableModel.getPageParameters();
-            inGraph = matchAndUpdateTitle(candidatePP, this.pageParameters);
+            inGraph = this.getPageParameters().equals(candidateBookmarkableModel.getPageParameters());
+            if(inGraph) {
+                this.setTitle(candidateBookmarkableModel.getTitle());
+            }
 
             // and also match recursively down to all children and grandchildren.
             if(candidateBookmarkableModel.hasAsChildPolicy()) {
@@ -107,6 +125,7 @@ public class BookmarkTreeNode implements Serializable {
             }
             return inGraph;
         }
+
 
         private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
             
@@ -126,7 +145,7 @@ public class BookmarkTreeNode implements Serializable {
                         continue;
                     } 
                     final String possibleParentOidStr = possibleParentOid.enStringNoVersion(IsisContext.getOidMarshaller());
-                    final String thisOidStr = PageParameterNames.OBJECT_OID.getStringFrom(this.pageParameters);
+                    final String thisOidStr = PageParameterNames.OBJECT_OID.getStringFrom(this.getPageParameters());
                     if(Objects.equal(thisOidStr, possibleParentOidStr)) {
                         this.addChild(candidateBookmarkableModel);
                         whetherAdded = true;
@@ -134,33 +153,6 @@ public class BookmarkTreeNode implements Serializable {
                 }
             }
             return whetherAdded;
-        }
-
-        protected boolean matchAndUpdateTitle(final PageParameters candidatePP, PageParameters pageParameters) {
-
-            final String candidateTitle = PageParameterNames.PAGE_TITLE.getStringFrom(candidatePP);
-            String pageTitle = PageParameterNames.PAGE_TITLE.getStringFrom(pageParameters);
-
-            final String pageTitleKey = PageParameterNames.PAGE_TITLE.toString();
-            try {
-                // temporarily remove to do comparison
-                candidatePP.remove(pageTitleKey);
-
-                pageParameters.remove(pageTitleKey);
-                if(pageParameters.equals(candidatePP)) {
-                    // update the existing
-                    pageTitle = candidateTitle;
-                    return true;
-                }
-
-            } finally {
-                // restore
-                PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, pageTitle);
-                PageParameterNames.PAGE_TITLE.addStringTo(candidatePP, candidateTitle);
-            }
-
-            // did not match, title not updated.
-            return false;
         }
 
         public void appendGraphTo(List<BookmarkTreeNode> list) {
@@ -173,4 +165,5 @@ public class BookmarkTreeNode implements Serializable {
         public int getDepth() {
             return depth;
         }
+
     }

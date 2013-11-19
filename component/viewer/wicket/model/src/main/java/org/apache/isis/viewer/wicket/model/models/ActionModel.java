@@ -105,32 +105,19 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * Factory method for creating {@link PageParameters}.
      * 
      * see {@link #ActionModel(PageParameters)}
-     * @param concurrencyChecking TODO
      */
-    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode, ConcurrencyChecking concurrencyChecking) {
+    public static PageParameters createPageParameters(
+            final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode, final ConcurrencyChecking concurrencyChecking) {
         
-        final PageParameters pageParameters = createPageParameters(adapter, objectAction, singleResultsMode, concurrencyChecking);
-
-        final String actionTitle = objectAction.getName();
-        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionTitle);
-
-        final Mode actionMode = determineActionMode(objectAction, contextAdapter);
-        PageParameterNames.ACTION_MODE.addEnumTo(pageParameters, actionMode);
-
-        return pageParameters;
-    }
-
-    private static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode, ConcurrencyChecking concurrencyChecking) {
         final PageParameters pageParameters = new PageParameters();
-
-        PageParameterNames.PAGE_TYPE.addEnumTo(pageParameters, PageType.ACTION);
+        
         PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addEnumTo(pageParameters, singleResultsMode);
-
+        
         final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
                 adapter.getOid().enString(getOidMarshaller()):
                 adapter.getOid().enStringNoVersion(getOidMarshaller());
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
-
+        
         final ActionType actionType = objectAction.getType();
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
         
@@ -138,7 +125,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         if (actionOnTypeSpec != null) {
             PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
         }
-
+        
         final String actionId = determineActionId(objectAction);
         PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
         
@@ -191,30 +178,38 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     // BookmarkableModel
     //////////////////////////////////////////////////
 
-
-    public PageParameters asPageParameters() {
+    public PageParameters getPageParameters() {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getActionMemento().getAction();
-        final PageParameters pageParameters = createPageParameters(adapter, objectAction, SingleResultsMode.REDIRECT, ConcurrencyChecking.CHECK);
+        final PageParameters pageParameters = createPageParameters(
+                adapter, objectAction, SingleResultsMode.INLINE, ConcurrencyChecking.NO_CHECK);
 
-        // capture argument values and build up a title
-        final StringBuilder buf = new StringBuilder();
+        // capture argument values
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
         for(ObjectAdapter argumentAdapter: argumentsAsArray) {
             final String encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
+        }
+
+        return pageParameters;
+    }
+
+    @Override
+    public String getTitle() {
+        final ObjectAdapter adapter = getTargetAdapter();
+        final ObjectAction objectAction = getActionMemento().getAction();
+        
+        final StringBuilder buf = new StringBuilder();
+        final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
+        for(ObjectAdapter argumentAdapter: argumentsAsArray) {
             if(buf.length() > 0) {
                 buf.append(",");
             }
             buf.append(abbreviated(titleOf(argumentAdapter), 8));
         }
 
-        final String actionTitle = adapter.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
-        PageParameterNames.PAGE_TITLE.addStringTo(pageParameters, actionTitle);
-
-        return pageParameters;
+        return adapter.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
     }
-
 
     @Override
     public boolean hasAsRootPolicy() {
@@ -239,10 +234,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
 
-
-    private static Mode determineActionMode(final ObjectAction objectAction, final ObjectAdapter contextAdapter) {
-        return objectAction.promptForParameters(contextAdapter)?Mode.PARAMETERS:Mode.RESULTS;
-    }
 
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getIdentifier();
@@ -269,7 +260,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private ActionExecutor executor;
 
     private ActionModel(final PageParameters pageParameters) {
-        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), PageParameterNames.ACTION_MODE.getEnumFrom(pageParameters, Mode.class), PageParameterNames.ACTION_SINGLE_RESULTS_MODE.getEnumFrom(pageParameters, SingleResultsMode.class));
+        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFrom(pageParameters), PageParameterNames.ACTION_SINGLE_RESULTS_MODE.getEnumFrom(pageParameters, SingleResultsMode.class));
 
         setArgumentsIfPossible(pageParameters);
         setContextArgumentIfPossible(pageParameters);
@@ -281,6 +272,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
         return new ActionMemento(owningSpec, actionType, actionNameParms);
     }
+
+    private static Mode actionModeFrom(PageParameters pageParameters) {
+        final ActionMemento actionMemento = newActionMementoFrom(pageParameters);
+        if(actionMemento.getAction().getParameterCount() == 0) {
+            return Mode.RESULTS;
+        }
+        final List<String> listFrom = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
+        return listFrom != null && !listFrom.isEmpty()? Mode.RESULTS: Mode.PARAMETERS;
+    }
+
 
     private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters) {
         RootOid oid = oidFor(pageParameters);
@@ -295,6 +296,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
+
 
     private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode, final SingleResultsMode singleResultsMode) {
         this.targetAdapterMemento = adapterMemento;
@@ -491,11 +493,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
 
+
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
     
-    protected static OidMarshaller getOidMarshaller() {
+    private static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
 

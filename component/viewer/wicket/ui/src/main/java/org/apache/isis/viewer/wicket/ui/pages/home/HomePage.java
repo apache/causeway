@@ -27,7 +27,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
-import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -50,7 +49,7 @@ public class HomePage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     public HomePage() {
-        super(new PageParameters(), ApplicationActions.INCLUDE);
+        super(new PageParameters(), ApplicationActions.INCLUDE, null);
 
         addChildComponents(null);
         buildGui();
@@ -62,8 +61,8 @@ public class HomePage extends PageAbstract {
         final HomePageTuple homePageTuple = lookupHomePageAction();
         if(homePageTuple != null) {
             Components.permanentlyHide(this, ComponentType.WELCOME); 
-            final ObjectAdapterMemento serviceMemento = MementoFunctions.fromAdapter().apply(homePageTuple.serviceAdapter);
-            ActionMemento homePageActionMemento = MementoFunctions.fromAction().apply(homePageTuple.action);
+            final ObjectAdapterMemento serviceMemento = ObjectAdapterMemento.Functions.fromAdapter().apply(homePageTuple.serviceAdapter);
+            ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(homePageTuple.action);
             Mode mode = homePageTuple.action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
             final IModel<?> actionModel = ActionModel.create(serviceMemento, homePageActionMemento, mode, SingleResultsMode.INLINE);
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ACTION, actionModel);

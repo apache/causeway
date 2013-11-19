@@ -39,7 +39,7 @@ public class ActionPage extends PageAbstract {
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
     public ActionPage(final ActionModel model) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, ComponentType.ACTION);
+        super(new PageParameters(), ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION);
         addChildComponents(model);
 
         if(model.isBookmarkable()) {
@@ -49,8 +49,11 @@ public class ActionPage extends PageAbstract {
     }
 
     public ActionPage(final PageParameters pageParameters) {
-        super(pageParameters, ApplicationActions.INCLUDE, ComponentType.ACTION);
-        final ActionModel model = buildModel();
+        this(pageParameters, buildModel(pageParameters));
+    }
+    
+    public ActionPage(final PageParameters pageParameters, final ActionModel model) {
+        super(pageParameters, ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION);
         addChildComponents(model);
         
         // no need to bookmark because the ActionPanel will have done so for us
@@ -58,7 +61,8 @@ public class ActionPage extends PageAbstract {
     }
 
 
-    private ActionModel buildModel() {
-        return ActionModel.createForPersistent(getPageParameters());
+    
+    private static ActionModel buildModel(final PageParameters pageParameters) {
+        return ActionModel.createForPersistent(pageParameters);
     }
 }
