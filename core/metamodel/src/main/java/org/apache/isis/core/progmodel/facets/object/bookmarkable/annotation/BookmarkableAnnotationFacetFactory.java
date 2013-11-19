@@ -19,17 +19,36 @@
 
 package org.apache.isis.core.progmodel.facets.object.bookmarkable.annotation;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacetFallback;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotation;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
+import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
 
-public class BookmarkableAnnotationFacetFactory extends FacetFactoryAbstract {
+public class BookmarkableAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     public BookmarkableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_AND_ACTIONS);
@@ -49,6 +68,36 @@ public class BookmarkableAnnotationFacetFactory extends FacetFactoryAbstract {
 
     private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {
         return annotation == null ? new BookmarkPolicyFacetFallback(holder) : new BookmarkPolicyFacetViaBookmarkableAnnotation(holder, annotation.value());
+    }
+
+
+    /**
+     * Violation if there is an action that is bookmarkable but does not have safe action semantics.
+     */
+    @Override
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+
+            @Override
+            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+                final Class<?> cls = objectSpec.getCorrespondingClass();
+                
+                final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
+                for (final ObjectAction objectAction : objectActions) {
+                    final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
+                    if(bookmarkFacet == null || bookmarkFacet.isNoop() || bookmarkFacet.value() == BookmarkPolicy.NEVER) {
+                        continue;
+                    }
+                    final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
+                    if(semanticsFacet == null || semanticsFacet.isNoop() || semanticsFacet.value() != Of.SAFE) {
+                      validationFailures.add(
+                      "Action %s is bookmarkable but action semantics are not explicitly indicated as being safe.  Either add @ActionSemantics(Of.Safe), or remove @Bookmarkable.", 
+                      objectAction.getIdentifier().toClassAndNameIdentityString());
+                    }
+                }
+                return true;
+            }
+        }));
     }
 
 }
