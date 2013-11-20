@@ -120,13 +120,6 @@
             <scope>test</scope>
         </dependency>
 
-<!-- 
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
- -->
-
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-legacy</artifactId>
