@@ -19,6 +19,7 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.jmock.Expectations;
@@ -38,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
@@ -75,9 +77,18 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         });
 
         runtimeContext = new RuntimeContextNoRuntime();
-        final ObjectReflectorDefault reflector = new ObjectReflectorDefault(mockConfiguration, new ClassSubstitutorAbstract() {}, new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
-                new MetaModelValidatorDefault());
+        final ObjectReflectorDefault reflector = 
+                new ObjectReflectorDefault(
+                        mockConfiguration, 
+                        new ClassSubstitutorAbstract() {}, 
+                        new CollectionTypeRegistryDefault(), 
+                        new SpecificationTraverserDefault(), 
+                        new ProgrammingModelFacetsJava5(), 
+                        new HashSet<FacetDecorator>(),
+                        new MetaModelValidatorDefault());
         reflector.setRuntimeContext(runtimeContext);
+        reflector.setContainer(new DomainObjectContainerDefault());
+        reflector.setServices(Collections.emptyList());
         reflector.init();
         
         specification = loadSpecification(reflector);

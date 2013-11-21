@@ -26,6 +26,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
@@ -180,13 +181,14 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, templateImageLoader, persistenceSessionFactory);
         final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory, metaModelRefiners);
 
-        final List<Object> servicesList = obtainServices();
+        final DomainObjectContainer container = obtainContainer();
+        final List<Object> services = obtainServices();
 
         // bind metamodel to the (runtime) framework
         RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
         runtimeContext.injectInto(reflector);
 
-        return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList, oidMarshaller);
+        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, container, services, oidMarshaller);
     }
 
 

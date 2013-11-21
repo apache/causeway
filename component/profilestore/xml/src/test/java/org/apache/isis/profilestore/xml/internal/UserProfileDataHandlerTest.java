@@ -27,10 +27,6 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,6 +35,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -73,7 +70,9 @@ public class UserProfileDataHandlerTest {
     private UserProfileLoader mockUserProfileLoader;
     @Mock
     private PersistenceSessionFactory mockPersistenceSessionFactory;
-
+    @Mock
+    private DomainObjectContainer mockContainer;
+    
     private TestServiceObject1 service;
     private UserProfile profile;
 
@@ -82,8 +81,8 @@ public class UserProfileDataHandlerTest {
     public void setup() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
         service = new TestServiceObject1();
-        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager,
-                mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, Arrays.<Object>asList(service), new OidMarshaller());
+        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager,
+                mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, Arrays.<Object>asList(service), new OidMarshaller());
 
         IsisContextStatic.createRelaxedInstance(executionContextFactory);
 

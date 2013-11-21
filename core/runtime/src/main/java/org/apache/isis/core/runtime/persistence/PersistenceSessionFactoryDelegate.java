@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
@@ -53,8 +52,6 @@ public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuil
     IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration);
 
     ServicesInjectorSpi createServicesInjector(IsisConfiguration configuration);
-
-    DomainObjectContainer createContainer(IsisConfiguration configuration);
 
     RuntimeContext createRuntimeContext(IsisConfiguration configuration);
 

@@ -145,7 +145,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         setMetaModelValidator(new MetaModelValidatorDefault());
     }
 
-    private void setContainer(DomainObjectContainer container) {
+    private void setContainer(final DomainObjectContainer container) {
         this.container = container;
     }
 
@@ -171,6 +171,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         ensureNotInitialized();
         reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
 
+        reflector.setContainer(container);
+        reflector.setServices(services);
+        
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
         runtimeContext.injectInto(reflector);

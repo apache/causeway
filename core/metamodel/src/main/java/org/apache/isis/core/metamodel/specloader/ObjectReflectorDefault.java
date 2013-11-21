@@ -41,6 +41,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -176,9 +177,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final SpecificationTraverser specificationTraverser;
 
     /**
-     * Priming cache, optionally {@link #setServices(List) injected}.
+     * @see #setContainer(DomainObjectContainer)
      */
-    private List<Object> services = Lists.newArrayList();
+    private DomainObjectContainer container;
+    /**
+     * @see #setServices(List)
+     */
+    private List<Object> services;
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
@@ -190,9 +195,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     // /////////////////////////////////////////////////////////////
 
     public ObjectReflectorDefault(
-            final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, 
-            final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser,
-            final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
+            final IsisConfiguration configuration, 
+            final ClassSubstitutor classSubstitutor, 
+            final CollectionTypeRegistry collectionTypeRegistry, 
+            final SpecificationTraverser specificationTraverser,
+            final ProgrammingModel programmingModel, 
+            final Set<FacetDecorator> facetDecorators, 
+            final MetaModelValidator metaModelValidator) {
 
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(classSubstitutor, is(notNullValue()));
@@ -366,8 +375,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     protected void initServices(IsisConfiguration configuration) {
         final List<Object> services = getServices();
-        
-        serviceInitializer.init(configuration, services);
+        serviceInitializer.init(configuration, container, services);
         serviceInitializer.postConstruct();
     }
 
@@ -675,6 +683,11 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private List<Object> getServices() {
         return services;
+    }
+    
+    @Override
+    public void setContainer(final DomainObjectContainer container) {
+        this.container = container;
     }
     
     @Override

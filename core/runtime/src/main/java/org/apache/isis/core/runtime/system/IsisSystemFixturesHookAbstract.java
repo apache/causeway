@@ -26,10 +26,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -41,6 +43,7 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
@@ -273,8 +276,27 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     protected abstract UserProfileStore obtainUserProfileStore();
 
     // ///////////////////////////////////////////
-    // Services
+    // Container & Services
     // ///////////////////////////////////////////
+
+    /**
+     * Returns a {@link DomainObjectContainer} as {@link #getConfiguration() configured}.
+     * 
+     * <p>
+    * By default, looks up implementation from provided
+    * {@link IsisConfiguration} using
+    * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no
+    * implementation is specified, then defaults to
+    * {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
+     */
+    protected DomainObjectContainer obtainContainer() {
+        return createContainer(getConfiguration());
+    }
+
+    private DomainObjectContainer createContainer(final IsisConfiguration configuration) {
+        final String configuredClassName = configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
+        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
+    }
 
     protected abstract List<Object> obtainServices();
 

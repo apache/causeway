@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -119,26 +120,29 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private DeploymentType deploymentType;
+    private DeploymentType mockDeploymentType;
     @Mock
-    private SpecificationLoaderSpi specificationLoader;
+    private SpecificationLoaderSpi mockSpecificationLoader;
     @Mock
-    private TemplateImageLoader templateImageLoader;
+    private TemplateImageLoader mockTemplateImageLoader;
     @Mock
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager mockAuthenticationManager;
     @Mock
-    private AuthorizationManager authorizationManager;
+    private AuthorizationManager mockAuthorizationManager;
     @Mock
-    private UserProfileLoader userProfileLoader;
+    private UserProfileLoader mockUserProfileLoader;
     @Mock
-    private PersistenceSessionFactory persistenceSessionFactory;
+    private PersistenceSessionFactory mockPersistenceSessionFactory;
     @Mock
-    private OidMarshaller oidMarshaller;
+    private OidMarshaller mockOidMarshaller;
+    
+    @Mock
+    private DomainObjectContainer mockContainer;
     
     private IsisConfigurationDefault configuration;
     private List<Object> serviceList;
 
-    private IsisSessionFactoryAbstract isfa;
+    private IsisSessionFactoryDefault isfa;
 
     
     @Before
@@ -147,7 +151,7 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
         configuration.add("foo", "bar");
         
         serviceList = Lists.newArrayList();
-        context.ignoring(deploymentType, specificationLoader, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, oidMarshaller);
+        context.ignoring(mockDeploymentType, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockContainer, mockPersistenceSessionFactory, mockOidMarshaller);
     }
     
     @Test
@@ -232,8 +236,8 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     }
 
 
-    private IsisSessionFactoryAbstract createIsisSessionFactoryAbstract(List<Object> serviceList) {
-        return new IsisSessionFactoryAbstract(deploymentType, configuration, specificationLoader, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, serviceList, oidMarshaller) {
+    private IsisSessionFactoryDefault createIsisSessionFactoryAbstract(List<Object> serviceList) {
+        return new IsisSessionFactoryDefault(mockDeploymentType, configuration, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, serviceList, mockOidMarshaller) {
         };
     }
 }

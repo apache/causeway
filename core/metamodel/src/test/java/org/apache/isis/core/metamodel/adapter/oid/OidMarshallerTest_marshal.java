@@ -61,7 +61,9 @@ public class OidMarshallerTest_marshal {
 
     @Test
     public void rootOid_versionSequenceAndUserThatHasAnAtSymbol() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.create(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs@foo.bar"));
+        final ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
+        final RootOidDefault oid = RootOidDefault.create(objectSpecId,  "123", 90807L, "joebloggs@foo.bar");
+        final String marshal = oidMarshaller.marshal(oid);
         assertThat(marshal, equalTo("CUS:123^90807:joebloggs%40foo.bar:"));
     }
 

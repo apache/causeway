@@ -21,15 +21,13 @@ package org.apache.isis.viewer.dnd.viewer.basic;
 
 import java.util.Collections;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -42,6 +40,8 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.TestToolkit;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -50,46 +50,36 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.border.ScrollBorder;
 
-@RunWith(JMock.class)
 public class ScrollBorderTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
     protected TemplateImageLoader mockTemplateImageLoader;
+    @Mock
     protected SpecificationLoaderSpi mockSpecificationLoader;
+    @Mock
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
     private UserProfileLoader mockUserProfileLoader;
+    @Mock
     protected AuthenticationManager mockAuthenticationManager;
+    @Mock
     protected AuthorizationManager mockAuthorizationManager;
+    @Mock
+    protected DomainObjectContainer mockContainer;
 
     @Before
     public void setUp() throws Exception {
         org.apache.log4j.LogManager.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        
-
-        mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoaderSpi.class);
-        mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
-        mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-        mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
-        mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-
-        mockery.checking(new Expectations() {
-            {
-                ignoring(mockTemplateImageLoader);
-                ignoring(mockSpecificationLoader);
-                ignoring(mockUserProfileLoader);
-                ignoring(mockPersistenceSessionFactory);
-                ignoring(mockAuthenticationManager);
-                ignoring(mockAuthorizationManager);
-            }
-        });
+        context.ignoring(mockTemplateImageLoader, mockSpecificationLoader, mockUserProfileLoader, mockPersistenceSessionFactory, mockAuthenticationManager, mockAuthorizationManager, mockContainer);
 
         TestToolkit.createInstance();
 
         final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, Collections.emptyList(), new OidMarshaller());
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, Collections.emptyList(), new OidMarshaller());
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
     }

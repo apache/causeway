@@ -31,7 +31,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -45,6 +47,7 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -218,7 +221,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     // ///////////////////////////////////////////
-    // Services
+    // Container and Services
     // ///////////////////////////////////////////
 
     public void setServicesInstaller(final ServicesInstaller servicesInstaller) {
@@ -235,12 +238,13 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         return servicesInstaller.getServices(getDeploymentType());
     }
 
-    // ///////////////////////////////////////////
+
+// ///////////////////////////////////////////
     // User Profile Loader/Store
     // ///////////////////////////////////////////
 
     public void lookupAndSetUserProfileFactoryInstaller() {
-        final IsisConfiguration configuration = installerLookup.getConfiguration();
+        final IsisConfiguration configuration = getConfiguration();
         final String persistor = configuration.getString(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY);
 
         final UserProfileStoreInstaller userProfilePersistenceMechanismInstaller = installerLookup.userProfilePersistenceMechanismInstaller(persistor, getDeploymentType());

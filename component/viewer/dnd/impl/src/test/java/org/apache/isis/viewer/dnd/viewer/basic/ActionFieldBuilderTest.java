@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -73,6 +74,8 @@ public class ActionFieldBuilderTest {
     @Mock
     protected AuthorizationManager mockAuthorizationManager;
 
+    @Mock
+    protected DomainObjectContainer mockContainer;
 
     private IsisConfiguration configuration;
     private List<Object> servicesList;
@@ -100,6 +103,8 @@ public class ActionFieldBuilderTest {
                 ignoring(mockTemplateImageLoader);
                 ignoring(mockAuthenticationManager);
                 ignoring(mockAuthorizationManager);
+                
+                ignoring(mockContainer);
             }
         });
 
@@ -110,7 +115,7 @@ public class ActionFieldBuilderTest {
             }
         };
 
-        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList, oidMarshaller);
+        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, servicesList, oidMarshaller);
 
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
         IsisContextStatic.createRelaxedInstance(sessionFactory);

@@ -23,12 +23,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -67,24 +67,17 @@ public class TextFieldContentTest {
     protected AuthenticationManager mockAuthenticationManager;
     @Mock
     protected AuthorizationManager mockAuthorizationManager;
+    @Mock
+    protected DomainObjectContainer mockContainer;
 
     @Before
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        context.checking(new Expectations() {
-            {
-                ignoring(mockTemplateImageLoader);
-                ignoring(mockSpecificationLoader);
-                ignoring(mockUserProfileLoader);
-                ignoring(mockPersistenceSessionFactory);
-                ignoring(mockAuthenticationManager);
-                ignoring(mockAuthorizationManager);
-            }
-        });
+        context.ignoring(mockTemplateImageLoader, mockSpecificationLoader, mockUserProfileLoader, mockPersistenceSessionFactory, mockAuthenticationManager, mockAuthorizationManager, mockContainer);
 
-        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory,
-        		Collections.emptyList(), new OidMarshaller());
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory,
+        		mockContainer, Collections.emptyList(), new OidMarshaller());
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
 

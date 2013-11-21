@@ -19,19 +19,19 @@ package org.apache.isis.core.metamodel.specloader;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 
 class ServiceInitializer {
 
@@ -50,8 +50,23 @@ class ServiceInitializer {
 
     // //////////////////////////////////////
 
+    ServiceInitializer() {
+    }
+    
+    public void init(final IsisConfiguration configuration, DomainObjectContainer container, final List<Object> services) {
+        
+        // all a bit hacky... :-(
+        // (a) newing up a new ServicesInjector
+        // (b) the guard, because of insufficient mock expectations in unit tests :-(
+        if (container == null || services == null) {
+            return;
+        } 
+        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
+        servicesInjector.setContainer(container);
+        servicesInjector.setServices(services);
+        servicesInjector.init();
 
-    public void init(final IsisConfiguration configuration, final List<Object> services) {
+        
         this.props = configuration.asMap();
         
         for (final Object service : services) {

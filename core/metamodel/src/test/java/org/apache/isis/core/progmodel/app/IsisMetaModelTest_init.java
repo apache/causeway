@@ -74,17 +74,17 @@ public class IsisMetaModelTest_init {
                 allowing(mockRuntimeContext).injectInto(with(any(Object.class)));
                 will(IsisActions.injectInto());
                 
-                one(mockRuntimeContext).setContainer(with(any(DomainObjectContainer.class)));
+                oneOf(mockRuntimeContext).setContainer(with(any(DomainObjectContainer.class)));
                 inSequence(initSequence);
                 
-                one(mockProgrammingModelFacets).init();
+                oneOf(mockProgrammingModelFacets).init();
                 inSequence(initSequence);
                 
-                one(mockProgrammingModelFacets).getList();
+                oneOf(mockProgrammingModelFacets).getList();
                 inSequence(initSequence);
                 will(returnValue(Lists.newArrayList()));
                 
-                one(mockRuntimeContext).init();
+                oneOf(mockRuntimeContext).init();
                 inSequence(initSequence);
             }
         });

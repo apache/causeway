@@ -22,6 +22,7 @@ package org.apache.isis.core.progmodel.facets;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -128,6 +129,11 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     }
 
     @Override
+    public void setContainer(DomainObjectContainer container) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
     public void setServices(final List<Object> services) {
         throw new NotYetImplementedException();
     }
@@ -150,6 +156,7 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     @Override
     public void invalidateCacheFor(Object domainObject) {
     }
+
 
 
 }

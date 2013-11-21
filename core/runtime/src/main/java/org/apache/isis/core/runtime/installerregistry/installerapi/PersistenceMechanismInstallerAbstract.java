@@ -282,23 +282,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return new PojoRecreatorDefault();
     }
 
-    /**
-     * Hook method to return a {@link DomainObjectContainer}.
-     * 
-     * <p>
-    * By default, looks up implementation from provided
-    * {@link IsisConfiguration} using
-    * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no
-    * implementation is specified, then defaults to
-    * {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
-     */
-    public DomainObjectContainer createContainer(final IsisConfiguration configuration) {
-        final String configuredClassName = configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
-    }
-
-
-
     // ///////////////////////////////////////////
     // Non overridable.
     // ///////////////////////////////////////////

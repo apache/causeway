@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.List;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -28,9 +29,16 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
 
-
+    /**
+     * Specify the {@link DomainObjectContainer} as part of initializing the services.
+     * 
+     * @see #setServices(List)
+     */
+    void setContainer(DomainObjectContainer container);
     /**
      * Specify the services to pro-actively prime the cache, and to initialize them also.
+     * 
+     * @see #setContainer(DomainObjectContainer)
      */
     void setServices(List<Object> services);
 

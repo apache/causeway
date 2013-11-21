@@ -78,7 +78,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     private LocalizationProvider localizationProvider;
 
     public DomainObjectContainerDefault() {
-
     }
 
     // //////////////////////////////////////////////////////////////////

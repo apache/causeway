@@ -55,9 +55,15 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
     private final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate;
-    
-    private List<Object> serviceList;
 
+    /**
+     * @see #setContainer(DomainObjectContainer)
+     */
+    private DomainObjectContainer container;
+    /**
+     * @see #setServices(List)
+     */
+    private List<Object> serviceList;
 
     private Boolean fixturesInstalled;
     
@@ -66,10 +72,12 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     private ObjectFactory objectFactory;
     private IdentifierGenerator identifierGenerator;
     private ServicesInjectorSpi servicesInjector;
-    private DomainObjectContainer container;
     private RuntimeContext runtimeContext;
 
-    public PersistenceSessionFactoryDelegating(final DeploymentType deploymentType, final IsisConfiguration isisConfiguration, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public PersistenceSessionFactoryDelegating(
+            final DeploymentType deploymentType, 
+            final IsisConfiguration isisConfiguration, 
+            final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
         this.persistenceSessionFactoryDelegate = persistenceSessionFactoryDelegate;
@@ -93,8 +101,8 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     public final void init() {
 
         // check prereq dependencies injected
+        ensureThatState(container, is(not(nullValue())));
         ensureThatState(serviceList, is(notNullValue()));
-
 
         // a bit of a workaround, but required if anything in the metamodel (for
         // example, a
@@ -118,10 +126,8 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         ensureThatState(identifierGenerator, is(not(nullValue())));
 
         servicesInjector = persistenceSessionFactoryDelegate.createServicesInjector(getConfiguration());
-        container = persistenceSessionFactoryDelegate.createContainer(getConfiguration());
 
         ensureThatState(servicesInjector, is(not(nullValue())));
-        ensureThatState(container, is(not(nullValue())));
 
         runtimeContext = persistenceSessionFactoryDelegate.createRuntimeContext(getConfiguration());
         ensureThatState(runtimeContext, is(not(nullValue())));
@@ -183,12 +189,12 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         return servicesInjector;
     }
     
-    public List<Object> getServiceList() {
-        return serviceList;
-    }
-
     public DomainObjectContainer getContainer() {
         return container;
+    }
+    
+    public List<Object> getServiceList() {
+        return serviceList;
     }
 
     // //////////////////////////////////////////////////////
@@ -237,6 +243,10 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     // Dependencies (injected via setters)
     // //////////////////////////////////////////////////////
 
+    public void setContainer(DomainObjectContainer container) {
+        this.container = container;
+    }
+    
     @Override
     public List<Object> getServices() {
         return serviceList;
