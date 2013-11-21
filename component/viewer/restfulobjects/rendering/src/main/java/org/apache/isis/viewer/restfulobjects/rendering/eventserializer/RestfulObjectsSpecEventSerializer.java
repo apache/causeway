@@ -59,10 +59,6 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
 
     @PostConstruct
     public void init(Map<String,String> props) {
-        // neither of these are used, but 'demonstrates' that container and services are injected prior to init.
-        Ensure.ensureThatState(container, is(not(nullValue())));
-        Ensure.ensureThatState(bookmarkService, is(not(nullValue())));
-        
         final String baseUrlFromConfig = props.get(BASE_URL_KEY);
         baseUrl = baseUrlFromConfig != null? baseUrlFromConfig: BASE_URL_DEFAULT;
     }
@@ -119,20 +115,5 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
         return jsonMapper;
     }
 
-    // //////////////////////////////////////
-
-    @Inject
-    @SuppressWarnings("unused")
-    private DomainObjectContainer container;
-//    public void setContainer(DomainObjectContainer container) {
-//        this.container = container;
-//    }
-    
-    @Inject
-    @SuppressWarnings("unused")
-    private BookmarkService bookmarkService;
-//    public void injectBookmarkService(BookmarkService bookmarkService) {
-//        this.bookmarkService = bookmarkService;
-//    }
 
 }
