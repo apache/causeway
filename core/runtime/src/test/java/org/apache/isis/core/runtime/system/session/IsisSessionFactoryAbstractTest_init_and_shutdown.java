@@ -142,7 +142,7 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     private IsisConfigurationDefault configuration;
     private List<Object> serviceList;
 
-    private IsisSessionFactoryDefault isfa;
+    private IsisSessionFactoryDefault isf;
 
     
     @Before
@@ -156,88 +156,88 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     
     @Test
     public void emptyListOfServices() {
-        isfa = createIsisSessionFactoryAbstract(serviceList);
+        isf = createIsisSessionFactory(mockContainer, serviceList);
     }
 
     @Test
     public void preConstruct_DomainServiceWithNoPostConstructOrPreDestroy() {
         serviceList.add(new DomainServiceWithNoPostConstructOrPreDestroy());
-        isfa = createIsisSessionFactoryAbstract(serviceList);
+        isf = createIsisSessionFactory(mockContainer, serviceList);
         
-        isfa.init();
-        isfa.shutdown();
+        isf.init();
+        isf.shutdown();
     }
 
     @Test
     public void preConstruct_DomainServiceWithValidPostConstructNoParams() {
         DomainServiceWithValidPostConstructNoParams domainService = new DomainServiceWithValidPostConstructNoParams();
         serviceList.add(domainService);
-        isfa = createIsisSessionFactoryAbstract(serviceList);
-        isfa.init();
+        isf = createIsisSessionFactory(mockContainer, serviceList);
+        isf.init();
         assertThat(domainService.called,is(true));
-        isfa.shutdown();
+        isf.shutdown();
     }
 
     @Test
     public void preConstruct_DomainServiceWithValidPostConstructPropertiesParam() {
         DomainServiceWithValidPostConstructPropertiesParam domainService = new DomainServiceWithValidPostConstructPropertiesParam();
         serviceList.add(domainService);
-        isfa = createIsisSessionFactoryAbstract(serviceList);
-        isfa.init();
+        isf = createIsisSessionFactory(mockContainer, serviceList);
+        isf.init();
         assertThat(domainService.called,is(true));
         assertThat(domainService.props.get("foo"), is("bar"));
-        isfa.shutdown();
+        isf.shutdown();
     }
 
     @Test
     public void preConstruct_DomainServiceWithValidPostConstructSubtypeOfPropertiesParam() {
         DomainServiceWithValidPostConstructSubtypeOfPropertiesParam domainService = new DomainServiceWithValidPostConstructSubtypeOfPropertiesParam();
         serviceList.add(domainService);
-        isfa = createIsisSessionFactoryAbstract(serviceList);
-        isfa.init();
+        isf = createIsisSessionFactory(mockContainer, serviceList);
+        isf.init();
         assertThat(domainService.called,is(true));
         assertThat(domainService.props, is(not(nullValue())));
-        isfa.shutdown();
+        isf.shutdown();
     }
 
     @Test(expected=IllegalStateException.class)
     public void preConstruct_DomainServiceWithInvalidPostConstructWrongNumberParams() {
         serviceList.add(new DomainServiceWithInvalidPostConstructWrongNumberParams());
-        isfa = createIsisSessionFactoryAbstract(serviceList);
+        isf = createIsisSessionFactory(mockContainer, serviceList);
     }
 
     @Test(expected=IllegalStateException.class)
     public void preConstruct_DomainServiceWithInvalidPostConstructWrongTypeOfParam() {
         serviceList.add(new DomainServiceWithInvalidPostConstructWrongTypeOfParam());
-        isfa = createIsisSessionFactoryAbstract(serviceList);
+        isf = createIsisSessionFactory(mockContainer, serviceList);
     }
 
     @Test
     public void preConstruct_DomainServiceWithValidPreDestroyNoParams() {
         DomainServiceWithValidPreDestroyNoParams domainService = new DomainServiceWithValidPreDestroyNoParams();
         serviceList.add(domainService);
-        isfa = createIsisSessionFactoryAbstract(serviceList);
-        isfa.init();
+        isf = createIsisSessionFactory(mockContainer, serviceList);
+        isf.init();
         assertThat(domainService.called,is(true));
-        isfa.shutdown();
+        isf.shutdown();
     }
 
     @Test(expected=IllegalStateException.class)
     public void preConstruct_DomainServiceWithInvalidPreDestroyWrongNumberParams() {
         serviceList.add(new DomainServiceWithInvalidPreDestroyWrongNumberParams());
-        isfa = createIsisSessionFactoryAbstract(serviceList);
+        isf = createIsisSessionFactory(mockContainer, serviceList);
     }
 
     @Test(expected=IllegalStateException.class)
     public void validate_DomainServicesWithDuplicateIds() {
         serviceList.add(new DomainServiceWithSomeId());
         serviceList.add(new DomainServiceWithDuplicateId());
-        isfa = createIsisSessionFactoryAbstract(serviceList);
+        isf = createIsisSessionFactory(mockContainer, serviceList);
     }
 
 
-    private IsisSessionFactoryDefault createIsisSessionFactoryAbstract(List<Object> serviceList) {
-        return new IsisSessionFactoryDefault(mockDeploymentType, configuration, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, serviceList, mockOidMarshaller) {
+    private IsisSessionFactoryDefault createIsisSessionFactory(DomainObjectContainer container, List<Object> serviceList) {
+        return new IsisSessionFactoryDefault(mockDeploymentType, configuration, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, container, serviceList, mockOidMarshaller) {
         };
     }
 }
