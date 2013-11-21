@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.Hidden;
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
 @Hidden
-public class ExceptionRecognizerForType extends ExceptionRecognizerDelegating {
+public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
     protected final static Predicate<Throwable> ofTypeExcluding(final Class<? extends Throwable> exceptionType, final String... messages) {
         return Predicates.and(ofType(exceptionType), excluding(messages));
@@ -114,10 +114,11 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerDelegating {
     }
     
     public ExceptionRecognizerForType(final Predicate<Throwable> predicate, final Function<String,String> messageParser) {
-        super(new ExceptionRecognizerGeneral(predicate, messageParser));
+        super(predicate, messageParser);
     }
     
     public ExceptionRecognizerForType(Class<? extends Exception> exceptionType) {
         this(exceptionType, null);
     }
+
 }

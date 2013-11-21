@@ -18,6 +18,12 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+
 
 /**
  * Domain service to (attempt) to recognize certain
@@ -55,4 +61,11 @@ public interface ExceptionRecognizer {
      * @return user-friendly message to render, or <tt>null</tt> otherwise.
      */
     public String recognize(Throwable ex);
+
+    @PostConstruct
+    public void init(Map<String, String> properties);
+
+    @PreDestroy
+    public void shutdown();
+
 }

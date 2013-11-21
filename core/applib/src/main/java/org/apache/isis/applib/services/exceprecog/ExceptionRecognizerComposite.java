@@ -20,6 +20,10 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import com.google.common.collect.Lists;
 
@@ -62,7 +66,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
      * before the more general ones.  See the <i>JDO object store</i> applib for
      * an example.
      */
-    public void add(ExceptionRecognizer ers) {
+    public final void add(ExceptionRecognizer ers) {
         services.add(ers);
     }
     
@@ -70,7 +74,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
      * Returns the non-<tt>null</tt> message of the first {@link #add(ExceptionRecognizer) add}ed 
      * {@link ExceptionRecognizer service} that recognizes the exception. 
      */
-    public String recognize(Throwable ex) {
+    public final  String recognize(Throwable ex) {
         for (ExceptionRecognizer ers : services) {
             String message = ers.recognize(ex);
             if(message != null) {
@@ -79,4 +83,21 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
         }
         return null;
     }
+    
+    @PostConstruct
+    @Override
+    public final void init(Map<String, String> properties) {
+        for (ExceptionRecognizer ers : services) {
+            ers.init(properties);
+        }
+    }
+
+    @PreDestroy
+    @Override
+    public final void shutdown() {
+        for (ExceptionRecognizer ers : services) {
+            ers.shutdown();
+        }
+    }
+
 }

@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 @Hidden
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
     
+    
     public ExceptionRecognizerCompositeForJdoObjectStore() {
         // most specific ones first
         add(new ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException());

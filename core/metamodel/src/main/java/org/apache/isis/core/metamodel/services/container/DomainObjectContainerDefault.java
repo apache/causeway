@@ -21,6 +21,10 @@ package org.apache.isis.core.metamodel.services.container;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import com.google.common.base.Predicate;
 
@@ -518,14 +522,25 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      */
     @Override
     public String recognize(Throwable ex) {
-        return getRecognizer().recognize(ex);
+        return recognizer.recognize(ex);
     }
     
     ExceptionRecognizer getRecognizer() {
         return recognizer;
     }
 
-    
+    @PostConstruct
+    @Override
+    public void init(Map<String, String> properties) {
+        recognizer.init(properties);
+    }
+
+    @PreDestroy
+    @Override
+    public void shutdown() {
+        recognizer.shutdown();
+    }
+
     // //////////////////////////////////////////////////////////////////
     // Dependencies
     // //////////////////////////////////////////////////////////////////
@@ -597,6 +612,8 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         this.localizationProvider = localizationProvider;
     }
+
+
 
 
 }

@@ -18,13 +18,44 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.annotation.Hidden;
 
 /**
- * Convenience implementation of {@link ExceptionRecognizer} that provides some
- * utility methods to subclasses.
+ * Abstract implementation of {@link ExceptionRecognizer} that looks 
+ * exceptions meeting the {@link Predicate} supplied in the constructor
+ * and, if found anywhere in the {@link Throwables#getCausalChain(Throwable) causal chain},
+ * then returns a non-null message indicating that the exception has been recognized.
+ * 
+ * <p>
+ * If a messaging-parsing {@link Function} is provided through the constructor,
+ * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
+@Hidden
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
+
+    public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstract.class);
+
+    /**
+     * Normally recognized exceptions are not logged (because they are expected and handled).  
+     * 
+     * <p>
+     * This key is primarily for diagnostic purposes, to log the exception regardless.
+     */
+    private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = "isis.services.exceprecog.logRecognizedExceptions";
 
     /**
      * Convenience for subclass implementations that always return a fixed message.
@@ -52,5 +83,52 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
             }
         };
     }
+    
+    // //////////////////////////////////////
 
+    
+    private final Predicate<Throwable> predicate;
+    private final Function<String,String> messageParser;
+    
+    private boolean logRecognizedExceptions;
+
+    // //////////////////////////////////////
+
+    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+        this.predicate = predicate;
+        this.messageParser = messageParser != null? messageParser: Functions.<String>identity();
+    }
+
+    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate) {
+        this(predicate, null);
+    }
+
+    
+    @PostConstruct
+    public void init(Map<String, String> properties) {
+        final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
+        this.logRecognizedExceptions = Boolean.parseBoolean(prop);
+    }
+
+    @PreDestroy
+    public void shutdown() {
+    }
+
+    // //////////////////////////////////////
+
+    public String recognize(Throwable ex) {
+        List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        for (Throwable throwable : causalChain) {
+            if(predicate.apply(throwable)) {
+                if(logRecognizedExceptions) {
+                    LOG.info("Recognized exception, stacktrace : ", throwable);
+                }
+                final Throwable rootCause = Throwables.getRootCause(throwable);
+                final String rootCauseMessage = rootCause.getMessage();
+                final String parsedMessage = messageParser.apply(rootCauseMessage);
+                return parsedMessage;
+            }
+        }
+        return null;
+    }
 }

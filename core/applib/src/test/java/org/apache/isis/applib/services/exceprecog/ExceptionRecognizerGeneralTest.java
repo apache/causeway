@@ -30,7 +30,7 @@ import org.junit.Test;
 
 public class ExceptionRecognizerGeneralTest {
 
-    private ExceptionRecognizerGeneral ersGeneral;
+    private ExceptionRecognizerAbstract ersGeneral;
 
     static class FooException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -49,19 +49,19 @@ public class ExceptionRecognizerGeneralTest {
     
     @Test
     public void whenRecognized() {
-        ersGeneral = new ExceptionRecognizerGeneral(Predicates.<Throwable>alwaysTrue());
+        ersGeneral = new ExceptionRecognizerAbstract(Predicates.<Throwable>alwaysTrue()){};
         assertThat(ersGeneral.recognize(new FooException()), is("foo"));
     }
 
     @Test
     public void whenDoesNotRecognize() {
-        ersGeneral = new ExceptionRecognizerGeneral(Predicates.<Throwable>alwaysFalse());
+        ersGeneral = new ExceptionRecognizerAbstract(Predicates.<Throwable>alwaysFalse()){};
         assertThat(ersGeneral.recognize(new FooException()), is(nullValue()));
     }
 
     @Test
     public void whenRecognizedWithMessageParser() {
-        ersGeneral = new ExceptionRecognizerGeneral(Predicates.<Throwable>alwaysTrue(), prepend);
+        ersGeneral = new ExceptionRecognizerAbstract(Predicates.<Throwable>alwaysTrue(), prepend){};
         assertThat(ersGeneral.recognize(new FooException()), is("pre: foo"));
     }
 

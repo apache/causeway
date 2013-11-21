@@ -23,6 +23,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +40,13 @@ public class ExceptionRecognizerCompositeTest {
         @Override
         public String recognize(Throwable ex) {
             return message;
+        }
+        @Override
+        public void init(Map<String, String> properties) {
+        }
+
+        @Override
+        public void shutdown() {
         }
     }
     
