@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
@@ -61,9 +62,10 @@ public interface PersistenceSessionFactory extends ClassSubstitutorFactory, Meta
     PersistenceSession createPersistenceSession();
 
     // //////////////////////////////////////////////////////
-    // Services
+    // Container & Services
     // //////////////////////////////////////////////////////
 
+    public void setContainer(DomainObjectContainer container);
     public void setServices(List<Object> servicesList);
 
     public List<Object> getServices();

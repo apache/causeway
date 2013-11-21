@@ -18,25 +18,33 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.eventserializer;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.io.IOException;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventSerializer;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 
 @Hidden
 public class RestfulObjectsSpecEventSerializer implements EventSerializer {
@@ -50,6 +58,10 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
 
     @PostConstruct
     public void init(Map<String,String> props) {
+        // neither of these are used, but 'demonstrates' that container and services are injected prior to init.
+        Ensure.ensureThatState(container, is(not(nullValue())));
+        Ensure.ensureThatState(bookmarkService, is(not(nullValue())));
+        
         final String baseUrlFromConfig = props.get(BASE_URL_KEY);
         baseUrl = baseUrlFromConfig != null? baseUrlFromConfig: BASE_URL_DEFAULT;
     }
@@ -106,5 +118,18 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
         return jsonMapper;
     }
 
+    // //////////////////////////////////////
+
+    @SuppressWarnings("unused")
+    private DomainObjectContainer container;
+    public void setContainer(DomainObjectContainer container) {
+        this.container = container;
+    }
+    
+    @SuppressWarnings("unused")
+    private BookmarkService bookmarkService;
+    public void injectBookmarkService(BookmarkService bookmarkService) {
+        this.bookmarkService = bookmarkService;
+    }
 
 }

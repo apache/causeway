@@ -219,6 +219,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         // must come after init of spec loader.
         specificationLoaderSpi.injectInto(persistenceSessionFactory);
+        persistenceSessionFactory.setContainer(container);
         persistenceSessionFactory.setServices(serviceList);
         userProfileLoader.setServices(serviceList);
 
