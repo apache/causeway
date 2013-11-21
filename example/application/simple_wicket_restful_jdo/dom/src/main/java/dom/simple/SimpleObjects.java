@@ -20,20 +20,19 @@ package dom.simple;
 
 import java.util.List;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
-public class SimpleObjects extends AbstractFactoryAndRepository {
+public class SimpleObjects {
 
     // //////////////////////////////////////
     // Identification in the UI
     // //////////////////////////////////////
 
-    @Override
     public String getId() {
         return "simple";
     }
@@ -50,7 +49,7 @@ public class SimpleObjects extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
     public List<SimpleObject> listAll() {
-        return allInstances(SimpleObject.class);
+        return container.allInstances(SimpleObject.class);
     }
 
 
@@ -61,10 +60,18 @@ public class SimpleObjects extends AbstractFactoryAndRepository {
     @MemberOrder(sequence = "2")
     public SimpleObject create(
             final @Named("Name") String name) {
-        final SimpleObject obj = newTransientInstance(SimpleObject.class);
+        final SimpleObject obj = container.newTransientInstance(SimpleObject.class);
         obj.setName(name);
-        persistIfNotAlready(obj);
+        container.persistIfNotAlready(obj);
         return obj;
     }
+
+    
+    // //////////////////////////////////////
+    // Injected services
+    // //////////////////////////////////////
+
+    @javax.inject.Inject 
+    DomainObjectContainer container;
 
 }

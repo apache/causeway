@@ -24,12 +24,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -59,10 +62,8 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
      */
     private final Map<Class<?>, List<Object>> servicesByType = Maps.newHashMap();
 
-    private final List<Object> services = Lists.newArrayList();
-    
     private DomainObjectContainer container;
-
+    private final List<Object> services = Lists.newArrayList();
 
     
     // /////////////////////////////////////////////////////////
@@ -169,25 +170,65 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static void injectServices(final Object object, final List<Object> services) {
         final Class<?> cls = object.getClass();
-        
-        final List<Method> methods = Arrays.asList(cls.getMethods());
-        final Iterable<Method> setterAndInjectorMethods = Iterables.filter(methods, new Predicate<Method>(){
-            public boolean apply(Method method) {
-                final String methodName = method.getName();
-                return methodName.startsWith("set") || methodName.startsWith("inject");
+
+        autowireViaFields(object, services, cls);
+        autowireViaPrefixedMethods(object, services, cls, "set");
+        autowireViaPrefixedMethods(object, services, cls, "inject");
+    }
+
+    private static void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {
+        final List<Field> fields = Arrays.asList(cls.getDeclaredFields());
+        final Iterable<Field> injectFields = Iterables.filter(fields, new Predicate<Field>() {
+            @Override
+            public boolean apply(Field input) {
+                final Inject annotation = input.getAnnotation(javax.inject.Inject.class);
+                return annotation != null;
             }
         });
-        
-        for (final Method method : setterAndInjectorMethods) {
+
+        for (final Field field : injectFields) {
             for (final Object service : services) {
                 final Class<?> serviceClass = service.getClass();
-                boolean isInjectorMethod = isInjectorMethodFor(method, serviceClass);
-                if(isInjectorMethod) {
-                    method.setAccessible(true);
-                    invokeSetMethod(method, object, service);
+                boolean isInjectorField = isInjectorFieldFor(field, serviceClass);
+                if(isInjectorField) {
+                    field.setAccessible(true);
+                    invokeInjectorField(field, object, service);
                 }
             }
         }
+        
+        // recurse up the hierarchy
+        final Class<?> superclass = cls.getSuperclass();
+        if(superclass != null) {
+            autowireViaFields(object, services, superclass);
+        }
+    }
+    
+    private static void autowireViaPrefixedMethods(final Object object, final List<Object> services, final Class<?> cls, final String prefix) {
+        final List<Method> methods = Arrays.asList(cls.getMethods());
+        final Iterable<Method> prefixedMethods = Iterables.filter(methods, new Predicate<Method>(){
+            public boolean apply(Method method) {
+                final String methodName = method.getName();
+                return methodName.startsWith(prefix);
+            }
+        });
+        
+        for (final Method prefixedMethod : prefixedMethods) {
+            for (final Object service : services) {
+                final Class<?> serviceClass = service.getClass();
+                boolean isInjectorMethod = isInjectorMethodFor(prefixedMethod, serviceClass);
+                if(isInjectorMethod) {
+                    prefixedMethod.setAccessible(true);
+                    invokeInjectorMethod(prefixedMethod, object, service);
+                }
+            }
+        }
+    }
+
+    private static boolean isInjectorFieldFor(final Field field, final Class<?> serviceClass) {
+        final Class<?> type = field.getType();
+        // don't think that type can ever be null, but Javadoc for java.lang.reflect.Field doesn't say
+        return type != null && type.isAssignableFrom(serviceClass);
     }
 
     public static boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
@@ -200,7 +241,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
         return false;
     }
-
+    
     private static void invokeMethod(final Method method, final Object target, final Object[] parameters) {
         try {
             method.invoke(target, parameters);
@@ -220,14 +261,27 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private static void invokeSetMethod(final Method set, final Object target, final Object parameter) {
-        final Object[] parameters = new Object[] { parameter };
-        invokeMethod(set, target, parameters);
+    private static void invokeInjectorField(final Field field, final Object target, final Object parameter) {
+        try {
+            field.set(target, parameter);
+        } catch (IllegalArgumentException e) {
+            throw new MetaModelException(e);
+        } catch (IllegalAccessException e) {
+            throw new MetaModelException(String.format("Cannot access the %s field in %s", field.getName(), target.getClass().getName()));
+        }
         if (LOG.isDebugEnabled()) {
             LOG.debug("injected " + parameter + " into " + new ToString(target));
         }
     }
 
+    private static void invokeInjectorMethod(final Method method, final Object target, final Object parameter) {
+        final Object[] parameters = new Object[] { parameter };
+        invokeMethod(method, target, parameters);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("injected " + parameter + " into " + new ToString(target));
+        }
+    }
+    
     private void autowireServicesAndContainer() {
         injectServicesInto(this.services);
         injectServicesInto(this.container);

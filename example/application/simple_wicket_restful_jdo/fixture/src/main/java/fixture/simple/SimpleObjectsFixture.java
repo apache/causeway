@@ -54,18 +54,13 @@ public class SimpleObjectsFixture extends AbstractFixture {
 
 
     // //////////////////////////////////////
+    // Injected services
+    // //////////////////////////////////////
 
-
+    @javax.inject.Inject
     private SimpleObjects simpleObjects;
 
-    public void injectSimpleObjects(final SimpleObjects simpleObjects) {
-        this.simpleObjects = simpleObjects;
-    }
-
-    
+    @javax.inject.Inject
     private IsisJdoSupport isisJdoSupport;
-    public void injectIsisJdoSupport(IsisJdoSupport isisJdoSupport) {
-        this.isisJdoSupport = isisJdoSupport;
-    }
 
 }

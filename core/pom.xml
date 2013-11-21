@@ -1477,7 +1477,12 @@ ${license.additional-notes}
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>1.7.1</version>
             </dependency>
-        
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-atinject_1.0_spec</artifactId>
+                <version>1.0</version>
+            </dependency>
+
            <dependency>
                <groupId>org.picocontainer</groupId>
                <artifactId>picocontainer</artifactId>

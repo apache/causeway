@@ -38,7 +38,6 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.query.QueryDefault;
 
 import services.ClockService;
@@ -242,17 +241,11 @@ public class ToDoItems {
     // Injected Services
     // //////////////////////////////////////
 
-    
+    @javax.inject.Inject
     private DomainObjectContainer container;
 
-    public void injectDomainObjectContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
-
+    @javax.inject.Inject
     private ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
 
 
 }

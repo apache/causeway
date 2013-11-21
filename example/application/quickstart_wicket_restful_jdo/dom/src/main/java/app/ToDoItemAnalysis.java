@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 
 import dom.todo.ToDoItem.Category;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
@@ -36,13 +36,12 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 
 @Named("Analysis")
-public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
+public class ToDoItemAnalysis {
 
     // //////////////////////////////////////
     // Identification in the UI
     // //////////////////////////////////////
 
-    @Override
     public String getId() {
         return "analysis";
     }
@@ -69,7 +68,7 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
              @Override
              public ToDoItemsByCategoryViewModel apply(final Category category) {
                  final ToDoItemsByCategoryViewModel byCategory = 
-                     getContainer().newViewModelInstance(ToDoItemsByCategoryViewModel.class, category.name());
+                     container.newViewModelInstance(ToDoItemsByCategoryViewModel.class, category.name());
                  byCategory.setCategory(category);
                  return byCategory;
              }
@@ -103,7 +102,7 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
              @Override
              public ToDoItemsByDateRangeViewModel apply(final DateRange dateRange) {
                  final ToDoItemsByDateRangeViewModel byDateRange = 
-                     getContainer().newViewModelInstance(ToDoItemsByDateRangeViewModel.class, dateRange.name());
+                     container.newViewModelInstance(ToDoItemsByDateRangeViewModel.class, dateRange.name());
                  byDateRange.setDateRange(dateRange);
                  return byDateRange;
              }
@@ -120,5 +119,12 @@ public class ToDoItemAnalysis extends AbstractFactoryAndRepository {
         return byCategory().apply(category);
     }
     
+
+    // //////////////////////////////////////
+    // Injected services
+    // //////////////////////////////////////
+
+    @javax.inject.Inject
+    private DomainObjectContainer container;
 
 }

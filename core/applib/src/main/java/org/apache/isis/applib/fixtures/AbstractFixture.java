@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -53,7 +54,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  */
 public abstract class AbstractFixture extends BaseFixture implements CompositeFixture {
 
-    private final List<Object> fixtures = new ArrayList<Object>();
+    private final List<Object> fixtures = Lists.newArrayList();
 
     // ///////////////////////////////////////////////////////////////
     // Constructor

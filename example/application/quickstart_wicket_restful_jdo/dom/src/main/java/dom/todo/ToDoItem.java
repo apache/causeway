@@ -39,12 +39,10 @@ import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
@@ -64,7 +62,6 @@ import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -704,22 +701,15 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Injected Services
     // //////////////////////////////////////
 
+    @javax.inject.Inject
     private DomainObjectContainer container;
 
-    public void injectDomainObjectContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
-
+    @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    public void injectToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
-
+    @javax.inject.Inject
+    @SuppressWarnings("unused")
     private ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
     
     // //////////////////////////////////////
     // Extensions
@@ -739,6 +729,5 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //    public void setLocation(Location location) {
 //        this.location = location;
 //    }
-
     
 }

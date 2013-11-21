@@ -33,6 +33,7 @@ import dom.todo.ToDoItems;
 import org.joda.time.DateTime;
 
 import org.apache.isis.applib.AbstractViewModel;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Render;
@@ -149,15 +150,10 @@ public class ToDoItemsByDateRangeViewModel
     // injected services
     // //////////////////////////////////////
     
+    @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    public void injectedToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
-
+    @javax.inject.Inject
     private ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
 
 }

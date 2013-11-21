@@ -69,10 +69,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
     // Injected
     // //////////////////////////////////////
 
+
+    @javax.inject.Inject
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
-    public void injectDomainObjectContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
     
 }

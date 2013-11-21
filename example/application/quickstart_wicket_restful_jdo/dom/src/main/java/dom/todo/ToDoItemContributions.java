@@ -206,10 +206,12 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         return getContainer().getUser().getName();
     }
 
+
+    // //////////////////////////////////////
+    // Injected services
     // //////////////////////////////////////
 
+    @javax.inject.Inject
     private ToDoItems toDoItems;
-    public void injectToDoItems(ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
+
 }

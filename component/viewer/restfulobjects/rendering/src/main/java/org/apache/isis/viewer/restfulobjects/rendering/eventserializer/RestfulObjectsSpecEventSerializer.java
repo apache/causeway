@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -120,16 +121,18 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
 
     // //////////////////////////////////////
 
+    @Inject
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
-    public void setContainer(DomainObjectContainer container) {
-        this.container = container;
-    }
+//    public void setContainer(DomainObjectContainer container) {
+//        this.container = container;
+//    }
     
+    @Inject
     @SuppressWarnings("unused")
     private BookmarkService bookmarkService;
-    public void injectBookmarkService(BookmarkService bookmarkService) {
-        this.bookmarkService = bookmarkService;
-    }
+//    public void injectBookmarkService(BookmarkService bookmarkService) {
+//        this.bookmarkService = bookmarkService;
+//    }
 
 }

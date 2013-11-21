@@ -44,7 +44,7 @@ public class SimpleObjectsTest_create {
     @Before
     public void setUp() throws Exception {
         simpleObjects = new SimpleObjects();
-        simpleObjects.setContainer(mockContainer);
+        simpleObjects.container = mockContainer;
     }
     
     @Test

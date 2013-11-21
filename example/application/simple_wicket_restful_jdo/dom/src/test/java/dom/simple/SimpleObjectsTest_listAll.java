@@ -16,17 +16,14 @@
  */
 package dom.simple;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import dom.simple.SimpleObject;
-
 import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -49,15 +46,14 @@ public class SimpleObjectsTest_listAll {
     @Before
     public void setUp() throws Exception {
         simpleObjects = new SimpleObjects();
-        simpleObjects.setContainer(mockContainer);
+        simpleObjects.container = mockContainer;
     }
     
     @Test
     public void happyCase() throws Exception {
         
-        
         // given
-        final List all = Lists.newArrayList();
+        final List<SimpleObject> all = Lists.newArrayList();
         
         context.checking(new Expectations() {
             {
@@ -67,7 +63,7 @@ public class SimpleObjectsTest_listAll {
         });
         
         // when
-        final List list = simpleObjects.listAll();
+        final List<SimpleObject> list = simpleObjects.listAll();
         
         // then
         assertThat(list, is(all));

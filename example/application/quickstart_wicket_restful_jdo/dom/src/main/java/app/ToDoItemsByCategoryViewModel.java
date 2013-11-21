@@ -32,10 +32,7 @@ import dom.todo.ToDoItem.Subcategory;
 import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Bounded;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Render;
@@ -178,11 +175,7 @@ public class ToDoItemsByCategoryViewModel
     // injected services
     // //////////////////////////////////////
     
+    @javax.inject.Inject
     private ToDoItems toDoItems;
-
-    public void injectedToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
-
 
 }
