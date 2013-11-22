@@ -39,7 +39,7 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         
-        MemberOrderFacet memberOrderFacet = getMemberOrderFromMetadataPropertiesIfPossible(processMethodContext);
+        MemberOrderFacet memberOrderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(memberOrderFacet == null) {
             final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
             if (annotation != null) {
@@ -53,13 +53,13 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
 
     @Override
     public void process(final ProcessContributeeMemberContext processMemberContext) {
-        final MemberOrderFacet memberOrderFacet = getMemberOrderFromMetadataPropertiesIfPossible(processMemberContext);
+        final MemberOrderFacet memberOrderFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
 
         // no-op if facet is null
         FacetUtil.addFacet(memberOrderFacet);
     }
 
-    private static MemberOrderFacet getMemberOrderFromMetadataPropertiesIfPossible(
+    private static MemberOrderFacet createFromMetadataPropertiesIfPossible(
             final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
         
         final FacetHolder holder = pcwmp.getFacetHolder();

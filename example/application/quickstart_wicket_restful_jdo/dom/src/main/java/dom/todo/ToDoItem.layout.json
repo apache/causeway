@@ -83,7 +83,11 @@
                     value: 5
                 }
             },
-            similarTo: {}
+            similarTo: {
+                paged: {
+                    value: 3
+                }
+            }
         }
     }
     ],

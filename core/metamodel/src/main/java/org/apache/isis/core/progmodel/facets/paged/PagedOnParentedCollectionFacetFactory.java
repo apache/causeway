@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
-public class PagedOnParentedCollectionFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, ContributeeMemberFacetFactory {
+public class PagedOnParentedCollectionFacetFactory extends FacetFactoryAbstract 
+        implements ContributeeMemberFacetFactory, IsisConfigurationAware {
 
     private IsisConfiguration configuration;
 
@@ -41,24 +42,32 @@ public class PagedOnParentedCollectionFacetFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        FacetUtil.addFacet(create(processMethodContext));
+        final PagedFacet pagedFacet = create(processMethodContext);
+        // no-op if null
+        FacetUtil.addFacet(pagedFacet);
     }
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        
+        final PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
+        // no-op if null
+        FacetUtil.addFacet(pagedFacet);
     }
 
     protected PagedFacet create(final ProcessMethodContext processMethodContext) {
 
-        final Properties properties = processMethodContext.metadataProperties("paged");
-        if (properties != null) {
-            return new PagedFacetProperties(properties, processMethodContext.getFacetHolder());
+        PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
+        if(pagedFacet != null) {
+            return pagedFacet;
         }
 
         final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
         return annotation != null ? new PagedFacetAnnotation(processMethodContext.getFacetHolder(), annotation.value()) : null;
+    }
+
+    private PagedFacet createFromMetadataPropertiesIfPossible(final ProcessContextWithMetadataProperties<?> processMethodContext) {
+        final Properties properties = processMethodContext.metadataProperties("paged");
+        return properties != null ? new PagedFacetProperties(properties, processMethodContext.getFacetHolder()) : null;
     }
 
     // //////////////////////////////////////
