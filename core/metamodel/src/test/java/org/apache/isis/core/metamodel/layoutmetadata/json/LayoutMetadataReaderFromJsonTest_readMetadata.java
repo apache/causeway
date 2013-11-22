@@ -61,6 +61,8 @@ public class LayoutMetadataReaderFromJsonTest_readMetadata {
         assertThat(metadata.getColumns().get(3).collections.get("dependencies").actions, is(not(nullValue())));
         assertThat(metadata.getColumns().get(3).collections.get("dependencies").actions.size(), is(2));
         assertThat(metadata.getColumns().get(3).collections.get("dependencies").actions.containsKey("add"), is(true));
+        assertThat(metadata.getColumns().get(3).collections.get("dependencies").paged, is(not(nullValue())));
+        assertThat(metadata.getColumns().get(3).collections.get("dependencies").paged.value, is(5));
 
         assertThat(metadata.getActions(), is(not(nullValue())));
         assertThat(metadata.getActions().size(), is(2));

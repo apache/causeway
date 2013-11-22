@@ -126,7 +126,7 @@ import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpec
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.value.annotation.ValueFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelIntefaceFacetFactory;
-import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnCollectionFacetFactory;
+import org.apache.isis.core.progmodel.facets.paged.PagedOnParentedCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.enums.ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory;
@@ -387,7 +387,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ParseableFacetFactory.class);
         addFactory(PluralAnnotationFacetFactory.class);
         addFactory(PagedAnnotationOnTypeFacetFactory.class);
-        addFactory(PagedAnnotationOnCollectionFacetFactory.class);
+        addFactory(PagedOnParentedCollectionFacetFactory.class);
 
         addFactory(AutoCompleteAnnotationFacetFactory.class);
 

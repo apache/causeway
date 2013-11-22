@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -90,14 +91,14 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             public Integer apply(ColumnRepr input) {
                 return input.span;
             }}));
-        props.setProperty("memberGroupLayout.columnSpans", columnSpansStr);
+        props.setProperty("class.memberGroupLayout.columnSpans", columnSpansStr);
     }
 
     private static void setMemberGroupLayoutColumnLists(LayoutMetadata metadata, int colIdx, String propkey, Properties props) {
         final ColumnRepr column = metadata.getColumns().get(colIdx);
         final Map<String, MemberGroupRepr> memberGroups = column.memberGroups;
         final String val = memberGroups != null ? Joiner.on(",").join(memberGroups.keySet()) : "";
-        props.setProperty("memberGroupLayout." + propkey, val);
+        props.setProperty("class.memberGroupLayout." + propkey, val);
     }
 
     private static void setProperties(LayoutMetadata metadata, Properties props, int[] memberSeq) {
@@ -129,26 +130,27 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
     private static void setMembersAndAssociatedActions(Properties props, final String memberGroupName, final Map<String, MemberRepr> members, int[] memberSeq) {
         for(final String memberName: members.keySet()) {
-            props.setProperty("memberOrder." + memberName + ".sequence", ""+ ++memberSeq[0]);
+            props.setProperty("member." + memberName + ".memberOrder.sequence", ""+ ++memberSeq[0]);
             if(memberGroupName != null) {
-                props.setProperty("memberOrder." + memberName + ".name", memberGroupName);
+                props.setProperty("member." + memberName + ".memberOrder.name", memberGroupName);
             }
             
             final MemberRepr memberRepr = members.get(memberName);
-            final Map<String, ActionRepr> actions = memberRepr.actions;
-            if(actions == null) {
-                continue;
+
+            final PagedFacetRepr paged = memberRepr.paged;
+            if(paged != null) {
+                props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
             }
-            int actSeq = 0;
-            for(final String actionName: actions.keySet()) {
-                String nameKey = "memberOrder." + actionName + ".name";
-                String sequenceKey = "memberOrder." + actionName + ".sequence";
-                if(props.containsKey(nameKey)) {
-                    nameKey = "memberOrder." + actionName + "().name";
-                    sequenceKey = "memberOrder." + actionName + "().sequence";
+
+            final Map<String, ActionRepr> actions = memberRepr.actions;
+            if(actions != null) {
+                int actSeq = 0;
+                for(final String actionName: actions.keySet()) {
+                    String nameKey = "action." + actionName + ".memberOrder.name";
+                    String sequenceKey = "action." + actionName + ".memberOrder.sequence";
+                    props.setProperty(nameKey, memberName);
+                    props.setProperty(sequenceKey, ""+ ++actSeq);
                 }
-                props.setProperty(nameKey, memberName);
-                props.setProperty(sequenceKey, ""+ ++actSeq);
             }
         }
     }
@@ -159,7 +161,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
         int seq=0;
         for (final String actionName : metadata.getActions().keySet()) {
-            props.setProperty("memberOrder." + actionName + ".sequence", ""+ ++seq);
+            props.setProperty("member." + actionName + ".memberOrder.sequence", ""+ ++seq);
         }
     }
 
@@ -303,13 +305,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     }
 
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     private static List<ObjectAssociation> propertiesOf(final ObjectSpecification objSpec) {
         return objSpec.getAssociations(Contributed.EXCLUDED, 
                 Filters.and(ObjectAssociation.Filters.PROPERTIES, 
                             ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES));
     }
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     private static List<ObjectAssociation> collectionsOf(final ObjectSpecification objSpec) {
         return objSpec.getAssociations(Contributed.EXCLUDED, 
                 Filters.and(ObjectAssociation.Filters.COLLECTIONS, 
@@ -319,7 +321,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         return objSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     private static Filter<ObjectAction> staticallyVisibleExcluding(final Set<String> excludedActionIds) {
         return Filters.and(
                 ObjectAction.Filters.VISIBLE_AT_LEAST_SOMETIMES, 

@@ -21,12 +21,12 @@ package org.apache.isis.core.progmodel.facets.object.membergroups;
 
 import java.util.Properties;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+import org.apache.isis.core.commons.lang.StringFunctions;
+import org.apache.isis.core.commons.lang.StringPredicates;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class MemberGroupLayoutFacetProperties extends MemberGroupLayoutFacetAbstract {
@@ -62,20 +62,8 @@ public class MemberGroupLayoutFacetProperties extends MemberGroupLayoutFacetAbst
         final Iterable<String> split = Splitter.on(',').split(property);
         return Iterables.toArray(
                     Iterables.filter(
-                        Iterables.transform(
-                                split, 
-                                new Function<String,String>(){
-                                    @Override
-                                    public String apply(String input) {
-                                        return input==null?"":input.trim();
-                                    }
-                                }), 
-                        new Predicate<String>() {
-                            @Override
-                            public boolean apply(String input) {
-                                return input!=null && !input.isEmpty();
-                            }
-                        }), 
+                        Iterables.transform(split,StringFunctions.TRIM), 
+                        StringPredicates.NOT_EMPTY), 
                     String.class);
     }
 }

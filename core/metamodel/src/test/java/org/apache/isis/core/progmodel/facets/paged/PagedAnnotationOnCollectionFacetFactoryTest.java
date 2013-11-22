@@ -34,13 +34,13 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class PagedAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private PagedAnnotationOnCollectionFacetFactory facetFactory;
+    private PagedOnParentedCollectionFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new PagedAnnotationOnCollectionFacetFactory();
+        facetFactory = new PagedOnParentedCollectionFacetFactory();
     }
 
     @Override

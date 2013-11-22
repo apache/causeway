@@ -18,8 +18,6 @@ package org.apache.isis.core.metamodel.layoutmetadata;
 
 import java.util.Map;
 
-public class MemberRepr {
-    
-    public Map<String,ActionRepr> actions;
-    public PagedFacetRepr paged;
+public class PagedFacetRepr {
+    public int value;
 }

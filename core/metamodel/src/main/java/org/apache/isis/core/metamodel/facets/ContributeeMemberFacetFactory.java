@@ -19,32 +19,38 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.List;
 import java.util.Properties;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.lang.PropertiesExtensions;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 /**
- * A {@link FacetFactory} which orders {@link ObjectMember}s (eg, according to
- * the {@link MemberOrderFacet}).
+ * A {@link FacetFactory} which is applied to only for {@link ContributeeMember}s.
  */
-public interface MemberOrderingFacetFactory extends FacetFactory {
+public interface ContributeeMemberFacetFactory extends FacetFactory {
 
-    public static class ProcessMemberContext extends AbstractProcessContext<ObjectMember> implements ProcessContextWithMetadataProperties<ObjectMember> {
+    public static class ProcessContributeeMemberContext extends AbstractProcessContext<ObjectMember> 
+            implements ProcessContextWithMetadataProperties<ObjectMember> {
         
         private final Properties metadataProperties;
 
-        public ProcessMemberContext(
+        public ProcessContributeeMemberContext(
                 final Properties metadataProperties, 
                 final ObjectMember facetHolder) {
             super(facetHolder);
             this.metadataProperties = metadataProperties;
         }
 
-        public Properties metadataProperties(String prefix) {
+        public Properties metadataProperties(String subKey) {
             
             if(metadataProperties == null) {
                 return null;
@@ -52,19 +58,27 @@ public interface MemberOrderingFacetFactory extends FacetFactory {
             Identifier identifier = getFacetHolder().getIdentifier();
             final String id = identifier.getMemberName();
             
-            // bit of a hack; to distinguish between actions and properties that have same identifier
-            // eg getPaidBy() and paidBy()
+            // build list of keys to search for... 
+            final List<String> keys = Lists.newArrayList();
             if(getFacetHolder() instanceof ObjectAction) {
-                Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id+"()");
+                // ... either "action.actionId" or "member.actionId()" 
+                keys.add("action." + id+"."+subKey);
+                keys.add("member." + id+"()"+"."+subKey);
+            } else if(getFacetHolder() instanceof OneToOneAssociation) {
+                // ... either "property.propertyId" or "member.propertyId"  
+                keys.add("property." + id+"."+subKey);
+                keys.add("member." + id+"."+subKey);
+            } else if(getFacetHolder() instanceof OneToManyAssociation) {
+                // ... either "collection.collectionId" or "member.collectionId" 
+                keys.add("member." + id+"."+subKey);
+                keys.add("collection." + id+"."+subKey);
+            }
+
+            for (final String key : keys) {
+                final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, key);
                 if (!subsetProperties.isEmpty()) {
                     return subsetProperties;
                 } 
-            }
-
-            // otherwise, regular processing...
-            Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id);
-            if (!subsetProperties.isEmpty()) {
-                return subsetProperties;
             }
             
             return null;
@@ -74,6 +88,6 @@ public interface MemberOrderingFacetFactory extends FacetFactory {
     /**
      * Sort the member, and return the correctly setup annotation if present.
      */
-    void process(ProcessMemberContext processMemberContext);
+    void process(ProcessContributeeMemberContext processMemberContext);
 
 }

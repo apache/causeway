@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.lang.PropertiesExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -32,6 +34,8 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public interface FacetFactory {
 
@@ -48,7 +52,7 @@ public interface FacetFactory {
     }
     
     public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
-        public Properties metadataProperties(String prefix);
+        public Properties metadataProperties(String subKey);
         public T getFacetHolder();
     }
 
@@ -118,11 +122,11 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties metadataProperties(String prefix) {
+        public Properties metadataProperties(String subKey) {
             if(metadataProperties == null) {
                 return null;
             }
-            final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix);
+            final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, "class." + subKey);
             return !subsetProperties.isEmpty() ? subsetProperties : null;
         }
     }
@@ -187,7 +191,7 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties metadataProperties(String prefix) {
+        public Properties metadataProperties(String subKey) {
             
             if(metadataProperties == null) {
                 return null;
@@ -195,19 +199,27 @@ public interface FacetFactory {
             Identifier identifier = featureType.identifierFor(getCls(), getMethod());
             final String id = identifier.getMemberName();
             
-            // bit of a hack; to distinguish between actions and properties that have same identifier
-            // eg getPaidBy() and paidBy()
-            if(featureType.isAction()) {
-                Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id+"()");
+            // build list of keys to search for... 
+            final List<String> keys = Lists.newArrayList();
+            if(featureType == FeatureType.ACTION) {
+                // ... either "action.actionId" or "member.actionId()" 
+                keys.add("action." + id+"."+subKey);
+                keys.add("member." + id+"()"+"."+subKey);
+            } else if(featureType == FeatureType.PROPERTY) {
+                // ... either "property.propertyId" or "member.propertyId" 
+                keys.add("property." + id+"."+subKey);
+                keys.add("member." + id+"."+subKey);
+            } else if(featureType == FeatureType.COLLECTION) {
+                // ... either "collection.collectionId" or "member.collectionId" 
+                keys.add("collection." + id+"."+subKey);
+                keys.add("member." + id+"."+subKey);
+            }
+
+            for (final String key : keys) {
+                final Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, key);
                 if (!subsetProperties.isEmpty()) {
                     return subsetProperties;
                 } 
-            }
-
-            // otherwise, regular processing...
-            Properties subsetProperties = PropertiesExtensions.subset(this.metadataProperties, prefix+"."+id);
-            if (!subsetProperties.isEmpty()) {
-                return subsetProperties;
             }
             
             return null;

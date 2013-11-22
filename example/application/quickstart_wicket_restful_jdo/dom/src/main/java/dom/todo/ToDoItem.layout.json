@@ -78,6 +78,9 @@
                 actions: {
                     add:{},
                     remove: {}
+                },
+                paged: {
+                    value: 5
                 }
             },
             similarTo: {}

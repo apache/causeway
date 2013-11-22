@@ -26,12 +26,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MemberOrderingFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
-public class MemberOrderFacetFactory extends FacetFactoryAbstract implements MemberOrderingFacetFactory {
+public class MemberOrderFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     public MemberOrderFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -41,7 +40,6 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Mem
     public void process(final ProcessMethodContext processMethodContext) {
         
         MemberOrderFacet memberOrderFacet = getMemberOrderFromMetadataPropertiesIfPossible(processMethodContext);
-
         if(memberOrderFacet == null) {
             final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
             if (annotation != null) {
@@ -53,18 +51,16 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Mem
         FacetUtil.addFacet(memberOrderFacet);
     }
 
-    /**
-     * For ordering of {@link ContributeeMember}s.
-     */
     @Override
-    public void process(final ProcessMemberContext processMemberContext) {
+    public void process(final ProcessContributeeMemberContext processMemberContext) {
         final MemberOrderFacet memberOrderFacet = getMemberOrderFromMetadataPropertiesIfPossible(processMemberContext);
 
         // no-op if facet is null
         FacetUtil.addFacet(memberOrderFacet);
     }
 
-    private static MemberOrderFacet getMemberOrderFromMetadataPropertiesIfPossible(final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
+    private static MemberOrderFacet getMemberOrderFromMetadataPropertiesIfPossible(
+            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
         
         final FacetHolder holder = pcwmp.getFacetHolder();
         

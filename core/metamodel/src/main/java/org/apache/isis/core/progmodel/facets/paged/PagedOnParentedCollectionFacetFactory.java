@@ -19,33 +19,49 @@
 
 package org.apache.isis.core.progmodel.facets.paged;
 
+import java.util.Properties;
+
 import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
-public class PagedAnnotationOnCollectionFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
+public class PagedOnParentedCollectionFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, ContributeeMemberFacetFactory {
 
     private IsisConfiguration configuration;
 
-    public PagedAnnotationOnCollectionFacetFactory() {
+    public PagedOnParentedCollectionFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+
+        FacetUtil.addFacet(create(processMethodContext));
     }
 
-    private PagedFacet create(final Paged annotation, final FacetHolder holder) {
-        return annotation != null ? new PagedFacetAnnotation(holder, annotation.value()) : null;
+    @Override
+    public void process(ProcessContributeeMemberContext processMemberContext) {
+        
     }
+
+    protected PagedFacet create(final ProcessMethodContext processMethodContext) {
+
+        final Properties properties = processMethodContext.metadataProperties("paged");
+        if (properties != null) {
+            return new PagedFacetProperties(properties, processMethodContext.getFacetHolder());
+        }
+
+        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
+        return annotation != null ? new PagedFacetAnnotation(processMethodContext.getFacetHolder(), annotation.value()) : null;
+    }
+
+    // //////////////////////////////////////
 
     public IsisConfiguration getConfiguration() {
         return configuration;
@@ -55,5 +71,6 @@ public class PagedAnnotationOnCollectionFacetFactory extends FacetFactoryAbstrac
     public void setConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
     }
+
 
 }

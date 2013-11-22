@@ -20,35 +20,18 @@
 package org.apache.isis.core.commons.lang;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 
-public final class StringFunctions {
+public final class StringPredicates {
     
-    public static final Function<String,String> TRIM = new Function<String,String>(){
+    public static final Predicate<String> NOT_EMPTY = new Predicate<String>() {
         @Override
-        public String apply(String input) {
-            return input==null?"":input.trim();
+        public boolean apply(String input) {
+            return input!=null && !input.isEmpty();
         }
     };
 
-    private StringFunctions() {
-    }
-
-    public static Function<String, String> toLowerCase() {
-        return new Function<String, String>() {
-            @Override
-            public String apply(String input) {
-                return input != null? input.toLowerCase(): null;
-            }
-        };
-    }
-    
-    public static Function<String, String> toUpperCase() {
-        return new Function<String, String>() {
-            @Override
-            public String apply(String input) {
-                return input != null? input.toUpperCase(): null;
-            }
-        };
+    private StringPredicates() {
     }
 
 }
