@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.NamedFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -140,6 +141,11 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             
             final MemberRepr memberRepr = members.get(memberName);
 
+            final NamedFacetRepr named = memberRepr.named;
+            if(named != null) {
+                props.setProperty("member." + memberName + ".named.value", named.value);
+            }
+            
             final PagedFacetRepr paged = memberRepr.paged;
             if(paged != null) {
                 props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
@@ -156,10 +162,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(actions != null) {
                 int actSeq = 0;
                 for(final String actionName: actions.keySet()) {
+                    final ActionRepr actionRepr = actions.get(actionName);
                     String nameKey = "action." + actionName + ".memberOrder.name";
-                    String sequenceKey = "action." + actionName + ".memberOrder.sequence";
                     props.setProperty(nameKey, memberName);
-                    props.setProperty(sequenceKey, ""+ ++actSeq);
+                    setRemainingActionProperties(props, "action", actionName, actionRepr, ++actSeq);
                 }
             }
         }
@@ -169,9 +175,20 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         if(metadata.getActions() == null) {
             return;
         }
-        int seq=0;
-        for (final String actionName : metadata.getActions().keySet()) {
-            props.setProperty("member." + actionName + ".memberOrder.sequence", ""+ ++seq);
+        int xeq=0;
+        final Map<String, ActionRepr> actions = metadata.getActions();
+        for (final String actionName : actions.keySet()) {
+            final ActionRepr actionRepr = actions.get(actionName);
+            setRemainingActionProperties(props, "member", actionName, actionRepr, ++xeq);
+        }
+    }
+
+    private static void setRemainingActionProperties(Properties props, String prefix, final String actionName, final ActionRepr actionRepr, final int seq) {
+        props.setProperty(prefix + "." + actionName + ".memberOrder.sequence", ""+ seq);
+        
+        final NamedFacetRepr actionNamed = actionRepr.named;
+        if(actionNamed != null) {
+            props.setProperty(prefix +"." + actionName + ".named.value", actionNamed.value);
         }
     }
 

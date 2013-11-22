@@ -25,7 +25,11 @@
                     category: {},
                     complete: {
                         actions: {
-                            completed: {},
+                            completed: {
+                                named: {
+                                    value: Done
+                                }
+                            },
                             notYetCompleted: {}
                         }
                     }
@@ -85,7 +89,11 @@
     ],
     actions: {
         delete: {},
-        duplicate: {}
+        duplicate: {
+           named: {
+                value: Clone
+            }
+        }
     }
 }
  

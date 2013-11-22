@@ -309,7 +309,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.complete = complete;
     }
 
-    @Named("Done")
     @PublishedAction
     @Bulk
     @CssClass("x-highlight")
@@ -334,7 +333,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return isComplete() ? "Already completed" : null;
     }
 
-    @Named("Not done")
     @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
@@ -363,7 +361,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.cost = cost!=null?cost.setScale(2):null;
     }
     
-    @Named("Update")
     public ToDoItem updateCost(@Named("New cost") @Optional final BigDecimal cost) {
         LOG.debug("%s: cost updated: %s -> %s", this.container.titleOf(this), getCost(), cost);
         setCost(cost);
@@ -530,7 +527,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Clone (action)
     // //////////////////////////////////////
 
-    @Named("Clone")
     // the name of the action in the UI
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored

@@ -16,12 +16,7 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-import java.util.Map;
 
-public class MemberRepr {
-    
-    public Map<String,ActionRepr> actions;
-    public PagedFacetRepr paged;
-    public RenderFacetRepr render;
-    public NamedFacetRepr named;
+public class NamedFacetRepr {
+    public String value;
 }

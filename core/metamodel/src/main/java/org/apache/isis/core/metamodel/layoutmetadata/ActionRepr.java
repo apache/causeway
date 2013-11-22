@@ -17,4 +17,5 @@
 package org.apache.isis.core.metamodel.layoutmetadata;
 
 public class ActionRepr {
+    public NamedFacetRepr named;
 }

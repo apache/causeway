@@ -60,7 +60,7 @@ import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenAnn
 import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HiddenFacetViaHideForSessionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hidden.method.HiddenFacetViaHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnotationOnMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.resolve.RenderOrResolveAnnotationFacetFactory;
@@ -371,7 +371,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MultiLineAnnotationOnParameterFacetFactory.class);
 
         addFactory(NamedAnnotationOnTypeFacetFactory.class);
-        addFactory(NamedAnnotationOnMemberFacetFactory.class);
+        addFactory(NamedOnMemberFacetFactory.class);
         addFactory(NamedAnnotationOnParameterFacetFactory.class);
 
         addFactory(NotPersistableAnnotationFacetFactory.class);

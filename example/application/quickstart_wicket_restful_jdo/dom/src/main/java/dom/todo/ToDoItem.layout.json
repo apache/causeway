@@ -26,14 +26,26 @@
                     },
                     subcategory: {
                         actions: {
-                            updateCategory: {},
+                            updateCategory: {
+                                named: {
+                                    value: "Update"
+                                }
+                            },
                             analyseCategory: {}
                         }
                     },
                     complete: {
                         actions: {
-                            completed: {},
-                            notYetCompleted: {}
+                            completed: {
+                                named: {
+                                    value: "Done"
+                                }
+                            },
+                            notYetCompleted: {
+                                named: {
+                                    value: "Not done"
+                                }
+                            }
                         }
                     }
                 }
@@ -59,7 +71,11 @@
                     dueBy: {},
                     cost: {
                         actions: {
-                            updateCost:{}
+                            updateCost:{
+                                named: {
+                                    value: "Update"
+                                }
+                            }
                         }
                     },
                     notes: {},
@@ -98,7 +114,11 @@
     }
     ],
     actions: {
-        duplicate: {},
+        duplicate: {
+	        named: {
+	            value: "Clone"
+	        }
+        },
         delete: {}
     }
 }

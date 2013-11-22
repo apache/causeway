@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContex
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnotationOnMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.named.annotation.NamedAnnotationOnParameterFacetFactory;
 
@@ -68,7 +68,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Test
     public void testNamedAnnotationPickedUpOnProperty() {
 
-        final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
+        final NamedOnMemberFacetFactory facetFactory = new NamedOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
@@ -92,7 +92,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     }
 
     public void testNamedAnnotationPickedUpOnCollection() {
-        final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
+        final NamedOnMemberFacetFactory facetFactory = new NamedOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
@@ -116,7 +116,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     }
 
     public void testNamedAnnotationPickedUpOnAction() {
-        final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
+        final NamedOnMemberFacetFactory facetFactory = new NamedOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {

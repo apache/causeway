@@ -22,9 +22,9 @@ package org.apache.isis.core.progmodel.facets.members.named.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 
-public class NamedFacetAnnotationOnMember extends NamedFacetAbstract {
+public class NamedFacetOnMemberAnnotation extends NamedFacetAbstract {
 
-    public NamedFacetAnnotationOnMember(final String value, final FacetHolder holder) {
+    public NamedFacetOnMemberAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 
