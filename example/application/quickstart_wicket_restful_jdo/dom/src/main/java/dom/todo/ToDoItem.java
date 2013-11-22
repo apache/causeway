@@ -44,11 +44,9 @@ import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
-import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
@@ -56,8 +54,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
@@ -171,7 +167,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private LocalDate dueBy;
 
     @javax.jdo.annotations.Column(allowsNull="true")
-    @CssClass("x-key")
     public LocalDate getDueBy() {
         return dueBy;
     }
@@ -311,7 +306,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @PublishedAction
     @Bulk
-    @CssClass("x-highlight")
     public ToDoItem completed() {
         setComplete(true);
         
@@ -386,7 +380,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
     @Hidden(where=Where.ALL_TABLES)
-    @MultiLine(numberOfLines=5)
     public String getNotes() {
         return notes;
     }
@@ -418,7 +411,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @Hidden(where=Where.ALL_TABLES)
     @Disabled
-    @Named("Version")
     public Long getVersionSequence() {
         if(!(this instanceof PersistenceCapable)) {
             return null;
@@ -498,7 +490,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return null;
     }
 
-    @CssClass("x-caution")
     public ToDoItem remove(final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
         return this;
@@ -564,7 +555,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     @Bulk
-    @CssClass("x-caution")
     public List<ToDoItem> delete() {
         container.removeIfNotAlready(this);
         container.informUser("Deleted " + container.titleOf(this));

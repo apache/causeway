@@ -44,13 +44,17 @@ import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayo
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.layoutmetadata.ActionRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.ColumnRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.CssClassFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.DescribedAsFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.MultiLineFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.NamedFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.TypicalLengthFacetRepr;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -145,12 +149,26 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(named != null) {
                 props.setProperty("member." + memberName + ".named.value", named.value);
             }
-            
+            final DescribedAsFacetRepr describedAs = memberRepr.describedAs;
+            if(describedAs!= null) {
+                props.setProperty("member." + memberName + ".describedAs.value", describedAs.value);
+            }
+            final CssClassFacetRepr cssClass = memberRepr.cssClass;
+            if(cssClass!= null) {
+                props.setProperty("member." + memberName + ".cssClass.value", cssClass.value);
+            }
+            final TypicalLengthFacetRepr typicalLength = memberRepr.typicalLength;
+            if(typicalLength!= null) {
+                props.setProperty("member." + memberName + ".typicalLength.value", ""+typicalLength.value);
+            }
+            final MultiLineFacetRepr multiLine = memberRepr.multiLine;
+            if(multiLine!= null) {
+                props.setProperty("member." + memberName + ".multiLine.numberOfLines", ""+multiLine.numberOfLines);
+            }
             final PagedFacetRepr paged = memberRepr.paged;
             if(paged != null) {
                 props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
             }
-
             final RenderFacetRepr render = memberRepr.render;
             if(render != null) {
                 // same default as in Render.Type.value()
@@ -183,12 +201,21 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
     }
 
-    private static void setRemainingActionProperties(Properties props, String prefix, final String actionName, final ActionRepr actionRepr, final int seq) {
+    private static void setRemainingActionProperties(Properties props, String prefix, final String actionNameOrig, final ActionRepr actionRepr, final int seq) {
+        final String actionName = actionNameOrig + ("action".equals(prefix)?"":"()");
         props.setProperty(prefix + "." + actionName + ".memberOrder.sequence", ""+ seq);
         
         final NamedFacetRepr actionNamed = actionRepr.named;
         if(actionNamed != null) {
             props.setProperty(prefix +"." + actionName + ".named.value", actionNamed.value);
+        }
+        final DescribedAsFacetRepr describedAs = actionRepr.describedAs;
+        if(describedAs!= null) {
+            props.setProperty(prefix +"." + actionName + ".describedAs.value", describedAs.value);
+        }
+        final CssClassFacetRepr cssClass = actionRepr.cssClass;
+        if(cssClass!= null) {
+            props.setProperty(prefix +"." + actionName + ".cssClass.value", cssClass.value);
         }
     }
 

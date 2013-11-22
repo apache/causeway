@@ -22,11 +22,11 @@ package org.apache.isis.core.progmodel.facets.properties.typicallen.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetAnnotationOnProperty extends TypicalLengthFacetAbstract {
+public class TypicalLengthFacetOnPropertyAnnotation extends TypicalLengthFacetAbstract {
 
     private final int value;
 
-    public TypicalLengthFacetAnnotationOnProperty(final int value, final FacetHolder holder) {
+    public TypicalLengthFacetOnPropertyAnnotation(final int value, final FacetHolder holder) {
         super(holder, false);
         this.value = value;
     }

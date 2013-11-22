@@ -19,32 +19,56 @@
 
 package org.apache.isis.core.progmodel.facets.properties.multiline.annotation;
 
+import java.util.Properties;
+
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 
-public class MultiLineAnnotationOnPropertyFacetFactory extends FacetFactoryAbstract {
+public class MultiLineOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public MultiLineAnnotationOnPropertyFacetFactory() {
+    public MultiLineOnPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        if (!Annotations.isString(returnType)) {
-            return;
+        MultiLineFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
+        if(facet == null) {
+            facet = createFromAnnotationIfPossible(processMethodContext);
         }
-        final MultiLine annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MultiLine.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        
+        // no-op if null
+        FacetUtil.addFacet(facet);
     }
 
-    private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
-        return (annotation != null) ? new MultiLineFacetAnnotationOnProperty(annotation.numberOfLines(), annotation.preventWrapping(), holder) : null;
+    @Override
+    public void process(ProcessContributeeMemberContext processMemberContext) {
+        
     }
+    
+    private static MultiLineFacet createFromMetadataPropertiesIfPossible(
+            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
+        
+        final FacetHolder holder = pcwmp.getFacetHolder();
+        
+        final Properties properties = pcwmp.metadataProperties("multiLine");
+        return properties != null ? new MultiLineFacetOnPropertyFromProperties(properties, holder) : null;
+    }
+
+    private static MultiLineFacetOnPropertyAnnotation createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+        if (!Annotations.isString(returnType)) {
+            return null;
+        }
+        final MultiLine annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MultiLine.class);
+        return (annotation != null) ? new MultiLineFacetOnPropertyAnnotation(annotation.numberOfLines(), annotation.preventWrapping(), processMethodContext.getFacetHolder()) : null;
+    }
+
 
 }

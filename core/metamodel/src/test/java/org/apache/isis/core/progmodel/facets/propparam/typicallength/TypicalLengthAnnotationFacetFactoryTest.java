@@ -29,13 +29,13 @@ import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.TypicalLengthAnnotationOnParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.TypicalLengthFacetAnnotationOnParameter;
-import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthAnnotationOnPropertyFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthFacetAnnotationOnProperty;
+import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthFacetOnPropertyAnnotation;
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testTypicalLengthAnnotationPickedUpOnProperty() {
-        final TypicalLengthAnnotationOnPropertyFacetFactory facetFactory = new TypicalLengthAnnotationOnPropertyFacetFactory();
+        final TypicalLengthOnPropertyFacetFactory facetFactory = new TypicalLengthOnPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -50,8 +50,8 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
 
         final Facet facet = facetedMethod.getFacet(TypicalLengthFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypicalLengthFacetAnnotationOnProperty);
-        final TypicalLengthFacetAnnotationOnProperty typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotationOnProperty) facet;
+        assertTrue(facet instanceof TypicalLengthFacetOnPropertyAnnotation);
+        final TypicalLengthFacetOnPropertyAnnotation typicalLengthFacetAnnotation = (TypicalLengthFacetOnPropertyAnnotation) facet;
         assertEquals(30, typicalLengthFacetAnnotation.value());
     }
 

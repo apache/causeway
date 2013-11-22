@@ -17,14 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.members.cssclass;
+package org.apache.isis.core.progmodel.facets.members.describedas.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 
-public class CssClassFacetAnnotationOnMember extends CssClassFacetAbstract {
+public class DescribedAsFacetOnMemberAnnotation extends DescribedAsFacetAbstract {
 
-    public CssClassFacetAnnotationOnMember(final String value, final FacetHolder holder) {
+    public DescribedAsFacetOnMemberAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
+
 }

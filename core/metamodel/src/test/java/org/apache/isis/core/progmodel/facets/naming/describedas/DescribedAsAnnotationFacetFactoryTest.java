@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContex
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsAnnotationOnMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.describedas.annotation.DescribedAsAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.describedas.annotation.DescribedAsAnnotationOnParameterFacetFactory;
 
@@ -55,7 +55,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnProperty() {
-        final DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
+        final DescribedAsOnMemberFacetFactory facetFactory = new DescribedAsOnMemberFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -78,7 +78,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnCollection() {
-        final DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
+        final DescribedAsOnMemberFacetFactory facetFactory = new DescribedAsOnMemberFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -101,7 +101,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnAction() {
-        final DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
+        final DescribedAsOnMemberFacetFactory facetFactory = new DescribedAsOnMemberFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

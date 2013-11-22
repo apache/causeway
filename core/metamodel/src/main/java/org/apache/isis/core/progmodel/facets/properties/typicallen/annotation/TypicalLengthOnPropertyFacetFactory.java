@@ -17,53 +17,60 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.members.named.annotation;
+package org.apache.isis.core.progmodel.facets.properties.typicallen.annotation;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 
-public class NamedOnMemberFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public NamedOnMemberFacetFactory() {
-        super(FeatureType.MEMBERS);
+    public TypicalLengthOnPropertyFacetFactory() {
+        super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        NamedFacet namedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(namedFacet == null) {
-            namedFacet = createFromAnnotationIfPossible(processMethodContext);
+        TypicalLengthFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
+        if(facet == null) {
+            facet = createFromAnnotationIfPossible(processMethodContext);
         }
+
         // no-op if null
-        FacetUtil.addFacet(namedFacet);
+        FacetUtil.addFacet(facet);
     }
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        NamedFacet namedFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
+        TypicalLengthFacet facet = createFromMetadataPropertiesIfPossible(processMemberContext);
+
         // no-op if null
-        FacetUtil.addFacet(namedFacet);
+        FacetUtil.addFacet(facet);
     }
-    
-    private static NamedFacet createFromMetadataPropertiesIfPossible(
+
+    private static TypicalLengthFacet createFromMetadataPropertiesIfPossible(
             final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
         
         final FacetHolder holder = pcwmp.getFacetHolder();
         
-        final Properties properties = pcwmp.metadataProperties("named");
-        return properties != null ? new NamedFacetOnMemberFromProperties(properties, holder) : null;
+        final Properties properties = pcwmp.metadataProperties("typicalLength");
+        return properties != null ? new TypicalLengthFacetOnPropertyFromProperties(properties, holder) : null;
     }
 
-    private static NamedFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final Named annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Named.class);
-        return annotation != null ? new NamedFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
+    private static TypicalLengthFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        final TypicalLength annotation = 
+                Annotations.getAnnotation(processMethodContext.getMethod(), TypicalLength.class);
+        return annotation != null 
+                ? new TypicalLengthFacetOnPropertyAnnotation(annotation.value(), processMethodContext.getFacetHolder()) 
+                : null;
     }
+
+    
 }

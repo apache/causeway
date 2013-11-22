@@ -49,8 +49,8 @@ import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation
 import org.apache.isis.core.progmodel.facets.collections.sortedby.SortedByAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfAnnotationForCollectionsFacetFactory;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.cssclass.CssClassAnnotationOnMemberFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsAnnotationOnMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.cssclass.CssClassOnMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaDescriptionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disabled.forsession.DisabledFacetViaDisableForSessionMethodFacetFactory;
@@ -160,10 +160,10 @@ import org.apache.isis.core.progmodel.facets.properties.mandatory.dflt.Mandatory
 import org.apache.isis.core.progmodel.facets.properties.mandatory.staticmethod.PropertyOptionalFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyModifyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetAndClearFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineAnnotationOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation.NotPersistedAnnotationForPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnPropertyFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthAnnotationOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.typicallen.fromtype.TypicalLengthFacetForPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateDefaultFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetFactory;
@@ -327,7 +327,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ParameterDefaultDerivedFromTypeFacetFactory.class);
 
         addFactory(DescribedAsAnnotationOnTypeFacetFactory.class);
-        addFactory(DescribedAsAnnotationOnMemberFacetFactory.class);
+        addFactory(DescribedAsOnMemberFacetFactory.class);
         addFactory(DescribedAsAnnotationOnParameterFacetFactory.class);
 
         addFactory(DisabledAnnotationFacetFactory.class);
@@ -343,7 +343,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after the TitleAnnotationFacetFactory, because can act as an override
         addFactory(HiddenAnnotationForMemberFacetFactory.class);
         addFactory(CssClassAnnotationForTypeFacetFactory.class);
-        addFactory(CssClassAnnotationOnMemberFacetFactory.class);
+        addFactory(CssClassOnMemberFacetFactory.class);
 
         addFactory(HiddenObjectViaHiddenMethodFacetFactory.class);
         addFactory(DisabledObjectViaDisabledMethodFacetFactory.class);
@@ -367,7 +367,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MustSatisfySpecificationOnParameterFacetFactory.class);
 
         addFactory(MultiLineAnnotationOnTypeFacetFactory.class);
-        addFactory(MultiLineAnnotationOnPropertyFacetFactory.class);
+        addFactory(MultiLineOnPropertyFacetFactory.class);
         addFactory(MultiLineAnnotationOnParameterFacetFactory.class);
 
         addFactory(NamedAnnotationOnTypeFacetFactory.class);
@@ -409,7 +409,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(TypicalLengthFacetForParameterDerivedFromTypeFacetFactory.class);
 
         addFactory(TypicalLengthAnnotationOnTypeFacetFactory.class);
-        addFactory(TypicalLengthAnnotationOnPropertyFacetFactory.class);
+        addFactory(TypicalLengthOnPropertyFacetFactory.class);
         addFactory(TypicalLengthAnnotationOnParameterFacetFactory.class);
         addFactory(RenderedAsDayBeforeAnnotationOnPropertyFacetFactory.class);
         addFactory(RenderedAsDayBeforeAnnotationOnParameterFacetFactory.class);

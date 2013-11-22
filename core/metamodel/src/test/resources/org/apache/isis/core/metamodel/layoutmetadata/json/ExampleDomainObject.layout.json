@@ -21,17 +21,27 @@
         memberGroups: {
             General: {
                 members: {
-                    description: {},
+                    description: {
+                        typicalLength: {
+                            value: 50
+                        }
+                    },
                     category: {},
                     complete: {
                         actions: {
                             completed: {
-                                named: {
-                                    value: Done
+                                named: { value: "Done" },
+                                describedAs: {
+                                    value: "Mark this todo item as having been completed"
                                 }
                             },
                             notYetCompleted: {}
-                        }
+                        },
+			            named: { value: "Done" },
+			            describedAs: {
+			                value: "Whether this todo item has been completed"
+			            },
+                        cssClass: { value: "x-highlight" }
                     }
                 }
             },
@@ -49,15 +59,22 @@
                 members: {
                     dueBy: {
                         actions: {
-                            dueBy: {}
-                        }
+                            dueBy: {
+                                cssClass: { value: "x-key2" }
+                            }
+                        },
+                        cssClass: { value: "x-key" }
                     },
                     cost: {
                         actions: {
                             updateCost:{}
                         }
                     },
-                    notes: {},
+                    notes: {
+                        multiLine: {
+                            numberOfLines: 5
+                        }
+                    },
                     attachment: {}
                 }
             }
@@ -72,7 +89,9 @@
             dependencies: {
                 actions: {
                     add:{},
-                    remove: {}
+                    remove: {
+                        cssClass: { value: "x-caution" }
+                    }
                 },
                 paged: {
                     value: 5
@@ -88,10 +107,15 @@
     }
     ],
     actions: {
-        delete: {},
+        delete: {
+            cssClass: { value: "x-caution" }
+        },
         duplicate: {
-           named: {
-                value: Clone
+            named: {
+                value: "Clone"
+            },
+            describedAs: {
+                value: "Create a new todo item from this one"
             }
         }
     }

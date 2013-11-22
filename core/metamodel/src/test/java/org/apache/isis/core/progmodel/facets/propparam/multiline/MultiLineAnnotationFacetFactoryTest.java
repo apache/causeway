@@ -32,8 +32,8 @@ import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLi
 import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLineFacetAnnotationOnType;
 import org.apache.isis.core.progmodel.facets.param.multiline.annotation.MultiLineAnnotationOnParameterFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.multiline.annotation.MultiLineFacetAnnotationOnParameter;
-import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineAnnotationOnPropertyFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineFacetAnnotationOnProperty;
+import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineFacetOnPropertyAnnotation;
 
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -55,7 +55,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationPickedUpOnProperty() {
-        final MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
+        final MultiLineOnPropertyFacetFactory facetFactory = new MultiLineOnPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -70,8 +70,8 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MultiLineFacetAnnotationOnProperty);
-        final MultiLineFacetAnnotationOnProperty multiLineFacetAnnotation = (MultiLineFacetAnnotationOnProperty) facet;
+        assertTrue(facet instanceof MultiLineFacetOnPropertyAnnotation);
+        final MultiLineFacetOnPropertyAnnotation multiLineFacetAnnotation = (MultiLineFacetOnPropertyAnnotation) facet;
         assertEquals(12, multiLineFacetAnnotation.numberOfLines());
         assertEquals(true, multiLineFacetAnnotation.preventWrapping());
     }
@@ -112,7 +112,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationIgnoredForNonStringProperties() {
-        final MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
+        final MultiLineOnPropertyFacetFactory facetFactory = new MultiLineOnPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

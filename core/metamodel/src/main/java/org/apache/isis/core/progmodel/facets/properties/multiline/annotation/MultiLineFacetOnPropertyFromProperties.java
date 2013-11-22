@@ -17,15 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.members.describedas.annotation;
+package org.apache.isis.core.progmodel.facets.properties.multiline.annotation;
+
+import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacetAbstract;
 
-public class DescribedAsFacetAnnotationOnMember extends DescribedAsFacetAbstract {
+public class MultiLineFacetOnPropertyFromProperties extends MultiLineFacetAbstract {
 
-    public DescribedAsFacetAnnotationOnMember(final String value, final FacetHolder holder) {
-        super(value, holder);
+    public MultiLineFacetOnPropertyFromProperties(Properties properties, FacetHolder holder) {
+        super(numberOfLinesFrom(properties), preventWrappingFrom(properties), holder);
     }
 
+    private static int numberOfLinesFrom(Properties properties) {
+        return Integer.parseInt(properties.getProperty("numberOfLines"));
+    }
+
+    private static boolean preventWrappingFrom(Properties properties) {
+        final String property = properties.getProperty("preventWrapping");
+        // same defaults as @MultiLine annotation
+        return property == null || Boolean.parseBoolean(property);
+    }
+    
 }
