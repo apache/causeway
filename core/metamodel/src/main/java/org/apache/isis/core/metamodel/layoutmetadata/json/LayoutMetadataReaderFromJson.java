@@ -34,6 +34,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -47,6 +49,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -142,6 +145,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
             }
 
+            final RenderFacetRepr render = memberRepr.render;
+            if(render != null) {
+                // same default as in Render.Type.value()
+                final Type renderType = render.value!=null?render.value: Render.Type.EAGERLY;
+                props.setProperty("member." + memberName + ".render.value", renderType.toString());
+            }
+            
             final Map<String, ActionRepr> actions = memberRepr.actions;
             if(actions != null) {
                 int actSeq = 0;

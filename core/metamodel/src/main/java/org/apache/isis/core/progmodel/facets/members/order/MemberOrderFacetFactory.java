@@ -41,10 +41,7 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
         
         MemberOrderFacet memberOrderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(memberOrderFacet == null) {
-            final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
-            if (annotation != null) {
-                memberOrderFacet = new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), processMethodContext.getFacetHolder());
-            }
+            memberOrderFacet = createFromAnnotationIfPossible(processMethodContext);
         }
 
         // no-op if facet is null
@@ -72,6 +69,11 @@ public class MemberOrderFacetFactory extends FacetFactoryAbstract implements Con
             memberOrderFacet = null;
         }
         return memberOrderFacet;
+    }
+
+    private static MemberOrderFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        final MemberOrder annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class);
+        return annotation != null ? new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), processMethodContext.getFacetHolder()) : null;
     }
 
 

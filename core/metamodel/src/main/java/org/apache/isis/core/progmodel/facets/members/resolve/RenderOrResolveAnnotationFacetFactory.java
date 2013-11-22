@@ -19,15 +19,19 @@
 
 package org.apache.isis.core.progmodel.facets.members.resolve;
 
+import java.util.Properties;
+
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 
-public class RenderOrResolveAnnotationFacetFactory extends FacetFactoryAbstract {
+public class RenderOrResolveAnnotationFacetFactory extends FacetFactoryAbstract 
+        implements ContributeeMemberFacetFactory {
 
     public RenderOrResolveAnnotationFacetFactory() {
         super(FeatureType.MEMBERS);
@@ -35,21 +39,47 @@ public class RenderOrResolveAnnotationFacetFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        
+        RenderFacet renderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
+        if(renderFacet == null) {
+            renderFacet = createFromRenderAnnotationIfPossible(processMethodContext);
+        }
+        if(renderFacet == null) {
+            renderFacet = createFromResolveAnnotationIfPossible(processMethodContext);
+        }
+
+        // no-op if null
+        FacetUtil.addFacet(renderFacet);
+    }
+
+    @Override
+    public void process(ProcessContributeeMemberContext processMemberContext) {
+        RenderFacet renderFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
+        // no-op if null
+        FacetUtil.addFacet(renderFacet);
+    }
+
+    private static RenderFacet createFromMetadataPropertiesIfPossible(
+            final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
+        
+        final FacetHolder holder = pcwmp.getFacetHolder();
+        
+        final Properties properties = pcwmp.metadataProperties("render");
+        return properties != null ? new RenderFacetProperties(properties, holder) : null;
+    }
+
+    private static RenderFacet createFromRenderAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        RenderFacet renderFacet;
         final Render renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Render.class);
-        FacetUtil.addFacet(create(renderAnnotation, processMethodContext.getFacetHolder()));
-
-        @SuppressWarnings("deprecation")
-        final org.apache.isis.applib.annotation.Resolve resolveAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), org.apache.isis.applib.annotation.Resolve.class);
-        FacetUtil.addFacet(create(resolveAnnotation, processMethodContext.getFacetHolder()));
+        renderFacet = renderAnnotation == null ? null : new RenderFacetAnnotation(processMethodContext.getFacetHolder(), renderAnnotation.value());
+        return renderFacet;
     }
 
-    private RenderFacet create(final Render annotation, final FacetHolder holder) {
-        return annotation == null ? null : new RenderFacetAnnotation(holder, annotation.value());
-    }
-
+    // @Render was originally called @Resolve, so look for that annotation instead.
     @SuppressWarnings("deprecation")
-    private RenderFacet create(final org.apache.isis.applib.annotation.Resolve annotation, final FacetHolder holder) {
-        return annotation == null ? null : new RenderFacetViaResolveAnnotation(holder, annotation.value());
+    private static RenderFacet createFromResolveAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        final org.apache.isis.applib.annotation.Resolve resolveAnnotation = 
+        Annotations.getAnnotation(processMethodContext.getMethod(), org.apache.isis.applib.annotation.Resolve.class);
+        return resolveAnnotation == null ? null : new RenderFacetViaResolveAnnotation(processMethodContext.getFacetHolder(), resolveAnnotation.value());
     }
-
 }

@@ -42,7 +42,11 @@ public class PagedOnParentedCollectionFacetFactory extends FacetFactoryAbstract
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final PagedFacet pagedFacet = create(processMethodContext);
+        
+        PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
+        if(pagedFacet == null) {
+            pagedFacet = createFromPagedAnnotationIfPossible(processMethodContext);
+        }
         // no-op if null
         FacetUtil.addFacet(pagedFacet);
     }
@@ -54,21 +58,16 @@ public class PagedOnParentedCollectionFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(pagedFacet);
     }
 
-    protected PagedFacet create(final ProcessMethodContext processMethodContext) {
-
-        PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if(pagedFacet != null) {
-            return pagedFacet;
-        }
-
-        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
-        return annotation != null ? new PagedFacetAnnotation(processMethodContext.getFacetHolder(), annotation.value()) : null;
-    }
-
     private PagedFacet createFromMetadataPropertiesIfPossible(final ProcessContextWithMetadataProperties<?> processMethodContext) {
         final Properties properties = processMethodContext.metadataProperties("paged");
         return properties != null ? new PagedFacetProperties(properties, processMethodContext.getFacetHolder()) : null;
     }
+
+    private PagedFacet createFromPagedAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
+        return annotation != null ? new PagedFacetAnnotation(processMethodContext.getFacetHolder(), annotation.value()) : null;
+    }
+
 
     // //////////////////////////////////////
 

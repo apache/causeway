@@ -464,7 +464,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @SortedBy(DependenciesComparator.class)
     @Disabled
-    @Render(Type.EAGERLY)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }

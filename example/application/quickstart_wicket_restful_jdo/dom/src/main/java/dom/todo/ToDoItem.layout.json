@@ -81,11 +81,17 @@
                 },
                 paged: {
                     value: 5
+                },
+                render: {
+                    value: EAGERLY
                 }
             },
             similarTo: {
                 paged: {
                     value: 3
+                },
+                render: {
+                    value: LAZILY
                 }
             }
         }

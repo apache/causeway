@@ -16,11 +16,8 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-import java.util.Map;
+import org.apache.isis.applib.annotation.Render;
 
-public class MemberRepr {
-    
-    public Map<String,ActionRepr> actions;
-    public PagedFacetRepr paged;
-    public RenderFacetRepr render;
+public class RenderFacetRepr {
+    public Render.Type value;
 }

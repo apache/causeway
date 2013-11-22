@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 
 public class LayoutMetadataReaderFromJsonTest_readMetadata {
@@ -62,7 +63,13 @@ public class LayoutMetadataReaderFromJsonTest_readMetadata {
         assertThat(metadata.getColumns().get(3).collections.get("dependencies").actions.size(), is(2));
         assertThat(metadata.getColumns().get(3).collections.get("dependencies").actions.containsKey("add"), is(true));
         assertThat(metadata.getColumns().get(3).collections.get("dependencies").paged, is(not(nullValue())));
-        assertThat(metadata.getColumns().get(3).collections.get("dependencies").paged.value, is(5));
+        assertThat(metadata.getColumns().get(3).collections.get("dependencies").paged, is(not(nullValue())));
+        assertThat(metadata.getColumns().get(3).collections.get("dependencies").render, is(not(nullValue())));
+        assertThat(metadata.getColumns().get(3).collections.get("dependencies").render.value, is(nullValue()));
+        
+        assertThat(metadata.getColumns().get(3).collections.containsKey("similarItems"), is(true));
+        assertThat(metadata.getColumns().get(3).collections.get("similarItems").render, is(not(nullValue())));
+        assertThat(metadata.getColumns().get(3).collections.get("similarItems").render.value, is(Render.Type.LAZILY));
 
         assertThat(metadata.getActions(), is(not(nullValue())));
         assertThat(metadata.getActions().size(), is(2));

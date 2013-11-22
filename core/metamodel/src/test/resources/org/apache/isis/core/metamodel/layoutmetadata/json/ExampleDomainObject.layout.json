@@ -72,9 +72,14 @@
                 },
                 paged: {
                     value: 5
-                }
+                },
+                render: {}
             },
-            similarItems: {}
+            similarItems: {
+                render: {
+                    value: LAZILY
+                }
+            }
         }
     }
     ],
