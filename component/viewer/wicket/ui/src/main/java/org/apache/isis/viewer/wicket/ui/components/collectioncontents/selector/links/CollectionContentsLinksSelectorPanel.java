@@ -23,6 +23,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.Render.Type;
@@ -31,8 +33,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.collections.EntityCollectionsPanel;
 import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 /**
@@ -44,7 +49,7 @@ import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstrac
  * Most of the heavy lifting is factored out into the superclass,
  * {@link LinksSelectorPanelAbstract}.
  */
-public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbstract<EntityCollectionModel> {
+public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,7 +68,7 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
      * otherwise first factory.
      */
     protected int determineInitialFactory(final List<ComponentFactory> componentFactories, final IModel<?> model) {
-        if(!hasResolveEagerlyFacet(model)) {
+        if(!hasRenderEagerlyFacet(model)) {
             for(int i=0; i<componentFactories.size(); i++) {
                 if(componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
                     return i;
@@ -104,7 +109,7 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
     }
 
 
-    private static boolean hasResolveEagerlyFacet(IModel<?> model) {
+    private static boolean hasRenderEagerlyFacet(IModel<?> model) {
         if(!(model instanceof EntityCollectionModel)) {
             return false;
         }
@@ -117,6 +122,42 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
                 entityCollectionModel.getCollectionMemento().getCollection();
         RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
         return renderFacet != null && renderFacet.value() == Type.EAGERLY;
+    }
+
+    /**
+     * Iterates up the component hierarchy looking for a parent
+     * {@link CollectionPanel}, and if so adds to ajax target so that it'll
+     * be repainted.
+     * 
+     * <p>
+     * Yeah, agreed, it's a little bit hacky doing it this way, because it bakes
+     * in knowledge that this component is created, somehow, by a parent {@link CollectionPanel}.
+     * Perhaps it could be refactored to use a more general purpose observer pattern?
+     */
+    protected void onSelect(AjaxRequestTarget target) {
+        super.onSelect(target);
+        Component component = this;
+        while(component != null) {
+            if(component instanceof CollectionPanel) {
+                CollectionPanel collectionPanel = (CollectionPanel) component;
+                final boolean expanded = collectionPanel.onSelect(target);
+                if(additionalLinks != null) {
+                    applyCssVisibility(additionalLinks, expanded);
+                }
+                return;
+            }
+            component = component.getParent();
+        }
+    }
+
+    @Override
+    public Integer getCount() {
+        if(selectedComponent instanceof CollectionCountProvider) {
+            final CollectionCountProvider collectionCountProvider = (CollectionCountProvider) selectedComponent;
+            return collectionCountProvider.getCount();
+        } else {
+            return null;
+        }
     }
 
 

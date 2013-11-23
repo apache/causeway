@@ -72,6 +72,14 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     private final ComponentType componentType;
     
     private ComponentFactory selectedComponentFactory;
+    protected Component selectedComponent;
+
+    /**
+     * May be <tt>null</tt>, depending upon the model implementation.
+     * 
+     * @see #addAdditionalLinks(IModel)
+     */
+    protected WebMarkupContainer additionalLinks;
 
     public LinksSelectorPanelAbstract(final String id, final String underlyingIdPrefix, final T model, final ComponentFactory factory) {
         super(id, model);
@@ -100,43 +108,9 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         }
         links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
         
-        final WebMarkupContainer views = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
-        markupContainer.addOrReplace(views);
+        additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
+        markupContainer.addOrReplace(additionalLinks);
     }
-
-//    protected void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
-//        final WebMarkupContainer views = new WebMarkupContainer(ID_ADDITIONAL_LINKS);
-//        
-//        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
-//        
-//        views.addOrReplace(container);
-//        views.setOutputMarkupId(true);
-//        
-//        this.setOutputMarkupId(true);
-//        
-//        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, links) {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void populateItem(ListItem<LinkAndLabel> item) {
-//                final LinkAndLabel linkAndLabel = item.getModelObject();
-//                
-//                final AbstractLink link = linkAndLabel.getLink();
-//                        
-//                Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
-//                String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
-//                if(disabledReasonIfAny != null) {
-//                    viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
-//                }
-//                viewTitleLabel.add(new CssClassAppender(StringUtils.toLowerDashed(linkAndLabel.getLabel())));
-//                link.addOrReplace(viewTitleLabel);
-//                item.addOrReplace(link);
-//            }
-//        };
-//        container.addOrReplace(listView);
-//        markupContainer.addOrReplace(views);
-//    }
 
     private void addUnderlyingViews(final String underlyingIdPrefix, final T model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
@@ -148,12 +122,11 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         // create all, hide the one not selected
         final Component[] underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         int i = 0;
+        final T emptyModel = dummyOf(model);
         for (ComponentFactory componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
             
-            final T emptyModel = dummyOf(model);
-            Component underlyingView = componentFactory.createComponent(underlyingId, 
-                   i==selected? model: emptyModel);
+            Component underlyingView = componentFactory.createComponent(underlyingId,i==selected? model: emptyModel);
             underlyingViews[i++] = underlyingView;
             selectorPanel.addOrReplace(underlyingView);
         }
@@ -198,17 +171,19 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             
+                            final T dummyModel = dummyOf(model);
                             for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
                                 final Component component = underlyingViews[i];
-                                T dummyModel = dummyOf(model);
-                                
-                                if(component != null) {
-                                    final boolean isSelected = i == underlyingViewNum;
-                                    applyCssVisibility(component, isSelected);
-                                    component.setDefaultModel(isSelected? model: dummyModel);
+                                if(component == null) {
+                                    continue;
                                 }
+                                final boolean isSelected = i == underlyingViewNum;
+                                applyCssVisibility(component, isSelected);
+                                component.setDefaultModel(isSelected? model: dummyModel);
                             }
                             selectorPanel.selectedComponentFactory = componentFactory;
+                            selectorPanel.selectedComponent = underlyingViews[underlyingViewNum];
+                            selectorPanel.onSelect(target);
                             target.add(selectorPanel, views);
                         }
                     };
@@ -233,11 +208,18 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
             Component component = underlyingViews[i];
             if(component != null) {
                 if(i != selected) {
-                    component.add(new AttributeAppender("class", " " +
-                    		INVISIBLE_CLASS));
+                    component.add(new AttributeAppender("class", " " + INVISIBLE_CLASS));
+                } else {
+                    selectedComponent = component;
                 }
             }
         }
+    }
+
+    /**
+     * Overrideable hook.
+     */
+    protected void onSelect(AjaxRequestTarget target) {
     }
 
     /**
@@ -246,7 +228,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
      */
     protected abstract T dummyOf(T model);
 
-    private static void applyCssVisibility(final Component component, final boolean visible) {
+    protected static void applyCssVisibility(final Component component, final boolean visible) {
         final AttributeModifier modifier =  
                 visible 
                     ? new AttributeModifier("class", String.valueOf(component.getMarkupAttributes().get("class")).replaceFirst(INVISIBLE_CLASS, "")) 

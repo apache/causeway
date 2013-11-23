@@ -77,14 +77,19 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             }
 
             @Override
-            void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list) {
+            void setObject(final EntityCollectionModel entityCollectionModel, final List<ObjectAdapter> list) {
                 entityCollectionModel.mementoList = Lists.newArrayList(Lists.transform(list, ObjectAdapterMemento.Functions.toMemento()));
             }
 
             @Override
-            public String getName(EntityCollectionModel model) {
+            public String getName(final EntityCollectionModel model) {
                 PluralFacet facet = model.getTypeOfSpecification().getFacet(PluralFacet.class);
                 return facet.value();
+            }
+
+            @Override
+            public int getCount(final EntityCollectionModel model) {
+                return model.mementoList.size();
             }
 
         },
@@ -129,6 +134,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             public String getName(EntityCollectionModel model) {
                 return model.getCollectionMemento().getName();
             }
+
+            @Override
+            public int getCount(EntityCollectionModel model) {
+                return load(model).size();
+            }
         };
 
         abstract List<ObjectAdapter> load(EntityCollectionModel entityCollectionModel);
@@ -136,6 +146,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         abstract void setObject(EntityCollectionModel entityCollectionModel, List<ObjectAdapter> list);
 
         public abstract String getName(EntityCollectionModel entityCollectionModel);
+
+        public abstract int getCount(EntityCollectionModel entityCollectionModel);
     }
 
     /**
@@ -294,6 +306,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return type.getName(this);
     }
 
+    public int getCount() {
+        return this.type.getCount(this);
+    }
+
+
     @Override
     protected List<ObjectAdapter> load() {
         return type.load(this);
@@ -334,7 +351,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
     @SuppressWarnings("unchecked")
-    public static Iterable<Object> asIterable(final ObjectAdapter resultAdapter) {
+    private static Iterable<Object> asIterable(final ObjectAdapter resultAdapter) {
         return (Iterable<Object>) resultAdapter.getObject();
     }
 
@@ -375,6 +392,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     private static AdapterManager getAdapterManagerStatic() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
+
 
 
 

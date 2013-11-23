@@ -27,9 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -37,15 +35,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -57,7 +53,7 @@ import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
@@ -66,13 +62,12 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilde
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
 
@@ -265,6 +260,12 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         buildGui();
     }
 
+    @Override
+    public Integer getCount() {
+        final EntityCollectionModel model = getModel();
+        return model.getCount();
+    }
+
 
     @Inject
     private WicketViewerSettings settings;
@@ -275,5 +276,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }
+
 
 }

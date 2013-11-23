@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -53,6 +54,8 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_COLLECTION_NAME = "collectionName";
     private static final String ID_COLLECTIONS = "collections";
     private static final String ID_COLLECTION = "collection";
+
+    private Label labelComponent;
 
 
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
@@ -103,13 +106,14 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         }
         final WebMarkupContainer fieldset = new WebMarkupContainer(ID_COLLECTION_GROUP);
         collectionRvContainer.add(fieldset);
-        
-        final String name = association.getName();
-        fieldset.add(new Label(ID_COLLECTION_NAME, name));
 
 		final OneToManyAssociation otma = (OneToManyAssociation) association;
 
 		final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
+		
+		labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+		
+        fieldset.add(labelComponent);
 
 		fieldset.addOrReplace(collectionPanel);
 	}
