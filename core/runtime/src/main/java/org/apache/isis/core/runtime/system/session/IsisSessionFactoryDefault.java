@@ -299,6 +299,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         return userProfileLoader;
     }
 
+    public DomainObjectContainer getContainer() {
+        return container;
+    }
     @Override
     public List<Object> getServices() {
         return serviceList;

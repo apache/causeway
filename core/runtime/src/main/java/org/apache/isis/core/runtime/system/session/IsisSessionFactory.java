@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.system.session;
 
 import java.util.List;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -94,6 +95,7 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
 
     public UserProfileLoader getUserProfileLoader();
 
+    public DomainObjectContainer getContainer();
     public List<Object> getServices();
 
     /**

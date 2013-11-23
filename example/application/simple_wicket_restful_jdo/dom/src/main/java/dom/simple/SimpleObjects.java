@@ -19,6 +19,9 @@
 package dom.simple;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -28,6 +31,12 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
 public class SimpleObjects {
+
+    @PostConstruct
+    public void init(Map<String,String> props) {
+        List<SimpleObject> x = container.allInstances(SimpleObject.class);
+        System.out.println(x);
+    }
 
     // //////////////////////////////////////
     // Identification in the UI

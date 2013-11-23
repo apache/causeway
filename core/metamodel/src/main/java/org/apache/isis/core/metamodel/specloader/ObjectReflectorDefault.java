@@ -23,16 +23,12 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -50,10 +46,8 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -278,8 +272,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         facetProcessor.init();
         metaModelValidator.init();
 
-        initServices(configuration);
-
         primeCache();
         
         ValidationFailures validationFailures = new ValidationFailures();
@@ -343,8 +335,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     public void shutdown() {
         LOG.info("shutting down " + this);
 
-        shutdownServices();
-
         getCache().clear();
         facetDecoratorSet.shutdown();
     }
@@ -369,21 +359,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     
-    // /////////////////////////////////////////////////////////////
-    // init services, destroy services
-    // /////////////////////////////////////////////////////////////
-
-    protected void initServices(IsisConfiguration configuration) {
-        final List<Object> services = getServices();
-        serviceInitializer.init(configuration, container, services);
-        serviceInitializer.postConstruct();
-    }
-
-
-    protected void shutdownServices() {
-        serviceInitializer.preDestroy();
-    }
-
 
     // /////////////////////////////////////////////////////////////
     // install, load, allSpecifications, lookup

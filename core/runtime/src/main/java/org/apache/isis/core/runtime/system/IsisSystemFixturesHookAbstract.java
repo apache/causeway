@@ -35,7 +35,9 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
@@ -45,12 +47,14 @@ import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.internal.SplashWindow;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 /**
@@ -72,6 +76,8 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     private boolean initialized = false;
 
     private IsisSessionFactory sessionFactory;
+
+    private ServiceInitializer serviceInitializer;
 
     // ///////////////////////////////////////////
     // Constructors
@@ -132,6 +138,8 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
             initContext(sessionFactory);
             sessionFactory.init();
 
+            serviceInitializer = initializeServices();
+
             installFixturesIfRequired();
 
         } catch (final IsisSystemException ex) {
@@ -147,12 +155,77 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         getDeploymentType().initContext(sessionFactory);
     }
 
+    /**
+     * @see #shutdownServices(ServiceInitializer)
+     */
+    private ServiceInitializer initializeServices() {
+
+        final DomainObjectContainer container = sessionFactory.getContainer();
+        final List<Object> services = sessionFactory.getServices();
+        
+        // autowire
+        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
+        servicesInjector.setContainer(container);
+        servicesInjector.setServices(services);
+        servicesInjector.init();
+
+        // validate 
+        final ServiceInitializer serviceInitializer = new ServiceInitializer();
+        serviceInitializer.validate(getConfiguration(), container, services);
+
+        // call @PostConstruct (in a session)
+        IsisContext.openSession(new InitialisationSession());
+        try {
+            IsisContext.getTransactionManager().startTransaction();
+            try {
+                serviceInitializer.postConstruct();
+                
+                return serviceInitializer;
+            } catch(RuntimeException ex) {
+                IsisContext.getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                return serviceInitializer;
+            } finally {
+                // will commit or abort
+                IsisContext.getTransactionManager().endTransaction();
+            }
+        } finally {
+            IsisContext.closeSession();
+        }
+    }
+
+
     @Override
     public void shutdown() {
         LOG.info("shutting down system");
+        
+        shutdownServices(this.serviceInitializer);
+        
         IsisContext.closeAllSessions();
     }
 
+    /**
+     * @see #initializeServices()
+     */
+    private void shutdownServices(final ServiceInitializer serviceInitializer) {
+        
+        // call @PostDestroy (in a session)
+        IsisContext.openSession(new InitialisationSession());
+        try {
+            IsisContext.getTransactionManager().startTransaction();
+            try {
+                serviceInitializer.preDestroy();
+                
+            } catch(RuntimeException ex) {
+                IsisContext.getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+            } finally {
+                // will commit or abort
+                IsisContext.getTransactionManager().endTransaction();
+            }
+        } finally {
+            IsisContext.closeSession();
+        }
+    }
+    
     // ///////////////////////////////////////////
     // Hook:
     // ///////////////////////////////////////////

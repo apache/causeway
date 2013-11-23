@@ -33,9 +33,9 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 
-class ServiceInitializer {
+public class ServiceInitializer {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ServiceInitializer.class);
 
     private Map<String, String> props;
     
@@ -50,22 +50,7 @@ class ServiceInitializer {
 
     // //////////////////////////////////////
 
-    ServiceInitializer() {
-    }
-    
-    public void init(final IsisConfiguration configuration, DomainObjectContainer container, final List<Object> services) {
-        
-        // all a bit hacky... :-(
-        // (a) newing up a new ServicesInjector
-        // (b) the guard, because of insufficient mock expectations in unit tests :-(
-        if (container == null || services == null) {
-            return;
-        } 
-        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
-        servicesInjector.setContainer(container);
-        servicesInjector.setServices(services);
-        servicesInjector.init();
-
+    public void validate(final IsisConfiguration configuration, DomainObjectContainer container, final List<Object> services) {
         
         this.props = configuration.asMap();
         
