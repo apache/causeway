@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
@@ -28,8 +27,8 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.datanucleus.NucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -37,10 +36,9 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFacet;
 
@@ -57,17 +55,20 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     //
     ///////////////////////////////////////////////////////////////////////////
 
-    public DataNucleusApplicationComponents(final Map<String, String> props, final Collection<ObjectSpecification> objectSpecs) {
-        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(props);
+    public DataNucleusApplicationComponents(
+            final Map<String, String> props, 
+            final Set<String> persistableClassNameSet) {
+        final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
         
-        final Set<String> classesToBePersisted = catalogClassesToBePersisted(objectSpecs);
+        props.put("datanucleus.autoStartClassNames", persistableClassNames);
+        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(props);
 
         final boolean createSchema = Boolean.parseBoolean( props.get("datanucleus.autoCreateSchema") );
         if(createSchema) {
-            createSchema(props, classesToBePersisted);
+            createSchema(props, persistableClassNameSet);
         }
 
-        namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries(objectSpecs));
+        namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries(persistableClassNameSet));
 
         synchronizer = new FrameworkSynchronizer();
         lifecycleListener = new IsisLifecycleListener(synchronizer);
@@ -80,15 +81,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         storeManager.createSchema(classesToBePersisted, asProperties(props));
     }
 
-    private static Set<String> catalogClassesToBePersisted(Collection<ObjectSpecification> objectSpecs) {
-        Set<String> classNames = Sets.newTreeSet();
-        for (final ObjectSpecification spec : objectSpecs) {
-            if(spec.containsFacet(JdoPersistenceCapableFacet.class) || spec.containsFacet(JdoEmbeddedOnlyFacet.class)) {
-                classNames.add(spec.getFullIdentifier());
-            }
-        }
-        return Collections.unmodifiableSet(classNames);
-    }
 
     private static Properties asProperties(Map<String, String> props) {
         Properties properties = new Properties();
@@ -96,9 +88,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return properties;
     }
 
-    private static Map<String, JdoNamedQuery> catalogNamedQueries(Collection<ObjectSpecification> objectSpecs) {
+    private static Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
-        for (final ObjectSpecification spec : objectSpecs) {
+        for (final String persistableClassName: persistableClassNames) {
+            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(persistableClassName);
             final JdoQueryFacet facet = spec.getFacet(JdoQueryFacet.class);
             if (facet == null) {
                 continue;

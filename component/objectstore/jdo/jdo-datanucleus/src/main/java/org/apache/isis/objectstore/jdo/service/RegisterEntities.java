@@ -27,6 +27,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 import org.reflections.Reflections;
@@ -34,20 +35,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @Hidden
 public class RegisterEntities {
 
+
     private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
     
-    private final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
+    private static final String LOCAL_KEY = "datanucleus.RegisterEntities.packagePrefix";
+    private final static String QUALIFIED_KEY = "isis.persistor." + LOCAL_KEY;
 
     private String packagePrefixes;
+    
+
 
     @PostConstruct
-    public void init(Map<String,String> props) {
-        packagePrefixes = props.get(PACKAGE_PREFIX_KEY);
+    public void init(Map<String,String> configuration) {
+        packagePrefixes = configuration.get(QUALIFIED_KEY);
+        if(Strings.isNullOrEmpty(packagePrefixes)) {
+            throw new IllegalStateException("Could not locate '" + QUALIFIED_KEY + "' key in property files - aborting");
+        }
         
         registerAllPersistenceCapables();
     }
@@ -58,22 +67,17 @@ public class RegisterEntities {
 
     private void registerAllPersistenceCapables() {
 
-        if(packagePrefixes == null) {
-            LOG.warn("Did not find key '" + PACKAGE_PREFIX_KEY + "' and so entities will not be eagerly registered in the Isis metamodel");
-            return;
-        }
-        
-        for (String packagePrefix : Splitter.on(",").split(packagePrefixes)) {
+        for (final String packagePrefix : Splitter.on(",").split(packagePrefixes)) {
             Reflections reflections = new Reflections(packagePrefix);
             
             Set<Class<?>> entityTypes = 
                     reflections.getTypesAnnotatedWith(PersistenceCapable.class);
             
             if(noEntitiesIn(entityTypes)) {
-                LOG.error("Could not locate any PersistenceCapable entities in " + packagePrefix);
+                throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
             }
             for (Class<?> entityType : entityTypes) {
-                IsisContext.getSpecificationLoader().loadSpecification(entityType);
+                getSpecificationLoader().loadSpecification(entityType);
             }
         }
     }
@@ -94,6 +98,13 @@ public class RegisterEntities {
             }
         };
     }
-    
+
+    // //////////////////////////////////////
+
+    SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+
     
 }

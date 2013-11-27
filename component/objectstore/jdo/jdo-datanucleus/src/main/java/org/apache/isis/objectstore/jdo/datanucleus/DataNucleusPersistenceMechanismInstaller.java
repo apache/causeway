@@ -18,7 +18,12 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +33,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -48,7 +54,9 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.Auditab
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
@@ -57,6 +65,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.MaxLengthDer
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
+import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 /**
  * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
@@ -108,8 +117,22 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         final IsisConfiguration dataNucleusConfig = configuration.createSubset(ISIS_CONFIG_PREFIX);
         final Map<String, String> props = dataNucleusConfig.asMap();
         addDataNucleusPropertiesIfRequired(props);
+
+        final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration, getSpecificationLoader().allSpecifications());
+        applicationComponents = new DataNucleusApplicationComponents(props, classesToBePersisted);
+    }
+
+    private static Set<String> catalogClassesToBePersisted(final IsisConfiguration configuration, Collection<ObjectSpecification> objectSpecs) {
+        final RegisterEntities registerEntities = new RegisterEntities();
+        registerEntities.init(configuration.asMap());
         
-        applicationComponents = new DataNucleusApplicationComponents(props, getSpecificationLoader().allSpecifications());
+        Set<String> classNames = Sets.newTreeSet();
+        for (final ObjectSpecification spec : objectSpecs) {
+            if(spec.containsFacet(JdoPersistenceCapableFacet.class) || spec.containsFacet(JdoEmbeddedOnlyFacet.class)) {
+                classNames.add(spec.getFullIdentifier());
+            }
+        }
+        return Collections.unmodifiableSet(classNames);
     }
 
 
