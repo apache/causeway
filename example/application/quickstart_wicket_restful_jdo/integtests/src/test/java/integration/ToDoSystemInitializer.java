@@ -59,7 +59,6 @@ public class ToDoSystemInitializer {
                     new ToDoItemAnalysis(),
                     new ToDoItemContributions(),
                     new WrapperFactoryDefault(),
-                    new RegisterEntities(),
                     new IsisJdoSupportImpl()
                     );
         }

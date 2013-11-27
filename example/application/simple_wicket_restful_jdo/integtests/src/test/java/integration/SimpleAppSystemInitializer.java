@@ -55,7 +55,6 @@ public class SimpleAppSystemInitializer {
             withServices(
                     new SimpleObjects(),
                     new WrapperFactoryDefault(),
-                    new RegisterEntities(),
                     new IsisJdoSupportImpl()
                     );
         }
